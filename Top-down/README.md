@@ -26,8 +26,8 @@ Root/
  - Data/
    - ADM	Administrative unit layer for each country as geopackage ISO_ADM.gpkg
    - HZD	Hazard layers (rasters)
-   - EXP
-   - RSK
+   - EXP	Exposure layers - Population (count), Built-up (ratio or binary), Agriculture (ratio or binary)
+   - RSK	Output directory
 ```
 
 Edit the `.env` file inside the notebook directories to specify the working directory:
