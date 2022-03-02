@@ -10,11 +10,11 @@ Note: this will be improved with script finalisation! Hopefully in the form of a
 
 - The script requires python3 - conda or mamba are encouraged
 - Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
-	conda create --name CCDR --file <dir/win_env.yml>
-	activate CCDR
+	`conda create --name CCDR --file <dir/win_env.yml>`
+	`activate CCDR`
 
-- Navigate to your working directory: cd <paste directory>
-- Run jupyter notebook
+- Navigate to your working directory: `cd <paste directory>`
+- Run `jupyter notebook`
 
 - The script expects input data folders to be structured as:
 
