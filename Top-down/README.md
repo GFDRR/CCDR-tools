@@ -165,7 +165,7 @@ Otherwise, this procedure is repeated for **each RP layer**, and then the EAI is
 
 - Create a new column and calculate the percentage of expected annually impacted built-up over total.
 
-- Plot results: absolute numbers and percentage over ADM3 total values.
+- Plot results as map: absolute numbers and percentage over total values for ADM level.
 
   <img width=60% src="https://user-images.githubusercontent.com/44863827/151826096-43510935-efb7-40c4-a2af-82f7c4c29564.png"> <img width=60% src="https://user-images.githubusercontent.com/44863827/151825526-14ba5f89-725d-4ee9-9943-f9bc7a91e225.png">
  
