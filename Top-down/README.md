@@ -161,8 +161,8 @@ The map can be zoomed and inspected with the pointer to show all the values in t
 <img width=500 src="https://user-images.githubusercontent.com/44863827/156605784-b80e4ba8-aafd-4316-b9f8-d3657230a1d4.png">
 
 EAI represents the aggregated absolute risk estimate:
- - Fatalities when considering impact over population
- - Hectars [ha] of built-up destroyed when considering impact built-up
+ - **Fatalities** when considering impact over population;
+ - **Hectars [ha] of built-up destroyed** when considering impact over built-up.
 
 ---------------
 
