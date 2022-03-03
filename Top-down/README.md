@@ -124,7 +124,7 @@ Note that not all combinations of hazards x exposure are supported; some are not
 
 ![immagine](https://user-images.githubusercontent.com/44863827/156599257-a9f587b4-bcbf-4e6b-9793-6e346945dca5.png)
 
-## Impact function
+## ANALYTICAL APPROACH = Impact function
 The "function" approach uses a mathematical relationship to calculate impact over exposed categories.
 For example, flood hazard impact over population is calculated using a mortality function, while the impact over built-up uses a damage function for buildings.
 
@@ -140,6 +140,23 @@ A chart of the impact function can be generated in the interface for the selecte
 
 <img width=400 src="https://user-images.githubusercontent.com/44863827/156601989-4997c63c-8c2a-4ce4-b6f9-bb7bb0506799.png">
 
+When the run finishes, a map is shown and geospatial data are exported as .gpkg and .csv.
+
+Hovering the mouse on the map will show all the values in the table.
+
+EAI represents the aggregated absolute risk estimate:
+ - Fatalities when considering impact over population
+ - Hectars [ha] of built-up destroyed when considering impact built-up
+
+
+## ANALYTICAL APPROACH = Exposure classification
+
+The "classes" approach simply split the hazard intensity layer into classes and, for ach one, calculates the toal exposure for the selected category.
+For example, flood hazard over agriculture is measured in terms of hectars of land falling within different intervals of water depth.
+
+<img width=400 src="https://user-images.githubusercontent.com/44863827/156603360-dabc7da2-52c8-4ed2-be07-bd2a4927af16.png">
+
+When the run finishes, geospatial data are exported as .gpkg and .csv.
 
 --------------------------------------
 
@@ -162,7 +179,7 @@ The following display equivalent spatial analytics steps performed by the script
 
   <img width=60% src="https://user-images.githubusercontent.com/44863827/151812298-25d14746-7d79-4d6e-8b67-3751a29233db.png">
 
-### OPTION 1 - USING A IMPACT CURVE / FUNCTION
+### ANALYTICAL APPROACH 1 - USING A IMPACT CURVE / FUNCTION
 
 In this scenario, a mathematical (quantitative) relationship is available to link physical hazard intensity and impact magnitude over built-up asset.
 
@@ -210,7 +227,7 @@ Otherwise, this procedure is repeated for **each RP layer**, and then the EAI is
 
 -------------------------------
 
-### OPTION 2 - USING IMPACT CATEGORIES CLASSIFICATION
+### ANALYTICAL APPROACH 2 - USING IMPACT CATEGORIES CLASSIFICATION
 
 In this scenario, the physical hazard intensity is ranked in qualitative classes of impact magnitude. This is the case when no impact function is available for the category at risk, but a classification of impact by hazard thresholds is possible. Starting from the thresholded layer, we split the hazard intensity (water depth, as in previouse example) into 6 classes, each representing an interval of 0.5 m - except the last one, the includes all values > MAX damage ratio. Then, we extract the total population located within each hazard class for each ADM3 unit into an excel table for further analytics to be applied.
 
