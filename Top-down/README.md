@@ -140,9 +140,20 @@ A chart of the impact function can be generated in the interface for the selecte
 
 <img width=400 src="https://user-images.githubusercontent.com/44863827/156601989-4997c63c-8c2a-4ce4-b6f9-bb7bb0506799.png">
 
-When the run finishes, a map is shown and geospatial data are exported as .gpkg and .csv.
+If you want to inspect all steps of the processing, you can select the option to export by-products as tiff files:
 
-Hovering the mouse on the map will show all the values in the table.
+- [X] Export Intermediate rasters
+
+***>>> RUN ANALYSIS <<<***
+
+Once the run finishes, a map is shown and geospatial data are exported as .gpkg and .csv.
+
+<img width=700 src="https://user-images.githubusercontent.com/44863827/156605538-85af4764-a2cb-4d0f-8046-a59fdcbed50b.png">
+
+The map can be zoomed and inspected with the pointer to show all the values in the table.
+
+<img width=500 src="https://user-images.githubusercontent.com/44863827/156605784-b80e4ba8-aafd-4316-b9f8-d3657230a1d4.png">
+
 
 EAI represents the aggregated absolute risk estimate:
  - Fatalities when considering impact over population
