@@ -19,6 +19,6 @@ A collection of Python notebooks to perform country-level climate and disaster r
   - **Air Pollution** - uses PM2.5 hazard map (individual layer) to calculate health impact on population according to mortality function.
 
 ## Bottom-up
-**Hazard-specific, detailed risk evaluation based on mix of regional and local data**
+**Country-specific, detailed risk evaluation based on mix of regional and local data**
 
 - **[Pakistan](https://github.com/mahamfkhan/Pakistan-CCDR)** Welfare Implications of Climate Change in Pakistan - Local analysis of vulnerability and focus on urban areas
