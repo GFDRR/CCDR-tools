@@ -21,4 +21,4 @@ A collection of Python notebooks to perform country-level climate and disaster r
 ## Bottom-up
 **Country-specific, detailed risk evaluation based on mix of regional and local data**
 
-- **[Pakistan](https://github.com/mahamfkhan/Pakistan-CCDR)** - Welfare Implications of Climate Change. Local analysis of vulnerability and focus on urban areas.
+- **[Pakistan](https://github.com/mahamfkhan/Pakistan-CCDR)** - Welfare Implications of Climate Change. Fine-tuned analysis of local vulnerability factors and risk channels. Integration of local data and a strong focus on resilience, adaptive capacity and adaptation measures.
