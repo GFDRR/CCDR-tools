@@ -69,7 +69,7 @@ Work dir/
    - RSK	Output directory
 ```
 
-- ADMINISTRATIVE boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL_ADM.gpkg`) made of multiple layers, up to ADM level 3:
+- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL_ADM.gpkg`) made of multiple layers, up to ADM level 3:
 
 ```
 - ISO_ADM
@@ -105,8 +105,8 @@ Work dir/
   |---|---|---|---|---|---|---|---|
   | Number | String (20) | Number | String(20) | Number | String(20) | Number | String(20) |
 
-- HAZARD layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work.
-- EXPOSURE are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`).
+- **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.
+- **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). The same suggestion about resolution applies here.
 
 	- Population from Worldpop, 90 m: `ISO`_POP.tif
 	- Built-up from World Settlement Footprint or equivalent, 90 m: `ISO`_BUP.tif
@@ -159,11 +159,13 @@ EAI represents the aggregated absolute risk estimate:
  - Fatalities when considering impact over population
  - Hectars [ha] of built-up destroyed when considering impact built-up
 
+---------------
 
 ## ANALYTICAL APPROACH = Exposure classification
 
-The "classes" approach simply split the hazard intensity layer into classes and, for ach one, calculates the toal exposure for the selected category.
+The "classes" approach simply split the hazard intensity layer into classes and, for ach one, calculates the toal exposure for the selected category. 
 For example, flood hazard over agriculture is measured in terms of hectars of land falling within different intervals of water depth.
+Note that Minimum threshold is deactivated.
 
 <img width=400 src="https://user-images.githubusercontent.com/44863827/156603360-dabc7da2-52c8-4ed2-be07-bd2a4927af16.png">
 
