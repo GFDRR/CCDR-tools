@@ -140,7 +140,7 @@ A chart of the impact function can be generated in the interface for the selecte
 
 <img width=400 src="https://user-images.githubusercontent.com/44863827/156601989-4997c63c-8c2a-4ce4-b6f9-bb7bb0506799.png">
 
-If you want to inspect all steps of the processing, you can select the option to export by-products as tiff files:
+If you want to inspect all steps of the processing, you can select the option to export all by-products as tiff files:
 
 - [X] Export Intermediate rasters
 
