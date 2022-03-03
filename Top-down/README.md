@@ -146,14 +146,19 @@ If you want to inspect all steps of the processing, you can select the option to
 
 ***>>> RUN ANALYSIS <<<***
 
-Once the run finishes, a map is shown and geospatial data are exported as .gpkg and .csv.
+Once the run finishes, results are exported as geospatial data (.gpkg) and table (.csv).
+
+By selecting
+
+- [X] Preview results
+
+A map will be generated at the end of the run, using a simple simbology.
 
 <img width=700 src="https://user-images.githubusercontent.com/44863827/156605538-85af4764-a2cb-4d0f-8046-a59fdcbed50b.png">
 
 The map can be zoomed and inspected with the pointer to show all the values in the table.
 
 <img width=500 src="https://user-images.githubusercontent.com/44863827/156605784-b80e4ba8-aafd-4316-b9f8-d3657230a1d4.png">
-
 
 EAI represents the aggregated absolute risk estimate:
  - Fatalities when considering impact over population
