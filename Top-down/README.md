@@ -100,7 +100,7 @@ Work dir/
   | Number | String (20) | Number | String(20) | Number | String(20) |
 
   - ADM3
-  - 
+  
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | ADM3_CODE | ADM3_NAME | 
   |---|---|---|---|---|---|---|---|
   | Number | String (20) | Number | String(20) | Number | String(20) | Number | String(20) |
