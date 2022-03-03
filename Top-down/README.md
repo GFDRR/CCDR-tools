@@ -114,6 +114,35 @@ Work dir/
 
 --------------------------------------
 
+# RUNNING THE SCRIPT
+
+Once required input layers have been created according to standards, the script can run.
+
+Select the country of interest, the exposure category and the level of administrative boundaries aggregation.
+
+Note that not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification. Select the analytical approach accordingly.
+
+![immagine](https://user-images.githubusercontent.com/44863827/156599257-a9f587b4-bcbf-4e6b-9793-6e346945dca5.png)
+
+## Impact function
+The "function" approach uses a mathematical relationship to calculate impact over exposed categories.
+For example, flood hazard impact over population is calculated using a mortality function, while the impact over built-up uses a damage function for buildings.
+
+The functions can be manually edited in the notebook, if a better model is available for the country of interest.
+
+<img width=700 src="https://user-images.githubusercontent.com/44863827/156601011-5b8cf8af-8703-4d2a-8dbf-698b9e132b6f.png">
+
+A minimum threshold can be set to ignore all values below - assuming that all risk is avoided under this threshold.
+
+<img width=400 src="https://user-images.githubusercontent.com/44863827/156601233-8bb33d74-127a-4e60-93a3-0cc683d0efba.png">
+
+A chart of the impact function can be generated in the interface for the selected exposure category.
+
+<img width=400 src="https://user-images.githubusercontent.com/44863827/156601989-4997c63c-8c2a-4ce4-b6f9-bb7bb0506799.png">
+
+
+--------------------------------------
+
 # EQUIVALENT PROCESSING IN QGIS
 
 The following display equivalent spatial analytics steps performed by the script by using QGIS (well known, free geospatial tool).
