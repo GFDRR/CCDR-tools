@@ -17,7 +17,7 @@ Analysis runs over high resolution exposure data (90 m) and is then aggregated a
 --------------------------------------
 
 ## SCRIPT SETUP
-Note: this will be improved with script finalisation! Hopefully in the form of a self-installing app.
+Note: this will be improved with script finalisation! Hopefully in the form of a self-installing app using [Voila](https://github.com/voila-dashboards/voila).
 
 ### Environment and libraries
 - The script requires python3 - conda or mamba are encouraged
