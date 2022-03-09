@@ -112,6 +112,10 @@ Work dir/
 	- Built-up from World Settlement Footprint or equivalent, 90 m: `ISO`_BUP.tif
 	- Agriculture from land cover map, ESA land cover or equivalent, 90 m: `ISO`_AGR.tif
 
+When resampling EXP layers to a lower resolution, it is **strongly recommended** to align the resampled grid to exactly match the hazard grid.
+
+<img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
+
 --------------------------------------
 
 # RUNNING THE SCRIPT
