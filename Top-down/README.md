@@ -85,25 +85,25 @@ Work dir/
 
   | ISO3166_a2 | ISO3166_a3 | ADM0_CODE | ADM0_NAME | 
   |---|---|---|---|
-  | String(2) | String(3) | Number | String (20) |
+  | String(2) | String(3) | Integer | String (20) |
  
   - ADM1
 
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | 
   |---|---|---|---|
-  | Number | String (20) | Number | String(20) |
+  | Integer | String (20) | Integer | String(20) |
 
   - ADM2
 
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | 
   |---|---|---|---|---|---|
-  | Number | String (20) | Number | String(20) | Number | String(20) |
+  | Integer | String (20) | Integer | String(20) | Integer | String(20) |
 
   - ADM3
   
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | ADM3_CODE | ADM3_NAME | 
   |---|---|---|---|---|---|---|---|
-  | Number | String (20) | Number | String(20) | Number | String(20) | Number | String(20) |
+  | Integer | String (20) | Integer | String(20) | Integer | String(20) | Integer | String(20) |
 
 - **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.
 - **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). The same suggestion about resolution applies here.
