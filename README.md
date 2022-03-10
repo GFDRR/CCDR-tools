@@ -10,7 +10,7 @@ A collection of Python notebooks to perform country-level climate and disaster r
 
   - **[Heat stress](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Heat_stress.ipynb)** - uses heat stress index (multiple return periods) to calculate distribution of exposed population across hazard thresholds (3 classes).
  
-  - **Drought** - uses drought frequency index (multiple return periods) to calculate distribution of exposed agricultural land across hazard thresholds.
+  - **Drought** - uses drought frequency index (multiple hazard thresholds) to calculate distribution of exposed agricultural land across hazard thresholds.
   
   - **[Landslide](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Landslide.ipynb)** - uses landslide hazard index (individual layer) to calculate distribution of exposed categories (population, built-up) across hazard thresholds (3 classes).
   
