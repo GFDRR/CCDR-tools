@@ -36,7 +36,7 @@ The output is:
 
 Climate data processing from CDS (or others)
 
-**Version:** CMIP6 – GCM 
+**Version:** CMIP6 – GCM - [Climate Extreme Indices](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
 
 **Ensemble:** the largest number of models available for the required dimensions. 
 
