@@ -34,19 +34,44 @@ The output is:
 
 # PRE-PROCESSED CLIMATE INDICES
 
-Climate data processing from CDS (or others)
+Climate data processing from CDS
 
-**Version:** CMIP6 – GCM - [Climate Extreme Indices](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
+**Version:** CMIP6 – GCM - 
+
+  - CMIP6 – [GCM projections](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)
+    - pro: full selection of variables
+    - con: low resolution
+
+  - CMIP6 derived [Climate Extreme Indices](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
+    - pro: disaggregated heat indices, better res;
+    - con: does not include Wind, SLR, SPEI
 
 **Ensemble:** the largest number of models available for the required dimensions. 
 
 Each index is stored as multi-dimensional netcdf. 
 
 **Dimensions:** 
-   - **RCP:** 2.6, 4.5, 8.5 
-   - **Period:** {Historical}, [2040, 2060, 2080] - or decadal? 
-   - **Ensemble range (percentile):** 10, 50, 90 
+   - **RCP:** 2.6, 4.5, 8.5
+   - **Ensemble member:** r1i1p1f1 
+   - **Ensemble range (percentile):** 10, 50, 90
+   - **Period:** {Historical}, [up ro 2100]
+   - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
    - **Metric:** {Mean, SD}, [Mean] 
+
+
+|   Name   |                  Description                  |     Source      | Time-scale  |
+|:--------:|:---------------------------------------------:|:---------------:|:-----------:|
+| R10mm    | Days with rainfall > 10 mm [days]             | CMIP6 Extremes  |   Annual    |
+| Rx5day   | Maximum 5-day precipitation [mm]              | CMIP6 Extremes  |   Monthly   |
+| R99p     | Extremely wet day precipitation [days/month]  | CMIP6 Extremes  |   Monthly   |
+| CWD      | Consecutive Wet Days [days/month]             | CMIP6 Extremes  |   Annual    |
+| slr      | Sea Level Rise [m]                            | CMIP6/NASA      |   Annual    |
+| sfcWind  | Daily maximum 10-m wind speed                 | CMIP6           |   Annual    |
+|          | Number of days with strong winds [days]       | CMIP6           |   Monthly   |
+| SPEI     | Standard Precipitation-ET Index [-]           | CMIP6           |   Annual    |
+| Heat     | WBGT or UTCI [°C] - bias adjusted             | CMIP6 Extremes  |    Daily    |
+| tmean    | Mean surface temperature [°C]                 | CMIP6           |   Monthly   |
+
 
 # PRE-REQUISITES (OFFLINE)
 
