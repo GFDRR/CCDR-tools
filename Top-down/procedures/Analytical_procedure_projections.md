@@ -31,6 +31,23 @@ The output is:
 - PREVIEW RESULTS: plot tables and maps
 - EXPORT RESULTS: results are exported as gpkg and csv according to templates
 
+
+# PRE-PROCESSED CLIMATE INDICES
+
+Climate data processing from CDS (or others)
+
+**Version:** CMIP6 – GCM 
+
+**Ensemble:** the largest number of models available for the required dimensions. 
+
+Each index is stored as multi-dimensional netcdf. 
+
+**Dimensions:** 
+   - **RCP:** 2.6, 4.5, 8.5 
+   - **Period:** {Historical}, [2040, 2060, 2080] - or decadal? 
+   - **Ensemble range (percentile):** 10, 50, 90 
+   - **Metric:** {Mean, SD}, [Mean] 
+
 # PRE-REQUISITES (OFFLINE)
 
 - Anaconda and python installed > Possibly we move to jupyter desktop Autoinstaller
