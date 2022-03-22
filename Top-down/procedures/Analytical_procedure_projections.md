@@ -56,7 +56,7 @@ Each index is stored as multi-dimensional netcdf.
    - **Ensemble range (percentile):** 10, 50, 90
    - **Period:** {Historical}, [up ro 2100]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Metric:** {Mean, SD}, [Mean] 
+   - **Metric:** {Mean, Median, P10 P90, SD}, [Mean. Median, P10, P90,] 
 
 
 |   Name   |                  Description                  |     Source      | Time-scale  |
