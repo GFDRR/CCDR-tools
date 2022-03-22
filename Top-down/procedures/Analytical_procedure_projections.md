@@ -98,8 +98,7 @@ Each index is stored as multi-dimensional netcdf.
 
 ## DATA MANAGEMENT
 
-- Creation of string request based on input (hazard, country and period)
-- String links to nc files hosted / downloaded from CCKP
+- Online data harvesting does not provide all the variables we want, then he aggregated (mean) layers are pre-calculated for each index and saved as nc for the tool to load and extract zonal statistics.
 
 ## DATA PROCESSING - PROJECTIONS
 
