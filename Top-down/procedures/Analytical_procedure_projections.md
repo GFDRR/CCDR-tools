@@ -127,7 +127,7 @@ Each index is stored as multi-dimensional netcdf.
     -  3 lines of different colors (green, yellow, orange) representing the median for each RCP
     -  3 shade areas representing the related p10 and p90 for each RCP
     -  X is period (as from input)
-    -  Y is intensity (depends on index selection)
+    -  Y is intensity (ramge depends on index selection)
     -  Title specify aggregation criteria
 
 Similar to common RPC representation:
