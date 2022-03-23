@@ -54,7 +54,7 @@ Each index is stored as multi-dimensional netcdf.
    - **RCP:** 2.6, 4.5, 8.5
    - **Ensemble member:** r1i1p1f1 
    - **Ensemble range (percentile):** 10, 50, 90
-   - **Period:** {Historical}, [up ro 2100]
+   - **Period:** {Historical}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
    - **Metric:** {Mean, Median, P10 P90, SD}, [Mean. Median, P10, P90,] 
 
