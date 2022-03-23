@@ -201,16 +201,16 @@ Similar to common RPC representation:
 ### Maps
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
+  <tr><td>Mean</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td></tr>
+  <tr><td><img width=300 src=""></td></tr>
 </table>
 
 ### Charts
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>Mean</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td></tr>
 </table>
 
 ## Normalised Mean Anomaly
@@ -220,35 +220,34 @@ Similar to common RPC representation:
 ### Maps
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
+  <tr><td>Mean</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td></tr>
+  <tr><td><img width=300 src=""></td></tr>
 </table>
 
 ### Charts
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>Mean</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td></tr>
 </table>
 
 ## Percentile 90th
 
 **CWD, SSP 126, Medium term**
-
 ### Maps
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
+  <tr><td>Mean</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td></tr>
+  <tr><td><img width=300 src=""></td></tr>
 </table>
 
 ### Charts
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>Mean</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td></tr>
 </table>
 
 ## Percentile 99th
@@ -258,14 +257,14 @@ Similar to common RPC representation:
 ### Maps
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
+  <tr><td>Mean</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td></tr>
+  <tr><td><img width=300 src=""></td></tr>
 </table>
 
 ### Charts
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>Mean</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td></tr>
 </table>
