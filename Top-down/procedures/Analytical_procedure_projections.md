@@ -95,14 +95,14 @@ Each index is stored as multi-dimensional netcdf.
 
 - Country of interest (1): Name dropdown (link ISOa3 value) 
 
-- Time horizon:
+- Time period:
   - Near term (2021-2040)
   - Medium term (2041-2060)
   - Long term (2081-2100)
 
 - Plot (multiple selection):
   - [ ] Historical Mean and SD
-  - [ ] Projected Mean and SD (time horizon)
+  - [ ] Projected Mean and SD (time period)
   - [ ] Mean Anomaly
   - [ ] Normalised Mean Anomaly
   - [ ] Percentile 90th
@@ -116,7 +116,8 @@ Each index is stored as multi-dimensional netcdf.
 
 ## DATA PROCESSING - PROJECTIONS
 
-- Run zonal statistic using ADM2 as zone and nc data as value based on input (country, horizon, RCP) and settings aggregation criteria
+- Compute the required statistics based on the collection of geotiff representing the different combinations of RCP and periods.
+- Run zonal statistic using ADM2 as zone and nc data as value based on input (country, period, RCP) and settings aggregation criteria
 
 |          Hazard           |               Associated climate indices           |
 |---------------------------|----------------------------------------------------|
@@ -150,3 +151,34 @@ Similar to common RPC representation:
 ## EXPORT RESULTS - PROJECTIONS
 
 - Export output as gpkg and csv
+
+<hr>
+
+# EXAMPLE OUTPUT PAKISTAN
+
+## Historical Mean and SD
+
+**R10mm**
+
+<table>
+  <tr><td>Mean</td><td>Standard Deviation</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>CountryMap- ADM 1 mean values</td><td>CountryMap- ADM 1 mean values</td></tr>
+</table>
+
+## Projected Mean and SD (time period)
+
+**CWD, SSP 126, Medium term**
+
+
+
+## Mean Anomaly
+
+
+## Normalised Mean Anomaly
+
+
+## Percentile 90th
+
+
+## Percentile 99th
