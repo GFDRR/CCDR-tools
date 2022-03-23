@@ -170,15 +170,48 @@ Similar to common RPC representation:
 
 **CWD, SSP 126, Medium term**
 
-
+<table>
+  <tr><td>Mean</td><td>Standard Deviation</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>CountryMap- ADM 1 mean values</td><td>CountryMap- ADM 1 mean values</td></tr>
+</table>
 
 ## Mean Anomaly
 
+**CWD, SSP 126, Medium term**
+
+<table>
+  <tr><td>Mean</td><td>Standard Deviation</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>CountryMap- ADM 1 mean values</td><td>CountryMap- ADM 1 mean values</td></tr>
+</table>
 
 ## Normalised Mean Anomaly
 
+**CWD, SSP 126, Medium term**
+
+<table>
+  <tr><td>Mean</td><td>Standard Deviation</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>CountryMap- ADM 1 mean values</td><td>CountryMap- ADM 1 mean values</td></tr>
+</table>
 
 ## Percentile 90th
 
+**CWD, SSP 126, Medium term**
+
+<table>
+  <tr><td>Mean</td><td>Standard Deviation</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>CountryMap- ADM 1 mean values</td><td>CountryMap- ADM 1 mean values</td></tr>
+</table>
 
 ## Percentile 99th
+
+**CWD, SSP 126, Medium term**
+
+<table>
+  <tr><td>Mean</td><td>Standard Deviation</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
+  <tr><td>CountryMap- ADM 1 mean values</td><td>CountryMap- ADM 1 mean values</td></tr>
+</table>
