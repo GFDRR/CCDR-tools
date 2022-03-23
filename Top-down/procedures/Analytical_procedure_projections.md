@@ -86,13 +86,27 @@ Each index is stored as multi-dimensional netcdf.
 
 ## USER INPUT
 
-- Hazard of interest: Flood and Landslide, Tropical Cyclone, Coastal flood, Drought and Water Scarcity, Heat
+- Hazard of interest:
+  - Flood and Landslide
+  - Drought and Water Scarcity
+  - Heat stress
+  - Tropical Cyclone
+  - Coastal flood
+
 - Country of interest (1): Name dropdown (link ISOa3 value) 
-- Time horizon: 2040, 2060, 2080, 2100
 
-## SETTINGS (DEFAULT can be changed)
+- Time horizon:
+  - Near term (2021-2040)
+  - Medium term (2041-2060)
+  - Long term (2081-2100)
 
-- Criteria for value aggregation: a) MAX; b) Mean
+- Plot (multiple selection):
+  - [ ] Historical Mean and SD
+  - [ ] Projected Mean and SD (time horizon)
+  - [ ] Mean Anomaly
+  - [ ] Normalised Mean Anomaly
+  - [ ] Percentile 90th
+  - [ ] Percentile 99th
 
 ------------------------------------------
 
@@ -126,7 +140,7 @@ Each index is stored as multi-dimensional netcdf.
     -  3 lines of different colors (green, yellow, orange) representing the median for each RCP
     -  3 shade areas representing the related p10 and p90 for each RCP
     -  X is period (as from input)
-    -  Y is intensity (ramge depends on index selection)
+    -  Y is intensity (ramge depends on index and metric selection)
     -  Title specify aggregation criteria
 
 Similar to common RPC representation:
