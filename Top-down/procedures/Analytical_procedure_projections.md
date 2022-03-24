@@ -22,6 +22,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 - Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results
 - Calculate output for selected period (near, medium and long term)
 - The estimate is provided for median, 10th-percentile and 90th percentile
+- ([confidence levels calculated as Ensemble_p25 and Ensemble_p75](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/))
 - Both the raster information andthe aggregated values at ADM1 or ADM0 level are plotted
 - The results are exported as csv (table) and geopackage (vector)
 
@@ -141,7 +142,7 @@ Each index is stored as multiple multi-dimensional netcdf files.
 - Plot as chart including:
   - X is period last year (as from "period" input), Y is intensity (ramge depends on index and metric selection)
   - Historical Mean (black line) and SD (grey area around line)
-  - Projected Normalised Mean Anonaly as 3 lines of different colors (green, yellow, orange) representing the median for each SSP
+  - Projected Normalised Mean Anomaly as 3 lines of different colors (green, yellow, orange) representing the median for each SSP
   - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each SSP
   - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 represent the mean of all models in the ensemble".
  
