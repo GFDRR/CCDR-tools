@@ -12,9 +12,10 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 - we need to present a well-rounded perspective for both space and time dimension
 - we can't have the cake and eat it too - or have the full bottle and the drunk wife
 
-### The data input is:
+### The input data is:
 - raster data aggregated across time (20 years windows) for spatial representation
-- csv data aggregated across space (country scale) for time-serie representation
+- csv data aggregated across space (country boundaries) for time-serie representation
+  - includes ensemble p25 and p75 (plot of model confidence)
 
 ### The script does:
 
@@ -82,7 +83,7 @@ Each index is stored as multiple multi-dimensional netcdf files.
 - SETUP: environment and libraries
 - USER INPUT: required
 - DATA PROCESSING: datasets are processed according to settings
-- PREVIEW RESULTS: plot tables and maps
+- PREVIEW RESULTS: plot maps and charts
 - EXPORT RESULTS: results are exported as gpkg and csv according to templates
 
 # SCRIPT STEP-BY-STEP
@@ -141,6 +142,7 @@ Each index is stored as multiple multi-dimensional netcdf files.
   - Historical Mean (black line) and SD (grey area around line)
   - Projected Normalised Mean Anomaly as 3 lines of different colors (green, yellow, orange) representing the median for each SSP
   - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each SSP
+  - Model confidence level as shaded area ranging p25-p75
   - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 represent the mean of all models in the ensemble".
  
 Similar to what usually done:
