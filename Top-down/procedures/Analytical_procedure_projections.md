@@ -35,15 +35,13 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 
 # PRE-PROCESSED CLIMATE INDICES
 
-Climate data processing from CDS
-
 **Version:** CMIP6 – GCM full collection
 
-  - CMIP6 – [GCM projections](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)
+  - CMIP6 – [GCM projections (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)
     - pro: full selection of variables
     - con: raw variables, low resolution
 
-  - CMIP6 derived [Climate Extreme Indices](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
+  - CMIP6 derived [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
     - pro: extreme indices already computed; refined resolution
     - con: does not include Wind, SLR, SPEI; rectangular grid
 
