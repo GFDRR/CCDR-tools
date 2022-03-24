@@ -139,7 +139,7 @@ Each index is stored as multi-dimensional netcdf.
     - as ADM1 mean value 
 
 - Plot as chart including:
-  - X is period (as from MAX period input), Y is intensity (ramge depends on index and metric selection)
+  - X is period last year (as from "period" input), Y is intensity (ramge depends on index and metric selection)
   - Historical Mean (black line) and SD (grey area around line)
   - Projected Normalised Mean Anonaly as 3 lines of different colors (green, yellow, orange) representing the median for each RCP
   - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each RCP
