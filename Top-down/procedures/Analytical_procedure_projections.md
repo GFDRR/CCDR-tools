@@ -147,7 +147,7 @@ Each index is stored as multiple multi-dimensional netcdf files.
  
 Example:
 
-<img width="500" src="https://user-images.githubusercontent.com/44863827/154677308-610702d4-1312-4ce5-b16c-e2b99e961c1e.png">
+<img width="500" src="https://user-images.githubusercontent.com/44863827/159906283-e7c073dc-d88c-4de6-b9dd-331140bed8de.png">
 
 
 ## EXPORT RESULTS - PROJECTIONS
