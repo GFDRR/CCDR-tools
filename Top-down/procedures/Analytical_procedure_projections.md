@@ -56,7 +56,7 @@ Each index is stored as multi-dimensional netcdf.
    - **Ensemble range (percentile):** 10, 50, 90
    - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Metric:** {Mean, Median, P10 P90, SD}, [Mean. Median, P10, P90] 
+   - **Metric:** {Mean, Median, P10, P90, SD}, [Mean. Median, P10, P90] 
 
 
 |   Name   |                  Description                  |     Source      | Time-scale  |
@@ -82,7 +82,6 @@ Each index is stored as multi-dimensional netcdf.
 
 - SETUP: environment and libraries
 - USER INPUT: required
-- DATA MANAGEMENT: global datasets are loaded according to user input
 - DATA PROCESSING: datasets are processed according to settings
 - PREVIEW RESULTS: plot tables and maps
 - EXPORT RESULTS: results are exported as gpkg and csv according to templates
@@ -97,29 +96,25 @@ Each index is stored as multi-dimensional netcdf.
 ## USER INPUT
 
 - Hazard of interest:
-  - Flood and Landslide
-  - Drought and Water Scarcity
-  - Heat stress
-  - Tropical Cyclone
-  - Coastal flood
+  - [ ] Flood and Landslide
+  - [ ] Drought and Water Scarcity
+  - [ ] Heat stress
+  - [ ] Tropical Cyclone
+  - [ ] Coastal flood
 
 - Country of interest (1): Name dropdown (link ISOa3 value) 
 
-- Time period:
-  - Near term (2021-2040)
-  - Medium term (2041-2060)
-  - Long term (2081-2100)
+- Time period (multiple selection):
+  - [ ] Near term (2021-2040)
+  - [ ] Medium term (2041-2060)
+  - [ ] Long term (2081-2100)
 
 ------------------------------------------
 
-## DATA MANAGEMENT
-
-
-
 ## DATA PROCESSING - PROJECTIONS
 
-- Compute the required statistics based on the collection of geotiff representing the different combinations of RCP and periods.
-- Run zonal statistic using ADM2 as zone and nc data as value based on input (country, period, RCP) and settings aggregation criteria
+- Compute the required spatial statistics based on the input selection (country/hazards) for all RCP and selected periods.
+- Run zonal statistic using ADM1 as zone and nc data as value based on input (country, period, RCP) and settings aggregation criteria
 
 |          Hazard           |               Associated climate indices           |
 |---------------------------|----------------------------------------------------|
@@ -136,24 +131,23 @@ Each index is stored as multi-dimensional netcdf.
 |                           |     Heat index                                     |
 
 
-## PREVIEW RESULTS - PROJECTIONS
+## PREVIEW RESULTS
 
-- Plot (default):
-  - [X] Historical Mean and SD
-  - [X] Projected Nornalised Mean Anonaly
-  - [X] Projected Nornalised Percentile 10th-90th
+- Plot as maps including:
+  - Projected Nornalised Mean Anonaly
+    - as raster data
+    - as ADM1 mean value 
 
-- Plot indices as map and as tables/charts
-  - On ADM2 map selection (mouse click), each indices is plotted as a one line chart that includes:
-    -  3 lines of different colors (green, yellow, orange) representing the median for each RCP
-    -  3 shade areas representing the related p10 and p90 for each RCP
-    -  X is period (as from input)
-    -  Y is intensity (ramge depends on index and metric selection)
-    -  Title specify aggregation criteria
-
-Similar to common RPC representation:
-
+- Plot as chart including:
+  - X is period (as from MAX period input), Y is intensity (ramge depends on index and metric selection)
+  - Historical Mean (black line) and SD (grey area around line)
+  - Projected Normalised Mean Anonaly as 3 lines of different colors (green, yellow, orange) representing the median for each RCP
+  - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each RCP
+  - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 represent the mean of all models in the ensemble".
+ 
+Example:
 <img width="500" src="https://user-images.githubusercontent.com/44863827/154677308-610702d4-1312-4ce5-b16c-e2b99e961c1e.png">
+
 
 ## EXPORT RESULTS - PROJECTIONS
 
