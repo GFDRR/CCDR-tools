@@ -1,20 +1,31 @@
 # OBJECTIVE
 
 The script performs collection of climate indices related to hydrometeorological hazards.
-The spatial information is collected from [WB CCKP](https://climateknowledgeportal.worldbank.org/download-data).
 
-The climate component estimates the mean or max anomaly over the reference baseline for a selection of hazard-related climate indices for a specified time horizon under 3 RCPs (2.6, 4.5, 8.5).
+The climate component provides aggregated statistics for a selection of:
+ 1) climate-related hazards
+ 2) country
+ 3) time period
+
+Challenges:
+- the complete array of climate information is too large and requires long processing. Thus the information needs to be aggregated into statistics
+- we need to present a well-rounded perspective for both space and time dimension
+- we can't have the cake and eat it too - or have the full bottle and the drunk wife
+
+The input is:
+- aggregated across time (20 years windows) as raster data for spatial representation
+- aggregated across space (country scale) as table data for time-serie representation
 
 The output is:
-- presented as map and dynamic chart at each model run
-- exported in form of tables, statistics, charts (excel format) and maps (geopackage) at each model run
+- presented as maps (spatial distribution)
+- plotted as charts (time distribution)
+- exported in form of tables, statistics, charts (excel format) and maps (geopackage)
 
 
 # SCRIPT OVERVIEW
 
 - Script runs on one country at time and for a specific set of indices (depending on hazard selected) to keep the calculation time manageable
-- User input defines country and settings
-- Settings affect which input data is selected, how the processing runs (criteria), and how the results are presented
+- User input defines hazard and country selection 
 - All RCP scenarios are always considered and presented in the results: RCP 2.6, 4.5, 8.5
 - The estimate is provided for median, 10th-percentile and 90th percentile
 - The information is aggregated at ADM2 level and presented dynamically
@@ -83,6 +94,7 @@ Each index is stored as multi-dimensional netcdf.
 ## SETUP
 
 - Load required libraries
+- Load data from geotiff and csv
 
 ## USER INPUT
 
