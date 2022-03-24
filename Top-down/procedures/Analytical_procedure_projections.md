@@ -1,6 +1,6 @@
 # OVERVIEW
 
-The climate component offers an overview of climate indices related to hydrometeorological hazards.
+The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (CMIP6).
 The script climate component provides aggregated statistics at ADM level [1] or [0] for a selection of:
  1) climate-related hazards
  2) country
@@ -19,7 +19,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 ### The script does:
 
 - Runs over one selected country and for a specific set of indices depending on selected hazard
-- Consider three RCP-SSP scenarios (2.6, 4.5, 8.5) by default and present them in the results
+- Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results
 - Calculate output for selected period (near, medium and long term)
 - The estimate is provided for median, 10th-percentile and 90th percentile
 - Both the raster information andthe aggregated values at ADM1 or ADM0 level are plotted
@@ -40,18 +40,18 @@ Climate data processing from CDS
 
   - CMIP6 – [GCM projections](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)
     - pro: full selection of variables
-    - con: low resolution
+    - con: raw variables, low resolution
 
   - CMIP6 derived [Climate Extreme Indices](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
-    - pro: disaggregated heat indices, better res;
+    - pro: extreme indices already computed; refined resolution
     - con: does not include Wind, SLR, SPEI; rectangular grid
 
 **Ensemble:** the largest number of models available for the required dimensions. 
 
-Each index is stored as multi-dimensional netcdf. 
+Each index is stored as multiple multi-dimensional netcdf files. 
 
 **Dimensions:** 
-   - **RCP:** 2.6, 4.5, 8.5
+   - **SSP:** 2.6, 4.5, 8.5
    - **Ensemble member:** r1i1p1f1 
    - **Ensemble range (percentile):** 10, 50, 90
    - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
@@ -113,8 +113,8 @@ Each index is stored as multi-dimensional netcdf.
 
 ## DATA PROCESSING - PROJECTIONS
 
-- Compute the required spatial statistics based on the input selection (country/hazards) for all RCP and selected periods.
-- Run zonal statistic using ADM1 as zone and nc data as value based on input (country, period, RCP) and settings aggregation criteria
+- Compute the required spatial statistics based on the input selection (country/hazards) for all SSP and selected periods.
+- Run zonal statistic using ADM1 as zone and nc data as value based on input (country, period, SSP) and settings aggregation criteria
 
 |          Hazard           |               Associated climate indices           |
 |---------------------------|----------------------------------------------------|
@@ -134,15 +134,15 @@ Each index is stored as multi-dimensional netcdf.
 ## PREVIEW RESULTS
 
 - Plot as maps including:
-  - Projected Nornalised Mean Anonaly
+  - Projected Nornalised Mean Anonaly for selected period, all SSPs.
     - as raster data
     - as ADM1 mean value 
 
 - Plot as chart including:
   - X is period last year (as from "period" input), Y is intensity (ramge depends on index and metric selection)
   - Historical Mean (black line) and SD (grey area around line)
-  - Projected Normalised Mean Anonaly as 3 lines of different colors (green, yellow, orange) representing the median for each RCP
-  - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each RCP
+  - Projected Normalised Mean Anonaly as 3 lines of different colors (green, yellow, orange) representing the median for each SSP
+  - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each SSP
   - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 represent the mean of all models in the ensemble".
  
 Example:
@@ -163,12 +163,29 @@ Example:
 ### Maps - Spatial distribution
 
 <table>
- <caption><b>Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td>Days with rainfall > 10 mm</td><td>Maximum 5-day precipitation</td><td>Very wet day precipitation</td></tr>
+ <caption><b>Days with rainfall > 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td>SSP 2.6</td><td>SSP 4.5</td><td>SSP 8.5</td></tr>
   <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td>
    <td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td>
    <td><img width=300 src=""></td></tr>
 </table>
+
+<table>
+ <caption><b>Maximum 5-day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td>SSP 2.6</td><td>SSP 4.5</td><td>SSP 8.5</td></tr>
+  <tr><td><img width=300 src=""></td>
+   <td><img width=300 src=""></td>
+   <td><img width=300 src=""></td></tr>
+</table>
+
+<table>
+ <caption><b>Very wet day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td>SSP 2.6</td><td>SSP 4.5</td><td>SSP 8.5</td></tr>
+  <tr><td><img width=300 src=""></td>
+   <td><img width=300 src=""></td>
+   <td><img width=300 src=""></td></tr>
+</table>
+
 
 ### Charts - Time distribution
 
