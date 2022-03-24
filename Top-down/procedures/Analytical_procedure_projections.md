@@ -119,10 +119,9 @@ Each index is stored as multiple multi-dimensional netcdf files.
 
 |          Hazard           |               Associated climate indices           |
 |---------------------------|----------------------------------------------------|
-| River floods / Landslides |     Days with rainfall > 10 mm [days]              |
+| River floods / Wet Landslides |     Days with rainfall > 10 mm [days]              |
 |                           |     Maximum 5-day precipitation [mm]               |
 |                           |     Very wet day precipitation [days/month]        |
-|     Wet landslides        |     Days with rainfall > 10 mm [days]              |
 |     Coastal floods        |     Mean Sea Level Rise [m]                        |
 |     Tropical cyclone      |     Number of days with strong winds [days]        |
 |                           |     Daily maximum 10-m wind speed [m/s]            |
