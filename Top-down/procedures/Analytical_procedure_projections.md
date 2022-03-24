@@ -36,28 +36,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 
 # PRE-PROCESSED CLIMATE INDICES
 
-**Version:** CMIP6 – GCM full collection
-
-  - CMIP6 – [GCM projections (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)
-    - pro: full selection of variables
-    - con: raw variables, low resolution
-
-  - CMIP6 derived [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
-    - pro: extreme indices already computed; refined resolution
-    - con: does not include Wind, SLR, SPEI; rectangular grid
-
-**Ensemble:** the largest number of models available for the required dimensions. 
-
-Each index is stored as multiple multi-dimensional netcdf files. 
-
-**Dimensions:** 
-   - **SSP:** 2.6, 4.5, 8.5
-   - **Ensemble member:** r1i1p1f1 
-   - **Ensemble confidence range:** mean, p25, p75
-   - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
-   - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Metric:** {Median, P10, P90, SD}, [Median, P10, P90] 
-
+The table summarises the relevant climate indices, with time scale and source. 
 
 |   Name   |                  Description                  |     Source      | Time-scale  |
 |:--------:|:---------------------------------------------:|:---------------:|:-----------:|
@@ -72,6 +51,37 @@ Each index is stored as multiple multi-dimensional netcdf files.
 | Heat     | WBGT or UTCI [°C] - bias adjusted             | CMIP6 Extremes  |    Daily    |
 | tmean    | Mean surface temperature [°C]                 | CMIP6           |   Monthly   |
 
+
+**Sources:** CMIP6 – GCM full collection
+
+  - CMIP6 – [GCM projections (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)
+    - pro: full selection of variables
+    - con: raw variables, low resolution
+
+  - CMIP6 derived [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
+    - pro: extreme indices already computed; refined resolution
+    - con: does not include Wind, SLR, SPEI; rectangular grid
+
+Each index is downloaded  as multiple multi-dimensional netcdf files. 
+
+**Dimensions:** 
+   - **SSP:** 2.6, 4.5, 8.5
+   - **Ensemble member:** r1i1p1f1 (largest number of models available)
+   - **Ensemble confidence range:** mean, p25, p75
+   - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
+   - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
+   - **Metric:** {Median, P10, P90, SD}, [Median, P10, P90] 
+
+These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
+The proposed approach is to produce:
+
+- raster data aggregated across time (20 years windows) for spatial representation as:
+  - `Ensemble_Mean[ (future_p10 - hist_p10)/hist_SD], EnsembleMean[(future_p50 - hist_p50)/hist_SD], EnsembleMean[(future_p90 - hist_p90)/hist_SD]`
+  
+- csv data aggregated across space (country ADM0 or ADM1 boundaries) for time-serie representation, includes ensemble p25 and p75 (plot of model confidence).
+  - `Ensemble_Mean[ (future_p10 - hist_p10)/hist_SD], EnsembleMean[(future_p50 - hist_p50)/hist_SD], EnsembleMean[(future_p90 - hist_p90)/hist_SD]`
+  - `Ensemble_p25[ (future_p10 - hist_p10)/hist_SD], EnsembleMean[(future_p50 - hist_p50)/hist_SD], EnsembleMean[(future_p90 - hist_p90)/hist_SD]`
+  - `Ensemble_p75[ (future_p10 - hist_p10)/hist_SD], EnsembleMean[(future_p50 - hist_p50)/hist_SD], EnsembleMean[(future_p90 - hist_p90)/hist_SD]` 
 
 # PRE-REQUISITES (OFFLINE)
 
