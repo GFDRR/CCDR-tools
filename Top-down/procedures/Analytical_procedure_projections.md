@@ -95,7 +95,7 @@ Each index is stored as multi-dimensional netcdf.
 
 ## USER INPUT
 
-- Hazard of interest:
+- Hazard of interest (one selection or more):
   - [ ] Flood and Landslide
   - [ ] Drought and Water Scarcity
   - [ ] Heat stress
@@ -104,9 +104,9 @@ Each index is stored as multi-dimensional netcdf.
 
 - Country of interest (1): Name dropdown (link ISOa3 value) 
 
-- Time period (multiple selection):
+- Time period (one selection):
   - [ ] Near term (2021-2040)
-  - [ ] Medium term (2041-2060)
+  - [X] Medium term (2041-2060)
   - [ ] Long term (2081-2100)
 
 ------------------------------------------
