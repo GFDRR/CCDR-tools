@@ -53,7 +53,7 @@ Each index is stored as multiple multi-dimensional netcdf files.
 **Dimensions:** 
    - **SSP:** 2.6, 4.5, 8.5
    - **Ensemble member:** r1i1p1f1 
-   - **Ensemble range (percentile):** mean, p25, p75
+   - **Ensemble confidence range:** mean, p25, p75
    - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
    - **Metric:** {Median, P10, P90, SD}, [Median, P10, P90] 
