@@ -145,9 +145,9 @@ Each index is stored as multiple multi-dimensional netcdf files.
   - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each SSP
   - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 represent the mean of all models in the ensemble".
  
-Example:
+Similar to what usually done:
 
-<img width="500" src="https://user-images.githubusercontent.com/44863827/159906283-e7c073dc-d88c-4de6-b9dd-331140bed8de.png">
+<img width="250" src="https://user-images.githubusercontent.com/44863827/159906283-e7c073dc-d88c-4de6-b9dd-331140bed8de.png">
 
 
 ## EXPORT RESULTS - PROJECTIONS
