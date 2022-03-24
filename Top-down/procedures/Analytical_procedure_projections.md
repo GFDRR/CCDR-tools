@@ -21,7 +21,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 - Runs over one selected country and for a specific set of indices depending on selected hazard
 - Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results
 - Calculate output for selected period (near, medium and long term)
-- The estimate is provided for median, 10th-percentile and 90th percentile of **Ensemble_Mean**.
+- The estimate is provided for median, 10th percentile (p10) and 90th percentile (p90) of **Ensemble_Mean**.
 - ([confidence levels calculated as Ensemble_p25 and Ensemble_p75](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/))
 - Both the raster information andthe aggregated values at ADM1 or ADM0 level are plotted
 - The results are exported as csv (table) and geopackage (vector)
@@ -54,10 +54,10 @@ Each index is stored as multiple multi-dimensional netcdf files.
 **Dimensions:** 
    - **SSP:** 2.6, 4.5, 8.5
    - **Ensemble member:** r1i1p1f1 
-   - **Ensemble range (percentile):** 10, 50, 90
+   - **Ensemble range (percentile):** mean, p25, p75
    - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Metric:** {Mean, Median, P10, P90, SD}, [Mean. Median, P10, P90] 
+   - **Metric:** {Median, P10, P90, SD}, [Median, P10, P90] 
 
 
 |   Name   |                  Description                  |     Source      | Time-scale  |
