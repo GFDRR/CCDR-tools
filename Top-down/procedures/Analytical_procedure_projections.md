@@ -163,7 +163,7 @@ Example:
 ### Maps - Spatial distribution
 
 <table>
- <caption><b>Standardised anomaly, Medium term (2040-2060)</b></caption>
+ <caption><b>Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
   <tr><td>Days with rainfall > 10 mm</td><td>Maximum 5-day precipitation</td><td>Very wet day precipitation</td></tr>
   <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td>
    <td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td>
@@ -173,9 +173,9 @@ Example:
 ### Charts - Time distribution
 
 <table>
- <caption><b>Standardised anomaly, Medium term (2040-2060)</b></caption>
+ <caption><b>Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
   <tr><td>Days with rainfall > 10 mm</td><td>Maximum 5-day precipitation</td><td>Very wet day precipitation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td>
-   <td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td>
+  <tr><td><img width=300 src=""></td>
+   <td><img width=300 src=""></td>
    <td><img width=300 src=""></td></tr>
 </table>
