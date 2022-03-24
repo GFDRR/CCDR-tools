@@ -1,53 +1,42 @@
-# OBJECTIVE
+# OVERVIEW
 
-The script performs collection of climate indices related to hydrometeorological hazards.
-
-The climate component provides aggregated statistics for a selection of:
+The climate component offers an overview of climate indices related to hydrometeorological hazards.
+The script climate component provides aggregated statistics at ADM level [1] or [0] for a selection of:
  1) climate-related hazards
  2) country
  3) time period
 
-Challenges:
-- the complete array of climate information is too large and requires long processing. Thus the information needs to be aggregated into statistics
+### Challenges:
+- harvesting online data does not provide all the variables we want, especially for the critical step of normalisation
+- the complete array of climate information is too large to be shared with the user and requires long processing. Thus the information needs to be aggregated into statistics
 - we need to present a well-rounded perspective for both space and time dimension
 - we can't have the cake and eat it too - or have the full bottle and the drunk wife
 
-The input is:
-- aggregated across time (20 years windows) as raster data for spatial representation
-- aggregated across space (country scale) as table data for time-serie representation
+### The data input is:
+- raster data aggregated across time (20 years windows) for spatial representation
+- csv data aggregated across space (country scale) for time-serie representation
 
-The output is:
+### The script does:
+
+- Runs over one selected country and for a specific set of indices depending on selected hazard
+- Consider three RCP-SSP scenarios (2.6, 4.5, 8.5) by default and present them in the results
+- Calculate output for selected period (near, medium and long term)
+- The estimate is provided for median, 10th-percentile and 90th percentile
+- Both the raster information andthe aggregated values at ADM1 or ADM0 level are plotted
+- The results are exported as csv (table) and geopackage (vector)
+
+### The output is:
 - presented as maps (spatial distribution)
 - plotted as charts (time distribution)
 - exported in form of tables, statistics, charts (excel format) and maps (geopackage)
 
-
-# SCRIPT OVERVIEW
-
-- Script runs on one country at time and for a specific set of indices (depending on hazard selected) to keep the calculation time manageable
-- User input defines hazard and country selection 
-- All RCP scenarios are always considered and presented in the results: RCP 2.6, 4.5, 8.5
-- The estimate is provided for median, 10th-percentile and 90th percentile
-- The information is aggregated at ADM2 level and presented dynamically
-- The results are exported as csv (table) and geopackage (vector)
-
-
-# SCRIPT STRUCTURE
-
-- SETUP: environment and libraries
-- USER INPUT: required
-- SETTINGS: default parameters can be changed by user
-- DATA MANAGEMENT: global datasets are loaded according to user input
-- DATA PROCESSING: datasets are processed according to settings
-- PREVIEW RESULTS: plot tables and maps
-- EXPORT RESULTS: results are exported as gpkg and csv according to templates
-
+----------------------------
 
 # PRE-PROCESSED CLIMATE INDICES
 
 Climate data processing from CDS
 
-**Version:** CMIP6 – GCM - 
+**Version:** CMIP6 – GCM full collection
 
   - CMIP6 – [GCM projections](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)
     - pro: full selection of variables
@@ -67,7 +56,7 @@ Each index is stored as multi-dimensional netcdf.
    - **Ensemble range (percentile):** 10, 50, 90
    - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Metric:** {Mean, Median, P10 P90, SD}, [Mean. Median, P10, P90,] 
+   - **Metric:** {Mean, Median, P10 P90, SD}, [Mean. Median, P10, P90] 
 
 
 |   Name   |                  Description                  |     Source      | Time-scale  |
@@ -88,6 +77,15 @@ Each index is stored as multi-dimensional netcdf.
 
 - Anaconda and python installed > Possibly we move to jupyter desktop Autoinstaller
 - Create environment from ccdr_analytics.yml
+
+# SCRIPT STRUCTURE
+
+- SETUP: environment and libraries
+- USER INPUT: required
+- DATA MANAGEMENT: global datasets are loaded according to user input
+- DATA PROCESSING: datasets are processed according to settings
+- PREVIEW RESULTS: plot tables and maps
+- EXPORT RESULTS: results are exported as gpkg and csv according to templates
 
 # SCRIPT STEP-BY-STEP
 
@@ -112,19 +110,11 @@ Each index is stored as multi-dimensional netcdf.
   - Medium term (2041-2060)
   - Long term (2081-2100)
 
-- Plot (multiple selection):
-  - [ ] Historical Mean and SD
-  - [ ] Projected Mean and SD (time period)
-  - [ ] Mean Anomaly
-  - [ ] Normalised Mean Anomaly
-  - [ ] Percentile 90th
-  - [ ] Percentile 99th
-
 ------------------------------------------
 
 ## DATA MANAGEMENT
 
-- Online data harvesting does not provide all the variables we want, then he aggregated (mean) layers are pre-calculated for each index and saved as nc for the tool to load and extract zonal statistics.
+
 
 ## DATA PROCESSING - PROJECTIONS
 
@@ -147,6 +137,11 @@ Each index is stored as multi-dimensional netcdf.
 
 
 ## PREVIEW RESULTS - PROJECTIONS
+
+- Plot (default):
+  - [X] Historical Mean and SD
+  - [X] Projected Nornalised Mean Anonaly
+  - [X] Projected Nornalised Percentile 10th-90th
 
 - Plot indices as map and as tables/charts
   - On ADM2 map selection (mouse click), each indices is plotted as a one line chart that includes:
