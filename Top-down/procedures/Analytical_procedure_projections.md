@@ -44,7 +44,7 @@ Climate data processing from CDS
 
   - CMIP6 derived [Climate Extreme Indices](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
     - pro: disaggregated heat indices, better res;
-    - con: does not include Wind, SLR, SPEI
+    - con: does not include Wind, SLR, SPEI; rectangular grid
 
 **Ensemble:** the largest number of models available for the required dimensions. 
 
@@ -146,6 +146,7 @@ Each index is stored as multi-dimensional netcdf.
   - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 represent the mean of all models in the ensemble".
  
 Example:
+
 <img width="500" src="https://user-images.githubusercontent.com/44863827/154677308-610702d4-1312-4ce5-b16c-e2b99e961c1e.png">
 
 
@@ -155,117 +156,26 @@ Example:
 
 <hr>
 
-# EXAMPLE OUTPUT PAKISTAN
+# EXAMPLE OUTPUT
 
-## Historical Mean and SD
+## Flood hazard in Pakistan, Medium term 
 
-**R10mm**
-
-### Maps
+### Maps - Spatial distribution
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
+ <caption><b>Standardised anomaly, Medium term (2040-2060)</b></caption>
+  <tr><td>Days with rainfall > 10 mm</td><td>Maximum 5-day precipitation</td><td>Very wet day precipitation</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td>
+   <td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td>
+   <td><img width=300 src=""></td></tr>
 </table>
 
-### Charts
+### Charts - Time distribution
 
 <table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
-</table>
-
-## Projected Mean and SD (time period)
-
-**CWD, SSP 126, Medium term**
-
-### Maps
-
-<table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
-</table>
-
-### Charts
-
-<table>
-  <tr><td>Mean</td><td>Standard Deviation</td></tr>
-  <tr><td><img width=300 src=""></td><td><img width=300 src=""></td></tr>
-</table>
-
-## Mean Anomaly
-
-**CWD, SSP 126, Medium term**
-
-### Maps
-
-<table>
-  <tr><td>Mean</td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-</table>
-
-### Charts
-
-<table>
-  <tr><td>Mean</td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-</table>
-
-## Normalised Mean Anomaly
-
-**CWD, SSP 126, Medium term**
-
-### Maps
-
-<table>
-  <tr><td>Mean</td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-</table>
-
-### Charts
-
-<table>
-  <tr><td>Mean</td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-</table>
-
-## Percentile 90th
-
-**CWD, SSP 126, Medium term**
-### Maps
-
-<table>
-  <tr><td>Mean</td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-</table>
-
-### Charts
-
-<table>
-  <tr><td>Mean</td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-</table>
-
-## Percentile 99th
-
-**CWD, SSP 126, Medium term**
-
-### Maps
-
-<table>
-  <tr><td>Mean</td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-  <tr><td><img width=300 src=""></td></tr>
-</table>
-
-### Charts
-
-<table>
-  <tr><td>Mean</td></tr>
-  <tr><td><img width=300 src=""></td></tr>
+ <caption><b>Standardised anomaly, Medium term (2040-2060)</b></caption>
+  <tr><td>Days with rainfall > 10 mm</td><td>Maximum 5-day precipitation</td><td>Very wet day precipitation</td></tr>
+  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td>
+   <td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td>
+   <td><img width=300 src=""></td></tr>
 </table>
