@@ -70,7 +70,7 @@ Each index is downloaded  as multiple multi-dimensional netcdf files.
    - **Ensemble confidence range:** mean, p25, p75
    - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Metric:** {Median, P10, P90, SD}, [Median, P10, P90] 
+   - **Value statistic:** {Median, P10, P90, SD}, [Median, P10, P90] 
 
 These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
 The proposed approach is to produce:
@@ -154,7 +154,7 @@ The proposed approach is to produce:
     - as ADM1 mean value 
 
 - Plot as chart including:
-  - X is period last year (as from "period" input), Y is intensity (ramge depends on index and metric selection)
+  - X is period last year (as from "period" input), Y is intensity (ramge depends on index and statistic selection)
   - Historical Mean (black line) and SD (grey area around line)
   - Projected Normalised Mean Anomaly as 3 lines of different colors (green, yellow, orange) representing the median for each SSP
   - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each SSP
