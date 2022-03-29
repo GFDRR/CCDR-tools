@@ -177,7 +177,7 @@ Similar to what usually done:
 ### Maps - Spatial distribution
 
 <table>
- <caption><b>Days with rainfall > 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+ <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
   <tr><td><img width=100% src="https://user-images.githubusercontent.com/44863827/160589506-0cc713b0-5a4e-4efb-8159-970b94087ca5.png"></td></tr>
 </table>
 
