@@ -53,6 +53,7 @@ The table summarises the relevant climate indices, with time scale and source.
 | Rx5day   | Maximum 5-day precipitation [mm]              | CMIP6 Extremes  |   Monthly   |
 | R99p     | Extremely wet day precipitation [days/month]  | CMIP6 Extremes  |   Monthly   |
 | CWD      | Consecutive Wet Days [days/month]             | CMIP6 Extremes  |   Annual    |
+| CDD      | Consecutive Dry Days [days/month]             | CMIP6 Extremes  |   Annual    |
 | slr      | Sea Level Rise [m]                            | CMIP6/NASA      |   Annual    |
 | sfcWind  | Daily maximum 10-m wind speed                 | CMIP6           |   Annual    |
 |          | Number of days with strong winds [days]       | CMIP6           |   Monthly   |
@@ -155,6 +156,8 @@ ADM0_mean(Ensemble_p90(anomaly/hist_SD))
 |     Tropical cyclone      |     Number of days with strong winds [days]        |
 |                           |     Daily maximum 10-m wind speed [m/s]            |
 |     Agricultural drought  |     Standard Precipitation-ET Index (SPEI) [-]     |
+|                           |     Consecutive Dry Days [days]                    |
+|                           |     Consecutive Wet Days [days]                    |
 |     Heat stress           |     Heat index [°C]                                |
 |     Wildfire?             |     Standard Precipitation-ET Index (SPEI) [-]     |
 |                           |     Heat index                                     |
