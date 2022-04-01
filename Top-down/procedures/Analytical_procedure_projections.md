@@ -240,11 +240,11 @@ Similar to:
 
 ### Table (for dynamic visualisation)
 
-| time | HIST_SD | Hist_p10 | Hist_50 | Hist_p90 | ssp1_pc10 | ssp1_pc50 | ssp1_pc90 | ssp2_pc10 | ssp2_pc50 | ssp2_pc90 | ssp5_pc10 | ssp5_pc50 | ssp5_pc90 | Std_Anom_Hist_p10 | Std_Anom_Hist_50 | Std_Anom_Hist_p90 | Std_Anom_ssp1_pc10 | Std_Anom_ssp1_pc50 | Std_Anom_ssp1_pc90 | Std_Anom_ssp2_pc10 | Std_Anom_ssp2_pc50 | Std_Anom_ssp2_pc90 | Std_Anom_ssp5_pc10 | Std_Anom_ssp5_pc50 | Std_Anom_ssp5_pc90 |  |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1980 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| 1981 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| 1982 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| 1983 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-| 1984 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| time | HIST_SD | Hist_p10 | Hist_50 | Hist_p90 | ssp(i)_pc10 | ssp(i)_pc50 | ssp(i)_pc90 | Std_Anom_Hist_p10 | Std_Anom_Hist_50 | Std_Anom_Hist_p90 | Std_Anom_ssp(i)_pc10 | Std_Anom_ssp(i)_pc50 | Std_Anom_ssp(i)_pc90 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1980 |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 1981 |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 1982 |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 1983 |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| 1984 |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| ... |  |  |  |  |  |  |  |  |  |  |  |  |  |
