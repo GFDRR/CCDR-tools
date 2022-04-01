@@ -92,7 +92,6 @@ A) Map output (spatial distribution)
 Period_mean(Ensemble_p10(anomaly/hist_SD))
 Period_mean(Ensemble_p50(anomaly/hist_SD))
 Period_mean(Ensemble_p90(anomaly/hist_SD))
-
   ```
   
 B) Chart output (time-series)
