@@ -125,8 +125,8 @@ ADM0_mean(Ensemble_p90(anomaly/hist_SD))
 
 ## USER INPUT
 
-- Hazard of interest (one selection or more):
-  - [ ] Flood and Landslide
+- Hazard of interest (one selection):
+  - [x] Flood and Landslide
   - [ ] Drought and Water Scarcity
   - [ ] Heat stress
   - [ ] Tropical Cyclone
