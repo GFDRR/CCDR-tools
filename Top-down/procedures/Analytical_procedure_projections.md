@@ -6,7 +6,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
  2) country
  3) time period
 
-Compared to the information offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure allows to:
+Compared to the information offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure adds:
 - Linking indices to hazards, thresholds to estimate change for ADM1 (increse / no change / decrease)
 - Standardisation of anomaly over historical variability as common metric of comparison
 
