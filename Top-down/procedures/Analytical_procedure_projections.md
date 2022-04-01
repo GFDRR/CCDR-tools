@@ -25,7 +25,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 - Runs over one selected country and for a specific set of indices depending on selected hazard
 - Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results
 - Consider four future 20-years period (near term, medium term, long term, end of century)
-- Claulate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly
+- Claulate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble
 - Compare standardised anomalies with pre-set thresholds to estimate change in the risk trend 
 - Plot maps and timeseries
 - The results are exported as csv (table) and geopackage (vector)
