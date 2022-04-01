@@ -134,9 +134,10 @@ ADM0_mean(Ensemble_p90(anomaly/hist_SD))
 - Country of interest (1): Name dropdown (link ISOa3 value) 
 
 - Time period (one selection):
-  - [ ] Near term (2021-2040)
-  - [X] Medium term (2041-2060)
-  - [ ] Long term (2081-2100)
+  - [ ] Near term (2020-2039)
+  - [X] Medium term (2040-2059)
+  - [ ] Long term (2060-2079)
+  - [ ] End of century (2081-2100)
 
 ------------------------------------------
 
