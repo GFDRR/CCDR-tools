@@ -195,12 +195,9 @@ Similar to:
 
 <img width="250" src="https://user-images.githubusercontent.com/44863827/161248206-9d7de806-ed15-41a2-9ab2-74860b87e0a8.png">
 
-<img width="250" src="https://user-images.githubusercontent.com/44863827/159906283-e7c073dc-d88c-4de6-b9dd-331140bed8de.png">
-
-
 ## EXPORT RESULTS - PROJECTIONS
 
-- Export output as gpkg and csv
+- Export output as gpkg (ADM1 values) and csv (timeseries)
 
 <hr>
 
