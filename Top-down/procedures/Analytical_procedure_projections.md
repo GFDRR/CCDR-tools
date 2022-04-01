@@ -233,7 +233,7 @@ Similar to:
  <caption><b>Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
   <tr><td>Days with rainfall > 10 mm</td><td>Maximum 5-day precipitation</td><td>Very wet day precipitation</td></tr>
   <tr><td><img width=300 src=""></td>
-   <td><img width=300 src=""></td>
+   <td><img width=300 src="https://github.com/klee016/SAR-CCDR-visualizations/raw/main/Pakistan/R%20Markdown/01.chapter1_files/figure-gfm/unnamed-chunk-44-1.png"></td>
    <td><img width=300 src=""></td></tr>
 </table>
 
