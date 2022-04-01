@@ -18,7 +18,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 ### The input data is:
 - raster data aggregated across time (20 years windows) for spatial representation
 - csv data aggregated across space (country boundaries) for time-serie representation
-  - includes ensemble p25 and p75 (plot of model confidence)
+  - includes ensemble p10 and p90 (variability across models)
 
 ### The script does:
 
