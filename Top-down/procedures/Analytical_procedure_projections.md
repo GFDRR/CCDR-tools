@@ -6,11 +6,14 @@ The script climate component provides aggregated statistics at ADM level [1] or 
  2) country
  3) time period
 
+Compared to the information offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure allows to:
+- Linking indices to hazards, thresholds to estimate change for ADM1 (increse / no change / decrease)
+- Standardisation of anomaly over historical variability as common metric of comparison
+
 ### Challenges:
 - harvesting online data does not provide all the variables we want, especially for the critical step of normalisation
 - the complete array of climate information is too large to be shared with the user and requires long processing. Thus the information needs to be aggregated into statistics
 - we need to present a well-rounded perspective for both space and time dimension
-- we can't have the cake and eat it too - or have the full bottle and the drunk wife
 
 ### The input data is:
 - raster data aggregated across time (20 years windows) for spatial representation
@@ -21,9 +24,10 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 
 - Runs over one selected country and for a specific set of indices depending on selected hazard
 - Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results
-- Calculate output for selected period (near, medium and long term)
-- The estimate is provided for median, 10th percentile (p10) and 90th percentile (p90) of **Ensemble_Mean**.
-- Both the raster information andthe aggregated values at ADM1 or ADM0 level are plotted
+- Consider four future 20-years period (near term, medium term, long term, end of century)
+- Claulate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly
+- Compare standardised anomalies with pre-set thresholds to estimate change in the risk trend 
+- Plot maps and timeseries
 - The results are exported as csv (table) and geopackage (vector)
 
 ### The output is:
@@ -65,28 +69,32 @@ The table summarises the relevant climate indices, with time scale and source.
 Each index is downloaded  as multiple multi-dimensional netcdf files. 
 
 **Dimensions:** 
-   - **SSP:** 2.6, 4.5, 8.5
+   - **SSP:** 1 (2.6), 2 (4.5), 5 (8.5)
    - **Ensemble member:** r1i1p1f1 (largest number of models available)
-   - **Ensemble confidence range:** mean, p25, p75
-   - **Period:** {Historical (1981-2010)}, [Near term (2021-2040), Medium term (2041-2060), Long term (2081-2100)]
+   - **Ensemble  range:** mean, p10, p90
+   - **Period:** {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
    - **Value statistic:** {Median, P10, P90, SD}, [Median, P10, P90] 
 
 These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
-The proposed approach is to produce:
+The script produces two types of output:
 
-- raster data aggregated across time (20 years windows) for spatial representation as:
+A) Map output (spatial distribution)
+   - raster data aggregated across time (20 years windows)
+   - ADM1-mean values above or below threshold (no change, increase/decrease)
   ```
-  Ensemble_Mean[(future_p10 - hist_p10)/hist_SD]
-  Ensemble_Mean[(future_p50 - hist_p50)/hist_SD]
-  Ensemble_Mean[(future_p90 - hist_p90)/hist_SD]
+Period_mean(Ensemble_p10(anomaly/hist_SD))
+Period_mean(Ensemble_p50(anomaly/hist_SD))
+Period_mean(Ensemble_p90(anomaly/hist_SD))
+
   ```
   
-- csv data aggregated across space (country ADM0 or ADM1 boundaries) for time-serie representation, includes ensemble p25 and p75 (plot of model confidence).
+B) Chart output (time-series)
+   - spatial data aggregated for country ADM0 boundaries plotted as chart
   ```
-  Ensemble_Mean[(future_p50 - hist_p50)/hist_SD]
-  Ensemble_p25[(future_p50 - hist_p50)/hist_SD]
-  Ensemble_p75[(future_p50 - hist_p50)/hist_SD]
+ADM0_mean(Ensemble_p10(anomaly/hist_SD))
+ADM0_mean(Ensemble_p50(anomaly/hist_SD))
+ADM0_mean(Ensemble_p90(anomaly/hist_SD))
   ```
 
 # PRE-REQUISITES (OFFLINE)
