@@ -11,7 +11,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 - Standardisation of anomaly over historical variability as common metric of comparison
 
 ### Challenges:
-- harvesting online data does not provide all the variables we want, especially for the critical step of normalisation
+- harvesting online data does not provide all the variables we want, especially for the critical step of spatial standardisation/normalisation
 - the complete array of climate information is too large to be shared with the user and requires long processing. Thus the information needs to be aggregated into statistics
 - we need to present a well-rounded perspective for both space and time dimension
 
