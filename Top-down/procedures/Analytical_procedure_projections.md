@@ -204,33 +204,26 @@ Similar to:
 
 ### Maps - Spatial distribution
 
+## Flood & Wet landslides, SSP2, Medium Term (2040-2059)
+
 <table>
- <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+ <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2059) compared to Historical period (1980-2015)</b></caption>
   <tr><td><img width=100% src="https://user-images.githubusercontent.com/44863827/160589506-0cc713b0-5a4e-4efb-8159-970b94087ca5.png"></td></tr>
 </table>
 
 <table>
- <caption><b>Days with rainfall > 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td>SSP 2.6</td><td>SSP 4.5</td><td>SSP 8.5</td></tr>
-  <tr><td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758502-5fa40db8-a2ab-498f-9339-e09f22808445.png"></td>
-   <td><img width=300 src="https://user-images.githubusercontent.com/44863827/159758595-72989fc4-ebc5-4ecd-b1c9-5391121a6fde.png"></td>
-   <td><img width=300 src=""></td></tr>
+ <caption><b>Days with rainfall > 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2015)</b></caption>
+  <tr><td><img width=100% src="https://user-images.githubusercontent.com/44863827/160589506-0cc713b0-5a4e-4efb-8159-970b94087ca5.png"></td></tr>
 </table>
 
 <table>
  <caption><b>Maximum 5-day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td>SSP 2.6</td><td>SSP 4.5</td><td>SSP 8.5</td></tr>
-  <tr><td><img width=300 src=""></td>
-   <td><img width=300 src=""></td>
-   <td><img width=300 src=""></td></tr>
+  <tr><td><img width=100% src="https://user-images.githubusercontent.com/44863827/160589506-0cc713b0-5a4e-4efb-8159-970b94087ca5.png"></td></tr>
 </table>
 
 <table>
  <caption><b>Very wet day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td>SSP 2.6</td><td>SSP 4.5</td><td>SSP 8.5</td></tr>
-  <tr><td><img width=300 src=""></td>
-   <td><img width=300 src=""></td>
-   <td><img width=300 src=""></td></tr>
+  <tr><td><img width=100% src="https://user-images.githubusercontent.com/44863827/160589506-0cc713b0-5a4e-4efb-8159-970b94087ca5.png"></td></tr>
 </table>
 
 
