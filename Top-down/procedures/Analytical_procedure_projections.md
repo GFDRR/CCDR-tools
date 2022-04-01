@@ -144,8 +144,21 @@ ADM0_mean(Ensemble_p90(anomaly/hist_SD))
 
 ## DATA PROCESSING - PROJECTIONS
 
-- Compute the required spatial statistics based on the input selection (country/hazards) for all SSP and selected periods.
-- Run zonal statistic using ADM1 as zone and nc data as value based on input (country, period, SSP) and settings aggregation criteria
+For each SSP scenario:
+	for each period:
+		for each model:
+   
+1. For each cell, calculate the anomaly and normalise it (anomaly/Hist_SD).
+   - Result: anomaly value x n_models x time interval (annual, monthly or daily)
+3. Take percentile 10, 50, 90 of these values to show the median change and the range of the variability within the model ensemble.
+   - Result: in anomaly value x 3p x time interval
+5. Calculate aggregated statistics:
+   A) mean over future 20-years period for maps visualisation and threshold evaluation at ADM1.
+   - Result: raster grid of anomaly x 3p
+   - Result: ADM1 value (median) compared to thresholds 
+   B) mean over ADM0 for timeseries visualisation up to end of selected period
+   - Result: ADM0 anomaly x 3p x time interval. If the interval is monthly or daily, it could be further aggregated (moving average)
+
 
 |          Hazard           |               Associated climate indices           |
 |---------------------------|----------------------------------------------------|
@@ -165,20 +178,22 @@ ADM0_mean(Ensemble_p90(anomaly/hist_SD))
 
 ## PREVIEW RESULTS
 
-- Plot as maps including:
-  - Projected Nornalised Mean Anonaly for selected period, all SSPs.
-    - as raster data
-    - as ADM1 mean value 
+For selected indices collection, SSP and period:
 
-- Plot as chart including:
-  - X is period last year (as from "period" input), Y is intensity (ramge depends on index and statistic selection)
+- Plot maps (20-years mean) 
+  - Projected Normalised Anonaly as raster data
+  - Change compared to Thresholds at ADM1
+
+- Plot timeseries (ADM0 mean) 
+  - X is years up to period_end, Y is standardised anomaly (range depends on the index)
   - Historical Mean (black line) and SD (grey area around line)
-  - Projected Normalised Mean Anomaly as 3 lines of different colors (green, yellow, orange) representing the median for each SSP
-  - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the p10-to-median and median-to-p90 for each SSP
-  - Model confidence level as shaded area ranging p25-p75
-  - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 represent the mean of all models in the ensemble".
+  - Projected Normalised Anomaly as 3 lines of different colors (green, yellow, orange) representing the Ensemble Median for each SSP
+  - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the Ensemble variability (p10-to-median and median-to-p90) for each SSP
+  - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 of ensemble for index (i) according to SSP(j)".
  
-Similar to what usually done:
+Similar to:
+
+<img width="250" src="https://user-images.githubusercontent.com/44863827/161248206-9d7de806-ed15-41a2-9ab2-74860b87e0a8.png">
 
 <img width="250" src="https://user-images.githubusercontent.com/44863827/159906283-e7c073dc-d88c-4de6-b9dd-331140bed8de.png">
 
