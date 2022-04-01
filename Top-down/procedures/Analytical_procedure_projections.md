@@ -33,8 +33,13 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 ### The output is:
 - presented as maps (spatial distribution)
 - plotted as charts (time distribution)
-  - ([confidence levels calculated as Ensemble_p25 and Ensemble_p75](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)) 
 - exported in form of tables, statistics, charts (excel format) and maps (geopackage)
+
+### Resources and references:
+
+- [E3CI](https://www.ifabfoundation.org/e3ci/)
+- [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information)
+- ([confidence levels calculated as Ensemble_p25 and Ensemble_p75](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/))
 
 ----------------------------
 
