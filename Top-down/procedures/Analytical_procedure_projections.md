@@ -77,10 +77,10 @@ Each index is downloaded  as multiple multi-dimensional netcdf files.
 **Dimensions:** 
    - **SSP:** 1 (2.6), 2 (4.5), 5 (8.5)
    - **Ensemble member:** r1i1p1f1 (largest number of models available)
-   - **Ensemble  range:** mean, p10, p90
+   - **Ensemble  range:** p10, p50, p90
    - **Period:** {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Value statistic:** {Median, P10, P90, SD}, [Median, P10, P90] 
+   - **Value statistic:** {P10, P50, P90, SD}, [P10, P50, P90] 
 
 These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
 The script produces two types of output:
@@ -190,9 +190,9 @@ For selected indices collection, SSP and period:
   - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the Ensemble variability (p10-to-median and median-to-p90) for each SSP
   - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 of ensemble for index (i) according to SSP(j)".
  
-Similar to:
-
-<img width="250" src="https://user-images.githubusercontent.com/44863827/161248206-9d7de806-ed15-41a2-9ab2-74860b87e0a8.png">
+- Plot hazard/risk change (ADM1) for each index (map, chart or table)
+  - Compare p66 of ensemble anomalies (High confidence) with set threshold of change.
+  - If the value is above threshold, the ADM1 is plotted as INCREASING
 
 ## EXPORT RESULTS - PROJECTIONS
 
