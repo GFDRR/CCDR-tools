@@ -191,7 +191,7 @@ For selected indices collection, SSP and period:
   - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 of ensemble for index (i) according to SSP(j)".
  
 - Plot hazard/risk change (ADM1) for each index (map, chart or table)
-  - Compare p66 of ensemble anomalies (High confidence) with set threshold of change.
+  - Compare p50 of ensemble anomalies (50% confidence) with set threshold of change.
   - If the value is above threshold, the ADM1 is plotted as INCREASING
 
 ## EXPORT RESULTS - PROJECTIONS
