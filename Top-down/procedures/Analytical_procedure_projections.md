@@ -82,8 +82,8 @@ Each index is downloaded  as multiple multi-dimensional netcdf files.
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
    - **Value statistic:** {P10, P50, P90, SD}, [P10, P50, P90] 
 
-These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
-The script produces two types of output:
+These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs via the notebook.
+Two types of output are produced:
 
 A) Map output (spatial distribution)
    - raster data aggregated across time (20 years windows)
@@ -101,21 +101,52 @@ ADM0_mean(Ensemble_p10(anomaly/hist_SD))
 ADM0_mean(Ensemble_p50(anomaly/hist_SD))
 ADM0_mean(Ensemble_p90(anomaly/hist_SD))
   ```
+## CLIMATE DATA PROCESSING
+
+For each SSP scenario:
+	for each period:
+		for each model:
+   
+1. For each cell, calculate the anomaly and normalise it (anomaly/Hist_SD).
+   - Result: anomaly value x n_models x time interval (annual, monthly or daily)
+3. Take percentile 10, 50, 90 of these values to show the median change and the range of the variability within the model ensemble.
+   - Result: in anomaly value x 3p x time interval
+5. Calculate aggregated statistics:
+   A) mean over future 20-years period for maps visualisation and threshold evaluation at ADM1.
+   - Result: raster grid of anomaly x 3p
+   - Result: ADM1 value (median) compared to thresholds 
+   B) mean over ADM0 for timeseries visualisation up to end of selected period
+   - Result: ADM0 anomaly x 3p x time interval. If the interval is monthly or daily, it could be further aggregated (moving average)
+
+|          Hazard           |               Associated climate indices           |
+|---------------------------|----------------------------------------------------|
+| River floods / Wet Landslides |     Days with rainfall > 10 mm [days]              |
+|                           |     Maximum 5-day precipitation [mm]               |
+|                           |     Very wet day precipitation [days/month]        |
+|     Coastal floods        |     Mean Sea Level Rise [m]                        |
+|     Tropical cyclone      |     Number of days with strong winds [days]        |
+|                           |     Daily maximum 10-m wind speed [m/s]            |
+|     Agricultural drought  |     Standard Precipitation-ET Index (SPEI) [-]     |
+|                           |     Consecutive Dry Days [days]                    |
+|                           |     Consecutive Wet Days [days]                    |
+|     Heat stress           |     Heat index [°C]                                |
+|     Wildfire?             |     Standard Precipitation-ET Index (SPEI) [-]     |
+|                           |     Heat index                                     |
+
+---------------------
 
 # PRE-REQUISITES (OFFLINE)
 
 - Anaconda and python installed > Possibly we move to jupyter desktop Autoinstaller
 - Create environment from ccdr_analytics.yml
 
-# SCRIPT STRUCTURE
+# NOTEBOOK SCRIPT STRUCTURE
 
 - SETUP: environment and libraries
 - USER INPUT: required
 - DATA PROCESSING: datasets are processed according to settings
 - PREVIEW RESULTS: plot maps and charts
 - EXPORT RESULTS: results are exported as gpkg and csv according to templates
-
-# SCRIPT STEP-BY-STEP
 
 ## SETUP
 
@@ -139,40 +170,9 @@ ADM0_mean(Ensemble_p90(anomaly/hist_SD))
   - [ ] Long term (2060-2079)
   - [ ] End of century (2081-2100)
 
-------------------------------------------
 
-## DATA PROCESSING - PROJECTIONS
+## DATA PROCESSING
 
-For each SSP scenario:
-	for each period:
-		for each model:
-   
-1. For each cell, calculate the anomaly and normalise it (anomaly/Hist_SD).
-   - Result: anomaly value x n_models x time interval (annual, monthly or daily)
-3. Take percentile 10, 50, 90 of these values to show the median change and the range of the variability within the model ensemble.
-   - Result: in anomaly value x 3p x time interval
-5. Calculate aggregated statistics:
-   A) mean over future 20-years period for maps visualisation and threshold evaluation at ADM1.
-   - Result: raster grid of anomaly x 3p
-   - Result: ADM1 value (median) compared to thresholds 
-   B) mean over ADM0 for timeseries visualisation up to end of selected period
-   - Result: ADM0 anomaly x 3p x time interval. If the interval is monthly or daily, it could be further aggregated (moving average)
-
-
-|          Hazard           |               Associated climate indices           |
-|---------------------------|----------------------------------------------------|
-| River floods / Wet Landslides |     Days with rainfall > 10 mm [days]              |
-|                           |     Maximum 5-day precipitation [mm]               |
-|                           |     Very wet day precipitation [days/month]        |
-|     Coastal floods        |     Mean Sea Level Rise [m]                        |
-|     Tropical cyclone      |     Number of days with strong winds [days]        |
-|                           |     Daily maximum 10-m wind speed [m/s]            |
-|     Agricultural drought  |     Standard Precipitation-ET Index (SPEI) [-]     |
-|                           |     Consecutive Dry Days [days]                    |
-|                           |     Consecutive Wet Days [days]                    |
-|     Heat stress           |     Heat index [°C]                                |
-|     Wildfire?             |     Standard Precipitation-ET Index (SPEI) [-]     |
-|                           |     Heat index                                     |
 
 
 ## PREVIEW RESULTS
