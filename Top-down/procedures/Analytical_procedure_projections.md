@@ -133,16 +133,23 @@ For each SSP scenario:
 |     Wildfire?             |     Standard Precipitation-ET Index (SPEI) [-]     |
 |                           |     Heat index                                     |
 
+## INPUT FILES FOR NOTEBOOK
+
 The resulting statistics are exported as GeoTiff files and csv which are input for the notebook.
 
-Geotiff files are named: `[index_name]_[scenario]_[period]_ens[stat]_st.anomaly_timmean`
+Geotiff files (global) are named: `[index_name]_[scenario]_[period]_ens[stat]_st.anomaly_timmean.tiff`
 
-  - Example: `cwd_ssp126_2061-2080_enspctl,50_anomaly_std_timmean`
+  - Example: `cwd_ssp126_2061-2080_enspctl,50_anomaly_std_timmean.tiff`
 
-Csv files are named: `[index_name]_[scenario]_[period]_ens[stat]_st.anomaly_[ISOa3]mean`
+The number of .tiff files is n = (10 indices x (1 hist + 3 scenarios x 4 periods) x 3 stats) = 390 (~100 Kb each, ~40 Mb in total)
 
-  - Example: `rx5day_ssp126_2061-2080_enspctl.50_st.anomaly_PAKmean`
-	
+Csv files (for each country) are named: `[index_name]_[scenario]_[period]_ens[stat]_st.anomaly_[ISOa3]mean.csv`
+
+  - Example: `rx5day_ssp126_2061-2080_enspctl.50_st.anomaly_PAKmean.csv`
+
+The number of files (for each country) is n = 10 indices x 1 sheet = 10 .csv files (or one .xlsx file),
+where each sheet includes all scenarios and statistics covering all time range (size depends on time scale: annual or monthly)
+
 ---------------------
 
 
