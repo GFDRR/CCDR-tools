@@ -43,7 +43,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 
 ----------------------------
 
-# PRE-PROCESSED CLIMATE INDICES
+# CLIMATE INDICES STATISTICS
 
 The table summarises the relevant climate indices, with time scale and source. 
 
@@ -101,7 +101,7 @@ ADM0_mean(Ensemble_p10(anomaly/hist_SD))
 ADM0_mean(Ensemble_p50(anomaly/hist_SD))
 ADM0_mean(Ensemble_p90(anomaly/hist_SD))
   ```
-## CLIMATE DATA PROCESSING
+## PROCESSING OF CLIMSTATS LAYERS REQUIRED BY NOTEBOOK
 
 For each SSP scenario:
 	for each period:
@@ -133,14 +133,18 @@ For each SSP scenario:
 |     Wildfire?             |     Standard Precipitation-ET Index (SPEI) [-]     |
 |                           |     Heat index                                     |
 
+
 ---------------------
 
-# PRE-REQUISITES (OFFLINE)
+
+# RUNNING THE NOTEBOOK TO PRESENT CLIMATE DATA
+
+## PRE-REQUISITES (OFFLINE)
 
 - Anaconda and python installed > Possibly we move to jupyter desktop Autoinstaller
 - Create environment from ccdr_analytics.yml
 
-# NOTEBOOK SCRIPT STRUCTURE
+## NOTEBOOK SCRIPT STRUCTURE
 
 - SETUP: environment and libraries
 - USER INPUT: required
@@ -148,12 +152,12 @@ For each SSP scenario:
 - PREVIEW RESULTS: plot maps and charts
 - EXPORT RESULTS: results are exported as gpkg and csv according to templates
 
-## SETUP
+### SETUP
 
 - Load required libraries
 - Load data from geotiff and csv
 
-## USER INPUT
+### USER INPUT
 
 - Hazard of interest (one selection):
   - [x] Flood and Landslide
@@ -171,11 +175,11 @@ For each SSP scenario:
   - [ ] End of century (2081-2100)
 
 
-## DATA PROCESSING
+### DATA PROCESSING
 
 
 
-## PREVIEW RESULTS
+### PREVIEW RESULTS
 
 For selected indices collection, SSP and period:
 
@@ -194,11 +198,11 @@ For selected indices collection, SSP and period:
   - Compare p50 of ensemble anomalies (50% confidence) with set threshold of change.
   - If the value is above threshold, the ADM1 is plotted as INCREASING
 
-## EXPORT RESULTS - PROJECTIONS
+### EXPORT RESULTS - PROJECTIONS
 
 - Export output as gpkg (ADM1 values) and csv (timeseries)
 
-<hr>
+-------------------
 
 # EXAMPLE OUTPUT
 
