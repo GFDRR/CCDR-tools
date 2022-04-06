@@ -171,9 +171,10 @@ where each sheet includes all scenarios and statistics covering all time range (
 ### SETUP
 
 - Load required libraries
-- Load data from geotiff and csv
 
 ### USER INPUT
+
+- Country of interest (1): Name dropdown (link ISOa3 value) 
 
 - Hazard of interest (one selection):
   - [x] Flood and Landslide
@@ -182,8 +183,6 @@ where each sheet includes all scenarios and statistics covering all time range (
   - [ ] Tropical Cyclone
   - [ ] Coastal flood
 
-- Country of interest (1): Name dropdown (link ISOa3 value) 
-
 - Time period (one selection):
   - [ ] Near term (2020-2039)
   - [X] Medium term (2040-2059)
@@ -191,24 +190,33 @@ where each sheet includes all scenarios and statistics covering all time range (
   - [ ] End of century (2081-2100)
 
 
-### DATA PROCESSING
+### PROCESSING
 
+- Load .gpkg files (ADM1 units) according to country selection
+- Load .tiff files (maps) according to hazard (one hazard can have multiple n indices) and time period selection (n_indices x (1 Historical + 3 SSP))
+- Load .csv files (timeseries) according to hazard and country selection
+- Load .csv file (indices thresholds)
+- Run zonal stats using ADM1 units on map data using MEAN criteria over each selected index.
+- Add field "Risk change" to ADM table
+- Compare the ADM1 score with indices threshold;
+  - if p50 > threshold, then: Risk_change = "Increase"
+  - if p50 > threshold, then: Risk_change = "No change"
 
-
-### PREVIEW RESULTS
+### PLOT RESULTS
 
 For selected indices collection, SSP and period:
 
-- Plot maps (20-years mean) 
-  - Projected Normalised Anonaly as raster data
-  - Change compared to Thresholds at ADM1
+- Plot maps (20-years mean) as:
+  - Grid data (1 row, 4 maps) showing (1) the historical p50 index value and (2-4) the p50 standard anomaly for 3 different SSP
+  - ADM1 data (1 row, 4 maps) showing if the risk threshold is surpassed (two values: no change / increase)
 
 - Plot timeseries (ADM0 mean) 
   - X is years up to period_end, Y is standardised anomaly (range depends on the index)
-  - Historical Mean (black line) and SD (grey area around line)
-  - Projected Normalised Anomaly as 3 lines of different colors (green, yellow, orange) representing the Ensemble Median for each SSP
-  - Projected Normalised Percentile 10th-90th as 3 color-shaded areas representing the Ensemble variability (p10-to-median and median-to-p90) for each SSP
-  - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 of ensemble for index (i) according to SSP(j)".
+  - Black line: Historical p50 (10-years moving average)
+  - Grey shade area: Historical p10-p90 range (10-years moving average)
+  - 3 lines (green, yellow, orange) representing the Ensemble Median of St.Anomaly for each SSP (10-years moving average)
+  - 3 color-shaded areas (light-green, -yellow, -orange) representing the Ensemble variability range p10-p90 for each SSP (10-years moving average)
+  - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 of ensemble for index (name)".
  
 - Plot hazard/risk change (ADM1) for each index (map, chart or table)
   - Compare p50 of ensemble anomalies (50% confidence) with set threshold of change.
