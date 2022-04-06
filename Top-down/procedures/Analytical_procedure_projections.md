@@ -101,7 +101,7 @@ ADM0_mean(Ensemble_p10(anomaly/hist_SD))
 ADM0_mean(Ensemble_p50(anomaly/hist_SD))
 ADM0_mean(Ensemble_p90(anomaly/hist_SD))
   ```
-## PROCESSING OF CLIMSTATS LAYERS REQUIRED BY NOTEBOOK
+## PROCESSING OF CLIMSTATS LAYERS FEEDING THE NOTEBOOK ANALYTICS
 
 For each SSP scenario:
 	for each period:
