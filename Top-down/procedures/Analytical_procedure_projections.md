@@ -230,18 +230,19 @@ For selected indices collection, SSP and period:
 
 # EXAMPLE OUTPUT
 
-### Maps - Spatial distribution
+## Maps - Spatial distribution
 
-## Flood & Wet landslides, SSP2, Medium Term (2040-2059)
+### General template for one index / one period / multiple SSP / Median
+<table>
+ <caption><b>Days with rainfall > 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2015)</b></caption>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162024767-241a2ad5-398f-4b0d-aa50-e473e2199464.png"></td></tr>
+</table>
+
+### Flood & Wet landslides, SSP2, Medium Term (2040-2059)
 
 <table>
  <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2059) compared to Historical period (1980-2015)</b></caption>
-  <tr><td><img width=100% src="https://user-images.githubusercontent.com/44863827/160589506-0cc713b0-5a4e-4efb-8159-970b94087ca5.png"></td></tr>
-</table>
-
-<table>
- <caption><b>Days with rainfall > 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2015)</b></caption>
-  <tr><td><img width=100% src=""></td></tr>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/160589506-0cc713b0-5a4e-4efb-8159-970b94087ca5.png"></td></tr>
 </table>
 
 <table>
@@ -255,7 +256,7 @@ For selected indices collection, SSP and period:
 </table>
 
 
-### Charts - Time distribution
+## Charts - Time distribution
 
 <table>
  <caption><b>Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
@@ -266,7 +267,7 @@ For selected indices collection, SSP and period:
 </table>
 
 
-### Table (for dynamic visualisation)
+## Table (for dynamic visualisation)
 
 | time | HIST_SD | Hist_p10 | Hist_50 | Hist_p90 | ssp(i)_pc10 | ssp(i)_pc50 | ssp(i)_pc90 | Std_Anom_Hist_p10 | Std_Anom_Hist_50 | Std_Anom_Hist_p90 | Std_Anom_ssp(i)_pc10 | Std_Anom_ssp(i)_pc50 | Std_Anom_ssp(i)_pc90 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
