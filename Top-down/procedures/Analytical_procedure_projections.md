@@ -232,11 +232,10 @@ For selected indices collection, SSP and period:
 
 ## Maps - Spatial distribution
 
-### General template for one index / one period / multiple SSP / Median
-<table>
- <caption><b>Days with rainfall > 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2015)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162024767-241a2ad5-398f-4b0d-aa50-e473e2199464.png"></td></tr>
-</table>
+### General template for one index / one period / multiple SSP / Median value and anomaly
+
+<img width=80% src="https://user-images.githubusercontent.com/44863827/162024767-241a2ad5-398f-4b0d-aa50-e473e2199464.png">
+
 
 ### Flood & Wet landslides, SSP2, Medium Term (2040-2059)
 
