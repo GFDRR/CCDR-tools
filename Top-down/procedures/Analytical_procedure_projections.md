@@ -133,7 +133,16 @@ For each SSP scenario:
 |     Wildfire?             |     Standard Precipitation-ET Index (SPEI) [-]     |
 |                           |     Heat index                                     |
 
+The resulting statistics are exported as GeoTiff files and csv which are input for the notebook.
 
+Geotiff files are named: `[index_name]_[scenario]_[period]_ens[stat]_st.anomaly_timmean`
+
+  - Example: `cwd_ssp126_2061-2080_enspctl,50_anomaly_std_timmean`
+
+Csv files are named: `[index_name]_[scenario]_[period]_ens[stat]_st.anomaly_[ISOa3]mean`
+
+  - Example: `rx5day_ssp126_2061-2080_enspctl.50_st.anomaly_PAKmean`
+	
 ---------------------
 
 
