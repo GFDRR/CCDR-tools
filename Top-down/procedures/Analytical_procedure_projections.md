@@ -137,15 +137,15 @@ For each SSP scenario:
 
 The resulting statistics are exported as GeoTiff files and csv which are input for the notebook.
 
-Geotiff files (global) are named: `[index_name]_[scenario]_[period]_ens[stat]_st.anomaly_timmean.tiff`
+Geotiff files (global) are named: `timmean_[index_name]_[scenario]_[period]_ens[stat]_st.anomaly.tiff`
 
-  - Example: `cwd_ssp126_2061-2080_enspctl,50_anomaly_std_timmean.tiff`
+  - Example: `timmean_cwd_ssp126_2061-2080_enspctl,50_anomaly_std.tiff`
 
 The number of .tiff files is n = (10 indices x (1 hist + 3 scenarios x 4 periods) x 3 stats) = 390 (~100 Kb each, ~40 Mb in total)
 
-Csv files (for each country) are named: `[index_name]_[scenario]_[period]_ens[stat]_st.anomaly_[ISOa3]mean.csv`
+Csv files (for each country) are named: `[ISOa3]mean_[index_name]_st.anomaly_.csv`
 
-  - Example: `rx5day_ssp126_2061-2080_enspctl.50_st.anomaly_PAKmean.csv`
+  - Example: `PAKmean_rx5day_st.anomaly_.csv`
 
 The number of files (for each country) is n = 10 indices x 1 sheet = 10 .csv files (or one .xlsx file),
 where each sheet includes all scenarios and statistics covering all time range (size depends on time scale: annual or monthly)
