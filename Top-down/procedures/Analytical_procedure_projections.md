@@ -239,7 +239,7 @@ For selected indices collection, SSP and period:
 
 <img width=80% src="https://user-images.githubusercontent.com/44863827/162429910-ea6b5a25-a9cb-4da3-a37f-3503c30f4202.png">
 
-### Flood & Wet landslides, SSP2, Medium Term (2040-2059)
+### Flood & Wet landslides, Medium Term (2040-2059)
 
 <table>
  <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2059) compared to Historical period (1980-2015)</b></caption>
