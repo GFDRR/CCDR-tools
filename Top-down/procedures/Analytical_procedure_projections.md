@@ -243,7 +243,7 @@ For selected indices collection, SSP and period:
 
 <table>
  <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2059) compared to Historical period (1980-2015)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/160589506-0cc713b0-5a4e-4efb-8159-970b94087ca5.png"></td></tr>
+  <tr><td><img width=80% src=""></td></tr>
 </table>
 
 <table>
