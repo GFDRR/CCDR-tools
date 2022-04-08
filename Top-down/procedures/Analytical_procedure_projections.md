@@ -87,19 +87,22 @@ Two types of output are produced:
 
 A) Map output (spatial distribution)
    - raster data aggregated across time (20 years windows)
+```
+Ensemble_mean(Period_mean(anomaly/hist_SD))
+Ensemble_p50(Period_mean(anomaly/hist_SD))
+```
    - ADM1-mean values above or below threshold (no change, increase/decrease)
-  ```
-Period_mean(Ensemble_p10(anomaly/hist_SD))
-Period_mean(Ensemble_p50(anomaly/hist_SD))
-Period_mean(Ensemble_p90(anomaly/hist_SD))
-  ```
+```
+ADM1_mean(Ensemble_p50(Period_mean(anomaly/hist_SD))) ≥ Threshold = "Increase"
+ADM1_mean(Ensemble_p50(Period_mean(anomaly/hist_SD))) < Threshold = "No change"
+```
   
 B) Chart output (time-series)
    - spatial data aggregated for country ADM0 boundaries plotted as chart
   ```
-ADM0_mean(Ensemble_p10(anomaly/hist_SD))
-ADM0_mean(Ensemble_p50(anomaly/hist_SD))
-ADM0_mean(Ensemble_p90(anomaly/hist_SD))
+Ensemble_p10(ADM0_mean(anomaly/hist_SD))
+Ensemble_p50(ADM0_mean(anomaly/hist_SD))
+Ensemble_p90(ADM0_mean(anomaly/hist_SD))
   ```
 ## PROCESSING OF CLIMSTATS LAYERS FEEDING THE NOTEBOOK ANALYTICS
 
@@ -232,10 +235,9 @@ For selected indices collection, SSP and period:
 
 ## Maps - Spatial distribution
 
-### General template for one index / one period / multiple SSP / Median value and anomaly
+### General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)
 
-<img width=80% src="https://user-images.githubusercontent.com/44863827/162027001-9076fa43-5823-43f7-8a40-85e703d5c7d0.png">
-
+<img width=80% src="https://user-images.githubusercontent.com/44863827/162420408-a0c430e3-425a-444b-9e55-5d3b90b2365b.png">
 
 
 ### Flood & Wet landslides, SSP2, Medium Term (2040-2059)
