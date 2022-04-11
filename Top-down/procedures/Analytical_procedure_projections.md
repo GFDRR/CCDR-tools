@@ -237,23 +237,23 @@ For selected indices collection, SSP and period:
 
 ### General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)
 
-<img width=80% src="https://user-images.githubusercontent.com/44863827/162790668-dd5767e2-63cb-4547-8b4d-edf463a0c9a8.png">
+<img width=80% src="https://user-images.githubusercontent.com/44863827/162792641-87b8111b-41da-4ff3-9ed2-6d386659b2e1.png">
 
 ### Flood & Wet landslides, Medium Term (2040-2059)
 
 <table>
  <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2059) compared to Historical period (1980-2015)</b></caption>
-  <tr><td><img width=80% src=""></td></tr>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793376-2960eb30-09e2-4384-896f-899192828a17.png"></td></tr>
 </table>
 
 <table>
  <caption><b>Maximum 5-day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=100% src=""></td></tr>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793424-a88c1a89-0ff9-4b23-8e6d-77b181f9ca8f.png"></td></tr>
 </table>
 
 <table>
  <caption><b>Very wet day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=100% src=""></td></tr>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793469-add447e9-656a-4572-92d0-750b9a7d8097.png"></td></tr>
 </table>
 
 
