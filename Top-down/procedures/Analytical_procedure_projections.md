@@ -247,8 +247,8 @@ For selected indices collection, SSP and period:
 </table>
 
 <table>
- <caption><b>Maximum 5-day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793424-a88c1a89-0ff9-4b23-8e6d-77b181f9ca8f.png"></td></tr>
+ <caption><b>Days with precipitation over 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793711-ad349487-dc46-4215-9e09-53b9682cf749.png"></td></tr>
 </table>
 
 <table>
@@ -256,6 +256,10 @@ For selected indices collection, SSP and period:
   <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793469-add447e9-656a-4572-92d0-750b9a7d8097.png"></td></tr>
 </table>
 
+<table>
+ <caption><b>Maximum 5-day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793424-a88c1a89-0ff9-4b23-8e6d-77b181f9ca8f.png"></td></tr>
+</table>
 
 ## Charts - Time distribution
 
