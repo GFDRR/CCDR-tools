@@ -51,7 +51,7 @@ The table summarises the relevant climate indices, with time scale and source.
 |:--------:|:---------------------------------------------:|:---------------:|:-----------:|
 | R10mm    | Days with rainfall > 10 mm [days]             | CMIP6 Extremes  |   Annual    |
 | Rx5day   | Maximum 5-day precipitation [mm]              | CMIP6 Extremes  |   Monthly   |
-| R99p     | Extremely wet day precipitation [days/month]  | CMIP6 Extremes  |   Monthly   |
+| R99p     | Extremely wet day precipitation [days]  	   | CMIP6 Extremes  |   Monthly   |
 | CWD      | Consecutive Wet Days [days/month]             | CMIP6 Extremes  |   Annual    |
 | CDD      | Consecutive Dry Days [days/month]             | CMIP6 Extremes  |   Annual    |
 | slr      | Sea Level Rise [m]                            | CMIP6/NASA      |   Annual    |
@@ -125,7 +125,7 @@ For each SSP scenario:
 |---------------------------|----------------------------------------------------|
 | River floods / Wet Landslides |     Days with rainfall > 10 mm [days]              |
 |                           |     Maximum 5-day precipitation [mm]               |
-|                           |     Very wet day precipitation [days/month]        |
+|                           |     Very wet day precipitation [days]        |
 |     Coastal floods        |     Mean Sea Level Rise [m]                        |
 |     Tropical cyclone      |     Number of days with strong winds [days]        |
 |                           |     Daily maximum 10-m wind speed [m/s]            |
