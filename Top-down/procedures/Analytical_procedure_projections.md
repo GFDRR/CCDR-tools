@@ -237,7 +237,7 @@ For selected indices collection, SSP and period:
 
 ### General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)
 
-<img width=80% src="https://user-images.githubusercontent.com/44863827/162429910-ea6b5a25-a9cb-4da3-a37f-3503c30f4202.png">
+<img width=80% src="https://user-images.githubusercontent.com/44863827/162790668-dd5767e2-63cb-4547-8b4d-edf463a0c9a8.png">
 
 ### Flood & Wet landslides, Medium Term (2040-2059)
 
