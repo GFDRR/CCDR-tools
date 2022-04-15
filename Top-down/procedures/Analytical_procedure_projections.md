@@ -123,9 +123,10 @@ For each SSP scenario:
 
 |          Hazard           |               Associated climate indices           |
 |---------------------------|----------------------------------------------------|
-| River floods / Wet Landslides |     Days with rainfall > 10 mm [days]              |
+| River floods / Wet Landslides | Consecutive Dry Days [days]                    |
+|                           |     Days with rainfall > 10 mm [days]              |
 |                           |     Maximum 5-day precipitation [mm]               |
-|                           |     Very wet day precipitation [days]        |
+|                           |     Very wet day precipitation [mm]      		 |
 |     Coastal floods        |     Mean Sea Level Rise [m]                        |
 |     Tropical cyclone      |     Number of days with strong winds [days]        |
 |                           |     Daily maximum 10-m wind speed [m/s]            |
