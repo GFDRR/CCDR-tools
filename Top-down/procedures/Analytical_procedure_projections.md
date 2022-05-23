@@ -7,7 +7,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
  3) time period
 
 Compared to the information offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure adds:
-- Linking indices to hazards, thresholds to estimate change for ADM1 (increse / no change / decrease)
+- Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level
 - Standardisation of anomaly over historical variability as common metric of comparison
 
 ### Challenges:
@@ -25,8 +25,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 - Runs over one selected country and for a specific set of indices depending on selected hazard
 - Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results
 - Consider four future 20-years period (near term, medium term, long term, end of century)
-- Claulate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble
-- Compare standardised anomalies with pre-set thresholds to estimate change in the risk trend 
+- Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble
 - Plot maps and timeseries
 - The results are exported as csv (table) and geopackage (vector)
 
@@ -91,10 +90,9 @@ A) Map output (spatial distribution)
 Ensemble_mean(Period_mean(anomaly/hist_SD))
 Ensemble_p50(Period_mean(anomaly/hist_SD))
 ```
-   - ADM1-mean values above or below threshold (no change, increase/decrease)
+   - ADM1-mean values from raster data
 ```
-ADM1_mean(Ensemble_p50(Period_mean(anomaly/hist_SD))) ≥ Threshold = "Increase"
-ADM1_mean(Ensemble_p50(Period_mean(anomaly/hist_SD))) < Threshold = "No change"
+ADM1_mean(Ensemble_p50(Period_mean(anomaly/hist_SD)))
 ```
   
 B) Chart output (time-series)
@@ -115,9 +113,9 @@ For each SSP scenario:
 3. Take percentile 10, 50, 90 of these values to show the median change and the range of the variability within the model ensemble.
    - Result: in anomaly value x 3p x time interval
 5. Calculate aggregated statistics:
-   A) mean over future 20-years period for maps visualisation and threshold evaluation at ADM1.
+   A) mean over future 20-years period for maps visualisation
    - Result: raster grid of anomaly x 3p
-   - Result: ADM1 value (median) compared to thresholds 
+   - Result: ADM1 value (median)
    B) mean over ADM0 for timeseries visualisation up to end of selected period
    - Result: ADM0 anomaly x 3p x time interval. If the interval is monthly or daily, it could be further aggregated (moving average)
 
