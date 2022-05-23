@@ -197,12 +197,7 @@ where each sheet includes all scenarios and statistics covering all time range (
 - Load .gpkg files (ADM1 units) according to country selection
 - Load .tiff files (maps) according to hazard (one hazard can have multiple n indices) and time period selection (n_indices x (1 Historical + 3 SSP))
 - Load .csv files (timeseries) according to hazard and country selection
-- Load .csv file (indices thresholds)
 - Run zonal stats using ADM1 units on map data using MEAN criteria over each selected index.
-- Add field "Risk change" to ADM table
-- Compare the ADM1 score with indices threshold;
-  - if p50 > threshold, then: Risk_change = "Increase"
-  - if p50 > threshold, then: Risk_change = "No change"
 
 ### PLOT RESULTS
 
@@ -210,7 +205,7 @@ For selected indices collection, SSP and period:
 
 - Plot maps (20-years mean) as:
   - Grid data (1 row, 4 maps) showing (1) the historical p50 index value and (2-4) the p50 standard anomaly for 3 different SSP
-  - ADM1 data (1 row, 4 maps) showing if the risk threshold is surpassed (two values: no change / increase)
+  - ADM1 data (1 row, 4 maps) showing the mean value as color and label
 
 - Plot timeseries (ADM0 mean) 
   - X is years up to period_end, Y is standardised anomaly (range depends on the index)
@@ -220,9 +215,6 @@ For selected indices collection, SSP and period:
   - 3 color-shaded areas (light-green, -yellow, -orange) representing the Ensemble variability range p10-p90 for each SSP (10-years moving average)
   - Title and description of the aggregation criteria, e.g. "Median, p10 and p90 of ensemble for index (name)".
  
-- Plot hazard/risk change (ADM1) for each index (map, chart or table)
-  - Compare p50 of ensemble anomalies (50% confidence) with set threshold of change.
-  - If the value is above threshold, the ADM1 is plotted as INCREASING
 
 ### EXPORT RESULTS - PROJECTIONS
 
