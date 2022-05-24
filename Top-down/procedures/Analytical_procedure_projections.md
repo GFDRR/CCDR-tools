@@ -228,28 +228,29 @@ For selected indices collection, SSP and period:
 
 ### General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)
 
-<img width=80% src="https://user-images.githubusercontent.com/44863827/162792641-87b8111b-41da-4ff3-9ed2-6d386659b2e1.png">
+<img width=80% src="https://user-images.githubusercontent.com/44863827/170073183-5828b264-558e-41eb-b960-f604d4924549.png">
+
 
 ### Flood & Wet landslides, Medium Term (2040-2059)
 
 <table>
  <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2059) compared to Historical period (1980-2015)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793376-2960eb30-09e2-4384-896f-899192828a17.png"></td></tr>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073680-bb41f0c0-2c46-4f51-b804-e3af6b87040b.png"></td></tr>
 </table>
 
 <table>
  <caption><b>Days with precipitation over 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793711-ad349487-dc46-4215-9e09-53b9682cf749.png"></td></tr>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073777-5b101bd9-ed7b-4b2a-8c0a-04292ccebcfe.png"></td></tr>
 </table>
 
 <table>
  <caption><b>Very wet day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793469-add447e9-656a-4572-92d0-750b9a7d8097.png"></td></tr>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073866-1915be3d-6d27-4722-9b6c-e1072276f9f6.png"></td></tr>
 </table>
 
 <table>
  <caption><b>Maximum 5-day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/162793424-a88c1a89-0ff9-4b23-8e6d-77b181f9ca8f.png"></td></tr>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073979-c8b99de7-4dbc-43b2-8709-0f213ec7c390.png"></td></tr>
 </table>
 
 ## Charts - Time distribution
