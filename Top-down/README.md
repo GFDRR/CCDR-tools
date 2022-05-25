@@ -47,6 +47,8 @@ CACHE_DIR = ${DATA_DIR}/cache/
 
 - Navigate to your working directory: `cd <Your work directory>`
 - Run `jupyter notebook`
+- Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
+  ![immagine](https://user-images.githubusercontent.com/44863827/170250738-03ad2f05-a128-4d84-ab27-01dcec54c4e4.png)
 - Execute all cells. The last one will present the user interface:
 
 <img width=500 src="https://user-images.githubusercontent.com/44863827/156407683-c5613196-53bc-4ee5-81b7-d94b4fdbf295.png">
