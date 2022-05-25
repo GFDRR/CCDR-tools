@@ -14,9 +14,9 @@ A collection of Python notebooks to perform country-level climate and disaster r
   
   - **[Landslide](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Landslide.ipynb)** - uses landslide hazard index (individual layer) to calculate distribution of exposed categories (population, built-up) across hazard thresholds (3 classes).
   
-  - **Tropical cyclones** - uses wind hazard model (gust speed for 3 return periods) to calculate impact over built-up according to damage function.
+  - **[Tropical cyclones](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Tropical_cyclones.ipynb)** - uses wind hazard model (gust speed for 3 return periods) to calculate impact over built-up according to damage function.
   
-  - **Air Pollution** - uses PM2.5 hazard map (individual layer) to calculate health impact on population according to mortality function.
+  - **[Air Pollution](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/AirPollution.ipynb)** - uses PM2.5 hazard map (individual layer) to calculate health impact on population according to mortality function.
 
 ## Bottom-up
 **Country-specific, detailed risk evaluation based on mix of regional and local data**
