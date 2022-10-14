@@ -4,6 +4,7 @@ from common import *
 from damageFunctions import damage_factor_builtup, damage_factor_agri, mortality_factor
 from runAnalysis import run_analysis
 
+
 # Defining the main function
 def main():
     # Defining the initial parameters

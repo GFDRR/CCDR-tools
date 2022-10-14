@@ -1,6 +1,7 @@
 # Importing the required packages
 import numpy as np
 
+
 # Defining the damage function - Built-Up areas
 def damage_factor_builtup(x):
     """A polynomial fit to average damage across builtup land cover relative
@@ -24,6 +25,7 @@ def damage_factor_builtup(x):
     
     # return (x+999)/(x+999)
 
+
 # Defining the damage function - Agriculture
 def damage_factor_agri(x):
     """A polynomial fit to average damage across agricultural land cover relative
@@ -39,9 +41,11 @@ def damage_factor_agri(x):
     return np.maximum(0.0, np.minimum(1.0, 0.00723 * x ** 3 - 0.1000 * x ** 2 + 0.5060 * x)) # Floods - ASIA
     # return (x+999)/(x+999)
 
+
 # Defining the damage function - Mortality
 def mortality_factor(x):
     """A polynomial fit to average population mortality due to nearby flooding.
+
     References
     ----------
     .. [1] Jonkman et al, 2008
