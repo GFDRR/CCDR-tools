@@ -26,10 +26,10 @@ def zonal_stats_parallel(args):
 
 
 # Defining the main function to run the analysis
-def run_analysis(country: str, haz_cat: str, valid_RPs: list[int], 
-        min_haz_threshold: float, exp_cat: str, adm_name: str, 
-        time_horizon: list[int], rcp_scenario: list[str], 
-        analysis_type: str, class_edges: list[float], save_check_raster: bool):
+def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
+                 min_haz_threshold: float, exp_cat: str, adm_name: str,
+                 time_horizon: list[int], rcp_scenario: list[str],
+                 analysis_type: str, class_edges: list[float], save_check_raster: bool):
     """
     Run specified analysis.
 
