@@ -105,9 +105,7 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
         exp_ras = None
         ValueError(f"Missing or unknown data layer {exp_cat}")
 
-    # ==================================================================================================================
-
-    # Running the analysis =============================================================================================
+    # Running the analysis
     # Importing the exposure data
     exp_data = rxr.open_rasterio(exp_ras)  # Open exposure dataset
     # Indicate -1 values as representing no data
