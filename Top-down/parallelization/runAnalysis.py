@@ -67,10 +67,10 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
     num_bins = None
     if analysis_type == "Classes":
         # Ensure class threshold values are valid
-        seq_check = np.all([True if class_edges[i] < class_edges[i + 1]
+        is_seq = np.all([True if class_edges[i] < class_edges[i + 1]
                            else False for i in range(0, len(class_edges) - 1)])
 
-        if not seq_check:
+        if not is_seq:
             ValueError(
                 "Class thresholds are not sequential. Lower classes must be less than class thresholds above.")
             exit()
