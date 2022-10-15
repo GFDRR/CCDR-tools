@@ -299,7 +299,7 @@ def calc_RPs(RP, haz_folder, analysis_type, country, haz_cat, exp_cat, exp_data,
                 f"Error occurred trying to open raster file: {country}_{haz_cat}_RP{rp}.tif")
 
         # Set values below min threshold to nan
-        haz_data = haz_data.where(haz_data.data < min_haz_threshold, 0.0)
+        haz_data = haz_data.where(haz_data.data > min_haz_threshold, np.nan)
 
         # Checking the analysis_type
         if analysis_type == "Function":
