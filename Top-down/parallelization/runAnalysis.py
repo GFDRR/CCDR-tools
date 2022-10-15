@@ -107,9 +107,9 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
 
     # Running the analysis
     # Importing the exposure data
-    exp_data = rxr.open_rasterio(exp_ras)  # Open exposure dataset
-    # Indicate -1 values as representing no data
-    exp_data.rio.write_nodata(0, inplace=True)
+    exp_data = rxr.open_rasterio(exp_ras)[0]  # Open exposure dataset
+    exp_data.rio.write_nodata(-1.0, inplace=True)
+    exp_data.data[exp_data < 0.0] = 0.0
 
     # Loading the ADM data based on country code and adm_name values
     try:
