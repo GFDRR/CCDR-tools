@@ -19,6 +19,7 @@ def main():
     analysis_app_dd    = "Function" #["Classes", "Function"]
     class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
     save_check_raster  = False
+    cores              = 2
 
     import time
     start_time = time.time()
@@ -28,7 +29,7 @@ def main():
         # Running the analysis
         run_analysis(country_dd, haz_cat_dd, return_periods, min_haz_slider,
                        exp_cat_dd, adm_dd, time_horizon_dd, rcp_scenario_dd, 
-                       analysis_app_dd, class_edges, save_check_raster)
+                       analysis_app_dd, class_edges, save_check_raster, cores)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 

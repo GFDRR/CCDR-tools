@@ -29,7 +29,8 @@ def zonal_stats_parallel(args):
 def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
                  min_haz_threshold: float, exp_cat: str, adm_name: str,
                  time_horizon: list[int], rcp_scenario: list[str],
-                 analysis_type: str, class_edges: list[float], save_check_raster: bool):
+                 analysis_type: str, class_edges: list[float], 
+                 save_check_raster: bool, cores: int=1):
     """
     Run specified analysis.
 
@@ -46,6 +47,7 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
     analysis_type : type of analysis (class or function)
     class_edges : class edges for class-based analysis
     save_check_raster : save intermediate results to disk?
+    cores : number of cores to use for parallel processing (default: 1, no parallelization)
     """
     print("Running analysis...")
 
