@@ -188,12 +188,13 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
                                                                                                            f"{adm_name}_{exp_cat}"]) * 100.0
         # Computing EAI if analysis is Function
         if analysis_type == "Function":
-            # Sum all EAI to get total EAI across all RPs
-            result_df.loc[:, f"{exp_cat}_EAI"] = result_df.loc[:,
-                                                               result_df.columns.str.contains('_EAI')].sum(axis=1)
-            # Calculate Exp_EAI% (Percent affected exposure per year)
-            result_df.loc[:, f"{exp_cat}_EAI%"] = (result_df.loc[:, f"{exp_cat}_EAI"] / result_df.loc[:,
-                                                                                                      f"{adm_name}_{exp_cat}"]) * 100.0
+            if len(valid_RPs) > 1:
+                # Sum all EAI to get total EAI across all RPs
+                result_df.loc[:, f"{exp_cat}_EAI"] = result_df.loc[:,
+                                                                result_df.columns.str.contains('_EAI')].sum(axis=1)
+                # Calculate Exp_EAI% (Percent affected exposure per year)
+                result_df.loc[:, f"{exp_cat}_EAI%"] = (result_df.loc[:, f"{exp_cat}_EAI"] / result_df.loc[:,
+                                                                                                        f"{adm_name}_{exp_cat}"]) * 100.0
 
     # Converting eventual nan/null to zero
     result_df = result_df.replace(np.nan, 0)
@@ -204,14 +205,15 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
         all_RPs = ["RP" + str(rp) for rp in valid_RPs]
         all_exp = [x + f"_{exp_cat}_tot" for x in all_RPs]
         all_imp = [x + f"_{exp_cat}_imp" for x in all_RPs]
-        all_EAI = []
-
-        if len(valid_RPs) > 1:
-            all_EAI = [x + "_EAI" for x in all_RPs]
+        all_EAI = [x + "_EAI" for x in all_RPs] if len(valid_RPs) > 1 else []
 
         col_order = all_adm_codes + all_adm_names + [f"{adm_name}_{exp_cat}"] + \
-            all_exp + all_imp + all_EAI + \
-            [f"{exp_cat}_EAI", f"{exp_cat}_EAI%", "geometry"]
+            all_exp + all_imp + all_EAI
+        
+        if len(valid_RPs) > 1:
+            col_order += [f"{exp_cat}_EAI", f"{exp_cat}_EAI%"]
+        
+        col_order += ["geometry"]
 
         result_df = result_df.loc[:, col_order]
 
