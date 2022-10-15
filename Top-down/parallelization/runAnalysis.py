@@ -59,6 +59,10 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
     exp_folder = f"{DATA_DIR}/EXP"  # Exposure folder
 
     # If the analysis type is "Classes", then make sure that the user-defined classes are valid
+    max_bin_value = None
+    max_haz_threshold = None
+    bin_seq = None
+    num_bins = None
     if analysis_type == "Classes":
         # Ensure class threshold values are valid
         seq_check = np.all([True if class_edges[i] < class_edges[i + 1]
