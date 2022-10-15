@@ -126,146 +126,49 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
     all_adm_codes = adm_cols[all_adm_codes].to_list()
     all_adm_names = adm_cols[all_adm_names].to_list()
 
-    # Creating the results pandas dataframe
-    result_df = adm_data.loc[:, all_adm_codes + all_adm_names + ["geometry"]]
-
-    # Creating a process pool using all cores
-    # cores = mp.cpu_count()
-    cores = 4
     with mp.Pool(cores) as p:
         # Get total exposure for each ADM region
         func = partial(zonal_stats_partial, raster=exp_ras, stats="sum")
         stats_parallel = p.map(func, np.array_split(adm_data.geometry, cores))
 
     exp_per_ADM = list(it.chain(*stats_parallel))
+
+    # Creating the results pandas dataframe
+    result_df = adm_data.loc[:, all_adm_codes + all_adm_names + ["geometry"]]
     result_df[f"{adm_name}_{exp_cat}"] = [x['sum'] for x in exp_per_ADM]
 
     # Cleaning-up memory
     del (stats_parallel, exp_per_ADM)
 
-    # For every probability as defined in the return period vector
-    for rp in valid_RPs:
-        # Probability of return period
-        # Essentially the same as 1/RP, but accounts for cases where RP == 1
-        freq = 1 - np.exp(-1 / rp)
+    n_valid_RPs_gt_1 = len(valid_RPs) > 1
+    with mp.Pool(cores) as p:
+        params = {
+            "haz_folder": haz_folder,
+            "analysis_type": analysis_type,
+            "country": country,
+            "haz_cat": haz_cat,
+            "exp_cat": exp_cat,
+            "exp_data": exp_data,
+            "min_haz_threshold": min_haz_threshold,
+            "damage_factor": damage_factor,
+            "save_check_raster": save_check_raster,
+            "max_bin_value": max_bin_value,
+            "max_haz_threshold": max_haz_threshold,
+            "bin_seq": bin_seq,
+            "num_bins": num_bins,
+            "adm_data": adm_data,
+            "n_valid_RPs_gt_1": n_valid_RPs_gt_1
+        }
 
-        # Loading the corresponding hazard dataset
-        try:
-            haz_data = rxr.open_rasterio(os.path.join(
-                haz_folder, f"{country}_{haz_cat}_RP{rp}.tif"))
-            haz_data.rio.write_nodata(0, inplace=True)
+        func = partial(calc_RPs, **params)
+        res = p.map(func, np.array_split(valid_RPs, cores))
 
-            # Reproject and clip raster to same bounds as exposure data
-            haz_data = haz_data.rio.reproject_match(exp_data)
-        except rxr._err.CPLE_OpenFailedError:
-            raise (
-                IOError, f"Error occurred trying to open raster file: {country}_{haz_cat}_RP{rp}.tif")
+    if not isinstance(res, list):
+        to_concat = [result_df, res]
+    else:
+        to_concat = [result_df] + res
 
-        # Get raw array values for exposure and hazard layer
-        haz_array = haz_data[0].values
-        # Set values below min threshold to nan
-        haz_array[haz_array < min_haz_threshold] = np.nan
-        # Checking the analysis_type
-        if analysis_type == "Function":
-            # Assign impact factor (this is F_i)
-            impact_arr = damage_factor(haz_array)
-
-            # Create raster from array
-            impact_rst = xr.DataArray(np.array([impact_arr]).astype(np.float32), coords=haz_data.coords,
-                                      dims=haz_data.dims)
-
-            if save_check_raster:
-                impact_rst.rio.to_raster(
-                    os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{rp}_{exp_cat}_haz_imp_factor.tif"))
-
-        elif analysis_type == "Classes":
-            # Pre-process the haz_array data
-            haz_array[np.isnan(haz_array)] = 0  # Set NaNs to 0
-            # Cap large values to maximum threshold value
-            haz_array[haz_array > max_bin_value] = max_haz_threshold
-
-            # Assign bin values to raster data
-            # Follows: x_{i-1} <= x_{i} < x_{i+1}
-            bin_idx = np.digitize(haz_array, bin_seq)
-            impact_arr = None
-            impact_rst = haz_data
-
-        # Calculate affected exposure in ADM
-        # Filter down to valid areas
-        valid_impact_areas = impact_rst.values > 0
-        # Get total exposure in affected areas
-        affected_exp = exp_data.where(valid_impact_areas)
-        # Out of the above, get areas that have people
-        affected_exp = affected_exp.where(affected_exp > 0)
-
-        if save_check_raster:
-            affected_exp.rio.to_raster(os.path.join(
-                OUTPUT_DIR, f"{country}_{haz_cat}_{exp_cat}_{rp}_affected.tif"))
-
-        del (haz_data, haz_array, impact_arr)
-
-        # Conduct analyses for classes
-        if analysis_type == "Classes":
-            for bin_x in reversed(range(0, num_bins)):
-                # Compute the impact for this class
-                impact_class = gen_zonal_stats(vectors=adm_data["geometry"],
-                                               raster=np.array(bin_idx == bin_x).astype(
-                                                   int) * affected_exp.data[0],
-                                               stats=["sum"], affine=affected_exp.rio.transform(), nodata=np.nan)
-                result_df[f"RP{rp}_{exp_cat}_C{bin_x}"] = [x['sum']
-                                                           for x in impact_class]
-
-                # Compute the cumulative impact for this class
-                if bin_x < (num_bins - 1):
-                    result_df[f"RP{rp}_{exp_cat}_C{bin_x}"] = result_df[f"RP{rp}_{exp_cat}_C{bin_x}"] + result_df[
-                        f"RP{rp}_{exp_cat}_C{bin_x + 1}"]
-
-                del impact_class
-            # end
-
-            # Compute the EAE for classes, if probabilistic (len(valid_RPs)>1)
-            if len(valid_RPs) > 1:
-                for bin_x in reversed(range(0, num_bins)):
-                    result_df[f"RP{rp}_{exp_cat}_C{bin_x}_EAE"] = result_df[f"RP{rp}_{exp_cat}_C{bin_x}"] * freq
-
-        # Conduct analyses for function
-        if analysis_type == "Function":
-            # Calculate degree of impact over Exposure category
-            # Get impacted exposure in affected areas
-            impact_exp = affected_exp * impact_rst.where(valid_impact_areas)
-
-            # If save intermediate to disk is TRUE, then
-            if save_check_raster:
-                impact_exp.rio.to_raster(os.path.join(
-                    OUTPUT_DIR, f"{country}_{haz_cat}_{exp_cat}_{rp}_impact.tif"))
-
-            # Compute the impact per ADM level
-            impact_exp_per_ADM = gen_zonal_stats(vectors=adm_data["geometry"], raster=impact_exp.data[0], stats=["sum"],
-                                                 affine=impact_exp.rio.transform(), nodata=0)
-            result_df[f"RP{rp}_{exp_cat}_imp"] = [x['sum']
-                                                  for x in impact_exp_per_ADM]
-
-            # Compute the exposure per ADM level
-            affected_exp_per_ADM = gen_zonal_stats(vectors=adm_data["geometry"], raster=affected_exp.data[0],
-                                                   stats=["sum"], affine=affected_exp.rio.transform(), nodata=0)
-            result_df[f"RP{rp}_{exp_cat}_tot"] = [x['sum']
-                                                  for x in affected_exp_per_ADM]
-
-            # Compute the EAI for this RP, if probabilistic (len(valid_RPs)>1)
-            if len(valid_RPs) > 1:
-                result_df[f"RP{rp}_EAI"] = result_df[f"RP{rp}_{exp_cat}_imp"] * freq
-
-                if save_check_raster:
-                    EAI_i = impact_exp.where(valid_impact_areas) * freq
-                    EAI_i.rio.to_raster(os.path.join(
-                        OUTPUT_DIR, f"{country}_{haz_cat}_{exp_cat}_{rp}_EAI.tif"))
-                    del EAI_i
-
-            del (impact_exp, impact_exp_per_ADM, affected_exp_per_ADM)
-
-        del (impact_rst, affected_exp, valid_impact_areas)
-
-    # End RP loop
+    result_df = pd.concat(to_concat, axis=1)
 
     # Computing the EAE or EAI, if probabilistic (len(valid_RPs)>1)
     if len(valid_RPs) > 1:
