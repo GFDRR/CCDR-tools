@@ -4,6 +4,7 @@ from common import *
 from damageFunctions import damage_factor_builtup, damage_factor_agri, mortality_factor
 from runAnalysis import run_analysis
 
+
 # Defining the main function
 def main():
     # Defining the initial parameters
@@ -17,19 +18,18 @@ def main():
     rcp_scenario_dd    = None #["2.6", "4.5", "8.5"] - not used
     analysis_app_dd    = "Function" #["Classes", "Function"]
     class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
-    save_inter_rst_chk = False
+    save_check_raster  = False
+    cores              = 2
 
     import time
     start_time = time.time()
 
     # For every exp_cat_dd
     for exp_cat_dd in exp_cat_dd_list:
-        # Defining the list variable to pass to run_analysis
-        run_country = [country_dd, haz_cat_dd, return_periods, min_haz_slider,
-                       exp_cat_dd, adm_dd, time_horizon_dd, rcp_scenario_dd, analysis_app_dd, class_edges,
-                       save_inter_rst_chk]
         # Running the analysis
-        run_analysis(run_country)
+        run_analysis(country_dd, haz_cat_dd, return_periods, min_haz_slider,
+                       exp_cat_dd, adm_dd, time_horizon_dd, rcp_scenario_dd, 
+                       analysis_app_dd, class_edges, save_check_raster, cores)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 

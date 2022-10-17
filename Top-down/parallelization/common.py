@@ -15,6 +15,8 @@ from rasterstats import gen_zonal_stats, zonal_stats
 
 # Load env vars from dotenv file
 from dotenv import dotenv_values
+
+
 config     = dotenv_values(".env")
 DATA_DIR   = config["DATA_DIR"]
 OUTPUT_DIR = config["OUTPUT_DIR"]

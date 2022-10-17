@@ -38,6 +38,7 @@ Edit the `.env` file inside the notebook directories to specify the working dire
 # Use absolute paths with forward slashes ("/"), and keep the trailing slash
 DATA_DIR = ""
 
+# THE ENTRIES BELOW DO NOT NEED TO BE EDITED
 # Location to store results of analyses
 OUTPUT_DIR = ${DATA_DIR}/RSK/
 
