@@ -72,22 +72,16 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 
   - Classify hazard layer according to settings: min and max thresholds, number of classes -> RPi_classes (multiband raster)
   - Each class of RP is used to mask the population layer -> RPi_class_pop (multiband raster)
-  - Perform zonal statistic (SUM) for each ADM2 unit over RPi_class_pop -> table (ADM2_NAME;RPi_C1_p;RPi_C2_p;...RPi_Ci_p)
-  - Calculate RPi_C1_p * V-factor (previously embedded in ADM2 layer) -> table (ADM2_NAME;RPi_C1_p_impact;RPi_C2_p_impact;...RPi_Ci_p_impact)
-  - Sum all RPi_Ci_p_impact columns for each ADM2 row -> table [ADM2;RP100_tot_p_impact]
+  - Perform zonal statistic (SUM) for each ADMi unit over RPi_class_pop -> table [ADMi_NAME;RPi_C1_p;RPi_C2_p;...RPi_Ci_p]
 
-- END LOOP; all RPs combined -> table [ADM2;RP10_impact;RP100_impact_RP1000_impact]
+- Multiply RPi_impact by RP_P (1-EXP(-1/RP)) -> table [ADMi;RP10_EAI;RP100_EAI;RP1000_EAI]
 
-- Multiply RPi_impact by RP_P (1-EXP(-1/RP)) -> table [ADM2;RP10_EAI;RP100_EAI;RP1000_EAI]
-
-- Sum all RPi_EAI columns for each ADM2: table [ADM2;Pop_EAI]
-
-- Aggregate at ADM1 level according to criteria (Max or Mean)
+- Sum all RPi_EAI columns for each ADM2: table [ADMi;Pop_EAI]
 
 ### PREVIEW RESULTS
 
-- Plot map of ADM2/ADM1
-- Plot tables/Charts
+- Plot map of ADMi
+- Plot EAI charts
 
 ### EXPORT RESULTS
 
