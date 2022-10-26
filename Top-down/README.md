@@ -26,7 +26,7 @@ Analysis runs over high resolution exposure data (90 m) and is then aggregated a
 
 ## ANALYSES
 
-  - **[Flood](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Flood.ipynb)** - uses flood model (water depth for multiple return periods) to calculate:
+  - **Flood** [[Procedure](/procedures/Analytical_procedure_function.md) - [Notebook](/notebooks/Flood.ipynb)] - uses flood model (water depth for multiple return periods) to calculate:
 	1) Expected Annual Impact (EAI) over population (mortality) and built-up (physical damage) according to vulnerability functions;
 	2) distribution of any exposed category (population, built-up or agricultural land) across hazard thresholds.
 
