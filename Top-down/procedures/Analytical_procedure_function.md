@@ -66,16 +66,17 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 ## DATA PROCESSING
 
 - LOOP over each hazard RPi layers:
-  - Filter hazard layer according to settings (min and max thresholds): RPi -> RPi_filtered
-  - Transform hazard intensity value into impact factor using specific hazard impact function or table: RPi_filtered -> RP_IF
-  - RPi_IF s multiplied as mask with the exposure layer to obtain impact RPi_IF -> RPi_exp_imp
-  - Perform zonal statistic (SUM) for each ADMi unit over every RPi_exp_imp -> table [ADMi_NAME;RPi_exp_imp] e.g. [ADM2_NAME;RP10_exp_imp;RP100_exp_imp;RP1000_exp_imp]
+  - Filter hazard layer according to settings (min and max thresholds) for each RPi -> `RPi_filtered`
+  - Transform hazard intensity value into impact factor using specific hazard impact function or table: `RPi_filtered` -> `RP_IF`
+  - RPi_IF s multiplied as mask with the exposure layer to obtain impact: `RPi_IF` -> `RPi_exp_imp`
+  - Perform zonal statistic (SUM) for each ADMi unit over every RPi_exp_imp -> `table [ADMi_NAME;RPi_exp_imp]`
+    <br> e.g. `[ADM2_NAME;RP10_exp_imp;RP100_exp_imp;RP1000_exp_imp]`
 
 - Calculate EAI
-  - Calculate the exceedance frequency for each RPi -> RPi_ef = (1/RPi - 1/RPj) where j is the next RP in the serie.
-    Example using 3 scenarios: RP 10, 100, and 1000 years. Then RP10_ef = (1/10 - 1/100) = 0.09
-  - Multiply impact on exposure for each scenario (RPi_Exp_imp) with its exceedence frequency (RPi_ef) -> RPi_Exp_EAI
-  - Sum all RPi_exp_EAI columns for each ADMi: table [ADMi;Exp_EAI]
+  - Calculate the exceedance frequency for each RPi -> `RPi_ef = (1/RPi - 1/RPj)` where `j` is the next RP in the serie.
+    Example using 3 scenarios: RP 10, 100, and 1000 years. Then: `RP10_ef = (1/10 - 1/100) = 0.09`
+  - Multiply impact on exposure for each scenario `(RPi_Exp_imp)` with its exceedence frequency `(RPi_ef)` -> `RPi_Exp_EAI`
+  - Sum all `RPi_exp_EAI` columns for each ADMi -> `table [ADMi;Exp_EAI]`
 
 	| RP | Freq | Exceedance freq | Exposure impact | Exposure EAI |
 	|:---:|:---:|:---:|:---:|:---:|
