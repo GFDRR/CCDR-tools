@@ -41,17 +41,13 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 ## SCRIPT STEP-BY-STEP
 
 ### SETUP
-
 - Load required libraries
-- Load HazardStats script (zonal statistics)
 
 ### USER INPUT
-
 - Country of interest (1): Name or ISO code 
 - Exposure category (1): a) population; b) built-up; c) agricultural land
 
 ### SETTINGS (DEFAULTS can be changed)
-
 - Criteria for aggregation: a) MAX; b) Mean
 - Number of classes: 5 (3 to 10)
 - Min Hazard threshold: data below this threshold are being ignored
