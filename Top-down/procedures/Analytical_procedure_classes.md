@@ -81,15 +81,15 @@ The output is exported in form of tables, statistics, charts (excel format) and 
   - Sum `RPi_Cj_Exp_EAE`across multiple RPi for the same class Cj -> `table [ADMi;Cj_Exp_EAE]`<br>
     Example using 3 classes (C1-3): `table [ADMi;C1_Exp_EAE;C2_Exp_EAE;C3_Exp_EAE]`
 
-	| RP | Freq | Exceedance freq | Exposure | EAE |
-	|:---:|:---:|:---:|:---:|:---:|
-	| 10 | 0.100 | 0.09 | 193 | 17 |
-	| 100 | 0.010 | 0.009 | 1,210 | 11 |
-	| 1000 | 0.001 | 0.001 | 3,034 | 3 |
-	| Total |   |   |   | **31** |
+	| RP | Exceedance freq | C3 | C4 | C5 | C6 | C3-6 | C3_EAE | C4_EAE | C5_EAE | C6_EAE | C3-6_EAE |
+	|:---:|---|:---:|:---:|:---:|:---:|---|:---:|:---:|:---:|:---:|---|
+	| 10 | 0.09 | 4,036 | 1,535 | 2,111 | 1,967 | 9,658 | 363 | 138 | 190 | 177 | 868 |
+	| 100 | 0.009 | 8,212 | 5,766 | 5,007 | 13,282 | 32,367 | 739 | 519 | 451 | 1,195 | 2,904 |
+	| 1000 | 0.0009 | 8,399 | 5,134 | 4,371 | 25,989 | 44,893 | 756 | 462 | 393 | 2,339 | 3,950 |
+	| Total | | | | | | | 1,858 | 1,119 | 1,034 | 3,711 | 7,723 |
   
   - Plot Exceedance Frequency Curve. Example:<br>
-    ![immagine](https://user-images.githubusercontent.com/44863827/198054208-5bd2c5c2-2349-4f84-ba44-5eb808be2f90.png)
+    ![immagine](https://user-images.githubusercontent.com/44863827/198069028-8bd0e317-0b2e-4a22-b912-e260d3b3bd65.png)
   - Perform zonal statistic of Tot_Exp using ADMi -> `[ADMi;ADMi_Exp;Exp_EAE]` in order to calculate `Exp_EAE% = Exp_EAE/ADMi_Exp` -> `[ADMi;ADMi_Exp;Exp_EAE;Exp_EAE%]`
 
 ## PREVIEW RESULTS
