@@ -12,4 +12,4 @@ Two metrics can be calculated depending on the availability of proper impact fun
 
 ## RISK OUTLOOK (projections)
  
-   - **[Projections](projections/)** - A set of extreme climate indices are accounted to estimate the change in climate-related hazards.
+   - **[Projections](projections/)** - A set of extreme climate indices are accounted to estimate the change in climate-related hazards by evaluating the anomaly (standard deviation) of hazard-related climate indices for a specified future time horizon over the reference period.
