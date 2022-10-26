@@ -28,7 +28,6 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 - PREVIEW RESULTS: plot tables and maps
 - EXPORT RESULTS: results are exported as excel according to template
 
-
 ## PRE-REQUISITES
 
 - Latest Anaconda and Python properly installed, environment set as from [instructions](../notebooks#readme).
@@ -66,31 +65,34 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 
 ## DATA PROCESSING
 
-- LOOP over all hazard RP layers:
-  - Filter hazard layer according to settings (min and max thresholds) -> RP
-  - Transform hazard intensity value into impact factor using specific hazard impact function or table -> RPi
-  - RPi is multiplied as mask with the population layer -> RPi_pop
-  - Perform zonal statistic (SUM) for each ADMi unit over RPi_pop -> table (ADM2_NAME;RPi_pop)
+- LOOP over each hazard RPi layers:
+  - Filter hazard layer according to settings (min and max thresholds): RPi -> RPi_filtered
+  - Transform hazard intensity value into impact factor using specific hazard impact function or table: RPi_filtered -> RP_IF
+  - RPi_IF s multiplied as mask with the exposure layer to obtain impact RPi_IF -> RPi_exp_imp
+  - Perform zonal statistic (SUM) for each ADMi unit over every RPi_exp_imp -> table [ADMi_NAME;RPi_exp_imp] e.g. [ADM2_NAME;RP10_exp_imp;RP100_exp_imp;RP1000_exp_imp]
 
-- END LOOP; all RPs combined -> table [ADM2;RP10i_pop;RP100i_pop;RP1000i_pop]
+- Calculate EAI
+  - Calculate the exceedance frequency for each RPi -> RPi_ef = (1/RPi - 1/RPj) where j is the next RP in the serie.
+    Example using 3 scenarios: RP 10, 100, and 1000 years. Then RP10_ef = (1/10 - 1/100) = 0.09
+  - Multiply impact on exposure for each scenario (RPi_Exp_imp) with its exceedence frequency (RPi_ef) -> RPi_Exp_EAI
+  - Sum all RPi_exp_EAI columns for each ADMi: table [ADMi;Exp_EAI]
 
-- Multiply RPi by RP frequency, RPf = 1/RP (or RPf = 1-EXP(-1/RP) if RP = 1) -> table [ADMi;RP10_EAI;RP100_EAI;RP1000_EAI]
-
-- Sum all RPi_EAI columns for each ADMi: table [ADMi;Pop_EAI]
-
-- Perform zonal statistic of Tot_Pop using ADMi -> [ADMi;ADMi_Pop;Pop_EAI]
-
-- Calculate Pop_EAI% = Pop_EAI/ADMi_Pop -> [ADMi;ADMi_Pop;Pop_EAI;Pop_EAI%]
+	| RP | Freq | Exceedance freq | Exposure impact | Exposure EAI |
+	|:---:|:---:|:---:|:---:|:---:|
+	| 10 | 0.100 | 0.09 | 193 | 17 |
+	| 100 | 0.010 | 0.009 | 1,210 | 11 |
+	| 1000 | 0.001 | 0.001 | 3,034 | 3 |
+	| Total |   |   |   | **31** |
+  
+  - Plot Exceedance Frequency Curve. Example:<br>
+    ![immagine](https://user-images.githubusercontent.com/44863827/198054208-5bd2c5c2-2349-4f84-ba44-5eb808be2f90.png)
+  - Perform zonal statistic of Tot_Pop using ADMi -> [ADMi;ADMi_Exp;Exp_EAI] and calculate Exp_EAI% = Exp_EAI/ADMi_Exp -> [ADMi;ADMi_Exp;Exp_EAI;Exp_EAI%]
 
 ## PREVIEW RESULTS
-
-- Plot map of ADM2/ADM1
-- Plot tables/Charts
+- Plot map of ADMi_EAI and related tables/Charts
 
 ## EXPORT RESULTS
-
-- Export tables and charts as excel
-- Export ADM2/ADM1/ADM0 with joined values as gpkg
+- Export geodata output as gpkg and tables, generate charts
 
 --------------------------------------
 
