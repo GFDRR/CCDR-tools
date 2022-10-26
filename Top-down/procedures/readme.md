@@ -1,5 +1,7 @@
 # CCDR ANALYTICAL PROCEDURES
 
+These documents describe the workflow behind the **[Notebooks](../notebooks/)**
+
 ## RISK BASELINE (historical period)
 Two metrics can be calculated depending on the availability of proper impact functions:
 
