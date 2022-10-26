@@ -1,14 +1,14 @@
 # CCDR ANALYTICAL NOTEBOOKS
-## Multi-hazard risk screening based on global/regional datasets
+## Multi-hazard risk screening based on global/regional geodatasets
 
 --------------------------------------
 
 ## OVERVIEW
 This is an open tool for risk screening based on globally-avaialble datasets. 
 
-The ‘top-down’ approach offers analytical notebooks allowing non-experts to perform comprehensive, multi-hazard risk screening using regionally available and comparable datasets. The work under this tier is characterized by: 
+The ‘top-down’ approach offers analytical notebooks allowing non-experts to perform comprehensive, multi-hazard risk screening using regionally available and comparable geodata. The work under this tier is characterized by: 
 
- - Global and regional-scale data inputs 
+ - Global and regional-scale geodata inputs 
  - User-friendly, and easily interpretable tools and outputs
  - Some degree of customisation, but ensuring transferability and comparability between countries 
 
