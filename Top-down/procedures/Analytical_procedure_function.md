@@ -87,7 +87,7 @@ The output is exported in form of tables, statistics, charts (excel format) and 
   
   - Plot Exceedance Frequency Curve. Example:<br>
     ![immagine](https://user-images.githubusercontent.com/44863827/198054208-5bd2c5c2-2349-4f84-ba44-5eb808be2f90.png)
-  - Perform zonal statistic of Tot_Pop using ADMi -> [ADMi;ADMi_Exp;Exp_EAI] and calculate Exp_EAI% = Exp_EAI/ADMi_Exp -> [ADMi;ADMi_Exp;Exp_EAI;Exp_EAI%]
+  - Perform zonal statistic of Tot_Pop using ADMi -> `[ADMi;ADMi_Exp;Exp_EAI]` and calculate `Exp_EAI% = Exp_EAI/ADMi_Exp` -> `[ADMi;ADMi_Exp;Exp_EAI;Exp_EAI%]`
 
 ## PREVIEW RESULTS
 - Plot map of ADMi_EAI and related tables/Charts
