@@ -16,6 +16,19 @@ Analysis runs over high resolution exposure data (90 m) and is then aggregated a
 
 --------------------------------------
 
+## RATIONALE
+
+The applied methodology centers around the concept of Risk. In the field of Disaster Risk Management (DRM), risk (R) is typically calculated as a function of: the hazard occurrence probability and intensity (i.e., physical magnitude) in a particular location (H, for Hazard); the people and physical assets (infrastructure, buildings, crops, etc.) situated in that location and therefore exposed to the hazard (E, for Exposure); and the conditions determined by physical, social, and economic factors which increase the susceptibility of an exposed individual, community, asset or system to the impacts of hazards (V, for Vulnerability).
+Following this established approach, the risk originating from hazard affecting exposed categories is defined as:
+
+`R = f(H,E,V)`
+
+The analysis workflow:
+
+<img width=200 src="https://user-images.githubusercontent.com/44863827/198074672-a933c85f-c62a-4821-a53a-90f150478156.png">
+
+--------------------------------------
+
 ## CONTENT
 
    - **[Procedures](procedures/)** - explains the analytical workflow used by notebooks with examples for different hazards
