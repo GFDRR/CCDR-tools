@@ -1,4 +1,4 @@
-# ANALYTICAL TOOLS FOR RISK ASSESSMENT
+# ANALYTICAL TOOLS FOR RISK SCREENING & ASSESSMENT
 A collection of Python notebooks to perform country-level climate and disaster risk analysis based on global data.
 
 ## [Top-down](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down)
