@@ -1,3 +1,8 @@
+# ANALYTICAL NOTEBOOKS
+
+For detailed explanation of the analytical workflow, please refer to [Procedures](../procedures/).
+
+
 ## SCRIPT SETUP
 Note: at this stage you need to manually download all the notebooks in this folder and create your python environment as from instructions below.
 This could be further improved in the form of a self-installing desktop app using [Voila](https://github.com/voila-dashboards/voila).
