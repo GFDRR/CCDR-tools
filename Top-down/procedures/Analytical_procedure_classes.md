@@ -18,10 +18,10 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 - Script runs on one country at time to keep the calculation time manageable.
 - The analysis is carried at the resolution of the exposure layer. For now, it is set around 100m.
 - User input is required to define country, exposure layer, and settings.
-- Settings affect how the processing runs (criteria, thesholds, number of classes).
-- The core of the analysis is zonal statistics: how much population falls in each class of hazard.
-- The information is aggregated at desired ADM level and combined with Vulnerability scores according to an algo (tbd) to produce impact score for each RP.
-- The expected annual impact (EAI) is computed by multiplying the impact score with the frequency (1/(RPi-RPj) of the events and sum the multiplied impact. The exceedance frequency curve (EFC) is built and plotted by interpolation of these 3 points.
+- Settings affect how the processing runs (number of classes and intervals).
+- The core of the analysis is raster calculation: how much population falls in each class of hazard.
+- The information is aggregated at desired ADM level using zonal statistics
+- The expected annual impact (EAE) is computed by summing up the total impact over a certain class threshold. For example, when considering agricultural flood impacts, it may account only for water depth > 0.5 m. Exposure score is multiplied by the exceedence frequency (1/(RPi-RPj) of the events. The exceedance frequency curve (EFC) is built and plotted.
 - The table results are exported in excel format, the map rsults are exported in gpkg format.
 
 ## SCRIPT STRUCTURE
