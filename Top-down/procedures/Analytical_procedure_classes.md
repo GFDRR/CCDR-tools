@@ -40,32 +40,15 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 
 ## SCRIPT STEP-BY-STEP
 
-### SETUP
-- Load required libraries
-
-### USER INPUT
-- Country of interest (1): Name or ISO code 
+### USER INPUT & SETTINGS (DEFAULTS can be changed)
+- Country (1): Name or ISO code 
 - Exposure category (1): a) population; b) built-up; c) agricultural land
+- Number of classes: 5 (2 to 10)
+- Min class threshold: starting value of each class, up to the next. Last class goes to infinite.
 
-### SETTINGS (DEFAULTS can be changed)
-- Criteria for aggregation: a) MAX; b) Mean
-- Number of classes: 5 (3 to 10)
-- Min Hazard threshold: data below this threshold are being ignored
-- Max Hazard threshod: data above this threshold are considered as the threshold value (max expected impact)
+<img width=200 src="https://user-images.githubusercontent.com/44863827/156603360-dabc7da2-52c8-4ed2-be07-bd2a4927af16.png">
 
-### SUMMARY OUTPUT SETTINGS
-
-- Display input and settings, preview classes intervals as table:
-
-	- Country: Nepal (NPL)
-	- Exposure: Population
-	- Values aggregation criteria: Max
-	- Output classes: Class value indicates the beginning of the class interval. Last class goes to infinite.
-	<img width=200 src="https://user-images.githubusercontent.com/44863827/156603360-dabc7da2-52c8-4ed2-be07-bd2a4927af16.png">
-
-------------------------------------------
-
-## DATA MANAGEMENT
+### DATA MANAGEMENT
 
 - Load country boundaries for multiple administrative levels sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations).
 
@@ -83,7 +66,7 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 	- Most hazard data consist of multiple layers (Return Periods, RP) each representing one probabilistic intensity maximum, or in other words the intensity of the hazard in relation to its frequency of occurrence.
 	- Some hazards, however, comes as individual layers representing a mean hazard value. In this case, ignore the looping over RP.
 
-## DATA PROCESSING
+### DATA PROCESSING
 
 - LOOP over all hazard RPs:
 
@@ -101,23 +84,23 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 
 - Aggregate at ADM1 level according to criteria (Max or Mean)
 
-## PREVIEW RESULTS
+### PREVIEW RESULTS
 
 - Plot map of ADM2/ADM1
 - Plot tables/Charts
 
-## EXPORT RESULTS
+### EXPORT RESULTS
 
 - Export tables and charts as excel
 - Export ADM2/ADM1/ADM0 with joined values as gpkg
 
 --------------------------------------
 
-# EQUIVALENT PROCESSING IN QGIS
+## EQUIVALENT PROCESSING IN QGIS
 
 The following display equivalent spatial analytics steps performed by the script by using QGIS (well known, free geospatial tool).
 
-## DATA MANAGEMENT
+### DATA MANAGEMENT
 
 - Load map data: ADM units (3 layers), hazard (one or as many layers as RP scenarios) and exposure (population map, land cover, etc).
   In this example, we use FATHOM river flood data (light blue) and WorldPop2020-constrained-US_adjusted population data (green to purple).
@@ -132,7 +115,7 @@ The following display equivalent spatial analytics steps performed by the script
 
   <img width=60% src="https://user-images.githubusercontent.com/44863827/151812298-25d14746-7d79-4d6e-8b67-3751a29233db.png">
 
-## ANALYTICAL APPROACH
+### ANALYTICAL APPROACH
 
 In this scenario, the physical hazard intensity is ranked in qualitative classes of impact magnitude. This is the case when no impact function is available for the category at risk, but a classification of impact by hazard thresholds is possible. Starting from the thresholded layer, we split the hazard intensity (water depth, as in previouse example) into 6 classes, each representing an interval of water depth range in m - except the last one, the includes all values > MAX damage ratio. Then, we extract the total population located within each hazard class for each ADM3 unit into an excel table for further analytics to be applied.
 
