@@ -69,17 +69,20 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 
 ------------------------------------------
 
-## DATA MANAGEMENT - BASELINE
+## DATA MANAGEMENT
 
 - Load country boundaries for multiple administrative levels sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations).
 
 - Verify that shapes, names and codes are consistent across different levels.
 
-- Load population from WorldPop - Population counts / Constrained individual countries, UN adjusted (100 m resolution)
+- Load exposure data
+  - Population: WorldPop 2020 Population counts / Constrained individual countries, UN adjusted (100 m resolution)
 	-  [Download page](https://hub.worldpop.org/geodata/listing?id=79)
 	-  API according to ISO3 code: https://www.worldpop.org/rest/data/pop/wpgp?iso3=NPL
     	returns a Json that includes the url of data: https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/NPL/npl_ppp_2020.tif
-	
+  - Built-up: the latest [World Settlement footprint]() can be download as tiles for the area of interest and merged into one compressed tif. 10 m binary grid can be resampled into 100 m using "mean": returns a 0-1 ratio describing the share of builtup for 100m cell.
+  - Land cover / Agricultural land: many are available from [planeterycomputer catalog](https://planetarycomputer.microsoft.com/catalog). ESA 2020 at 10m resolution is suggested. Specific land cover types can be filtered using pixel value.
+
 - Load hazard data.
 	- Most hazard data consist of multiple layers (Return Periods, RP) each representing one probabilistic intensity maximum, or in other words the intensity of the hazard in relation to its frequency of occurrence.
 	- Some hazards, however, comes as individual layers representing a mean hazard value. In this case, ignore the looping over RP.
