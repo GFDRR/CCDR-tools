@@ -44,7 +44,6 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 ### SETTINGS (DEFAULTS can be changed)
 - Min Hazard threshold: data below this threshold are being ignored
 
-------------------------------------------
 ### DATA MANAGEMENT
 
 - Load country boundaries for multiple administrative levels sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations).
