@@ -68,25 +68,35 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 
 ### DATA PROCESSING
 
-- LOOP over all hazard RPs:
+- LOOP over each hazard RPi layers:
+  - Classify hazard layer RPi according to settings: number and size of classes: `RPi` -> `RPi_Cj` (multiband raster)
+  - Each class `Cj` of RPi is used to mask the Exposure layer -> `RPi_Cj_Exp` (multiband raster)
+  - Perform zonal statistic (SUM) for each ADMi unit over eac `RPi_Cj_Exp` -> `table [ADMi_NAME;RPi_C1_Exp;RPi_C2_Exp;...RPi_Cj_Exp]`<br>
+    Example using 3 RP scenarios: (10-100-1000) and 3 classes (C1-3): `table [ADM2_NAME;RP10_C1_Exp;RP10_C2_Exp;RP10_C3_Exp;RP100_C1_Exp;RP100_C2_Exp;RP100_C3_Exp;RP1000_C1_Exp;RP1000_C2_Exp;RP1000_C3_Exp;]
 
-  - Classify hazard layer according to settings: min and max thresholds, number of classes -> RPi_classes (multiband raster)
-  - Each class of RP is used to mask the population layer -> RPi_class_pop (multiband raster)
-  - Perform zonal statistic (SUM) for each ADMi unit over RPi_class_pop -> table [ADMi_NAME;RPi_C1_p;RPi_C2_p;...RPi_Ci_p]
+- Calculate EAE
+  - Calculate the exceedance frequency for each RPi -> `RPi_ef = (1/RPi - 1/RPi+1)` where `RPi+1` means the next RP in the serie.
+    Example using 3 RP scenarios: RP 10, 100, and 1000 years. Then: `RP10_ef = (1/10 - 1/100) = 0.09`
+  - Multiply exposure for each scenario i and class j `(RPi_Cj_Exp)` with its exceedence frequency `(RPi_ef)` -> `RPi_Cj_Exp_EAE`
+  - Sum `RPi_Cj_Exp_EAE`across multiple RPi for the same class Cj -> `table [ADMi;Cj_Exp_EAE]`<br>
+    Example using 3 classes (C1-3): `table [ADMi;C1_Exp_EAE;C2_Exp_EAE;C3_Exp_EAE]`
 
-- Multiply RPi_impact by RP_P (1-EXP(-1/RP)) -> table [ADMi;RP10_EAI;RP100_EAI;RP1000_EAI]
+	| RP | Freq | Exceedance freq | Exposure | EAE |
+	|:---:|:---:|:---:|:---:|:---:|
+	| 10 | 0.100 | 0.09 | 193 | 17 |
+	| 100 | 0.010 | 0.009 | 1,210 | 11 |
+	| 1000 | 0.001 | 0.001 | 3,034 | 3 |
+	| Total |   |   |   | **31** |
+  
+  - Plot Exceedance Frequency Curve. Example:<br>
+    ![immagine](https://user-images.githubusercontent.com/44863827/198054208-5bd2c5c2-2349-4f84-ba44-5eb808be2f90.png)
+  - Perform zonal statistic of Tot_Pop using ADMi -> `[ADMi;ADMi_Exp;Exp_EAI]` and calculate `Exp_EAI% = Exp_EAI/ADMi_Exp` -> `[ADMi;ADMi_Exp;Exp_EAI;Exp_EAI%]`
 
-- Sum all RPi_EAI columns for each ADM2: table [ADMi;Pop_EAI]
+## PREVIEW RESULTS
+- Plot map of ADMi_EAE and related tables/Charts
 
-### PREVIEW RESULTS
-
-- Plot map of ADMi
-- Plot EAI charts
-
-### EXPORT RESULTS
-
-- Export tables and charts as excel
-- Export ADM2/ADM1/ADM0 with joined values as gpkg
+## EXPORT RESULTS
+- Export geodata output as gpkg and tables, generate charts
 
 --------------------------------------
 
