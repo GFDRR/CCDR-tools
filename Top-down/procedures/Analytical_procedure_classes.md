@@ -21,8 +21,8 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 - Settings affect how the processing runs (number of classes and intervals).
 - The core of the analysis is raster calculation: how much population falls in each class of hazard.
 - The information is aggregated at desired ADM level using zonal statistics
-- The expected annual impact (EAE) is computed by summing up the total impact over a certain class threshold. For example, when considering agricultural flood impacts, it may account only for water depth > 0.5 m. Exposure score is multiplied by the exceedence frequency (1/(RPi-RPj) of the events. The exceedance frequency curve (EFC) is built and plotted.
-- The table results are exported in excel format, the map rsults are exported in gpkg format.
+- The expected annual impact (EAE) is computed by summing up the total impact over a certain class threshold. For example, when considering agricultural flood impacts, it may account only for water depth > 0.5 m. Exposure score is multiplied by the exceedence frequency (1/RPi - 1/RPj) of the scenario. The exceedance frequency curve (EFC) is built and plotted.
+- Table results are exported in excel format, map rsults are exported in gpkg format.
 
 ## SCRIPT STRUCTURE
 
@@ -34,7 +34,7 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 - PREVIEW RESULTS: plot tables and maps
 - EXPORT RESULTS: results are exported as excel according to template
 
-## PRE-REQUISITES (OFFLINE)
+## PRE-REQUISITES
 
 - Latest Anaconda and Python properly installed, environment set as from [instructions](../notebooks#readme).
 
