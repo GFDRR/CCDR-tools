@@ -27,6 +27,6 @@ Analysis runs over high resolution exposure data (90 m) and is then aggregated a
 ## CREDITS
 
 Tools developed in the context of World Bank CCDR analytics
-Concept: [Mattia Amadio](https://www.github.com/matamadio)
-Coding: [Takuya Iwanaga](https://github.com/ConnectedSystems)
-Additional coding: [Arthur H. Essenfelder](https://github.com/artessen)
+- Concept: [Mattia Amadio](https://www.github.com/matamadio)
+- Coding: [Takuya Iwanaga](https://github.com/ConnectedSystems)
+- Additional coding: [Arthur H. Essenfelder](https://github.com/artessen)
