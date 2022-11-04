@@ -26,7 +26,7 @@ Following this established approach, the risk originating from hazard affecting 
 </div>
 
 The analysis workflow:
-<div align="center"><img width=500 src="https://user-images.githubusercontent.com/44863827/200046500-2418ed39-88dd-4aa6-acf3-fb2963899db8.png"></div>
+<div align="center"><img width=500 src="https://user-images.githubusercontent.com/44863827/200046878-b0eaa822-3fde-4ce4-94bc-685cba483a64.png"></div>
 
 --------------------------------------
 
@@ -35,7 +35,7 @@ The analysis workflow:
    - **[Procedures](procedures/)** - explains the analytical workflow used by notebooks with examples for different hazards
    - **[Notebooks](notebooks/)** - include jupyter notebooks to perform the spatial analytics for each hazard
    - **[Parallelization](parallelization/)** - include python scripts (beta) to perform the spatial analytics with better efficiency for each hazard
-   
+
 --------------------------------------
 
 ## ANALYSES
