@@ -26,7 +26,7 @@ Following this established approach, the risk originating from hazard affecting 
 </div>
 
 The analysis workflow:
-<div align="center"><img width=500 src="https://user-images.githubusercontent.com/44863827/200046344-52278c0b-9263-4529-99ab-c7e0cc6c1dd0.png"></div>
+<div align="center"><img width=500 src="https://user-images.githubusercontent.com/44863827/200046500-2418ed39-88dd-4aa6-acf3-fb2963899db8.png"></div>
 
 --------------------------------------
 
