@@ -110,7 +110,7 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 
 --------------------------------------
 
-# EQUIVALENT PROCESSING IN QGIS
+# EQUIVALENT PROCESSING IN [QGIS](https://www.qgis.org/en/site/forusers/download.html)
 
 The following display equivalent spatial analytics steps performed by the script by using QGIS (well known, free geospatial tool).
 
