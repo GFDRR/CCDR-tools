@@ -1,4 +1,10 @@
-# ANALYTICAL APPROACH = Expected Annual Exposure (EAI) 
+# ANALYTICAL APPROACH = Expected Annual Impact (EAI) 
+
+This analytical approach applies to multiple probabilistic hazard scenarios and aims to produce a mean estimate of Expected Annual Impact (EAI).
+
+<div align=center>
+<img src="https://user-images.githubusercontent.com/44863827/201052605-78fdd0e9-a109-4894-b3bf-a5f9eaabbdd2.png">
+</div>
 
 ## OBJECTIVE
 
@@ -8,14 +14,13 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 
 ## SCRIPT OVERVIEW
 
-- For now, each script is hazard specific, because each hazard has its own metrics and thresholds; we are looking to build a better interface.
-- Script runs on one country at time to keep the calculation time manageable.
-- The analysis is carried at the resolution of the exposure layer. For prototype, worldpop is 100m.
+- Script runs on one country, one hazard at time to keep the calculation time manageable.
+- The analysis is carried at the resolution of the exposure layer. E.g. when using Worldpop exposure layer, it is 100x100 meters.
 - User input is required to define country, exposure layer, and settings.
 - Settings affect how the processing runs (min theshold).
-- The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function
-- The information is then aggregated at ADM level using zonal statistic
-- The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) of the scenario. The exceedance frequency curve (EFC) is plotted.
+- The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.
+- The information is then aggregated at ADM level using zonal statistic.
+- The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The exceedance frequency curve (EFC) is plotted.
 - Table results are exported in excel format, map rsults are exported in gpkg format.
 
 ## SCRIPT STRUCTURE
