@@ -67,7 +67,9 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 - LOOP over each hazard RPi layers:
   - Filter hazard layer according to settings (min and max thresholds) for each RPi -> `RPi_filtered`
   - Transform hazard intensity value into impact factor using specific hazard impact function or table: `RPi_filtered` -> `RP_IF`
-  - RPi_IF s multiplied as mask with the exposure layer to obtain impact: `RPi_IF` -> `RPi_exp_imp`
+  - RPi_IF s multiplied as mask with the exposure layer to obtain expected impact: `RPi_IF` -> `RPi_exp_imp`
+    ![immagine](https://user-images.githubusercontent.com/44863827/201050148-5aa6ad10-44b2-480f-9bef-51c3703d0e33.png)
+
   - Perform zonal statistic (SUM) for each ADMi unit over every RPi_exp_imp -> `table [ADMi_NAME;RPi_exp_imp]`
     <br> e.g. `[ADM2_NAME;RP10_exp_imp;RP100_exp_imp;RP1000_exp_imp]`
 
@@ -85,7 +87,7 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 	| Total |   |   |   | **31** |
   
   - Plot Exceedance Frequency Curve. Example:<br>
-    ![immagine](https://user-images.githubusercontent.com/44863827/198054208-5bd2c5c2-2349-4f84-ba44-5eb808be2f90.png)
+    ![immagine](https://user-images.githubusercontent.com/44863827/201049813-008d5fbc-3195-4289-ba18-34a126fe434e.png)
   - Perform zonal statistic of Tot_Exp using ADMi -> `[ADMi;ADMi_Exp;Exp_EAI]` in order to calculate `Exp_EAI% = Exp_EAI/ADMi_Exp` -> `[ADMi;ADMi_Exp;Exp_EAI;Exp_EAI%]`
 
 ## PREVIEW RESULTS
