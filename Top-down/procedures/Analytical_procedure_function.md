@@ -72,11 +72,13 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 - LOOP over each hazard RPi layers:
   - Filter hazard layer according to settings (min and max thresholds) for each RPi -> `RPi_filtered`
   - Transform hazard intensity value into impact factor using specific hazard impact function or table: `RPi_filtered` -> `RP_IF`
-  - RPi_IF s multiplied as mask with the exposure layer to obtain expected impact: `RPi_IF` -> `RPi_exp_imp`
-    ![immagine](https://user-images.githubusercontent.com/44863827/201050148-5aa6ad10-44b2-480f-9bef-51c3703d0e33.png)
-
+  - RPi_IF is multiplied with the exposure layer to obtain expected impact: `RPi_IF` -> `RPi_exp_imp`
   - Perform zonal statistic (SUM) for each ADMi unit over every RPi_exp_imp -> `table [ADMi_NAME;RPi_exp_imp]`
-    <br> e.g. `[ADM2_NAME;RP10_exp_imp;RP100_exp_imp;RP1000_exp_imp]`
+    <br> e.g. `[ADM2_NAME;RP10_exp_imp;RP100_exp_imp;RP1000_exp_imp]`<br><br>
+
+  <div align=center>
+  <img src="https://user-images.githubusercontent.com/44863827/201050148-5aa6ad10-44b2-480f-9bef-51c3703d0e33.png">
+  </div>
 
 - Calculate EAI
   - Calculate the exceedance frequency for each RPi -> `RPi_ef = (1/RPi - 1/RPj)` where `j` is the next RP in the serie.
@@ -98,8 +100,13 @@ The output is exported in form of tables, statistics, charts (excel format) and 
 ## PREVIEW RESULTS
 - Plot map of ADMi_EAI and related tables/Charts
 
+  <div align=center>
+  <table><tr><td width="45%"><img src="https://user-images.githubusercontent.com/44863827/201054765-5a1ce2c9-0bde-4e98-80ce-ee30ccefc4e2.png"></td>
+	  <td><img src="https://user-images.githubusercontent.com/44863827/201055152-28482f07-7215-4b09-b3c2-397381d516af.png"></td></tr></table>
+  </div>
+
 ## EXPORT RESULTS
-- Export geodata output as gpkg and tables, generate charts
+- Export geodata output as gpkg and tables.
 
 --------------------------------------
 
