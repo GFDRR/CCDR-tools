@@ -6,6 +6,11 @@ This analytical approach applies to multiple probabilistic hazard scenarios and 
 <img src="https://user-images.githubusercontent.com/44863827/201052605-78fdd0e9-a109-4894-b3bf-a5f9eaabbdd2.png">
 </div>
 
+The EAI is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering all combined hazard probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.
+<div align=center>
+<img src="https://user-images.githubusercontent.com/44863827/201917310-9fc8b871-8351-4657-959e-d09c0b0e340c.png">
+</div>
+
 ## OBJECTIVE
 
 The script performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period). 
