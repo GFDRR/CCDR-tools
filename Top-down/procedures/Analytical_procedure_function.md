@@ -2,6 +2,12 @@
 
 This analytical approach applies to multiple probabilistic hazard scenarios and aims to produce a mean estimate of Expected Annual Impact (EAI).
 
+Natural hazards modelling can be either:
+- Deterministic, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.
+- Probabilistic, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years. This is the case for river flood, coastal flood and strong winds.
+
+See the picture below as example: the landslide hazard (first map) is represented by one aggregated mean index value; while the flood hazard is shows as a series of events (scenarios) of increasing magnitude and decreasing probability. ***Note that a return period of 1,000 years, while very unlikely, can occur anyday!*** Therefore it is important to include all range of probabilities when assessing risk.
+
 <div align=center>
 <img src="https://user-images.githubusercontent.com/44863827/201052605-78fdd0e9-a109-4894-b3bf-a5f9eaabbdd2.png">
 </div>
