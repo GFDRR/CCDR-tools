@@ -8,38 +8,28 @@ parts:
       - file: docs/exposure-data
         sections:
         - file: Top-down/notebooks/CCDR.ipynb
-  - caption: Data Products
+  - caption: Global datasets
     chapters:
-      - file: notebooks/ndvi/README
-      - file: notebooks/ntl-analysis/README
-      - file: notebooks/mobility/README
+      - file: docs/global-hazard
         sections:
-          - file: notebooks/mobility/stops/README
+          - file: reports/2023-summer-tree-cover-loss.md
+      - file: docs/global-exposure
+        sections:
+          - file: reports/2023-summer-tree-cover-loss.md
+  - caption: Analytical notebooks
+    chapters:
+      - file: Top-down/notebooks/README
+        sections:
+          - file: Top-down/procedures/Analytical_procedure_function
             sections:
-            - file: notebooks/mobility/stops/01a-aoi-and-tessellation.ipynb
-            - file: notebooks/mobility/stops/01b-convenience-sampling.ipynb
-            - file: notebooks/mobility/stops/02-validate-mobility-data.ipynb
-            - file: notebooks/mobility/stops/03a-count-within-aoi.ipynb
-            - file: notebooks/mobility/stops/03b-estimate-stay-locations.ipynb
-          - file: notebooks/mobility/activity/README
+            - file: Top-down/notebooks/Flood.ipynb
+          - file: Top-down/procedures/Analytical_procedure_classes
       - file: notebooks/ais-analysis/README
         sections:
           - file: notebooks/ais-analysis/01-descriptive-stats.ipynb
           - file: notebooks/ais-analysis/02-trade-estimation.ipynb
       - file: notebooks/traffic/README
-      - file: notebooks/syria-forest-cover/syria_forest.ipynb
-      - file: notebooks/internet-connectivity/README
-        sections:
-        - file: notebooks/internet-connectivity/ookla-speedtest-analysis.ipynb
-      - file: notebooks/conflict/acled.ipynb
-      - file: notebooks/vegetation-conditions/README
-        sections:
-          - file: notebooks/vegetation-conditions/Seasonality_Parameters_Data_Extraction.md
-  - caption: Insights and Indicators
-    chapters:
-      - file: docs/2023-summer-economic-monitor
-        sections:
-          - file: reports/2023-summer-tree-cover-loss.md
+
   - caption: Acknowledgements
     chapters:
       - file: docs/team
