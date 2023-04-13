@@ -14,8 +14,6 @@ parts:
         sections:
           - file: reports/2023-summer-tree-cover-loss.md
       - file: docs/global-exposure
-        sections:
-          - file: reports/2023-summer-tree-cover-loss.md
   - caption: Analytical notebooks
     chapters:
       - file: Top-down/notebooks/README
