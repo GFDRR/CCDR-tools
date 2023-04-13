@@ -1,5 +1,5 @@
 format: jb-book
-root: docs/home
+root: README
 
 parts:
   - caption: Introduction to Risk Data
