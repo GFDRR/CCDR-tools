@@ -1,0 +1,805 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ANALYTICAL APPROACH = Expected Annual Exposure (EAE) &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/Top-down/procedures/Analytical_procedure_classes.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Climate & Disaster Risk Screening Tools</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Acknowledgements
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../docs/team.html">
+   Data Goods Team and Acknowledgements
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2FTop-down/procedures/Analytical_procedure_classes.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/Top-down/procedures/Analytical_procedure_classes.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/Top-down/procedures/Analytical_procedure_classes.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#objective">
+   OBJECTIVE
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#script-overview">
+   SCRIPT OVERVIEW
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#script-structure">
+   SCRIPT STRUCTURE
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pre-requisites">
+   PRE-REQUISITES
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#script-step-by-step">
+   SCRIPT STEP-BY-STEP
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#user-input-settings-defaults-can-be-changed">
+     USER INPUT &amp; SETTINGS (DEFAULTS can be changed)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-management">
+     DATA MANAGEMENT
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-processing">
+     DATA PROCESSING
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preview-results">
+   PREVIEW RESULTS
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#export-results">
+   EXPORT RESULTS
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#equivalent-processing-in-qgis">
+   EQUIVALENT PROCESSING IN QGIS
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     DATA MANAGEMENT
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytical-approach">
+     ANALYTICAL APPROACH
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>ANALYTICAL APPROACH = Expected Annual Exposure (EAE)</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#objective">
+   OBJECTIVE
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#script-overview">
+   SCRIPT OVERVIEW
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#script-structure">
+   SCRIPT STRUCTURE
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pre-requisites">
+   PRE-REQUISITES
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#script-step-by-step">
+   SCRIPT STEP-BY-STEP
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#user-input-settings-defaults-can-be-changed">
+     USER INPUT &amp; SETTINGS (DEFAULTS can be changed)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-management">
+     DATA MANAGEMENT
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-processing">
+     DATA PROCESSING
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preview-results">
+   PREVIEW RESULTS
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#export-results">
+   EXPORT RESULTS
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#equivalent-processing-in-qgis">
+   EQUIVALENT PROCESSING IN QGIS
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     DATA MANAGEMENT
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytical-approach">
+     ANALYTICAL APPROACH
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="analytical-approach-expected-annual-exposure-eae">
+<h1>ANALYTICAL APPROACH = Expected Annual Exposure (EAE)<a class="headerlink" href="#analytical-approach-expected-annual-exposure-eae" title="Permalink to this headline">#</a></h1>
+<section id="objective">
+<h2>OBJECTIVE<a class="headerlink" href="#objective" title="Permalink to this headline">#</a></h2>
+<p>The script performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Exposure (EAE) for the baseline (reference period).</p>
+<p>The “classes” approach simply split the hazard intensity layer into classes and, for ach one, calculates the toal exposure for the selected category.
+For example, flood hazard over agriculture is measured in terms of hectars of land falling within different intervals of water depth.
+Note that Minimum threshold is deactivated/ignored for this approach.</p>
+<p>The spatial information about hazard and exposure is first collected at the grid level, the output is then aggregated at ADM2 boundary level to combine Vulnerability scores and calculate risk estimate. This represents the disaster risk historical baseline.</p>
+<p>The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).</p>
+</section>
+<section id="script-overview">
+<h2>SCRIPT OVERVIEW<a class="headerlink" href="#script-overview" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>For now, each script is hazard specific, because each hazard has its own metrics and thresholds; we are looking to build a better interface.</p></li>
+<li><p>Script runs on one country at time to keep the calculation time manageable.</p></li>
+<li><p>The analysis is carried at the resolution of the exposure layer. For now, it is set around 100m.</p></li>
+<li><p>User input is required to define country, exposure layer, and settings.</p></li>
+<li><p>Settings affect how the processing runs (number of classes and intervals).</p></li>
+<li><p>The core of the analysis is raster calculation: how much population falls in each class of hazard.</p></li>
+<li><p>The information is aggregated at desired ADM level using zonal statistics</p></li>
+<li><p>The expected annual impact (EAE) is computed by summing up the total impact over a certain class threshold. For example, when considering agricultural flood impacts, it may account only for water depth &gt; 0.5 m. Exposure score is multiplied by the exceedence frequency (1/RPi - 1/RPj) of the scenario. The exceedance frequency curve (EFC) is built and plotted.</p></li>
+<li><p>Table results are exported in excel format, map rsults are exported in gpkg format.</p></li>
+</ul>
+</section>
+<section id="script-structure">
+<h2>SCRIPT STRUCTURE<a class="headerlink" href="#script-structure" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>SETUP: environment and libraries</p></li>
+<li><p>USER INPUT: specify country and categories of interest</p></li>
+<li><p>SETTINGS: default parameters can be changed by user</p></li>
+<li><p>DATA MANAGEMENT: global datasets are loaded according to user input</p></li>
+<li><p>DATA PROCESSING: datasets are processed according to settings</p></li>
+<li><p>PREVIEW RESULTS: plot tables and maps</p></li>
+<li><p>EXPORT RESULTS: results are exported as excel according to template</p></li>
+</ul>
+</section>
+<section id="pre-requisites">
+<h2>PRE-REQUISITES<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Latest Anaconda and Python properly installed, environment set as from <a class="reference external" href="../notebooks#readme">instructions</a>.</p></li>
+</ul>
+</section>
+<section id="script-step-by-step">
+<h2>SCRIPT STEP-BY-STEP<a class="headerlink" href="#script-step-by-step" title="Permalink to this headline">#</a></h2>
+<section id="user-input-settings-defaults-can-be-changed">
+<h3>USER INPUT &amp; SETTINGS (DEFAULTS can be changed)<a class="headerlink" href="#user-input-settings-defaults-can-be-changed" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Country (1): Name or ISO code</p></li>
+<li><p>Exposure category (1): a) population; b) built-up; c) agricultural land</p></li>
+<li><p>Number of classes: 5 (2 to 10)</p></li>
+<li><p>Min class threshold: starting value of each class, up to the next. Last class goes to infinite.</p></li>
+</ul>
+<img width=200 src="https://user-images.githubusercontent.com/44863827/156603360-dabc7da2-52c8-4ed2-be07-bd2a4927af16.png">
+</section>
+<section id="data-management">
+<h3>DATA MANAGEMENT<a class="headerlink" href="#data-management" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Load country boundaries for multiple administrative levels sourced from <a class="reference external" href="https://data.humdata.org/dataset">HDX</a> or <a class="reference external" href="https://www.geoboundaries.org">Geoboundaries</a>. Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations).</p></li>
+<li><p>Verify that shapes, names and codes are consistent across different levels.</p></li>
+<li><p>Load exposure data</p>
+<ul>
+<li><p>Population: WorldPop 2020 Population counts / Constrained individual countries, UN adjusted (100 m resolution)</p>
+<ul>
+<li><p><a class="reference external" href="https://hub.worldpop.org/geodata/listing?id=79">Download page</a></p></li>
+<li><p>API according to ISO3 code: <a class="reference external" href="https://www.worldpop.org/rest/data/pop/wpgp?iso3=NPL">https://www.worldpop.org/rest/data/pop/wpgp?iso3=NPL</a>
+returns a Json that includes the url of data: <a class="reference external" href="https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/NPL/npl_ppp_2020.tif">https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/NPL/npl_ppp_2020.tif</a></p></li>
+</ul>
+</li>
+<li><p>Built-up: the latest <a class="reference external" href="https://download.geoservice.dlr.de/WSF2019/#details">World Settlement footprint</a> can be download as tiles for the area of interest and merged into one compressed tif. 10 m binary grid can be resampled into 100 m using “mean”: returns a 0-1 ratio describing the share of builtup for 100m cell.</p></li>
+<li><p>Land cover / Agricultural land: many are available from <a class="reference external" href="https://planetarycomputer.microsoft.com/catalog#Land%20use/Land%20cover">planeterycomputer catalog</a>. ESA 2020 at 10m resolution is suggested. Specific land cover types can be filtered using pixel value.</p></li>
+</ul>
+</li>
+<li><p>Load hazard data.</p>
+<ul>
+<li><p>Most hazard data consist of multiple layers (Return Periods, RP) each representing one probabilistic intensity maximum, or in other words the intensity of the hazard in relation to its frequency of occurrence.</p></li>
+<li><p>Some hazards, however, comes as individual layers representing a mean hazard value. In this case, ignore the looping over RP.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="data-processing">
+<h3>DATA PROCESSING<a class="headerlink" href="#data-processing" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>LOOP over each hazard RPi layers:</p>
+<ul class="simple">
+<li><p>Classify hazard layer RPi according to settings: number and size of classes: <code class="docutils literal notranslate"><span class="pre">RPi</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_Cj</span></code> (multiband raster)</p></li>
+<li><p>Each class <code class="docutils literal notranslate"><span class="pre">Cj</span></code> of RPi is used to mask the Exposure layer -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_Cj_Exp</span></code> (multiband raster)</p></li>
+<li><p>Perform zonal statistic (SUM) for each ADMi unit over eac <code class="docutils literal notranslate"><span class="pre">RPi_Cj_Exp</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">[ADMi_NAME;RPi_C1_Exp;RPi_C2_Exp;...RPi_Cj_Exp]</span></code><br>
+Example using 3 RP scenarios: (10-100-1000) and 3 classes (C1-3): `table [ADM2_NAME;RP10_C1_Exp;RP10_C2_Exp;RP10_C3_Exp;RP100_C1_Exp;RP100_C2_Exp;RP100_C3_Exp;RP1000_C1_Exp;RP1000_C2_Exp;RP1000_C3_Exp;]</p></li>
+</ul>
+</li>
+<li><p>Calculate EAE</p>
+<ul>
+<li><p>Calculate the exceedance frequency for each RPi -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_ef</span> <span class="pre">=</span> <span class="pre">(1/RPi</span> <span class="pre">-</span> <span class="pre">1/RPi+1)</span></code> where <code class="docutils literal notranslate"><span class="pre">RPi+1</span></code> means the next RP in the serie.
+Example using 3 RP scenarios: RP 10, 100, and 1000 years. Then: <code class="docutils literal notranslate"><span class="pre">RP10_ef</span> <span class="pre">=</span> <span class="pre">(1/10</span> <span class="pre">-</span> <span class="pre">1/100)</span> <span class="pre">=</span> <span class="pre">0.09</span></code></p></li>
+<li><p>Multiply exposure for each scenario i and class j <code class="docutils literal notranslate"><span class="pre">(RPi_Cj_Exp)</span></code> with its exceedence frequency <code class="docutils literal notranslate"><span class="pre">(RPi_ef)</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_Cj_Exp_EAE</span></code></p></li>
+<li><p>Sum <code class="docutils literal notranslate"><span class="pre">RPi_Cj_Exp_EAE</span></code>across multiple RPi for the same class Cj -&gt; <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">[ADMi;Cj_Exp_EAE]</span></code><br>
+Example using 3 classes (C1-3): <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">[ADMi;C1_Exp_EAE;C2_Exp_EAE;C3_Exp_EAE]</span></code></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:center head"><p>RP</p></th>
+<th class="head"><p>Exceedance freq</p></th>
+<th class="text-align:center head"><p>C3</p></th>
+<th class="text-align:center head"><p>C4</p></th>
+<th class="text-align:center head"><p>C5</p></th>
+<th class="text-align:center head"><p>C6</p></th>
+<th class="head"><p>C3-6</p></th>
+<th class="text-align:center head"><p>C3_EAE</p></th>
+<th class="text-align:center head"><p>C4_EAE</p></th>
+<th class="text-align:center head"><p>C5_EAE</p></th>
+<th class="text-align:center head"><p>C6_EAE</p></th>
+<th class="head"><p>C3-6_EAE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:center"><p>10</p></td>
+<td><p>0.09</p></td>
+<td class="text-align:center"><p>4,036</p></td>
+<td class="text-align:center"><p>1,535</p></td>
+<td class="text-align:center"><p>2,111</p></td>
+<td class="text-align:center"><p>1,967</p></td>
+<td><p>9,658</p></td>
+<td class="text-align:center"><p>363</p></td>
+<td class="text-align:center"><p>138</p></td>
+<td class="text-align:center"><p>190</p></td>
+<td class="text-align:center"><p>177</p></td>
+<td><p>868</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>100</p></td>
+<td><p>0.009</p></td>
+<td class="text-align:center"><p>8,212</p></td>
+<td class="text-align:center"><p>5,766</p></td>
+<td class="text-align:center"><p>5,007</p></td>
+<td class="text-align:center"><p>13,282</p></td>
+<td><p>32,367</p></td>
+<td class="text-align:center"><p>739</p></td>
+<td class="text-align:center"><p>519</p></td>
+<td class="text-align:center"><p>451</p></td>
+<td class="text-align:center"><p>1,195</p></td>
+<td><p>2,904</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>1000</p></td>
+<td><p>0.0009</p></td>
+<td class="text-align:center"><p>8,399</p></td>
+<td class="text-align:center"><p>5,134</p></td>
+<td class="text-align:center"><p>4,371</p></td>
+<td class="text-align:center"><p>25,989</p></td>
+<td><p>44,893</p></td>
+<td class="text-align:center"><p>756</p></td>
+<td class="text-align:center"><p>462</p></td>
+<td class="text-align:center"><p>393</p></td>
+<td class="text-align:center"><p>2,339</p></td>
+<td><p>3,950</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>Total</p></td>
+<td><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td><p></p></td>
+<td class="text-align:center"><p>1,858</p></td>
+<td class="text-align:center"><p>1,119</p></td>
+<td class="text-align:center"><p>1,034</p></td>
+<td class="text-align:center"><p>3,711</p></td>
+<td><p>7,723</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Plot Exceedance Frequency Curve. Example:<br>
+<img alt="immagine" src="https://user-images.githubusercontent.com/44863827/198069028-8bd0e317-0b2e-4a22-b912-e260d3b3bd65.png" /></p></li>
+<li><p>Perform zonal statistic of Tot_Exp using ADMi -&gt; <code class="docutils literal notranslate"><span class="pre">[ADMi;ADMi_Exp;Exp_EAE]</span></code> in order to calculate <code class="docutils literal notranslate"><span class="pre">Exp_EAE%</span> <span class="pre">=</span> <span class="pre">Exp_EAE/ADMi_Exp</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">[ADMi;ADMi_Exp;Exp_EAE;Exp_EAE%]</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="preview-results">
+<h2>PREVIEW RESULTS<a class="headerlink" href="#preview-results" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Plot map of ADMi_EAE and related tables/Charts</p></li>
+</ul>
+</section>
+<section id="export-results">
+<h2>EXPORT RESULTS<a class="headerlink" href="#export-results" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Export geodata output as gpkg and tables, generate charts</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="equivalent-processing-in-qgis">
+<h2>EQUIVALENT PROCESSING IN QGIS<a class="headerlink" href="#equivalent-processing-in-qgis" title="Permalink to this headline">#</a></h2>
+<p>The following display equivalent spatial analytics steps performed by the script by using QGIS (well known, free geospatial tool).</p>
+<section id="id1">
+<h3>DATA MANAGEMENT<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>Load map data: ADM units (3 layers), hazard (one or as many layers as RP scenarios) and exposure (population map, land cover, etc).
+In this example, we use FATHOM river flood data (light blue) and WorldPop2020-constrained-US_adjusted population data (green to purple).</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151433893-76299364-f416-487f-a3e1-acf082d8b137.png">
+</li>
+<li><p>(optional) assign symbology for each one to print out readable maps. Consider min and max hazard thresholds and classes when building symbology.</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151356576-7f56d2a6-4314-4bcb-9727-377bd032ac54.png">
+</li>
+</ul>
+</section>
+<section id="analytical-approach">
+<h3>ANALYTICAL APPROACH<a class="headerlink" href="#analytical-approach" title="Permalink to this headline">#</a></h3>
+<p>In this scenario, the physical hazard intensity is ranked in qualitative classes of impact magnitude. This is the case when no impact function is available for the category at risk, but a classification of impact by hazard thresholds is possible. Starting from the thresholded layer, we split the hazard intensity (water depth, as in previouse example) into 6 classes, each representing an interval of water depth range in m - except the last one, the includes all values &gt; MAX damage ratio. Then, we extract the total population located within each hazard class for each ADM3 unit into an excel table for further analytics to be applied.</p>
+<p>Water depth classes:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Class name</p></th>
+<th class="head"><p>min</p></th>
+<th class="head"><p>Max</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>C1</p></td>
+<td><p>0.01</p></td>
+<td><p>0.15</p></td>
+</tr>
+<tr class="row-odd"><td><p>C2</p></td>
+<td><p>0.15</p></td>
+<td><p>0.5</p></td>
+</tr>
+<tr class="row-even"><td><p>C3</p></td>
+<td><p>0.5</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>C4</p></td>
+<td><p>1</p></td>
+<td><p>1.5</p></td>
+</tr>
+<tr class="row-even"><td><p>C5</p></td>
+<td><p>1.5</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-odd"><td><p>C6</p></td>
+<td><p>2</p></td>
+<td><p>inf</p></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>Raster calculator: split the layer (one layer or multiple RP) into multiple impact classes. Repeat the task, changing the interval values for each class.</p>
+<img width=40% src="https://user-images.githubusercontent.com/44863827/153635133-40167c5e-6e99-45a5-add7-8f116fe78512.png">
+<p>The outputs are 6 raster files, one for each hazard class, as a binary mask. These can combined into one multi-band file.</p>
+</li>
+<li><p>Merge tool: select the 6 layers and keep default options; select “High” compression.</p>
+<img width=40% src="https://user-images.githubusercontent.com/44863827/151591267-4b7706e5-1d12-4bca-a4bf-2163f7f7572e.png">
+<p>Resulting multi-band file (each band plotted separately):</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151594139-4583cdc4-1bc0-4961-a860-dbc4cb826366.png">
+</li>
+<li><p>Raster calculator: multiply each band from the multi-band file with the population map.</p>
+<img width=40% src="https://user-images.githubusercontent.com/44863827/151592373-e01086a2-e9fb-4f50-9f37-fd9dfb029f51.png">
+<p>The outputs are 6 raster files, one for each hazard class, as number of exposed population. These can combined into one multi-band file (class_population), as shown before.
+Resulting multi-band file (each band plotted separately) in orange-red colors:</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151594269-268fbf44-882d-46a1-a610-65d5abca12af.png">
+</li>
+<li><p>Zonal statistic: run as “batch”. Select the 6 bands of the multi-band class_population layer, and select only the “sum” criteria to aggregate impacted population at ADM3 level.</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151595290-3951d11e-85dc-4d7b-af70-9c8741c651d3.png">
+<p>Six columns [c1_sum to c6_sum] are added to ADM3 layer. It can be plotted to represent the number of people wihith each hazard class; or it can be exported as table for further steps of the analytics (e..g apply desired functions or parameters to each class). You can do that by either 1) exporting the ADM3 layer as csv; or 2) selecting the whole attribute table and selecting the “copy” button on the top (ctrl+C does not work!). Then paste into excel.</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151596863-ec6d47cd-b2c7-4511-8ef3-d5275f01ea46.png">
+<p>In order to express the value as % of total, the steps are the same as explained in the Option 1 example: extract total population using zonal statistic, and export it as table.</p>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./Top-down/procedures"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By M. Amadio (GFDRR)<br/>
+  
+    Last updated on Apr 13, 2023.<br/>
+    <div class="extra_footer">
+      <div>
+    <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
+</div>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,816 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ANALYTICAL APPROACH = Expected Annual Impact (EAI) &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/Top-down/procedures/Analytical_procedure_function.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Climate & Disaster Risk Screening Tools</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Acknowledgements
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../docs/team.html">
+   Data Goods Team and Acknowledgements
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2FTop-down/procedures/Analytical_procedure_function.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/Top-down/procedures/Analytical_procedure_function.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/Top-down/procedures/Analytical_procedure_function.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   ANALYTICAL APPROACH = Expected Annual Impact (EAI)
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#objective">
+     OBJECTIVE
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#script-overview">
+     SCRIPT OVERVIEW
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#script-structure">
+     SCRIPT STRUCTURE
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-requisites">
+     PRE-REQUISITES
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#script-step-by-step">
+     SCRIPT STEP-BY-STEP
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#setup">
+       SETUP
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#user-input">
+       USER INPUT
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#settings-defaults-can-be-changed">
+       SETTINGS (DEFAULTS can be changed)
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#data-management">
+       DATA MANAGEMENT
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-processing">
+     DATA PROCESSING
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#preview-results">
+     PREVIEW RESULTS
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#export-results">
+     EXPORT RESULTS
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#equivalent-processing-in-qgis">
+   EQUIVALENT PROCESSING IN QGIS
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     DATA MANAGEMENT
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytical-approach">
+     ANALYTICAL APPROACH
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>ANALYTICAL APPROACH = Expected Annual Impact (EAI)</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   ANALYTICAL APPROACH = Expected Annual Impact (EAI)
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#objective">
+     OBJECTIVE
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#script-overview">
+     SCRIPT OVERVIEW
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#script-structure">
+     SCRIPT STRUCTURE
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-requisites">
+     PRE-REQUISITES
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#script-step-by-step">
+     SCRIPT STEP-BY-STEP
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#setup">
+       SETUP
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#user-input">
+       USER INPUT
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#settings-defaults-can-be-changed">
+       SETTINGS (DEFAULTS can be changed)
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#data-management">
+       DATA MANAGEMENT
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-processing">
+     DATA PROCESSING
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#preview-results">
+     PREVIEW RESULTS
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#export-results">
+     EXPORT RESULTS
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#equivalent-processing-in-qgis">
+   EQUIVALENT PROCESSING IN QGIS
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     DATA MANAGEMENT
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytical-approach">
+     ANALYTICAL APPROACH
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="analytical-approach-expected-annual-impact-eai">
+<h1>ANALYTICAL APPROACH = Expected Annual Impact (EAI)<a class="headerlink" href="#analytical-approach-expected-annual-impact-eai" title="Permalink to this headline">#</a></h1>
+<p>This analytical approach applies to multiple probabilistic hazard scenarios and aims to produce a mean estimate of Expected Annual Impact (EAI).</p>
+<p>Natural hazards modelling can be either:</p>
+<ul class="simple">
+<li><p>Deterministic, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.</p></li>
+<li><p>Probabilistic, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years. This is the case for river flood, coastal flood and strong winds.</p></li>
+</ul>
+<p>See the picture below as example: the landslide hazard (first map) is represented by one aggregated mean index value; while the flood hazard is shows as a series of events (scenarios) of increasing magnitude and decreasing probability. <em><strong>Note that a return period of 1,000 years, while very unlikely, can occur anyday!</strong></em> Therefore it is important to include all range of probabilities when assessing risk.</p>
+<div align=center>
+<img src="https://user-images.githubusercontent.com/44863827/201052605-78fdd0e9-a109-4894-b3bf-a5f9eaabbdd2.png">
+</div>
+<p>The EAI is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering all combined hazard probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.</p>
+<div align=center>
+<img src="https://user-images.githubusercontent.com/44863827/201917310-9fc8b871-8351-4657-959e-d09c0b0e340c.png">
+</div>
+<section id="objective">
+<h2>OBJECTIVE<a class="headerlink" href="#objective" title="Permalink to this headline">#</a></h2>
+<p>The script performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period).
+The spatial information about hazard and exposure is first combined at the grid level, then the total risk estimate is calculated at ADM boundary level. This represents the disaster risk historical baseline.
+The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).</p>
+</section>
+<section id="script-overview">
+<h2>SCRIPT OVERVIEW<a class="headerlink" href="#script-overview" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Script runs on one country, one hazard at time to keep the calculation time manageable.</p></li>
+<li><p>The analysis is carried at the resolution of the exposure layer. E.g. when using Worldpop exposure layer, it is 100x100 meters.</p></li>
+<li><p>User input is required to define country, exposure layer, and settings.</p></li>
+<li><p>Settings affect how the processing runs (min theshold).</p></li>
+<li><p>The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.</p></li>
+<li><p>The information is then aggregated at ADM level using zonal statistic.</p></li>
+<li><p>The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The exceedance frequency curve (EFC) is plotted.</p></li>
+<li><p>Table results are exported in excel format, map rsults are exported in gpkg format.</p></li>
+</ul>
+</section>
+<section id="script-structure">
+<h2>SCRIPT STRUCTURE<a class="headerlink" href="#script-structure" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>SETUP: environment and libraries</p></li>
+<li><p>USER INPUT: specify country and categories of interest</p></li>
+<li><p>SETTINGS: default parameters can be changed by user</p></li>
+<li><p>DATA MANAGEMENT: global datasets are loaded according to user input</p></li>
+<li><p>DATA PROCESSING: datasets are processed according to settings</p></li>
+<li><p>PREVIEW RESULTS: plot tables and maps</p></li>
+<li><p>EXPORT RESULTS: results are exported as excel according to template</p></li>
+</ul>
+</section>
+<section id="pre-requisites">
+<h2>PRE-REQUISITES<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Latest Anaconda and Python properly installed, environment set as from <a class="reference external" href="../notebooks#readme">instructions</a>.</p></li>
+</ul>
+</section>
+<section id="script-step-by-step">
+<h2>SCRIPT STEP-BY-STEP<a class="headerlink" href="#script-step-by-step" title="Permalink to this headline">#</a></h2>
+<section id="setup">
+<h3>SETUP<a class="headerlink" href="#setup" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Load required libraries</p></li>
+</ul>
+</section>
+<section id="user-input">
+<h3>USER INPUT<a class="headerlink" href="#user-input" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Country of interest (1): Name or ISO code</p></li>
+<li><p>Exposure category (1): a) population; b) land cover</p></li>
+</ul>
+</section>
+<section id="settings-defaults-can-be-changed">
+<h3>SETTINGS (DEFAULTS can be changed)<a class="headerlink" href="#settings-defaults-can-be-changed" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Min Hazard threshold: data below this threshold are being ignored</p></li>
+</ul>
+</section>
+<section id="data-management">
+<h3>DATA MANAGEMENT<a class="headerlink" href="#data-management" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Load country boundaries for multiple administrative levels sourced from <a class="reference external" href="https://data.humdata.org/dataset">HDX</a> or <a class="reference external" href="https://www.geoboundaries.org">Geoboundaries</a>. Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations).</p></li>
+<li><p>Verify that shapes, names and codes are consistent across different levels.</p></li>
+<li><p>Load exposure data</p>
+<ul>
+<li><p>Population: WorldPop 2020 Population counts / Constrained individual countries, UN adjusted (100 m resolution)</p>
+<ul>
+<li><p><a class="reference external" href="https://hub.worldpop.org/geodata/listing?id=79">Download page</a></p></li>
+<li><p>API according to ISO3 code e.g. <code class="docutils literal notranslate"><span class="pre">https://www.worldpop.org/rest/data/pop/wpgp?iso3=NPL</span></code>
+returns a Json that includes <a class="reference external" href="https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/NPL/npl_ppp_2020.tif">the url of data</a>.</p></li>
+</ul>
+</li>
+<li><p>Built-up: the latest <a class="reference external" href="https://download.geoservice.dlr.de/WSF2019/#details">World Settlement footprint</a> can be download as tiles for the area of interest and merged into one compressed tif. 10 m binary grid can be resampled into 100 m using “mean”: returns a 0-1 ratio describing the share of builtup for 100m cell.</p>
+<ul>
+<li><p>Download all tiles within country extent and merge them in a virtual raster (0-255)</p></li>
+<li><p>GDAL Warp on virtual raster, setting resolution = cell_res * 10</p></li>
+<li><p>GDAL Calc on Reprojected, setting calc: A/255</p></li>
+</ul>
+</li>
+<li><p>Land cover / Agricultural land: many are available from <a class="reference external" href="https://planetarycomputer.microsoft.com/catalog#Land%20use/Land%20cover">planeterycomputer catalog</a>. ESA 2020 at 10m resolution is suggested. Specific land cover types can be filtered using pixel value.</p></li>
+</ul>
+</li>
+<li><p>Load hazard data.</p>
+<ul>
+<li><p>Most hazard data consist of multiple layers (Return Periods, RP) each representing one probabilistic intensity maximum, or in other words the intensity of the hazard in relation to its frequency of occurrence.</p></li>
+<li><p>Some hazards, however, comes as individual layers representing a mean hazard value. In this case, ignore the looping over RP.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="data-processing">
+<h2>DATA PROCESSING<a class="headerlink" href="#data-processing" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>LOOP over each hazard RPi layers:</p>
+<ul class="simple">
+<li><p>Filter hazard layer according to settings (min and max thresholds) for each RPi -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_filtered</span></code></p></li>
+<li><p>Transform hazard intensity value into impact factor using specific hazard impact function or table: <code class="docutils literal notranslate"><span class="pre">RPi_filtered</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">RP_IF</span></code></p></li>
+<li><p>RPi_IF is multiplied with the exposure layer to obtain expected impact: <code class="docutils literal notranslate"><span class="pre">RPi_IF</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_exp_imp</span></code></p></li>
+<li><p>Perform zonal statistic (SUM) for each ADMi unit over every RPi_exp_imp -&gt; <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">[ADMi_NAME;RPi_exp_imp]</span></code>
+<br> e.g. <code class="docutils literal notranslate"><span class="pre">[ADM2_NAME;RP10_exp_imp;RP100_exp_imp;RP1000_exp_imp]</span></code><br><br></p></li>
+</ul>
+<div align=center>
+<img src="https://user-images.githubusercontent.com/44863827/201050148-5aa6ad10-44b2-480f-9bef-51c3703d0e33.png">
+</div>
+</li>
+<li><p>Calculate EAI</p>
+<ul>
+<li><p>Calculate the exceedance frequency for each RPi -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_ef</span> <span class="pre">=</span> <span class="pre">(1/RPi</span> <span class="pre">-</span> <span class="pre">1/RPj)</span></code> where <code class="docutils literal notranslate"><span class="pre">j</span></code> is the next RP in the serie.
+Example using 3 scenarios: RP 10, 100, and 1000 years. Then: <code class="docutils literal notranslate"><span class="pre">RP10_ef</span> <span class="pre">=</span> <span class="pre">(1/10</span> <span class="pre">-</span> <span class="pre">1/100)</span> <span class="pre">=</span> <span class="pre">0.09</span></code></p></li>
+<li><p>Multiply impact on exposure for each scenario <code class="docutils literal notranslate"><span class="pre">(RPi_Exp_imp)</span></code> with its exceedence frequency <code class="docutils literal notranslate"><span class="pre">(RPi_ef)</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_Exp_EAI</span></code></p></li>
+<li><p>Sum all <code class="docutils literal notranslate"><span class="pre">RPi_exp_EAI</span></code> columns for each ADMi -&gt; <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">[ADMi;Exp_EAI]</span></code></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:center head"><p>RP</p></th>
+<th class="text-align:center head"><p>Freq</p></th>
+<th class="text-align:center head"><p>Exceedance freq</p></th>
+<th class="text-align:center head"><p>Impact</p></th>
+<th class="text-align:center head"><p>EAI</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:center"><p>10</p></td>
+<td class="text-align:center"><p>0.100</p></td>
+<td class="text-align:center"><p>0.09</p></td>
+<td class="text-align:center"><p>193</p></td>
+<td class="text-align:center"><p>17</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>100</p></td>
+<td class="text-align:center"><p>0.010</p></td>
+<td class="text-align:center"><p>0.009</p></td>
+<td class="text-align:center"><p>1,210</p></td>
+<td class="text-align:center"><p>11</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>1000</p></td>
+<td class="text-align:center"><p>0.001</p></td>
+<td class="text-align:center"><p>0.001</p></td>
+<td class="text-align:center"><p>3,034</p></td>
+<td class="text-align:center"><p>3</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>Total</p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p><strong>31</strong></p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Plot Exceedance Frequency Curve. Example:<br>
+<img alt="immagine" src="https://user-images.githubusercontent.com/44863827/201049813-008d5fbc-3195-4289-ba18-34a126fe434e.png" /></p></li>
+<li><p>Perform zonal statistic of Tot_Exp using ADMi -&gt; <code class="docutils literal notranslate"><span class="pre">[ADMi;ADMi_Exp;Exp_EAI]</span></code> in order to calculate <code class="docutils literal notranslate"><span class="pre">Exp_EAI%</span> <span class="pre">=</span> <span class="pre">Exp_EAI/ADMi_Exp</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">[ADMi;ADMi_Exp;Exp_EAI;Exp_EAI%]</span></code></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="preview-results">
+<h2>PREVIEW RESULTS<a class="headerlink" href="#preview-results" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>Plot map of ADMi_EAI and related tables/Charts</p>
+<div align=center>
+<table><tr><td width="45%"><img src="https://user-images.githubusercontent.com/44863827/201054765-5a1ce2c9-0bde-4e98-80ce-ee30ccefc4e2.png"></td>
+    <td><img src="https://user-images.githubusercontent.com/44863827/201055152-28482f07-7215-4b09-b3c2-397381d516af.png"></td></tr></table>
+</div>
+</li>
+</ul>
+</section>
+<section id="export-results">
+<h2>EXPORT RESULTS<a class="headerlink" href="#export-results" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Export geodata output as gpkg and tables.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="equivalent-processing-in-qgis">
+<h1>EQUIVALENT PROCESSING IN <a class="reference external" href="https://www.qgis.org/en/site/forusers/download.html">QGIS</a><a class="headerlink" href="#equivalent-processing-in-qgis" title="Permalink to this headline">#</a></h1>
+<p>The following display equivalent spatial analytics steps performed by the script by using QGIS (well known, free geospatial tool).</p>
+<section id="id1">
+<h2>DATA MANAGEMENT<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>Load map data: ADM units (3 layers), hazard (one or as many layers as RP scenarios) and exposure (population map, land cover, etc).
+In this example, we use FATHOM river flood data (light blue) and WorldPop2020-constrained-US_adjusted population data (green to purple).</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151433893-76299364-f416-487f-a3e1-acf082d8b137.png">
+</li>
+<li><p>(optional) assign symbology for each one to print out readable maps. Consider min and max hazard thresholds and classes when building symbology.</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151356576-7f56d2a6-4314-4bcb-9727-377bd032ac54.png">
+</li>
+<li><p>Apply min threshold for hazard, if required. In the example, we consider values &lt; 0.5 m as non-impacting due to defence standards, and values &gt; 10 m as part of the water body. Repeat this step for multiple RPs.</p>
+<img width=60% src="https://user-images.githubusercontent.com/44863827/151812298-25d14746-7d79-4d6e-8b67-3751a29233db.png">
+</li>
+</ul>
+</section>
+<section id="analytical-approach">
+<h2>ANALYTICAL APPROACH<a class="headerlink" href="#analytical-approach" title="Permalink to this headline">#</a></h2>
+<p>In this scenario, a mathematical (quantitative) relationship is available to link physical hazard intensity and impact magnitude over built-up asset.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Raster</span> <span class="pre">calculator</span></code>: tranlate the hazard map (one layer or multiple RP) into impact factor map.
+In this example, the average flood damage curve for Asia (JRC 2017) is used to aproximate an impact on built-up land cover.
+A polynomial function is fitted to the curve (R2= 0.99), where x is the hazard metric (water depth); the max damage is set to 1:</p>
+<p><code class="docutils literal notranslate"><span class="pre">y=</span> <span class="pre">MIN(1,</span> <span class="pre">0.00723</span> <span class="pre">\*</span> <span class="pre">x^3</span> <span class="pre">-</span> <span class="pre">0.1</span> <span class="pre">\*</span> <span class="pre">x^2</span> <span class="pre">+</span> <span class="pre">0.506</span> <span class="pre">\*</span> <span class="pre">x)</span></code></p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151544290-1306bda1-30a4-4729-9e4d-c025cf4f6f2e.png">
+<p>The resulting impact factor layers RPi has values ranging 0-1.</p>
+<p><img width=37% src="https://user-images.githubusercontent.com/44863827/151798346-121dae76-1004-468d-9ec2-8f89d056ceed.png"> <img width=40% src="https://user-images.githubusercontent.com/44863827/151381602-319c426f-273d-482c-ace2-059b6375b4b3.png"></p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Raster</span> <span class="pre">calculator</span></code>: multiply the impact factor map with the exposure map. The resulting layer RPi_Pop represent the share of people impacted under RP10.</p>
+<p><img width=37% src="https://user-images.githubusercontent.com/44863827/151382232-4a48272a-6615-4a75-96d8-405c5d4d14e1.png"> <img width=40% src="https://user-images.githubusercontent.com/44863827/151381319-6a9b3fe9-f7f2-4dcd-b497-91bfcaac1c03.png"></p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Zonal</span> <span class="pre">statistic</span></code>: select “sum” criteria to aggregate impacted built-up at ADM3 level. A new column “RP10_exp_sum” is added to ADM3 layer: plot it to desired simbology.</p>
+<p><img width=35% src="https://user-images.githubusercontent.com/44863827/151384000-0a71e054-49a8-414b-bf3e-77432b135543.png">  <img width=45% src="https://user-images.githubusercontent.com/44863827/151402320-3ed9a157-59cd-4a5d-8209-312e9aaf0b7c.png"></p>
+<p>In order to express the value as % of total, we need the total built-up for each ADM3 unit.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Zonal</span> <span class="pre">statistic</span></code>: select “sum” criteria on the Built-up layer of choice.</p></li>
+</ul>
+<p>If the hazard is represented by <strong>one layer</strong>, it is assumed to represent the Expected Annual Impact (EAI).</p>
+<p>Otherwise, this procedure is repeated for <strong>each RP layer</strong>, and then the EAI is computed as described in the following steps.</p>
+<ul>
+<li><p>Once reapeted over all RP layers, the ADM3 layer used to perform zonal statistic will include all the required information to calculate EAI and EAI%.
+The impact for each column is multiplied by the year frequency of the return period (RPf), calculated as RPf = 1/RP or, in the case where the set includes RP 1 year, as:
+RPf = 1 - EXP(-1/RP). Then, the column are summed up to a total, representing EAI.</p>
+<img width=50% src="https://user-images.githubusercontent.com/44863827/151416889-8adafa0c-584b-4505-8185-6ee46c7f1bfe.png">    
+</li>
+<li><p>Create a new column and calculate the percentage of expected annually impacted built-up over total.</p></li>
+<li><p>Plot results as map: absolute numbers and percentage over total values for ADM level.</p>
+<p><img width=60% src="https://user-images.githubusercontent.com/44863827/151826096-43510935-efb7-40c4-a2af-82f7c4c29564.png"> <img width=60% src="https://user-images.githubusercontent.com/44863827/151825526-14ba5f89-725d-4ee9-9943-f9bc7a91e225.png"></p>
+</li>
+<li><p>Results can be furtherly aggregated for ADM2 and ADM1 levels by creating a new column ADM2_EAI ADM1_EAI and summing all EAI using ADM2_code and ADM1_code as index.</p></li>
+</ul>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./Top-down/procedures"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By M. Amadio (GFDRR)<br/>
+  
+    Last updated on Apr 13, 2023.<br/>
+    <div class="extra_footer">
+      <div>
+    <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
+</div>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
