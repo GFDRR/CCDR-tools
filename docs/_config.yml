@@ -1,0 +1,44 @@
+# Book settings
+title: Climate & Disaster Risk tools 
+author: M. Amadio (GFDRR)
+logo: docs/images/logo.png
+exclude_patterns: [_build, Thumbs.db, .DS_Store, "**.ipynb_checkpoints"]
+only_build_toc_files: true
+
+repository:
+    url: https://github.com/GFDRR/CCDR-tools
+    branch: main
+
+html:
+    home_page_in_navbar: false
+    extra_navbar: ""
+    use_edit_page_button: true
+    use_repository_button: true
+    use_issues_button: true
+    baseurl: https://GFDRR.github.io/CCDR-tools
+    extra_footer: |
+        <div>
+            <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
+        </div>
+
+#######################################################################################
+# Execution settings
+execute:
+    execute_notebooks: force
+    allow_errors: true
+    exclude_patterns:
+        - notebooks/**/*.ipynb
+
+#######################################################################################
+# Bibliography settings
+bibtex_bibfiles:
+    - docs/bibliography.bib
+
+#######################################################################################
+# Sphinx settings
+sphinx:
+    config:
+        bibtex_reference_style: author_year
+        mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+        html_last_updated_fmt: "%b %d, %Y"
+        html_show_copyright: false
