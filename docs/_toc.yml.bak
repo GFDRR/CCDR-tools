@@ -1,13 +1,13 @@
 format: jb-book
-root: docs/home
+root: README
 
 parts:
-  - caption: Introduction to Risk Data
+  - caption: Introduction to Data Goods
     chapters:
-      - file: docs/hazard-data
-      - file: docs/exposure-data
+      - file: docs/introduction_to_data_goods
+      - file: docs/foundational_datasets_and_data_products
         sections:
-        - file: Top-down/notebooks/CCDR.ipynb
+        - file: notebooks/earthquake-intensity/earthquake_intensity.ipynb
   - caption: Data Products
     chapters:
       - file: notebooks/ndvi/README
