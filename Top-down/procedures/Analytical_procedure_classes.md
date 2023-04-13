@@ -1,4 +1,4 @@
-# ANALYTICAL APPROACH = Expected Annual Exposure (EAE) 
+# Expected Annual Exposure (EAE) 
 
 ## OBJECTIVE
 

@@ -19,7 +19,7 @@ parts:
         sections:
         - file: Top-down/notebooks/Flood.ipynb
       - file: Top-down/procedures/Analytical_procedure_classes
-  - caption: Jupyer Notebooks
+  - caption: Jupyter Notebooks
     chapters:
       - file: Top-down/notebooks/readme
         sections:

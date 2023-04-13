@@ -1,4 +1,4 @@
-# ANALYTICAL APPROACH = Expected Annual Impact (EAI) 
+# Expected Annual Impact (EAI) 
 
 This analytical approach applies to multiple probabilistic hazard scenarios and aims to produce a mean estimate of Expected Annual Impact (EAI).
 
