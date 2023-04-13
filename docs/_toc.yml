@@ -7,9 +7,7 @@ parts:
       - file: docs/intro-risk
       - file: docs/hazard-data
       - file: docs/exposure-data
-        sections:
-        - file: Top-down/notebooks/CCDR.ipynb
-  - caption: Global datasets
+  - caption: Global Risk Data
     chapters:
       - file: docs/global-data
         sections:
@@ -17,11 +15,15 @@ parts:
         - file: docs/global-exposure
   - caption: Analytical approaches
     chapters:
-      - file: Top-down/notebooks/readme
       - file: Top-down/procedures/Analytical_procedure_function
         sections:
         - file: Top-down/notebooks/Flood.ipynb
       - file: Top-down/procedures/Analytical_procedure_classes
+  - caption: Jupyer Notebooks
+    chapters:
+      - file: Top-down/notebooks/readme
+        sections:
+        - file: Top-down/notebooks/CCDR.ipynb
 
   - caption: Acknowledgements
     chapters:
