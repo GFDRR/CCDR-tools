@@ -1,0 +1,766 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ANALYTICAL NOTEBOOKS &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/Top-down/notebooks/readme.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ANALYTICAL APPROACH = Expected Annual Impact (EAI)" href="../procedures/Analytical_procedure_function.html" />
+    <link rel="prev" title="Foundational Datasets, Data Products, &amp; Sample Indicators" href="../../docs/global-data.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Climate & Disaster Risk Screening Tools</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to Risk Data
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../docs/intro-risk.html">
+   Introduction to Data Goods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../docs/hazard-data.html">
+   Hazard data
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../docs/exposure-data.html">
+   Exposure data
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CCDR.html">
+     Choose your hazard:
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Global datasets
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../docs/global-data.html">
+   Foundational Datasets, Data Products, &amp; Sample Indicators
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="simple">
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Analytical notebooks
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   ANALYTICAL NOTEBOOKS
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Acknowledgements
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../docs/team.html">
+   Team and Acknowledgements
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2FTop-down/notebooks/readme.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/Top-down/notebooks/readme.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/Top-down/notebooks/readme.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   ANALYTICAL NOTEBOOKS
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#script-setup">
+     SCRIPT SETUP
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#environment-and-libraries">
+       Environment and libraries
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#expected-directories-and-data-format">
+       Expected directories and data format
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-the-script">
+   RUNNING THE SCRIPT
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytical-approach-impact-function">
+     ANALYTICAL APPROACH = Impact function
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>ANALYTICAL NOTEBOOKS</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   ANALYTICAL NOTEBOOKS
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#script-setup">
+     SCRIPT SETUP
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#environment-and-libraries">
+       Environment and libraries
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#expected-directories-and-data-format">
+       Expected directories and data format
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-the-script">
+   RUNNING THE SCRIPT
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytical-approach-impact-function">
+     ANALYTICAL APPROACH = Impact function
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="analytical-notebooks">
+<h1>ANALYTICAL NOTEBOOKS<a class="headerlink" href="#analytical-notebooks" title="Permalink to this headline">#</a></h1>
+<p>For detailed explanation of the analytical workflow, please refer to <span class="xref myst">Procedures</span>.</p>
+<section id="script-setup">
+<h2>SCRIPT SETUP<a class="headerlink" href="#script-setup" title="Permalink to this headline">#</a></h2>
+<p>Note: at this stage you need to manually download all the notebooks in this folder and create your python environment as from instructions below.
+This could be further improved in the form of a self-installing desktop app using <a class="reference external" href="https://github.com/voila-dashboards/voila">Voila</a>.</p>
+<section id="environment-and-libraries">
+<h3>Environment and libraries<a class="headerlink" href="#environment-and-libraries" title="Permalink to this headline">#</a></h3>
+<ul>
+<li><p>The script requires python3 - conda or mamba are encouraged</p></li>
+<li><p>Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
+In Anaconda cmd prompt:</p>
+<p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">CCDR</span> <span class="pre">--file</span> <span class="pre">&lt;dir/win_env.yml&gt;</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">CCDR</span></code></p>
+</li>
+</ul>
+<p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file inside the notebook directories to specify the working directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
+
+# Fill the below with the location of data files
+# Use absolute paths with forward slashes (&quot;/&quot;), and keep the trailing slash
+DATA_DIR = &quot;&quot;
+
+# THE ENTRIES BELOW DO NOT NEED TO BE EDITED
+# Location to store results of analyses
+OUTPUT_DIR = ${DATA_DIR}/RSK/
+
+# Location to store downloaded rasters and other data
+# for the analysis notebooks
+CACHE_DIR = ${DATA_DIR}/cache/
+</pre></div>
+</div>
+<ul>
+<li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
+<li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">CCDR.ipynb</a> and chose the hazard to analyse.</p>
+<img width=500 src="https://user-images.githubusercontent.com/44863827/170250738-03ad2f05-a128-4d84-ab27-01dcec54c4e4.png">
+</li>
+<li><p>Execute all cells. The last one will present the user interface:</p>
+<img width=500 src="https://user-images.githubusercontent.com/44863827/156407683-c5613196-53bc-4ee5-81b7-d94b4fdbf295.png">
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="expected-directories-and-data-format">
+<h3>Expected directories and data format<a class="headerlink" href="#expected-directories-and-data-format" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>The script expects input data folders to be structured as:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Work</span> <span class="nb">dir</span><span class="o">/</span>
+ <span class="o">-</span> <span class="n">Hazard</span><span class="o">.</span><span class="n">ipynb</span>
+ <span class="o">-</span> <span class="n">common</span><span class="o">.</span><span class="n">py</span>
+ <span class="o">-</span> <span class="o">.</span><span class="n">env</span>
+ <span class="o">-</span> <span class="n">Data</span><span class="o">/</span>
+   <span class="o">-</span> <span class="n">ADM</span>	<span class="n">Administrative</span> <span class="n">unit</span> <span class="n">layer</span> <span class="k">for</span> <span class="n">each</span> <span class="n">country</span>
+   <span class="o">-</span> <span class="n">HZD</span>	<span class="n">Hazard</span> <span class="n">layers</span>
+   <span class="o">-</span> <span class="n">EXP</span>	<span class="n">Exposure</span> <span class="n">layers</span> <span class="o">-</span> <span class="n">Population</span> <span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">Built</span><span class="o">-</span><span class="n">up</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">),</span> <span class="n">Agriculture</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">)</span>
+   <span class="o">-</span> <span class="n">RSK</span>	<span class="n">Output</span> <span class="n">directory</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>ADMINISTRATIVE</strong> boundaries are provided as geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (exampe <code class="docutils literal notranslate"><span class="pre">NPL_ADM.gpkg</span></code>) made of multiple layers, up to ADM level 3:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">ISO_ADM</span>
+  <span class="o">-</span> <span class="n">ADM0</span>
+  <span class="o">-</span> <span class="n">ADM1</span>
+  <span class="o">-</span> <span class="n">ADM2</span>
+  <span class="o">-</span> <span class="n">ADM3</span>
+</pre></div>
+</div>
+<ul>
+<li><p>All spatial data must use CRS <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code></p></li>
+<li><p>Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:</p>
+<ul class="simple">
+<li><p>ADM0:</p></li>
+</ul>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ISO3166_a2</p></th>
+<th class="head"><p>ISO3166_a3</p></th>
+<th class="head"><p>ADM0_CODE</p></th>
+<th class="head"><p>ADM0_NAME</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>String(2)</p></td>
+<td><p>String(3)</p></td>
+<td><p>Integer</p></td>
+<td><p>String (20)</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>ADM1</p></li>
+</ul>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ADM0_CODE</p></th>
+<th class="head"><p>ADM0_NAME</p></th>
+<th class="head"><p>ADM1_CODE</p></th>
+<th class="head"><p>ADM1_NAME</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Integer</p></td>
+<td><p>String (20)</p></td>
+<td><p>Integer</p></td>
+<td><p>String(20)</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>ADM2</p></li>
+</ul>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ADM0_CODE</p></th>
+<th class="head"><p>ADM0_NAME</p></th>
+<th class="head"><p>ADM1_CODE</p></th>
+<th class="head"><p>ADM1_NAME</p></th>
+<th class="head"><p>ADM2_CODE</p></th>
+<th class="head"><p>ADM2_NAME</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Integer</p></td>
+<td><p>String (20)</p></td>
+<td><p>Integer</p></td>
+<td><p>String(20)</p></td>
+<td><p>Integer</p></td>
+<td><p>String(20)</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>ADM3</p></li>
+</ul>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ADM0_CODE</p></th>
+<th class="head"><p>ADM0_NAME</p></th>
+<th class="head"><p>ADM1_CODE</p></th>
+<th class="head"><p>ADM1_NAME</p></th>
+<th class="head"><p>ADM2_CODE</p></th>
+<th class="head"><p>ADM2_NAME</p></th>
+<th class="head"><p>ADM3_CODE</p></th>
+<th class="head"><p>ADM3_NAME</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Integer</p></td>
+<td><p>String (20)</p></td>
+<td><p>Integer</p></td>
+<td><p>String(20)</p></td>
+<td><p>Integer</p></td>
+<td><p>String(20)</p></td>
+<td><p>Integer</p></td>
+<td><p>String(20)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_HZD_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
+<li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_EXP.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). The same suggestion about resolution applies here.</p>
+<ul class="simple">
+<li><p>Population from Worldpop, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</p></li>
+<li><p>Built-up from World Settlement Footprint or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BUP.tif</p></li>
+<li><p>Agriculture from land cover map, ESA land cover or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</p></li>
+</ul>
+</li>
+</ul>
+<p>When resampling EXP layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid.</p>
+<img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="running-the-script">
+<h1>RUNNING THE SCRIPT<a class="headerlink" href="#running-the-script" title="Permalink to this headline">#</a></h1>
+<p>Once required input layers have been created according to standards, the script can run.</p>
+<p>Select the country of interest, the exposure category and the level of administrative boundaries aggregation.</p>
+<p>Note that not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification. Select the analytical approach accordingly.</p>
+<p><img alt="immagine" src="https://user-images.githubusercontent.com/44863827/156599257-a9f587b4-bcbf-4e6b-9793-6e346945dca5.png" /></p>
+<section id="analytical-approach-impact-function">
+<h2>ANALYTICAL APPROACH = Impact function<a class="headerlink" href="#analytical-approach-impact-function" title="Permalink to this headline">#</a></h2>
+<p>The “function” approach uses a mathematical relationship to calculate impact over exposed categories.
+For example, flood hazard impact over population is calculated using a mortality function, while the impact over built-up uses a damage function for buildings.</p>
+<p>The functions can be manually edited in the notebook, if a better model is available for the country of interest.</p>
+<img width=700 src="https://user-images.githubusercontent.com/44863827/156601011-5b8cf8af-8703-4d2a-8dbf-698b9e132b6f.png">
+<p>A minimum threshold can be set to ignore all values below - assuming that all risk is avoided under this threshold.</p>
+<img width=400 src="https://user-images.githubusercontent.com/44863827/156601233-8bb33d74-127a-4e60-93a3-0cc683d0efba.png">
+<p>A chart of the impact function can be generated in the interface for the selected exposure category.</p>
+<img width=400 src="https://user-images.githubusercontent.com/44863827/156601989-4997c63c-8c2a-4ce4-b6f9-bb7bb0506799.png">
+<p>If you want to inspect all steps of the processing, you can select the option to export all by-products as tiff files:</p>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Export Intermediate rasters</p></li>
+</ul>
+<p><em><strong>&gt;&gt;&gt; RUN ANALYSIS &lt;&lt;&lt;</strong></em></p>
+<p>Once the run finishes, results are exported as geospatial data (.gpkg) and table (.csv).</p>
+<p>By selecting</p>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Preview results</p></li>
+</ul>
+<p>A map will be generated at the end of the run, using a simple simbology.</p>
+<img width=700 src="https://user-images.githubusercontent.com/44863827/156605538-85af4764-a2cb-4d0f-8046-a59fdcbed50b.png">
+<p>The map can be zoomed and inspected with the pointer to show all the values in the table.</p>
+<img width=500 src="https://user-images.githubusercontent.com/44863827/156605784-b80e4ba8-aafd-4316-b9f8-d3657230a1d4.png">
+<p>EAI represents the aggregated absolute risk estimate:</p>
+<ul class="simple">
+<li><p><strong>Fatalities</strong> when considering impact over population;</p></li>
+<li><p><strong>Hectars [ha] of built-up destroyed</strong> when considering impact over built-up.</p></li>
+</ul>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./Top-down/notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../../docs/global-data.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Foundational Datasets, Data Products, &amp; Sample Indicators</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../procedures/Analytical_procedure_function.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ANALYTICAL APPROACH = Expected Annual Impact (EAI)</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By M. Amadio (GFDRR)<br/>
+  
+    Last updated on Apr 13, 2023.<br/>
+    <div class="extra_footer">
+      <div>
+    <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
+</div>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
