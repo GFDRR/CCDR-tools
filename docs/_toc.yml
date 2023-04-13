@@ -17,12 +17,12 @@ parts:
       - file: docs/global-exposure
   - caption: Analytical notebooks
     chapters:
-      - file: ../Top-down/notebooks/README
+      - file: Top-down/notebooks/readme
         sections:
-          - file: ../Top-down/procedures/Analytical_procedure_function
+          - file: Top-down/procedures/Analytical_procedure_function
             sections:
-            - file: ../Top-down/notebooks/Flood.ipynb
-          - file: ../Top-down/procedures/Analytical_procedure_classes
+            - file: Top-down/notebooks/Flood.ipynb
+          - file: Top-down/procedures/Analytical_procedure_classes
       - file: notebooks/ais-analysis/README
         sections:
           - file: notebooks/ais-analysis/01-descriptive-stats.ipynb
