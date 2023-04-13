@@ -13,21 +13,15 @@ parts:
     chapters:
       - file: docs/global-data
         sections:
-          - file: reports/2023-summer-tree-cover-loss.md
-      - file: docs/global-exposure
-  - caption: Analytical notebooks
+        - file: docs/global-hazard
+        - file: docs/global-exposure
+  - caption: Analytical approaches
     chapters:
       - file: Top-down/notebooks/readme
+      - file: Top-down/procedures/Analytical_procedure_function
         sections:
-          - file: Top-down/procedures/Analytical_procedure_function
-            sections:
-            - file: Top-down/notebooks/Flood.ipynb
-          - file: Top-down/procedures/Analytical_procedure_classes
-      - file: notebooks/ais-analysis/README
-        sections:
-          - file: notebooks/ais-analysis/01-descriptive-stats.ipynb
-          - file: notebooks/ais-analysis/02-trade-estimation.ipynb
-      - file: notebooks/traffic/README
+        - file: Top-down/notebooks/Flood.ipynb
+      - file: Top-down/procedures/Analytical_procedure_classes
 
   - caption: Acknowledgements
     chapters:
