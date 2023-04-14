@@ -4,7 +4,7 @@ root: README
 parts:
   - caption: Introduction to Risk Data
     chapters:
-      - file: README
+      - file: README.md
       - file: docs/intro-hazard
       - file: docs/intro-exposure
       - file: docs/climate-risk
