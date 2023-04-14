@@ -1,0 +1,1259 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>OVERVIEW &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/docs/climate-indices.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ANALYTICAL NOTEBOOKS" href="../Top-down/notebooks/readme.html" />
+    <link rel="prev" title="Expected Annual Exposure (EAE)" href="../Top-down/procedures/Analytical_procedure_classes.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Climate & Disaster Risk Screening Tools</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Introduction to Risk Data
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro-risk.html">
+   Disaster risk from natural hazards
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro-hazard.html">
+   Natural Hazards
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro-exposure.html">
+   Exposure
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="climate-risk.html">
+   Climate outlook
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Global Risk Data
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="global-data.html">
+   Foundational Datasets, Data Products, &amp; Sample Indicators
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="simple">
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Analytical approaches
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Top-down/procedures/Analytical_procedure_function.html">
+   Expected Annual Impact (EAI)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Top-down/procedures/Analytical_procedure_classes.html">
+   Expected Annual Exposure (EAE)
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   OVERVIEW
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Jupyter Notebooks
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Top-down/notebooks/readme.html">
+   ANALYTICAL NOTEBOOKS
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Acknowledgements
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="team.html">
+   Team and Acknowledgements
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2Fdocs/climate-indices.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/docs/climate-indices.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/climate-indices.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   OVERVIEW
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#challenges">
+     Challenges:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-input-data-is">
+     The input data is:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-script-does">
+     The script does:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-output-is">
+     The output is:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#resources-and-references">
+     Resources and references:
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#climate-indices-statistics">
+   CLIMATE INDICES STATISTICS
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#processing-of-climstats-layers-feeding-the-notebook-analytics">
+     PROCESSING OF CLIMSTATS LAYERS FEEDING THE NOTEBOOK ANALYTICS
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#input-files-for-notebook">
+     INPUT FILES FOR NOTEBOOK
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-the-notebook-to-present-climate-data">
+   RUNNING THE NOTEBOOK TO PRESENT CLIMATE DATA
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-requisites-offline">
+     PRE-REQUISITES (OFFLINE)
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#notebook-script-structure">
+     NOTEBOOK SCRIPT STRUCTURE
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#setup">
+       SETUP
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#user-input">
+       USER INPUT
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#processing">
+       PROCESSING
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#plot-results">
+       PLOT RESULTS
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#export-results-projections">
+       EXPORT RESULTS - PROJECTIONS
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#example-output">
+   EXAMPLE OUTPUT
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#maps-spatial-distribution">
+     Maps - Spatial distribution
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#general-template-for-one-index-one-period-multiple-ssp-historical-value-index-unit-and-median-anomaly-n-of-standard-deviations-compared-to-the-historical-period">
+       General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#flood-wet-landslides-medium-term-2040-2059">
+       Flood &amp; Wet landslides, Medium Term (2040-2059)
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#charts-time-distribution">
+     Charts - Time distribution
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#table-for-dynamic-visualisation">
+     Table (for dynamic visualisation)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>OVERVIEW</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   OVERVIEW
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#challenges">
+     Challenges:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-input-data-is">
+     The input data is:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-script-does">
+     The script does:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-output-is">
+     The output is:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#resources-and-references">
+     Resources and references:
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#climate-indices-statistics">
+   CLIMATE INDICES STATISTICS
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#processing-of-climstats-layers-feeding-the-notebook-analytics">
+     PROCESSING OF CLIMSTATS LAYERS FEEDING THE NOTEBOOK ANALYTICS
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#input-files-for-notebook">
+     INPUT FILES FOR NOTEBOOK
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#running-the-notebook-to-present-climate-data">
+   RUNNING THE NOTEBOOK TO PRESENT CLIMATE DATA
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-requisites-offline">
+     PRE-REQUISITES (OFFLINE)
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#notebook-script-structure">
+     NOTEBOOK SCRIPT STRUCTURE
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#setup">
+       SETUP
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#user-input">
+       USER INPUT
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#processing">
+       PROCESSING
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#plot-results">
+       PLOT RESULTS
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#export-results-projections">
+       EXPORT RESULTS - PROJECTIONS
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#example-output">
+   EXAMPLE OUTPUT
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#maps-spatial-distribution">
+     Maps - Spatial distribution
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#general-template-for-one-index-one-period-multiple-ssp-historical-value-index-unit-and-median-anomaly-n-of-standard-deviations-compared-to-the-historical-period">
+       General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#flood-wet-landslides-medium-term-2040-2059">
+       Flood &amp; Wet landslides, Medium Term (2040-2059)
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#charts-time-distribution">
+     Charts - Time distribution
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#table-for-dynamic-visualisation">
+     Table (for dynamic visualisation)
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="overview">
+<h1>OVERVIEW<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h1>
+<p>The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (CMIP6).
+The script climate component provides aggregated statistics at ADM level [1] or [0] for a selection of:</p>
+<ol class="simple">
+<li><p>climate-related hazards</p></li>
+<li><p>country</p></li>
+<li><p>time period</p></li>
+</ol>
+<p>Compared to the information offered by the <a class="reference external" href="https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections">CCKP country page</a>, this procedure adds:</p>
+<ul class="simple">
+<li><p>Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level</p></li>
+<li><p>Standardisation of anomaly over historical variability as common metric of comparison</p></li>
+</ul>
+<section id="challenges">
+<h2>Challenges:<a class="headerlink" href="#challenges" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>harvesting online data does not provide all the variables we want, especially for the critical step of spatial standardisation/normalisation</p></li>
+<li><p>the complete array of climate information is too large to be shared with the user and requires long processing. Thus the information needs to be aggregated into statistics</p></li>
+<li><p>we need to present a well-rounded perspective for both space and time dimension</p></li>
+</ul>
+</section>
+<section id="the-input-data-is">
+<h2>The input data is:<a class="headerlink" href="#the-input-data-is" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>raster data aggregated across time (20 years windows) for spatial representation</p></li>
+<li><p>csv data aggregated across space (country boundaries) for time-serie representation</p>
+<ul>
+<li><p>includes ensemble p10 and p90 (variability across models)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="the-script-does">
+<h2>The script does:<a class="headerlink" href="#the-script-does" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Runs over one selected country and for a specific set of indices depending on selected hazard</p></li>
+<li><p>Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results</p></li>
+<li><p>Consider four future 20-years period (near term, medium term, long term, end of century)</p></li>
+<li><p>Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble</p></li>
+<li><p>Plot maps and timeseries</p></li>
+<li><p>The results are exported as csv (table) and geopackage (vector)</p></li>
+</ul>
+</section>
+<section id="the-output-is">
+<h2>The output is:<a class="headerlink" href="#the-output-is" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>presented as maps (spatial distribution)</p></li>
+<li><p>plotted as charts (time distribution)</p></li>
+<li><p>exported in form of tables, charts (excel format) and ADM 1 maps (geopackage)</p></li>
+</ul>
+</section>
+<section id="resources-and-references">
+<h2>Resources and references:<a class="headerlink" href="#resources-and-references" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.ifabfoundation.org/e3ci/">E3CI</a></p></li>
+<li><p><a class="reference external" href="https://interactive-atlas.ipcc.ch/regional-information">IPCC atlas</a></p></li>
+<li><p>(<a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">confidence levels calculated as Ensemble_p25 and Ensemble_p75</a>)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="climate-indices-statistics">
+<h1>CLIMATE INDICES STATISTICS<a class="headerlink" href="#climate-indices-statistics" title="Permalink to this headline">#</a></h1>
+<p>The table summarises the relevant climate indices, with time scale and source.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:center head"><p>Name</p></th>
+<th class="text-align:center head"><p>Description</p></th>
+<th class="text-align:center head"><p>Source</p></th>
+<th class="text-align:center head"><p>Time-scale</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:center"><p>R10mm</p></td>
+<td class="text-align:center"><p>Days with rainfall &gt; 10 mm [days]</p></td>
+<td class="text-align:center"><p>CMIP6 Extremes</p></td>
+<td class="text-align:center"><p>Annual</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>Rx5day</p></td>
+<td class="text-align:center"><p>Maximum 5-day precipitation [mm]</p></td>
+<td class="text-align:center"><p>CMIP6 Extremes</p></td>
+<td class="text-align:center"><p>Monthly</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>R99p</p></td>
+<td class="text-align:center"><p>Extremely wet day precipitation [days]</p></td>
+<td class="text-align:center"><p>CMIP6 Extremes</p></td>
+<td class="text-align:center"><p>Monthly</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>CWD</p></td>
+<td class="text-align:center"><p>Consecutive Wet Days [days/month]</p></td>
+<td class="text-align:center"><p>CMIP6 Extremes</p></td>
+<td class="text-align:center"><p>Annual</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>CDD</p></td>
+<td class="text-align:center"><p>Consecutive Dry Days [days/month]</p></td>
+<td class="text-align:center"><p>CMIP6 Extremes</p></td>
+<td class="text-align:center"><p>Annual</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>slr</p></td>
+<td class="text-align:center"><p>Sea Level Rise [m]</p></td>
+<td class="text-align:center"><p>CMIP6/NASA</p></td>
+<td class="text-align:center"><p>Annual</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>sfcWind</p></td>
+<td class="text-align:center"><p>Daily maximum 10-m wind speed</p></td>
+<td class="text-align:center"><p>CMIP6</p></td>
+<td class="text-align:center"><p>Annual</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p>Number of days with strong winds [days]</p></td>
+<td class="text-align:center"><p>CMIP6</p></td>
+<td class="text-align:center"><p>Monthly</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>SPEI</p></td>
+<td class="text-align:center"><p>Standard Precipitation-ET Index [-]</p></td>
+<td class="text-align:center"><p>CMIP6</p></td>
+<td class="text-align:center"><p>Annual</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>Heat</p></td>
+<td class="text-align:center"><p>WBGT or UTCI [°C] - bias adjusted</p></td>
+<td class="text-align:center"><p>CMIP6 Extremes</p></td>
+<td class="text-align:center"><p>Daily</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>tmean</p></td>
+<td class="text-align:center"><p>Mean surface temperature [°C]</p></td>
+<td class="text-align:center"><p>CMIP6</p></td>
+<td class="text-align:center"><p>Monthly</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sources:</strong> CMIP6 – GCM full collection</p>
+<ul class="simple">
+<li><p>CMIP6 – <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/projections-cmip6">GCM projections (CDS)</a></p>
+<ul>
+<li><p>pro: full selection of variables</p></li>
+<li><p>con: raw variables, low resolution</p></li>
+</ul>
+</li>
+<li><p>CMIP6 derived <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/sis-extreme-indices-cmip6">Climate Extreme Indices (CDS)</a></p>
+<ul>
+<li><p>pro: extreme indices already computed; refined resolution</p></li>
+<li><p>con: does not include Wind, SLR, SPEI; rectangular grid</p></li>
+</ul>
+</li>
+</ul>
+<p>Each index is downloaded  as multiple multi-dimensional netcdf files.</p>
+<p><strong>Dimensions:</strong></p>
+<ul class="simple">
+<li><p><strong>SSP:</strong> 1 (2.6), 2 (4.5), 5 (8.5)</p></li>
+<li><p><strong>Ensemble member:</strong> r1i1p1f1 (largest number of models available)</p></li>
+<li><p><strong>Ensemble  range:</strong> p10, p50, p90</p></li>
+<li><p><strong>Period:</strong> {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]</p></li>
+<li><p><strong>Time scale:</strong> Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat)</p></li>
+<li><p><strong>Value statistic:</strong> {P10, P50, P90, SD}, [P10, P50, P90]</p></li>
+</ul>
+<p>These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs via the notebook.
+Two types of output are produced:</p>
+<p>A) Map output (spatial distribution)</p>
+<ul class="simple">
+<li><p>raster data aggregated across time (20 years windows)</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Ensemble_mean</span><span class="p">(</span><span class="n">Period_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
+<span class="n">Ensemble_p50</span><span class="p">(</span><span class="n">Period_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>ADM1-mean values from raster data</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ADM1_mean</span><span class="p">(</span><span class="n">Ensemble_p50</span><span class="p">(</span><span class="n">Period_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>B) Chart output (time-series)</p>
+<ul class="simple">
+<li><p>spatial data aggregated for country ADM0 boundaries plotted as chart</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Ensemble_p10</span><span class="p">(</span><span class="n">ADM0_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
+<span class="n">Ensemble_p50</span><span class="p">(</span><span class="n">ADM0_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
+<span class="n">Ensemble_p90</span><span class="p">(</span><span class="n">ADM0_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
+</pre></div>
+</div>
+<section id="processing-of-climstats-layers-feeding-the-notebook-analytics">
+<h2>PROCESSING OF CLIMSTATS LAYERS FEEDING THE NOTEBOOK ANALYTICS<a class="headerlink" href="#processing-of-climstats-layers-feeding-the-notebook-analytics" title="Permalink to this headline">#</a></h2>
+<p>For each SSP scenario:
+for each period:
+for each model:</p>
+<ol class="simple">
+<li><p>For each cell, calculate the anomaly and normalise it (anomaly/Hist_SD).</p>
+<ul class="simple">
+<li><p>Result: anomaly value x n_models x time interval (annual, monthly or daily)</p></li>
+</ul>
+</li>
+<li><p>Take percentile 10, 50, 90 of these values to show the median change and the range of the variability within the model ensemble.</p>
+<ul class="simple">
+<li><p>Result: in anomaly value x 3p x time interval</p></li>
+</ul>
+</li>
+<li><p>Calculate aggregated statistics:
+A) mean over future 20-years period for maps visualisation</p>
+<ul class="simple">
+<li><p>Result: raster grid of anomaly x 3p</p></li>
+<li><p>Result: ADM1 value (median)
+B) mean over ADM0 for timeseries visualisation up to end of selected period</p></li>
+<li><p>Result: ADM0 anomaly x 3p x time interval. If the interval is monthly or daily, it could be further aggregated (moving average)</p></li>
+</ul>
+</li>
+</ol>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Hazard</p></th>
+<th class="head"><p>Associated climate indices</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>River floods / Wet Landslides</p></td>
+<td><p>Consecutive Dry Days [days]</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Days with rainfall &gt; 10 mm [days]</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Maximum 5-day precipitation [mm]</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Very wet day precipitation [mm]</p></td>
+</tr>
+<tr class="row-even"><td><p>Coastal floods</p></td>
+<td><p>Mean Sea Level Rise [m]</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tropical cyclone</p></td>
+<td><p>Number of days with strong winds [days]</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Daily maximum 10-m wind speed [m/s]</p></td>
+</tr>
+<tr class="row-odd"><td><p>Agricultural drought</p></td>
+<td><p>Standard Precipitation-ET Index (SPEI) [-]</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Consecutive Dry Days [days]</p></td>
+</tr>
+<tr class="row-odd"><td><p></p></td>
+<td><p>Consecutive Wet Days [days]</p></td>
+</tr>
+<tr class="row-even"><td><p>Heat stress</p></td>
+<td><p>Heat index [°C]</p></td>
+</tr>
+<tr class="row-odd"><td><p>Wildfire?</p></td>
+<td><p>Standard Precipitation-ET Index (SPEI) [-]</p></td>
+</tr>
+<tr class="row-even"><td><p></p></td>
+<td><p>Heat index</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="input-files-for-notebook">
+<h2>INPUT FILES FOR NOTEBOOK<a class="headerlink" href="#input-files-for-notebook" title="Permalink to this headline">#</a></h2>
+<p>The resulting statistics are exported as GeoTiff files and csv which are input for the notebook.</p>
+<p>Geotiff files (global) are named: <code class="docutils literal notranslate"><span class="pre">timmean_[index_name]_[scenario]_[period]_ens[stat]_st.anomaly.tiff</span></code></p>
+<ul class="simple">
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">timmean_cwd_ssp126_2061-2080_enspctl,50_anomaly_std.tiff</span></code></p></li>
+</ul>
+<p>The number of .tiff files is n = (10 indices x (1 hist + 3 scenarios x 4 periods) x 3 stats) = 390 (~100 Kb each, ~40 Mb in total)</p>
+<p>Csv files (for each country) are named: <code class="docutils literal notranslate"><span class="pre">[ISOa3]mean_[index_name]_st.anomaly_.csv</span></code></p>
+<ul class="simple">
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">PAKmean_rx5day_st.anomaly_.csv</span></code></p></li>
+</ul>
+<p>The number of files (for each country) is n = 10 indices x 1 sheet = 10 .csv files (or one .xlsx file),
+where each sheet includes all scenarios and statistics covering all time range (size depends on time scale: annual or monthly)</p>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="running-the-notebook-to-present-climate-data">
+<h1>RUNNING THE NOTEBOOK TO PRESENT CLIMATE DATA<a class="headerlink" href="#running-the-notebook-to-present-climate-data" title="Permalink to this headline">#</a></h1>
+<section id="pre-requisites-offline">
+<h2>PRE-REQUISITES (OFFLINE)<a class="headerlink" href="#pre-requisites-offline" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>Anaconda and python installed &gt; Possibly we move to jupyter desktop Autoinstaller</p></li>
+<li><p>Create environment from ccdr_analytics.yml</p></li>
+</ul>
+</section>
+<section id="notebook-script-structure">
+<h2>NOTEBOOK SCRIPT STRUCTURE<a class="headerlink" href="#notebook-script-structure" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>SETUP: environment and libraries</p></li>
+<li><p>USER INPUT: required</p></li>
+<li><p>DATA PROCESSING: datasets are processed according to settings</p></li>
+<li><p>PREVIEW RESULTS: plot maps and charts</p></li>
+<li><p>EXPORT RESULTS: results are exported as gpkg and csv according to templates</p></li>
+</ul>
+<section id="setup">
+<h3>SETUP<a class="headerlink" href="#setup" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Load required libraries</p></li>
+</ul>
+</section>
+<section id="user-input">
+<h3>USER INPUT<a class="headerlink" href="#user-input" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Country of interest (1): Name dropdown (link ISOa3 value)</p></li>
+<li><p>Hazard of interest (one selection):</p>
+<ul class="contains-task-list">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Flood and Landslide</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Drought and Water Scarcity</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Heat stress</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Tropical Cyclone</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Coastal flood</p></li>
+</ul>
+</li>
+<li><p>Time period (one selection):</p>
+<ul class="contains-task-list">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Near term (2020-2039)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Medium term (2040-2059)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Long term (2060-2079)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> End of century (2081-2100)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="processing">
+<h3>PROCESSING<a class="headerlink" href="#processing" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Load .gpkg files (ADM1 units) according to country selection</p></li>
+<li><p>Load .tiff files (maps) according to hazard (one hazard can have multiple n indices) and time period selection (n_indices x (1 Historical + 3 SSP))</p></li>
+<li><p>Load .csv files (timeseries) according to hazard and country selection</p></li>
+<li><p>Run zonal stats using ADM1 units on map data using MEAN criteria over each selected index.</p></li>
+</ul>
+</section>
+<section id="plot-results">
+<h3>PLOT RESULTS<a class="headerlink" href="#plot-results" title="Permalink to this headline">#</a></h3>
+<p>For selected indices collection, SSP and period:</p>
+<ul class="simple">
+<li><p>Plot maps (20-years mean) as:</p>
+<ul>
+<li><p>Grid data (1 row, 4 maps) showing (1) the historical p50 index value and (2-4) the p50 standard anomaly for 3 different SSP</p></li>
+<li><p>ADM1 data (1 row, 4 maps) showing the mean value as color and label</p></li>
+</ul>
+</li>
+<li><p>Plot timeseries (ADM0 mean)</p>
+<ul>
+<li><p>X is years up to period_end, Y is standardised anomaly (range depends on the index)</p></li>
+<li><p>Black line: Historical p50 (10-years moving average)</p></li>
+<li><p>Grey shade area: Historical p10-p90 range (10-years moving average)</p></li>
+<li><p>3 lines (green, yellow, orange) representing the Ensemble Median of St.Anomaly for each SSP (10-years moving average)</p></li>
+<li><p>3 color-shaded areas (light-green, -yellow, -orange) representing the Ensemble variability range p10-p90 for each SSP (10-years moving average)</p></li>
+<li><p>Title and description of the aggregation criteria, e.g. “Median, p10 and p90 of ensemble for index (name)”.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="export-results-projections">
+<h3>EXPORT RESULTS - PROJECTIONS<a class="headerlink" href="#export-results-projections" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Export output as gpkg (ADM1 values) and csv (timeseries)</p></li>
+</ul>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="example-output">
+<h1>EXAMPLE OUTPUT<a class="headerlink" href="#example-output" title="Permalink to this headline">#</a></h1>
+<section id="maps-spatial-distribution">
+<h2>Maps - Spatial distribution<a class="headerlink" href="#maps-spatial-distribution" title="Permalink to this headline">#</a></h2>
+<section id="general-template-for-one-index-one-period-multiple-ssp-historical-value-index-unit-and-median-anomaly-n-of-standard-deviations-compared-to-the-historical-period">
+<h3>General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)<a class="headerlink" href="#general-template-for-one-index-one-period-multiple-ssp-historical-value-index-unit-and-median-anomaly-n-of-standard-deviations-compared-to-the-historical-period" title="Permalink to this headline">#</a></h3>
+<img width=80% src="https://user-images.githubusercontent.com/44863827/170073183-5828b264-558e-41eb-b960-f604d4924549.png">
+</section>
+<section id="flood-wet-landslides-medium-term-2040-2059">
+<h3>Flood &amp; Wet landslides, Medium Term (2040-2059)<a class="headerlink" href="#flood-wet-landslides-medium-term-2040-2059" title="Permalink to this headline">#</a></h3>
+<table>
+ <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2059) compared to Historical period (1980-2015)</b></caption>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073680-bb41f0c0-2c46-4f51-b804-e3af6b87040b.png"></td></tr>
+</table>
+<table>
+ <caption><b>Days with precipitation over 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073777-5b101bd9-ed7b-4b2a-8c0a-04292ccebcfe.png"></td></tr>
+</table>
+<table>
+ <caption><b>Very wet day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073866-1915be3d-6d27-4722-9b6c-e1072276f9f6.png"></td></tr>
+</table>
+<table>
+ <caption><b>Maximum 5-day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073979-c8b99de7-4dbc-43b2-8709-0f213ec7c390.png"></td></tr>
+</table>
+</section>
+</section>
+<section id="charts-time-distribution">
+<h2>Charts - Time distribution<a class="headerlink" href="#charts-time-distribution" title="Permalink to this headline">#</a></h2>
+<table>
+ <caption><b>Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
+  <tr><td>Days with rainfall > 10 mm</td><td>Maximum 5-day precipitation</td><td>Very wet day precipitation</td></tr>
+  <tr><td><img width=300 src=""></td>
+   <td><img width=300 src="https://github.com/klee016/SAR-CCDR-visualizations/raw/main/Pakistan/R%20Markdown/01.chapter1_files/figure-gfm/unnamed-chunk-44-1.png"></td>
+   <td><img width=300 src=""></td></tr>
+</table>
+</section>
+<section id="table-for-dynamic-visualisation">
+<h2>Table (for dynamic visualisation)<a class="headerlink" href="#table-for-dynamic-visualisation" title="Permalink to this headline">#</a></h2>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>time</p></th>
+<th class="head"><p>HIST_SD</p></th>
+<th class="head"><p>Hist_p10</p></th>
+<th class="head"><p>Hist_50</p></th>
+<th class="head"><p>Hist_p90</p></th>
+<th class="head"><p>ssp(i)_pc10</p></th>
+<th class="head"><p>ssp(i)_pc50</p></th>
+<th class="head"><p>ssp(i)_pc90</p></th>
+<th class="head"><p>Std_Anom_Hist_p10</p></th>
+<th class="head"><p>Std_Anom_Hist_50</p></th>
+<th class="head"><p>Std_Anom_Hist_p90</p></th>
+<th class="head"><p>Std_Anom_ssp(i)_pc10</p></th>
+<th class="head"><p>Std_Anom_ssp(i)_pc50</p></th>
+<th class="head"><p>Std_Anom_ssp(i)_pc90</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1980</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>1981</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>1982</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>1983</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>1984</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>…</p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../Top-down/procedures/Analytical_procedure_classes.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Expected Annual Exposure (EAE)</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../Top-down/notebooks/readme.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ANALYTICAL NOTEBOOKS</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By M. Amadio (GFDRR)<br/>
+  
+    Last updated on Apr 14, 2023.<br/>
+    <div class="extra_footer">
+      <div>
+    <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
+</div>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

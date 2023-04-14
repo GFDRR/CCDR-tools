@@ -117,13 +117,18 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="docs/hazard-data.html">
+  <a class="reference internal" href="docs/intro-hazard.html">
    Natural Hazards
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="docs/exposure-data.html">
-   Exposure data
+  <a class="reference internal" href="docs/intro-exposure.html">
+   Exposure
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs/climate-risk.html">
+   Climate outlook
   </a>
  </li>
 </ul>
@@ -160,6 +165,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="Top-down/procedures/Analytical_procedure_classes.html">
    Expected Annual Exposure (EAE)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs/climate-indices.html">
+   OVERVIEW
   </a>
  </li>
 </ul>
@@ -354,12 +364,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overview">
+   OVERVIEW
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rationale">
+   RATIONALE
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -371,6 +410,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overview">
+   OVERVIEW
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rationale">
+   RATIONALE
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -380,6 +437,8 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="analytical-tools-for-risk-screening-assessment">
 <h1>ANALYTICAL TOOLS FOR RISK SCREENING &amp; ASSESSMENT<a class="headerlink" href="#analytical-tools-for-risk-screening-assessment" title="Permalink to this headline">#</a></h1>
+<section id="overview">
+<h2>OVERVIEW<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h2>
 <p>A collection of tools to:</p>
 <ul class="simple">
 <li><p>perform subnational disaster risk analysis based on global datasets</p></li>
@@ -388,6 +447,16 @@ title="Print to PDF"
 <li><p>present results into dashboard</p></li>
 </ul>
 <p><a class="reference external" href="https://gfdrr.github.io/CCDR-tools/">DOCUMENTATION</a></p>
+</section>
+<section id="rationale">
+<h2>RATIONALE<a class="headerlink" href="#rationale" title="Permalink to this headline">#</a></h2>
+<p>In the field of Disaster Risk Management (DRM), risk (R) is typically calculated as a function of: the hazard occurrence probability and intensity (i.e., physical magnitude) in a particular location (H, for Hazard); the people and physical assets (infrastructure, buildings, crops, etc.) situated in that location and therefore exposed to the hazard (E, for Exposure); and the conditions determined by physical, social, and economic factors which increase the susceptibility of an exposed individual, community, asset or system to the impacts of hazards (V, for Vulnerability).
+Following this established approach, the risk originating from hazard affecting exposed categories is defined as: <code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">=</span> <span class="pre">f(H,E,V)</span></code></p>
+<div align="center">
+<img width=250 src="https://user-images.githubusercontent.com/44863827/198075495-b2235f1e-755d-461a-9c4a-ceca8bd2b79e.png">
+</div>
+<p>The analysis workflow:</p>
+<div align="center"><img width=500 src="https://user-images.githubusercontent.com/44863827/200046878-b0eaa822-3fde-4ce4-94bc-685cba483a64.png"></div></section>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
