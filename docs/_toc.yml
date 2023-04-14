@@ -5,8 +5,9 @@ parts:
   - caption: Introduction to Risk Data
     chapters:
       - file: docs/intro-risk
-      - file: docs/hazard-data
-      - file: docs/exposure-data
+      - file: docs/intro-hazard
+      - file: docs/intro-exposure
+      - file: docs/climate-risk
   - caption: Global Risk Data
     chapters:
       - file: docs/global-data
@@ -19,12 +20,12 @@ parts:
         sections:
         - file: Top-down/notebooks/Flood.ipynb
       - file: Top-down/procedures/Analytical_procedure_classes
+      - file: docs/climate-indices.md
   - caption: Jupyter Notebooks
     chapters:
       - file: Top-down/notebooks/readme
         sections:
         - file: Top-down/notebooks/CCDR.ipynb
-
   - caption: Acknowledgements
     chapters:
       - file: docs/team
