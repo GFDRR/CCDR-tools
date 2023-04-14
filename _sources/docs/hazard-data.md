@@ -1,23 +1,41 @@
-# Hazard data
+# Natural Hazards
 
-**Hazard Data** are comprised of data, reproducible methods (code), documentation, and sample insights. Unlike a traditional data analysis, which results in a single-use report or visualization, Data Goods are designed to be re-used for future updates and projects, thereby building the capacity of the World Bank and partner organizations to quickly and effectively deliver complex data science solutions to pressing global challenges.
+Natural (or physical) events are only termed hazards when they have the potential to harm people or cause property damage, social and economic disruption. The location of natural hazards primarily depends on natural processes, including the movement of tectonic plates, the influence of weather systems, and the existence of waterways and slopes (e.g. that might generate landslides). But processes such as urbanization, environmental degradation and climate change can also influence the location, occurrence (frequency) and intensity of natural hazards. These processes are known as risk drivers.
 
-Data Goods packages include:
+```{seealso}
+**A hazard is a process or phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation. Hazards may be natural, anthropogenic or socionatural in origin (UNDRR 2017).**
 
-1. **Foundational Datasets**. Foundational Datasets comprise *all* datasets used to prepare the Data Goods. To support replication and re-use of the Data Goods, the documetation includes a description of each datasource, including data type, update frequency, access links (including to the World Bank's data catalogue, the [Development Data Hub](https://datacatalog.worldbank.org/home)) and contact information.
-<br><br>
-2. **Data Products**. These are analytical products derived from the Foundational Datasets, which can be further used to generate indicators and insights. All data products include documentation, links to original data sources (and/or information on how to access them), and a description of their limitations. Reference resources are also cited, where relevant. In the documentation, each Data Product has it's own "chapter", generated through use of a Jupyter notebook.
-<br><br>
-3. **Insights and Indicators**. Each Data Goods package may also include additional analytical work, such as dynamic maps, data visualizaations, and/or sample indicators. Indicators can be derived from a combination of **Foundational Datasets** and **Data Products**. By combining these two inputs, teams are empowered to develop a large array of indicators to meet their project needs. Indicators can be presented side-by-side in an Excel workbook -- a format that is generally accessible to the widest audience. Because all indicators are based on the same underlying data, they are comparable with each other, across geographies and across time.
-<br><br>
-4. **Data Lab Team**. For each project, the [World Bank Data Lab](https://wbdatalab.org/) recruits colleagues from throughout our organization, pooling our collective great talents in support of our lending and technical assistance operations. Data Goods documentation includes a list and contact information for the unique team that prepared the Goods.
-<br><br>
+- **[UNDRR Hazard definition & classification review](https://www.undrr.org/publication/hazard-definition-and-classification-review-technical-report)**
+```
 
-## How Data Goods are Managed
+**Natural Hazard Data** include hazard intensity datasets and the models (code) or approaches that are used to produce them. Hazard intensity modelling can be either:
 
-1. **Dynamic, Web-Hosted Documentation**. Unless specified otherwise, all code and documentation used to produce the Data Goods is hosted in a project GitHub repository, to facilitate reuse for future updates and projects, as well as to support collaboration and capacity building activities.
-<br><br>
-2. **Data Catalogue**. Where possible, all datasets used in the production of Data Goods are added as entries to the World Bank's [Development Data Hub](https://datacatalog.worldbank.org/home), where they are tagged with meta data, license attributes, and access information.
-<br><br>
-3. **Internal Project Management and File Sharing System**. To facilitate project management across teams, the Lab creates a Project SharePoint, which includes project management information (work plan, milestones, check-in slides, log of hours charged, final report), related literature, data files, indicator tables, and links to resources, such as this documentation. The advantage of SharePoint for World Bank usage is that all contents are automatically encrypted and tagged as Official Use Only. The project SharePoint is accessible to project team members and, with permission, can be replicated as a basis for future project updates or for similar projects.
-<br><br>
+- Deterministic, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.
+
+- Probabilistic, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years. This is the case for river flood, coastal flood and strong winds.
+
+
+```{seealso}
+**Raw hazard data (model output) usually come in the form of one or more georeferenced layers.**
+
+- **[Geospatial data and GIS](https://centre.humdata.org/learning-path/an-introduction-to-geospatial-data/geospatial-data-geographic-information-systems/)**
+```
+See the picture below as example: the landslide hazard (first map) is represented by one aggregated mean index value; while the flood hazard is shows as a series of events (scenarios) of increasing magnitude and decreasing probability.
+
+```{caution}
+Note that a return period of 1,000 years, while very unlikely, can occur anyday!*** Therefore it is important to include all range of probabilities when assessing risk.
+```
+
+<div align=center>
+<img src="https://user-images.githubusercontent.com/44863827/201052605-78fdd0e9-a109-4894-b3bf-a5f9eaabbdd2.png">
+</div>
+
+```{caution}
+Hazard models have limitations in their use. Their quality depend on scale, resolution, model quality, training period and related input data quality.
+As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expeceted to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.
+
+In the context of developing countries, however, a global model is the only available source of hazard data for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations.
+
+When it comes to natural hazards and risk, misinformation can be worse than no information at all.
+
+```
