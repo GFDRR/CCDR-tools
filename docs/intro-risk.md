@@ -1,4 +1,4 @@
-# Introduction to Data Goods
+# Disaster risk from natural hazards
 
 **Data Goods** are comprised of data, reproducible methods (code), documentation, and sample insights. Unlike a traditional data analysis, which results in a single-use report or visualization, Data Goods are designed to be re-used for future updates and projects, thereby building the capacity of the World Bank and partner organizations to quickly and effectively deliver complex data science solutions to pressing global challenges.
 
