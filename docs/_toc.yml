@@ -15,10 +15,10 @@ parts:
         - file: docs/global-exposure
   - caption: Analytical approaches
     chapters:
-      - file: Top-down/procedures/Analytical_procedure_function
+      - file: docs/EAI
         sections:
         - file: Top-down/notebooks/Flood.ipynb
-      - file: Top-down/procedures/Analytical_procedure_classes
+      - file: docs/EAE
       - file: docs/climate-indices.md
   - caption: Jupyter Notebooks
     chapters:
