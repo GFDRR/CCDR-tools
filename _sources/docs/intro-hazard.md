@@ -39,4 +39,4 @@ As a rule of thumb, their fitness for application in the context of a risk scree
 
 In the context of developing countries, however, a global model is the only available source of hazard data for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations.
 
-When it comes to natural hazards and risk, misinformation can be worse than no information at all.
+When it comes to natural hazards and risk, **misinformation can be worse than no information at all**.

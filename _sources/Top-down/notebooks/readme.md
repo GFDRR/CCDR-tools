@@ -1,13 +1,6 @@
-# ANALYTICAL NOTEBOOKS
+# Tools setup
 
-For detailed explanation of the analytical workflow, please refer to [Procedures](../procedures/).
-
-
-## SCRIPT SETUP
-Note: at this stage you need to manually download all the notebooks in this folder and create your python environment as from instructions below.
-This could be further improved in the form of a self-installing desktop app using [Voila](https://github.com/voila-dashboards/voila).
-
-### Environment and libraries
+## Environment and libraries
 - The script requires python3 - conda or mamba are encouraged
 - Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
   In Anaconda cmd prompt:

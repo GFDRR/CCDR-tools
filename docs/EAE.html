@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Climate outlook &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>Expected Annual Exposure (EAE) &#8212; Climate &amp; Disaster Risk Screening Tools</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -50,11 +50,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/docs/climate-risk.html" />
+    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/docs/EAE.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Foundational Datasets, Data Products, &amp; Sample Indicators" href="global-data.html" />
-    <link rel="prev" title="Exposure" href="intro-exposure.html" />
+    <link rel="next" title="Climate indices" href="climate-indices.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="../Top-down/notebooks/Flood.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -111,7 +111,7 @@ const thebe_selector_output = ".output, .cell_output"
   Introduction to Risk Data
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="intro-hazard.html">
    Natural hazards
@@ -122,8 +122,8 @@ const thebe_selector_output = ".output, .cell_output"
    Exposure
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="climate-risk.html">
    Climate outlook
   </a>
  </li>
@@ -152,7 +152,7 @@ const thebe_selector_output = ".output, .cell_output"
   Analytical approaches
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="EAI.html">
    Expected Annual Impact (EAI)
@@ -165,8 +165,8 @@ const thebe_selector_output = ".output, .cell_output"
   <ul class="simple">
   </ul>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="EAE.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Expected Annual Exposure (EAE)
   </a>
  </li>
@@ -285,7 +285,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2Fdocs/climate-risk.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2Fdocs/EAE.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -302,7 +302,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/docs/climate-risk.md"
+        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/docs/EAE.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -330,7 +330,7 @@ title="Edit this page"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../_sources/docs/climate-risk.md"
+        <a href="../_sources/docs/EAE.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -379,7 +379,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Climate outlook</h1>
+                <h1>Expected Annual Exposure (EAE)</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -391,9 +391,107 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="climate-outlook">
-<h1>Climate outlook<a class="headerlink" href="#climate-outlook" title="Permalink to this headline">#</a></h1>
-<p>Hydro-meteorological hazards are affected by climate.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="expected-annual-exposure-eae">
+<h1>Expected Annual Exposure (EAE)<a class="headerlink" href="#expected-annual-exposure-eae" title="Permalink to this headline">#</a></h1>
+<p>The script performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Exposure (EAE) for the baseline (reference period).</p>
+<p>The “classes” approach simply split the hazard intensity layer into classes and, for ach one, calculates the toal exposure for the selected category.
+For example, flood hazard over agriculture is measured in terms of hectars of land falling within different intervals of water depth.
+Note that Minimum threshold is deactivated/ignored for this approach.</p>
+<p>The spatial information about hazard and exposure is first collected at the grid level, the output is then aggregated at ADM2 boundary level to combine Vulnerability scores and calculate risk estimate. This represents the disaster risk historical baseline.</p>
+<ul>
+<li><p>LOOP over each hazard RPi layers:</p>
+<ul class="simple">
+<li><p>Classify hazard layer RPi according to settings: number and size of classes: <code class="docutils literal notranslate"><span class="pre">RPi</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_Cj</span></code> (multiband raster)</p></li>
+<li><p>Each class <code class="docutils literal notranslate"><span class="pre">Cj</span></code> of RPi is used to mask the Exposure layer -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_Cj_Exp</span></code> (multiband raster)</p></li>
+<li><p>Perform zonal statistic (SUM) for each ADMi unit over eac <code class="docutils literal notranslate"><span class="pre">RPi_Cj_Exp</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">[ADMi_NAME;RPi_C1_Exp;RPi_C2_Exp;...RPi_Cj_Exp]</span></code><br>
+Example using 3 RP scenarios: (10-100-1000) and 3 classes (C1-3): `table [ADM2_NAME;RP10_C1_Exp;RP10_C2_Exp;RP10_C3_Exp;RP100_C1_Exp;RP100_C2_Exp;RP100_C3_Exp;RP1000_C1_Exp;RP1000_C2_Exp;RP1000_C3_Exp;]</p></li>
+</ul>
+</li>
+<li><p>Calculate EAE</p>
+<ul>
+<li><p>Calculate the exceedance frequency for each RPi -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_ef</span> <span class="pre">=</span> <span class="pre">(1/RPi</span> <span class="pre">-</span> <span class="pre">1/RPi+1)</span></code> where <code class="docutils literal notranslate"><span class="pre">RPi+1</span></code> means the next RP in the serie.
+Example using 3 RP scenarios: RP 10, 100, and 1000 years. Then: <code class="docutils literal notranslate"><span class="pre">RP10_ef</span> <span class="pre">=</span> <span class="pre">(1/10</span> <span class="pre">-</span> <span class="pre">1/100)</span> <span class="pre">=</span> <span class="pre">0.09</span></code></p></li>
+<li><p>Multiply exposure for each scenario i and class j <code class="docutils literal notranslate"><span class="pre">(RPi_Cj_Exp)</span></code> with its exceedence frequency <code class="docutils literal notranslate"><span class="pre">(RPi_ef)</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">RPi_Cj_Exp_EAE</span></code></p></li>
+<li><p>Sum <code class="docutils literal notranslate"><span class="pre">RPi_Cj_Exp_EAE</span></code>across multiple RPi for the same class Cj -&gt; <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">[ADMi;Cj_Exp_EAE]</span></code><br>
+Example using 3 classes (C1-3): <code class="docutils literal notranslate"><span class="pre">table</span> <span class="pre">[ADMi;C1_Exp_EAE;C2_Exp_EAE;C3_Exp_EAE]</span></code></p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:center head"><p>RP</p></th>
+<th class="head"><p>Exceedance freq</p></th>
+<th class="text-align:center head"><p>C3</p></th>
+<th class="text-align:center head"><p>C4</p></th>
+<th class="text-align:center head"><p>C5</p></th>
+<th class="text-align:center head"><p>C6</p></th>
+<th class="head"><p>C3-6</p></th>
+<th class="text-align:center head"><p>C3_EAE</p></th>
+<th class="text-align:center head"><p>C4_EAE</p></th>
+<th class="text-align:center head"><p>C5_EAE</p></th>
+<th class="text-align:center head"><p>C6_EAE</p></th>
+<th class="head"><p>C3-6_EAE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:center"><p>10</p></td>
+<td><p>0.09</p></td>
+<td class="text-align:center"><p>4,036</p></td>
+<td class="text-align:center"><p>1,535</p></td>
+<td class="text-align:center"><p>2,111</p></td>
+<td class="text-align:center"><p>1,967</p></td>
+<td><p>9,658</p></td>
+<td class="text-align:center"><p>363</p></td>
+<td class="text-align:center"><p>138</p></td>
+<td class="text-align:center"><p>190</p></td>
+<td class="text-align:center"><p>177</p></td>
+<td><p>868</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>100</p></td>
+<td><p>0.009</p></td>
+<td class="text-align:center"><p>8,212</p></td>
+<td class="text-align:center"><p>5,766</p></td>
+<td class="text-align:center"><p>5,007</p></td>
+<td class="text-align:center"><p>13,282</p></td>
+<td><p>32,367</p></td>
+<td class="text-align:center"><p>739</p></td>
+<td class="text-align:center"><p>519</p></td>
+<td class="text-align:center"><p>451</p></td>
+<td class="text-align:center"><p>1,195</p></td>
+<td><p>2,904</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:center"><p>1000</p></td>
+<td><p>0.0009</p></td>
+<td class="text-align:center"><p>8,399</p></td>
+<td class="text-align:center"><p>5,134</p></td>
+<td class="text-align:center"><p>4,371</p></td>
+<td class="text-align:center"><p>25,989</p></td>
+<td><p>44,893</p></td>
+<td class="text-align:center"><p>756</p></td>
+<td class="text-align:center"><p>462</p></td>
+<td class="text-align:center"><p>393</p></td>
+<td class="text-align:center"><p>2,339</p></td>
+<td><p>3,950</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:center"><p>Total</p></td>
+<td><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td class="text-align:center"><p></p></td>
+<td><p></p></td>
+<td class="text-align:center"><p>1,858</p></td>
+<td class="text-align:center"><p>1,119</p></td>
+<td class="text-align:center"><p>1,034</p></td>
+<td class="text-align:center"><p>3,711</p></td>
+<td><p>7,723</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Plot Exceedance Frequency Curve. Example:<br>
+<img alt="immagine" src="https://user-images.githubusercontent.com/44863827/198069028-8bd0e317-0b2e-4a22-b912-e260d3b3bd65.png" /></p></li>
+<li><p>Perform zonal statistic of Tot_Exp using ADMi -&gt; <code class="docutils literal notranslate"><span class="pre">[ADMi;ADMi_Exp;Exp_EAE]</span></code> in order to calculate <code class="docutils literal notranslate"><span class="pre">Exp_EAE%</span> <span class="pre">=</span> <span class="pre">Exp_EAE/ADMi_Exp</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">[ADMi;ADMi_Exp;Exp_EAE;Exp_EAE%]</span></code></p></li>
+</ul>
+</li>
+</ul>
 </section>
 
     <script type="text/x-thebe-config">
@@ -423,17 +521,17 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="intro-exposure.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../Top-down/notebooks/Flood.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Exposure</p>
+            <p class="prev-next-title">&lt;no title&gt;</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="global-data.html" title="next page">
+    <a class='right-next' id="next-link" href="climate-indices.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Foundational Datasets, Data Products, &amp; Sample Indicators</p>
+        <p class="prev-next-title">Climate indices</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ANALYTICAL NOTEBOOKS &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>Tools setup &#8212; Climate &amp; Disaster Risk Screening Tools</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -153,13 +153,20 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../procedures/Analytical_procedure_function.html">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../docs/EAI.html">
    Expected Annual Impact (EAI)
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="simple">
+  </ul>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../procedures/Analytical_procedure_classes.html">
+  <a class="reference internal" href="../../docs/EAE.html">
    Expected Annual Exposure (EAE)
   </a>
  </li>
@@ -177,7 +184,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   ANALYTICAL NOTEBOOKS
+   Tools setup
   </a>
  </li>
 </ul>
@@ -384,19 +391,14 @@ title="Print to PDF"
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   ANALYTICAL NOTEBOOKS
+   Tools setup
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#script-setup">
-     SCRIPT SETUP
+    <a class="reference internal nav-link" href="#environment-and-libraries">
+     Environment and libraries
     </a>
     <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#environment-and-libraries">
-       Environment and libraries
-      </a>
-     </li>
      <li class="toc-h3 nav-item toc-entry">
       <a class="reference internal nav-link" href="#expected-directories-and-data-format">
        Expected directories and data format
@@ -427,7 +429,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>ANALYTICAL NOTEBOOKS</h1>
+                <h1>Tools setup</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -439,19 +441,14 @@ title="Print to PDF"
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   ANALYTICAL NOTEBOOKS
+   Tools setup
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#script-setup">
-     SCRIPT SETUP
+    <a class="reference internal nav-link" href="#environment-and-libraries">
+     Environment and libraries
     </a>
     <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#environment-and-libraries">
-       Environment and libraries
-      </a>
-     </li>
      <li class="toc-h3 nav-item toc-entry">
       <a class="reference internal nav-link" href="#expected-directories-and-data-format">
        Expected directories and data format
@@ -483,15 +480,10 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="analytical-notebooks">
-<h1>ANALYTICAL NOTEBOOKS<a class="headerlink" href="#analytical-notebooks" title="Permalink to this headline">#</a></h1>
-<p>For detailed explanation of the analytical workflow, please refer to <span class="xref myst">Procedures</span>.</p>
-<section id="script-setup">
-<h2>SCRIPT SETUP<a class="headerlink" href="#script-setup" title="Permalink to this headline">#</a></h2>
-<p>Note: at this stage you need to manually download all the notebooks in this folder and create your python environment as from instructions below.
-This could be further improved in the form of a self-installing desktop app using <a class="reference external" href="https://github.com/voila-dashboards/voila">Voila</a>.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="tools-setup">
+<h1>Tools setup<a class="headerlink" href="#tools-setup" title="Permalink to this headline">#</a></h1>
 <section id="environment-and-libraries">
-<h3>Environment and libraries<a class="headerlink" href="#environment-and-libraries" title="Permalink to this headline">#</a></h3>
+<h2>Environment and libraries<a class="headerlink" href="#environment-and-libraries" title="Permalink to this headline">#</a></h2>
 <ul>
 <li><p>The script requires python3 - conda or mamba are encouraged</p></li>
 <li><p>Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
@@ -526,7 +518,6 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <img width=500 src="https://user-images.githubusercontent.com/44863827/156407683-c5613196-53bc-4ee5-81b7-d94b4fdbf295.png">
 </li>
 </ul>
-</section>
 <hr class="docutils" />
 <section id="expected-directories-and-data-format">
 <h3>Expected directories and data format<a class="headerlink" href="#expected-directories-and-data-format" title="Permalink to this headline">#</a></h3>
