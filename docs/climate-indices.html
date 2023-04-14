@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>OVERVIEW &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>Climate indices &#8212; Climate &amp; Disaster Risk Screening Tools</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -111,15 +111,74 @@ const thebe_selector_output = ".output, .cell_output"
   Introduction to Risk Data
  </span>
 </p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="intro-risk.html">
-   Disaster risk from natural hazards
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../README.html">
+   Climate &amp; Disaster Risk Screening Tools
   </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="intro-hazard.html">
+     Natural hazards
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="intro-exposure.html">
+     Exposure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="climate-risk.html">
+     Climate outlook
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="global-data.html">
+     Foundational Datasets, Data Products, &amp; Sample Indicators
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul class="simple">
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Top-down/procedures/Analytical_procedure_function.html">
+     Expected Annual Impact (EAI)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Top-down/procedures/Analytical_procedure_classes.html">
+     Expected Annual Exposure (EAE)
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Climate indices
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Top-down/notebooks/readme.html">
+     ANALYTICAL NOTEBOOKS
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="team.html">
+     Team and Acknowledgements
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="intro-hazard.html">
-   Natural Hazards
+   Natural hazards
   </a>
  </li>
  <li class="toctree-l1">
@@ -143,8 +202,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="global-data.html">
    Foundational Datasets, Data Products, &amp; Sample Indicators
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -170,7 +229,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   OVERVIEW
+   Climate indices
   </a>
  </li>
 </ul>
@@ -389,7 +448,7 @@ title="Print to PDF"
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   OVERVIEW
+   Climate indices
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
@@ -423,96 +482,6 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#climate-indices-statistics">
    CLIMATE INDICES STATISTICS
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#processing-of-climstats-layers-feeding-the-notebook-analytics">
-     PROCESSING OF CLIMSTATS LAYERS FEEDING THE NOTEBOOK ANALYTICS
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#input-files-for-notebook">
-     INPUT FILES FOR NOTEBOOK
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#running-the-notebook-to-present-climate-data">
-   RUNNING THE NOTEBOOK TO PRESENT CLIMATE DATA
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#pre-requisites-offline">
-     PRE-REQUISITES (OFFLINE)
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#notebook-script-structure">
-     NOTEBOOK SCRIPT STRUCTURE
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#setup">
-       SETUP
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#user-input">
-       USER INPUT
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#processing">
-       PROCESSING
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#plot-results">
-       PLOT RESULTS
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#export-results-projections">
-       EXPORT RESULTS - PROJECTIONS
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#example-output">
-   EXAMPLE OUTPUT
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#maps-spatial-distribution">
-     Maps - Spatial distribution
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#general-template-for-one-index-one-period-multiple-ssp-historical-value-index-unit-and-median-anomaly-n-of-standard-deviations-compared-to-the-historical-period">
-       General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#flood-wet-landslides-medium-term-2040-2059">
-       Flood &amp; Wet landslides, Medium Term (2040-2059)
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#charts-time-distribution">
-     Charts - Time distribution
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#table-for-dynamic-visualisation">
-     Table (for dynamic visualisation)
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -523,7 +492,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>OVERVIEW</h1>
+                <h1>Climate indices</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -535,7 +504,7 @@ title="Print to PDF"
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
-   OVERVIEW
+   Climate indices
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
@@ -569,96 +538,6 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#climate-indices-statistics">
    CLIMATE INDICES STATISTICS
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#processing-of-climstats-layers-feeding-the-notebook-analytics">
-     PROCESSING OF CLIMSTATS LAYERS FEEDING THE NOTEBOOK ANALYTICS
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#input-files-for-notebook">
-     INPUT FILES FOR NOTEBOOK
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#running-the-notebook-to-present-climate-data">
-   RUNNING THE NOTEBOOK TO PRESENT CLIMATE DATA
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#pre-requisites-offline">
-     PRE-REQUISITES (OFFLINE)
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#notebook-script-structure">
-     NOTEBOOK SCRIPT STRUCTURE
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#setup">
-       SETUP
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#user-input">
-       USER INPUT
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#processing">
-       PROCESSING
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#plot-results">
-       PLOT RESULTS
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#export-results-projections">
-       EXPORT RESULTS - PROJECTIONS
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#example-output">
-   EXAMPLE OUTPUT
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#maps-spatial-distribution">
-     Maps - Spatial distribution
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#general-template-for-one-index-one-period-multiple-ssp-historical-value-index-unit-and-median-anomaly-n-of-standard-deviations-compared-to-the-historical-period">
-       General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)
-      </a>
-     </li>
-     <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#flood-wet-landslides-medium-term-2040-2059">
-       Flood &amp; Wet landslides, Medium Term (2040-2059)
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#charts-time-distribution">
-     Charts - Time distribution
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#table-for-dynamic-visualisation">
-     Table (for dynamic visualisation)
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -670,8 +549,8 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="overview">
-<h1>OVERVIEW<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="climate-indices">
+<h1>Climate indices<a class="headerlink" href="#climate-indices" title="Permalink to this headline">#</a></h1>
 <p>The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (CMIP6).
 The script climate component provides aggregated statistics at ADM level [1] or [0] for a selection of:</p>
 <ol class="simple">
@@ -851,337 +730,6 @@ Two types of output are produced:</p>
 <span class="n">Ensemble_p90</span><span class="p">(</span><span class="n">ADM0_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
 </pre></div>
 </div>
-<section id="processing-of-climstats-layers-feeding-the-notebook-analytics">
-<h2>PROCESSING OF CLIMSTATS LAYERS FEEDING THE NOTEBOOK ANALYTICS<a class="headerlink" href="#processing-of-climstats-layers-feeding-the-notebook-analytics" title="Permalink to this headline">#</a></h2>
-<p>For each SSP scenario:
-for each period:
-for each model:</p>
-<ol class="simple">
-<li><p>For each cell, calculate the anomaly and normalise it (anomaly/Hist_SD).</p>
-<ul class="simple">
-<li><p>Result: anomaly value x n_models x time interval (annual, monthly or daily)</p></li>
-</ul>
-</li>
-<li><p>Take percentile 10, 50, 90 of these values to show the median change and the range of the variability within the model ensemble.</p>
-<ul class="simple">
-<li><p>Result: in anomaly value x 3p x time interval</p></li>
-</ul>
-</li>
-<li><p>Calculate aggregated statistics:
-A) mean over future 20-years period for maps visualisation</p>
-<ul class="simple">
-<li><p>Result: raster grid of anomaly x 3p</p></li>
-<li><p>Result: ADM1 value (median)
-B) mean over ADM0 for timeseries visualisation up to end of selected period</p></li>
-<li><p>Result: ADM0 anomaly x 3p x time interval. If the interval is monthly or daily, it could be further aggregated (moving average)</p></li>
-</ul>
-</li>
-</ol>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Hazard</p></th>
-<th class="head"><p>Associated climate indices</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>River floods / Wet Landslides</p></td>
-<td><p>Consecutive Dry Days [days]</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td><p>Days with rainfall &gt; 10 mm [days]</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Maximum 5-day precipitation [mm]</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td><p>Very wet day precipitation [mm]</p></td>
-</tr>
-<tr class="row-even"><td><p>Coastal floods</p></td>
-<td><p>Mean Sea Level Rise [m]</p></td>
-</tr>
-<tr class="row-odd"><td><p>Tropical cyclone</p></td>
-<td><p>Number of days with strong winds [days]</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Daily maximum 10-m wind speed [m/s]</p></td>
-</tr>
-<tr class="row-odd"><td><p>Agricultural drought</p></td>
-<td><p>Standard Precipitation-ET Index (SPEI) [-]</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Consecutive Dry Days [days]</p></td>
-</tr>
-<tr class="row-odd"><td><p></p></td>
-<td><p>Consecutive Wet Days [days]</p></td>
-</tr>
-<tr class="row-even"><td><p>Heat stress</p></td>
-<td><p>Heat index [°C]</p></td>
-</tr>
-<tr class="row-odd"><td><p>Wildfire?</p></td>
-<td><p>Standard Precipitation-ET Index (SPEI) [-]</p></td>
-</tr>
-<tr class="row-even"><td><p></p></td>
-<td><p>Heat index</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="input-files-for-notebook">
-<h2>INPUT FILES FOR NOTEBOOK<a class="headerlink" href="#input-files-for-notebook" title="Permalink to this headline">#</a></h2>
-<p>The resulting statistics are exported as GeoTiff files and csv which are input for the notebook.</p>
-<p>Geotiff files (global) are named: <code class="docutils literal notranslate"><span class="pre">timmean_[index_name]_[scenario]_[period]_ens[stat]_st.anomaly.tiff</span></code></p>
-<ul class="simple">
-<li><p>Example: <code class="docutils literal notranslate"><span class="pre">timmean_cwd_ssp126_2061-2080_enspctl,50_anomaly_std.tiff</span></code></p></li>
-</ul>
-<p>The number of .tiff files is n = (10 indices x (1 hist + 3 scenarios x 4 periods) x 3 stats) = 390 (~100 Kb each, ~40 Mb in total)</p>
-<p>Csv files (for each country) are named: <code class="docutils literal notranslate"><span class="pre">[ISOa3]mean_[index_name]_st.anomaly_.csv</span></code></p>
-<ul class="simple">
-<li><p>Example: <code class="docutils literal notranslate"><span class="pre">PAKmean_rx5day_st.anomaly_.csv</span></code></p></li>
-</ul>
-<p>The number of files (for each country) is n = 10 indices x 1 sheet = 10 .csv files (or one .xlsx file),
-where each sheet includes all scenarios and statistics covering all time range (size depends on time scale: annual or monthly)</p>
-</section>
-</section>
-<hr class="docutils" />
-<section class="tex2jax_ignore mathjax_ignore" id="running-the-notebook-to-present-climate-data">
-<h1>RUNNING THE NOTEBOOK TO PRESENT CLIMATE DATA<a class="headerlink" href="#running-the-notebook-to-present-climate-data" title="Permalink to this headline">#</a></h1>
-<section id="pre-requisites-offline">
-<h2>PRE-REQUISITES (OFFLINE)<a class="headerlink" href="#pre-requisites-offline" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>Anaconda and python installed &gt; Possibly we move to jupyter desktop Autoinstaller</p></li>
-<li><p>Create environment from ccdr_analytics.yml</p></li>
-</ul>
-</section>
-<section id="notebook-script-structure">
-<h2>NOTEBOOK SCRIPT STRUCTURE<a class="headerlink" href="#notebook-script-structure" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>SETUP: environment and libraries</p></li>
-<li><p>USER INPUT: required</p></li>
-<li><p>DATA PROCESSING: datasets are processed according to settings</p></li>
-<li><p>PREVIEW RESULTS: plot maps and charts</p></li>
-<li><p>EXPORT RESULTS: results are exported as gpkg and csv according to templates</p></li>
-</ul>
-<section id="setup">
-<h3>SETUP<a class="headerlink" href="#setup" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Load required libraries</p></li>
-</ul>
-</section>
-<section id="user-input">
-<h3>USER INPUT<a class="headerlink" href="#user-input" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Country of interest (1): Name dropdown (link ISOa3 value)</p></li>
-<li><p>Hazard of interest (one selection):</p>
-<ul class="contains-task-list">
-<li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Flood and Landslide</p></li>
-<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Drought and Water Scarcity</p></li>
-<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Heat stress</p></li>
-<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Tropical Cyclone</p></li>
-<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Coastal flood</p></li>
-</ul>
-</li>
-<li><p>Time period (one selection):</p>
-<ul class="contains-task-list">
-<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Near term (2020-2039)</p></li>
-<li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Medium term (2040-2059)</p></li>
-<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> Long term (2060-2079)</p></li>
-<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"> End of century (2081-2100)</p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="processing">
-<h3>PROCESSING<a class="headerlink" href="#processing" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Load .gpkg files (ADM1 units) according to country selection</p></li>
-<li><p>Load .tiff files (maps) according to hazard (one hazard can have multiple n indices) and time period selection (n_indices x (1 Historical + 3 SSP))</p></li>
-<li><p>Load .csv files (timeseries) according to hazard and country selection</p></li>
-<li><p>Run zonal stats using ADM1 units on map data using MEAN criteria over each selected index.</p></li>
-</ul>
-</section>
-<section id="plot-results">
-<h3>PLOT RESULTS<a class="headerlink" href="#plot-results" title="Permalink to this headline">#</a></h3>
-<p>For selected indices collection, SSP and period:</p>
-<ul class="simple">
-<li><p>Plot maps (20-years mean) as:</p>
-<ul>
-<li><p>Grid data (1 row, 4 maps) showing (1) the historical p50 index value and (2-4) the p50 standard anomaly for 3 different SSP</p></li>
-<li><p>ADM1 data (1 row, 4 maps) showing the mean value as color and label</p></li>
-</ul>
-</li>
-<li><p>Plot timeseries (ADM0 mean)</p>
-<ul>
-<li><p>X is years up to period_end, Y is standardised anomaly (range depends on the index)</p></li>
-<li><p>Black line: Historical p50 (10-years moving average)</p></li>
-<li><p>Grey shade area: Historical p10-p90 range (10-years moving average)</p></li>
-<li><p>3 lines (green, yellow, orange) representing the Ensemble Median of St.Anomaly for each SSP (10-years moving average)</p></li>
-<li><p>3 color-shaded areas (light-green, -yellow, -orange) representing the Ensemble variability range p10-p90 for each SSP (10-years moving average)</p></li>
-<li><p>Title and description of the aggregation criteria, e.g. “Median, p10 and p90 of ensemble for index (name)”.</p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="export-results-projections">
-<h3>EXPORT RESULTS - PROJECTIONS<a class="headerlink" href="#export-results-projections" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Export output as gpkg (ADM1 values) and csv (timeseries)</p></li>
-</ul>
-</section>
-</section>
-</section>
-<hr class="docutils" />
-<section class="tex2jax_ignore mathjax_ignore" id="example-output">
-<h1>EXAMPLE OUTPUT<a class="headerlink" href="#example-output" title="Permalink to this headline">#</a></h1>
-<section id="maps-spatial-distribution">
-<h2>Maps - Spatial distribution<a class="headerlink" href="#maps-spatial-distribution" title="Permalink to this headline">#</a></h2>
-<section id="general-template-for-one-index-one-period-multiple-ssp-historical-value-index-unit-and-median-anomaly-n-of-standard-deviations-compared-to-the-historical-period">
-<h3>General template for one index / one period / multiple SSP / Historical value (index unit) and median anomaly (n of Standard Deviations compared to the historical period)<a class="headerlink" href="#general-template-for-one-index-one-period-multiple-ssp-historical-value-index-unit-and-median-anomaly-n-of-standard-deviations-compared-to-the-historical-period" title="Permalink to this headline">#</a></h3>
-<img width=80% src="https://user-images.githubusercontent.com/44863827/170073183-5828b264-558e-41eb-b960-f604d4924549.png">
-</section>
-<section id="flood-wet-landslides-medium-term-2040-2059">
-<h3>Flood &amp; Wet landslides, Medium Term (2040-2059)<a class="headerlink" href="#flood-wet-landslides-medium-term-2040-2059" title="Permalink to this headline">#</a></h3>
-<table>
- <caption><b>Consecutive Wet Days (CWD) - Standardised anomaly, Medium term (2040-2059) compared to Historical period (1980-2015)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073680-bb41f0c0-2c46-4f51-b804-e3af6b87040b.png"></td></tr>
-</table>
-<table>
- <caption><b>Days with precipitation over 10 mm - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073777-5b101bd9-ed7b-4b2a-8c0a-04292ccebcfe.png"></td></tr>
-</table>
-<table>
- <caption><b>Very wet day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073866-1915be3d-6d27-4722-9b6c-e1072276f9f6.png"></td></tr>
-</table>
-<table>
- <caption><b>Maximum 5-day precipitation - Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td><img width=80% src="https://user-images.githubusercontent.com/44863827/170073979-c8b99de7-4dbc-43b2-8709-0f213ec7c390.png"></td></tr>
-</table>
-</section>
-</section>
-<section id="charts-time-distribution">
-<h2>Charts - Time distribution<a class="headerlink" href="#charts-time-distribution" title="Permalink to this headline">#</a></h2>
-<table>
- <caption><b>Standardised anomaly, Medium term (2040-2060) compared to Historical period (1980-2010)</b></caption>
-  <tr><td>Days with rainfall > 10 mm</td><td>Maximum 5-day precipitation</td><td>Very wet day precipitation</td></tr>
-  <tr><td><img width=300 src=""></td>
-   <td><img width=300 src="https://github.com/klee016/SAR-CCDR-visualizations/raw/main/Pakistan/R%20Markdown/01.chapter1_files/figure-gfm/unnamed-chunk-44-1.png"></td>
-   <td><img width=300 src=""></td></tr>
-</table>
-</section>
-<section id="table-for-dynamic-visualisation">
-<h2>Table (for dynamic visualisation)<a class="headerlink" href="#table-for-dynamic-visualisation" title="Permalink to this headline">#</a></h2>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>time</p></th>
-<th class="head"><p>HIST_SD</p></th>
-<th class="head"><p>Hist_p10</p></th>
-<th class="head"><p>Hist_50</p></th>
-<th class="head"><p>Hist_p90</p></th>
-<th class="head"><p>ssp(i)_pc10</p></th>
-<th class="head"><p>ssp(i)_pc50</p></th>
-<th class="head"><p>ssp(i)_pc90</p></th>
-<th class="head"><p>Std_Anom_Hist_p10</p></th>
-<th class="head"><p>Std_Anom_Hist_50</p></th>
-<th class="head"><p>Std_Anom_Hist_p90</p></th>
-<th class="head"><p>Std_Anom_ssp(i)_pc10</p></th>
-<th class="head"><p>Std_Anom_ssp(i)_pc50</p></th>
-<th class="head"><p>Std_Anom_ssp(i)_pc90</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>1980</p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p>1981</p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p>1982</p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p>1983</p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p>1984</p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p>…</p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</section>
 </section>
 
     <script type="text/x-thebe-config">

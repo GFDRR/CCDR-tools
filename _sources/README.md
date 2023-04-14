@@ -1,6 +1,6 @@
-# ANALYTICAL TOOLS FOR RISK SCREENING & ASSESSMENT
+# Climate & Disaster Risk Screening Tools
 
-## OVERVIEW
+## Overview
 A collection of tools to:
 - perform subnational disaster risk analysis based on global datasets
 - combine risk and poverty information
@@ -9,14 +9,23 @@ A collection of tools to:
 
 [DOCUMENTATION](https://gfdrr.github.io/CCDR-tools/)
 
-## RATIONALE
+## Disaster risk framework
 
 In the field of Disaster Risk Management (DRM), risk (R) is typically calculated as a function of: the hazard occurrence probability and intensity (i.e., physical magnitude) in a particular location (H, for Hazard); the people and physical assets (infrastructure, buildings, crops, etc.) situated in that location and therefore exposed to the hazard (E, for Exposure); and the conditions determined by physical, social, and economic factors which increase the susceptibility of an exposed individual, community, asset or system to the impacts of hazards (V, for Vulnerability).
 Following this established approach, the risk originating from hazard affecting exposed categories is defined as: `R = f(H,E,V)`
 
-<div align="center">
-<img width=250 src="https://user-images.githubusercontent.com/44863827/198075495-b2235f1e-755d-461a-9c4a-ceca8bd2b79e.png">
-</div>
+```{figure} images/risk_framing.png
+---
+align: center
+---
+Conceptual framework of Disaster Risk as a combination of an hazard (described by intensity in relation to its occurrence frequency or probability) occurring in the same location of Exposed asset or capital (which can include population, built-up asset, or else) which is vulnerable to suffer impact from that specific hazard.
+```
 
-The analysis workflow:
-<div align="center"><img width=500 src="https://user-images.githubusercontent.com/44863827/200046878-b0eaa822-3fde-4ce4-94bc-685cba483a64.png"></div>
+```{seealso}
+**Disaster risk is expressed as the likelihood of loss of life, injury or destruction and damage from a disaster in a given period of time (UNDRR 2017).**
+
+Measures of exposure can include the number of people or types of assets in an area. These can be combined with the specific vulnerability and capacity of the exposed elements to any particular hazard to estimate the quantitative risks associated with that hazard in the area of interest.
+
+- **[UNDRR Risk overview](https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk)**
+```
+

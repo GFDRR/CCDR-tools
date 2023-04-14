@@ -1,6 +1,5 @@
-# Natural Hazards
+# Natural hazards
 
-## Definition
 Natural (or physical) events are only termed hazards when they have the potential to harm people or cause property damage, social and economic disruption. The location of natural hazards primarily depends on natural processes, including the movement of tectonic plates, the influence of weather systems, and the existence of waterways and slopes (e.g. that might generate landslides). But processes such as urbanization, environmental degradation and climate change can also influence the location, occurrence (frequency) and intensity of natural hazards. These processes are known as risk drivers.
 
 ```{seealso}

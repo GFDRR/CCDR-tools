@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ANALYTICAL TOOLS FOR RISK SCREENING &amp; ASSESSMENT &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>Climate &amp; Disaster Risk Screening Tools &#8212; Climate &amp; Disaster Risk Screening Tools</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -53,7 +53,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/README.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Disaster risk from natural hazards" href="docs/intro-risk.html" />
+    <link rel="next" title="Natural hazards" href="docs/intro-hazard.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -110,15 +110,74 @@ const thebe_selector_output = ".output, .cell_output"
   Introduction to Risk Data
  </span>
 </p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="docs/intro-risk.html">
-   Disaster risk from natural hazards
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
+   Climate &amp; Disaster Risk Screening Tools
   </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/intro-hazard.html">
+     Natural hazards
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/intro-exposure.html">
+     Exposure
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/climate-risk.html">
+     Climate outlook
+    </a>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="docs/global-data.html">
+     Foundational Datasets, Data Products, &amp; Sample Indicators
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul class="simple">
+    </ul>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Top-down/procedures/Analytical_procedure_function.html">
+     Expected Annual Impact (EAI)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Top-down/procedures/Analytical_procedure_classes.html">
+     Expected Annual Exposure (EAE)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/climate-indices.html">
+     Climate indices
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Top-down/notebooks/readme.html">
+     ANALYTICAL NOTEBOOKS
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="docs/team.html">
+     Team and Acknowledgements
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="docs/intro-hazard.html">
-   Natural Hazards
+   Natural hazards
   </a>
  </li>
  <li class="toctree-l1">
@@ -142,8 +201,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="docs/global-data.html">
    Foundational Datasets, Data Products, &amp; Sample Indicators
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -169,7 +228,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="docs/climate-indices.html">
-   OVERVIEW
+   Climate indices
   </a>
  </li>
 </ul>
@@ -388,12 +447,12 @@ title="Print to PDF"
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#overview">
-   OVERVIEW
+   Overview
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#rationale">
-   RATIONALE
+  <a class="reference internal nav-link" href="#disaster-risk-framework">
+   Disaster risk framework
   </a>
  </li>
 </ul>
@@ -405,7 +464,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>ANALYTICAL TOOLS FOR RISK SCREENING & ASSESSMENT</h1>
+                <h1>Climate & Disaster Risk Screening Tools</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -417,12 +476,12 @@ title="Print to PDF"
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#overview">
-   OVERVIEW
+   Overview
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#rationale">
-   RATIONALE
+  <a class="reference internal nav-link" href="#disaster-risk-framework">
+   Disaster risk framework
   </a>
  </li>
 </ul>
@@ -435,10 +494,10 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="analytical-tools-for-risk-screening-assessment">
-<h1>ANALYTICAL TOOLS FOR RISK SCREENING &amp; ASSESSMENT<a class="headerlink" href="#analytical-tools-for-risk-screening-assessment" title="Permalink to this headline">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="climate-disaster-risk-screening-tools">
+<h1>Climate &amp; Disaster Risk Screening Tools<a class="headerlink" href="#climate-disaster-risk-screening-tools" title="Permalink to this headline">#</a></h1>
 <section id="overview">
-<h2>OVERVIEW<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">#</a></h2>
 <p>A collection of tools to:</p>
 <ul class="simple">
 <li><p>perform subnational disaster risk analysis based on global datasets</p></li>
@@ -448,15 +507,25 @@ title="Print to PDF"
 </ul>
 <p><a class="reference external" href="https://gfdrr.github.io/CCDR-tools/">DOCUMENTATION</a></p>
 </section>
-<section id="rationale">
-<h2>RATIONALE<a class="headerlink" href="#rationale" title="Permalink to this headline">#</a></h2>
+<section id="disaster-risk-framework">
+<h2>Disaster risk framework<a class="headerlink" href="#disaster-risk-framework" title="Permalink to this headline">#</a></h2>
 <p>In the field of Disaster Risk Management (DRM), risk (R) is typically calculated as a function of: the hazard occurrence probability and intensity (i.e., physical magnitude) in a particular location (H, for Hazard); the people and physical assets (infrastructure, buildings, crops, etc.) situated in that location and therefore exposed to the hazard (E, for Exposure); and the conditions determined by physical, social, and economic factors which increase the susceptibility of an exposed individual, community, asset or system to the impacts of hazards (V, for Vulnerability).
 Following this established approach, the risk originating from hazard affecting exposed categories is defined as: <code class="docutils literal notranslate"><span class="pre">R</span> <span class="pre">=</span> <span class="pre">f(H,E,V)</span></code></p>
-<div align="center">
-<img width=250 src="https://user-images.githubusercontent.com/44863827/198075495-b2235f1e-755d-461a-9c4a-ceca8bd2b79e.png">
+<figure class="align-center" id="id1">
+<img alt="images/risk_framing.png" src="images/risk_framing.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Conceptual framework of Disaster Risk as a combination of an hazard (described by intensity in relation to its occurrence frequency or probability) occurring in the same location of Exposed asset or capital (which can include population, built-up asset, or else) which is vulnerable to suffer impact from that specific hazard.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><strong>Disaster risk is expressed as the likelihood of loss of life, injury or destruction and damage from a disaster in a given period of time (UNDRR 2017).</strong></p>
+<p>Measures of exposure can include the number of people or types of assets in an area. These can be combined with the specific vulnerability and capacity of the exposed elements to any particular hazard to estimate the quantitative risks associated with that hazard in the area of interest.</p>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk">UNDRR Risk overview</a></strong></p></li>
+</ul>
 </div>
-<p>The analysis workflow:</p>
-<div align="center"><img width=500 src="https://user-images.githubusercontent.com/44863827/200046878-b0eaa822-3fde-4ce4-94bc-685cba483a64.png"></div></section>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -496,10 +565,10 @@ Following this established approach, the risk originating from hazard affecting 
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='right-next' id="next-link" href="docs/intro-risk.html" title="next page">
+    <a class='right-next' id="next-link" href="docs/intro-hazard.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Disaster risk from natural hazards</p>
+        <p class="prev-next-title">Natural hazards</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
