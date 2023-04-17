@@ -19,9 +19,9 @@ Below is a quick link to openly-licensed datasets that are used by the CCDR stan
 
 ### **EU-JRC Global Human Settlment Layer**
 
-```{figure} images/JRC_GHSL.jpg
+```{figure} images/JRC_GHSL.png
 ---
-width: 300
+width: 600
 align: center
 ---
 Population count per 100 m grid over for New Dehli as obtained from EU-JRC GHSL 2020.
@@ -30,16 +30,16 @@ Population count per 100 m grid over for New Dehli as obtained from EU-JRC GHSL 
 
 ```{figure} images/DLR_WSF.jpg
 ---
-width: 300
+width: 600
 align: center
 ---
 Built-up land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019 and resampled into 100 m built-up density grid.
 
 ### **ESA World Cover**
 
-```{figure} images/ESA_WC.png
+```{figure} images/ESA_WC.jpg
 ---
-width: 300
+width: 600
 align: center
 ---
 Land cover information at 10 m resolution over Senegal as obtained from ESA WorldCover 2020.
