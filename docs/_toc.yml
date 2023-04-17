@@ -2,17 +2,19 @@ format: jb-book
 root: DOCS
 
 parts:
-  - caption: Introduction to Disaster Risk
+  - caption: Disaster Risk concepts
     chapters:
       - file: docs/intro-hazard
       - file: docs/intro-exposure
+      - file: docs/intro-vulnerability
       - file: docs/climate-risk
-  - caption: Global Risk Data
+  - caption: Global Risk Datasets
     chapters:
       - file: docs/global-data
         sections:
         - file: docs/global-hazard
         - file: docs/global-exposure
+        - file: docs/global-vulnerability
   - caption: Analytical approaches
     chapters:
       - file: docs/EAI
