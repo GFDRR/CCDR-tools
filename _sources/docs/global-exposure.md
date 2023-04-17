@@ -17,26 +17,29 @@ Below is a quick link to openly-licensed datasets that are used by the CCDR stan
 | [WorldCover](https://esa-worldcover.org/en/data-access) | ESA | Land cover classes | 10 m | Annual |                
 ```
 
-### **EU-JRC Global Human Settlment Layer*
+### **EU-JRC Global Human Settlment Layer**
 
-```{figure} docs/images/JRC_GHSL.jpg
+```{figure} images/JRC_GHSL.jpg
 ---
+width: 300
 align: center
 ---
-Population count per 100 m grid over for Senegal as obtained from EU-JRC GHSL 2020.
+Population count per 100 m grid over for New Dehli as obtained from EU-JRC GHSL 2020.
 
 ### **DLR World Settlment Footprint**
 
-```{figure} docs/images/DLR_WSF.jpg
+```{figure} images/DLR_WSF.jpg
 ---
+width: 300
 align: center
 ---
-Land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019.
+Built-up land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019 and resampled into 100 m built-up density grid.
 
-### **ESA World Cover **
+### **ESA World Cover**
 
-```{figure} docs/images/ESA_WC.png
+```{figure} images/ESA_WC.png
 ---
+width: 300
 align: center
 ---
 Land cover information at 10 m resolution over Senegal as obtained from ESA WorldCover 2020.
