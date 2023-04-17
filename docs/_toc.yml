@@ -10,11 +10,10 @@ parts:
       - file: docs/climate-risk
   - caption: Global Risk Datasets
     chapters:
-      - file: docs/global-data
-        sections:
         - file: docs/global-hazard
         - file: docs/global-exposure
         - file: docs/global-vulnerability
+        - file: docs/rdl
   - caption: Analytical approaches
     chapters:
       - file: docs/EAI
