@@ -9,8 +9,6 @@ Natural (or physical) events are only termed hazards when they have the potentia
 
 - **[UNDRR Hazard definition & classification review](https://www.undrr.org/publication/hazard-definition-and-classification-review-technical-report)**
 ```
-
-## Hazard data and models
 **Natural Hazard Data** include hazard intensity datasets and the models (code) or approaches that are used to produce them. Hazard intensity modelling can be either:
 
 - Deterministic, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.
@@ -33,8 +31,7 @@ See the picture below as example: the landslide hazard (first map) is represente
 Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.
 ```
 
-## Limitations
-Hazard models have limitations in their use. Their quality depend on scale, resolution, model quality, training period and related input data quality.
+Hazard models carry **limitations related to their applicability**. Their quality depend on scale, resolution, model quality, training period and related input data quality.
 As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expeceted to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.
 
 In the context of developing countries, however, a global model is the only available source of hazard data for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations.

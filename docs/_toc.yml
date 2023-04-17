@@ -18,8 +18,6 @@ parts:
   - caption: Analytical approaches
     chapters:
       - file: docs/EAI
-        sections:
-        - file: Top-down/notebooks/Flood.ipynb
       - file: docs/EAE
       - file: docs/climate-indices.md
   - caption: Jupyter Notebooks
@@ -27,6 +25,6 @@ parts:
       - file: Top-down/notebooks/readme
         sections:
         - file: Top-down/notebooks/CCDR.ipynb
-  - caption: Acknowledgements
+  - caption: Credits
     chapters:
       - file: docs/team
