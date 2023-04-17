@@ -3,7 +3,7 @@
 **Exposure Datasets** refer to a variety of datasets that can be used to represent the value that is exposed to suffer damage and losses from natural hazards.
 This section presents some of the most common and recent type of data and indicators used for this purpose.
 
-Where feasible, all datasets that can be obtained through the Development Data Hub have been placed in a special collection: [Risk Data Library Collection: EXPOSURE](https://datacatalog.worldbank.org/search?q=exposure&start=0&sort=){:target="_blank"}. 
+Where feasible, all datasets that can be obtained through the Development Data Hub have been placed in a special collection: [Risk Data Library Collection: EXPOSURE](https://datacatalog.worldbank.org/search?q=exposure&start=0&sort=){target="_blank"}. 
 
 ```{table}
 :name: foundational_datasets
