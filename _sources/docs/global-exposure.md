@@ -12,10 +12,34 @@ Below is a quick link to openly-licensed datasets that are used by the CCDR stan
 
 | **Name** | **Developer** | **Metric** | **Resolution** | **Update frequency** |
 |---:|---:|---:|---:|---:|
-| Global Human Settlement Layer | EU Joint Research Center | Population count | 100 m | Annual |
-| World Settlement Footprints | ESA | Presence of built-up | 10 m | Annual |
-| WorldCover | ESA | Land cover classes | 10 m | Annual |                
+| [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php) | EU-JRC | Population count | 100 m | Annual |
+| [World Settlement Footprints](https://download.geoservice.dlr.de/WSF2019) | DLR | Presence of built-up | 10 m | Annual |
+| [WorldCover](https://esa-worldcover.org/en/data-access) | ESA | Land cover classes | 10 m | Annual |                
 ```
+
+### **EU-JRC Global Human Settlment Layer*
+
+```{figure} docs/images/JRC_GHSL.jpg
+---
+align: center
+---
+Population count per 100 m grid over for Senegal as obtained from EU-JRC GHSL 2020.
+
+### **DLR World Settlment Footprint**
+
+```{figure} docs/images/DLR_WSF.jpg
+---
+align: center
+---
+Land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019.
+
+### **ESA World Cover **
+
+```{figure} docs/images/ESA_WC.png
+---
+align: center
+---
+Land cover information at 10 m resolution over Senegal as obtained from ESA WorldCover 2020.
 
 ## Additional datasets
 
