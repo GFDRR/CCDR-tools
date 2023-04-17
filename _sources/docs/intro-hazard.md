@@ -16,7 +16,7 @@ Natural (or physical) events are only termed hazards when they have the potentia
 - Probabilistic, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years. This is the case for river flood, coastal flood and strong winds.
 
 
-```{seealso}
+```{note}
 **Raw hazard data (model output) usually come in the form of one or more georeferenced layers.**
 
 - **[Geospatial data and GIS](https://centre.humdata.org/learning-path/an-introduction-to-geospatial-data/geospatial-data-geographic-information-systems/)**
