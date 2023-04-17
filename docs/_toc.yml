@@ -1,8 +1,8 @@
 format: jb-book
-root: README
+root: DOCS
 
 parts:
-  - caption: Introduction to Risk Data
+  - caption: Introduction to Disaster Risk
     chapters:
       - file: docs/intro-hazard
       - file: docs/intro-exposure
