@@ -1,4 +1,4 @@
-# Open Risk Data
+# Risk Data Library
 
 Introduce [Risk Data Library](riskdatalibrary.org).
 
