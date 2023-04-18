@@ -48,7 +48,7 @@ A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/T
   - Sum `RPi_Cj_Exp_EAE`across multiple RPi for the same class Cj -> `table [ADMi;Cj_Exp_EAE]`<br>
     Example using 4 classes (C1-4): `table [ADMi;C1_EAE;C2_EAE;C3_EAE;C4_EAE]`
 
-	| RP | Exceedance freq | C1_exp | C2_exp | C3_exp | C4_exp | C1_EAE | C2_EAE | C3_EAE | C4_EAE |
+	| RP | Exc. frequency | C1_exp | C2_exp | C3_exp | C4_exp | C1_EAE | C2_EAE | C3_EAE | C4_EAE |
 	|:---:|---|:---:|:---:|:---:|:---:|---|:---:|:---:|:---:|
 	| 10 | 0.09 | 4,036 | 1,535 | 2,111 | 1,967 | 363 | 138 | 190 | 177 |
 	| 100 | 0.009 | 8,212 | 5,766 | 5,007 | 13,282 | 739 | 519 | 451 | 1,195 |

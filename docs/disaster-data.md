@@ -21,7 +21,7 @@ width: 600
 align: center
 ---
 Example of remote mapping of a recent flood event occurring in Ethiopia and Somalia ([Source](https://unosat.org/products/3563)).
-
+```
 ## Additional sources
 
 For a more detailed analysis, local disaster data should be considered.
