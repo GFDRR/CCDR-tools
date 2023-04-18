@@ -4,7 +4,7 @@
 --------------------------------------
 
 ## OVERVIEW
-This is an open tool for risk screening based on globally-avaialble datasets. 
+This is an open tool for risk screening based on globally-avaialble datasets. For more details see full online [**DOCUMENTATION**](https://gfdrr.github.io/CCDR-tools).
 
 The ‘top-down’ approach offers analytical notebooks allowing non-experts to perform comprehensive, multi-hazard risk screening using regionally available and comparable geodata. The work under this tier is characterized by: 
 

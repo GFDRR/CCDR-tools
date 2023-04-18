@@ -7,7 +7,7 @@ The concept of exposure relates to the receptors of risk, which are the physical
 
 Measures of exposure can include the number of people or types of assets in an area. These can be combined with the specific vulnerability and capacity of the exposed elements to any particular hazard to estimate the quantitative risks associated with that hazard in the area of interest.
 
-- **[UNDRR Expsure overview](https://www.preventionweb.net/understanding-disaster-risk/component-risk/exposure)**
+- **[UNDRR Exposure overview](https://www.preventionweb.net/understanding-disaster-risk/component-risk/exposure)**
 
 - **[UNDRR Hazard definition & classification review](https://www.undrr.org/publication/hazard-definition-and-classification-review-technical-report)**
 ```
