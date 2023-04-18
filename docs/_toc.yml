@@ -14,7 +14,7 @@ parts:
         - file: docs/global-exposure
         - file: docs/global-vulnerability
         - file: docs/rdl
-	- file: docs/disaster-data
+        - file: docs/disaster-data
   - caption: Analytical approaches
     chapters:
       - file: docs/EAI

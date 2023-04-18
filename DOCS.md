@@ -4,7 +4,7 @@ A collection of scripted tools developed alongside the World Bank's [Country Cli
 
 The tools allow to:
 
-- Perform subnational disaster risk analysis based on global datasets
+- Perform disaster risk analysis at sub-national level based on global datasets
 - Combine risk and poverty information
 - Produce climate outlook
 - Present results into a dashboard
