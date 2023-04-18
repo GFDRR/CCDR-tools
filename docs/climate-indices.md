@@ -19,9 +19,7 @@ The table summarises the relevant climate indices and related time scale.
 | CWD      | Consecutive Wet Days [days/month]             |    Annual    |
 | CDD      | Consecutive Dry Days [days/month]             |    Annual    |
 | slr      | Sea Level Rise [m]                            |    Annual    |
-| sfcWind  | Daily maximum 10-m wind speed                 |    Annual    |
-|          | Number of days with strong winds [days]       |    Monthly   |
-| SPEI     | Standard Precipitation-ET Index [-]           |    Annual    |
+| SPEI     | Standard Precipitation-EvapoT Index [-]       |    Annual    |
 | Heat     | WBGT or UTCI [°C] - bias adjusted             |     Daily    |
 | tmean    | Mean surface temperature [°C]                 |    Monthly   |
 
