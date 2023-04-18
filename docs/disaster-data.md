@@ -11,8 +11,6 @@ The table below lists some of the online portals that provide global disaster da
 | [Desinventar](https://www.desinventar.net/DesInventar/) | UNDRR | Multihazard | Subnational level | Table, figures |
 | [UNOSAT](https://unosat.org/products/) | UNITAR | Multihazard | 10 m | Table, map data, reports |                
 ```
-
-```{note}
 The most commonly used for multi-hazard disasters is EM-DAT, followed by Desinventar. The DesInventar database effectively has no inclusion criteria and therefore, almost all the disaster events are registered into this database. Whereas, the EMDAT database, have a relatively stringent inclusion criterion which may prohibit many small-scale disaster events to be included into the database [(read more)](https://link.springer.com/article/10.1007/s41885-019-00052-0).
 
 The UNOSAT page is the best global source of remote-sourced hazard data, in particular for flood hazard: recent flood events are often available for download as geospatial data representing the water extent as obtained from satellite images interpretation, together with a quick exposure analysis of affected population.
@@ -21,9 +19,7 @@ The UNOSAT page is the best global source of remote-sourced hazard data, in part
 width: 600
 align: center
 ---
-Example of remote mapping of a recent flood event occurring in Somalia ([Source](https://unosat.org/products/3563)).
-
-```
+Example of remote mapping of a recent flood event occurring in Ethiopia and Somalia ([Source](https://unosat.org/products/3563)).
 
 ## Additional sources
 

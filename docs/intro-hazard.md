@@ -23,9 +23,13 @@ Natural (or physical) events are only termed hazards when they have the potentia
 ```
 See the picture below as example: the landslide hazard (first map) is represented by one aggregated mean index value; while the flood hazard is shows as a series of events (scenarios) of increasing magnitude and decreasing probability.
 
-<div align=center>
-<img src="https://user-images.githubusercontent.com/44863827/201052605-78fdd0e9-a109-4894-b3bf-a5f9eaabbdd2.png">
-</div>
+```{figure} images/vln_fragility.jpg
+---
+width: 600
+align: center
+---
+
+A probabilistic hazard representation is required in order to produce probabilistic risk mapping.
 
 ```{caution}
 Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.
