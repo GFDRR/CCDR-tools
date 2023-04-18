@@ -422,46 +422,29 @@ title="Print to PDF"
     </div>
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   Climate indices
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#input-data">
+   Input data
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#input-data">
-     Input data
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#processing">
-     Processing
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#output">
-     Output
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#climate-indices-statistics">
-   CLIMATE INDICES STATISTICS
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#sources-of-cmip6-data">
      Sources of CMIP6 data
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#dimensions">
      Dimensions:
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#data-processing-and-presentation">
-     Data processing and presentation
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#processing">
+     Processing
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#output-presentation">
+     Output presentation
     </a>
    </li>
   </ul>
@@ -485,46 +468,29 @@ title="Print to PDF"
                         </div>
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   Climate indices
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#input-data">
+   Input data
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#input-data">
-     Input data
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#processing">
-     Processing
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#output">
-     Output
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#climate-indices-statistics">
-   CLIMATE INDICES STATISTICS
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#sources-of-cmip6-data">
      Sources of CMIP6 data
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#dimensions">
      Dimensions:
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#data-processing-and-presentation">
-     Data processing and presentation
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#processing">
+     Processing
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#output-presentation">
+     Output presentation
     </a>
    </li>
   </ul>
@@ -550,46 +516,7 @@ This is reflected on the technical side, by the challenge to reduce huge dataset
 <li><p>country</p></li>
 <li><p>time periods</p></li>
 </ol>
-<p>Compared to the information offered by the <a class="reference external" href="https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections">CCKP country page</a>, this procedure adds:</p>
-<ul class="simple">
-<li><p>Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level</p></li>
-<li><p>Standardisation of anomaly over historical variability as common metric of comparison</p></li>
-</ul>
-<section id="input-data">
-<h2>Input data<a class="headerlink" href="#input-data" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>raster data aggregated across time (20 years windows) for spatial representation</p></li>
-<li><p>csv data aggregated across space (country boundaries) for time-serie representation</p>
-<ul>
-<li><p>includes ensemble p25 and p75 (variability across models)</p></li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="processing">
-<h2>Processing<a class="headerlink" href="#processing" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>Runs over one selected country and for a specific set of indices depending on selected hazard</p></li>
-<li><p>Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)</p></li>
-<li><p>Consider four 20-years periods (near term, medium term, long term, end of century)</p></li>
-<li><p>Calculate median, 25th percentile (p25) and 75th percentile (p75) of standardised anomaly across models in the ensemble (<a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">more details</a></p></li>
-<li><p>Plot maps and timeseries</p></li>
-<li><p>Exported results as csv (table) and geopackage (vector)</p></li>
-</ul>
-</section>
-<section id="output">
-<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>maps (spatial distribution)</p></li>
-<li><p>charts (time distribution)</p></li>
-<li><p>tables, charts (excel format) and ADM 1 maps (geopackage)</p></li>
-</ul>
-</section>
-</section>
-<hr class="docutils" />
-<section class="tex2jax_ignore mathjax_ignore" id="climate-indices-statistics">
-<h1>CLIMATE INDICES STATISTICS<a class="headerlink" href="#climate-indices-statistics" title="Permalink to this headline">#</a></h1>
-<p>The table summarises the relevant climate indices, with time scale and source.</p>
+<p>The table summarises the relevant climate indices and related time scale.</p>
 <table class="colwidths-auto table">
 <thead>
 <tr class="row-odd"><th class="text-align:center head"><p>Name</p></th>
@@ -622,16 +549,8 @@ This is reflected on the technical side, by the challenge to reduce huge dataset
 <td class="text-align:center"><p>Sea Level Rise [m]</p></td>
 <td class="text-align:center"><p>Annual</p></td>
 </tr>
-<tr class="row-even"><td class="text-align:center"><p>sfcWind</p></td>
-<td class="text-align:center"><p>Daily maximum 10-m wind speed</p></td>
-<td class="text-align:center"><p>Annual</p></td>
-</tr>
-<tr class="row-odd"><td class="text-align:center"><p></p></td>
-<td class="text-align:center"><p>Number of days with strong winds [days]</p></td>
-<td class="text-align:center"><p>Monthly</p></td>
-</tr>
 <tr class="row-even"><td class="text-align:center"><p>SPEI</p></td>
-<td class="text-align:center"><p>Standard Precipitation-ET Index [-]</p></td>
+<td class="text-align:center"><p>Standard Precipitation-EvapoT Index [-]</p></td>
 <td class="text-align:center"><p>Annual</p></td>
 </tr>
 <tr class="row-odd"><td class="text-align:center"><p>Heat</p></td>
@@ -644,8 +563,23 @@ This is reflected on the technical side, by the challenge to reduce huge dataset
 </tr>
 </tbody>
 </table>
+<p>Compared to the information offered by the <a class="reference external" href="https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections">CCKP country page</a>, this procedure adds:</p>
+<ul class="simple">
+<li><p>Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level</p></li>
+<li><p>Standardisation of anomaly over historical variability as common metric of comparison</p></li>
+</ul>
+<section id="input-data">
+<h2>Input data<a class="headerlink" href="#input-data" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>raster data aggregated across time (20 years windows) for spatial representation</p></li>
+<li><p>csv data aggregated across space (country boundaries) for time-serie representation</p>
+<ul>
+<li><p>includes ensemble p25 and p75 (variability across models)</p></li>
+</ul>
+</li>
+</ul>
 <section id="sources-of-cmip6-data">
-<h2>Sources of CMIP6 data<a class="headerlink" href="#sources-of-cmip6-data" title="Permalink to this headline">#</a></h2>
+<h3>Sources of CMIP6 data<a class="headerlink" href="#sources-of-cmip6-data" title="Permalink to this headline">#</a></h3>
 <table class="colwidths-auto table">
 <thead>
 <tr class="row-odd"><th class="text-align:right head"><p><strong>Name</strong></p></th>
@@ -678,7 +612,7 @@ This is reflected on the technical side, by the challenge to reduce huge dataset
 </table>
 </section>
 <section id="dimensions">
-<h2>Dimensions:<a class="headerlink" href="#dimensions" title="Permalink to this headline">#</a></h2>
+<h3>Dimensions:<a class="headerlink" href="#dimensions" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p><strong>SSP:</strong> SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8</p></li>
 <li><p><strong>Ensemble member:</strong> r1i1p1f1 (largest number of models available)</p></li>
@@ -687,11 +621,20 @@ This is reflected on the technical side, by the challenge to reduce huge dataset
 <li><p><strong>Time scale:</strong> Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat)</p></li>
 <li><p><strong>Value statistic:</strong> {P25, P50, P75, SD}, [P25, P50, P75]</p></li>
 </ul>
-<p>These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
-Two types of output are produced:</p>
 </section>
-<section id="data-processing-and-presentation">
-<h2>Data processing and presentation<a class="headerlink" href="#data-processing-and-presentation" title="Permalink to this headline">#</a></h2>
+<section id="processing">
+<h3>Processing<a class="headerlink" href="#processing" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Runs over one selected country and for a specific set of indices depending on selected hazard</p></li>
+<li><p>Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)</p></li>
+<li><p>Consider four 20-years periods (near term, medium term, long term, end of century)</p></li>
+<li><p>Calculate median, 25th percentile (p25) and 75th percentile (p75) of standardised anomaly across models in the ensemble (<a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">more details</a></p></li>
+<li><p>Plot maps and timeseries</p></li>
+<li><p>Exported results as csv (table) and geopackage (vector)</p></li>
+</ul>
+</section>
+<section id="output-presentation">
+<h3>Output presentation<a class="headerlink" href="#output-presentation" title="Permalink to this headline">#</a></h3>
 <p><strong>A) Map output</strong> (spatial distribution)</p>
 <ul class="simple">
 <li><p>Raster data aggregated across time (20 years windows)</p></li>
@@ -715,6 +658,7 @@ Two types of output are produced:</p>
 <span class="n">Ensemble_p90</span><span class="p">(</span><span class="n">ADM0_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
 </pre></div>
 </div>
+</section>
 </section>
 </section>
 

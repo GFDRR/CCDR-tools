@@ -9,34 +9,7 @@ The climate component provides aggregated statistics at boundary level (country 
  2) country
  3) time periods
 
-Compared to the information offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure adds:
-- Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level
-- Standardisation of anomaly over historical variability as common metric of comparison
-
-### Input data
-- raster data aggregated across time (20 years windows) for spatial representation
-- csv data aggregated across space (country boundaries) for time-serie representation
-  - includes ensemble p25 and p75 (variability across models)
-
-### Processing
-
-- Runs over one selected country and for a specific set of indices depending on selected hazard
-- Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)
-- Consider four 20-years periods (near term, medium term, long term, end of century)
-- Calculate median, 25th percentile (p25) and 75th percentile (p75) of standardised anomaly across models in the ensemble ([more details](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)
-- Plot maps and timeseries
-- Exported results as csv (table) and geopackage (vector)
-
-### Output
-- maps (spatial distribution)
-- charts (time distribution)
-- tables, charts (excel format) and ADM 1 maps (geopackage)
-
-----------------------------
-
-# CLIMATE INDICES STATISTICS
-
-The table summarises the relevant climate indices, with time scale and source. 
+The table summarises the relevant climate indices and related time scale. 
 
 |   Name   |                  Description                  |  Time-scale  |
 |:--------:|:---------------------------------------------:|:------------:|
@@ -46,11 +19,18 @@ The table summarises the relevant climate indices, with time scale and source.
 | CWD      | Consecutive Wet Days [days/month]             |    Annual    |
 | CDD      | Consecutive Dry Days [days/month]             |    Annual    |
 | slr      | Sea Level Rise [m]                            |    Annual    |
-| sfcWind  | Daily maximum 10-m wind speed                 |    Annual    |
-|          | Number of days with strong winds [days]       |    Monthly   |
-| SPEI     | Standard Precipitation-ET Index [-]           |    Annual    |
+| SPEI     | Standard Precipitation-EvapoT Index [-]       |    Annual    |
 | Heat     | WBGT or UTCI [°C] - bias adjusted             |     Daily    |
 | tmean    | Mean surface temperature [°C]                 |    Monthly   |
+
+Compared to the information offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure adds:
+- Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level
+- Standardisation of anomaly over historical variability as common metric of comparison
+
+## Input data
+- raster data aggregated across time (20 years windows) for spatial representation
+- csv data aggregated across space (country boundaries) for time-serie representation
+  - includes ensemble p25 and p75 (variability across models)
 
 ### Sources of CMIP6 data
 
@@ -68,10 +48,16 @@ The table summarises the relevant climate indices, with time scale and source.
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
    - **Value statistic:** {P25, P50, P75, SD}, [P25, P50, P75] 
 
-These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
-Two types of output are produced:
+### Processing
 
-### Data processing and presentation
+- Runs over one selected country and for a specific set of indices depending on selected hazard
+- Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)
+- Consider four 20-years periods (near term, medium term, long term, end of century)
+- Calculate median, 25th percentile (p25) and 75th percentile (p75) of standardised anomaly across models in the ensemble ([more details](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)
+- Plot maps and timeseries
+- Exported results as csv (table) and geopackage (vector)
+
+### Output presentation
 
 **A) Map output** (spatial distribution)
    - Raster data aggregated across time (20 years windows)
