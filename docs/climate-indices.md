@@ -1,7 +1,7 @@
 # Climate indices
 
 The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (CMIP6).
-The challenge is to offer a tool that convey the complexity of climate models into statistics that are easily interpretable by non-climate experts.
+The challenge is to offer a tool that convey the complexity of climate models into statistics that are easily interpretable by non-climate experts, providign a well-rounded perspective for both space and time dimension.
 This is reflected on the technical side, by the challenge to reduce huge datasets into manageable pieces.
 
 The climate component provides aggregated statistics at boundary level (country or subnational level) for a selection of:
@@ -13,17 +13,12 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 - Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level
 - Standardisation of anomaly over historical variability as common metric of comparison
 
-### Challenges:
-- the complete array of climate information is too large to be shared with the user and requires long processing.
-Thus the information needs to be aggregated into statistics
-- we need to present a well-rounded perspective for both space and time dimension
-
-## The input data is:
+### Input data
 - raster data aggregated across time (20 years windows) for spatial representation
 - csv data aggregated across space (country boundaries) for time-serie representation
   - includes ensemble p25 and p75 (variability across models)
 
-## The script does:
+### Processing
 
 - Runs over one selected country and for a specific set of indices depending on selected hazard
 - Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)
@@ -32,10 +27,10 @@ Thus the information needs to be aggregated into statistics
 - Plot maps and timeseries
 - Exported results as csv (table) and geopackage (vector)
 
-## The output is:
-- presented as maps (spatial distribution)
-- plotted as charts (time distribution)
-- exported in form of tables, charts (excel format) and ADM 1 maps (geopackage)
+### Output
+- maps (spatial distribution)
+- charts (time distribution)
+- tables, charts (excel format) and ADM 1 maps (geopackage)
 
 ----------------------------
 
