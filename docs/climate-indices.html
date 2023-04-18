@@ -447,11 +447,6 @@ title="Print to PDF"
      The output is:
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#resources-and-references">
-     Resources and references:
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toc-h1 nav-item toc-entry">
@@ -520,11 +515,6 @@ title="Print to PDF"
      The output is:
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#resources-and-references">
-     Resources and references:
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toc-h1 nav-item toc-entry">
@@ -562,11 +552,13 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="climate-indices">
 <h1>Climate indices<a class="headerlink" href="#climate-indices" title="Permalink to this headline">#</a></h1>
 <p>The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (CMIP6).
-The script climate component provides aggregated statistics at ADM level [1] or [0] for a selection of:</p>
+The challenge is to offer a tool that convey the complexity of climate models into statistics that are easily interpretable by non-climate experts.
+This is reflected on the technical side, by the challenge to reduce huge datasets into manageable pieces.</p>
+<p>The climate component provides aggregated statistics at boundary level (country or subnational level) for a selection of:</p>
 <ol class="simple">
 <li><p>climate-related hazards</p></li>
 <li><p>country</p></li>
-<li><p>time period</p></li>
+<li><p>time periods</p></li>
 </ol>
 <p>Compared to the information offered by the <a class="reference external" href="https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections">CCKP country page</a>, this procedure adds:</p>
 <ul class="simple">
@@ -576,8 +568,8 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 <section id="challenges">
 <h2>Challenges:<a class="headerlink" href="#challenges" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
-<li><p>harvesting online data does not provide all the variables we want, especially for the critical step of spatial standardisation/normalisation</p></li>
-<li><p>the complete array of climate information is too large to be shared with the user and requires long processing. Thus the information needs to be aggregated into statistics</p></li>
+<li><p>the complete array of climate information is too large to be shared with the user and requires long processing.
+Thus the information needs to be aggregated into statistics</p></li>
 <li><p>we need to present a well-rounded perspective for both space and time dimension</p></li>
 </ul>
 </section>
@@ -587,7 +579,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 <li><p>raster data aggregated across time (20 years windows) for spatial representation</p></li>
 <li><p>csv data aggregated across space (country boundaries) for time-serie representation</p>
 <ul>
-<li><p>includes ensemble p10 and p90 (variability across models)</p></li>
+<li><p>includes ensemble p25 and p75 (variability across models)</p></li>
 </ul>
 </li>
 </ul>
@@ -598,7 +590,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 <li><p>Runs over one selected country and for a specific set of indices depending on selected hazard</p></li>
 <li><p>Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)</p></li>
 <li><p>Consider four 20-years periods (near term, medium term, long term, end of century)</p></li>
-<li><p>Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble</p></li>
+<li><p>Calculate median, 25th percentile (p25) and 75th percentile (p75) of standardised anomaly across models in the ensemble (<a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">more details</a></p></li>
 <li><p>Plot maps and timeseries</p></li>
 <li><p>Exported results as csv (table) and geopackage (vector)</p></li>
 </ul>
@@ -609,14 +601,6 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 <li><p>presented as maps (spatial distribution)</p></li>
 <li><p>plotted as charts (time distribution)</p></li>
 <li><p>exported in form of tables, charts (excel format) and ADM 1 maps (geopackage)</p></li>
-</ul>
-</section>
-<section id="resources-and-references">
-<h2>Resources and references:<a class="headerlink" href="#resources-and-references" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference external" href="https://www.ifabfoundation.org/e3ci/">E3CI</a></p></li>
-<li><p><a class="reference external" href="https://interactive-atlas.ipcc.ch/regional-information">IPCC atlas</a></p></li>
-<li><p><a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">Confidence levels calculated as Ensemble_p25 and Ensemble_p75</a></p></li>
 </ul>
 </section>
 </section>
@@ -680,35 +664,48 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 </table>
 <section id="sources-of-cmip6-data">
 <h2>Sources of CMIP6 data<a class="headerlink" href="#sources-of-cmip6-data" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p><strong>WB Climate Knowledge portal</strong>
-<em>pro:</em> large selection of indices for trens and extremes; geodata export; chart generation</p></li>
-<li><p><strong><a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/projections-cmip6">GCM projections (CDS)</a></strong></p>
-<ul>
-<li><p><em>pro:</em> full selection of variables</p></li>
-<li><p><em>con:</em> raw variables, low resolution</p></li>
-</ul>
-</li>
-<li><p>CMIP6 derived <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/sis-extreme-indices-cmip6">Climate Extreme Indices (CDS)</a></p>
-<ul>
-<li><p><em>pro:</em> extreme indices already computed; refined resolution</p></li>
-<li><p><em>con:</em> does not include Wind, SLR, SPEI; rectangular grid</p></li>
-</ul>
-</li>
-</ul>
-<p>Each index is downloaded as multiple multi-dimensional netcdf files.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-align:right head"><p><strong>Name</strong></p></th>
+<th class="text-align:right head"><p><strong>Developer</strong></p></th>
+<th class="text-align:right head"><p><strong>Hazard covered</strong></p></th>
+<th class="text-align:right head"><p><strong>Description</strong></p></th>
+<th class="text-align:right head"><p><strong>Data format</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-align:right"><p><a class="reference external" href="https://climateknowledgeportal.worldbank.org">Climate Knowledge portal</a></p></td>
+<td class="text-align:right"><p>World Bank</p></td>
+<td class="text-align:right"><p>Multihazard</p></td>
+<td class="text-align:right"><p>Large selection of climate indices for both trends and extremes</p></td>
+<td class="text-align:right"><p>Table, geodata, charts</p></td>
+</tr>
+<tr class="row-odd"><td class="text-align:right"><p><a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/sis-extreme-indices-cmip6">Climate Extreme Indices (CDS)</a></p></td>
+<td class="text-align:right"><p>UNDRR</p></td>
+<td class="text-align:right"><p>Multihazard</p></td>
+<td class="text-align:right"><p>Full selection of variables, model members, periods</p></td>
+<td class="text-align:right"><p>Geodata</p></td>
+</tr>
+<tr class="row-even"><td class="text-align:right"><p><a class="reference external" href="https://interactive-atlas.ipcc.ch/regional-information">IPCC atlas</a></p></td>
+<td class="text-align:right"><p>UNITAR</p></td>
+<td class="text-align:right"><p>Multihazard</p></td>
+<td class="text-align:right"><p>10 m</p></td>
+<td class="text-align:right"><p>Table, geodata, maps, charts</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="dimensions">
 <h2>Dimensions:<a class="headerlink" href="#dimensions" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p><strong>SSP:</strong> SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8</p></li>
 <li><p><strong>Ensemble member:</strong> r1i1p1f1 (largest number of models available)</p></li>
-<li><p><strong>Ensemble  range:</strong> p10, p50, p90</p></li>
+<li><p><strong>Ensemble  range:</strong> p25, p50, p75</p></li>
 <li><p><strong>Period:</strong> {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]</p></li>
 <li><p><strong>Time scale:</strong> Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat)</p></li>
-<li><p><strong>Value statistic:</strong> {P10, P50, P90, SD}, [P10, P50, P90]</p></li>
+<li><p><strong>Value statistic:</strong> {P25, P50, P75, SD}, [P25, P50, P75]</p></li>
 </ul>
-<p>These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs via the notebook.
+<p>These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
 Two types of output are produced:</p>
 </section>
 <section id="data-processing-and-presentation">

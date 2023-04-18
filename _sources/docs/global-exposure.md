@@ -14,7 +14,7 @@ Below is a quick link to openly-licensed datasets that are used by the CCDR stan
 |---:|---:|---:|---:|---:|
 | [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php) | EU-JRC | Population count | 100 m | Annual |
 | [World Settlement Footprints](https://download.geoservice.dlr.de/WSF2019) | DLR | Presence of built-up | 10 m | Annual |
-| [WorldCover](https://esa-worldcover.org/en/data-access) | ESA | Land cover classes | 10 m | Annual |                
+| [WorldCover](https://esa-worldcover.org/en/data-access) | ESA | Land cover classes | 10 m | Annual |
 ```
 
 ### **EU-JRC Global Human Settlment Layer**
@@ -46,6 +46,9 @@ Land cover information at 10 m resolution over Senegal as obtained from ESA Worl
 
 ## Additional datasets
 
-For a more detailed analysis, additional exposure datasets can be considered. 
+For a more granular analysis of agricultural impacts, additional exposure datasets can be considered.
 
-For this project, sample indicators have been derived and aggregated at the governorate level and by year, to show changing trends in each governorate over time. Here is a link to the **Indicators Excel workbook** (accessible to team members via SharePoint): [Excel workbook](https://worldbankgroup.sharepoint.com/:x:/t/DevelopmentDataPartnershipCommunity-WBGroup/EXZkY4Z6vMVMjRVcIBCHqlkBVI4z1b9rP1fyyLQ6aluvWA?e=pFazxV), and following is a summary of sample indicators.
+| **Name** | **Developer** | **Metric** | **Resolution** | **Last update** |
+|---:|---:|---:|---:|---:|
+| [Global Agro-Ecological Zones (GAEZ)](https://gaez.fao.org/) | FAO | The GAEZ v4 spatial data are organized in six themes: (1) Land and Water Resources, (2) Agro-climatic Resources, (3) Agro-climatic Potential Yield, (4) Suitability and Attainable Yield, (5) Actual Yields and Production, and (6) Yield and Production Gaps | 1 km | 2010 |
+| Gridded Livestock of the World (GLW)](https://www.fao.org/livestock-systems/global-distributions/en/) | FAO | Global distributions of cattle, buffaloes, sheep, goats, horses, pigs, chickens and ducks | 10 km | 2015 |
