@@ -428,23 +428,18 @@ title="Print to PDF"
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#challenges">
-     Challenges:
+    <a class="reference internal nav-link" href="#input-data">
+     Input data
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-input-data-is">
-     The input data is:
+    <a class="reference internal nav-link" href="#processing">
+     Processing
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-script-does">
-     The script does:
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-output-is">
-     The output is:
+    <a class="reference internal nav-link" href="#output">
+     Output
     </a>
    </li>
   </ul>
@@ -496,23 +491,18 @@ title="Print to PDF"
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#challenges">
-     Challenges:
+    <a class="reference internal nav-link" href="#input-data">
+     Input data
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-input-data-is">
-     The input data is:
+    <a class="reference internal nav-link" href="#processing">
+     Processing
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-script-does">
-     The script does:
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-output-is">
-     The output is:
+    <a class="reference internal nav-link" href="#output">
+     Output
     </a>
    </li>
   </ul>
@@ -552,7 +542,7 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="climate-indices">
 <h1>Climate indices<a class="headerlink" href="#climate-indices" title="Permalink to this headline">#</a></h1>
 <p>The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (CMIP6).
-The challenge is to offer a tool that convey the complexity of climate models into statistics that are easily interpretable by non-climate experts.
+The challenge is to offer a tool that convey the complexity of climate models into statistics that are easily interpretable by non-climate experts, providign a well-rounded perspective for both space and time dimension.
 This is reflected on the technical side, by the challenge to reduce huge datasets into manageable pieces.</p>
 <p>The climate component provides aggregated statistics at boundary level (country or subnational level) for a selection of:</p>
 <ol class="simple">
@@ -565,16 +555,8 @@ This is reflected on the technical side, by the challenge to reduce huge dataset
 <li><p>Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level</p></li>
 <li><p>Standardisation of anomaly over historical variability as common metric of comparison</p></li>
 </ul>
-<section id="challenges">
-<h2>Challenges:<a class="headerlink" href="#challenges" title="Permalink to this headline">#</a></h2>
-<ul class="simple">
-<li><p>the complete array of climate information is too large to be shared with the user and requires long processing.
-Thus the information needs to be aggregated into statistics</p></li>
-<li><p>we need to present a well-rounded perspective for both space and time dimension</p></li>
-</ul>
-</section>
-<section id="the-input-data-is">
-<h2>The input data is:<a class="headerlink" href="#the-input-data-is" title="Permalink to this headline">#</a></h2>
+<section id="input-data">
+<h2>Input data<a class="headerlink" href="#input-data" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>raster data aggregated across time (20 years windows) for spatial representation</p></li>
 <li><p>csv data aggregated across space (country boundaries) for time-serie representation</p>
@@ -584,8 +566,8 @@ Thus the information needs to be aggregated into statistics</p></li>
 </li>
 </ul>
 </section>
-<section id="the-script-does">
-<h2>The script does:<a class="headerlink" href="#the-script-does" title="Permalink to this headline">#</a></h2>
+<section id="processing">
+<h2>Processing<a class="headerlink" href="#processing" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>Runs over one selected country and for a specific set of indices depending on selected hazard</p></li>
 <li><p>Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)</p></li>
@@ -595,12 +577,12 @@ Thus the information needs to be aggregated into statistics</p></li>
 <li><p>Exported results as csv (table) and geopackage (vector)</p></li>
 </ul>
 </section>
-<section id="the-output-is">
-<h2>The output is:<a class="headerlink" href="#the-output-is" title="Permalink to this headline">#</a></h2>
+<section id="output">
+<h2>Output<a class="headerlink" href="#output" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
-<li><p>presented as maps (spatial distribution)</p></li>
-<li><p>plotted as charts (time distribution)</p></li>
-<li><p>exported in form of tables, charts (excel format) and ADM 1 maps (geopackage)</p></li>
+<li><p>maps (spatial distribution)</p></li>
+<li><p>charts (time distribution)</p></li>
+<li><p>tables, charts (excel format) and ADM 1 maps (geopackage)</p></li>
 </ul>
 </section>
 </section>
