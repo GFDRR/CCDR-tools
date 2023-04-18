@@ -23,7 +23,7 @@ Natural (or physical) events are only termed hazards when they have the potentia
 ```
 See the picture below as example: the landslide hazard (first map) is represented by one aggregated mean index value; while the flood hazard is shows as a series of events (scenarios) of increasing magnitude and decreasing probability.
 
-```{figure} images/vln_fragility.jpg
+```{figure} images/hzd_models.jpg
 ---
 width: 600
 align: center
