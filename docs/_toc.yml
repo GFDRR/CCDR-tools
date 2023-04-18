@@ -23,7 +23,8 @@ parts:
       - file: docs/climate-indices.md
   - caption: Jupyter Notebooks
     chapters:
-      - file: Top-down/notebooks/readme
+      - file: docs/tool-setup
+      - file: docs/run-baseline
         sections:
         - file: Top-down/notebooks/CCDR.ipynb
   - caption: Credits
