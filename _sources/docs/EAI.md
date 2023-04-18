@@ -62,7 +62,7 @@ align: center
   - Multiply impact on exposure for each scenario `(RPi_Exp_imp)` with its exceedence frequency `(RPi_ef)` -> `RPi_Exp_EAI`
   - Sum all `RPi_exp_EAI` columns for each ADMi -> `table [ADMi;Exp_EAI]`
 
-	| RP | Freq | Exceedance freq | Impact | EAI |
+	| RP | Frequency | Exc. frequency | Impact | EAI |
 	|:---:|:---:|:---:|:---:|:---:|
 	| 10 | 0.100 | 0.09 | 193 | 17 |
 	| 100 | 0.010 | 0.009 | 1,210 | 11 |
