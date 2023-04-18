@@ -1,51 +1,46 @@
 # Expected Annual Impact (EAI) 
 
-This analytical approach applies to multiple probabilistic hazard scenarios and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories.
+This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories, as explained in the [risk concepts](intro-risk.md).
 
 The EAI is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.
-<div align=center>
-<img src="https://user-images.githubusercontent.com/44863827/201917310-9fc8b871-8351-4657-959e-d09c0b0e340c.png">
-</div>
 
-## OBJECTIVE
-
-The script performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period). 
-The spatial information about hazard and exposure is first combined at the grid level, then the total risk estimate is calculated at ADM boundary level. This represents the disaster risk historical baseline.
-The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).
+```{figure} images/EAI.png
+---
+width: 400
+align: center
+---
 
 ## SCRIPT OVERVIEW
 
-- Script runs on one country, one hazard at time to keep the calculation time manageable.
-- The analysis is carried at the resolution of the exposure layer. E.g. when using Worldpop exposure layer, it is 100x100 meters.
-- User input is required to define country, exposure layer, and settings.
-- Settings affect how the processing runs (min theshold).
-- The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.
-- The information is then aggregated at ADM level using zonal statistic.
-- The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The exceedance frequency curve (EFC) is plotted.
-- Table results are exported in excel format, map rsults are exported in gpkg format.
+The [python notebooks](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period). This is possible when both probabilistic hazards datasets and impact model are provided. In relation to the global datasets currently available, these is possible for:
+
+- [Flood hazard](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Flood.ipynb): using water depth as hazard intensity measure, calculates mortality over population and damage over built-up.
+- [Tropical Cyclone - Strong Winds](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Tropical_cyclones.ipynb): using wind speed as hazard intensity measure, calculates wind damage over built-up.
+
+The script runs on one country and one hazard at time to keep the calculation time manageable.
+
+```{note}
+A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization_v2) of thes scripts makes use of cpu parallelization.
+```
+
+- User input is required to define country, exposure layer, and settings. Settings affect how the processing runs (min theshold).
+
+- The spatial information about hazard and exposure is first combined at the grid level, using the resolution of the exposure layer. E.g. when using Worldpop exposure layer, it is 100x100 meters. The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.
+```{figure} images/raster_calc.jpg
+---
+width: 600
+align: center
+---
+
+- The exposure and impact estimates is summarised for the chosen administrative boundary (ADM) level using zonal statistic. The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The exceedance frequency curve (EFC) is plotted. These output represents the disaster risk historical baseline. The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).
 
 ## DATA MANAGEMENT
 
-- Load country boundaries for multiple administrative levels sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations).
+- Download country boundaries for multiple administrative levels sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.
+- Download [exposure data](global-exposure.md).
+- Download probabilistic [hazard data](globa-hazard.md), consisting of multiple RP scenarios.
 
-- Verify that shapes, names and codes are consistent across different levels.
-
-- Load exposure data
-  - Population: WorldPop 2020 Population counts / Constrained individual countries, UN adjusted (100 m resolution)
-	-  [Download page](https://hub.worldpop.org/geodata/listing?id=79)
-	-  API according to ISO3 code e.g. `https://www.worldpop.org/rest/data/pop/wpgp?iso3=NPL`
-    	returns a Json that includes [the url of data](https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/NPL/npl_ppp_2020.tif). 
-  - Built-up: the latest [World Settlement footprint](https://download.geoservice.dlr.de/WSF2019/#details) can be download as tiles for the area of interest and merged into one compressed tif. 10 m binary grid can be resampled into 100 m using "mean": returns a 0-1 ratio describing the share of builtup for 100m cell.
-  	- Download all tiles within country extent and merge them in a virtual raster (0-255)
-  	- GDAL Warp on virtual raster, setting resolution = cell_res * 10
-  	- GDAL Calc on Reprojected, setting calc: A/255
-  - Land cover / Agricultural land: many are available from [planeterycomputer catalog](https://planetarycomputer.microsoft.com/catalog#Land%20use/Land%20cover). ESA 2020 at 10m resolution is suggested. Specific land cover types can be filtered using pixel value.
-
-- Load hazard data.
-	- Most hazard data consist of multiple layers (Return Periods, RP) each representing one probabilistic intensity maximum, or in other words the intensity of the hazard in relation to its frequency of occurrence.
-	- Some hazards, however, comes as individual layers representing a mean hazard value. In this case, ignore the looping over RP.
-
-## DATA PROCESSING
+## PROCESSING
 
 - LOOP over each hazard RPi layers:
   - Filter hazard layer according to settings (min and max thresholds) for each RPi -> `RPi_filtered`

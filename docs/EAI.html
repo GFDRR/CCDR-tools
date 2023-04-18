@@ -128,6 +128,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="intro-risk.html">
+   Impact and risk
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="climate-risk.html">
    Climate outlook
   </a>
@@ -401,11 +406,6 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#objective">
-   OBJECTIVE
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#script-overview">
    SCRIPT OVERVIEW
   </a>
@@ -416,8 +416,8 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-processing">
-   DATA PROCESSING
+  <a class="reference internal nav-link" href="#processing">
+   PROCESSING
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -445,11 +445,6 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#objective">
-   OBJECTIVE
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#script-overview">
    SCRIPT OVERVIEW
   </a>
@@ -460,8 +455,8 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-processing">
-   DATA PROCESSING
+  <a class="reference internal nav-link" href="#processing">
+   PROCESSING
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -481,64 +476,38 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="expected-annual-impact-eai">
 <h1>Expected Annual Impact (EAI)<a class="headerlink" href="#expected-annual-impact-eai" title="Permalink to this headline">#</a></h1>
-<p>This analytical approach applies to multiple probabilistic hazard scenarios and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories.</p>
+<p>This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories, as explained in the <a class="reference internal" href="intro-risk.html"><span class="doc std std-doc">risk concepts</span></a>.</p>
 <p>The EAI is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.</p>
-<div align=center>
-<img src="https://user-images.githubusercontent.com/44863827/201917310-9fc8b871-8351-4657-959e-d09c0b0e340c.png">
-</div>
-<section id="objective">
-<h2>OBJECTIVE<a class="headerlink" href="#objective" title="Permalink to this headline">#</a></h2>
-<p>The script performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period).
-The spatial information about hazard and exposure is first combined at the grid level, then the total risk estimate is calculated at ADM boundary level. This represents the disaster risk historical baseline.
-The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).</p>
-</section>
 <section id="script-overview">
 <h2>SCRIPT OVERVIEW<a class="headerlink" href="#script-overview" title="Permalink to this headline">#</a></h2>
+<p>The <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">python notebooks</a> performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period). This is possible when both probabilistic hazards datasets and impact model are provided. In relation to the global datasets currently available, these is possible for:</p>
 <ul class="simple">
-<li><p>Script runs on one country, one hazard at time to keep the calculation time manageable.</p></li>
-<li><p>The analysis is carried at the resolution of the exposure layer. E.g. when using Worldpop exposure layer, it is 100x100 meters.</p></li>
-<li><p>User input is required to define country, exposure layer, and settings.</p></li>
-<li><p>Settings affect how the processing runs (min theshold).</p></li>
-<li><p>The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.</p></li>
-<li><p>The information is then aggregated at ADM level using zonal statistic.</p></li>
-<li><p>The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The exceedance frequency curve (EFC) is plotted.</p></li>
-<li><p>Table results are exported in excel format, map rsults are exported in gpkg format.</p></li>
+<li><p><a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Flood.ipynb">Flood hazard</a>: using water depth as hazard intensity measure, calculates mortality over population and damage over built-up.</p></li>
+<li><p><a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Tropical_cyclones.ipynb">Tropical Cyclone - Strong Winds</a>: using wind speed as hazard intensity measure, calculates wind damage over built-up.</p></li>
 </ul>
+<p>The script runs on one country and one hazard at time to keep the calculation time manageable.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization_v2">developer version (<strong>beta</strong>)</a> of thes scripts makes use of cpu parallelization.</p>
+</div>
 </section>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/EAI.png"><img alt="../_images/EAI.png" src="../_images/EAI.png" style="width: 400px;" /></a>
+</figure>
+<ul class="simple">
+<li><p>User input is required to define country, exposure layer, and settings. Settings affect how the processing runs (min theshold).</p></li>
+<li><p>The spatial information about hazard and exposure is first combined at the grid level, using the resolution of the exposure layer. E.g. when using Worldpop exposure layer, it is 100x100 meters. The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.</p></li>
+</ul>
 <section id="data-management">
 <h2>DATA MANAGEMENT<a class="headerlink" href="#data-management" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
-<li><p>Load country boundaries for multiple administrative levels sourced from <a class="reference external" href="https://data.humdata.org/dataset">HDX</a> or <a class="reference external" href="https://www.geoboundaries.org">Geoboundaries</a>. Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations).</p></li>
-<li><p>Verify that shapes, names and codes are consistent across different levels.</p></li>
-<li><p>Load exposure data</p>
-<ul>
-<li><p>Population: WorldPop 2020 Population counts / Constrained individual countries, UN adjusted (100 m resolution)</p>
-<ul>
-<li><p><a class="reference external" href="https://hub.worldpop.org/geodata/listing?id=79">Download page</a></p></li>
-<li><p>API according to ISO3 code e.g. <code class="docutils literal notranslate"><span class="pre">https://www.worldpop.org/rest/data/pop/wpgp?iso3=NPL</span></code>
-returns a Json that includes <a class="reference external" href="https://data.worldpop.org/GIS/Population/Global_2000_2020/2020/NPL/npl_ppp_2020.tif">the url of data</a>.</p></li>
-</ul>
-</li>
-<li><p>Built-up: the latest <a class="reference external" href="https://download.geoservice.dlr.de/WSF2019/#details">World Settlement footprint</a> can be download as tiles for the area of interest and merged into one compressed tif. 10 m binary grid can be resampled into 100 m using “mean”: returns a 0-1 ratio describing the share of builtup for 100m cell.</p>
-<ul>
-<li><p>Download all tiles within country extent and merge them in a virtual raster (0-255)</p></li>
-<li><p>GDAL Warp on virtual raster, setting resolution = cell_res * 10</p></li>
-<li><p>GDAL Calc on Reprojected, setting calc: A/255</p></li>
-</ul>
-</li>
-<li><p>Land cover / Agricultural land: many are available from <a class="reference external" href="https://planetarycomputer.microsoft.com/catalog#Land%20use/Land%20cover">planeterycomputer catalog</a>. ESA 2020 at 10m resolution is suggested. Specific land cover types can be filtered using pixel value.</p></li>
-</ul>
-</li>
-<li><p>Load hazard data.</p>
-<ul>
-<li><p>Most hazard data consist of multiple layers (Return Periods, RP) each representing one probabilistic intensity maximum, or in other words the intensity of the hazard in relation to its frequency of occurrence.</p></li>
-<li><p>Some hazards, however, comes as individual layers representing a mean hazard value. In this case, ignore the looping over RP.</p></li>
-</ul>
-</li>
+<li><p>Download country boundaries for multiple administrative levels sourced from <a class="reference external" href="https://data.humdata.org/dataset">HDX</a> or <a class="reference external" href="https://www.geoboundaries.org">Geoboundaries</a>. Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.</p></li>
+<li><p>Download <a class="reference internal" href="global-exposure.html"><span class="doc std std-doc">exposure data</span></a>.</p></li>
+<li><p>Download probabilistic <span class="xref myst">hazard data</span>, consisting of multiple RP scenarios.</p></li>
 </ul>
 </section>
-<section id="data-processing">
-<h2>DATA PROCESSING<a class="headerlink" href="#data-processing" title="Permalink to this headline">#</a></h2>
+<section id="processing">
+<h2>PROCESSING<a class="headerlink" href="#processing" title="Permalink to this headline">#</a></h2>
 <ul>
 <li><p>LOOP over each hazard RPi layers:</p>
 <ul class="simple">
@@ -609,9 +578,13 @@ Example using 3 scenarios: RP 10, 100, and 1000 years. Then: <code class="docuti
 <div align=center>
 <table><tr><td width="45%"><img src="https://user-images.githubusercontent.com/44863827/201054765-5a1ce2c9-0bde-4e98-80ce-ee30ccefc4e2.png"></td>
     <td><img src="https://user-images.githubusercontent.com/44863827/201055152-28482f07-7215-4b09-b3c2-397381d516af.png"></td></tr></table>
-</div></li>
+</div>
+</li>
 </ul>
 </section>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/raster_calc.jpg"><img alt="../_images/raster_calc.jpg" src="../_images/raster_calc.jpg" style="width: 600px;" /></a>
+</figure>
 </section>
 
     <script type="text/x-thebe-config">
