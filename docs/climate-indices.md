@@ -1,31 +1,34 @@
 # Climate indices
 
 The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (CMIP6).
-The script climate component provides aggregated statistics at ADM level [1] or [0] for a selection of:
+The challenge is to offer a tool that convey the complexity of climate models into statistics that are easily interpretable by non-climate experts.
+This is reflected on the technical side, by the challenge to reduce huge datasets into manageable pieces.
+
+The climate component provides aggregated statistics at boundary level (country or subnational level) for a selection of:
  1) climate-related hazards
  2) country
- 3) time period
+ 3) time periods
 
 Compared to the information offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure adds:
 - Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level
 - Standardisation of anomaly over historical variability as common metric of comparison
 
-## Challenges:
-- harvesting online data does not provide all the variables we want, especially for the critical step of spatial standardisation/normalisation
-- the complete array of climate information is too large to be shared with the user and requires long processing. Thus the information needs to be aggregated into statistics
+### Challenges:
+- the complete array of climate information is too large to be shared with the user and requires long processing.
+Thus the information needs to be aggregated into statistics
 - we need to present a well-rounded perspective for both space and time dimension
 
 ## The input data is:
 - raster data aggregated across time (20 years windows) for spatial representation
 - csv data aggregated across space (country boundaries) for time-serie representation
-  - includes ensemble p10 and p90 (variability across models)
+  - includes ensemble p25 and p75 (variability across models)
 
 ## The script does:
 
 - Runs over one selected country and for a specific set of indices depending on selected hazard
 - Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)
 - Consider four 20-years periods (near term, medium term, long term, end of century)
-- Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble
+- Calculate median, 25th percentile (p25) and 75th percentile (p75) of standardised anomaly across models in the ensemble ([more details](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)
 - Plot maps and timeseries
 - Exported results as csv (table) and geopackage (vector)
 
@@ -33,12 +36,6 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 - presented as maps (spatial distribution)
 - plotted as charts (time distribution)
 - exported in form of tables, charts (excel format) and ADM 1 maps (geopackage)
-
-## Resources and references:
-
-- [E3CI](https://www.ifabfoundation.org/e3ci/)
-- [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information)
-- [Confidence levels calculated as Ensemble_p25 and Ensemble_p75](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)
 
 ----------------------------
 
@@ -60,31 +57,23 @@ The table summarises the relevant climate indices, with time scale and source.
 | Heat     | WBGT or UTCI [°C] - bias adjusted             |     Daily    |
 | tmean    | Mean surface temperature [°C]                 |    Monthly   |
 
-
 ### Sources of CMIP6 data
 
-- **WB Climate Knowledge portal**
-  *pro:* large selection of indices for trens and extremes; geodata export; chart generation
-
-- **[GCM projections (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)**
-  - *pro:* full selection of variables
-  - *con:* raw variables, low resolution
-
-- CMIP6 derived [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
-  - *pro:* extreme indices already computed; refined resolution
-  - *con:* does not include Wind, SLR, SPEI; rectangular grid
-
-Each index is downloaded as multiple multi-dimensional netcdf files. 
+| **Name** | **Developer** | **Hazard covered** | **Description** | **Data format** |
+|---:|---:|---:|---:|---:|
+| [Climate Knowledge portal](https://climateknowledgeportal.worldbank.org) | World Bank | Multihazard | Large selection of climate indices for both trends and extremes | Table, geodata, charts |
+| [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6) | UNDRR | Multihazard | Full selection of variables, model members, periods | Geodata |
+| [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information) | UNITAR | Multihazard | 10 m | Table, geodata, maps, charts |       
 
 ### Dimensions:
    - **SSP:** SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8
    - **Ensemble member:** r1i1p1f1 (largest number of models available)
-   - **Ensemble  range:** p10, p50, p90
+   - **Ensemble  range:** p25, p50, p75
    - **Period:** {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Value statistic:** {P10, P50, P90, SD}, [P10, P50, P90] 
+   - **Value statistic:** {P25, P50, P75, SD}, [P25, P50, P75] 
 
-These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs via the notebook.
+These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs.
 Two types of output are produced:
 
 ### Data processing and presentation
