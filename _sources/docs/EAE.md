@@ -25,11 +25,11 @@ A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/T
 
 - Download country boundaries for multiple administrative levels sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.
 - Download [exposure data](global-exposure.md).
-- Download probabilistic [hazard data](globa-hazard.md), consisting of multiple RP scenarios.
+- Download probabilistic [hazard data](global-hazard.md), consisting of multiple RP scenarios.
 
 ## SETUP THE NOTEBOOK
 
-- Create environment and folder structure as explained in tool setup
+- Create environment and folder structure as explained in [tool setup](tool-setup.md)
 - Move verified input data into the tools folders
 - Use the interface to select the settings and start the processing; in particular, the number of classes and hazard thesholds to use.
 
@@ -39,16 +39,16 @@ A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/T
   - Classify hazard layer RPi according to settings: number and size of classes: `RPi` -> `RPi_Cj` (multiband raster)
   - Each class `Cj` of RPi is used to mask the Exposure layer -> `RPi_Cj_Exp` (multiband raster)
   - Perform zonal statistic (SUM) for each ADMi unit over eac `RPi_Cj_Exp` -> `table [ADMi_NAME;RPi_C1_Exp;RPi_C2_Exp;...RPi_Cj_Exp]`<br>
-    Example using 3 RP scenarios: (10-100-1000) and 3 classes (C1-3): `table [ADM2_NAME;RP10_C1_Exp;RP10_C2_Exp;RP10_C3_Exp;RP100_C1_Exp;RP100_C2_Exp;RP100_C3_Exp;RP1000_C1_Exp;RP1000_C2_Exp;RP1000_C3_Exp;]
+    Example using 3 RP scenarios: (10-100-1000) and 4 classes (C1-4): `table [ADM2_NAME;RP10_C1_Exp;RP10_C2_Exp;RP10_C3_Exp;RP100_C1_Exp;RP100_C2_Exp;RP100_C3_Exp;RP1000_C1_Exp;RP1000_C2_Exp;RP1000_C3_Exp;RP1000_C4_Exp;]
 
 ### Calculate EAE
   - Calculate the exceedance frequency for each RPi -> `RPi_ef = (1/RPi - 1/RPi+1)` where `RPi+1` means the next RP in the serie.
     Example using 3 RP scenarios: RP 10, 100, and 1000 years. Then: `RP10_ef = (1/10 - 1/100) = 0.09`
-  - Multiply exposure for each scenario i and class j `(RPi_Cj_Exp)` with its exceedence frequency `(RPi_ef)` -> `RPi_Cj_Exp_EAE`
+  - Multiply exposure for each scenario i and class j `(RPi_Cj_Exp)` with its exceedence frequency `(RPi_ef)` -> `RPi_Cj_EAE`
   - Sum `RPi_Cj_Exp_EAE`across multiple RPi for the same class Cj -> `table [ADMi;Cj_Exp_EAE]`<br>
-    Example using 3 classes (C1-3): `table [ADMi;C1_Exp_EAE;C2_Exp_EAE;C3_Exp_EAE]`
+    Example using 4 classes (C1-4): `table [ADMi;C1_EAE;C2_EAE;C3_EAE;C4_EAE]`
 
-	| RP | Exceedance freq | C3 | C4 | C5 | C6 | C3_EAE | C4_EAE | C5_EAE | C6_EAE |
+	| RP | Exceedance freq | C1_exp | C2_exp | C3_exp | C4_exp | C1_EAE | C2_EAE | C3_EAE | C4_EAE |
 	|:---:|---|:---:|:---:|:---:|:---:|---|:---:|:---:|:---:|
 	| 10 | 0.09 | 4,036 | 1,535 | 2,111 | 1,967 | 363 | 138 | 190 | 177 |
 	| 100 | 0.009 | 8,212 | 5,766 | 5,007 | 13,282 | 739 | 519 | 451 | 1,195 |
