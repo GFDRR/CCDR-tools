@@ -199,9 +199,26 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../Top-down/notebooks/readme.html">
+  <a class="reference internal" href="tool-setup.html">
    Tools setup
   </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="run-baseline.html">
+   Baseline risk
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Top-down/notebooks/CCDR.html">
+     Choose your hazard:
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
@@ -383,12 +400,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#probability-of-impact">
+   Probability of impact
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#annual-risk">
+   Annual risk
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -400,6 +446,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#probability-of-impact">
+   Probability of impact
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#annual-risk">
+   Annual risk
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -409,6 +473,16 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="impact-and-risk">
 <h1>Impact and risk<a class="headerlink" href="#impact-and-risk" title="Permalink to this headline">#</a></h1>
+<section id="probability-of-impact">
+<h2>Probability of impact<a class="headerlink" href="#probability-of-impact" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="annual-risk">
+<h2>Annual risk<a class="headerlink" href="#annual-risk" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>The EAI</p></li>
+<li><p>The EAE is calculated by multiplying the exposure to each hazard scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities for a range of hazard thresholds.</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Natural hazards &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>Baseline risk &#8212; Climate &amp; Disaster Risk Screening Tools</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -50,11 +50,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/docs/intro-hazard.html" />
+    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/docs/run-baseline.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Exposure" href="intro-exposure.html" />
-    <link rel="prev" title="Climate &amp; Disaster Risk Screening Tools" href="../DOCS.html" />
+    <link rel="next" title="Choose your hazard:" href="../Top-down/notebooks/CCDR.html" />
+    <link rel="prev" title="Tools setup" href="tool-setup.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -111,9 +111,9 @@ const thebe_selector_output = ".output, .cell_output"
   Disaster Risk concepts
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro-hazard.html">
    Natural hazards
   </a>
  </li>
@@ -197,17 +197,17 @@ const thebe_selector_output = ".output, .cell_output"
   Jupyter Notebooks
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="tool-setup.html">
    Tools setup
   </a>
  </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="run-baseline.html">
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
    Baseline risk
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
@@ -318,7 +318,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2Fdocs/intro-hazard.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2Fdocs/run-baseline.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -335,7 +335,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/docs/intro-hazard.md"
+        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/docs/run-baseline.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -363,7 +363,7 @@ title="Edit this page"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../_sources/docs/intro-hazard.md"
+        <a href="../_sources/docs/run-baseline.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -400,23 +400,60 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analytical-approach-impact-function">
+   ANALYTICAL APPROACH = Impact function
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Natural hazards</h1>
+                <h1>Baseline risk</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#analytical-approach-impact-function">
+   ANALYTICAL APPROACH = Impact function
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -424,46 +461,44 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="natural-hazards">
-<h1>Natural hazards<a class="headerlink" href="#natural-hazards" title="Permalink to this headline">#</a></h1>
-<p>Natural (or physical) events are only termed hazards when they have the potential to harm people or cause property damage, social and economic disruption. The location of natural hazards primarily depends on natural processes, including the movement of tectonic plates, the influence of weather systems, and the existence of waterways and slopes (e.g. that might generate landslides). But processes such as urbanization, environmental degradation and climate change can also influence the location, occurrence (frequency) and intensity of natural hazards. These processes are known as risk drivers.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><strong>A hazard is a process or phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation. Hazards may be natural, anthropogenic or socionatural in origin (UNDRR 2017).</strong></p>
-<ul class="simple">
-<li><p><strong><a class="reference external" href="https://www.preventionweb.net/understanding-disaster-risk/component-risk/hazard">UNDRR Hazard overview</a></strong></p></li>
-<li><p><strong><a class="reference external" href="https://www.undrr.org/publication/hazard-definition-and-classification-review-technical-report">UNDRR Hazard definition &amp; classification review</a></strong></p></li>
+  <section class="tex2jax_ignore mathjax_ignore" id="baseline-risk">
+<h1>Baseline risk<a class="headerlink" href="#baseline-risk" title="Permalink to this headline">#</a></h1>
+<p>Once required input layers have been created according to standards, the script can run.</p>
+<p>Select the country of interest, the exposure category and the level of administrative boundaries aggregation.</p>
+<p>Note that not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification. Select the analytical approach accordingly.</p>
+<p><img alt="immagine" src="https://user-images.githubusercontent.com/44863827/156599257-a9f587b4-bcbf-4e6b-9793-6e346945dca5.png" /></p>
+<section id="analytical-approach-impact-function">
+<h2>ANALYTICAL APPROACH = Impact function<a class="headerlink" href="#analytical-approach-impact-function" title="Permalink to this headline">#</a></h2>
+<p>The “function” approach uses a mathematical relationship to calculate impact over exposed categories.
+For example, flood hazard impact over population is calculated using a mortality function, while the impact over built-up uses a damage function for buildings.</p>
+<p>The functions can be manually edited in the notebook, if a better model is available for the country of interest.</p>
+<img width=700 src="https://user-images.githubusercontent.com/44863827/156601011-5b8cf8af-8703-4d2a-8dbf-698b9e132b6f.png">
+<p>A minimum threshold can be set to ignore all values below - assuming that all risk is avoided under this threshold.</p>
+<img width=400 src="https://user-images.githubusercontent.com/44863827/156601233-8bb33d74-127a-4e60-93a3-0cc683d0efba.png">
+<p>A chart of the impact function can be generated in the interface for the selected exposure category.</p>
+<img width=400 src="https://user-images.githubusercontent.com/44863827/156601989-4997c63c-8c2a-4ce4-b6f9-bb7bb0506799.png">
+<p>If you want to inspect all steps of the processing, you can select the option to export all by-products as tiff files:</p>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Export Intermediate rasters</p></li>
 </ul>
-</div>
-<p><strong>Natural Hazard Data</strong> include hazard intensity datasets and the models (code) or approaches that are used to produce them. Hazard intensity modelling can be either:</p>
-<ul class="simple">
-<li><p>Deterministic, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.</p></li>
-<li><p>Probabilistic, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years. This is the case for river flood, coastal flood and strong winds.</p></li>
+<p><em><strong>&gt;&gt;&gt; RUN ANALYSIS &lt;&lt;&lt;</strong></em></p>
+<p>Once the run finishes, results are exported as geospatial data (.gpkg) and table (.csv).</p>
+<p>By selecting</p>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Preview results</p></li>
 </ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>Raw hazard data (model output) usually come in the form of one or more georeferenced layers.</strong></p>
+<p>A map will be generated at the end of the run, using a simple simbology.</p>
+<img width=700 src="https://user-images.githubusercontent.com/44863827/156605538-85af4764-a2cb-4d0f-8046-a59fdcbed50b.png">
+<p>The map can be zoomed and inspected with the pointer to show all the values in the table.</p>
+<img width=500 src="https://user-images.githubusercontent.com/44863827/156605784-b80e4ba8-aafd-4316-b9f8-d3657230a1d4.png">
+<p>EAI represents the aggregated absolute risk estimate:</p>
 <ul class="simple">
-<li><p><strong><a class="reference external" href="https://centre.humdata.org/learning-path/an-introduction-to-geospatial-data/geospatial-data-geographic-information-systems/">Geospatial data and GIS</a></strong></p></li>
+<li><p><strong>Fatalities</strong> when considering impact over population;</p></li>
+<li><p><strong>Hectars [ha] of built-up destroyed</strong> when considering impact over built-up.</p></li>
 </ul>
+</section>
+<div class="toctree-wrapper compound">
 </div>
-<p>See the picture below as example: the landslide hazard (first map) is represented by one aggregated mean index value; while the flood hazard is shows as a series of events (scenarios) of increasing magnitude and decreasing probability.</p>
-<figure class="align-center" id="id1">
-<a class="reference internal image-reference" href="../_images/hzd_models.jpg"><img alt="../_images/hzd_models.jpg" src="../_images/hzd_models.jpg" style="width: 100%;" /></a>
-<figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">A probabilistic hazard representation is required in order to produce probabilistic risk mapping.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
-<div class="legend">
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
-<p>Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.</p>
-</div>
-</div>
-</figcaption>
-</figure>
-<p>Hazard models carry <strong>limitations related to their applicability</strong>. Their quality depend on scale, resolution, model quality, training period and related input data quality.
-As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expeceted to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.</p>
-<p>In the context of developing countries, however, a global model is the only available source of hazard data for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations.</p>
-<p>When it comes to natural hazards and risk, <strong>misinformation can be worse than no information at all</strong>.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -493,17 +528,17 @@ As a rule of thumb, their fitness for application in the context of a risk scree
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../DOCS.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="tool-setup.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Climate &amp; Disaster Risk Screening Tools</p>
+            <p class="prev-next-title">Tools setup</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="intro-exposure.html" title="next page">
+    <a class='right-next' id="next-link" href="../Top-down/notebooks/CCDR.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Exposure</p>
+        <p class="prev-next-title">Choose your hazard:</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
