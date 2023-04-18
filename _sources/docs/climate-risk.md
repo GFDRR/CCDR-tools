@@ -4,7 +4,7 @@ Hydro-meteorological hazards are affected by climate forcing, and, as such, clim
 
 The estimate of upcoming climate change impacts are based on comparisons of baseline conditions (which can be either observed or simulated) against future scenarios of climate variability. The long-term averages of climate variables serve as the baseline conditions. Changes in projected values against this baseline are then interpreted future climate anomalies and used to project forward-looking disaster risks.
 
-```{table} Climate variables underlying climate projections
+```{table} Climate variables underlying hazard projections
 :name: climate_indices
 **Hazard** | **Associated climate indices** | **Unit of measurement**
 ---|---|---
@@ -27,7 +27,7 @@ Data from climate models released under the IPCC Sixth Assessment Report (AR) fr
 - **SSP3/RCP7.0:** models describe a large emission variability for this scenario. Warming in 2100 is estimated at 3.9-4.6 °C.
 - **SSP5/RCP8.5:** high emissions scenario resulting in warming of 4.7-5.1 °C.
 
-Each climate scenarios predicts different spatial patterns, resulting into a range of possible futures in terms of intensities, and frequencies of natural hazards. Key climate variables connected to the changing patterns of precipitation and temperature are collected from the [Climate Change Knowledge Portal](https://climateknowledgeportal.worldbank.org/) and the [Copernicus Data Store](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6). summarized in the table below.
+Each climate scenarios predicts different spatial patterns, resulting into a range of possible futures in terms of intensities, and frequencies of natural hazards. Key climate variables connected to the changing patterns of precipitation and temperature are collected from the [Climate Change Knowledge Portal](https://climateknowledgeportal.worldbank.org/) and the [Copernicus Data Store](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6).
 
 ```{seealso}
 [**Climate analytics repository**](https://bennyistanto.github.io/gost-climate) from the Global Operational Support Team (**GOST**) describes a list of data provider, derived products, step-by-step to do the analysis to produce climate analytics.
