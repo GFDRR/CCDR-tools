@@ -11,9 +11,9 @@ Natural (or physical) events are only termed hazards when they have the potentia
 ```
 **Natural Hazard Data** include hazard intensity datasets and the models (code) or approaches that are used to produce them. Hazard intensity modelling can be either:
 
-- Deterministic, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.
+- **Deterministic**, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.
 
-- Probabilistic, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years. This is the case for river flood, coastal flood and strong winds.
+- **Probabilistic**, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years. This is the case for river flood, coastal flood and strong winds.
 
 
 ```{note}

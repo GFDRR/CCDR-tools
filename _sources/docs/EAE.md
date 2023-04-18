@@ -6,6 +6,11 @@ For example, flood hazard over agriculture is measured in terms of hectars of la
 
 This produces a mean estimate of **Expected Annual Exposure (EAE) by hazard intensity classes**, as explained in the [**risk concepts**](intro-risk.md).
 
+```{example}
+`For example`: there is no generalised impact model available for measuring flood impact over crops by means of water depth alone, because crop damage depends on a variety of additional factors, such as: duration of the submersion, water velocity, presence of pollutants, type of crop, stage of the crop cycle.
+
+For this reason, following a rule of thumb, the risk metric chosen to measure flood risk over crops is simply **exposure to water depth over 0.5 m**.
+```
 
 ## SCRIPT OVERVIEW
 

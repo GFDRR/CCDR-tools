@@ -23,11 +23,11 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 ## The script does:
 
 - Runs over one selected country and for a specific set of indices depending on selected hazard
-- Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results
-- Consider four future 20-years period (near term, medium term, long term, end of century)
+- Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)
+- Consider four 20-years periods (near term, medium term, long term, end of century)
 - Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble
 - Plot maps and timeseries
-- The results are exported as csv (table) and geopackage (vector)
+- Exported results as csv (table) and geopackage (vector)
 
 ## The output is:
 - presented as maps (spatial distribution)
@@ -38,7 +38,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 
 - [E3CI](https://www.ifabfoundation.org/e3ci/)
 - [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information)
-- ([confidence levels calculated as Ensemble_p25 and Ensemble_p75](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/))
+- [Confidence levels calculated as Ensemble_p25 and Ensemble_p75](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)
 
 ----------------------------
 
@@ -46,35 +46,38 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 
 The table summarises the relevant climate indices, with time scale and source. 
 
-|   Name   |                  Description                  |     Source      | Time-scale  |
-|:--------:|:---------------------------------------------:|:---------------:|:-----------:|
-| R10mm    | Days with rainfall > 10 mm [days]             | CMIP6 Extremes  |   Annual    |
-| Rx5day   | Maximum 5-day precipitation [mm]              | CMIP6 Extremes  |   Monthly   |
-| R99p     | Extremely wet day precipitation [days]  	   | CMIP6 Extremes  |   Monthly   |
-| CWD      | Consecutive Wet Days [days/month]             | CMIP6 Extremes  |   Annual    |
-| CDD      | Consecutive Dry Days [days/month]             | CMIP6 Extremes  |   Annual    |
-| slr      | Sea Level Rise [m]                            | CMIP6/NASA      |   Annual    |
-| sfcWind  | Daily maximum 10-m wind speed                 | CMIP6           |   Annual    |
-|          | Number of days with strong winds [days]       | CMIP6           |   Monthly   |
-| SPEI     | Standard Precipitation-ET Index [-]           | CMIP6           |   Annual    |
-| Heat     | WBGT or UTCI [°C] - bias adjusted             | CMIP6 Extremes  |    Daily    |
-| tmean    | Mean surface temperature [°C]                 | CMIP6           |   Monthly   |
+|   Name   |                  Description                  |  Time-scale  |
+|:--------:|:---------------------------------------------:|:------------:|
+| R10mm    | Days with rainfall > 10 mm [days]             |    Annual    |
+| Rx5day   | Maximum 5-day precipitation [mm]              |    Monthly   |
+| R99p     | Extremely wet day precipitation [days]  	   |    Monthly   |
+| CWD      | Consecutive Wet Days [days/month]             |    Annual    |
+| CDD      | Consecutive Dry Days [days/month]             |    Annual    |
+| slr      | Sea Level Rise [m]                            |    Annual    |
+| sfcWind  | Daily maximum 10-m wind speed                 |    Annual    |
+|          | Number of days with strong winds [days]       |    Monthly   |
+| SPEI     | Standard Precipitation-ET Index [-]           |    Annual    |
+| Heat     | WBGT or UTCI [°C] - bias adjusted             |     Daily    |
+| tmean    | Mean surface temperature [°C]                 |    Monthly   |
 
 
-**Sources:** CMIP6 – GCM full collection
+### Sources of CMIP6 data
 
-  - CMIP6 – [GCM projections (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)
-    - pro: full selection of variables
-    - con: raw variables, low resolution
+- **WB Climate Knowledge portal**
+  *pro:* large selection of indices for trens and extremes; geodata export; chart generation
 
-  - CMIP6 derived [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
-    - pro: extreme indices already computed; refined resolution
-    - con: does not include Wind, SLR, SPEI; rectangular grid
+- **[GCM projections (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cmip6)**
+  - *pro:* full selection of variables
+  - *con:* raw variables, low resolution
 
-Each index is downloaded  as multiple multi-dimensional netcdf files. 
+- CMIP6 derived [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6)
+  - *pro:* extreme indices already computed; refined resolution
+  - *con:* does not include Wind, SLR, SPEI; rectangular grid
 
-**Dimensions:** 
-   - **SSP:** 1 (2.6), 2 (4.5), 5 (8.5)
+Each index is downloaded as multiple multi-dimensional netcdf files. 
+
+### Dimensions:
+   - **SSP:** SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8
    - **Ensemble member:** r1i1p1f1 (largest number of models available)
    - **Ensemble  range:** p10, p50, p90
    - **Period:** {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]
@@ -84,8 +87,10 @@ Each index is downloaded  as multiple multi-dimensional netcdf files.
 These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs via the notebook.
 Two types of output are produced:
 
-A) Map output (spatial distribution)
-   - raster data aggregated across time (20 years windows)
+### Data processing and presentation
+
+**A) Map output** (spatial distribution)
+   - Raster data aggregated across time (20 years windows)
 ```
 Ensemble_mean(Period_mean(anomaly/hist_SD))
 Ensemble_p50(Period_mean(anomaly/hist_SD))
@@ -95,8 +100,8 @@ Ensemble_p50(Period_mean(anomaly/hist_SD))
 ADM1_mean(Ensemble_p50(Period_mean(anomaly/hist_SD)))
 ```
   
-B) Chart output (time-series)
-   - spatial data aggregated for country ADM0 boundaries plotted as chart
+**B) Chart output** (time-series)
+   - Spatial data aggregated for country ADM0 boundaries plotted as chart
   ```
 Ensemble_p10(ADM0_mean(anomaly/hist_SD))
 Ensemble_p50(ADM0_mean(anomaly/hist_SD))

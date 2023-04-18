@@ -458,6 +458,23 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#climate-indices-statistics">
    CLIMATE INDICES STATISTICS
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sources-of-cmip6-data">
+     Sources of CMIP6 data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dimensions">
+     Dimensions:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-processing-and-presentation">
+     Data processing and presentation
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -514,6 +531,23 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#climate-indices-statistics">
    CLIMATE INDICES STATISTICS
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sources-of-cmip6-data">
+     Sources of CMIP6 data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dimensions">
+     Dimensions:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-processing-and-presentation">
+     Data processing and presentation
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -562,11 +596,11 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 <h2>The script does:<a class="headerlink" href="#the-script-does" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>Runs over one selected country and for a specific set of indices depending on selected hazard</p></li>
-<li><p>Consider three SSP (ex RCP) scenarios (2.6, 4.5, 8.5) by default and present them in the results</p></li>
-<li><p>Consider four future 20-years period (near term, medium term, long term, end of century)</p></li>
+<li><p>Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)</p></li>
+<li><p>Consider four 20-years periods (near term, medium term, long term, end of century)</p></li>
 <li><p>Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble</p></li>
 <li><p>Plot maps and timeseries</p></li>
-<li><p>The results are exported as csv (table) and geopackage (vector)</p></li>
+<li><p>Exported results as csv (table) and geopackage (vector)</p></li>
 </ul>
 </section>
 <section id="the-output-is">
@@ -582,7 +616,7 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.ifabfoundation.org/e3ci/">E3CI</a></p></li>
 <li><p><a class="reference external" href="https://interactive-atlas.ipcc.ch/regional-information">IPCC atlas</a></p></li>
-<li><p>(<a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">confidence levels calculated as Ensemble_p25 and Ensemble_p75</a>)</p></li>
+<li><p><a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">Confidence levels calculated as Ensemble_p25 and Ensemble_p75</a></p></li>
 </ul>
 </section>
 </section>
@@ -594,87 +628,80 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 <thead>
 <tr class="row-odd"><th class="text-align:center head"><p>Name</p></th>
 <th class="text-align:center head"><p>Description</p></th>
-<th class="text-align:center head"><p>Source</p></th>
 <th class="text-align:center head"><p>Time-scale</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td class="text-align:center"><p>R10mm</p></td>
 <td class="text-align:center"><p>Days with rainfall &gt; 10 mm [days]</p></td>
-<td class="text-align:center"><p>CMIP6 Extremes</p></td>
 <td class="text-align:center"><p>Annual</p></td>
 </tr>
 <tr class="row-odd"><td class="text-align:center"><p>Rx5day</p></td>
 <td class="text-align:center"><p>Maximum 5-day precipitation [mm]</p></td>
-<td class="text-align:center"><p>CMIP6 Extremes</p></td>
 <td class="text-align:center"><p>Monthly</p></td>
 </tr>
 <tr class="row-even"><td class="text-align:center"><p>R99p</p></td>
 <td class="text-align:center"><p>Extremely wet day precipitation [days]</p></td>
-<td class="text-align:center"><p>CMIP6 Extremes</p></td>
 <td class="text-align:center"><p>Monthly</p></td>
 </tr>
 <tr class="row-odd"><td class="text-align:center"><p>CWD</p></td>
 <td class="text-align:center"><p>Consecutive Wet Days [days/month]</p></td>
-<td class="text-align:center"><p>CMIP6 Extremes</p></td>
 <td class="text-align:center"><p>Annual</p></td>
 </tr>
 <tr class="row-even"><td class="text-align:center"><p>CDD</p></td>
 <td class="text-align:center"><p>Consecutive Dry Days [days/month]</p></td>
-<td class="text-align:center"><p>CMIP6 Extremes</p></td>
 <td class="text-align:center"><p>Annual</p></td>
 </tr>
 <tr class="row-odd"><td class="text-align:center"><p>slr</p></td>
 <td class="text-align:center"><p>Sea Level Rise [m]</p></td>
-<td class="text-align:center"><p>CMIP6/NASA</p></td>
 <td class="text-align:center"><p>Annual</p></td>
 </tr>
 <tr class="row-even"><td class="text-align:center"><p>sfcWind</p></td>
 <td class="text-align:center"><p>Daily maximum 10-m wind speed</p></td>
-<td class="text-align:center"><p>CMIP6</p></td>
 <td class="text-align:center"><p>Annual</p></td>
 </tr>
 <tr class="row-odd"><td class="text-align:center"><p></p></td>
 <td class="text-align:center"><p>Number of days with strong winds [days]</p></td>
-<td class="text-align:center"><p>CMIP6</p></td>
 <td class="text-align:center"><p>Monthly</p></td>
 </tr>
 <tr class="row-even"><td class="text-align:center"><p>SPEI</p></td>
 <td class="text-align:center"><p>Standard Precipitation-ET Index [-]</p></td>
-<td class="text-align:center"><p>CMIP6</p></td>
 <td class="text-align:center"><p>Annual</p></td>
 </tr>
 <tr class="row-odd"><td class="text-align:center"><p>Heat</p></td>
 <td class="text-align:center"><p>WBGT or UTCI [°C] - bias adjusted</p></td>
-<td class="text-align:center"><p>CMIP6 Extremes</p></td>
 <td class="text-align:center"><p>Daily</p></td>
 </tr>
 <tr class="row-even"><td class="text-align:center"><p>tmean</p></td>
 <td class="text-align:center"><p>Mean surface temperature [°C]</p></td>
-<td class="text-align:center"><p>CMIP6</p></td>
 <td class="text-align:center"><p>Monthly</p></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Sources:</strong> CMIP6 – GCM full collection</p>
+<section id="sources-of-cmip6-data">
+<h2>Sources of CMIP6 data<a class="headerlink" href="#sources-of-cmip6-data" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
-<li><p>CMIP6 – <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/projections-cmip6">GCM projections (CDS)</a></p>
+<li><p><strong>WB Climate Knowledge portal</strong>
+<em>pro:</em> large selection of indices for trens and extremes; geodata export; chart generation</p></li>
+<li><p><strong><a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/projections-cmip6">GCM projections (CDS)</a></strong></p>
 <ul>
-<li><p>pro: full selection of variables</p></li>
-<li><p>con: raw variables, low resolution</p></li>
+<li><p><em>pro:</em> full selection of variables</p></li>
+<li><p><em>con:</em> raw variables, low resolution</p></li>
 </ul>
 </li>
 <li><p>CMIP6 derived <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/sis-extreme-indices-cmip6">Climate Extreme Indices (CDS)</a></p>
 <ul>
-<li><p>pro: extreme indices already computed; refined resolution</p></li>
-<li><p>con: does not include Wind, SLR, SPEI; rectangular grid</p></li>
+<li><p><em>pro:</em> extreme indices already computed; refined resolution</p></li>
+<li><p><em>con:</em> does not include Wind, SLR, SPEI; rectangular grid</p></li>
 </ul>
 </li>
 </ul>
-<p>Each index is downloaded  as multiple multi-dimensional netcdf files.</p>
-<p><strong>Dimensions:</strong></p>
+<p>Each index is downloaded as multiple multi-dimensional netcdf files.</p>
+</section>
+<section id="dimensions">
+<h2>Dimensions:<a class="headerlink" href="#dimensions" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
-<li><p><strong>SSP:</strong> 1 (2.6), 2 (4.5), 5 (8.5)</p></li>
+<li><p><strong>SSP:</strong> SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8</p></li>
 <li><p><strong>Ensemble member:</strong> r1i1p1f1 (largest number of models available)</p></li>
 <li><p><strong>Ensemble  range:</strong> p10, p50, p90</p></li>
 <li><p><strong>Period:</strong> {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]</p></li>
@@ -683,9 +710,12 @@ The script climate component provides aggregated statistics at ADM level [1] or 
 </ul>
 <p>These dimensions needs to be flatten according to meaningful statistics to provide aggregated outputs via the notebook.
 Two types of output are produced:</p>
-<p>A) Map output (spatial distribution)</p>
+</section>
+<section id="data-processing-and-presentation">
+<h2>Data processing and presentation<a class="headerlink" href="#data-processing-and-presentation" title="Permalink to this headline">#</a></h2>
+<p><strong>A) Map output</strong> (spatial distribution)</p>
 <ul class="simple">
-<li><p>raster data aggregated across time (20 years windows)</p></li>
+<li><p>Raster data aggregated across time (20 years windows)</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Ensemble_mean</span><span class="p">(</span><span class="n">Period_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
 <span class="n">Ensemble_p50</span><span class="p">(</span><span class="n">Period_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
@@ -697,15 +727,16 @@ Two types of output are produced:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ADM1_mean</span><span class="p">(</span><span class="n">Ensemble_p50</span><span class="p">(</span><span class="n">Period_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">)))</span>
 </pre></div>
 </div>
-<p>B) Chart output (time-series)</p>
+<p><strong>B) Chart output</strong> (time-series)</p>
 <ul class="simple">
-<li><p>spatial data aggregated for country ADM0 boundaries plotted as chart</p></li>
+<li><p>Spatial data aggregated for country ADM0 boundaries plotted as chart</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Ensemble_p10</span><span class="p">(</span><span class="n">ADM0_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
 <span class="n">Ensemble_p50</span><span class="p">(</span><span class="n">ADM0_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
 <span class="n">Ensemble_p90</span><span class="p">(</span><span class="n">ADM0_mean</span><span class="p">(</span><span class="n">anomaly</span><span class="o">/</span><span class="n">hist_SD</span><span class="p">))</span>
 </pre></div>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
