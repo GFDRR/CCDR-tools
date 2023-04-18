@@ -25,7 +25,7 @@ See the picture below as example: the landslide hazard (first map) is represente
 
 ```{figure} images/hzd_models.jpg
 ---
-width: 600
+width: 100%
 align: center
 ---
 
