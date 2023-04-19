@@ -8,7 +8,7 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 ```{table}
 :name: FL_data
 **Name** | Fathom flood hazard maps | Aqueduct flood hazard maps
--- | -- | --
+--: | :--: | :--:
 **Developer** | Fathom | WRI
 **Hazard process** | Fluvial flood, Pluvial flood | Fluvial flood
 **Resolution** | 90 m | 900 m
@@ -42,7 +42,7 @@ Coastal floods occur when the level in a water body (sea, estuary) rises to engu
 ```{table}
 :name: CF_data
 | **Name** | Aqueduct flood hazard maps | Global Flood map |
-|---|---|---|
+|---:|:---:|:---:|
 | **Developer** | WRI-Deltares | Deltares |
 | **Hazard process** | Coastal flood | Coastal flood, SLR |
 | **Resolution** | 1 km | 90 m, 1 km, 5 km |
@@ -61,7 +61,7 @@ Additional datasets that have been previously used in WB coastal flood analytics
 ```{table}
 :name: CF_data_more
 | **Name** | Coastal flood hazard maps | Coastal risk screening |
-|---|---|---|
+|---:|:---:|:---:|
 | **Developer** | Muis et al. (2016, 2020) | Climate Central |
 | **Hazard process** | Coastal flood | Mean sea level |
 | **Resolution** | 1 km | |
@@ -94,7 +94,7 @@ Landslides (mass movements) are affected by geological features (rock type and s
 ```{table}
 :name: LS_data
 | **Name** | Global landslide hazard layer | Global landslide susceptibility layer |
-|---|---|---|
+|---:|:---:|:---:|
 | **Developer** | ARUP | NASA |
 | **Hazard process** | Dry (seismic) mass movement Wet (rainfall) mass movement | Wet (rainfall) mass movement |
 | **Resolution** | 1 km | 1 km |
@@ -121,7 +121,7 @@ Tropical cyclones (including hurricanes, typhoons) are events that can trigger d
 ```{table}
 :name: SW_data
 | **Name** | GAR15-IBTrACS | IBTrACSv4 | STORMv3 |
-|---|---|---|---|
+|---:|:---:|:---:|:---:|
 | **Developer** | NOAA | NOAA | IVM |
 | **Hazard process** | Strong winds | Strong winds | Strong winds |
 | **Resolution** | 30 km | 10 km | 10 km |

@@ -13,7 +13,7 @@ Below is a quick link to openly-licensed datasets that are used by the CCDR stan
 :name: exp_datasets
 
 | **Name** | **Developer** | **Metric** | **Resolution** | **Update frequency** |
-|---:|---:|---:|---:|---:|
+|---:|:---:|:---:|:---:|:---:|
 | [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php) | EU-JRC | Population count | 100 m | Annual |
 | [World Settlement Footprints](https://download.geoservice.dlr.de/WSF2019) | DLR | Presence of built-up | 10 m | Annual |
 | [WorldCover](https://esa-worldcover.org/en/data-access) | ESA | Land cover classes | 10 m | Annual |
