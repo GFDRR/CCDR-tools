@@ -755,10 +755,10 @@ Others, such as landslides, use a <strong>deterministic approach</strong>, provi
 </ul>
 <p>It is important to note that pluvial (flash) flood events are extremely hard to model properly on the base of global static hazard maps alone. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures. Because of this, while Fathom does offer pluvial hazard maps, their application for pluvial risk assessment is questionable as it cannot account for these key drivers.</p>
 <p>A complementary perspective on flood risk is offered by the <a class="reference external" href="https://planetarycomputer.microsoft.com/dataset/jrc-gsw">Global Surface Water layer</a> produced by JRC using remote sensing data (Landsat 5, 7, 8) over the period1984-2020. It provides information on all the locations ever detected as max water level, water occurrence, occurrence change, recurrence, seasonality, and seasonality change. However, this layer does not seem to properly account for extreme flood events, I.e. recorded flood events for the period 1984-2020 most often exceed the extent of this layer. Hence it can be used to identify permanent and semi-permanent water bodies, but not to identify the baseline flood extent from past events.</p>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id1">
 <img alt="../_images/GSWL.jpg" src="../_images/GSWL.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Global Surface Water Layer</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Global Surface Water Layer</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -862,10 +862,10 @@ Others, such as landslides, use a <strong>deterministic approach</strong>, provi
 <p>Both these models seem to be affrom a simplified bathtub modelling approach, projecting unrealistic flood extent already under baseline climate conditions.</p>
 <p>As shown in figure below, considering the minimum baseline values (least impact criteria), the flood extent drawn by the Climate Central layer is similar to the baseline RP100 from Muis, in the middle - both generously overestimating water spreading inland even under less extreme scenarios [<em>the locaiton of comparison is chosen as both the Netherlands and N Italy are low-lying areas, which are typically the most difficult to model</em>].
 In comparison, the WRI is far from perfection (it is also a bathtub model), but it seems to apply a more realistic max flood extent, which ultimately makes it more realistic for application.</p>
-<figure class="align-center" id="id3">
+<figure class="align-center" id="id2">
 <img alt="../_images/CF_data.jpg" src="../_images/CF_data.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <section id="sea-level-rise">
@@ -926,17 +926,17 @@ In comparison, the WRI is far from perfection (it is also a bathtub model), but 
 </tbody>
 </table>
 <p>Landslide hazard description can rely on either the NASA Landslide Hazard Susceptibility map (LHASA) or the derived ARUP layer funded by GFDRR in 2019. This dataset considers empirical events from the COOLR database and model both the earthquake and rainfall triggers over the existing LHASA map. The metric of choice is frequency of occurrence of a significant landslide per km2, which is however provided as synthetic index (not directly translatable as time occurrence probability).</p>
-<figure class="align-center" id="id4">
+<figure class="align-center" id="id3">
 <img alt="../_images/LS_data.jpg" src="../_images/LS_data.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuos index is displayed into 3 discrete classes (Low, Medium, High).</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuos index is displayed into 3 discrete classes (Low, Medium, High).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
 <section id="tropical-cyclones">
 <h2>Tropical cyclones<a class="headerlink" href="#tropical-cyclones" title="Permalink to this headline">#</a></h2>
 <p>Tropical cyclones (including hurricanes, typhoons) are events that can trigger different hazard processes at once such as strong winds, intense rainfall, extreme waves, and storm surges. In this category, we consider only the wind component of cyclone hazard, while other components (floods, storm surge) are typically considered separately.</p>
-<table class="colwidths-auto table" id="id1">
+<table class="colwidths-auto table" id="sw-data">
 <thead>
 <tr class="row-odd"><th class="head"><p><strong>Name</strong></p></th>
 <th class="head"><p>GAR15-IBTrACS</p></th>
@@ -962,8 +962,8 @@ In comparison, the WRI is far from perfection (it is also a bathtub model), but 
 </tr>
 <tr class="row-odd"><td><p><strong>Analysis type</strong></p></td>
 <td><p>Probabilistic</p></td>
-<td><p>Historical</p></td>
-<td><p>Historical, Probabilistic</p></td>
+<td><p>Empirical</p></td>
+<td><p>Empirical, Probabilistic</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Frequency type</strong></p></td>
 <td><p>Return Period (5 RPs)</p></td>
@@ -973,7 +973,7 @@ In comparison, the WRI is far from perfection (it is also a bathtub model), but 
 <tr class="row-odd"><td><p><strong>Time reference</strong></p></td>
 <td><p>Baseline (1989-2007)</p></td>
 <td><p>Baseline (1980-2022)</p></td>
-<td><p>Baseline (1984-2022)</p></td>
+<td><p>Baseline (1984-2022); Projections (2015-2050; SSP5/8.5)</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Intensity metric</strong></p></td>
 <td><p>Wind gust speed [5-sec m/s]</p></td>
@@ -987,6 +987,15 @@ In comparison, the WRI is far from perfection (it is also a bathtub model), but 
 </tr>
 </tbody>
 </table>
+<p>A newer version (<a class="reference external" href="https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access">IBTrACSv4</a>) has been released in 2018 and could be leveraged to generate an updated wind-hazard layer, with better resolution and possibly the inclusion of orography effect. There are several attributes tied to each event; the map in figure below shows the USA_WIND variable (Maximum sustained wind speed in knots: 0 - 300 kts) as general intensity measure.</p>
+<p>The STORM database has recently released their new version (<a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_tropical_cyclone_wind_speed_return_periods/12705164/3">STORMv3</a>), which includes synthetic global maps of 1) maximum wind speeds for a fixed set of return periods; and 2) return periods for a fixed set of maximum wind speeds, at 10 km resolution over all ocean basins. In addition, it contains the same set for events occurring within 100 km from a selection of 18 coastal cities and another for events occurring within 100 km from the capital city of an island. It also comes with <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1">projections</a>: those are generated by extracting the climate change signal from each of the four general circulation models listed below, and adding this signal to the historical data from IBTrACS. This new dataset is then used as input for STORM, and resembles future-climate (2015-2050; RCP8.5/SSP5) conditions. The data can be used to calculate tropical cyclone risk in all (coastal) regions prone to tropical cyclones.</p>
+<figure class="align-center" id="id4">
+<img alt="../_images/SW_data.jpg" src="../_images/SW_data.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>More recently (2022), simulated tracks for climate change scenarios have been developed as described in <a class="reference external" href="https://www.science.org/doi/10.1126/sciadv.abm8438">Bloemendaal, et al., 2022</a>. Both <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1">synthetic tracks</a> and <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_climate_change_tropical_cyclone_wind_speed_return_periods/14510817">wind speed maps</a> are available.</p>
 </section>
 <section id="drought-water-scarcity">
 <h2>Drought &amp; Water scarcity<a class="headerlink" href="#drought-water-scarcity" title="Permalink to this headline">#</a></h2>
