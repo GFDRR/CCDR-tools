@@ -11,15 +11,15 @@ The most relevant datasets (updated, high resolution, scientific quality) repres
 
 ```{table}
 :name: hzd_datasets
-<div style="width:80px">Geophysical</div> | <div style="width:80px">Hydro-meteorological</div>  | <div style="width:80px">Environmental factors</div>
--- | -- | -- 
-Earthquake | River flood | Air pollution
-Tsunami | Landslide |   
-Volcanic activity | Coastal flood |  
-  | Tropical cyclones |   
-  | Drought |  
-  | Extreme heat |  
-  | Wildfires |  
+| <div style="width:80px">Geophysical</div> | <div style="width:80px">Hydro-meteorological</div>  | <div style="width:80px">Environmental factors</div> |
+| -- | -- | -- |
+| Earthquake | River flood | Air pollution |
+| Tsunami | Landslide |   |
+| Volcanic activity | Coastal flood |  |
+|   | Tropical cyclones |   |
+|   | Drought |  |
+|   | Extreme heat |  |
+|   | Wildfires |  |
 ```
 
 Some hazards are modelled using a **probabilistic approach**, providing a set of scenarios linked to hazard frequency for the period of reference. For the current data availability, this is the case for floods, storm surges, cyclones, heatwaves, and wildfires.
@@ -44,7 +44,7 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 
 ```{table}
 :name: FL_data
-**Name** | Fathom   flood hazard maps | Aqueduct   flood hazard maps
+**Name** | Fathom flood hazard maps | Aqueduct flood hazard maps
 -- | -- | --
 **Developer** | Fathom | WRI
 **Hazard process** | Fluvial flood, Pluvial flood | Fluvial flood
@@ -151,7 +151,23 @@ align: center
 ---
 Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuos index is displayed into 3 discrete classes (Low, Medium, High).
 ```
+
 ## Tropical cyclones
+Tropical cyclones (including hurricanes, typhoons) are events that can trigger different hazard processes at once such as strong winds, intense rainfall, extreme waves, and storm surges. In this category, we consider only the wind component of cyclone hazard, while other components (floods, storm surge) are typically considered separately.
+
+```{table}
+:name: LS_data
+| **Name** | GAR15-IBTrACS | IBTrACSv4 | STORMv3 |
+|---|---|---|---|
+| **Developer** | NOAA | NOAA | IVM |
+| **Hazard process** | Strong winds | Strong winds | Strong winds |
+| **Resolution** | 30 km | 10 km | 10 km |
+| **Analysis type** | Probabilistic | Historical | Historical, Probabilistic |
+| **Frequency type** | Return Period (5 RPs) | | Return periods (10 10,000 years) |
+| **Time reference** | Baseline (1989-2007) | Baseline (1980-2022) | Baseline (1984-2022) |
+| **Intensity metric** | Wind gust speed [5-sec m/s] | Many variables | Many variables |
+| **License** | Open data | Open data | Open data |
+```
 
 ## Drought & Water scarcity
 
