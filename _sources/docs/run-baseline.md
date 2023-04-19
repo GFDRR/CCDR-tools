@@ -20,7 +20,23 @@ For example, flood hazard impact over population is calculated using a mortality
 
 The functions can be manually edited in the notebook, if a better model is available for the country of interest.
 
-<img width=700 src="https://user-images.githubusercontent.com/44863827/156601011-5b8cf8af-8703-4d2a-8dbf-698b9e132b6f.png">
+```
+def damage_factor_builtup(x):
+    """A polynomial fit to average damage across builtup land cover relative 
+    to water depth in meters in Asia.
+
+    The sectors are commercial, industry, transport, infrastructure and residential.
+
+    Values are capped between 0 and 1, where water depth values >= 6m return a damage factor of 1
+
+    References
+    ----------
+    .. [1] JRC, 2017
+    """
+    return np.maximum(0.0, np.minimum(1.0, -0.0028*x**3 + 0.0362*x**2 + 0.0095*x)) 	# Floods - AFRICA
+    #return np.maximum(0.0, np.minimum(1.0, 0.9981236 - 0.9946279*np.exp(-1.711056*x))) # Floods - LAC
+    #return np.maximum(0.0, np.minimum(1.0, 0.00723*x**3 - 0.1000*x**2 + 0.5060*x))	# Floods - ASIA
+```
 
 A minimum threshold can be set to ignore all values below - assuming that all risk is avoided under this threshold.
 

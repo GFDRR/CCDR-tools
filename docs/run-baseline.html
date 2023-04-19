@@ -501,7 +501,23 @@ Select the analytical approach accordingly.</p>
 <p>This approach uses a mathematical relationship to calculate impact over exposed categories (read <a class="reference internal" href="EAI.html"><span class="doc std std-doc">more</span></a>).
 For example, flood hazard impact over population is calculated using a mortality function, while the impact over built-up uses a damage function for buildings.</p>
 <p>The functions can be manually edited in the notebook, if a better model is available for the country of interest.</p>
-<img width=700 src="https://user-images.githubusercontent.com/44863827/156601011-5b8cf8af-8703-4d2a-8dbf-698b9e132b6f.png">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">damage_factor_builtup</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A polynomial fit to average damage across builtup land cover relative </span>
+<span class="sd">    to water depth in meters in Asia.</span>
+
+<span class="sd">    The sectors are commercial, industry, transport, infrastructure and residential.</span>
+
+<span class="sd">    Values are capped between 0 and 1, where water depth values &gt;= 6m return a damage factor of 1</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] JRC, 2017</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0028</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mf">0.0362</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">0.0095</span><span class="o">*</span><span class="n">x</span><span class="p">))</span> 	<span class="c1"># Floods - AFRICA</span>
+    <span class="c1">#return np.maximum(0.0, np.minimum(1.0, 0.9981236 - 0.9946279*np.exp(-1.711056*x))) # Floods - LAC</span>
+    <span class="c1">#return np.maximum(0.0, np.minimum(1.0, 0.00723*x**3 - 0.1000*x**2 + 0.5060*x))	# Floods - ASIA</span>
+</pre></div>
+</div>
 <p>A minimum threshold can be set to ignore all values below - assuming that all risk is avoided under this threshold.</p>
 <img width=400 src="https://user-images.githubusercontent.com/44863827/156601233-8bb33d74-127a-4e60-93a3-0cc683d0efba.png">
 <p>A chart of the impact function can be generated in the interface for the selected exposure category.</p>
