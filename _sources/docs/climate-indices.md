@@ -43,17 +43,17 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 ### Dimensions:
    - **SSP:** SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8
    - **Ensemble member:** r1i1p1f1 (largest number of models available)
-   - **Ensemble  range:** p25, p50, p75
+   - **Ensemble  range:** p10, p50, p90
    - **Period:** {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
-   - **Value statistic:** {P25, P50, P75, SD}, [P25, P50, P75] 
+   - **Value statistic:** {P10, P50, P90, SD}, [P10, P50, P90] 
 
 ### Processing
 
 - Runs over one selected country and for a specific set of indices depending on selected hazard
 - Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)
 - Consider four 20-years periods (near term, medium term, long term, end of century)
-- Calculate median, 25th percentile (p25) and 75th percentile (p75) of standardised anomaly across models in the ensemble ([more details](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)
+- Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble ([more details](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)
 - Plot maps and timeseries
 - Exported results as csv (table) and geopackage (vector)
 

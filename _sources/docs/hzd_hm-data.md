@@ -25,6 +25,8 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 
 - **WRI** hazard maps are the preferred choice only in cases when 1) data needs to be open/public; 2) explicit climate scenarios are required, however the scientific quality and granularity of this dataset is far from the one offered by Fathom – and far from optimal, in general (low resolution, old baseline, simplified modelling).
 
+[insert map comparison]
+
 It is important to note that pluvial (flash) flood events are extremely hard to model properly on the base of global static hazard maps alone. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures. Because of this, while Fathom does offer pluvial hazard maps, their application for pluvial risk assessment is questionable as it cannot account for these key drivers.
 
 A complementary perspective on flood risk is offered by the [Global Surface Water layer](https://planetarycomputer.microsoft.com/dataset/jrc-gsw) produced by JRC using remote sensing data (Landsat 5, 7, 8) over the period1984-2020. It provides information on all the locations ever detected as max water level, water occurrence, occurrence change, recurrence, seasonality, and seasonality change. However, this layer does not seem to properly account for extreme flood events, I.e. recorded flood events for the period 1984-2020 most often exceed the extent of this layer. Hence it can be used to identify permanent and semi-permanent water bodies, but not to identify the baseline flood extent from past events.

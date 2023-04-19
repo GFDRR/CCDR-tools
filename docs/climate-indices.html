@@ -639,10 +639,10 @@ This is reflected on the technical side, by the challenge to reduce huge dataset
 <ul class="simple">
 <li><p><strong>SSP:</strong> SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8</p></li>
 <li><p><strong>Ensemble member:</strong> r1i1p1f1 (largest number of models available)</p></li>
-<li><p><strong>Ensemble  range:</strong> p25, p50, p75</p></li>
+<li><p><strong>Ensemble  range:</strong> p10, p50, p90</p></li>
 <li><p><strong>Period:</strong> {Historical (1981-2015)}, [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]</p></li>
 <li><p><strong>Time scale:</strong> Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat)</p></li>
-<li><p><strong>Value statistic:</strong> {P25, P50, P75, SD}, [P25, P50, P75]</p></li>
+<li><p><strong>Value statistic:</strong> {P10, P50, P90, SD}, [P10, P50, P90]</p></li>
 </ul>
 </section>
 <section id="processing">
@@ -651,7 +651,7 @@ This is reflected on the technical side, by the challenge to reduce huge dataset
 <li><p>Runs over one selected country and for a specific set of indices depending on selected hazard</p></li>
 <li><p>Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)</p></li>
 <li><p>Consider four 20-years periods (near term, medium term, long term, end of century)</p></li>
-<li><p>Calculate median, 25th percentile (p25) and 75th percentile (p75) of standardised anomaly across models in the ensemble (<a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">more details</a></p></li>
+<li><p>Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble (<a class="reference external" href="https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/">more details</a></p></li>
 <li><p>Plot maps and timeseries</p></li>
 <li><p>Exported results as csv (table) and geopackage (vector)</p></li>
 </ul>

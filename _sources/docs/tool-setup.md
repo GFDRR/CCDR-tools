@@ -101,6 +101,7 @@ Work dir/
   | Integer | String (20) | Integer | String(20) | Integer | String(20) | Integer | String(20) |
 
 - **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.
+
 - **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). The same suggestion about resolution applies here.
 
 	- Population from GHSL, 90 m: `ISO`_POP.tif

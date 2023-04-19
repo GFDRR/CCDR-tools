@@ -1,6 +1,11 @@
 # Natural hazards
 
-Natural (or physical) events are only termed hazards when they have the potential to harm people or cause property damage, social and economic disruption. The location of natural hazards primarily depends on natural processes, including the movement of tectonic plates, the influence of weather systems, and the existence of waterways and slopes (e.g. that might generate landslides). But processes such as urbanization, environmental degradation and climate change can also influence the location, occurrence (frequency) and intensity of natural hazards. These processes are known as risk drivers.
+Natural events (including extreme events and long term phenomena) are only termed hazards when they have the potential to harm people or cause property damage, social and economic disruption. The location of natural hazards primarily depends on natural processes, including the movement of tectonic plates, the influence of weather systems, and the existence of waterways and slopes (e.g. that might generate landslides). But processes such as urbanization, environmental degradation and climate change can also influence the location, occurrence (frequency) and intensity of natural hazards. These processes are known as risk drivers.
+
+- **Geophysical hazards**: Earthquakes, Tsunami, Volcanic activities
+- **Hydro-meteorological hazards**: River and pluvial floods, coastal floods, landslides, tropycal cyclones, drought, extreme heat, wildfires
+
+Climate change has the potential to affect the frequency and intensity of hydrometeorological hazards (see [climate outlook](climate-risk).
 
 ```{seealso}
 **A hazard is a process or phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation. Hazards may be natural, anthropogenic or socionatural in origin (UNDRR 2017).**
