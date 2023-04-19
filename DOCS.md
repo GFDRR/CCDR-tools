@@ -11,9 +11,7 @@ The tools collected in this repository allow to:
 
 As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
 
-[**Cambodia**](Top-down/reports/KHM_RSK.pdf)
-
-- [**Cambodia**](Top-down/reports/KHM_RSK.pdf)
+- [**Cambodia**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/reports/KHM_RSK.pdf)
 - [**Nigeria**](Top-down/reports/NGA_RSK.pdf)
 - [**OECS countries**](Top-down/reports/OECS_RSK.pdf)
 
