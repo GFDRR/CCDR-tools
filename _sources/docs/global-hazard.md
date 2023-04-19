@@ -11,7 +11,7 @@ The most relevant datasets (updated, high resolution, scientific quality) repres
 
 ```{table}
 :name: hzd_datasets
-| <div style="width:80px">Geophysical</div> | <div style="width:80px">Hydro-meteorological</div>  | <div style="width:80px">Environmental factors</div> |
+| <div style="width:150px;align:center">Geophysical</div> | <div style="width:150px;align:center">Hydro-meteorological</div>  | <div style="width:150px;align:center">Environmental factors</div> |
 | -- | -- | -- |
 | Earthquake | River flood | Air pollution |
 | Tsunami | Landslide |   |
@@ -125,8 +125,8 @@ Quick comparison of coastal flood layers over Northern Europe under baseline con
 
 ## Landslide
 Landslides (mass movements) are affected by geological features (rock type and structure) and geomorphological setting (slope gradient). Landslides can be split into two categories depending on their trigger:
-- Dry mass movements (rockfalls, debris flows) are driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation. 
-- Wet mass movements can be triggered by heavy precipitation and flooding and are strongly affected by geological features (e.g. soil type and structure) and geomorphological settings (e.g., slope gradient). They do not typically include avalanches.
+- **Dry mass movement** (rockfalls, debris flows) is driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation. 
+- **Wet mass movement** can be triggered by heavy precipitation and flooding and are strongly affected by geological features (e.g. soil type and structure) and geomorphological settings (e.g., slope gradient). They do not typically include avalanches.
 
 ```{table}
 :name: LS_data
