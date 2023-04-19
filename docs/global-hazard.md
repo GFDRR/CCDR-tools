@@ -33,6 +33,8 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 
 ## Volcanic activity
 
+<hr>
+
 # HYDRO-METEOROLOGICAL HAZARDS
 
 ## River floods
@@ -156,6 +158,8 @@ Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakista
 ## Heat stress
 
 ## Wildfires
+
+<hr>
 
 # ENVIRONMENTAL FACTORS
 

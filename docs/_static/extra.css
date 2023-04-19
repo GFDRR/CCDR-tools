@@ -1,0 +1,71 @@
+body {
+  font-family: "Source Sans Pro",sans-serif;
+  font-size: 100%;
+}
+table {
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+th, td {
+  padding: 8px;
+}
+th {
+  background-color: #0b3860;
+  color: white;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+table th:first-of-type {
+    width: 5%;
+}
+table th:nth-of-type(2) {
+    width: 15%;
+}
+table th:nth-of-type(3) {
+    width: 50%;
+}
+table th:nth-of-type(4) {
+    width: 30%;
+}
+.scrollbar {
+position: relative;
+height: 200px;
+overflow: auto;
+}
+.table-scroll {
+display: block;
+}
+h1, h2, h3 {
+  color: #0b3860;
+}
+
+ul {
+line-height: 1.7em!important;
+margin-bottom: 0.5em!important;
+}
+.section ul li {
+list-style-type: square!important;
+}
+.lis {
+list-style-type: square!important;
+}
+.lic {
+list-style-type: circle!important;
+margin-top: 20px;
+margin-bottom: 20px;
+margin-bottom: 20px;
+margin-right: 20px;
+}
+
+.wy-side-nav-search {
+  background-color: #0b3860;
+}
+.wy-nav-side {
+  color: #ffffff;
+  background: #0b3860;
+}
+svg[id^="mermaid-"] {
+  width: 100%;
+  max-width: 80em;
+}
