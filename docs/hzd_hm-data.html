@@ -1,0 +1,952 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Hydro-Meteorological hazards &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/extra.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/docs/hzd_hm-data.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Environmental factors" href="hzd_env-data.html" />
+    <link rel="prev" title="Geophysical hazards" href="hzd_gp-data.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Climate & Disaster Risk Screening Tools</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Disaster Risk concepts
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro-hazard.html">
+   Natural hazards
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro-exposure.html">
+   Exposure
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro-vulnerability.html">
+   Vulnerability
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro-risk.html">
+   Impact and risk
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="climate-risk.html">
+   Climate outlook
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Global Risk Datasets
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="global-hazard.html">
+   Hazard Datasets
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="hzd_gp-data.html">
+     Geophysical hazards
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Hydro-Meteorological hazards
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="hzd_env-data.html">
+     Environmental factors
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="global-exposure.html">
+   Exposure Datasets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="global-vulnerability.html">
+   Vulnerability Datasets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="rdl.html">
+   Risk Data Library
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="disaster-data.html">
+   Disaster records
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Analytical approaches
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="EAI.html">
+   Expected Annual Impact (EAI)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EAE.html">
+   Expected Annual Exposure (EAE)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="climate-indices.html">
+   Climate indices
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Jupyter Notebooks
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tool-setup.html">
+   Tools setup
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="run-baseline.html">
+   Baseline risk
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Top-down/notebooks/CCDR.html">
+     Choose your hazard:
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Credits
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="team.html">
+   Team and Acknowledgements
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2Fdocs/hzd_hm-data.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/docs/hzd_hm-data.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/docs/hzd_hm-data.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#river-floods">
+   River floods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#coastal-floods-storm-surge">
+   Coastal floods (storm surge)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sea-level-rise">
+     Sea level rise
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#landslide">
+   Landslide
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tropical-cyclones">
+   Tropical cyclones
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#drought-water-scarcity">
+   Drought &amp; Water scarcity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#heat-stress">
+   Heat stress
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#wildfires">
+   Wildfires
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Hydro-Meteorological hazards</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#river-floods">
+   River floods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#coastal-floods-storm-surge">
+   Coastal floods (storm surge)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sea-level-rise">
+     Sea level rise
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#landslide">
+   Landslide
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tropical-cyclones">
+   Tropical cyclones
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#drought-water-scarcity">
+   Drought &amp; Water scarcity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#heat-stress">
+   Heat stress
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#wildfires">
+   Wildfires
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="hydro-meteorological-hazards">
+<h1>Hydro-Meteorological hazards<a class="headerlink" href="#hydro-meteorological-hazards" title="Permalink to this headline">#</a></h1>
+<section id="river-floods">
+<h2>River floods<a class="headerlink" href="#river-floods" title="Permalink to this headline">#</a></h2>
+<p>Flood hazard is commonly described in terms of flood frequency (multiple scenarios) and severity, which is measured in terms of water extent and related depth modelled over Digital Elevation Model (DEM). Inland flood events can be split into 2 categories:</p>
+<ul class="simple">
+<li><p><strong>Fluvial (or river) floods</strong> occur when intense precipitation or snow melt collects in a catchment, causing river(s) to exceed capacity, triggering the overflow, or breaching of barriers and causing the submersion of land, especially along the floodplains.</p></li>
+<li><p><strong>Pluvial (or surface water) floods</strong> are a consequence of heavy rainfall, but unrelated to the presence of water bodies. Fast accumulation of rainfall is due to reduced soil absorbing capacity or due to the saturation of the drainage infrastructures; meaning that the same event intensity can trigger very different risk outcomes depending on those parameters. For this reason, static hazard maps based on rainfall and DEM alone should be used with extreme caution.</p></li>
+</ul>
+<table class="colwidths-auto table" id="fl-data">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Name</strong></p></th>
+<th class="head"><p>Fathom flood hazard maps</p></th>
+<th class="head"><p>Aqueduct flood hazard maps</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Developer</strong></p></td>
+<td><p>Fathom</p></td>
+<td><p>WRI</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Hazard process</strong></p></td>
+<td><p>Fluvial flood, Pluvial flood</p></td>
+<td><p>Fluvial flood</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Resolution</strong></p></td>
+<td><p>90 m</p></td>
+<td><p>900 m</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Analysis type</strong></p></td>
+<td><p>Probabilistic</p></td>
+<td><p>Probabilistic</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Frequency type</strong></p></td>
+<td><p>Return Period (11 RPs)</p></td>
+<td><p>Return Period (10 RPs)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Time reference</strong></p></td>
+<td><p>Baseline (1989-2018)</p></td>
+<td><p>Baseline (1960-1999); Projections  – CMIP5 (2030-2050-2080)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Intensity metric</strong></p></td>
+<td><p>Water depth [m]</p></td>
+<td><p>Water depth [m]</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>License</strong></p></td>
+<td><p>Commercial</p></td>
+<td><p>Open data</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Other</strong></p></td>
+<td><p>Includes defended/undefended option</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Notes</strong></p></td>
+<td><p>Standard for WB analysis</p></td>
+<td><p>The only open flood dataset addressing future hazard scenarios</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>Despite missing projections, <strong>Fathom</strong> modelling has consistently proven to be the preferred option due to its higher quality (better resolution, updated data and a more advanced modelling approach). There are, however, important details and limitations to consider for the correct use and interpretation of the model. The undefended model (FU) is typically the preferred product to use in assessments, since the defended model (FD) does not account for physical presence of defense measures, rather proxies the defense standard by using GDP as proxy (FLOPROS database).</p></li>
+<li><p><strong>WRI</strong> hazard maps are the preferred choice only in cases when 1) data needs to be open/public; 2) explicit climate scenarios are required, however the scientific quality and granularity of this dataset is far from the one offered by Fathom – and far from optimal, in general (low resolution, old baseline, simplified modelling).</p></li>
+</ul>
+<p>It is important to note that pluvial (flash) flood events are extremely hard to model properly on the base of global static hazard maps alone. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures. Because of this, while Fathom does offer pluvial hazard maps, their application for pluvial risk assessment is questionable as it cannot account for these key drivers.</p>
+<p>A complementary perspective on flood risk is offered by the <a class="reference external" href="https://planetarycomputer.microsoft.com/dataset/jrc-gsw">Global Surface Water layer</a> produced by JRC using remote sensing data (Landsat 5, 7, 8) over the period1984-2020. It provides information on all the locations ever detected as max water level, water occurrence, occurrence change, recurrence, seasonality, and seasonality change. However, this layer does not seem to properly account for extreme flood events, I.e. recorded flood events for the period 1984-2020 most often exceed the extent of this layer. Hence it can be used to identify permanent and semi-permanent water bodies, but not to identify the baseline flood extent from past events.</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/GSWL.jpg" src="../_images/GSWL.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Global Surface Water Layer</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="coastal-floods-storm-surge">
+<h2>Coastal floods (storm surge)<a class="headerlink" href="#coastal-floods-storm-surge" title="Permalink to this headline">#</a></h2>
+<p>Coastal floods occur when the level in a water body (sea, estuary) rises to engulf otherwise dry land. This happens mainly due to storm surges, triggered by tropical cyclones and/or strong winds pushing surface water inland. Like for inland floods, hazard intensity is measured using the water extent and associated depth.</p>
+<table class="colwidths-auto table" id="cf-data">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Name</strong></p></th>
+<th class="head"><p>Aqueduct flood hazard maps</p></th>
+<th class="head"><p>Global Flood map</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Developer</strong></p></td>
+<td><p>WRI-Deltares</p></td>
+<td><p>Deltares</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Hazard process</strong></p></td>
+<td><p>Coastal flood</p></td>
+<td><p>Coastal flood, SLR</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Resolution</strong></p></td>
+<td><p>1 km</p></td>
+<td><p>90 m, 1 km, 5 km</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Analysis type</strong></p></td>
+<td><p>Probabilistic</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Frequency type</strong></p></td>
+<td><p>Return Period (10 RPs)</p></td>
+<td><p>Return Period (6 RPs)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Time reference</strong></p></td>
+<td><p>Baseline (1960–1999); Projections – CMIP5 (2030-2050-2080)</p></td>
+<td><p>Baseline (2018); Projections – SLR (2050)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Intensity metric</strong></p></td>
+<td><p>Water depth [m]</p></td>
+<td><p>Water depth [m]</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>License</strong></p></td>
+<td><p>Open data</p></td>
+<td><p>Access requested</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Notes</strong></p></td>
+<td><p>Includes effect of local subsidence (2 datasets) and flood attenuation. Modelled future scenarios.</p></td>
+<td><p>Essentially an evolution of the WRI</p></td>
+</tr>
+</tbody>
+</table>
+<p>The current availability of global dataset is poor, with WRI products (recently updated by Deltares) representing the best option in terms of resolution and time coverage (baseline + scenarios), and water routing, including inundation attenuation to generate more realistic flood extent. The latest version has a much better resolution of 90 m based on MeritDEM or NASADEM, overcoming WRI limitations for local-scale assessment. Note that the Fathom is working to include coastal floods and climate scenarios in the next version (3) of the dataset (coming sometime in 2023/24), which will likely become the best option for risk assessment in the next future.</p>
+<p>Additional datasets that have been previously used in WB coastal flood analytics are:</p>
+<table class="colwidths-auto table" id="cf-data-more">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Name</strong></p></th>
+<th class="head"><p>Coastal flood hazard maps</p></th>
+<th class="head"><p>Coastal risk screening</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Developer</strong></p></td>
+<td><p>Muis et al. (2016, 2020)</p></td>
+<td><p>Climate Central</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Hazard process</strong></p></td>
+<td><p>Coastal flood</p></td>
+<td><p>Mean sea level</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Resolution</strong></p></td>
+<td><p>1 km</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Analysis type</strong></p></td>
+<td><p>Probabilistic</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Frequency type</strong></p></td>
+<td><p>Return Period (10 RPs)</p></td>
+<td><p>One layer per period</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Time reference</strong></p></td>
+<td><p>Baseline (1979–2014)</p></td>
+<td><p>Baseline; Projections</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Intensity metric</strong></p></td>
+<td><p>Water depth [m]</p></td>
+<td><p>Water extent</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>License</strong></p></td>
+<td><p>Open data</p></td>
+<td><p>Licensed</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Notes</strong></p></td>
+<td><p>The update of Muis 2020 has been considered; however, the available data does include easily applicable land inundation, only extreme sea levels.</p></td>
+<td><p>Does use simple bathtub distribution without flood attenuation – does not simulate extreme sea events.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Both these models seem to be affrom a simplified bathtub modelling approach, projecting unrealistic flood extent already under baseline climate conditions.</p>
+<p>As shown in figure below, considering the minimum baseline values (least impact criteria), the flood extent drawn by the Climate Central layer is similar to the baseline RP100 from Muis, in the middle - both generously overestimating water spreading inland even under less extreme scenarios [<em>the locaiton of comparison is chosen as both the Netherlands and N Italy are low-lying areas, which are typically the most difficult to model</em>].
+In comparison, the WRI is far from perfection (it is also a bathtub model), but it seems to apply a more realistic max flood extent, which ultimately makes it more realistic for application.</p>
+<figure class="align-center" id="id2">
+<img alt="../_images/CF_data.jpg" src="../_images/CF_data.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<section id="sea-level-rise">
+<h3>Sea level rise<a class="headerlink" href="#sea-level-rise" title="Permalink to this headline">#</a></h3>
+</section>
+</section>
+<section id="landslide">
+<h2>Landslide<a class="headerlink" href="#landslide" title="Permalink to this headline">#</a></h2>
+<p>Landslides (mass movements) are affected by geological features (rock type and structure) and geomorphological setting (slope gradient). Landslides can be split into two categories depending on their trigger:</p>
+<ul class="simple">
+<li><p><strong>Dry mass movement</strong> (rockfalls, debris flows) is driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation.</p></li>
+<li><p><strong>Wet mass movement</strong> can be triggered by heavy precipitation and flooding and are strongly affected by geological features (e.g. soil type and structure) and geomorphological settings (e.g., slope gradient). They do not typically include avalanches.</p></li>
+</ul>
+<table class="colwidths-auto table" id="ls-data">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Name</strong></p></th>
+<th class="head"><p>Global landslide hazard layer</p></th>
+<th class="head"><p>Global landslide susceptibility layer</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Developer</strong></p></td>
+<td><p>ARUP</p></td>
+<td><p>NASA</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Hazard process</strong></p></td>
+<td><p>Dry (seismic) mass movement Wet (rainfall) mass movement</p></td>
+<td><p>Wet (rainfall) mass movement</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Resolution</strong></p></td>
+<td><p>1 km</p></td>
+<td><p>1 km</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Analysis type</strong></p></td>
+<td><p>Deterministic</p></td>
+<td><p>Deterministic</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Frequency type</strong></p></td>
+<td><p>none</p></td>
+<td><p>none</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Time reference</strong></p></td>
+<td><p>Baseline (rainfall trigger) (1980-2018)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Intensity metric</strong></p></td>
+<td><p>Hazard index [-]</p></td>
+<td><p>Susceptibility index [-]</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>License</strong></p></td>
+<td><p>Open</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Notes</strong></p></td>
+<td><p>Based on NASA landslide susceptibility layer. Median and Mean layers provided.</p></td>
+<td><p>Although not a hazard layer, it can be accounted for in addition to the ARUP layer.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Landslide hazard description can rely on either the NASA Landslide Hazard Susceptibility map (LHASA) or the derived ARUP layer funded by GFDRR in 2019. This dataset considers empirical events from the COOLR database and model both the earthquake and rainfall triggers over the existing LHASA map. The metric of choice is frequency of occurrence of a significant landslide per km2, which is however provided as synthetic index (not directly translatable as time occurrence probability).</p>
+<figure class="align-center" id="id3">
+<img alt="../_images/LS_data.jpg" src="../_images/LS_data.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuos index is displayed into 3 discrete classes (Low, Medium, High).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="tropical-cyclones">
+<h2>Tropical cyclones<a class="headerlink" href="#tropical-cyclones" title="Permalink to this headline">#</a></h2>
+<p>Tropical cyclones (including hurricanes, typhoons) are events that can trigger different hazard processes at once such as strong winds, intense rainfall, extreme waves, and storm surges. In this category, we consider only the wind component of cyclone hazard, while other components (floods, storm surge) are typically considered separately.</p>
+<table class="colwidths-auto table" id="sw-data">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Name</strong></p></th>
+<th class="head"><p>GAR15-IBTrACS</p></th>
+<th class="head"><p>IBTrACSv4</p></th>
+<th class="head"><p>STORMv3</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Developer</strong></p></td>
+<td><p>NOAA</p></td>
+<td><p>NOAA</p></td>
+<td><p>IVM</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Hazard process</strong></p></td>
+<td><p>Strong winds</p></td>
+<td><p>Strong winds</p></td>
+<td><p>Strong winds</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Resolution</strong></p></td>
+<td><p>30 km</p></td>
+<td><p>10 km</p></td>
+<td><p>10 km</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Analysis type</strong></p></td>
+<td><p>Probabilistic</p></td>
+<td><p>Empirical</p></td>
+<td><p>Empirical, Probabilistic</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Frequency type</strong></p></td>
+<td><p>Return Period (5 RPs)</p></td>
+<td><p></p></td>
+<td><p>Return periods (10 10,000 years)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Time reference</strong></p></td>
+<td><p>Baseline (1989-2007)</p></td>
+<td><p>Baseline (1980-2022)</p></td>
+<td><p>Baseline (1984-2022); Projections (2015-2050; SSP5/8.5)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Intensity metric</strong></p></td>
+<td><p>Wind gust speed [5-sec m/s]</p></td>
+<td><p>Many variables</p></td>
+<td><p>Many variables</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>License</strong></p></td>
+<td><p>Open data</p></td>
+<td><p>Open data</p></td>
+<td><p>Open data</p></td>
+</tr>
+</tbody>
+</table>
+<p>A newer version (<a class="reference external" href="https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access">IBTrACSv4</a>) has been released in 2018 and could be leveraged to generate an updated wind-hazard layer, with better resolution and possibly the inclusion of orography effect. There are several attributes tied to each event; the map in figure below shows the USA_WIND variable (Maximum sustained wind speed in knots: 0 - 300 kts) as general intensity measure.</p>
+<p>The STORM database has recently released their new version (<a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_tropical_cyclone_wind_speed_return_periods/12705164/3">STORMv3</a>), which includes synthetic global maps of 1) maximum wind speeds for a fixed set of return periods; and 2) return periods for a fixed set of maximum wind speeds, at 10 km resolution over all ocean basins. In addition, it contains the same set for events occurring within 100 km from a selection of 18 coastal cities and another for events occurring within 100 km from the capital city of an island.
+The STORM dataset comes with <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1">projections</a> as described in <a class="reference external" href="https://www.science.org/doi/10.1126/sciadv.abm8438">Bloemendaal, et al., 2022</a>: those are generated by extracting the climate change signal from each of the four general circulation models listed below, and adding this signal to the historical data from IBTrACS. This new dataset is then used as input for STORM, and resembles future-climate (2015-2050; RCP8.5/SSP5) conditions. Both <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1">synthetic tracks</a> and <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_climate_change_tropical_cyclone_wind_speed_return_periods/14510817">wind speed maps</a> are available.
+These data can be used to calculate tropical cyclone risk in all (coastal) regions prone to tropical cyclones.</p>
+<figure class="align-center" id="id4">
+<img alt="../_images/SW_data.jpg" src="../_images/SW_data.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="drought-water-scarcity">
+<h2>Drought &amp; Water scarcity<a class="headerlink" href="#drought-water-scarcity" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="heat-stress">
+<h2>Heat stress<a class="headerlink" href="#heat-stress" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="wildfires">
+<h2>Wildfires<a class="headerlink" href="#wildfires" title="Permalink to this headline">#</a></h2>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="hzd_gp-data.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Geophysical hazards</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="hzd_env-data.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Environmental factors</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By M. Amadio (GFDRR)<br/>
+  
+    Last updated on Apr 19, 2023.<br/>
+    <div class="extra_footer">
+      <div>
+    <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
+</div>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
