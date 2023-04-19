@@ -11,7 +11,7 @@ The most relevant datasets (updated, high resolution, scientific quality) repres
 
 ```{table}
 :name: hzd_datasets
-Geophysical | Hydro-meteorological | Environmental factors
+<div style="width:100px">Geophysical</div> | <div style="width:100px">Hydro-meteorological</div>  | <div style="width:100px">Environmental factors</div>
 -- | -- | -- 
 Earthquake | River flood | Air pollution
 Tsunami | Landslide |   
