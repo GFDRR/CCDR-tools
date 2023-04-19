@@ -2,6 +2,13 @@
 
 Hydro-meteorological hazards are affected by climate forcing, and, as such, climate change should be accounted when estimating future risk conditions. A forward-looking analysis makes use of climate projections to explore how environmental risks could develop spatially over time.
 
+```{figure} images/hzd_spectrum.png
+---
+width: 100%
+align: center
+---
+```
+
 The estimate of upcoming climate change impacts are based on comparisons of baseline conditions (which can be either observed or simulated) against future scenarios of climate variability. The long-term averages of climate variables serve as the baseline conditions. Changes in projected values against this baseline are then interpreted future climate anomalies and used to project forward-looking disaster risks.
 
 ```{table} Climate variables underlying hazard projections

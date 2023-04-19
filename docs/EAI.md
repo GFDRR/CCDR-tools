@@ -19,7 +19,7 @@ align: center
 The [python notebooks](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period).
 
 ```{note}
-A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization_v2) of these scripts makes use of cpu parallelization.
+A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization) of these scripts makes use of cpu parallelization.
 ```
 
 - User input is required to define country, exposure layer, and settings. Settings affect how the processing runs (min theshold). The script runs on one country and one hazard at time to keep the calculation time manageable.
