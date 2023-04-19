@@ -1,54 +1,6 @@
 # Tools setup
 
-## Environment and libraries
-- The script requires python3 - conda or mamba are encouraged
-- Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
-  In Anaconda cmd prompt:
-
-	`conda create --name CCDR --file <dir/win_env.yml>`
-	
-	`activate CCDR`
-
-Edit the `.env` file inside the notebook directories to specify the working directory:
-
-```
-# Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
-
-# Fill the below with the location of data files
-# Use absolute paths with forward slashes ("/"), and keep the trailing slash
-DATA_DIR = ""
-
-# THE ENTRIES BELOW DO NOT NEED TO BE EDITED
-# Location to store results of analyses
-OUTPUT_DIR = ${DATA_DIR}/RSK/
-
-# Location to store downloaded rasters and other data
-# for the analysis notebooks
-CACHE_DIR = ${DATA_DIR}/cache/
-```
-
-- Navigate to your working directory: `cd <Your work directory>`
-- Run `jupyter notebook`
-- Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
-
-```{figure} images/ccdr-nb.png
----
-align: center
----
-Starting page for the CCDR python notebooks
-```
-
-- Execute all cells. The last one will present the user interface:
-
-```{figure} images/ccdr-nb_settings.png
----
-align: center
----
-Settings from one of the python notebooks
-```
---------------------------------------
-
-### Expected directories and data format
+### Expected directories and input format
 
 - The script expects input data folders to be structured as:
 
@@ -111,3 +63,52 @@ Work dir/
 When resampling EXP layers to a lower resolution, it is **strongly recommended** to align the resampled grid to exactly match the hazard grid.
 
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
+
+<hr>
+
+## Environment and libraries
+- The script requires python3 - conda or mamba are encouraged
+- Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
+  In Anaconda cmd prompt:
+
+	`conda create --name CCDR --file <dir/win_env.yml>`
+	
+	`activate CCDR`
+
+Edit the `.env` file inside the notebook directories to specify the working directory:
+
+```
+# Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
+
+# Fill the below with the location of data files
+# Use absolute paths with forward slashes ("/"), and keep the trailing slash
+DATA_DIR = ""
+
+# THE ENTRIES BELOW DO NOT NEED TO BE EDITED
+# Location to store results of analyses
+OUTPUT_DIR = ${DATA_DIR}/RSK/
+
+# Location to store downloaded rasters and other data
+# for the analysis notebooks
+CACHE_DIR = ${DATA_DIR}/cache/
+```
+
+- Navigate to your working directory: `cd <Your work directory>`
+- Run `jupyter notebook`
+- Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
+
+```{figure} images/ccdr-nb.png
+---
+align: center
+---
+Starting page for the CCDR python notebooks
+```
+
+- Execute all cells. The last one will present the user interface:
+
+```{figure} images/ccdr-nb_settings.png
+---
+align: center
+---
+Settings from one of the python notebooks
+```

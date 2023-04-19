@@ -11,4 +11,5 @@ tr:nth-child(even) {
 }
 .bg-rdl {
   background-color: #0B3860;
+  padding: 25px;
 }

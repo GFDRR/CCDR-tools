@@ -1,15 +1,21 @@
 # Baseline risk
 
-Once required input layers have been created according to standards, the script can run.
+Once required input layers have been created according to [tool setup](tool-setup), the analysis can run.
 
 Select the country of interest, the exposure category and the level of administrative boundaries aggregation.
 
-Note that not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification. Select the analytical approach accordingly.
+```{figure} images/ccdr-nb_settings.png
+---
+align: center
+---
+Settings from one of the python notebooks
+```
 
-![immagine](https://user-images.githubusercontent.com/44863827/156599257-a9f587b4-bcbf-4e6b-9793-6e346945dca5.png)
+Note that not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification (read [more](inro-risk)).
+Select the analytical approach accordingly.
 
-## ANALYTICAL APPROACH = Impact function
-The "function" approach uses a mathematical relationship to calculate impact over exposed categories.
+## Analytical approach: Expected Annual Impact
+This approach uses a mathematical relationship to calculate impact over exposed categories (read [more](EAI)).
 For example, flood hazard impact over population is calculated using a mortality function, while the impact over built-up uses a damage function for buildings.
 
 The functions can be manually edited in the notebook, if a better model is available for the country of interest.
@@ -28,7 +34,13 @@ If you want to inspect all steps of the processing, you can select the option to
 
 - [X] Export Intermediate rasters
 
-***>>> RUN ANALYSIS <<<***
+```{figure} images/run-analysis.png
+---
+:width: 180px
+:align: center
+---
+Click the button to start the processing
+```
 
 Once the run finishes, results are exported as geospatial data (.gpkg) and table (.csv).
 
