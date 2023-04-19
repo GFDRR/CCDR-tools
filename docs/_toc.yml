@@ -12,6 +12,10 @@ parts:
   - caption: Global Risk Datasets
     chapters:
         - file: docs/global-hazard
+	sections:
+          - file: docs/hzd_gp-data
+          - file: docs/hzd_hm-data
+          - file: docs/hzd_env-data
         - file: docs/global-exposure
         - file: docs/global-vulnerability
         - file: docs/rdl
