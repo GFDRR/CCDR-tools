@@ -65,15 +65,37 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 Ensemble_mean(Period_mean(anomaly/hist_SD))
 Ensemble_p50(Period_mean(anomaly/hist_SD))
 ```
+```{figure} images/ci_raw.png
+---
+align: center
+---
+Example of mean standardardised anomaly plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - grid data.
+```
+
    - ADM1-mean values from raster data
 ```
 ADM1_mean(Ensemble_p50(Period_mean(anomaly/hist_SD)))
 ```
+
+```{figure} images/ci_adm.png
+---
+align: center
+---
+Example of mean standardardised anomaly plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - mean for subnational unit.
+```
+
   
 **B) Chart output** (time-series)
    - Spatial data aggregated for country ADM0 boundaries plotted as chart
-  ```
+```
 Ensemble_p10(ADM0_mean(anomaly/hist_SD))
 Ensemble_p50(ADM0_mean(anomaly/hist_SD))
 Ensemble_p90(ADM0_mean(anomaly/hist_SD))
-  ```
+```
+
+```{figure} images/ci_tseries.png
+---
+align: center
+---
+Example of mean standardardised anomaly plotted for one climate index over Pakistan, timeserie up to 2100,  3 SSP scenarios - mean at country level.
+```
