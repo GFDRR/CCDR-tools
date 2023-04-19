@@ -3,6 +3,8 @@ table {
 }
 th {
   background-color: #bfbfbf;
+  text-align: center;
+  vertical-align: middle;
 }
 tr:nth-child(even) {
   background-color: #f2f2f2;
