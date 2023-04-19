@@ -10,7 +10,7 @@ Exposure datasets developed by WB disaster risk projects have been placed in a s
 Below is a quick link to openly-licensed datasets that are used by the CCDR standard screening tool.
 
 ```{table}
-:name: foundational_datasets
+:name: exp_datasets
 
 | **Name** | **Developer** | **Metric** | **Resolution** | **Update frequency** |
 |---:|---:|---:|---:|---:|
