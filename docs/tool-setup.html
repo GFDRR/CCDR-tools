@@ -446,16 +446,14 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#expected-directories-and-input-format">
+   Expected directories and input format
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#environment-and-libraries">
    Environment and libraries
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#expected-directories-and-data-format">
-     Expected directories and data format
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -477,16 +475,14 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#expected-directories-and-input-format">
+   Expected directories and input format
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#environment-and-libraries">
    Environment and libraries
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#expected-directories-and-data-format">
-     Expected directories and data format
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -500,55 +496,8 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="tools-setup">
 <h1>Tools setup<a class="headerlink" href="#tools-setup" title="Permalink to this headline">#</a></h1>
-<section id="environment-and-libraries">
-<h2>Environment and libraries<a class="headerlink" href="#environment-and-libraries" title="Permalink to this headline">#</a></h2>
-<ul>
-<li><p>The script requires python3 - conda or mamba are encouraged</p></li>
-<li><p>Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
-In Anaconda cmd prompt:</p>
-<p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">CCDR</span> <span class="pre">--file</span> <span class="pre">&lt;dir/win_env.yml&gt;</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">CCDR</span></code></p>
-</li>
-</ul>
-<p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file inside the notebook directories to specify the working directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
-
-# Fill the below with the location of data files
-# Use absolute paths with forward slashes (&quot;/&quot;), and keep the trailing slash
-DATA_DIR = &quot;&quot;
-
-# THE ENTRIES BELOW DO NOT NEED TO BE EDITED
-# Location to store results of analyses
-OUTPUT_DIR = ${DATA_DIR}/RSK/
-
-# Location to store downloaded rasters and other data
-# for the analysis notebooks
-CACHE_DIR = ${DATA_DIR}/cache/
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
-<li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">CCDR.ipynb</a> and chose the hazard to analyse.</p></li>
-</ul>
-<figure class="align-center" id="id1">
-<img alt="../_images/ccdr-nb.png" src="../_images/ccdr-nb.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 18 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-<ul class="simple">
-<li><p>Execute all cells. The last one will present the user interface:</p></li>
-</ul>
-<figure class="align-center" id="id2">
-<img alt="../_images/ccdr-nb_settings.png" src="../_images/ccdr-nb_settings.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-<hr class="docutils" />
-<section id="expected-directories-and-data-format">
-<h3>Expected directories and data format<a class="headerlink" href="#expected-directories-and-data-format" title="Permalink to this headline">#</a></h3>
+<section id="expected-directories-and-input-format">
+<h2>Expected directories and input format<a class="headerlink" href="#expected-directories-and-input-format" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>The script expects input data folders to be structured as:</p></li>
 </ul>
@@ -675,7 +624,55 @@ CACHE_DIR = ${DATA_DIR}/cache/
 </li>
 </ul>
 <p>When resampling EXP layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid.</p>
-<img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png"></section>
+<img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
+<hr>
+</section>
+<section id="environment-and-libraries">
+<h2>Environment and libraries<a class="headerlink" href="#environment-and-libraries" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>The script requires python3 - conda or mamba are encouraged</p></li>
+<li><p>Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
+In Anaconda cmd prompt:</p>
+<p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">CCDR</span> <span class="pre">--file</span> <span class="pre">&lt;dir/win_env.yml&gt;</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">CCDR</span></code></p>
+</li>
+</ul>
+<p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file inside the notebook directories to specify the working directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
+
+# Fill the below with the location of data files
+# Use absolute paths with forward slashes (&quot;/&quot;), and keep the trailing slash
+DATA_DIR = &quot;&quot;
+
+# THE ENTRIES BELOW DO NOT NEED TO BE EDITED
+# Location to store results of analyses
+OUTPUT_DIR = ${DATA_DIR}/RSK/
+
+# Location to store downloaded rasters and other data
+# for the analysis notebooks
+CACHE_DIR = ${DATA_DIR}/cache/
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
+<li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">CCDR.ipynb</a> and chose the hazard to analyse.</p></li>
+</ul>
+<figure class="align-center" id="id1">
+<img alt="../_images/ccdr-nb.png" src="../_images/ccdr-nb.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 18 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p>Execute all cells. The last one will present the user interface:</p></li>
+</ul>
+<figure class="align-center" id="id2">
+<img alt="../_images/ccdr-nb_settings.png" src="../_images/ccdr-nb_settings.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 

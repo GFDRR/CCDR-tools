@@ -446,8 +446,8 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#analytical-approach-impact-function">
-   ANALYTICAL APPROACH = Impact function
+  <a class="reference internal nav-link" href="#analytical-approach-expected-annual-impact">
+   Analytical approach: Expected Annual Impact
   </a>
  </li>
 </ul>
@@ -470,8 +470,8 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#analytical-approach-impact-function">
-   ANALYTICAL APPROACH = Impact function
+  <a class="reference internal nav-link" href="#analytical-approach-expected-annual-impact">
+   Analytical approach: Expected Annual Impact
   </a>
  </li>
 </ul>
@@ -486,13 +486,19 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="baseline-risk">
 <h1>Baseline risk<a class="headerlink" href="#baseline-risk" title="Permalink to this headline">#</a></h1>
-<p>Once required input layers have been created according to standards, the script can run.</p>
+<p>Once required input layers have been created according to <a class="reference internal" href="tool-setup.html"><span class="doc std std-doc">tool setup</span></a>, the analysis can run.</p>
 <p>Select the country of interest, the exposure category and the level of administrative boundaries aggregation.</p>
-<p>Note that not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification. Select the analytical approach accordingly.</p>
-<p><img alt="immagine" src="https://user-images.githubusercontent.com/44863827/156599257-a9f587b4-bcbf-4e6b-9793-6e346945dca5.png" /></p>
-<section id="analytical-approach-impact-function">
-<h2>ANALYTICAL APPROACH = Impact function<a class="headerlink" href="#analytical-approach-impact-function" title="Permalink to this headline">#</a></h2>
-<p>The “function” approach uses a mathematical relationship to calculate impact over exposed categories.
+<figure class="align-center" id="id1">
+<img alt="../_images/ccdr-nb_settings.png" src="../_images/ccdr-nb_settings.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 20 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Note that not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification (read <span class="xref myst">more</span>).
+Select the analytical approach accordingly.</p>
+<section id="analytical-approach-expected-annual-impact">
+<h2>Analytical approach: Expected Annual Impact<a class="headerlink" href="#analytical-approach-expected-annual-impact" title="Permalink to this headline">#</a></h2>
+<p>This approach uses a mathematical relationship to calculate impact over exposed categories (read <a class="reference internal" href="EAI.html"><span class="doc std std-doc">more</span></a>).
 For example, flood hazard impact over population is calculated using a mortality function, while the impact over built-up uses a damage function for buildings.</p>
 <p>The functions can be manually edited in the notebook, if a better model is available for the country of interest.</p>
 <img width=700 src="https://user-images.githubusercontent.com/44863827/156601011-5b8cf8af-8703-4d2a-8dbf-698b9e132b6f.png">
@@ -504,7 +510,6 @@ For example, flood hazard impact over population is calculated using a mortality
 <ul class="contains-task-list simple">
 <li class="task-list-item"><p><input class="task-list-item-checkbox" checked="checked" disabled="disabled" type="checkbox"> Export Intermediate rasters</p></li>
 </ul>
-<p><em><strong>&gt;&gt;&gt; RUN ANALYSIS &lt;&lt;&lt;</strong></em></p>
 <p>Once the run finishes, results are exported as geospatial data (.gpkg) and table (.csv).</p>
 <p>By selecting</p>
 <ul class="contains-task-list simple">
