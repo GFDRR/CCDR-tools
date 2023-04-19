@@ -33,6 +33,7 @@ See the picture below as example: the landslide hazard (first map) is represente
 width: 100%
 align: center
 ---
+```
 
 A probabilistic hazard representation is required in order to produce probabilistic risk mapping.
 

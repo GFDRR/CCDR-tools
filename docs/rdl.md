@@ -2,6 +2,13 @@
 
 Introduce [Risk Data Library](riskdatalibrary.org).
 
+```{figure} images/rdl_attributes.png
+---
+width: 100%
+align: center
+---
+```
+
 **Foundational Datasets** refer to **global, free to use risk datasets** that can be included in risk screening projects. Most of these datasets can be obtained through the WB Development Data Hub, being collected into the [Risk Data Library Collection](https://datacatalog.worldbank.org/int/search/collections/rdl).
 
 ```{note}
