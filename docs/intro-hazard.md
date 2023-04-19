@@ -5,7 +5,7 @@ Natural events (including extreme events and long term phenomena) are only terme
 - **Geophysical hazards**: Earthquakes, Tsunami, Volcanic activities
 - **Hydro-meteorological hazards**: River and pluvial floods, coastal floods, landslides, tropycal cyclones, drought, extreme heat, wildfires
 
-Climate change has the potential to affect the frequency and intensity of hydrometeorological hazards (see [climate outlook](climate-risk).
+Climate change has the potential to affect the frequency and intensity of hydrometeorological hazards (see [**climate outlook**](climate-risk)).
 
 ```{seealso}
 **A hazard is a process or phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation. Hazards may be natural, anthropogenic or socionatural in origin (UNDRR 2017).**

@@ -14,7 +14,7 @@ The estimate of upcoming climate change impacts are based on comparisons of base
 ```{table} Climate variables underlying hazard projections
 :name: climate_indices
 **Hazard** | **Associated climate indices** | **Unit of measurement**
----|---|---
+---:|---|---
 Floods and Landslides | Rainfall > 10 mm | Days per year
 Floods and Landslides | Consecutive wet days | Days per year
 Floods and Landslides | Maximum 5-day precipitation | mm
