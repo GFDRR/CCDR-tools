@@ -12,7 +12,7 @@ The most relevant datasets (updated, high resolution, scientific quality) repres
 ```{table}
 :name: hzd_datasets
 | [**GEOPHYSICAL**](hzd_gp-data.md) <img width="200">| [**HYDRO-METEOROLOGICAL**](hzd_hm-data.md) <img width="200"> | [**ENVIRONMENTAL FACTORS**](hzd_env-data.md) <img width="200"> |
-| -- | -- | -- |
+| :--: | :--: | :--: |
 | Earthquake | River flood | Air pollution |
 | Tsunami | Landslide |   |
 | Volcanic activity | Coastal flood |  |
