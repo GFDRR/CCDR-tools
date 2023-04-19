@@ -9,6 +9,8 @@ Hazard datasets developed by WB disaster risk projects have been placed in a spe
 
 The most relevant datasets (updated, high resolution, scientific quality) representing extreme events and long-term hazards that were considered for inclusion in the CCDR and other risk-related activities across the Bank have been listed below for each hazard, explaining their pros and cons and providing suggestions for improvement.
 
+```{table}
+:name: hzd_datasets
 Geophysical | Hydro-meteorological | Environmental factors
 -- | -- | -- 
 Earthquake | River flood | Air pollution
@@ -18,6 +20,7 @@ Volcanic activity | Coastal flood |
   | Drought |  
   | Extreme heat |  
   | Wildfires |  
+```
 
 Some hazards are modelled using a **probabilistic approach**, providing a set of scenarios linked to hazard frequency for the period of reference. For the current data availability, this is the case for floods, storm surges, cyclones, heatwaves, and wildfires.
 Others, such as landslides, use a **deterministic approach**, providing an individual map of hazard intensity or susceptibility.
@@ -37,6 +40,8 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 - **Fluvial (or river) floods** occur when intense precipitation or snow melt collects in a catchment, causing river(s) to exceed capacity, triggering the overflow, or breaching of barriers and causing the submersion of land, especially along the floodplains.
 - **Pluvial (or surface water) floods** are a consequence of heavy rainfall, but unrelated to the presence of water bodies. Fast accumulation of rainfall is due to reduced soil absorbing capacity or due to the saturation of the drainage infrastructures; meaning that the same event intensity can trigger very different risk outcomes depending on those parameters. For this reason, static hazard maps based on rainfall and DEM alone should be used with extreme caution.
 
+```{table}
+:name: FL_data
 **Name** | Fathom   flood hazard maps | Aqueduct   flood hazard maps
 -- | -- | --
 **Developer** | Fathom | WRI
@@ -49,6 +54,7 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 **License** | Commercial | Open data
 **Other** | Includes defended/undefended option |  
 **Notes** | Standard for WB analysis | The only open flood dataset addressing future hazard scenarios
+```
 
 - Despite missing projections, **Fathom** modelling has consistently proven to be the preferred option due to its higher quality (better resolution, updated data and a more advanced modelling approach). There are, however, important details and limitations to consider for the correct use and interpretation of the model. The undefended model (FU) is typically the preferred product to use in assessments, since the defended model (FD) does not account for physical presence of defense measures, rather proxies the defense standard by using GDP as proxy (FLOPROS database).
 
@@ -68,6 +74,8 @@ Global Surface Water Layer
 ## Coastal floods (storm surge)
 Coastal floods occur when the level in a water body (sea, estuary) rises to engulf otherwise dry land. This happens mainly due to storm surges, triggered by tropical cyclones and/or strong winds pushing surface water inland. Like for inland floods, hazard intensity is measured using the water extent and associated depth.
 
+```{table}
+:name: CF_data
 | **Name** | Aqueduct flood hazard maps | Global Flood map |
 |---|---|---|
 | **Developer** | WRI-Deltares | Deltares |
@@ -79,11 +87,14 @@ Coastal floods occur when the level in a water body (sea, estuary) rises to engu
 | **Intensity metric** | Water depth [m] | Water depth [m] |
 | **License** | Open data | Access requested |
 | **Notes** | Includes effect of local subsidence (2 datasets) and flood attenuation. Modelled future scenarios. | Essentially an evolution of the WRI |
+```
 
 The current availability of global dataset is poor, with WRI products (recently updated by Deltares) representing the best option in terms of resolution and time coverage (baseline + scenarios), and water routing, including inundation attenuation to generate more realistic flood extent. The latest version has a much better resolution of 90 m based on MeritDEM or NASADEM, overcoming WRI limitations for local-scale assessment. Note that the Fathom is working to include coastal floods and climate scenarios in the next version (3) of the dataset (coming sometime in 2023/24), which will likely become the best option for risk assessment in the next future.
 
 Additional datasets that have been previously used in WB coastal flood analytics are:
 
+```{table}
+:name: CF_data_more
 | **Name** | Coastal flood hazard maps | Coastal risk screening |
 |---|---|---|
 | **Developer** | Muis et al. (2016, 2020) | Climate Central |
@@ -95,6 +106,7 @@ Additional datasets that have been previously used in WB coastal flood analytics
 | **Intensity metric** | Water depth [m] | Water extent |
 | **License** | Open data | Licensed |
 | **Notes** | The update of Muis 2020 has been considered; however, the available data does include easily applicable land inundation, only extreme sea levels. | Does use simple bathtub distribution without flood attenuation – does not simulate extreme sea events. |
+```
 
 Both these models seem to be affrom a simplified bathtub modelling approach, projecting unrealistic flood extent already under baseline climate conditions.
 
@@ -114,6 +126,8 @@ Landslides (mass movements) are affected by geological features (rock type and s
 - Dry mass movements (rockfalls, debris flows) are driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation. 
 - Wet mass movements can be triggered by heavy precipitation and flooding and are strongly affected by geological features (e.g. soil type and structure) and geomorphological settings (e.g., slope gradient). They do not typically include avalanches.
 
+```{table}
+:name: LS_data
 | **Name** | Global landslide hazard layer | Global landslide susceptibility layer |
 |---|---|---|
 | **Developer** | ARUP | NASA |
@@ -125,6 +139,7 @@ Landslides (mass movements) are affected by geological features (rock type and s
 | **Intensity metric** | Hazard index [-] | Susceptibility index [-] |
 | **License** | Open | |
 | **Notes** | Based on NASA landslide susceptibility layer. Median and Mean layers provided. | Although not a hazard layer, it can be accounted for in addition to the ARUP layer. |
+```
 
 Landslide hazard description can rely on either the NASA Landslide Hazard Susceptibility map (LHASA) or the derived ARUP layer funded by GFDRR in 2019. This dataset considers empirical events from the COOLR database and model both the earthquake and rainfall triggers over the existing LHASA map. The metric of choice is frequency of occurrence of a significant landslide per km2, which is however provided as synthetic index (not directly translatable as time occurrence probability).
 
