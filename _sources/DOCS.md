@@ -11,9 +11,9 @@ The tools allow to:
 
 As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
 
-- [**Cambodia**](Top-down/reports/khm_rsk.pdf)
-- [**Nigeria**](Top-down/reports/nga_rsk.pdf)
-- [**OECS countries**](Top-down/reports/oecs_rsk.pdf)
+- [**Cambodia**](Top-down/reports/KHM_RSK.pdf)
+- [**Nigeria**](Top-down/reports/NGA_RSK.pdf)
+- [**OECS countries**](Top-down/reports/OECS_RSK.pdf)
 
 ## Disaster risk framework
 

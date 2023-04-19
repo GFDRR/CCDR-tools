@@ -9,3 +9,6 @@ th {
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+.bg-rdl {
+  background-color: #0B3860;
+}
