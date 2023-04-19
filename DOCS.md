@@ -1,8 +1,8 @@
 # Climate & Disaster Risk Screening Tools
 
-A collection of scripted tools developed alongside the World Bank's [Country Climate and Development Report](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2023).
+A collection of scripted tools developed alongside the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2023).
 
-The tools allow to:
+The tools collected in this repository allow to:
 
 - Perform disaster risk analysis at sub-national level based on global datasets
 - Combine risk and poverty information
@@ -11,7 +11,9 @@ The tools allow to:
 
 As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
 
-- [**Cambodia**](./Top-down/reports/KHM_RSK.pdf)
+[**Cambodia**](Top-down/reports/KHM_RSK.pdf)
+
+- [**Cambodia**](Top-down/reports/KHM_RSK.pdf)
 - [**Nigeria**](Top-down/reports/NGA_RSK.pdf)
 - [**OECS countries**](Top-down/reports/OECS_RSK.pdf)
 
