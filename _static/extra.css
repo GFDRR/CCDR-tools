@@ -1,23 +1,9 @@
 table {
-  border-collapse: collapse;
-  font-size: 0.85em;
+  font-size: 0.90em;
 }
 th {
-  background-color: #0b3860;
-  color: white;
+  background-color: #bfbfbf;
 }
 tr:nth-child(even) {
   background-color: #f2f2f2;
-}
-table th:first-of-type {
-    width: 5%;
-}
-table th:nth-of-type(2) {
-    width: 15%;
-}
-table th:nth-of-type(3) {
-    width: 50%;
-}
-table th:nth-of-type(4) {
-    width: 30%;
 }
