@@ -31,11 +31,21 @@ CACHE_DIR = ${DATA_DIR}/cache/
 - Run `jupyter notebook`
 - Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
 
-  <img width=500 src="https://user-images.githubusercontent.com/44863827/170250738-03ad2f05-a128-4d84-ab27-01dcec54c4e4.png">
+```{figure} images/ccdr-nb.png
+---
+align: center
+---
+Starting page for the CCDR python notebooks
+```
+
 - Execute all cells. The last one will present the user interface:
 
-  <img width=500 src="https://user-images.githubusercontent.com/44863827/156407683-c5613196-53bc-4ee5-81b7-d94b4fdbf295.png">
-
+```{figure} images/ccdr-nb_settings.png
+---
+align: center
+---
+Settings from one of the python notebooks
+```
 --------------------------------------
 
 ### Expected directories and data format
@@ -66,25 +76,25 @@ Work dir/
 - All spatial data must use CRS `EPSG 4326`
 - Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:
 
-  - ADM0:
+  - **ADM0**
 
   | ISO3166_a2 | ISO3166_a3 | ADM0_CODE | ADM0_NAME | 
   |---|---|---|---|
   | String(2) | String(3) | Integer | String (20) |
  
-  - ADM1
+  - **ADM1**
 
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | 
   |---|---|---|---|
   | Integer | String (20) | Integer | String(20) |
 
-  - ADM2
+  - **ADM2**
 
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | 
   |---|---|---|---|---|---|
   | Integer | String (20) | Integer | String(20) | Integer | String(20) |
 
-  - ADM3
+  - **ADM3**
   
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | ADM3_CODE | ADM3_NAME | 
   |---|---|---|---|---|---|---|---|
@@ -93,7 +103,7 @@ Work dir/
 - **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.
 - **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). The same suggestion about resolution applies here.
 
-	- Population from Worldpop, 90 m: `ISO`_POP.tif
+	- Population from GHSL, 90 m: `ISO`_POP.tif
 	- Built-up from World Settlement Footprint or equivalent, 90 m: `ISO`_BUP.tif
 	- Agriculture from land cover map, ESA land cover or equivalent, 90 m: `ISO`_AGR.tif
 

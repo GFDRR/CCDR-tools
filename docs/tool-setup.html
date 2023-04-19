@@ -526,16 +526,26 @@ OUTPUT_DIR = ${DATA_DIR}/RSK/
 CACHE_DIR = ${DATA_DIR}/cache/
 </pre></div>
 </div>
-<ul>
+<ul class="simple">
 <li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
-<li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">CCDR.ipynb</a> and chose the hazard to analyse.</p>
-<img width=500 src="https://user-images.githubusercontent.com/44863827/170250738-03ad2f05-a128-4d84-ab27-01dcec54c4e4.png">
-</li>
-<li><p>Execute all cells. The last one will present the user interface:</p>
-<img width=500 src="https://user-images.githubusercontent.com/44863827/156407683-c5613196-53bc-4ee5-81b7-d94b4fdbf295.png">
-</li>
+<li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">CCDR.ipynb</a> and chose the hazard to analyse.</p></li>
 </ul>
+<figure class="align-center" id="id1">
+<img alt="../_images/ccdr-nb.png" src="../_images/ccdr-nb.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 17 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p>Execute all cells. The last one will present the user interface:</p></li>
+</ul>
+<figure class="align-center" id="id2">
+<img alt="../_images/ccdr-nb_settings.png" src="../_images/ccdr-nb_settings.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 18 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 <hr class="docutils" />
 <section id="expected-directories-and-data-format">
 <h3>Expected directories and data format<a class="headerlink" href="#expected-directories-and-data-format" title="Permalink to this headline">#</a></h3>
@@ -567,7 +577,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <li><p>All spatial data must use CRS <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code></p></li>
 <li><p>Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:</p>
 <ul class="simple">
-<li><p>ADM0:</p></li>
+<li><p><strong>ADM0</strong></p></li>
 </ul>
 <table class="colwidths-auto table">
 <thead>
@@ -586,7 +596,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
 </tbody>
 </table>
 <ul class="simple">
-<li><p>ADM1</p></li>
+<li><p><strong>ADM1</strong></p></li>
 </ul>
 <table class="colwidths-auto table">
 <thead>
@@ -605,7 +615,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
 </tbody>
 </table>
 <ul class="simple">
-<li><p>ADM2</p></li>
+<li><p><strong>ADM2</strong></p></li>
 </ul>
 <table class="colwidths-auto table">
 <thead>
@@ -628,7 +638,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
 </tbody>
 </table>
 <ul class="simple">
-<li><p>ADM3</p></li>
+<li><p><strong>ADM3</strong></p></li>
 </ul>
 <table class="colwidths-auto table">
 <thead>
@@ -658,7 +668,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_HZD_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
 <li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_EXP.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). The same suggestion about resolution applies here.</p>
 <ul class="simple">
-<li><p>Population from Worldpop, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</p></li>
+<li><p>Population from GHSL, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</p></li>
 <li><p>Built-up from World Settlement Footprint or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BUP.tif</p></li>
 <li><p>Agriculture from land cover map, ESA land cover or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</p></li>
 </ul>

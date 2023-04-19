@@ -51,6 +51,6 @@ Land cover information at 10 m resolution over Senegal as obtained from ESA Worl
 For a more granular analysis of agricultural impacts, additional exposure datasets can be considered.
 
 | **Name** | **Developer** | **Metric** | **Resolution** | **Last update** |
-|---:|---:|---:|---:|---:|
+|---:|:---:|:---:|:---:|:---:|
 | [Global Agro-Ecological Zones (GAEZ)](https://gaez.fao.org/) | FAO | The GAEZ v4 spatial data cover six themes: (1) Land and Water Resources, (2) Agro-climatic Resources, (3) Agro-climatic Potential Yield, (4) Suitability and Attainable Yield, (5) Actual Yields and Production, and (6) Yield and Production Gaps | 1 km | 2010 |
 | [Gridded Livestock of the World (GLW)](https://www.fao.org/livestock-systems/global-distributions/en/) | FAO | Global distributions of cattle, buffaloes, sheep, goats, horses, pigs, chickens and ducks | 10 km | 2015 |
