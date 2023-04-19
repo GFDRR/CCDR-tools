@@ -44,8 +44,8 @@ Starting page for the CCDR python notebooks
 ---
 align: center
 ---
-Starting page for the CCDR python notebooks
-
+Settings from one of the python notebooks
+```
 --------------------------------------
 
 ### Expected directories and data format
