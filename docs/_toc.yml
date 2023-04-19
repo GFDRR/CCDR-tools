@@ -12,7 +12,7 @@ parts:
   - caption: Global Risk Datasets
     chapters:
         - file: docs/global-hazard
-	  sections:
+          sections:
           - file: docs/hzd_gp-data
           - file: docs/hzd_hm-data
           - file: docs/hzd_env-data
@@ -24,7 +24,7 @@ parts:
     chapters:
       - file: docs/EAI
       - file: docs/EAE
-      - file: docs/climate-indices.md
+      - file: docs/climate-indices
   - caption: Jupyter Notebooks
     chapters:
       - file: docs/tool-setup
