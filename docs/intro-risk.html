@@ -446,13 +446,8 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#hazard-and-exposure-combinations">
-   Hazard and exposure combinations
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#probability-of-impact">
-   Probability of impact
+  <a class="reference internal nav-link" href="#determimistic-and-probabilistic-risk">
+   Determimistic and probabilistic risk
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -466,6 +461,16 @@ title="Print to PDF"
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#supported-hazard-and-exposure-combinations">
+   Supported Hazard and exposure combinations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#uncertainty">
+   Uncertainty
+  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#risk-outlook-using-climate-indices">
@@ -492,13 +497,8 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#hazard-and-exposure-combinations">
-   Hazard and exposure combinations
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#probability-of-impact">
-   Probability of impact
+  <a class="reference internal nav-link" href="#determimistic-and-probabilistic-risk">
+   Determimistic and probabilistic risk
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -512,6 +512,16 @@ title="Print to PDF"
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#supported-hazard-and-exposure-combinations">
+   Supported Hazard and exposure combinations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#uncertainty">
+   Uncertainty
+  </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#risk-outlook-using-climate-indices">
@@ -539,19 +549,16 @@ title="Print to PDF"
 <li><p><strong><a class="reference external" href="https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk">UNDRR Risk overview</a></strong></p></li>
 </ul>
 </div>
-<section id="hazard-and-exposure-combinations">
-<h2>Hazard and exposure combinations<a class="headerlink" href="#hazard-and-exposure-combinations" title="Permalink to this headline">#</a></h2>
-<p>The following matrix show the combinations of hazard and exposure for which a vulnerability model is provided, and the type of model, allowing to express the risk either in form of impact (damage) or exposure to hazard classes.</p>
-<figure class="align-center" id="id1">
-<img alt="../_images/rsk_combo.png" src="../_images/rsk_combo.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - grid data.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-</section>
-<section id="probability-of-impact">
-<h2>Probability of impact<a class="headerlink" href="#probability-of-impact" title="Permalink to this headline">#</a></h2>
-<p>When probabilistic hazard scenarios (multiple layers by Return Period) are available to describe hazard intensity in relation to their occurrence frequency, a mean estimate of Expected Annual Impact (EAI) over exposed categories can be calculated.</p>
+<section id="determimistic-and-probabilistic-risk">
+<h2>Determimistic and probabilistic risk<a class="headerlink" href="#determimistic-and-probabilistic-risk" title="Permalink to this headline">#</a></h2>
+<p>While historical losses can explain the past, they do not necessarily provide a good guide to the future; <em>most disasters that could happen have not happened yet</em>. Probabilistic risk assessment simulates those future disasters which, based on scientific evidence, are likely to occur. As a result, these risk assessments resolve the problem posed by the limits of historical data. Probabilistic models therefore “complete” historical records by reproducing the physics of the phenomena and recreating the intensity of a large number of synthetic events.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the context of disaster risk, probability refers to the frequency of occurrence or the return period of losses associated with hazardous events.</p>
+</div>
+<p><strong>Probabilistic risk</strong> is the chance of something adverse occurring. This method assesses the likelihood of an event(s) and it contains the idea of uncertainty because it incorporates the concept of randomness.</p>
+<p>In contrast, a <strong>deterministic risk</strong> model typically models one scenarios, representing a real event or an individual, finite risk scenario (e.g. mean, median, worst case), but does not quantify the variability around it.</p>
+<p>When probabilistic hazard scenarios (multiple layers by Return Period) are available to calculate impacts in relation to occurrence frequency, an estimate of the Expected Annual Impact (EAI) over exposed categories can be calculated.</p>
 </section>
 <section id="annual-risk-baseline">
 <h2>Annual risk baseline<a class="headerlink" href="#annual-risk-baseline" title="Permalink to this headline">#</a></h2>
@@ -562,8 +569,21 @@ title="Print to PDF"
 </ul>
 <section id="lower-and-upper-bounds">
 <h3>Lower and Upper bounds<a class="headerlink" href="#lower-and-upper-bounds" title="Permalink to this headline">#</a></h3>
-<p>Originally, the calculation of EAI was performed using the customary approach, as exempliefied <a class="reference external" href="https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac">here</a> and [CIT].</p>
+<p>Originally, the calculation of EAI was performed using the customary approach, as exemplified <a class="reference external" href="https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac">here</a> and <a class="reference external" href="https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets">here</a>.</p>
 </section>
+</section>
+<section id="supported-hazard-and-exposure-combinations">
+<h2>Supported Hazard and exposure combinations<a class="headerlink" href="#supported-hazard-and-exposure-combinations" title="Permalink to this headline">#</a></h2>
+<p>The following matrix show the combinations of hazard and exposure for which a vulnerability model is provided, and the type of model, allowing to express the risk either in form of impact (damage) or exposure to hazard classes.</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/rsk_combo.png" src="../_images/rsk_combo.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - grid data.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="uncertainty">
+<h2>Uncertainty<a class="headerlink" href="#uncertainty" title="Permalink to this headline">#</a></h2>
 </section>
 <section id="risk-outlook-using-climate-indices">
 <h2>Risk outlook using climate indices<a class="headerlink" href="#risk-outlook-using-climate-indices" title="Permalink to this headline">#</a></h2>
