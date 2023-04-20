@@ -551,28 +551,28 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="expected-annual-impact-eai">
 <h1>Expected Annual Impact (EAI)<a class="headerlink" href="#expected-annual-impact-eai" title="Permalink to this headline">#</a></h1>
 <p>This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories, as explained in the <a class="reference internal" href="intro-risk.html"><span class="doc std std-doc"><strong>risk concepts</strong></span></a>.
-In order to calculate impacts, we need some <a class="reference internal" href="intro-hazard.html"><span class="doc std std-doc"><strong>probabilistic hazards datasets</strong></span></a> and aligned <a class="reference internal" href="intro-vulnerability.html"><span class="doc std std-doc"><strong>impact model</strong></span></a>. In relation to the global datasets currently available, these is possible for:</p>
+In order to calculate impacts, we need some <a class="reference internal" href="intro-hazard.html"><span class="doc std std-doc"><strong>probabilistic hazards datasets</strong></span></a> and aligned <a class="reference internal" href="intro-vulnerability.html"><span class="doc std std-doc"><strong>vulnerability model</strong></span></a>. In relation to the global datasets currently available, these is possible for:</p>
 <ul class="simple">
 <li><p><strong><a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Flood.ipynb">Floods</a></strong>: using water depth as hazard intensity measure, calculates mortality over population and damage over built-up.</p></li>
 <li><p><strong><a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Tropical_cyclones.ipynb">Tropical Cyclone - Strong Winds</a></strong>: using wind speed as hazard intensity measure, calculates wind damage over built-up.</p></li>
 </ul>
 <p>The EAI is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/EAI.png"><img alt="../_images/EAI.png" src="../_images/EAI.png" style="width: 400px;" /></a>
+</figure>
 <section id="script-overview">
 <h2>SCRIPT OVERVIEW<a class="headerlink" href="#script-overview" title="Permalink to this headline">#</a></h2>
-<p>The <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">python notebooks</a> performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period).</p>
+<p>The <a class="reference internal" href="run-baseline.html"><span class="doc std std-doc">notebooks for EAI calculation</span></a> performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization">developer version (<strong>beta</strong>)</a> of these scripts makes use of cpu parallelization.</p>
 </div>
-</section>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/EAI.png"><img alt="../_images/EAI.png" src="../_images/EAI.png" style="width: 400px;" /></a>
-</figure>
 <ul class="simple">
 <li><p>User input is required to define country, exposure layer, and settings. Settings affect how the processing runs (min theshold). The script runs on one country and one hazard at time to keep the calculation time manageable.</p></li>
 <li><p>The spatial information about hazard and exposure is first combined at the grid level, using the resolution of the exposure layer. E.g. when using GHSL population layer, it is 100x100 meters. The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.</p></li>
 <li><p>The exposure and impact estimates is summarised for the chosen administrative boundary (ADM) level using zonal statistic. The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The exceedance frequency curve (EFC) is plotted. These output represents the disaster risk historical baseline. The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).</p></li>
 </ul>
+</section>
 <section id="data-management">
 <h2>DATA MANAGEMENT<a class="headerlink" href="#data-management" title="Permalink to this headline">#</a></h2>
 <ul class="simple">

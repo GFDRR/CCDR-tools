@@ -1,7 +1,7 @@
 # Expected Annual Impact (EAI) 
 
 This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories, as explained in the [**risk concepts**](intro-risk.md).
-In order to calculate impacts, we need some [**probabilistic hazards datasets**](intro-hazard.md) and aligned [**impact model**](intro-vulnerability.md). In relation to the global datasets currently available, these is possible for:
+In order to calculate impacts, we need some [**probabilistic hazards datasets**](intro-hazard.md) and aligned [**vulnerability model**](intro-vulnerability.md). In relation to the global datasets currently available, these is possible for:
 
 - **[Floods](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Flood.ipynb)**: using water depth as hazard intensity measure, calculates mortality over population and damage over built-up.
 - **[Tropical Cyclone - Strong Winds](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Tropical_cyclones.ipynb)**: using wind speed as hazard intensity measure, calculates wind damage over built-up.
@@ -13,10 +13,11 @@ The EAI is calculated by multiplying the impact from each scenario with its exce
 width: 400
 align: center
 ---
+```
 
 ## SCRIPT OVERVIEW
 
-The [python notebooks](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period).
+The [notebooks for EAI calculation](run-baseline) performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period).
 
 ```{note}
 A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization) of these scripts makes use of cpu parallelization.
