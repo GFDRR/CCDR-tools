@@ -30,7 +30,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 ## Input data
 - raster data aggregated across time (20 years windows) for spatial representation
 - csv data aggregated across space (country boundaries) for time-serie representation
-  - includes ensemble p25 and p75 (variability across models)
+  - includes ensemble p10 and p90 (variability across models)
 
 ### Sources of CMIP6 data
 
