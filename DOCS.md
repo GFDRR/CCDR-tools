@@ -27,10 +27,8 @@ Conceptual framework of Disaster Risk as a combination of an hazard (described b
 ```
 
 ```{seealso}
-**Disaster risk is expressed as the likelihood of loss of life, injury or destruction and damage from a disaster in a given period of time (UNDRR 2017).**
+The **UN Global Assessment Report on Disaster Risk Reduction (GAR)** is the flagship report of the United Nations on worldwide efforts to reduce disaster risk. The GAR is published by the UN Office for Disaster Risk Reduction (UNDRR), and is the product of the contributions of nations, public and private disaster risk-related science and research, amongst others.
 
-Measures of exposure can include the number of people or types of assets in an area. These can be combined with the specific vulnerability and capacity of the exposed elements to any particular hazard to estimate the quantitative risks associated with that hazard in the area of interest.
-
-- **[UNDRR Risk overview](https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk)**
+- **[UNDRR GAR 2022](https://www.undrr.org/global-assessment-report-disaster-risk-reduction-gar)**
 ```
 
