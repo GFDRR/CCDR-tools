@@ -12,7 +12,7 @@ Settings from one of the python notebooks
 ```
 
 ```{note}
-Not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification (read [more](inro-risk)).
+Not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification (read [more](intro-risk)).
 Select the analytical approach accordingly.
 ```
 

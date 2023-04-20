@@ -35,7 +35,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 ### Sources of CMIP6 data
 
 | **Name** | **Developer** | **Description** | **Data format** |
-|---:|---:|---:|---:|---:|
+|:---:|:---:|---|---|
 | [Climate Knowledge portal](https://climateknowledgeportal.worldbank.org) | World Bank | Large selection of climate indices for both trends and extremes | Table, geodata, charts |
 | [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6) | UNDRR | Full selection of variables, model members, periods | Geodata |
 | [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information) | IPCC | Selection of climate variables for a range of periods and scenario | Table, geodata, maps, charts |       
