@@ -35,7 +35,7 @@ Baseline refers to the historical period to which the data refer.
 
 ### Lower and Upper bounds
 
-Originally, the calculation of EAI was performed using the customary approach, as exempliefied [here](https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac) and [CIT].
+Originally, the calculation of EAI was performed using the customary approach, as exemplified [here](https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac) and [here](https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets).
 
 
 ## Risk outlook using climate indices
