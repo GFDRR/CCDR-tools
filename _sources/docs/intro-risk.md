@@ -1,6 +1,6 @@
 # Impact and risk
 
-In the field of Disaster Risk Management (DRM), risk (R) is typically calculated as a function of: the hazard occurrence probability and intensity (i.e., physical magnitude) in a particular location (H, for Hazard); the people and physical assets (infrastructure, buildings, crops, etc.) situated in that location and therefore exposed to the hazard (E, for Exposure); and the conditions determined by physical, social, and economic factors which increase the susceptibility of an exposed individual, community, asset or system to the impacts of hazards (V, for Vulnerability).
+In the field of Disaster Risk Management (DRM), **R**isk (**R**) is typically calculated as a function of: the hazard occurrence probability and intensity (i.e., physical magnitude) in a particular location (**H**, for **H**azard); the people and physical assets (infrastructure, buildings, crops, etc.) situated in that location and therefore exposed to the hazard (**E**, for **E**xposure); and the conditions determined by physical, social, and economic factors which increase the susceptibility of an exposed individual, community, asset or system to the impacts of hazards (**V**, for Vulnerability).
 
 ```{seealso}
 **Disaster risk is expressed as the likelihood of loss of life, injury or destruction and damage from a disaster in a given period of time (UNDRR 2017).**
@@ -21,19 +21,23 @@ In the context of disaster risk, probability refers to the frequency of occurren
 
 In contrast, a **deterministic risk** model typically models one scenarios, representing a real event or an individual, finite risk scenario (e.g. mean, median, worst case), but does not quantify the variability around it.
  
-When probabilistic hazard scenarios (multiple layers by Return Period) are available to calculate impacts in relation to occurrence frequency, an estimate of the Expected Annual Impact (EAI) over exposed categories can be calculated.
+When probabilistic hazard scenarios (multiple layers by Return Period) are available to calculate impacts in relation to occurrence frequency, an estimate of the **Expected Annual Impact (EAI)** over exposed categories can be calculated.
 
 ## Annual risk baseline
 *Baseline* refers to the historical period to which the data refer, as opposed to [risk projections](#climate-change-and-disaster-risk).
 
-- The EAI is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.
+- The **EAI** is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.
 
-- The EAE is calculated by multiplying the exposure to each hazard scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities for a range of hazard thresholds. Risk is then expressed *as exposure to hazard over a certain threshold*.
+- In lack of a proper vulnerability function, the **EAE** is calculated by multiplying the exposure to each hazard scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities for a range of hazard thresholds. Risk (**EAE**) is then expressed as *annual exposure to hazard over a certain threshold*.
 
 ### Lower and Upper bounds
 Originally, the calculation of EAI was performed using the customary approach, as exemplified [here](https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac) and [here](https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets).
 
-Due to requests from regional teams, a range estimated was included in the EAI calculation.
+Due to requests from regional teams, a range estimate was included in the EAI calculation, outputting:
+
+- **EAI Lower Bound**: calculated as the customary approach.
+- **EAI Upper Bound**:
+- **EAI**: mean between lower and upper bound
 
 ## Supported Hazard and exposure combinations
 The following matrix show the combinations of hazard and exposure for which a vulnerability model is provided, and the type of model, allowing to express the risk either in form of impact (damage) or exposure to hazard classes.
@@ -44,7 +48,6 @@ align: center
 ---
 Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - grid data.
 ```
-
 ## Uncertainty
 In the development of risk models, many different data sets are used as input components. The level of uncertainty is directly linked to the quality of the input data. In addition, there is also random uncertainty that cannot be reduced. On many occasions during model development, expert judgment and proxies are used in the absence of historical data, and the results are very sensitive to most of these assumptions and variations in input data. As such, outputs of these models should be considered indicators of the order of magnitude of the risks, not as exact values. Better data quality and advances in science and modelling methodologies reduce the level of uncertainty, but it is crucial to interpret the results of any risk assessment against the backdrop of unavoidable uncertainty.
 
@@ -67,5 +70,6 @@ In other words, disaster risk can be magnified by climate change: it can increas
 
 - **Droughts:** there will likely be a large reduction in natural land water storage in two-thirds of the world, especially in the Southern Hemisphere. The number of people suffering extreme droughts across the world could double in less than 80 years, which has major implications for the livelihoods of the rural poor, and can also lead to increased migration streams.
 
-
 - **Tropical cyclones:** even though the attribution of these events to climate change is difficult, a robust increase of the most devastating storms with climate change is expected. Under 2.5°C of global warming, the most devastating storms are projected to occur up to twice as often as today.
+
+See the next chapter for more details.
