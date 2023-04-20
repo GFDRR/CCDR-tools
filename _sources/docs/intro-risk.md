@@ -14,7 +14,12 @@ Measures of exposure can include the number of people or types of assets in an a
 
 The following matrix show the combinations of hazard and exposure for which a vulnerability model is provided, and the type of model, allowing to express the risk either in form of impact (damage) or exposure to hazard classes.
 
-![immagine](https://user-images.githubusercontent.com/44863827/156599257-a9f587b4-bcbf-4e6b-9793-6e346945dca5.png)
+```{figure} images/rsk_combo.png
+---
+align: center
+---
+Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - grid data.
+```
 
 ## Probability of impact
 

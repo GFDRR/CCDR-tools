@@ -69,7 +69,7 @@ Ensemble_p50(Period_mean(anomaly/hist_SD))
 ---
 align: center
 ---
-Example of mean standardardised anomaly plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - grid data.
+Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - grid data.
 ```
 
    - ADM1-mean values from raster data
@@ -81,7 +81,7 @@ ADM1_mean(Ensemble_p50(Period_mean(anomaly/hist_SD)))
 ---
 align: center
 ---
-Example of mean standardardised anomaly plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - mean for subnational unit.
+Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, period 2040-2060, 3 SSP scenarios - mean for subnational unit.
 ```
 
   
@@ -97,5 +97,5 @@ Ensemble_p90(ADM0_mean(anomaly/hist_SD))
 ---
 align: center
 ---
-Example of mean standardardised anomaly plotted for one climate index over Pakistan, timeserie up to 2100,  3 SSP scenarios - mean at country level.
+Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, timeserie up to 2100,  3 SSP scenarios - mean at country level.
 ```
