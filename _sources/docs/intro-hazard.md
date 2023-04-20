@@ -14,7 +14,9 @@ Climate change has the potential to affect the frequency and intensity of hydrom
 
 - **[UNDRR Hazard definition & classification review](https://www.undrr.org/publication/hazard-definition-and-classification-review-technical-report)**
 ```
-**Natural Hazard Data** include hazard intensity datasets and the models (code) or approaches that are used to produce them.
+**Natural Hazard Data** include hazard datasets representing intensity and the models (code) or approaches that are used to produce them.
+
+## Intensity and frequency
 
 **Hazard intensity** is one of the key factors that determine the size of the impact over exposed elements.
 
@@ -24,11 +26,11 @@ align: center
 ---
 ```
 
-Hazard intensity modelling can be either:
+The modelling of hazard intensity can be either:
 
-- **Deterministic**, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.
+- **Deterministic**, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling (this is the case for landslide and drought hazard in the current data pool).
 
-- **Probabilistic**, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years. This is the case for river flood, coastal flood and strong winds.
+- **Probabilistic**, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years (this is the case for river flood, coastal flood and strong winds in the current data pool).
 
 
 ```{note}
@@ -45,7 +47,7 @@ align: center
 ---
 ```
 
-A probabilistic hazard representation is required in order to produce probabilistic risk mapping.
+A probabilistic hazard representation is required in order to produce [probabilistic risk](intro-risk#determimistic-and-probabilistic-risk) mapping.
 
 ```{caution}
 Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.

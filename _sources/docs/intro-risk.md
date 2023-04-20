@@ -18,7 +18,7 @@ While historical losses can explain the past, they do not necessarily provide a 
 In the context of disaster risk, probability refers to the frequency of occurrence or the return period of losses associated with hazardous events.
 ```
 
-**Probabilistic risk** is the chance of something adverse occurring. This method assesses the likelihood of an event(s) and it contains the idea of uncertainty because it incorporates the concept of randomness.
+**Probabilistic risk** is the chance of something adverse (impact) occurring. This method assesses the likelihood of an event(s) and it contains the idea of uncertainty because it incorporates the variability between frequent, low impact events and rare, high impact events.
 
 In contrast, a **deterministic risk** model typically models one scenarios, representing a real event or an individual, finite risk scenario (e.g. mean, median, worst case), but does not quantify the variability around it.
  
@@ -30,7 +30,7 @@ Baseline refers to the historical period to which the data refer.
 
 - The EAI is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.
 
-- The EAE is calculated by multiplying the exposure to each hazard scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities for a range of hazard thresholds.
+- The EAE is calculated by multiplying the exposure to each hazard scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities for a range of hazard thresholds. Risk is then expressed *as exposure to hazard over a certain threshold*.
 
 ### Lower and Upper bounds
 
