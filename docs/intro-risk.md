@@ -8,6 +8,7 @@ In the field of Disaster Risk Management (DRM), risk (R) is typically calculated
 Measures of exposure can include the number of people or types of assets in an area. These can be combined with the specific vulnerability and capacity of the exposed elements to any particular hazard to estimate the quantitative risks associated with that hazard in the area of interest.
 
 - **[UNDRR Risk overview](https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk)**
+```
 
 ## Hazard and exposure combinations
 
