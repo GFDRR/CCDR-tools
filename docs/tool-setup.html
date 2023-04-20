@@ -450,11 +450,6 @@ title="Print to PDF"
    Expected directories and input format
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#environment-and-libraries">
-   Environment and libraries
-  </a>
- </li>
 </ul>
 
     </nav>
@@ -477,11 +472,6 @@ title="Print to PDF"
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#expected-directories-and-input-format">
    Expected directories and input format
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#environment-and-libraries">
-   Environment and libraries
   </a>
  </li>
 </ul>
@@ -520,8 +510,7 @@ title="Print to PDF"
   <span class="o">-</span> <span class="n">ADM3</span>
 </pre></div>
 </div>
-<ul>
-<li><p>Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:</p>
+<p>Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:</p>
 <ul class="simple">
 <li><p><strong>ADM0</strong></p></li>
 </ul>
@@ -610,34 +599,33 @@ title="Print to PDF"
 </tr>
 </tbody>
 </table>
-</li>
-<li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_HZD_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
-<li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_EXP.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). The same suggestion about resolution applies here.</p>
 <ul class="simple">
+<li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_HZD_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.
+<br></p></li>
+<li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_EXP.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). The same suggestion about resolution applies here.</p>
+<ul>
 <li><p>Population from GHSL, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</p></li>
 <li><p>Built-up from World Settlement Footprint or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BUP.tif</p></li>
 <li><p>Agriculture from land cover map, ESA land cover or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</p></li>
 </ul>
 </li>
 </ul>
-<p>When resampling EXP layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid.</p>
+<p>When resampling exposure layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid, or viceversa.</p>
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>All spatial data must use the same CRS, suggested: <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code> (WGS 84)</p>
 </div>
 <hr>
-</section>
-<section id="environment-and-libraries">
-<h2>Environment and libraries<a class="headerlink" href="#environment-and-libraries" title="Permalink to this headline">#</a></h2>
-<ul>
-<li><p>The script requires python3 - conda or mamba are encouraged</p></li>
-<li><p>Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
-In Anaconda cmd prompt:</p>
-<p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">CCDR</span> <span class="pre">--file</span> <span class="pre">&lt;dir/win_env.yml&gt;</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">CCDR</span></code></p>
-</li>
-</ul>
+## Environment and libraries
+- The script requires python3 - conda or mamba are encouraged
+- Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
+  In Anaconda cmd prompt:
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>`conda create --name CCDR --file &lt;dir/win_env.yml&gt;`
+
+`activate CCDR`
+</pre></div>
+</div>
 <p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file inside the notebook directories to specify the working directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
 
