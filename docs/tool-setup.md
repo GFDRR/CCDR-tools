@@ -25,7 +25,7 @@ Work dir/
   - ADM2
   - ADM3
 ```
-- Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:
+Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:
 
   - **ADM0**
 
@@ -52,6 +52,7 @@ Work dir/
   | Integer | String (20) | Integer | String(20) | Integer | String(20) | Integer | String(20) |
 
 - **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.
+<br>
 
 - **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). The same suggestion about resolution applies here.
 
@@ -59,7 +60,7 @@ Work dir/
 	- Built-up from World Settlement Footprint or equivalent, 90 m: `ISO`_BUP.tif
 	- Agriculture from land cover map, ESA land cover or equivalent, 90 m: `ISO`_AGR.tif
 
-When resampling EXP layers to a lower resolution, it is **strongly recommended** to align the resampled grid to exactly match the hazard grid.
+When resampling exposure layers to a lower resolution, it is **strongly recommended** to align the resampled grid to exactly match the hazard grid, or viceversa.
 
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
 
@@ -68,7 +69,6 @@ All spatial data must use the same CRS, suggested: `EPSG 4326` (WGS 84)
 ```
 
 <hr>
-
 ## Environment and libraries
 - The script requires python3 - conda or mamba are encouraged
 - Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
