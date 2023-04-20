@@ -2,7 +2,7 @@
 
 ### Expected directories and input format
 
-- The script expects input data folders to be structured as:
+The script expects input data folders to be structured as:
 
 ```
 Work dir/
