@@ -50,17 +50,17 @@ If you want to inspect all steps of the processing, you can select the option to
 
 - [X] Export Intermediate rasters
 
-```{figure} images/run-analysis.png
+```{figure} images/run_analysis.png
 ---
-width: 180px
+width: 180 px
 align: center
 ---
 Click the button to start the processing
 ```
 
-Once the run finishes, results are exported as geospatial data (.gpkg) and table (.csv).
+Once the analysis finishes, results are exported as geospatial data (.gpkg) and table (.csv).
 
-By selecting
+By selecting:
 
 - [X] Preview results
 
