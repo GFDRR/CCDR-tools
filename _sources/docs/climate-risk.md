@@ -39,6 +39,9 @@ The analysis relies on CMIP6 data for modeling into the future, and takes into a
 Each climate scenarios predicts different spatial patterns, resulting into a range of possible futures in terms of intensities, and frequencies of natural hazards. Key climate variables connected to the changing patterns of precipitation and temperature are collected from the [Climate Change Knowledge Portal](https://climateknowledgeportal.worldbank.org/) and the [Copernicus Data Store](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6).
 
 ```{seealso}
-The [**Climate analytics repository**](https://bennyistanto.github.io/gost-climate) from the Global Operational Support Team (**GOST**) describes a list of data provider, derived products, step-by-step to do the analysis to produce climate analytics.
+- The [**Climate Knowledge Portal**](https://climateknowledgeportal.worldbank.org) by the World Bank provides a large selection of climate indices for both trends and extremes as table, geodata and charts.
+- The [**Climate analytics repository**](https://bennyistanto.github.io/gost-climate) by the Global Operational Support Team (**GOST**) describes a list of data provider, derived products, step-by-step to do the analysis to produce climate analytics.
+- The [**CLIMADA project**](https://github.com/CLIMADA-project/climada_python) by ETH Zurich provides global coverage of major climate-related extreme-weather hazards at high resolution via data API.
+- The [**European Extreme Events Climate Index**](https://www.ifabfoundation.org/e3ci/) based on the [Actuaries Climate Index (ACI)](https://actuariesclimateindex.org) offers an ensemble of indices to describe different types of weather-induced hazards and their severity.
 ```
 

@@ -11,8 +11,10 @@ align: center
 Settings from one of the python notebooks
 ```
 
-Note that not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification (read [more](inro-risk)).
+```{note}
+Not all combinations of hazards x exposure are supported; some are not covered by appropriate damage functions or classification (read [more](inro-risk)).
 Select the analytical approach accordingly.
+```
 
 ## Analytical approach: Expected Annual Impact
 This approach uses a mathematical relationship to calculate impact over exposed categories (read [more](EAI)).

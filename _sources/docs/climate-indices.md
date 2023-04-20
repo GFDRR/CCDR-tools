@@ -34,11 +34,11 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 
 ### Sources of CMIP6 data
 
-| **Name** | **Developer** | **Hazard covered** | **Description** | **Data format** |
+| **Name** | **Developer** | **Description** | **Data format** |
 |---:|---:|---:|---:|---:|
-| [Climate Knowledge portal](https://climateknowledgeportal.worldbank.org) | World Bank | Multihazard | Large selection of climate indices for both trends and extremes | Table, geodata, charts |
-| [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6) | UNDRR | Multihazard | Full selection of variables, model members, periods | Geodata |
-| [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information) | UNITAR | Multihazard | 10 m | Table, geodata, maps, charts |       
+| [Climate Knowledge portal](https://climateknowledgeportal.worldbank.org) | World Bank | Large selection of climate indices for both trends and extremes | Table, geodata, charts |
+| [Climate Extreme Indices (CDS)](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6) | UNDRR | Full selection of variables, model members, periods | Geodata |
+| [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information) | IPCC | Selection of climate variables for a range of periods and scenario | Table, geodata, maps, charts |       
 
 ### Dimensions:
    - **SSP:** SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8
