@@ -14,7 +14,17 @@ Climate change has the potential to affect the frequency and intensity of hydrom
 
 - **[UNDRR Hazard definition & classification review](https://www.undrr.org/publication/hazard-definition-and-classification-review-technical-report)**
 ```
-**Natural Hazard Data** include hazard intensity datasets and the models (code) or approaches that are used to produce them. Hazard intensity modelling can be either:
+**Natural Hazard Data** include hazard intensity datasets and the models (code) or approaches that are used to produce them.
+
+**Hazard intensity** is one of the key factors that determine the size of the impact over exposed elements.
+
+```{figure} images/hzd_intensity.jpg
+---
+align: center
+---
+```
+
+Hazard intensity modelling can be either:
 
 - **Deterministic**, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling. This is the case for landslide and drought hazard.
 
