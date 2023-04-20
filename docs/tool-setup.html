@@ -523,7 +523,6 @@ title="Print to PDF"
 </pre></div>
 </div>
 <ul>
-<li><p>All spatial data must use CRS <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code></p></li>
 <li><p>Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:</p>
 <ul class="simple">
 <li><p><strong>ADM0</strong></p></li>
@@ -625,6 +624,10 @@ title="Print to PDF"
 </ul>
 <p>When resampling EXP layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid.</p>
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>All spatial data must use the same CRS, suggested: <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code> (WGS 84)</p>
+</div>
 <hr>
 </section>
 <section id="environment-and-libraries">
@@ -726,7 +729,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
   
     By M. Amadio (GFDRR)<br/>
   
-    Last updated on Apr 19, 2023.<br/>
+    Last updated on Apr 20, 2023.<br/>
     <div class="extra_footer">
       <div>
     <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>

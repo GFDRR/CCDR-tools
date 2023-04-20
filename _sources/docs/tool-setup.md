@@ -25,7 +25,6 @@ Work dir/
   - ADM2
   - ADM3
 ```
-- All spatial data must use CRS `EPSG 4326`
 - Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:
 
   - **ADM0**
@@ -63,6 +62,10 @@ Work dir/
 When resampling EXP layers to a lower resolution, it is **strongly recommended** to align the resampled grid to exactly match the hazard grid.
 
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
+
+```{caution}
+All spatial data must use the same CRS, suggested: `EPSG 4326` (WGS 84)
+```
 
 <hr>
 
