@@ -25,6 +25,7 @@ parts:
       - file: docs/EAI
       - file: docs/EAE
       - file: docs/climate-indices
+      - file: docs/validation
   - caption: Jupyter Notebooks
     chapters:
       - file: docs/tool-setup
