@@ -33,7 +33,7 @@ The modelling of hazard intensity can be either:
 - **Probabilistic**, in the form of multiple geodata layers, each representing a range of hazard physical intensities (e.g. water depth [m], wind speed [km/h]) corresponding to a specific occurrence frequency, measured as Return Period (RP), in years (this is the case for river flood, coastal flood and strong winds in the current data pool).
 
 
-```{note}
+```{seealso}
 **Raw hazard data (model output) usually come in the form of one or more georeferenced layers.**
 
 - **[Geospatial data and GIS](https://centre.humdata.org/learning-path/an-introduction-to-geospatial-data/geospatial-data-geographic-information-systems/)**
@@ -49,7 +49,7 @@ align: center
 
 A probabilistic hazard representation is required in order to produce [probabilistic risk](intro-risk#determimistic-and-probabilistic-risk) mapping.
 
-```{caution}
+```{note}
 Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.
 ```
 
@@ -58,4 +58,6 @@ As a rule of thumb, their fitness for application in the context of a risk scree
 
 In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations.
 
+```{caution}
 When it comes to natural hazards and risk, **misinformation can be worse than no information at all**.
+```
