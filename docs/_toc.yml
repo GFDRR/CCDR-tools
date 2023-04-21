@@ -31,6 +31,9 @@ parts:
       - file: docs/run-baseline
         sections:
         - file: Top-down/notebooks/CCDR.ipynb
+  - caption: External resources
+    chapters:
+      - file: docs/external-tools
   - caption: Credits
     chapters:
       - file: docs/team
