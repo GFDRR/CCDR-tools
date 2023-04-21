@@ -69,6 +69,7 @@ All spatial data must use the same CRS, suggested: `EPSG 4326` (WGS 84)
 ```
 
 <hr>
+
 ## Environment and libraries
 - The script requires python3 - conda or mamba are encouraged
 - Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
@@ -96,6 +97,10 @@ OUTPUT_DIR = ${DATA_DIR}/RSK/
 CACHE_DIR = ${DATA_DIR}/cache/
 ```
 
+## Run CCDR tool notebooks
+
+### Baseline risk
+
 - Navigate to your working directory: `cd <Your work directory>`
 - Run `jupyter notebook`
 - Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
@@ -115,3 +120,18 @@ align: center
 ---
 Settings from one of the python notebooks
 ```
+
+### Climate indices (temp)
+
+- Navigate to your working directory: `cd <Your work directory>`
+- Run `jupyter notebook`
+- Select [CCDR-climate.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb) and chose the indices to plot.
+
+```{figure} images/ccdr-nb.png
+---
+align: center
+---
+Starting page for the CCDR python notebooks
+```
+
+

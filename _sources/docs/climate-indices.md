@@ -1,6 +1,6 @@
 # Climate indices
 
-The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (CMIP6).
+The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated information (**CMIP6**).
 The challenge is to offer a tool that convey the complexity of climate models into statistics that are easily interpretable by non-climate experts, providign a well-rounded perspective for both space and time dimension.
 This is reflected on the technical side, by the challenge to reduce huge datasets into manageable pieces.
 
@@ -53,7 +53,7 @@ Compared to the information offered by the [CCKP country page](https://climatekn
 - Runs over one selected country and for a specific set of indices depending on selected hazard
 - Consider four SSP (ex RCP) scenarios (SSP1/RCP2.6; SSP2/RCP4.5; SSP3/RCP7.0; SSP5/RCP8.5)
 - Consider four 20-years periods (near term, medium term, long term, end of century)
-- Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble ([more details](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/)
+- Calculate median, 10th percentile (p10) and 90th percentile (p90) of standardised anomaly across models in the ensemble ([more details](https://climateinformation.org/confidence-and-robustness/how-to-interpret-agreement-ensemble-value-range/))
 - Plot maps and timeseries
 - Exported results as csv (table) and geopackage (vector)
 

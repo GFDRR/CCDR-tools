@@ -27,9 +27,9 @@ Heat stress | Heat index (WBGT or UTCI) | Days per year > 30 °C
 ```
 
 Given that specific unit of measurement varies across climate indices, in order to give a comparable metric of change the projected anomalies against the baseline are expressed in terms of Standard Deviation (SD) of the anomaly compared to historical variability [E3CI, 2020](https://www.ifabfoundation.org/e3ci/).
-Data from climate models released under the IPCC Sixth Assessment Report (AR) framework (IPCC 2021a) are used to establish estimates of baseline and future projected climate anomalies. ARs are supported by coordinated climate modeling efforts referred to as Coupled Model Intercomparison Projects (CMIP).
+Data from climate models released under the IPCC Sixth Assessment Report (AR) framework (IPCC 2021a) are used to establish estimates of baseline and future projected climate anomalies. ARs are supported by coordinated climate modeling efforts referred to as Coupled Model Intercomparison Projects (**CMIP**).
 
-The analysis relies on CMIP6 data for modeling into the future, and takes into account four climate change scenarios, referred to as Shared Socioeconomic Pathways (SSPs) in CMIP6. These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b). The following scenarios are included in this analysis:
+The analysis relies on **CMIP6** data for modeling into the future, and takes into account four climate change scenarios, referred to as Shared Socioeconomic Pathways (SSPs) in CMIP6. These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b). The following scenarios are included in this analysis:
 
 - **SSP1/RCP2.6:** emissions peak between 2040 and 2060, declining by 2100. This results in warming of 3-3.5 °C by 2100.
 - **SSP2/RCP4.5:** emissions continue to increase through the end of the century, with resulting warming of 3.8-4.2 °C by 2100.
