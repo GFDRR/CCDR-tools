@@ -2,10 +2,23 @@
 
 Natural events (including extreme events and long term phenomena) are only termed hazards when they have the potential to harm people or cause property damage, social and economic disruption. The location of natural hazards primarily depends on natural processes, including the movement of tectonic plates, the influence of weather systems, and the existence of waterways and slopes (e.g. that might generate landslides). But processes such as urbanization, environmental degradation and climate change can also influence the location, occurrence (frequency) and intensity of natural hazards. These processes are known as risk drivers.
 
-- **Geophysical hazards**: Earthquakes, Tsunami, Volcanic activities
-- **Hydro-meteorological hazards**: River and pluvial floods, coastal floods, landslides, tropycal cyclones, drought, extreme heat, wildfires
+Some of the hazards typically considered in risk screening are:
 
-Climate change has the potential to affect the frequency and intensity of hydrometeorological hazards (see [**climate outlook**](climate-risk)).
+- **Geophysical hazards**
+  - Earthquakes
+  - Tsunami
+  - Volcanic activities
+
+- **Hydro-meteorological hazards**
+  - River and pluvial floods
+  - Coastal floods
+  - Landslides
+  - Tropical cyclones
+  - Drought
+  - Extreme heat
+  - Wildfires
+
+Climate change has the potential to affect the frequency and intensity of hydrometeorological hazards (see [**climate outlook**](climate-risk)), while it doesn't significantly affect geophysical hazards.
 
 ```{seealso}
 **A hazard is a process or phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation. Hazards may be natural, anthropogenic or socionatural in origin (UNDRR 2017).**
@@ -56,7 +69,7 @@ Note that a return period of 1,000 years, while very unlikely, can occur anyday!
 Hazard models carry **limitations related to their applicability**. Their quality depend on scale, resolution, model quality, training period and related input data quality.
 As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expeceted to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.
 
-In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations.
+In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations. See [**uncertainty**](docs/validation.md#uncertainty)
 
 ```{caution}
 When it comes to natural hazards and risk, **misinformation can be worse than no information at all**.
