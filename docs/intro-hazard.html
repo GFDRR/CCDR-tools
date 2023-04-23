@@ -123,10 +123,22 @@ const thebe_selector_output = ".output, .cell_output"
    Exposure
   </a>
  </li>
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="intro-vulnerability.html">
    Vulnerability
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="risk-poverty.html">
+     Risk and poverty
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="intro-risk.html">
@@ -149,8 +161,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="global-hazard.html">
    Hazard Datasets
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -235,8 +247,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="run-baseline.html">
    Baseline risk
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -564,7 +576,7 @@ title="Print to PDF"
 </div>
 <p>Hazard models carry <strong>limitations related to their applicability</strong>. Their quality depend on scale, resolution, model quality, training period and related input data quality.
 As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expeceted to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.</p>
-<p>In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations. See <a class="reference external" href="docs/validation.md#uncertainty"><strong>uncertainty</strong></a></p>
+<p>In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations. See <a class="reference external" href="validation#uncertainty"><strong>uncertainty</strong></a>.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>When it comes to natural hazards and risk, <strong>misinformation can be worse than no information at all</strong>.</p>

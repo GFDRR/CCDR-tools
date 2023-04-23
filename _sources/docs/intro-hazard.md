@@ -69,7 +69,7 @@ Note that a return period of 1,000 years, while very unlikely, can occur anyday!
 Hazard models carry **limitations related to their applicability**. Their quality depend on scale, resolution, model quality, training period and related input data quality.
 As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expeceted to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.
 
-In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations. See [**uncertainty**](docs/validation.md#uncertainty)
+In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations. See [**uncertainty**](validation#uncertainty).
 
 ```{caution}
 When it comes to natural hazards and risk, **misinformation can be worse than no information at all**.

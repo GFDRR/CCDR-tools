@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Tools setup &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>Risk and poverty &#8212; Climate &amp; Disaster Risk Screening Tools</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -51,11 +51,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/docs/tool-setup.html" />
+    <link rel="canonical" href="https://GFDRR.github.io/CCDR-tools/docs/risk-poverty.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Baseline risk" href="run-baseline.html" />
-    <link rel="prev" title="Validation and interpretation" href="validation.html" />
+    <link rel="next" title="Impact and risk" href="intro-risk.html" />
+    <link rel="prev" title="Vulnerability" href="intro-vulnerability.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -112,7 +112,7 @@ const thebe_selector_output = ".output, .cell_output"
   Disaster Risk concepts
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="intro-hazard.html">
    Natural hazards
@@ -123,18 +123,18 @@ const thebe_selector_output = ".output, .cell_output"
    Exposure
   </a>
  </li>
- <li class="toctree-l1 has-children">
+ <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="intro-vulnerability.html">
    Vulnerability
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="risk-poverty.html">
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      Risk and poverty
     </a>
    </li>
@@ -237,9 +237,9 @@ const thebe_selector_output = ".output, .cell_output"
   Jupyter Notebooks
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tool-setup.html">
    Tools setup
   </a>
  </li>
@@ -370,7 +370,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2Fdocs/tool-setup.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/GFDRR/CCDR-tools/issues/new?title=Issue%20on%20page%20%2Fdocs/risk-poverty.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -387,7 +387,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/docs/tool-setup.md"
+        <a href="https://github.com/GFDRR/CCDR-tools/edit/main/docs/risk-poverty.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -415,7 +415,7 @@ title="Edit this page"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../_sources/docs/tool-setup.md"
+        <a href="../_sources/docs/risk-poverty.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -475,31 +475,9 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#expected-directories-and-input-format">
-   Expected directories and input format
+  <a class="reference internal nav-link" href="#bi-variate-maps">
+   Bi-variate maps
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#environment-and-libraries">
-   Environment and libraries
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#run-ccdr-tool-notebooks">
-   Run CCDR tool notebooks
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#baseline-risk">
-     Baseline risk
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#climate-indices-temp">
-     Climate indices (temp)
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -510,7 +488,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Tools setup</h1>
+                <h1>Risk and poverty</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -521,31 +499,9 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#expected-directories-and-input-format">
-   Expected directories and input format
+  <a class="reference internal nav-link" href="#bi-variate-maps">
+   Bi-variate maps
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#environment-and-libraries">
-   Environment and libraries
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#run-ccdr-tool-notebooks">
-   Run CCDR tool notebooks
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#baseline-risk">
-     Baseline risk
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#climate-indices-temp">
-     Climate indices (temp)
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -557,206 +513,10 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="tools-setup">
-<h1>Tools setup<a class="headerlink" href="#tools-setup" title="Permalink to this headline">#</a></h1>
-<section id="expected-directories-and-input-format">
-<h2>Expected directories and input format<a class="headerlink" href="#expected-directories-and-input-format" title="Permalink to this headline">#</a></h2>
-<p>The script expects input data folders to be structured as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Work</span> <span class="nb">dir</span><span class="o">/</span>
- <span class="o">-</span> <span class="n">Hazard</span><span class="o">.</span><span class="n">ipynb</span>
- <span class="o">-</span> <span class="n">common</span><span class="o">.</span><span class="n">py</span>
- <span class="o">-</span> <span class="o">.</span><span class="n">env</span>
- <span class="o">-</span> <span class="n">Data</span><span class="o">/</span>
-   <span class="o">-</span> <span class="n">ADM</span>	<span class="n">Administrative</span> <span class="n">unit</span> <span class="n">layer</span> <span class="k">for</span> <span class="n">each</span> <span class="n">country</span>
-   <span class="o">-</span> <span class="n">HZD</span>	<span class="n">Hazard</span> <span class="n">layers</span>
-   <span class="o">-</span> <span class="n">EXP</span>	<span class="n">Exposure</span> <span class="n">layers</span> <span class="o">-</span> <span class="n">Population</span> <span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">Built</span><span class="o">-</span><span class="n">up</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">),</span> <span class="n">Agriculture</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">)</span>
-   <span class="o">-</span> <span class="n">RSK</span>	<span class="n">Output</span> <span class="n">directory</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><strong>ADMINISTRATIVE</strong> boundaries are provided as geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (exampe <code class="docutils literal notranslate"><span class="pre">NPL_ADM.gpkg</span></code>) made of multiple layers, up to ADM level 3:</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">ISO_ADM</span>
-  <span class="o">-</span> <span class="n">ADM0</span>
-  <span class="o">-</span> <span class="n">ADM1</span>
-  <span class="o">-</span> <span class="n">ADM2</span>
-  <span class="o">-</span> <span class="n">ADM3</span>
-</pre></div>
-</div>
-<p>Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:</p>
-<ul class="simple">
-<li><p><strong>ADM0</strong></p></li>
-</ul>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>ISO3166_a2</p></th>
-<th class="head"><p>ISO3166_a3</p></th>
-<th class="head"><p>ADM0_CODE</p></th>
-<th class="head"><p>ADM0_NAME</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>String(2)</p></td>
-<td><p>String(3)</p></td>
-<td><p>Integer</p></td>
-<td><p>String (20)</p></td>
-</tr>
-</tbody>
-</table>
-<ul class="simple">
-<li><p><strong>ADM1</strong></p></li>
-</ul>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>ADM0_CODE</p></th>
-<th class="head"><p>ADM0_NAME</p></th>
-<th class="head"><p>ADM1_CODE</p></th>
-<th class="head"><p>ADM1_NAME</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Integer</p></td>
-<td><p>String (20)</p></td>
-<td><p>Integer</p></td>
-<td><p>String(20)</p></td>
-</tr>
-</tbody>
-</table>
-<ul class="simple">
-<li><p><strong>ADM2</strong></p></li>
-</ul>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>ADM0_CODE</p></th>
-<th class="head"><p>ADM0_NAME</p></th>
-<th class="head"><p>ADM1_CODE</p></th>
-<th class="head"><p>ADM1_NAME</p></th>
-<th class="head"><p>ADM2_CODE</p></th>
-<th class="head"><p>ADM2_NAME</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Integer</p></td>
-<td><p>String (20)</p></td>
-<td><p>Integer</p></td>
-<td><p>String(20)</p></td>
-<td><p>Integer</p></td>
-<td><p>String(20)</p></td>
-</tr>
-</tbody>
-</table>
-<ul class="simple">
-<li><p><strong>ADM3</strong></p></li>
-</ul>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>ADM0_CODE</p></th>
-<th class="head"><p>ADM0_NAME</p></th>
-<th class="head"><p>ADM1_CODE</p></th>
-<th class="head"><p>ADM1_NAME</p></th>
-<th class="head"><p>ADM2_CODE</p></th>
-<th class="head"><p>ADM2_NAME</p></th>
-<th class="head"><p>ADM3_CODE</p></th>
-<th class="head"><p>ADM3_NAME</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Integer</p></td>
-<td><p>String (20)</p></td>
-<td><p>Integer</p></td>
-<td><p>String(20)</p></td>
-<td><p>Integer</p></td>
-<td><p>String(20)</p></td>
-<td><p>Integer</p></td>
-<td><p>String(20)</p></td>
-</tr>
-</tbody>
-</table>
-<ul class="simple">
-<li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_HZD_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.
-<br></p></li>
-<li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_EXP.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). The same suggestion about resolution applies here.</p>
-<ul>
-<li><p>Population from GHSL, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</p></li>
-<li><p>Built-up from World Settlement Footprint or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BUP.tif</p></li>
-<li><p>Agriculture from land cover map, ESA land cover or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</p></li>
-</ul>
-</li>
-</ul>
-<p>When resampling exposure layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid, or viceversa.</p>
-<img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
-<p>All spatial data must use the same CRS, suggested: <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code> (WGS 84)</p>
-</div>
-<hr>
-</section>
-<section id="environment-and-libraries">
-<h2>Environment and libraries<a class="headerlink" href="#environment-and-libraries" title="Permalink to this headline">#</a></h2>
-<ul>
-<li><p>The script requires python3 - conda or mamba are encouraged</p></li>
-<li><p>Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
-In Anaconda cmd prompt:</p>
-<p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">CCDR</span> <span class="pre">--file</span> <span class="pre">&lt;dir/win_env.yml&gt;</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">CCDR</span></code></p>
-</li>
-</ul>
-<p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file inside the notebook directories to specify the working directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
-
-# Fill the below with the location of data files
-# Use absolute paths with forward slashes (&quot;/&quot;), and keep the trailing slash
-DATA_DIR = &quot;&quot;
-
-# THE ENTRIES BELOW DO NOT NEED TO BE EDITED
-# Location to store results of analyses
-OUTPUT_DIR = ${DATA_DIR}/RSK/
-
-# Location to store downloaded rasters and other data
-# for the analysis notebooks
-CACHE_DIR = ${DATA_DIR}/cache/
-</pre></div>
-</div>
-</section>
-<section id="run-ccdr-tool-notebooks">
-<h2>Run CCDR tool notebooks<a class="headerlink" href="#run-ccdr-tool-notebooks" title="Permalink to this headline">#</a></h2>
-<section id="baseline-risk">
-<h3>Baseline risk<a class="headerlink" href="#baseline-risk" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
-<li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">CCDR.ipynb</a> and chose the hazard to analyse.</p></li>
-</ul>
-<figure class="align-center" id="id1">
-<img alt="../_images/ccdr-nb.png" src="../_images/ccdr-nb.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-<ul class="simple">
-<li><p>Execute all cells. The last one will present the user interface:</p></li>
-</ul>
-<figure class="align-center" id="id2">
-<img alt="../_images/ccdr-nb_settings.png" src="../_images/ccdr-nb_settings.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 20 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-</section>
-<section id="climate-indices-temp">
-<h3>Climate indices (temp)<a class="headerlink" href="#climate-indices-temp" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
-<li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb">CCDR-climate.ipynb</a> and chose the indices to plot.</p></li>
-</ul>
-<figure class="align-center" id="id3">
-<img alt="../_images/ccdr-nb.png" src="../_images/ccdr-nb.png" />
-<figcaption>
-<p><span class="caption-number">Fig. 21 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-</section>
+  <section class="tex2jax_ignore mathjax_ignore" id="risk-and-poverty">
+<h1>Risk and poverty<a class="headerlink" href="#risk-and-poverty" title="Permalink to this headline">#</a></h1>
+<section id="bi-variate-maps">
+<h2>Bi-variate maps<a class="headerlink" href="#bi-variate-maps" title="Permalink to this headline">#</a></h2>
 </section>
 </section>
 
@@ -787,17 +547,17 @@ CACHE_DIR = ${DATA_DIR}/cache/
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="validation.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="intro-vulnerability.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Validation and interpretation</p>
+            <p class="prev-next-title">Vulnerability</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="run-baseline.html" title="next page">
+    <a class='right-next' id="next-link" href="intro-risk.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Baseline risk</p>
+        <p class="prev-next-title">Impact and risk</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
