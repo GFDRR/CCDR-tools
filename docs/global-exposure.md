@@ -19,7 +19,7 @@ Below is a quick link to openly-licensed datasets that are used by the CCDR stan
 | [WorldCover](https://esa-worldcover.org/en/data-access) | ESA | Land cover classes | 10 m | Annual |
 ```
 
-### **EU-JRC Global Human Settlment Layer**
+### **EU-JRC Global Human Settlement Layer**
 
 Description
 
@@ -31,7 +31,7 @@ align: center
 Population count per 100 m grid over for New Dehli as obtained from EU-JRC GHSL 2020.
 ```
 
-### **DLR World Settlment Footprint**
+### **DLR World Settlement Footprint**
 
 Built-up assets include houses, commercial and industrial buildings, infrastructures, facilities, and others. Data from 2019 World Settlement Footprint (WSF) is used for this current analysis. This is a high-resolution (10m) remotely sensed dataset which indicates whether each cell is primarily built up, excluding roads.
 
