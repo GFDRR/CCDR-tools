@@ -22,8 +22,8 @@ Floods and Landslides | Extremely wet days | mm
 Coastal floods | Sea Level Rise	| m
 Drought	| Annual SPEI | [-]
 Drought	| Consecutive dry days | Days per year
-Heat stress | Heat index (WBGT or UTCI) | Days per year > 23 °C
-Heat stress | Heat index (WBGT or UTCI) | Days per year > 30 °C
+Heat stress | Heat index (WBGT or UTCI) for *moderate stress* | Days per year
+Heat stress | Heat index (WBGT or UTCI) for *extreme stress* | Days per year
 ```
 
 Given that specific unit of measurement varies across climate indices, in order to give a comparable metric of change the projected anomalies against the baseline are expressed in terms of Standard Deviation (SD) of the anomaly compared to historical variability [E3CI, 2020](https://www.ifabfoundation.org/e3ci/).
