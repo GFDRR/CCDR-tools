@@ -83,3 +83,7 @@ align: center
   <table><tr><td width="45%"><img src="https://user-images.githubusercontent.com/44863827/201054765-5a1ce2c9-0bde-4e98-80ce-ee30ccefc4e2.png"></td>
 	  <td><img src="https://user-images.githubusercontent.com/44863827/201055152-28482f07-7215-4b09-b3c2-397381d516af.png"></td></tr></table>
   </div>
+
+```{seealso}
+More details on [**results presentation**](presentation).
+```
