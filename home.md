@@ -1,6 +1,6 @@
-# Climate & Disaster Risk Screening Tools
+# CCDR Risk Screening Tools
 
-A collection of scripted tools developed alongside the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2023).
+A collection of scripted tools and related global datasets developed and used as part of the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2023).
 
 The tools collected in this repository allow to:
 
