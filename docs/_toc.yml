@@ -1,5 +1,5 @@
 format: jb-book
-root: DOCS
+root: home
 
 parts:
   - caption: Disaster Risk concepts
