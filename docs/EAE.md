@@ -63,7 +63,21 @@ A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/T
   - Perform zonal statistic of Tot_Exp using ADMi -> `[ADMi;ADMi_Exp;Exp_EAE]` in order to calculate `Exp_EAE% = Exp_EAE/ADMi_Exp` -> `[ADMi;ADMi_Exp;Exp_EAE;Exp_EAE%]`
 
 ### Present results
+
+<!--
 - Plot Exceedance Frequency Curve for selected hazard threshold. Example for flood, considering ten RP scenarios and a threshold of 0.5 m for cropland exposure:<br>
     ![immagine](https://user-images.githubusercontent.com/44863827/201049813-008d5fbc-3195-4289-ba18-34a126fe434e.png)
+-->
 
 - Plot map of ADMi_EAI and related tables and charts to be included in reports and presentation. You can use open software [QGIS](https://www.qgis.org/en/site/forusers/download.html) to plot the geospatial data (.gpkg).
+
+```{figure} images/EAE_FL_agri.jpg
+---
+width: 300
+align: center
+---
+```
+
+```{seealso}
+More details on [**results presentation**](presentation).
+```
