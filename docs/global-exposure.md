@@ -19,7 +19,7 @@ Below is a quick link to openly-licensed datasets that are used by the CCDR stan
 | [WorldCover](https://esa-worldcover.org/en/data-access) | ESA | Land cover classes | 10 m | Annual |
 ```
 
-### **EU-JRC Global Human Settlment Layer**
+### EU-JRC Global Human Settlment Layer
 
 Description
 
@@ -31,7 +31,7 @@ align: center
 Population count per 100 m grid over for New Dehli as obtained from EU-JRC GHSL 2020.
 ```
 
-### **DLR World Settlment Footprint**
+### DLR World Settlment Footprint
 
 Built-up assets include houses, commercial and industrial buildings, infrastructures, facilities, and others. Data from 2019 World Settlement Footprint (WSF) is used for this current analysis. This is a high-resolution (10m) remotely sensed dataset which indicates whether each cell is primarily built up, excluding roads.
 
@@ -43,7 +43,7 @@ align: center
 Built-up land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019 and resampled into 100 m built-up density grid.
 ```
 
-### **ESA World Cover**
+### ESA World Cover
 
 The 2020 WorldCover dataset at 10m resolution from the European Space Agency can be used to identify specific types, e.g. agricultural land.
 
@@ -55,7 +55,7 @@ align: center
 Land cover information at 10 m resolution over Senegal as obtained from ESA WorldCover 2020.
 ```
 
-## Additional datasets
+### Additional datasets
 
 For a more granular analysis of agricultural impacts, additional exposure datasets can be considered.
 
