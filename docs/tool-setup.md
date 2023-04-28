@@ -102,6 +102,12 @@ CACHE_DIR = ${DATA_DIR}/cache/
 ### Baseline risk
 
 - Navigate to your working directory: `cd <Your work directory>`
+  ```{figure} images/cmd-prompt.png
+  ---
+  align: center
+  ---
+  Example of Anaconda cmd prompt
+  ```
 - Run `jupyter notebook`
 - Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
 

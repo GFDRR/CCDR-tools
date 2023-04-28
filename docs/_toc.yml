@@ -7,8 +7,6 @@ parts:
       - file: docs/intro-hazard
       - file: docs/intro-exposure
       - file: docs/intro-vulnerability
-        sections:
-        - file: docs/risk-poverty
       - file: docs/intro-risk
       - file: docs/climate-risk
   - caption: Global Risk Datasets
@@ -26,6 +24,7 @@ parts:
     chapters:
       - file: docs/EAI
       - file: docs/EAE
+      - file: docs/risk-poverty
       - file: docs/climate-indices
       - file: docs/validation
       - file: docs/presentation
@@ -33,11 +32,10 @@ parts:
     chapters:
       - file: docs/tool-setup
       - file: docs/run-baseline
-        sections:
-        - file: Top-down/notebooks/CCDR.ipynb
   - caption: External resources
     chapters:
-      - file: docs/external-resources
+      - file: docs/external-tools
+      - file: docs/external-data
   - caption: Credits
     chapters:
       - file: docs/team
