@@ -1,4 +1,4 @@
-# External data
+# Additional data sources
 
 Additional sources of risk data (hazard, exposure, disaster losses).
 
