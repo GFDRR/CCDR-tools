@@ -1,6 +1,6 @@
-# External tools
+# External resources
 
-Additional tools to help manage and process risk data.
+Additional resources and tools to help collect and process risk data.
 
 ```{table}
 :name: external_tools

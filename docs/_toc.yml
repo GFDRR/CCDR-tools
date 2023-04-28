@@ -37,7 +37,7 @@ parts:
         - file: Top-down/notebooks/CCDR.ipynb
   - caption: External resources
     chapters:
-      - file: docs/external-tools
+      - file: docs/external-resources
   - caption: Credits
     chapters:
       - file: docs/team

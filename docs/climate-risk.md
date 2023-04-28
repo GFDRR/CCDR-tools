@@ -9,7 +9,7 @@ align: center
 ---
 ```
 
-The estimate of upcoming climate change impacts are based on comparisons of baseline conditions (which can be either observed or simulated) against future scenarios of climate variability. The long-term averages of climate variables serve as the baseline conditions. Changes in projected values against this baseline are then interpreted future climate anomalies and used to project forward-looking disaster risks.
+The long-term averages of climate indices (observed or simulated) serve as the baseline conditions, against which the effects of climate change are measured for future scenarios. Changes in projected climate indices against this baseline (anomalies) and used to estimate changes in natural hazard frequency and intensity. 
 
 ```{table} Climate variables underlying hazard projections
 :name: climate_indices
