@@ -123,22 +123,10 @@ const thebe_selector_output = ".output, .cell_output"
    Exposure
   </a>
  </li>
- <li class="toctree-l1 has-children">
+ <li class="toctree-l1">
   <a class="reference internal" href="intro-vulnerability.html">
    Vulnerability
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="risk-poverty.html">
-     Risk and poverty
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="intro-risk.html">
@@ -161,8 +149,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="global-hazard.html">
    Hazard Datasets
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -222,6 +210,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="risk-poverty.html">
+   Risk and poverty
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="climate-indices.html">
    Climate indices
   </a>
@@ -248,22 +241,10 @@ const thebe_selector_output = ".output, .cell_output"
    Tools setup
   </a>
  </li>
- <li class="toctree-l1 has-children">
+ <li class="toctree-l1">
   <a class="reference internal" href="run-baseline.html">
    Baseline risk
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../Top-down/notebooks/CCDR.html">
-     Choose your hazard:
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
@@ -273,8 +254,13 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="external-resources.html">
-   External resources
+  <a class="reference internal" href="external-tools.html">
+   External tools
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="external-data.html">
+   External data
   </a>
  </li>
 </ul>
@@ -727,24 +713,31 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <h2>Run CCDR tool notebooks<a class="headerlink" href="#run-ccdr-tool-notebooks" title="Permalink to this headline">#</a></h2>
 <section id="baseline-risk">
 <h3>Baseline risk<a class="headerlink" href="#baseline-risk" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p></li>
+<ul>
+<li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p>
+<figure class="align-center" id="id1">
+<img alt="docs/images/cmd-prompt.png" src="docs/images/cmd-prompt.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Example of Anaconda cmd prompt</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
 <li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">CCDR.ipynb</a> and chose the hazard to analyse.</p></li>
 </ul>
-<figure class="align-center" id="id1">
+<figure class="align-center" id="id2">
 <img alt="../_images/ccdr-nb.png" src="../_images/ccdr-nb.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 20 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <ul class="simple">
 <li><p>Execute all cells. The last one will present the user interface:</p></li>
 </ul>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id3">
 <img alt="../_images/ccdr-nb_settings.png" src="../_images/ccdr-nb_settings.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 20 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 21 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -755,10 +748,10 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
 <li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb">CCDR-climate.ipynb</a> and chose the indices to plot.</p></li>
 </ul>
-<figure class="align-center" id="id3">
+<figure class="align-center" id="id4">
 <img alt="../_images/ccdr-nb.png" src="../_images/ccdr-nb.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 21 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 22 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
