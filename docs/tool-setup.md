@@ -27,7 +27,7 @@ Work dir/
   - ...
 ```
 
-```{figure} images/adm_lvl.png
+```{figure} images/adm_lvl.jpg
 ---
 align: center
 ---
