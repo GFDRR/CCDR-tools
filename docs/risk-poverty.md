@@ -13,15 +13,15 @@ The estimate of poverty distribution is usually done measuring either the income
 The presence of physical assets in the household can be used to construct a wealth index [(Filmer and Pritchett 2001)](https://www.jstor.org/stable/3088292). Relative wealth indices are an equally valid, but distinct measure of household socio-economic status from income and consumption measures [(Poirier et al. 2019)](https://doi.org/10.1007/s11205-019-02187-9). Context-specific factors such as country development level may affect the concordance of health and educational outcomes with wealth indices and urban–rural disparities can be more pronounced using wealth indices compared to income or consumption.
 
 ```{caution}
-While the wealth quintiles are useful to understand relative wealth and equity within a country, they do not give one a sense of absolute wealth and neither comply with a predefined mathematical relationship; for instance, a tile with a wealth index value of 4 is richer than a tile with a value of 2, but there is no information on how much richer. Someone deemed “rich” according to the wealth quintiles in developing countries might still have few resources for out-of-pocket expenditures.
+While the wealth quintiles are useful to understand relative wealth and equity within a country, they do not give one a sense of absolute wealth and neither comply with a predefined mathematical relationship; for instance, a tile with a wealth index value of **2** is richer than a tile with a value of **0.5**, but there is no information on how much richer. Someone deemed “rich” according to the wealth quintiles in developing countries might still have few resources for out-of-pocket expenditures.
 ```
 
 ```{table}
 :name: vln-se
-| **Name** | **Source** | **Hazard type** | **Exposure category** | **Model type** | **Scale** |
+| **Name** | **Source** | **Model type** | **Scale** |
 |---:|---:|---:|---:|---:|---:|
-| [Relative Wealth Index](https://data.humdata.org/dataset/relative-wealth-index) | META | - | Population | Socio-economic | National |
-| [Demographic Health Survey](https://dhsprogram.com/data/available-datasets.cfm) | USAID | - | Population | Socio-economic | National |
+| [Relative Wealth Index](https://data.humdata.org/dataset/relative-wealth-index) | META | Wealth index | National |
+| [Demographic Health Survey](https://dhsprogram.com/data/available-datasets.cfm) | USAID| Wealth index | National |
 ```
 
 The USAID **Demographic Health Survey** (**DHS**) has been used to this purpose, analysing the quantiles distribution obtained from a series of questions about household construction materials, water and sanitation access, and ownership of various items (e.g. television, refrigerator), which form a relative indicator of socio-economic status within a given country at the time of the survey.
