@@ -565,7 +565,7 @@ title="Print to PDF"
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>ADMINISTRATIVE</strong> boundaries are provided as geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (exampe <code class="docutils literal notranslate"><span class="pre">NPL_ADM.gpkg</span></code>) made of multiple layers represening different administrative boundary levels. (example up to subnational level 3):</p></li>
+<li><p><strong>ADMINISTRATIVE</strong> boundaries are provided as geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (exampe <code class="docutils literal notranslate"><span class="pre">NPL</span></code>_ADM.gpkg) made of multiple layers represening different administrative boundary levels. (example up to subnational level 3):</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">ISO_ADM</span>
   <span class="o">-</span> <span class="n">ADM0</span> <span class="p">(</span><span class="n">country</span><span class="p">)</span>
@@ -575,6 +575,12 @@ title="Print to PDF"
   <span class="o">-</span> <span class="o">...</span>
 </pre></div>
 </div>
+<figure class="align-center" id="id1">
+<img alt="docs/images/adm_lvl.png" src="docs/images/adm_lvl.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 20 </span><span class="caption-text">Example of sub-national administrative boundaries for Senegal.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 <p>Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:</p>
 <ul class="simple">
 <li><p><strong>ADM0</strong></p></li>
@@ -716,29 +722,29 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <h3>Baseline risk<a class="headerlink" href="#baseline-risk" title="Permalink to this headline">#</a></h3>
 <ul>
 <li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p>
-<figure class="align-center" id="id1">
+<figure class="align-center" id="id2">
 <img alt="docs/images/cmd-prompt.png" src="docs/images/cmd-prompt.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 20 </span><span class="caption-text">Example of Anaconda cmd prompt</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 21 </span><span class="caption-text">Example of Anaconda cmd prompt</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
 <li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">CCDR.ipynb</a> and chose the hazard to analyse.</p></li>
 </ul>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id3">
 <img alt="../_images/ccdr-nb.png" src="../_images/ccdr-nb.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 21 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 22 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <ul class="simple">
 <li><p>Execute all cells. The last one will present the user interface:</p></li>
 </ul>
-<figure class="align-center" id="id3">
+<figure class="align-center" id="id4">
 <img alt="../_images/ccdr-nb_settings.png" src="../_images/ccdr-nb_settings.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 22 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 23 </span><span class="caption-text">Settings from one of the python notebooks</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -749,10 +755,10 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></p></li>
 <li><p>Select <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb">CCDR-climate.ipynb</a> and chose the indices to plot.</p></li>
 </ul>
-<figure class="align-center" id="id4">
+<figure class="align-center" id="id5">
 <img alt="docs/images/ccdr_nb.png" src="docs/images/ccdr_nb.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 23 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 24 </span><span class="caption-text">Starting page for the CCDR python notebooks</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
