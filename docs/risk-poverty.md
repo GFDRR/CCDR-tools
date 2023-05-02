@@ -3,7 +3,12 @@
 The distributional impact of climate risks can be examined by overlaying risk maps (EAI or EAE) with poverty maps.
 The combination can be displayed using bivariate maps that show the locations where risk is most likely to translate into most severe impacts on the poorest and vulnerable households.
 
-[figure sample]
+```{figure} images/bivariate_map.png
+---
+align: center
+---
+Example of bivariate maps relating expected annual impact from river floods on population mortality and population socio-economci status as described by population-weighted wealth index (RWI).
+```
 
 ## Wealth indices
 
