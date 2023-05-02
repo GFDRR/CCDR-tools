@@ -16,16 +16,17 @@ Work dir/
    - RSK	Output directory
 ```
 
-- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL_ADM.gpkg`) made of multiple layers, up to ADM level 3:
+- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL_ADM.gpkg`) made of multiple layers represening different administrative boundary levels. (example up to subnational level 3):
 
 ```
 - ISO_ADM
-  - ADM0
-  - ADM1
-  - ADM2
-  - ADM3
+  - ADM0 (country)
+  - ADM1 (first-level sub-national division)
+  - ADM2 (second-level sub-national division)
+  - ADM3 (third-level sub-national division)
+  - ...
 ```
-Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate aggrgation of results:
+Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:
 
   - **ADM0**
 
@@ -51,7 +52,7 @@ Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to 
   |---|---|---|---|---|---|---|---|
   | Integer | String (20) | Integer | String(20) | Integer | String(20) | Integer | String(20) |
 
-- **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using  resolution below 90m over large countries could cause very long processing and memory cap issues.
+- **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
 <br>
 
 - **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). The same suggestion about resolution applies here.
@@ -133,7 +134,7 @@ Settings from one of the python notebooks
 - Run `jupyter notebook`
 - Select [CCDR-climate.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb) and chose the indices to plot.
 
-```{figure} images/ccdr-nb.png
+```{figure} images/ccdr_nb.png
 ---
 align: center
 ---
