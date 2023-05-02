@@ -16,7 +16,7 @@ Work dir/
    - RSK	Output directory
 ```
 
-- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL_ADM.gpkg`) made of multiple layers represening different administrative boundary levels. (example up to subnational level 3):
+- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL`_ADM.gpkg) made of multiple layers represening different administrative boundary levels. (example up to subnational level 3):
 
 ```
 - ISO_ADM
@@ -26,6 +26,14 @@ Work dir/
   - ADM3 (third-level sub-national division)
   - ...
 ```
+
+```{figure} images/adm_lvl.png
+---
+align: center
+---
+Example of sub-national administrative boundaries for Senegal.
+```
+
 Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:
 
   - **ADM0**
