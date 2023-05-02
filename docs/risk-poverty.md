@@ -1,10 +1,9 @@
 # Risk and poverty
 
-Introduce bi-variate maps, examples.
+The distributional impact of climate risks can be examined by overlaying risk maps (EAI or EAE) with poverty maps.
+The combination can be displayed using bivariate maps that show the locations where risk is most likely to translate into most severe impacts on the poorest and vulnerable households.
 
-The distributional impact of climate risks can be examined by overlaying poverty maps shown in Figure 21, on built-up asset and agricultural land EAE and EAI maps produced in the earlier section. These results are visualized using a series of bivariate maps that show the locations where risk is most likely to translate into severe impacts on the poorest and vulnerable households.
-
-
+[figure sample]
 
 ## Wealth indices
 
