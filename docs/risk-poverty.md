@@ -52,7 +52,6 @@ Poverty maps are combined with EAE/EAI maps to generate bi-variate maps. These m
 
 ```{table}
 :name: bivariate-matrix
-
 |  **Risk indicator**  |  **Unit**  |  **Metric**  <td colspan=3>Risk Classification  |  |  |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |  |  |  | **Low** | **Medium** | **High** |
@@ -66,4 +65,4 @@ Poverty maps are combined with EAE/EAI maps to generate bi-variate maps. These m
 
 Classification of total exposure on an administrative unit is done both on the basis of absolute numbers or ratios. For instance, as severe fluvial flooding and landslides represent very localized threats, the classification is based on total counts. In comparison, heat waves, droughts and air pollution are more widespread across geographic units and therefore classified into groups based on proportions. 
 
-How to create bi-variate maps, link to script
+**Link to script**
