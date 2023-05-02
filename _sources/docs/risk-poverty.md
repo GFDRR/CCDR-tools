@@ -1,10 +1,48 @@
 # Risk and poverty
 
-Rationalle, DHS vs RWI - examples and references.
+Introduce bi-variate maps
+
+## Wealth indices
+
+The estimate of poverty distribution is usually done measuring either the income distribution (of the household’s dwellers), or expenditure (average monthly expenditure of the household). However, due to the difficulties in obtaining reliable income/consumption data in low- and middle-income countries, alternative ways to build the wealth index are often the best available approximation of relative socio-economic status.
+<br>
+The presence of physical assets in the household can be used to construct a wealth index [Filmer and Pritchett 2001](https://www.jstor.org/stable/3088292). The USAID Demographic Health Survey (DHS) has been used to this purpose, analysing the quantiles distribution obtained from a series of questions about household construction materials, water and sanitation access, and ownership of various items (e.g. television, refrigerator), which form a relative indicator of socio-economic status within a given country at the time of the survey.
+
+```{caution}
+While the wealth quintiles are useful to understand relative wealth and equity within a country, they do not give one a sense of absolute wealth and neither comply with a predefined mathematical relationship; for instance, a tile with a wealth index value of 4 is richer than a tile with a value of 2, but there is no information on how much richer. Someone deemed “rich” according to the wealth quintiles in developing countries might still have few resources for out-of-pocket expenditures.
+```
+
+AI-based indices such as the Relative Wealth Index (RWI) [Chi et al., 2022](https://www.pnas.org/doi/10.1073/pnas.2113658119) are appealing due to the immediate and cost-effective estimates they can provide. The RWI is an index estimated by a machine learning model for 135 low and middle-income countries to provide micro-estimates (projections) of wealth and poverty at fine-grained 2.4 km resolution tiles. The model is trained on vast and heterogeneous datasets from satellites, mobile phone networks, topographic maps, as well as connectivity data from Facebook. The approach for creating the RWI map overcomes essential limitations of the traditional surveys, such as fine-grained coverage, and timely and cost-efficient data, while extending to countries where DHS does not operate. However, the application of RWI index to a real-world scenario would be sensitive to the socioeconomic particularities of the country, leading to significantly different estimates from the ones obtained by a traditional survey approach.
+
+Relative wealth indices are an equally valid, but distinct measure of household socio-economic status from income and consumption measures [Poirier et al, 2019]. Context-specific factors such as country development level may affect the concordance of health and educational outcomes with wealth indices and urban–rural disparities can be more pronounced using wealth indices compared to income or consumption.
+
+
+```{table}
+:name: vln-se
+| **Name** | **Source** | **Hazard type** | **Exposure category** | **Model type** | **Scale** |
+|---:|---:|---:|---:|---:|---:|
+| [Relative Wealth Index](https://data.humdata.org/dataset/relative-wealth-index) | META | - | Population | Socio-economic | National |
+| [Demographic Health Survey](https://dhsprogram.com/data/available-datasets.cfm) | USAID | - | Population | Socio-economic | National |
+```
 
 ## Index normalisation
 
-Using population
+The DHS data are weighted to render the survey demographically representative; while the RWI requires to be weighted. The High-Resolution Settlement Layer (HRSL) [Tiecke et al., 2017] is used to obtain the population estimates at 100 m resolution.
 
+```{figure} images/rwi1.jpg
+---
+align: center
+---
+(left) Original RWI data points (x,y) from Meta; (right) RWI as regular grid (2.4 km).
+```
+
+```{figure} images/rwi2.jpg
+---
+align: center
+---
+(left) RWI weighted by population at 100 m (GHSL); (right) Population-weighted RWI summarised at ADM 3 level.
+```
 
 ## Bi-variate maps
+
+How to create bi-variate maps, link to script
