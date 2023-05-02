@@ -1,5 +1,8 @@
 # Tools setup
 
+The analytical script is provided in form of [notebooks] and [independent code].
+In both cases, the script expects input data to be provided according to some rules.
+
 ### Expected directories and input format
 
 The script expects input data folders to be structured as:
@@ -8,7 +11,6 @@ The script expects input data folders to be structured as:
 Work dir/
  - Hazard.ipynb
  - common.py
- - .env
  - Data/
    - ADM	Administrative unit layer for each country
    - HZD	Hazard layers
