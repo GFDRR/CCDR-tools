@@ -566,7 +566,7 @@ In both cases, the script expects input data to be provided according to some ru
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>ADMINISTRATIVE</strong> boundaries are provided as geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (exampe <code class="docutils literal notranslate"><span class="pre">NPL</span></code>_ADM.gpkg) made of multiple layers represening different administrative boundary levels.</p></li>
+<li><p><strong>ADMINISTRATIVE</strong> boundaries are provided as geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (e.g. <code class="docutils literal notranslate"><span class="pre">NPL</span></code>_ADM.gpkg) made of multiple layers represening different administrative boundary levels.</p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">ISO_ADM</span>
   <span class="o">-</span> <span class="n">ADM0</span> <span class="p">(</span><span class="n">country</span><span class="p">)</span>
@@ -673,6 +673,7 @@ In both cases, the script expects input data to be provided according to some ru
 </table>
 <ul class="simple">
 <li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_HZD_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
+<br>
 <br></p></li>
 <li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_EXP.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). The same suggestion about resolution applies here.</p>
 <ul>
@@ -682,7 +683,10 @@ In both cases, the script expects input data to be provided according to some ru
 </ul>
 </li>
 </ul>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
 <p>When resampling exposure layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid, or viceversa.</p>
+</div>
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>

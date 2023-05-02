@@ -18,7 +18,7 @@ Work dir/
    - RSK	Output directory
 ```
 
-- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL`_ADM.gpkg) made of multiple layers represening different administrative boundary levels.
+- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (e.g. `NPL`_ADM.gpkg) made of multiple layers represening different administrative boundary levels.
 
 ```
 - ISO_ADM
@@ -64,14 +64,16 @@ Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to 
 
 - **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
 <br>
-
+<br>
 - **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). The same suggestion about resolution applies here.
 
 	- Population from GHSL, 90 m: `ISO`_POP.tif
 	- Built-up from World Settlement Footprint or equivalent, 90 m: `ISO`_BUP.tif
 	- Agriculture from land cover map, ESA land cover or equivalent, 90 m: `ISO`_AGR.tif
 
+```{caution}
 When resampling exposure layers to a lower resolution, it is **strongly recommended** to align the resampled grid to exactly match the hazard grid, or viceversa.
+```
 
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
 
