@@ -16,7 +16,7 @@ Work dir/
    - RSK	Output directory
 ```
 
-- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL`_ADM.gpkg) made of multiple layers represening different administrative boundary levels. (example up to subnational level 3):
+- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (exampe `NPL`_ADM.gpkg) made of multiple layers represening different administrative boundary levels.
 
 ```
 - ISO_ADM
@@ -111,7 +111,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
 ### Baseline risk
 
 - Navigate to your working directory: `cd <Your work directory>`
-  ```{figure} images/cmd-prompt.png
+  ```{figure} images/cmd_prompt.png
   ---
   align: center
   ---
@@ -142,7 +142,7 @@ Settings from one of the python notebooks
 - Run `jupyter notebook`
 - Select [CCDR-climate.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb) and chose the indices to plot.
 
-```{figure} images/ccdr_nb.png
+```{figure} images/ccdr-nb.png
 ---
 align: center
 ---
