@@ -535,35 +535,8 @@ title="Print to PDF"
 The presence of physical assets in the household can be used to construct a wealth index <a class="reference external" href="https://www.jstor.org/stable/3088292">(Filmer and Pritchett 2001)</a>. Relative wealth indices are an equally valid, but distinct measure of household socio-economic status from income and consumption measures <a class="reference external" href="https://doi.org/10.1007/s11205-019-02187-9">(Poirier et al. 2019)</a>. Context-specific factors such as country development level may affect the concordance of health and educational outcomes with wealth indices and urban–rural disparities can be more pronounced using wealth indices compared to income or consumption.</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
-<p>While the wealth quintiles are useful to understand relative wealth and equity within a country, they do not give one a sense of absolute wealth and neither comply with a predefined mathematical relationship; for instance, a tile with a wealth index value of 4 is richer than a tile with a value of 2, but there is no information on how much richer. Someone deemed “rich” according to the wealth quintiles in developing countries might still have few resources for out-of-pocket expenditures.</p>
+<p>While the wealth quintiles are useful to understand relative wealth and equity within a country, they do not give one a sense of absolute wealth and neither comply with a predefined mathematical relationship; for instance, a tile with a wealth index value of <strong>2</strong> is richer than a tile with a value of <strong>0.5</strong>, but there is no information on how much richer. Someone deemed “rich” according to the wealth quintiles in developing countries might still have few resources for out-of-pocket expenditures.</p>
 </div>
-<table class="colwidths-auto table" id="vln-se">
-<thead>
-<tr class="row-odd"><th class="text-align:right head"><p><strong>Name</strong></p></th>
-<th class="text-align:right head"><p><strong>Source</strong></p></th>
-<th class="text-align:right head"><p><strong>Hazard type</strong></p></th>
-<th class="text-align:right head"><p><strong>Exposure category</strong></p></th>
-<th class="text-align:right head"><p><strong>Model type</strong></p></th>
-<th class="text-align:right head"><p><strong>Scale</strong></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td class="text-align:right"><p><a class="reference external" href="https://data.humdata.org/dataset/relative-wealth-index">Relative Wealth Index</a></p></td>
-<td class="text-align:right"><p>META</p></td>
-<td class="text-align:right"><p>-</p></td>
-<td class="text-align:right"><p>Population</p></td>
-<td class="text-align:right"><p>Socio-economic</p></td>
-<td class="text-align:right"><p>National</p></td>
-</tr>
-<tr class="row-odd"><td class="text-align:right"><p><a class="reference external" href="https://dhsprogram.com/data/available-datasets.cfm">Demographic Health Survey</a></p></td>
-<td class="text-align:right"><p>USAID</p></td>
-<td class="text-align:right"><p>-</p></td>
-<td class="text-align:right"><p>Population</p></td>
-<td class="text-align:right"><p>Socio-economic</p></td>
-<td class="text-align:right"><p>National</p></td>
-</tr>
-</tbody>
-</table>
 <p>The USAID <strong>Demographic Health Survey</strong> (<strong>DHS</strong>) has been used to this purpose, analysing the quantiles distribution obtained from a series of questions about household construction materials, water and sanitation access, and ownership of various items (e.g. television, refrigerator), which form a relative indicator of socio-economic status within a given country at the time of the survey.</p>
 <p>AI-based indices such as the <strong>Relative Wealth Index</strong> (<strong>RWI</strong>) <a class="reference external" href="https://www.pnas.org/doi/10.1073/pnas.2113658119">Chi et al. 2022</a> are appealing due to the immediate and cost-effective estimates they can provide. The RWI is an index estimated by a machine learning model for 135 low and middle-income countries to provide micro-estimates (projections) of wealth and poverty at fine-grained 2.4 km resolution tiles. The model is trained on vast and heterogeneous datasets from satellites, mobile phone networks, topographic maps, as well as connectivity data from Facebook. The approach for creating the RWI map overcomes essential limitations of the traditional surveys, such as fine-grained coverage, and timely and cost-efficient data, while extending to countries where DHS does not operate. However, the application of RWI index to a real-world scenario would be sensitive to the socioeconomic particularities of the country, leading to significantly different estimates from the ones obtained by a traditional survey approach.</p>
 </section>
@@ -587,7 +560,7 @@ The presence of physical assets in the household can be used to construct a weal
 <h2>Bi-variate maps<a class="headerlink" href="#bi-variate-maps" title="Permalink to this headline">#</a></h2>
 <p>Poverty maps are combined with EAE/EAI maps to generate bi-variate maps. These maps provide ranks explained by a 3x3 matrix, resulting in 9 possible scores ranging from low-risk / low-poverty to high-risk / high poverty. The matrix is built by classifying poverty indicators into three quantiles and dividing risk indicators (EAE/EAI) of each hazard type into groups.</p>
 <p>Classification of total exposure on an administrative unit is done both on the basis of absolute numbers or ratios. For instance, as severe fluvial flooding and landslides represent very localized threats, the classification is based on total counts. In comparison, heat waves, droughts and air pollution are more widespread across geographic units and therefore classified into groups based on proportions.</p>
-<p>How to create bi-variate maps, link to script</p>
+<p><strong>Link to script</strong></p>
 </section>
 </section>
 
