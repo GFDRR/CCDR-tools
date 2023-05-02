@@ -8,7 +8,7 @@ Some of the hazards typically considered in risk screening are:
   - Earthquakes
   - Tsunami
   - Volcanic activities
-
+<br>
 - **Hydro-meteorological hazards**
   - River and pluvial floods
   - Coastal floods
