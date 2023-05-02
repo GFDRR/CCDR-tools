@@ -155,7 +155,7 @@ The Agricultural Stress Index by FAO depicts the frequency of severe drought in 
 ---
 align: center
 ---
-Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.
+FAO ASI global dataset showing historical drought frequency for >30% cropland area affected along the period 1984-2021.
 ```
 
 ## Heat stress
