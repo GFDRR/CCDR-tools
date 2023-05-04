@@ -11,14 +11,14 @@ The most relevant datasets (updated, high resolution, scientific quality) repres
 
 ```{table}
 :name: hzd_datasets
-| [**GEOPHYSICAL**](hzd_gp-data.md) | [**HYDRO-METEOROLOGICAL**](hzd_hm-data.md) | [**ENVIRONMENTAL FACTORS**](hzd_env-data.md) |
+| [**GEOPHYSICAL**](hzd_gp-data.md) | [**HYDRO-METEOROLOGICAL**](hzd_hm-data.md#river-floods) | [**ENVIRONMENTAL FACTORS**](hzd_env-data.md) |
 | :--: | :--: | :--: |
-| Earthquake | River flood | Air pollution |
-| Tsunami | Landslide |   |
-| Volcanic activity | Coastal flood |  |
-|   | Tropical cyclones |   |
-|   | Drought |  |
-|   | Extreme heat |  |
+| Earthquake | [River floods](hzd_hm-data.md#river-floods) | [Air pollution](hzd_env-data.md#) |
+| Tsunami | [Landslides](hzd_hm-data.md#landslides) |   |
+| Volcanic activity | [Coastal flood](hzd_hm-data.md#coastal-floods-storm-surge)  |  |
+|   | [Tropical cyclones](hzd_hm-data.md#tropical-cyclones) |   |
+|   | [Drought](hzd_hm-data.md#drought-water-scarcity) |  |
+|   | [Heat stress](hzd_hm-data.md#heat-stress) |  |
 |   | Wildfires |  |
 ```
 
