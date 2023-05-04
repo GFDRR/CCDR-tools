@@ -9,14 +9,20 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 ## Hazard
 
 ### Correct values interpretation and Outliers
+
 ### Geographic validation
+
 ### Validation against empirical datasets
+
 
 ## Exposure
 
 ### Correct values interpretation and Outliers
+
 ### Comparison against basemap
+
 ### Cross-comparison between similar datasets
+
 
 # Output interpretation
 
