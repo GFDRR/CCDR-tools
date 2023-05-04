@@ -138,18 +138,3 @@ align: center
 ---
 Settings from one of the python notebooks
 ```
-
-### Climate indices (temp)
-
-- Navigate to your working directory: `cd <Your work directory>`
-- Run `jupyter notebook`
-- Select [CCDR-climate.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb) and chose the indices to plot.
-
-```{figure} images/ccdr-nb.png
----
-align: center
----
-Starting page for the CCDR python notebooks
-```
-
-
