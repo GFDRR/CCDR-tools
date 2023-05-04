@@ -2,6 +2,8 @@
 
 In this framework, Risk (**R**) is calculated as a function of: the hazard occurrence probability and intensity (i.e., physical magnitude) in a particular location (**H**, for Hazard); the people and physical assets (infrastructure, buildings, crops, etc.) situated in that location and therefore exposed to the hazard (**E**, for Exposure); and the conditions determined by physical, social, and economic factors which increase the susceptibility of an exposed individual, community, asset or system to the impacts of hazards (**V**, for Vulnerability).
 
+<span style="font-size: 120%;"><p align="center" size=+2><b>Risk = Hazard x Exposure x Vulnerability</b></p></span>
+
 ```{seealso}
 **Disaster risk is expressed as the likelihood of loss of life, injury or destruction and damage from a disaster in a given period of time (UNDRR 2017).**
 
@@ -10,17 +12,11 @@ Measures of exposure can include the number of people or types of assets in an a
 - **[UNDRR Risk overview](https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk)**
 ```
 
-From these definitions, we understand that the concept of risk is inherently tied to the concept of probability.
+From these definitions, we understand that the concept of `risk` is inherently tied to the concept of `probability`, expressed in terms of frequency (also occurrence rate). In other words:
 
-<p align="center" size=+2>Risk = Probability x Impact</p>
+<span style="font-size: 120%;"><p align="center" size=+2><b>Risk = Probability x Impact</b></p></span>
 
 ```{figure} images/risk_impact_rate.png
----
-align: center
----
-Risk as impact - probability combination.
-```
-```{figure} images/risk_impact_prob.png
 ---
 align: center
 ---
