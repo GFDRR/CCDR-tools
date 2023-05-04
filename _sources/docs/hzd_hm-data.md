@@ -43,7 +43,7 @@ align: center
 ---
 Global Surface Water Layer
 ```
-
+<hr>
 ## Coastal floods (storm surge)
 Coastal floods occur when the level in a water body (sea, estuary) rises to engulf otherwise dry land. This happens mainly due to storm surges, triggered by tropical cyclones and/or strong winds pushing surface water inland. Like for inland floods, hazard intensity is measured using the water extent and associated depth.
 
@@ -94,6 +94,7 @@ Quick comparison of coastal flood layers over Northern Europe under baseline con
 ```
 ### Sea level rise
 
+<hr>
 ## Landslides
 Landslides (mass movements) are affected by geological features (rock type and structure) and geomorphological setting (slope gradient). Landslides can be split into two categories depending on their trigger:
 - **Dry mass movement** (rockfalls, debris flows) is driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation. 
@@ -122,7 +123,7 @@ align: center
 ---
 Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuos index is displayed into 3 discrete classes (Low, Medium, High).
 ```
-
+<hr>
 ## Tropical cyclones
 Tropical cyclones (including hurricanes, typhoons) are events that can trigger different hazard processes at once such as strong winds, intense rainfall, extreme waves, and storm surges. In this category, we consider only the wind component of cyclone hazard, while other components (floods, storm surge) are typically considered separately.
 
@@ -152,7 +153,7 @@ align: center
 ---
 Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.
 ```
-
+<hr>
 ## Drought & Water scarcity
 
 The [**Agricultural Stress Index**](https://www.fao.org/giews/earthobservation/access.jsp) by **FAO** depicts the frequency of severe drought in areas where: i) 30 percent of the cropped land; or ii) 50 percent of the cropped land has been affected. The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2021). Data are available in 
@@ -163,7 +164,7 @@ align: center
 ---
 FAO ASI global dataset showing historical drought frequency for >30% cropland area affected along the period 1984-2021.
 ```
-
+<hr>
 ## Heat stress
 
 Heat discomfort increases when hot temperatures are associated with high humidity [[Coffel et al 2018](https://doi.org/10.1088/1748-9326/aaa00e)]. Heat stress can cause long-term impairment and reduce labour productivity and incomes [[Goodman et [al 2018](https://scholar.harvard.edu/files/joshuagoodman/files/w24639.pdf)].
@@ -212,5 +213,5 @@ width: 60%
 ---
 ```
 In terms of future projections, both UTCI and WBGT projections have been produced under CMIP6 scenarios and are available via [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). The indices are provided for historical and future climate projections (SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5) included in the Coupled Model Intercomparison Project Phase 6 (CMIP6) and used in the 6th Assessment Report of the Intergovernmental Panel on Climate Change (IPCC). These have daily resolution and would allow to derive downscaled extreme temperature projections. These projections have not yet been processed into a frequency analysis, but that can be produced using the same approach.
-
+<hr>
 ## Wildfires
