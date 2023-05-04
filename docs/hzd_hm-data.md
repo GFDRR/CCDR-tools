@@ -158,6 +158,7 @@ align: center
 Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.
 ```
 <hr>
+
 ## Drought & Water scarcity
 
 The [**Agricultural Stress Index**](https://www.fao.org/giews/earthobservation/access.jsp) by **FAO** depicts the frequency of severe drought in areas where: i) 30 percent of the cropped land; or ii) 50 percent of the cropped land has been affected. The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2021). Data are available in 

@@ -1,10 +1,10 @@
-# Exposure Datasets
+# Exposure datasets
 
-**Exposure Datasets** refer to a variety of datasets that can be used to represent the value that is exposed to suffer damage and losses from natural hazards.
+**Exposure datasets** refer to a variety of datasets that can be used to represent the value that is exposed to suffer damage and losses from natural hazards.
 This section presents some of the most common and recent type of data and indicators used for this purpose.
 
 ```{seealso}
-Exposure datasets developed by WB disaster risk projects have been placed in a special collection of the WB Development Data Hub: [Risk Data Library Collection: **EXPOSURE**](https://datacatalog.worldbank.org/search?q=exposure&start=0&sort=).
+Exposure datasets developed by WB disaster risk projects have been placed in a special collection of the WB Development Data Hub: [Risk Data Library Collection: **EXPOSURE**](https://datacatalog.worldbank.org/search?fq=(identification%2Fcollection_code%2Fany(col:col%20eq%20%27RDL%27))&q=exposure).
 ```
 
 Below is a quick link to openly-licensed datasets that are used by the CCDR standard screening tool.

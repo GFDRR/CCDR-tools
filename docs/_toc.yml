@@ -18,8 +18,8 @@ parts:
           - file: docs/hzd_env-data
         - file: docs/global-exposure
         - file: docs/global-vulnerability
-        - file: docs/rdl
         - file: docs/disaster-data
+        - file: docs/rdl
   - caption: Analytical approaches
     chapters:
       - file: docs/EAI
