@@ -2,14 +2,7 @@
 
 Process or phenomenon of atmospheric, hydrological or oceanographic nature that may cause loss of life, injury or other health impacts, property damage, loss of livelihoods and services, social and economic disruption, or environmental damage [(UNISDR)](https://link.springer.com/referenceworkentry/10.1007/978-1-4020-4399-4_179#ref-CR8537).
 
- - [River floods](river-floods)
- - [Coastal flood](coastal-floods-storm-surge)
- - [Landslides](landslides)
- - [Tropical cyclones](tropical-cyclones)
- - [Drought](drought-water-scarcity)
- - [Heat stress](heat-stress)
- - Wildfires
-
+(sub-section-label)=
 ## River floods
 Flood hazard is commonly described in terms of flood frequency (multiple scenarios) and severity, which is measured in terms of water extent and related depth modelled over Digital Elevation Model (DEM). Inland flood events can be split into 2 categories:
 - **Fluvial (or river) floods** occur when intense precipitation or snow melt collects in a catchment, causing river(s) to exceed capacity, triggering the overflow, or breaching of barriers and causing the submersion of land, especially along the floodplains.
