@@ -54,7 +54,7 @@ Coastal floods occur when the level in a water body (sea, estuary) rises to engu
 | **Resolution** | 1 km | 90 m, 1 km, 5 km |
 | **Analysis type** | Probabilistic | |
 | **Frequency type** | Return Period (10 RPs) | Return Period (6 RPs) |
-| **Time reference** | Baseline (1960–1999); Projections – CMIP5 (2030-2050-2080) | Baseline (2018); Projections – SLR (2050) |
+| **Time reference** | Baseline (1960–1999);<br>Projections – CMIP5 (2030-2050-2080) | Baseline (2018);<br>Projections – SLR (2050) |
 | **Intensity metric** | Water depth [m] | Water depth [m] |
 | **License** | Open data | Access requested |
 | **Notes** | Includes effect of local subsidence (2 datasets) and flood attenuation. Modelled future scenarios. | Essentially an evolution of the WRI |
@@ -133,7 +133,7 @@ Tropical cyclones (including hurricanes, typhoons) are events that can trigger d
 | **Resolution** | 30 km | 10 km | 10 km |
 | **Analysis type** | Probabilistic | Empirical | Empirical, Probabilistic |
 | **Frequency type** | Return Period (5 RPs) | | Return periods (10 10,000 years) |
-| **Time reference** | Baseline (1989-2007) | Baseline (1980-2022) | Baseline (1984-2022); Projections (2015-2050; SSP5/8.5) |
+| **Time reference** | Baseline (1989-2007) | Baseline (1980-2022) | Baseline (1984-2022);<br>Projections (2015-2050; SSP5/8.5) |
 | **Intensity metric** | Wind gust speed [5-sec m/s] | Many variables | Many variables |
 | **License** | Open data | Open data | Open data |
 ```
@@ -171,7 +171,7 @@ Not everyone reacts to the heat stresses in the same way, as individual response
 Various definitions regarding magnitude and duration thresholds and heat metrics exist. There are several heat indices involving both temperature and relative humidity, here are listed the most common ones.
 
 Name | [Global extreme temperatures (WBGT)](https://www.geonode-gfdrrlab.org/layers/hazard:intensity_returnperiod5y/metadata_detail) | [Universal Thermal Climate Index (UTCI)](https://climate.copernicus.eu/ESOTC/2019/heat-and-cold-stress) | [Heat-humidity index](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cordex-domains-single-levels?tab=overview)
--- | -- | -- | --
+--: | :--: | :--: | :--:
 Developer | VITO | Copernicus | CORDEX
 Hazard process | Extreme heat stress | Heat stress on human health | Extreme heat and humidity
 Resolution | 10 km | 30 km | 25 km
@@ -193,22 +193,22 @@ Comparing recent high-resolution temperature maps showing the heat island effect
 
 - **Universal Thermal Climate Index** (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, skin wetness, skin blood flow and rectal, mean skin and face temperatures) as the actual environment.
 A polynomial approximation based on near-surface air temperature, solar radiation, vapor pressure, and wind speed is used for calculating the universal thermal climate index.
-UTCI data from ERA-5 climate reanalysis has been processed into a probabilistic analysis of extremes. In this dataset, the influence of solar radiation and wind speed is not considered, and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
+
 
 ```{seealso}
-A collection of scenarios representing the frequency distribution of heat has been produced in form of multiple layers representing return periods. The objective is to facilitate the use of these data for heat risk analysis. The scenarios include ten return periods for mean, min and max daily UTCI (C°) for the period 1940-2020. Return Period scenarios: 5, 10, 20, 50, 75, 100, 200, 250, 500 and 1000 years.<br>`NOT RELEASE YET`.
+UTCI data from ERA-5 climate reanalysis has been processed into a probabilistic analysis of extremes from the [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). In this dataset, the influence of solar radiation and wind speed is not considered, and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
+A collection of scenarios representing the frequency distribution of heat has been produced in form of multiple layers representing return periods.
+The objective is to facilitate the use of these data for heat risk analysis. The scenarios include ten return periods for mean, min and max daily UTCI (C°) for the period 1940-2020. Return Period scenarios: 5, 10, 20, 50, 75, 100, 200, 250, 500 and 1000 years.<br>`NOT RELEASE YET`.
 
 ```
 
-The two indices are similar and [correlated](https://www.sciencedirect.com/science/article/pii/S2212094717302037), but while WBGT considers workload and overall effect on human health, UTCI is a more physically-based measure, and that could fit better assessments that do not strictly refer to human health. It also has the advantage to consider cold stress extremes as well. Secondary, it is easier to interpret in relation to the physical surface temperature measure (°C).
+The two indices are similar and [correlated](https://www.sciencedirect.com/science/article/pii/S2212094717302037), but while WBGT considers workload and overall effect on human health, UTCI is a more physically-based measure, thus it is easier to put it in relation to the physical measure of surface temperature (°C). It also has the advantage to consider cold stress extremes as well.
 
 ```{figure} images/hzd_hs_class.png
 ---
 align: center
 ---
-
-In terms of future projections, both UTCI and WBGT projections have been produced under CMIP6 scenarios and are available via [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). The indices are provided for historical and future climate projections (SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5) included in the Coupled Model Intercomparison Project Phase 6 (CMIP6) and used in the 6th Assessment Report of the Intergovernmental Panel on Climate Change (IPCC). These have daily resolution and would allow to derive downscaled extreme temperature projections. These projections have not yet been processed into a frequency analysis, but that can be produced using the same approach.
-
 ```
+In terms of future projections, both UTCI and WBGT projections have been produced under CMIP6 scenarios and are available via [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). The indices are provided for historical and future climate projections (SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5) included in the Coupled Model Intercomparison Project Phase 6 (CMIP6) and used in the 6th Assessment Report of the Intergovernmental Panel on Climate Change (IPCC). These have daily resolution and would allow to derive downscaled extreme temperature projections. These projections have not yet been processed into a frequency analysis, but that can be produced using the same approach.
 
 ## Wildfires
