@@ -15,7 +15,7 @@ Some of the hazards typically considered in risk screening are:
   - Landslides
   - Tropical cyclones
   - Drought
-  - Extreme heat
+  - Heat stress
   - Wildfires
 
 Climate change has the potential to affect the frequency and intensity of hydrometeorological hazards (see [**climate outlook**](climate-risk)), while it doesn't significantly affect geophysical hazards.
