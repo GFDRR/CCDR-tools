@@ -2,12 +2,12 @@
 
 Process or phenomenon of atmospheric, hydrological or oceanographic nature that may cause loss of life, injury or other health impacts, property damage, loss of livelihoods and services, social and economic disruption, or environmental damage [(UNISDR)](https://link.springer.com/referenceworkentry/10.1007/978-1-4020-4399-4_179#ref-CR8537).
 
- - [River floods](hzd_hm-data.md#river-floods)
- - [Coastal flood](hzd_hm-data.md#coastal-floods-storm-surge)
- - [Landslides](hzd_hm-data.md#landslides)
- - [Tropical cyclones](hzd_hm-data.md#tropical-cyclones)
- - [Drought](hzd_hm-data.md#drought-water-scarcity)
- - [Heat stress](hzd_hm-data.md#heat-stress)
+ - [River floods](river-floods)
+ - [Coastal flood](coastal-floods-storm-surge)
+ - [Landslides](landslides)
+ - [Tropical cyclones](tropical-cyclones)
+ - [Drought](drought-water-scarcity)
+ - [Heat stress](heat-stress)
  - Wildfires
 
 ## River floods
