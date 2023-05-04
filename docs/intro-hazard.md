@@ -1,6 +1,6 @@
 # Natural hazards
 
-Natural events (including extreme events and long term phenomena) are only termed hazards when they have the potential to harm people or cause property damage, social and economic disruption. The location of natural hazards primarily depends on natural processes, including the movement of tectonic plates, the influence of weather systems, and the existence of waterways and slopes (e.g. that might generate landslides). But processes such as urbanization, environmental degradation and climate change can also influence the location, occurrence (frequency) and intensity of natural hazards. These processes are known as risk drivers.
+Natural events (including extreme events and long term phenomena) are only termed hazards when they have the potential to harm people or cause property damage, social and economic disruption. The location of natural hazards primarily depends on natural processes, including the movement of tectonic plates, the influence of weather systems, and the morphology of the terrain (slopes, drainage, vegetation, ...). Anthropic processes such as urbanization, environmental degradation and climate change can also influence the location, occurrence frequency and intensity of natural hazards. These processes are known as risk drivers.
 
 Some of the hazards typically considered in risk screening are:
 
@@ -8,7 +8,7 @@ Some of the hazards typically considered in risk screening are:
   - Earthquakes
   - Tsunami
   - Volcanic activities
-<br>
+<br><br>
 - **Hydro-meteorological hazards**
   - River and pluvial floods
   - Coastal floods

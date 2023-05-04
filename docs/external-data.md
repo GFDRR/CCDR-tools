@@ -20,5 +20,5 @@ There is a nice [**QGIS plugin**](https://stac-utils.github.io/qgis-stac-plugin/
 align: center
 ---
 Planetary Computer as STAC catalogue accessed via [QGIS](external-tools) using STAC plugin.
-```
+
 ```
