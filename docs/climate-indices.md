@@ -48,6 +48,19 @@ Compared to the information offered by the [CCKP country page](https://climatekn
    - **Time scale:** Annual (R10mm, CWD, slr, SPEI); Monthly (Rxday, R99p, tmean); Daily (Heat) 
    - **Value statistic:** {P10, P50, P90, SD}, [P10, P50, P90] 
 
+### Script setup [WIP]
+
+- Navigate to your working directory: `cd <Your work directory>`
+- Run `jupyter notebook`
+- Select [CCDR-climate.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb) and chose the indices to plot.
+
+```{figure} images/ccdr-clim.png
+---
+align: center
+---
+Starting page for the climate outlook notebook.
+```
+
 ### Processing
 
 - Runs over one selected country and for a specific set of indices depending on selected hazard
