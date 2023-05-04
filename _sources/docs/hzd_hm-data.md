@@ -16,7 +16,7 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 **Hazard process** | Fluvial flood, Pluvial flood | Fluvial flood
 **Resolution** | 90 m | 900 m
 **Analysis type** | Probabilistic | Probabilistic
-**Frequency type** | Return Period (11 RPs) | Return Period (10 RPs)
+**Frequency type** | Return Period (11 scenarios) | Return Period (10 scenarios)
 **Time reference** | Baseline (1989-2018) | Baseline (1960-1999); Projections  – CMIP5 (2030-2050-2080)
 **Intensity metric** | Water depth [m] | Water depth [m]
 **License** | Commercial | Open data
@@ -57,7 +57,7 @@ Coastal floods occur when the level in a water body (sea, estuary) rises to engu
 | **Hazard process** | Coastal flood | Coastal flood, SLR |
 | **Resolution** | 1 km | 90 m, 1 km, 5 km |
 | **Analysis type** | Probabilistic | |
-| **Frequency type** | Return Period (10 RPs) | Return Period (6 RPs) |
+| **Frequency type** | Return Period (10 scenarios) | Return Period (6 scenarios) |
 | **Time reference** | Baseline (1960–1999);<br>Projections – CMIP5 (2030-2050-2080) | Baseline (2018);<br>Projections – SLR (2050) |
 | **Intensity metric** | Water depth [m] | Water depth [m] |
 | **License** | Open data | Access requested |
@@ -76,7 +76,7 @@ Additional datasets that have been previously used in WB coastal flood analytics
 | **Hazard process** | Coastal flood | Mean sea level |
 | **Resolution** | 1 km | |
 | **Analysis type** | Probabilistic | |
-| **Frequency type** | Return Period (10 RPs) | One layer per period |
+| **Frequency type** | Return Period (10 scenarios) | One layer per period |
 | **Time reference** | Baseline (1979–2014) | Baseline; Projections |
 | **Intensity metric** | Water depth [m] | Water extent |
 | **License** | Open data | Licensed |
@@ -105,10 +105,10 @@ Landslides (mass movements) are affected by geological features (rock type and s
 
 ```{table}
 :name: LS_data
-| **Name** | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) | [Global landslide susceptibility (LHASA)](https://gpm.nasa.gov/landslides/projects.html) |
+| **Name** | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) | [Global landslide susceptibility<br>(LHASA)](https://gpm.nasa.gov/landslides/projects.html) |
 |---:|:---:|:---:|
 | **Developer** | ARUP | NASA |
-| **Hazard process** | Dry (seismic) mass movement Wet (rainfall) mass movement | Wet (rainfall) mass movement |
+| **Hazard process** | Dry (seismic) mass movement<br>Wet (rainfall) mass movement | none |
 | **Resolution** | 1 km | 1 km |
 | **Analysis type** | Deterministic | Deterministic |
 | **Frequency type** | none | none |
@@ -139,7 +139,7 @@ Tropical cyclones (including hurricanes, typhoons) are events that can trigger d
 | **Hazard process** | Strong winds | Strong winds | Strong winds |
 | **Resolution** | 30 km | 10 km | 10 km |
 | **Analysis type** | Probabilistic | Empirical | Empirical, Probabilistic |
-| **Frequency type** | Return Period (5 RPs) | | Return periods (10 10,000 years) |
+| **Frequency type** | Return Period (5 scenarios) | | Return periods (10 to 10,000 years) |
 | **Time reference** | Baseline (1989-2007) | Baseline (1980-2022) | Baseline (1984-2022);<br>Projections (2015-2050; SSP5/8.5) |
 | **Intensity metric** | Wind gust speed [5-sec m/s] | Many variables | Many variables |
 | **License** | Open data | Open data | Open data |
@@ -179,17 +179,17 @@ Not everyone reacts to the heat stresses in the same way, as individual response
 
 Various definitions regarding magnitude and duration thresholds and heat metrics exist. There are several heat indices involving both temperature and relative humidity, here are listed the most common ones.
 
-Name | [Global extreme temperatures (WBGT)](https://www.geonode-gfdrrlab.org/layers/hazard:intensity_returnperiod5y/metadata_detail) | [Universal Thermal Climate Index (UTCI)](https://climate.copernicus.eu/ESOTC/2019/heat-and-cold-stress) | [Heat-humidity index](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cordex-domains-single-levels?tab=overview)
+**Name** | [Global extreme temperatures (WBGT)](https://www.geonode-gfdrrlab.org/layers/hazard:intensity_returnperiod5y/metadata_detail) | [Universal Thermal Climate Index (UTCI)](https://climate.copernicus.eu/ESOTC/2019/heat-and-cold-stress) | [Heat-humidity index](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cordex-domains-single-levels?tab=overview)
 --: | :--: | :--: | :--:
-Developer | VITO | Copernicus | CORDEX
-Hazard process | Extreme heat stress | Heat stress on human health | Extreme heat and humidity
-Resolution | 10 km | 30 km | 25 km
-Analysis type | Probabilistic | Index | Probabilistic
-Frequency type | Return Period (3 RPs) | None |  
-Time reference | Baseline (1980-2009) | Baseline (1979-2020) | Baseline (1970-2000); Projections (2040-2070, 2070-2100)
-Intensity metric | Wet Bulb Globe Temperature [°C] | UTCI (°C) | Heat Index, Humidex
-License | Open data | Open data | Open data
-Notes | Accounts for air temperature, humidity, wind speed, radiation, fatigue-heating. Includes intensity-impact classification. | Accounts   for air temperature, humidity, wind speed, radiation. Includes intensity-impact classification. |  
+**Developer** | VITO | Copernicus | CORDEX
+**Hazard process** | Extreme heat stress | Heat stress on human health | Extreme heat and humidity
+**Resolution** | 10 km | 30 km | 25 km
+**Analysis type** | Probabilistic | Index | Probabilistic
+**Frequency type** | Return Period (3 scenarios) | None |  
+**Time reference** | Baseline (1980-2009) | Baseline (1979-2020) | Baseline (1970-2000); Projections (2040-2070, 2070-2100)
+**Intensity metric** | Wet Bulb Globe Temperature [°C] | UTCI (°C) | Heat Index, Humidex
+**License** | Open data | Open data | Open data
+**Notes** | Accounts for air temperature, humidity, wind speed, radiation, fatigue-heating. Includes intensity-impact classification. | Accounts   for air temperature, humidity, wind speed, radiation. Includes intensity-impact classification. |  
 
 - **Wet-Bulb Globe Temperature** (WBGT °C): the WBGT combines temperature and humidity, both critical components in determining heat stress. A probabilistic dataset (3 return periods: 5, 20 and 100 years) based on 1980-2009 data has been developed for the GFDRR by VITO and has since been used to measure heat stress in risk screenings and assessment. This layer is generally sufficient for country-level hazard screening, but it has several limitations for any hazard and risk assessment. Although downscaled to consider gepmorphology and orography, the low grid resolution and relatively simple modelling makes it unfit to capture the heat island effect occurring in cities (Urban Heat Island) – nor the cooling effect of water bodies. That makes it unfit for any urban-scale assessment and generally sub-optimal for any sub-national assessment.
 

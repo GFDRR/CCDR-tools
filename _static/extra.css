@@ -9,6 +9,9 @@ th {
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+table th:first-of-type {
+    width: 20%;
+}
 .bg-rdl {
   background-color: #0B3860;
   padding: 25px;
