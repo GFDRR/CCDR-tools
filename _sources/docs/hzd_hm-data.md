@@ -7,7 +7,7 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 
 ```{table}
 :name: FL_data
-**Name** | Fathom flood hazard maps | Aqueduct flood hazard maps
+**Name** | [Fathom flood hazard maps](https://www.fathom.global/) | [Aqueduct flood hazard maps](https://www.wri.org/data/aqueduct-floods-hazard-maps)
 --: | :--: | :--:
 **Developer** | Fathom | WRI
 **Hazard process** | Fluvial flood, Pluvial flood | Fluvial flood
@@ -22,6 +22,10 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 ```
 
 - Despite missing projections, **Fathom** modelling has consistently proven to be the preferred option due to its higher quality (better resolution, updated data and a more advanced modelling approach). There are, however, important details and limitations to consider for the correct use and interpretation of the model. The undefended model (FU) is typically the preferred product to use in assessments, since the defended model (FD) does not account for physical presence of defense measures, rather proxies the defense standard by using GDP as proxy (FLOPROS database).
+
+```{seealso}
+The Fathom v2 global dataset can be requested for use in World Bank projects by filling the [**request form**](https://forms.office.com/r/RzNaVV3mft).
+```
 
 - **WRI** hazard maps are the preferred choice only in cases when 1) data needs to be open/public; 2) explicit climate scenarios are required, however the scientific quality and granularity of this dataset is far from the one offered by Fathom – and far from optimal, in general (low resolution, old baseline, simplified modelling).
 
@@ -43,7 +47,7 @@ Coastal floods occur when the level in a water body (sea, estuary) rises to engu
 
 ```{table}
 :name: CF_data
-| **Name** | Aqueduct flood hazard maps | Global Flood map |
+| **Name** | [Aqueduct flood hazard maps](https://www.wri.org/data/aqueduct-floods-hazard-maps) | [Global Flood map](https://planetarycomputer.microsoft.com/dataset/deltares-floods) |
 |---:|:---:|:---:|
 | **Developer** | WRI-Deltares | Deltares |
 | **Hazard process** | Coastal flood | Coastal flood, SLR |
@@ -62,7 +66,7 @@ Additional datasets that have been previously used in WB coastal flood analytics
 
 ```{table}
 :name: CF_data_more
-| **Name** | Coastal flood hazard maps | Coastal risk screening |
+| **Name** | [Coastal flood hazard maps](https://www.geonode-gfdrrlab.org/search/?hazard_type=coastal_flood&limit=5&offset=5&type__in=raster&title__icontains=muis) | [Coastal risk screening](https://coastal.climatecentral.org) |
 |---:|:---:|:---:|
 | **Developer** | Muis et al. (2016, 2020) | Climate Central |
 | **Hazard process** | Coastal flood | Mean sea level |
@@ -95,7 +99,7 @@ Landslides (mass movements) are affected by geological features (rock type and s
 
 ```{table}
 :name: LS_data
-| **Name** | Global landslide hazard layer | Global landslide susceptibility layer |
+| **Name** | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) | [Global landslide susceptibility (LHASA)](https://gpm.nasa.gov/landslides/projects.html) |
 |---:|:---:|:---:|
 | **Developer** | ARUP | NASA |
 | **Hazard process** | Dry (seismic) mass movement Wet (rainfall) mass movement | Wet (rainfall) mass movement |
@@ -122,7 +126,7 @@ Tropical cyclones (including hurricanes, typhoons) are events that can trigger d
 
 ```{table}
 :name: SW_data
-| **Name** | GAR15-IBTrACS | IBTrACSv4 | STORMv3 |
+| **Name** | [GAR15-IBTrACS](https://www.geonode-gfdrrlab.org/search/?hazard_type=strong_wind&limit=50&offset=0&title__icontains=CY-GLOBAL) | [IBTrACSv4](https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access) | [STORMv3](https://data.4tu.nl/articles/dataset/STORM_tropical_cyclone_wind_speed_return_periods/12705164/3) |
 |---:|:---:|:---:|:---:|
 | **Developer** | NOAA | NOAA | IVM |
 | **Hazard process** | Strong winds | Strong winds | Strong winds |
@@ -149,7 +153,7 @@ Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: ST
 
 ## Drought & Water scarcity
 
-The Agricultural Stress Index by FAO depicts the frequency of severe drought in areas where: i) 30 percent of the cropped land; or ii) 50 percent of the cropped land has been affected. The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2021).
+The [**Agricultural Stress Index**](https://www.fao.org/giews/earthobservation/access.jsp) by **FAO** depicts the frequency of severe drought in areas where: i) 30 percent of the cropped land; or ii) 50 percent of the cropped land has been affected. The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2021). Data are available in 
  
 ```{figure} images/fao_asi.jpg
 ---
@@ -160,5 +164,51 @@ FAO ASI global dataset showing historical drought frequency for >30% cropland ar
 
 ## Heat stress
 
+Heat discomfort increases when hot temperatures are associated with high humidity [[Coffel et al 2018](https://doi.org/10.1088/1748-9326/aaa00e)]. Heat stress can cause long-term impairment and reduce labour productivity and incomes [[Goodman et [al 2018](https://scholar.harvard.edu/files/joshuagoodman/files/w24639.pdf)].
+Extreme heat events lead to heat stress and can increase morbidity and mortality as well as losses of work productivity [Kjellstrom et al 2009, Singh et al 2015].
+Not everyone reacts to the heat stresses in the same way, as individual responses are conditional on their medical condition, level of fitness, body weight, age, and economic situation [National Institute for Occupational Safety and Health 2016].
+
+Various definitions regarding magnitude and duration thresholds and heat metrics exist. There are several heat indices involving both temperature and relative humidity, here are listed the most common ones.
+
+Name | [Global extreme temperatures (WBGT)](https://www.geonode-gfdrrlab.org/layers/hazard:intensity_returnperiod5y/metadata_detail) | [Universal Thermal Climate Index (UTCI)](https://climate.copernicus.eu/ESOTC/2019/heat-and-cold-stress) | [Heat-humidity index](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cordex-domains-single-levels?tab=overview)
+-- | -- | -- | --
+Developer | VITO | Copernicus | CORDEX
+Hazard process | Extreme heat stress | Heat stress on human health | Extreme heat and humidity
+Resolution | 10 km | 30 km | 25 km
+Analysis type | Probabilistic | Index | Probabilistic
+Frequency type | Return Period (3 RPs) | None |  
+Time reference | Baseline (1980-2009) | Baseline (1979-2020) | Baseline (1970-2000); Projections (2040-2070, 2070-2100)
+Intensity metric | Wet Bulb Globe Temperature [°C] | UTCI (°C) | Heat Index, Humidex
+License | Open data | Open data | Open data
+Notes | Accounts for air temperature, humidity, wind speed, radiation, fatigue-heating. Includes intensity-impact classification. | Accounts   for air temperature, humidity, wind speed, radiation. Includes intensity-impact classification. |  
+
+- **Wet-Bulb Globe Temperature** (WBGT °C): the WBGT combines temperature and humidity, both critical components in determining heat stress. A probabilistic dataset (3 return periods: 5, 20 and 100 years) based on 1980-2009 data has been developed for the GFDRR by VITO and has since been used to measure heat stress in risk screenings and assessment. This layer is generally sufficient for country-level hazard screening, but it has several limitations for any hazard and risk assessment. Although downscaled to consider gepmorphology and orography, the low grid resolution and relatively simple modelling makes it unfit to capture the heat island effect occurring in cities (Urban Heat Island) – nor the cooling effect of water bodies. That makes it unfit for any urban-scale assessment and generally sub-optimal for any sub-national assessment.
+
+```{figure} images/hzd_hs.jpg
+---
+align: center
+---
+Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the WBGT map by VITO cannot capture these details.
+```
+
+- **Universal Thermal Climate Index** (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, skin wetness, skin blood flow and rectal, mean skin and face temperatures) as the actual environment.
+A polynomial approximation based on near-surface air temperature, solar radiation, vapor pressure, and wind speed is used for calculating the universal thermal climate index.
+UTCI data from ERA-5 climate reanalysis has been processed into a probabilistic analysis of extremes. In this dataset, the influence of solar radiation and wind speed is not considered, and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
+
+```{seealso}
+A collection of scenarios representing the frequency distribution of heat has been produced in form of multiple layers representing return periods. The objective is to facilitate the use of these data for heat risk analysis. The scenarios include ten return periods for mean, min and max daily UTCI (C°) for the period 1940-2020. Return Period scenarios: 5, 10, 20, 50, 75, 100, 200, 250, 500 and 1000 years.<br>`NOT RELEASE YET`.
+
+```
+
+The two indices are similar and [correlated](https://www.sciencedirect.com/science/article/pii/S2212094717302037), but while WBGT considers workload and overall effect on human health, UTCI is a more physically-based measure, and that could fit better assessments that do not strictly refer to human health. It also has the advantage to consider cold stress extremes as well. Secondary, it is easier to interpret in relation to the physical surface temperature measure (°C).
+
+```{figure} images/hzd_hs_class.png
+---
+align: center
+---
+
+In terms of future projections, both UTCI and WBGT projections have been produced under CMIP6 scenarios and are available via [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). The indices are provided for historical and future climate projections (SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5) included in the Coupled Model Intercomparison Project Phase 6 (CMIP6) and used in the 6th Assessment Report of the Intergovernmental Panel on Climate Change (IPCC). These have daily resolution and would allow to derive downscaled extreme temperature projections. These projections have not yet been processed into a frequency analysis, but that can be produced using the same approach.
+
+```
 
 ## Wildfires
