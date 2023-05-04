@@ -1,10 +1,10 @@
-# Hazard Datasets
+# Hazard datasets
 
-**Hazard Datasets** refer to a variety of datasets that can be used to represent the value that is exposed to suffer damage and losses from natural hazards.
+**Hazard datasets** refer to a variety of datasets that can be used to represent the value that is exposed to suffer damage and losses from natural hazards.
 This section presents some of the most common and recent type of data and indicators used for this purpose.
 
 ```{seealso}
-Hazard datasets developed by WB disaster risk projects have been placed in a special collection of the WB Development Data Hub: [Risk Data Library Collection: **HAZARD**](https://datacatalog.worldbank.org/search?q=hazard&start=0&sort=).
+Hazard datasets developed by WB disaster risk projects have been placed in a special collection of the WB Development Data Hub: [Risk Data Library Collection: **HAZARD**](https://datacatalog.worldbank.org/search?fq=(identification%2Fcollection_code%2Fany(col:col%20eq%20%27RDL%27))&q=hazard).
 ```
 
 The most relevant datasets (updated, high resolution, scientific quality) representing extreme events and long-term hazards that were considered for inclusion in the CCDR and other risk-related activities across the Bank have been listed below for each hazard, explaining their pros and cons and providing suggestions for improvement.
