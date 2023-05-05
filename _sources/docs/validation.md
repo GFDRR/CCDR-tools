@@ -55,8 +55,8 @@ The model just provide cold numbers; then is to the ability of the risk analyst 
 
 ## Validation against empirical disaster data
 
-- First, check that results make sense in terms of metrics.
-  - Percentage values over 100% are often a good indicator that something went wrong.
+- First, check that results make sense in terms of metrics and units of measures.
+  - Relative impacts over 100% are always a good indicator that something went wrong.
 - Does the calculated distribution of risk reflect the historical distribution of disaster events as recorded by catalogues (e.g. EM-DAT) and agencies (e.g. reliefweb)?
   - If not, can you explain the reason?
 
