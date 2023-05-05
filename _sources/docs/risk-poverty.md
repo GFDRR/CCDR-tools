@@ -68,9 +68,9 @@ Poverty maps are combined with EAE/EAI maps to generate bi-variate maps. These m
 |  Flood x Population  |  EAI [#]  |  Total count  |  0.01 - 100  |  100 – 1,000  |  > 1,000  |
 |  Flood x Built-up  |  EAI [Ha]  |  Total count  |  0.01 – 1  |  1 – 10  |  > 10  |
 |  Flood x Agri land  |  EAE [Ha]  |  Total count  |  0.01 - 100  |  100 – 1,000  |  > 1,000  |
-|  Drought x Agri land  |  EAE [Ha]  |  Total count |  1 - 5  |  5 - 15  |  > 15  |
-|  Heat stress x Population  |  EAE [#]  |  Total count |  1 – 10,000  |  10,000 – 30,000  |  > 30,000  |
-|  Air pollution x  Population  |  EAE [#]  |  Total count  |  1 – 5,000  |  5,000 – 15,000  |  > 15,000  |
+|  Drought x Agri land  |  EAE [Ha]  |  Ratio |  1% - 5%  |  5% - 15%  |  > 15%  |
+|  Heat stress x Population  |  EAE [#]  |  Ratio |  1% – 10%  |  10% – 30%  |  > 30%  |
+|  Air pollution x  Population  |  EAE [#]  |  Ratio  |  1% – 10%  |  10% – 30%  |  > 30%  |
 ```
 
 Classification of total exposure on an administrative unit is done both on the basis of absolute numbers or ratios. For instance, as severe fluvial flooding and landslides represent very localized threats, the classification is based on total counts. In comparison, heat waves, droughts and air pollution are more widespread across geographic units and therefore classified into groups based on proportions. 
