@@ -4,16 +4,35 @@
 
 # Validate input
 It is always a good practice to spend some time to evaluate the quality and representativeness of input data before diving into the analytics.
-Input data can contain errors and artefacts; sometimes they are large and evident, sometimes they are small and hard to catch - but that doesn't mean they don't have an impact over the quality results!
+Input data can contain errors and artefacts; sometimes they are large and evident, sometimes they are small and hard to catch - but that doesn't mean they don't have an impact over the quality of results!
 
 ## Hazard
 
 ### Correct values interpretation and Outliers
 
-### Geographic validation
+- Check unit of measure (hazard metadata)
+- Check values distribution (histogram)
+- Set a proper cut for outliers
+
+### Geographic correlation
+
+This is easier to check for hazards with strong dependency to the geomorphology, such as floods and landslides. An inspection of hazard layers against a reliable basemap (ESRI; Google) can help to spot inconsistencies between the representation of hazard distribution and its expected behaviour (rul of thumb) in relation to the basemap.
+
+Some examples:
+- River flood extent occurring too far from its catchment; depth values not matching with the digital terran model.
+- High landslide hazard on flat terrain.
+- Coastal floods spreading for kilometers over the whole coastal plain.
 
 ### Validation against empirical datasets
 
+Probabilistic scenarios of hazard data can be compared with observed disaster events to corroborate the analysis, although this is often a difficult task due to lack of granular spatial data representing the events. Some hazards are better covered by observations than others - see the [disaster records](disaster-data.md).
+
+```{figure} images/hzd_validate.jpg
+---
+align: center
+---
+Example of flood model extent validation between observed events (Pakistan 2022) and probabilistic model (Fathom RP 100 years).
+```
 
 ## Exposure
 

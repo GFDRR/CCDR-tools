@@ -34,7 +34,8 @@ AI-based indices such as the **Relative Wealth Index** (**RWI**) [(*Chi et al. 2
 
 ## Index normalisation
 
-The DHS data are weighted to render the survey demographically representative; while the RWI requires to be weighted. The **High-Resolution Settlement Layer** [(**HRSL**)](https://arxiv.org/abs/1712.05839) is used to obtain the population estimates at 100 m resolution.
+The DHS data is weighted using population density to render the survey demographically representative; while the RWI needs to be weighted in a similar fashon.
+The **High-Resolution Settlement Layer** [(**HRSL**)](https://arxiv.org/abs/1712.05839) is used to obtain the population estimates at 100 m resolution.
 
 ```{figure} images/rwi1.jpg
 ---
@@ -48,6 +49,11 @@ align: center
 align: center
 ---
 (left) RWI weighted by population at 100 m (GHSL); (right) Population-weighted RWI summarised at ADM 3 level.
+```
+
+```{seealso}
+A script in R is provided to produce population-weighted RWI maps at sub-national level starting from RWI points, GHS population and boundaries data.<br>`Work in progress - we are looking to make it more user friendly!`
+[**RWI-Pop weighted Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/scripts/RWI-pop.R)
 ```
 
 ## Bi-variate maps
@@ -69,7 +75,7 @@ Poverty maps are combined with EAE/EAI maps to generate bi-variate maps. These m
 
 Classification of total exposure on an administrative unit is done both on the basis of absolute numbers or ratios. For instance, as severe fluvial flooding and landslides represent very localized threats, the classification is based on total counts. In comparison, heat waves, droughts and air pollution are more widespread across geographic units and therefore classified into groups based on proportions. 
 
-```{note}
+```{seealso}
 A script in R is provided to create bi-variate maps starting from risk and poverty data.<br>`Work in progress - we are looking to make it more user friendly!`
 [**Bivariate Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/scripts/BivariateMap.R)
 ```
