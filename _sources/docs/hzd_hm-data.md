@@ -179,7 +179,7 @@ Not everyone reacts to the heat stresses in the same way, as individual response
 
 Various definitions regarding magnitude and duration thresholds and heat metrics exist. There are several heat indices involving both temperature and relative humidity, here are listed the most common ones.
 
-**Name** | [Global extreme temperatures (WBGT)](https://www.geonode-gfdrrlab.org/layers/hazard:intensity_returnperiod5y/metadata_detail) | [Universal Thermal Climate Index (UTCI)](https://climate.copernicus.eu/ESOTC/2019/heat-and-cold-stress) | [Heat-humidity index](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cordex-domains-single-levels?tab=overview)
+**Name** | [Global extreme temperatures (WBGT)](https://www.geonode-gfdrrlab.org/search/?hazard_type=extreme_heat&title__icontains=VITO) | [Universal Thermal Climate Index (UTCI)](https://climate.copernicus.eu/ESOTC/2019/heat-and-cold-stress) | [Heat-humidity index](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cordex-domains-single-levels?tab=overview)
 --: | :--: | :--: | :--:
 **Developer** | VITO | Copernicus | CORDEX
 **Hazard process** | Extreme heat stress | Heat stress on human health | Extreme heat and humidity

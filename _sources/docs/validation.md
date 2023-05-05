@@ -10,6 +10,7 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 
 ### Correct values interpretation and outliers
 
+- Check layer projection sysyem (CRS)
 - Check unit of measure (hazard metadata)
 - Check values distribution (histogram)
 - Set a proper cut for outliers before setting any hazard threshold or classification
@@ -38,6 +39,7 @@ Example of flood model extent validation between observed events (Pakistan 2022)
 
 ### Correct values interpretation and outliers
 
+- Check layer projection sysyem (CRS)
 - Check unit of measure (exposure metadata)
 - Check values distribution (histogram)
 
