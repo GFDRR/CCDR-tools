@@ -486,8 +486,8 @@ title="Print to PDF"
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#geographic-validation">
-       Geographic validation
+      <a class="reference internal nav-link" href="#geographic-correlation">
+       Geographic correlation
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
@@ -578,8 +578,8 @@ title="Print to PDF"
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#geographic-validation">
-       Geographic validation
+      <a class="reference internal nav-link" href="#geographic-correlation">
+       Geographic correlation
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
@@ -646,17 +646,36 @@ title="Print to PDF"
 <section class="tex2jax_ignore mathjax_ignore" id="validate-input">
 <h1>Validate input<a class="headerlink" href="#validate-input" title="Permalink to this headline">#</a></h1>
 <p>It is always a good practice to spend some time to evaluate the quality and representativeness of input data before diving into the analytics.
-Input data can contain errors and artefacts; sometimes they are large and evident, sometimes they are small and hard to catch - but that doesn’t mean they don’t have an impact over the quality results!</p>
+Input data can contain errors and artefacts; sometimes they are large and evident, sometimes they are small and hard to catch - but that doesn’t mean they don’t have an impact over the quality of results!</p>
 <section id="hazard">
 <h2>Hazard<a class="headerlink" href="#hazard" title="Permalink to this headline">#</a></h2>
 <section id="correct-values-interpretation-and-outliers">
 <h3>Correct values interpretation and Outliers<a class="headerlink" href="#correct-values-interpretation-and-outliers" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Check unit of measure (hazard metadata)</p></li>
+<li><p>Check values distribution (histogram)</p></li>
+<li><p>Set a proper cut for outliers</p></li>
+</ul>
 </section>
-<section id="geographic-validation">
-<h3>Geographic validation<a class="headerlink" href="#geographic-validation" title="Permalink to this headline">#</a></h3>
+<section id="geographic-correlation">
+<h3>Geographic correlation<a class="headerlink" href="#geographic-correlation" title="Permalink to this headline">#</a></h3>
+<p>This is easier to check for hazards with strong dependency to the geomorphology, such as floods and landslides. An inspection of hazard layers against a reliable basemap (ESRI; Google) can help to spot inconsistencies between the representation of hazard distribution and its expected behaviour (rul of thumb) in relation to the basemap.</p>
+<p>Some examples:</p>
+<ul class="simple">
+<li><p>River flood extent occurring too far from its catchment; depth values not matching with the digital terran model.</p></li>
+<li><p>High landslide hazard on flat terrain.</p></li>
+<li><p>Coastal floods spreading for kilometers over the whole coastal plain.</p></li>
+</ul>
 </section>
 <section id="validation-against-empirical-datasets">
 <h3>Validation against empirical datasets<a class="headerlink" href="#validation-against-empirical-datasets" title="Permalink to this headline">#</a></h3>
+<p>Probabilistic scenarios of hazard data can be compared with observed disaster events to corroborate the analysis, although this is often a difficult task due to lack of granular spatial data representing the events. Some hazards are better covered by observations than others - see the <a class="reference internal" href="disaster-data.html"><span class="doc std std-doc">disaster records</span></a>.</p>
+<figure class="align-center" id="id2">
+<img alt="../_images/hzd_validate.jpg" src="../_images/hzd_validate.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 26 </span><span class="caption-text">Example of flood model extent validation between observed events (Pakistan 2022) and probabilistic model (Fathom RP 100 years).</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 <section id="exposure">
@@ -735,7 +754,7 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
   
     By M. Amadio (GFDRR)<br/>
   
-    Last updated on May 04, 2023.<br/>
+    Last updated on May 05, 2023.<br/>
     <div class="extra_footer">
       <div>
     <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>

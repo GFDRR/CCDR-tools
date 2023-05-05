@@ -548,7 +548,8 @@ The presence of physical assets in the household can be used to construct a weal
 </section>
 <section id="index-normalisation">
 <h2>Index normalisation<a class="headerlink" href="#index-normalisation" title="Permalink to this headline">#</a></h2>
-<p>The DHS data are weighted to render the survey demographically representative; while the RWI requires to be weighted. The <strong>High-Resolution Settlement Layer</strong> <a class="reference external" href="https://arxiv.org/abs/1712.05839">(<strong>HRSL</strong>)</a> is used to obtain the population estimates at 100 m resolution.</p>
+<p>The DHS data is weighted using population density to render the survey demographically representative; while the RWI needs to be weighted in a similar fashon.
+The <strong>High-Resolution Settlement Layer</strong> <a class="reference external" href="https://arxiv.org/abs/1712.05839">(<strong>HRSL</strong>)</a> is used to obtain the population estimates at 100 m resolution.</p>
 <figure class="align-center" id="id2">
 <img alt="../_images/rwi1.jpg" src="../_images/rwi1.jpg" />
 <figcaption>
@@ -561,6 +562,11 @@ The presence of physical assets in the household can be used to construct a weal
 <p><span class="caption-number">Fig. 21 </span><span class="caption-text">(left) RWI weighted by population at 100 m (GHSL); (right) Population-weighted RWI summarised at ADM 3 level.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>A script in R is provided to produce population-weighted RWI maps at sub-national level starting from RWI points, GHS population and boundaries data.<br><code class="docutils literal notranslate"><span class="pre">Work</span> <span class="pre">in</span> <span class="pre">progress</span> <span class="pre">-</span> <span class="pre">we</span> <span class="pre">are</span> <span class="pre">looking</span> <span class="pre">to</span> <span class="pre">make</span> <span class="pre">it</span> <span class="pre">more</span> <span class="pre">user</span> <span class="pre">friendly!</span></code>
+<a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/scripts/RWI-pop.R"><strong>RWI-Pop weighted Maps Script</strong></a></p>
+</div>
 </section>
 <section id="bi-variate-maps">
 <h2>Bi-variate maps<a class="headerlink" href="#bi-variate-maps" title="Permalink to this headline">#</a></h2>
@@ -628,8 +634,8 @@ The presence of physical assets in the household can be used to construct a weal
 </tbody>
 </table>
 <p>Classification of total exposure on an administrative unit is done both on the basis of absolute numbers or ratios. For instance, as severe fluvial flooding and landslides represent very localized threats, the classification is based on total counts. In comparison, heat waves, droughts and air pollution are more widespread across geographic units and therefore classified into groups based on proportions.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
 <p>A script in R is provided to create bi-variate maps starting from risk and poverty data.<br><code class="docutils literal notranslate"><span class="pre">Work</span> <span class="pre">in</span> <span class="pre">progress</span> <span class="pre">-</span> <span class="pre">we</span> <span class="pre">are</span> <span class="pre">looking</span> <span class="pre">to</span> <span class="pre">make</span> <span class="pre">it</span> <span class="pre">more</span> <span class="pre">user</span> <span class="pre">friendly!</span></code>
 <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/scripts/BivariateMap.R"><strong>Bivariate Maps Script</strong></a></p>
 </div>
@@ -686,7 +692,7 @@ The presence of physical assets in the household can be used to construct a weal
   
     By M. Amadio (GFDRR)<br/>
   
-    Last updated on May 04, 2023.<br/>
+    Last updated on May 05, 2023.<br/>
     <div class="extra_footer">
       <div>
     <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
