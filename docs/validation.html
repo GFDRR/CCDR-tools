@@ -482,7 +482,7 @@ title="Print to PDF"
     <ul class="nav section-nav flex-column">
      <li class="toc-h3 nav-item toc-entry">
       <a class="reference internal nav-link" href="#correct-values-interpretation-and-outliers">
-       Correct values interpretation and Outliers
+       Correct values interpretation and outliers
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
@@ -504,7 +504,7 @@ title="Print to PDF"
     <ul class="nav section-nav flex-column">
      <li class="toc-h3 nav-item toc-entry">
       <a class="reference internal nav-link" href="#id1">
-       Correct values interpretation and Outliers
+       Correct values interpretation and outliers
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
@@ -574,7 +574,7 @@ title="Print to PDF"
     <ul class="nav section-nav flex-column">
      <li class="toc-h3 nav-item toc-entry">
       <a class="reference internal nav-link" href="#correct-values-interpretation-and-outliers">
-       Correct values interpretation and Outliers
+       Correct values interpretation and outliers
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
@@ -596,7 +596,7 @@ title="Print to PDF"
     <ul class="nav section-nav flex-column">
      <li class="toc-h3 nav-item toc-entry">
       <a class="reference internal nav-link" href="#id1">
-       Correct values interpretation and Outliers
+       Correct values interpretation and outliers
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
@@ -650,21 +650,21 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <section id="hazard">
 <h2>Hazard<a class="headerlink" href="#hazard" title="Permalink to this headline">#</a></h2>
 <section id="correct-values-interpretation-and-outliers">
-<h3>Correct values interpretation and Outliers<a class="headerlink" href="#correct-values-interpretation-and-outliers" title="Permalink to this headline">#</a></h3>
+<h3>Correct values interpretation and outliers<a class="headerlink" href="#correct-values-interpretation-and-outliers" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
 <li><p>Check unit of measure (hazard metadata)</p></li>
 <li><p>Check values distribution (histogram)</p></li>
-<li><p>Set a proper cut for outliers</p></li>
+<li><p>Set a proper cut for outliers before setting any hazard threshold or classification</p></li>
 </ul>
 </section>
 <section id="geographic-correlation">
 <h3>Geographic correlation<a class="headerlink" href="#geographic-correlation" title="Permalink to this headline">#</a></h3>
-<p>This is easier to check for hazards with strong dependency to the geomorphology, such as floods and landslides. An inspection of hazard layers against a reliable basemap (ESRI; Google) can help to spot inconsistencies between the representation of hazard distribution and its expected behaviour (rul of thumb) in relation to the basemap.</p>
+<p>This is easier to check for hazards with strong dependency to the geomorphology, such as floods and landslides. An inspection of hazard layers against a reliable basemap (e.g. ESRI or Google) can help to spot inconsistencies between the representation of hazard distribution and its expected behaviour (rule of thumb) in relation to the basemap.</p>
 <p>Some examples:</p>
 <ul class="simple">
-<li><p>River flood extent occurring too far from its catchment; depth values not matching with the digital terran model.</p></li>
+<li><p>River flood extent occurring too far from its catchment; depth values not matching with the elevation from digital terrain model.</p></li>
 <li><p>High landslide hazard on flat terrain.</p></li>
-<li><p>Coastal floods spreading for kilometers over the whole coastal plain.</p></li>
+<li><p>Coastal floods spreading for kilometers over the whole coastal plain; ignoring coastal defence measures.</p></li>
 </ul>
 </section>
 <section id="validation-against-empirical-datasets">
@@ -681,20 +681,40 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <section id="exposure">
 <h2>Exposure<a class="headerlink" href="#exposure" title="Permalink to this headline">#</a></h2>
 <section id="id1">
-<h3>Correct values interpretation and Outliers<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<h3>Correct values interpretation and outliers<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<ul class="simple">
+<li><p>Check unit of measure (exposure metadata)</p></li>
+<li><p>Check values distribution (histogram)</p></li>
+</ul>
 </section>
 <section id="comparison-against-basemap">
 <h3>Comparison against basemap<a class="headerlink" href="#comparison-against-basemap" title="Permalink to this headline">#</a></h3>
+<p>Identify artifacts in exposure data; if the errors are limited and a better source of truth is avaialble for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.</p>
 </section>
 <section id="cross-comparison-between-similar-datasets">
 <h3>Cross-comparison between similar datasets<a class="headerlink" href="#cross-comparison-between-similar-datasets" title="Permalink to this headline">#</a></h3>
+<p>Run a statistical comparison between similar dataset to estimate their similarity.
+An example is spatial correlation:</p>
 </section>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="output-interpretation">
 <h1>Output interpretation<a class="headerlink" href="#output-interpretation" title="Permalink to this headline">#</a></h1>
+<p>The model just provide cold numbers; then is to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestable for a non-expert audience.</p>
 <section id="validation-against-empirical-disaster-data">
 <h2>Validation against empirical disaster data<a class="headerlink" href="#validation-against-empirical-disaster-data" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p>First, check that results make sense in terms of metrics.</p>
+<ul>
+<li><p>Percentage values over 100% are often a good indicator that something went wrong.</p></li>
+</ul>
+</li>
+<li><p>Does the calculated distribution of risk reflect the historical distribution of disaster events as recorded by catalogues (e.g. EM-DAT) and agencies (e.g. reliefweb)?</p>
+<ul>
+<li><p>If not, can you explain the reason?</p></li>
+</ul>
+</li>
+</ul>
 </section>
 <section id="uncertainty">
 <h2>Uncertainty<a class="headerlink" href="#uncertainty" title="Permalink to this headline">#</a></h2>

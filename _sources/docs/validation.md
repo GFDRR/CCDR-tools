@@ -8,20 +8,20 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 
 ## Hazard
 
-### Correct values interpretation and Outliers
+### Correct values interpretation and outliers
 
 - Check unit of measure (hazard metadata)
 - Check values distribution (histogram)
-- Set a proper cut for outliers
+- Set a proper cut for outliers before setting any hazard threshold or classification
 
 ### Geographic correlation
 
-This is easier to check for hazards with strong dependency to the geomorphology, such as floods and landslides. An inspection of hazard layers against a reliable basemap (ESRI; Google) can help to spot inconsistencies between the representation of hazard distribution and its expected behaviour (rul of thumb) in relation to the basemap.
+This is easier to check for hazards with strong dependency to the geomorphology, such as floods and landslides. An inspection of hazard layers against a reliable basemap (e.g. ESRI or Google) can help to spot inconsistencies between the representation of hazard distribution and its expected behaviour (rule of thumb) in relation to the basemap.
 
 Some examples:
-- River flood extent occurring too far from its catchment; depth values not matching with the digital terran model.
+- River flood extent occurring too far from its catchment; depth values not matching with the elevation from digital terrain model.
 - High landslide hazard on flat terrain.
-- Coastal floods spreading for kilometers over the whole coastal plain.
+- Coastal floods spreading for kilometers over the whole coastal plain; ignoring coastal defence measures.
 
 ### Validation against empirical datasets
 
@@ -36,16 +36,29 @@ Example of flood model extent validation between observed events (Pakistan 2022)
 
 ## Exposure
 
-### Correct values interpretation and Outliers
+### Correct values interpretation and outliers
+
+- Check unit of measure (exposure metadata)
+- Check values distribution (histogram)
 
 ### Comparison against basemap
 
+Identify artifacts in exposure data; if the errors are limited and a better source of truth is avaialble for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.
+
 ### Cross-comparison between similar datasets
 
+Run a statistical comparison between similar dataset to estimate their similarity.
+An example is spatial correlation:
 
 # Output interpretation
+The model just provide cold numbers; then is to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestable for a non-expert audience.
 
 ## Validation against empirical disaster data
+
+- First, check that results make sense in terms of metrics.
+  - Percentage values over 100% are often a good indicator that something went wrong.
+- Does the calculated distribution of risk reflect the historical distribution of disaster events as recorded by catalogues (e.g. EM-DAT) and agencies (e.g. reliefweb)?
+  - If not, can you explain the reason?
 
 ## Uncertainty
 In the development of risk models, many different data sets are used as input components. The level of uncertainty is directly linked to the quality of the input data. In addition, there is also random uncertainty that cannot be reduced. On many occasions during model development, expert judgment and proxies are used in the absence of historical data, and the results are very sensitive to most of these assumptions and variations in input data. As such, outputs of these models should be considered indicators of the order of magnitude of the risks, not as exact values. Better data quality and advances in science and modelling methodologies reduce the level of uncertainty, but it is crucial to interpret the results of any risk assessment against the backdrop of unavoidable uncertainty.
