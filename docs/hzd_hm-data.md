@@ -32,7 +32,12 @@ The Fathom v2 global dataset can be requested for use in World Bank projects by 
 
 - **WRI** hazard maps are the preferred choice only in cases when 1) data needs to be open/public; 2) explicit climate scenarios are required, however the scientific quality and granularity of this dataset is far from the one offered by Fathom – and far from optimal, in general (low resolution, old baseline, simplified modelling).
 
-`[insert map comparison]`
+```{figure} images/hzd_fl_model.jpg
+---
+align: center
+---
+Comparing modelled flood extent and depth across Ethiopia: Fathom (right); RWI - Aquesduct (center); Global Assessment Report (left).
+```
 
 It is important to note that pluvial (flash) flood events are extremely hard to model properly on the base of global static hazard maps alone. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures. Because of this, while Fathom does offer pluvial hazard maps, their application for pluvial risk assessment is questionable as it cannot account for these key drivers.
 
