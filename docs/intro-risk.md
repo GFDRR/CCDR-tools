@@ -9,7 +9,7 @@ In this framework, Risk (**R**) is calculated as a function of: the hazard occur
 
 Measures of exposure can include the number of people or types of assets in an area. These can be combined with the specific vulnerability and capacity of the exposed elements to any particular hazard to estimate the quantitative risks associated with that hazard in the area of interest.
 
-- [**UNDRR Risk overview**](https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk){target="_blank"}
+- [**UNDRR Risk overview**](https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk)
 ```
 
 From these definitions, we understand that the concept of `risk` is inherently tied to the concept of `probability`, expressed in terms of frequency (also occurrence rate). In other words:

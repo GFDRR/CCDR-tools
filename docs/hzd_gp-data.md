@@ -1,6 +1,6 @@
 # Geophysical hazards
 
-‘Content under development’
+`Content under development.`
 
 ## Earthquake
 
