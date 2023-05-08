@@ -32,7 +32,7 @@ The Fathom v2 global dataset can be requested for use in World Bank projects by 
 
 - **WRI** hazard maps are the preferred choice only in cases when 1) data needs to be open/public; 2) explicit climate scenarios are required, however the scientific quality and granularity of this dataset is far from the one offered by Fathom – and far from optimal, in general (low resolution, old baseline, simplified modelling).
 
-```{figure} images/hzd_fl_model.jpg
+```{figure} images/hzd_fl_models.jpg
 ---
 align: center
 ---
