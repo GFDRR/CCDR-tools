@@ -36,7 +36,7 @@ The Fathom v2 global dataset can be requested for use in World Bank projects by 
 ---
 align: center
 ---
-Comparing modelled flood extent and depth across Ethiopia: Fathom (right); RWI - Aquesduct (center); Global Assessment Report (left).
+Comparing modelled flood extent and depth across Ethiopia: Fathom 2019 (right); RWI - Aqueduct 2020 (center); Global Assessment Report 2015 (left). Note how the Fathom model is the only one capable of capturing smaller discharge basins thanks to a better DTM resolution (90 m). The RWI and GAR data, both at 1 km resolution, cannot capture them. 
 ```
 
 It is important to note that pluvial (flash) flood events are extremely hard to model properly on the base of global static hazard maps alone. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures. Because of this, while Fathom does offer pluvial hazard maps, their application for pluvial risk assessment is questionable as it cannot account for these key drivers.
