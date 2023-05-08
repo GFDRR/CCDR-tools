@@ -32,7 +32,7 @@ The Fathom v2 global dataset can be requested for use in World Bank projects by 
 
 - **WRI** hazard maps are the preferred choice only in cases when 1) data needs to be open/public; 2) explicit climate scenarios are required, however the scientific quality and granularity of this dataset is far from the one offered by Fathom – and far from optimal, in general (low resolution, old baseline, simplified modelling).
 
-[insert map comparison]
+`[insert map comparison]`
 
 It is important to note that pluvial (flash) flood events are extremely hard to model properly on the base of global static hazard maps alone. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures. Because of this, while Fathom does offer pluvial hazard maps, their application for pluvial risk assessment is questionable as it cannot account for these key drivers.
 
@@ -83,7 +83,7 @@ Additional datasets that have been previously used in WB coastal flood analytics
 | **Notes** | The update of Muis 2020 has been considered; however, the available data does include easily applicable land inundation, only extreme sea levels. | Does use simple bathtub distribution without flood attenuation – does not simulate extreme sea events. |
 ```
 
-Both these models seem to be affrom a simplified bathtub modelling approach, projecting unrealistic flood extent already under baseline climate conditions.
+Both these models tend to project unrealistic flood extent already under baseline climate conditions, which might be due an oversimplified bathtub modelling approach, or due to the relatively low resolution and vertical accuracy of the Digital Terrain Model (DTM).
 
 As shown in figure below, considering the minimum baseline values (least impact criteria), the flood extent drawn by the Climate Central layer is similar to the baseline RP100 from Muis, in the middle - both generously overestimating water spreading inland even under less extreme scenarios [*the locaiton of comparison is chosen as both the Netherlands and N Italy are low-lying areas, which are typically the most difficult to model*].
 In comparison, the WRI is far from perfection (it is also a bathtub model), but it seems to apply a more realistic max flood extent, which ultimately makes it more realistic for application.
@@ -95,6 +95,8 @@ align: center
 Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.
 ```
 ### Sea level rise
+
+`Content under development.`
 
 <hr>
 
@@ -124,7 +126,7 @@ Landslide hazard description can rely on either the NASA Landslide Hazard Suscep
 ---
 align: center
 ---
-Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuos index is displayed into 3 discrete classes (Low, Medium, High).
+Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuous index is displayed into 3 discrete classes (Low, Medium, High).
 ```
 <hr>
 
@@ -173,7 +175,7 @@ FAO ASI global dataset showing historical drought frequency for >30% cropland ar
 
 ## Heat stress
 
-Heat discomfort increases when hot temperatures are associated with high humidity [[Coffel et al 2018](https://doi.org/10.1088/1748-9326/aaa00e)]. Heat stress can cause long-term impairment and reduce labour productivity and incomes [[Goodman et [al 2018](https://scholar.harvard.edu/files/joshuagoodman/files/w24639.pdf)].
+Heat discomfort increases when hot temperatures are associated with high humidity [[Coffel et al 2018](https://doi.org/10.1088/1748-9326/aaa00e)]. Heat stress can cause long-term impairment and reduce labour productivity and incomes [[Goodman et al 2018](https://scholar.harvard.edu/files/joshuagoodman/files/w24639.pdf)].
 Extreme heat events lead to heat stress and can increase morbidity and mortality as well as losses of work productivity [Kjellstrom et al 2009, Singh et al 2015].
 Not everyone reacts to the heat stresses in the same way, as individual responses are conditional on their medical condition, level of fitness, body weight, age, and economic situation [National Institute for Occupational Safety and Health 2016].
 
@@ -222,3 +224,5 @@ In terms of future projections, both UTCI and WBGT projections have been produce
 <hr>
 
 ## Wildfires
+
+`Content under development.`

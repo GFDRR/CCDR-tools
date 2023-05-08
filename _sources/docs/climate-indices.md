@@ -23,13 +23,13 @@ The table summarises the relevant climate indices and related time scale.
 | Heat     | WBGT or UTCI [°C] - bias adjusted             |     Daily    |
 | tmean    | Mean surface temperature [°C]                 |    Monthly   |
 
-Compared to the information offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure adds:
-- Linking relevant climate indices to natural hazard occurrance in order to estimate change at ADM1 level
-- Standardisation of anomaly over historical variability as common metric of comparison
+Compared to the information directly offered by the [CCKP country page](https://climateknowledgeportal.worldbank.org/country/pakistan/climate-data-projections), this procedure adds:
+- Linking relevant climate indices to natural hazard occurrance in order to estimate changes in risk drivers over the future
+- Standardisation of anomaly over historical variability as common metric of change
 
 ## Input data
 - raster data aggregated across time (20 years windows) for spatial representation
-- csv data aggregated across space (country boundaries) for time-serie representation
+- csv data aggregated across space (country boundaries) for time-series representation
   - includes ensemble p10 and p90 (variability across models)
 
 ### Sources of CMIP6 data
@@ -110,5 +110,5 @@ Ensemble_p90(ADM0_mean(anomaly/hist_SD))
 ---
 align: center
 ---
-Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, timeserie up to 2100,  3 SSP scenarios - mean at country level.
+Example of mean standardardised anomaly (ensemble median) plotted for one climate index over Pakistan, time-series up to 2100,  3 SSP scenarios - mean at country level.
 ```

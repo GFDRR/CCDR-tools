@@ -1,7 +1,7 @@
 # Expected Annual Impact (EAI) 
 
-This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories, as explained in the [**risk concepts**](intro-risk.md).
-In order to calculate impacts, we need some [**probabilistic hazards datasets**](intro-hazard.md) and aligned [**vulnerability model**](intro-vulnerability.md). In relation to the global datasets currently available, these is possible for:
+This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories for the historical baseline, as explained in the [**risk concepts**](intro-risk.md).
+In order to calculate impacts, we need some [**probabilistic hazards datasets**](intro-hazard.md) depticting hazard intensity and aligned [**physical vulnerability model**](intro-vulnerability.md) to translate the intensity into impact over exposed categories. In relation to the global datasets currently available, this is possible for:
 
 - **[Floods](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Flood.ipynb)**: using water depth as hazard intensity measure, calculates mortality over population and damage over built-up.
 - **[Tropical Cyclone - Strong Winds](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Tropical_cyclones.ipynb)**: using wind speed as hazard intensity measure, calculates wind damage over built-up.
@@ -25,9 +25,16 @@ A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/T
 
 - User input is required to define country, exposure layer, and settings. Settings affect how the processing runs (min theshold). The script runs on one country and one hazard at time to keep the calculation time manageable.
 
-- The spatial information about hazard and exposure is first combined at the grid level, using the resolution of the exposure layer. E.g. when using GHSL population layer, it is 100x100 meters. The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.
+- The spatial information about hazard and exposure is first combined at the grid level, using the resolution of the exposure layer. E.g. when using GHSL population layer, it is 100x100 meters. The core of the analysis is `raster calculation`, combinining exposure and hazard value through an impact function at the grid level.
 
-- The exposure and impact estimates is summarised for the chosen administrative boundary (ADM) level using zonal statistic. The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The exceedance frequency curve (EFC) is plotted. These output represents the disaster risk historical baseline. The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).
+```{figure} images/raster_calc.jpg
+---
+width: 600
+align: center
+---
+```
+
+- The exposure and impact estimates are then summarised for the chosen administrative boundary (ADM) level using `zonal statistic`. The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency depending on the scenario. The `exceedance frequency curve (EFC)` is plotted. These outputs represent the core of the disaster risk historical baseline. The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).
 
 ## DATA MANAGEMENT
 
@@ -47,13 +54,6 @@ A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/T
   - Filter hazard layer according to settings (min and max thresholds) for each RPi -> `RPi_filtered`
   - Transform hazard intensity value into impact factor using specific hazard impact function or table: `RPi_filtered` -> `RP_IF`
   - RPi_IF is multiplied with the exposure layer to obtain expected impact: `RPi_IF` -> `RPi_exp_imp`
-
-```{figure} images/raster_calc.jpg
----
-width: 600
-align: center
----
-```
   - Perform zonal statistic (SUM) for each ADMi unit over every RPi_exp_imp -> `table [ADMi_NAME;RPi_exp_imp]`
     <br> e.g. `[ADM2_NAME;RP10_exp_imp;RP100_exp_imp;RP1000_exp_imp]`<br><br>
 

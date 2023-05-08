@@ -32,7 +32,7 @@ Probabilistic scenarios of hazard data can be compared with observed disaster ev
 ---
 align: center
 ---
-Example of flood model extent validation between observed events (Pakistan 2022) and probabilistic model (Fathom RP 100 years).
+Example of flood model extent validation between observed events (Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).
 ```
 
 ## Exposure
@@ -45,15 +45,17 @@ Example of flood model extent validation between observed events (Pakistan 2022)
 
 ### Comparison against basemap
 
-Identify artifacts in exposure data; if the errors are limited and a better source of truth is avaialble for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.
+Identify artifacts in exposure data; if the errors are limited and a better source of truth is available for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.
 
 ### Cross-comparison between similar datasets
 
 Run a statistical comparison between similar dataset to estimate their similarity.
 An example is spatial correlation:
 
+`Insert figure`
+
 # Output interpretation
-The model just provide cold numbers; then is to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestable for a non-expert audience.
+The analytical model produces numbers; then is to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestable for a non-expert audience.
 
 ## Validation against empirical disaster data
 
@@ -67,4 +69,4 @@ In the development of risk models, many different data sets are used as input co
 
 A risk model can produce a very precise result—it may show, for example, that a 1-in-100-year flood will affect 388,123 people—but in reality the accuracy of the model and input data may provide only an order of magnitude estimate. Similarly, sharply delineated flood zones on a hazard map do not adequately reflect the uncertainty associated with the estimate and could lead to decisions such as locating critical facilities just outside the flood line, where the actual risk is the same as if the facility was located inside the flood zone.
 
-We should not be apprehensive of using information that is uncertain so long as any decisions and actions based upon the information are made with a full understanding of the associated uncertainty and its implications. It should be remembered that uncertainty will usually promote an analytical debate that should lead to robust decisions, which is a positive manifestation of uncertainty. Credible scientific should also have associated uncertainty clearly presented.
+We should not be apprehensive of using information that is uncertain so long as any decisions and actions based upon the information are made with a full understanding of the associated uncertainty and its implications. It should be remembered that uncertainty will usually promote an analytical debate that should lead to robust decisions, which is a positive manifestation of uncertainty. Credible scientific results should also have associated uncertainty clearly presented.

@@ -1,10 +1,13 @@
 # Expected Annual Exposure (EAE) 
 
-This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) which cannot be coupled with a proper impact model (i.e. `fragility function`), but can be ranked in terms of hazard intensity thresholds.
-Thus the hazard intensity layer is translated into discrete classes and, for ach one, the total exposure for the selected category is calculated.
+This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) which cannot be coupled with a proper [**physical vulnerability model**](intro-vulnerability.md), but can be ranked in terms of hazard intensity thresholds.
+Thus the hazard intensity layer is translated into discrete classes and, for each one, the total exposure for the selected category is calculated.
 For example, flood hazard over agriculture is measured in terms of hectars of land falling within different intervals of water depth.
 
-This produces a mean estimate of **Expected Annual Exposure (EAE) by hazard intensity classes**, as explained in the [**risk concepts**](intro-risk.md).
+This produces a mean estimate of **Expected Annual Exposure (EAE) by hazard intensity classes** for the historical baseline, as explained in the [**risk concepts**](intro-risk.md). This is applied for:
+
+- **Floods**: using water depth as hazard intensity measure, calculates agricultural land area affected by water detph over 0.5 meters.
+- [**Heat**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Heat_stress.ipynb): using WBGT (°C) as hazard intensity measure, calculates the amount of population exposed to heat stress classes (strong, very strong, extreme).
 
 ```{example}
 `For example`: there is no generalised impact model available for measuring flood impact over crops by means of water depth alone, because crop damage depends on a variety of additional factors, such as: duration of the submersion, water velocity, presence of pollutants, type of crop, stage of the crop cycle.
@@ -20,11 +23,11 @@ The [python notebooks](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/no
 A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization) of these scripts makes use of cpu parallelization.
 ```
 
-- User input is required to define country, exposure layer, and settings. Settings affect how the processing runs (min theshold). The script runs on one country and one hazard at time to keep the calculation time manageable.
+- User input is required to define country, exposure layer, and settings. Settings is used to define the classes thresholds. The script runs on one country and one hazard at time to keep the calculation time manageable.
 
-- The spatial information about hazard and exposure is first combined at the grid level, using the resolution of the exposure layer. E.g. when using GHSL population layer, it is 100x100 meters. The core of the analysis is raster calculation, combinining exposure and hazard value through an impact function.
+- The spatial information about hazard and exposure is combined at the grid level, using the horizontal resolution of the exposure layer (e.g. when using GHSL population layer, it is 100 meters). This is done for separate hazard intensity classes.
 
-- The exposure and impact estimates is summarised for the chosen administrative boundary (ADM) level using zonal statistic. The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The exceedance frequency curve (EFC) is plotted. These output represents the disaster risk historical baseline. The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).
+- The exposure estimates by hazard are then summarised for the chosen administrative boundary (ADM) level using `zonal statistic`. The expected annual exposure (EAE) is computed by multiplying the exposure value (for each hazard intensity class) with its exceedence frequency (1/RPi - 1/RPj) depending on the scenario. The `exceedance frequency curve (EFC)` can be plotted. These outputs represent the core of the disaster risk historical baseline. The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).
 
 ## DATA MANAGEMENT
 

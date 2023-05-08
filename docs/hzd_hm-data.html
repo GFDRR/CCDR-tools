@@ -649,13 +649,13 @@ title="Print to PDF"
 <ul class="simple">
 <li><p><strong>WRI</strong> hazard maps are the preferred choice only in cases when 1) data needs to be open/public; 2) explicit climate scenarios are required, however the scientific quality and granularity of this dataset is far from the one offered by Fathom – and far from optimal, in general (low resolution, old baseline, simplified modelling).</p></li>
 </ul>
-<p>[insert map comparison]</p>
+<p><code class="docutils literal notranslate"><span class="pre">[insert</span> <span class="pre">map</span> <span class="pre">comparison]</span></code></p>
 <p>It is important to note that pluvial (flash) flood events are extremely hard to model properly on the base of global static hazard maps alone. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures. Because of this, while Fathom does offer pluvial hazard maps, their application for pluvial risk assessment is questionable as it cannot account for these key drivers.</p>
 <p>A complementary perspective on flood risk is offered by the <a class="reference external" href="https://planetarycomputer.microsoft.com/dataset/jrc-gsw">Global Surface Water layer</a> produced by JRC using remote sensing data (Landsat 5, 7, 8) over the period1984-2020. It provides information on all the locations ever detected as max water level, water occurrence, occurrence change, recurrence, seasonality, and seasonality change. However, this layer does not seem to properly account for extreme flood events, I.e. recorded flood events for the period 1984-2020 most often exceed the extent of this layer. Hence it can be used to identify permanent and semi-permanent water bodies, but not to identify the baseline flood extent from past events.</p>
 <figure class="align-center" id="id1">
 <img alt="../_images/GSWL.jpg" src="../_images/GSWL.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Global Surface Water Layer</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Global Surface Water Layer</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <hr>
@@ -757,17 +757,18 @@ title="Print to PDF"
 </tr>
 </tbody>
 </table>
-<p>Both these models seem to be affrom a simplified bathtub modelling approach, projecting unrealistic flood extent already under baseline climate conditions.</p>
+<p>Both these models tend to project unrealistic flood extent already under baseline climate conditions, which might be due an oversimplified bathtub modelling approach, or due to the relatively low resolution and vertical accuracy of the Digital Terrain Model (DTM).</p>
 <p>As shown in figure below, considering the minimum baseline values (least impact criteria), the flood extent drawn by the Climate Central layer is similar to the baseline RP100 from Muis, in the middle - both generously overestimating water spreading inland even under less extreme scenarios [<em>the locaiton of comparison is chosen as both the Netherlands and N Italy are low-lying areas, which are typically the most difficult to model</em>].
 In comparison, the WRI is far from perfection (it is also a bathtub model), but it seems to apply a more realistic max flood extent, which ultimately makes it more realistic for application.</p>
 <figure class="align-center" id="id2">
 <img alt="../_images/CF_data.jpg" src="../_images/CF_data.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <section id="sea-level-rise">
 <h3>Sea level rise<a class="headerlink" href="#sea-level-rise" title="Permalink to this headline">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Content</span> <span class="pre">under</span> <span class="pre">development.</span></code></p>
 <hr>
 </section>
 </section>
@@ -828,7 +829,7 @@ In comparison, the WRI is far from perfection (it is also a bathtub model), but 
 <figure class="align-center" id="id3">
 <img alt="../_images/LS_data.jpg" src="../_images/LS_data.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuos index is displayed into 3 discrete classes (Low, Medium, High).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuous index is displayed into 3 discrete classes (Low, Medium, High).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <hr>
@@ -894,7 +895,7 @@ These data can be used to calculate tropical cyclone risk in all (coastal) regio
 <figure class="align-center" id="id4">
 <img alt="../_images/SW_data.jpg" src="../_images/SW_data.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <hr>
@@ -905,14 +906,14 @@ These data can be used to calculate tropical cyclone risk in all (coastal) regio
 <figure class="align-center" id="id5">
 <img alt="../_images/fao_asi.jpg" src="../_images/fao_asi.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 11 </span><span class="caption-text">FAO ASI global dataset showing historical drought frequency for &gt;30% cropland area affected along the period 1984-2021.</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 12 </span><span class="caption-text">FAO ASI global dataset showing historical drought frequency for &gt;30% cropland area affected along the period 1984-2021.</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <hr>
 </section>
 <section id="heat-stress">
 <h2>Heat stress<a class="headerlink" href="#heat-stress" title="Permalink to this headline">#</a></h2>
-<p>Heat discomfort increases when hot temperatures are associated with high humidity [<a class="reference external" href="https://doi.org/10.1088/1748-9326/aaa00e">Coffel et al 2018</a>]. Heat stress can cause long-term impairment and reduce labour productivity and incomes [[Goodman et <a class="reference external" href="https://scholar.harvard.edu/files/joshuagoodman/files/w24639.pdf">al 2018</a>].
+<p>Heat discomfort increases when hot temperatures are associated with high humidity [<a class="reference external" href="https://doi.org/10.1088/1748-9326/aaa00e">Coffel et al 2018</a>]. Heat stress can cause long-term impairment and reduce labour productivity and incomes [<a class="reference external" href="https://scholar.harvard.edu/files/joshuagoodman/files/w24639.pdf">Goodman et al 2018</a>].
 Extreme heat events lead to heat stress and can increase morbidity and mortality as well as losses of work productivity [Kjellstrom et al 2009, Singh et al 2015].
 Not everyone reacts to the heat stresses in the same way, as individual responses are conditional on their medical condition, level of fitness, body weight, age, and economic situation [National Institute for Occupational Safety and Health 2016].</p>
 <p>Various definitions regarding magnitude and duration thresholds and heat metrics exist. There are several heat indices involving both temperature and relative humidity, here are listed the most common ones.</p>
@@ -978,7 +979,7 @@ Not everyone reacts to the heat stresses in the same way, as individual response
 <figure class="align-center" id="id6">
 <img alt="../_images/hzd_hs.jpg" src="../_images/hzd_hs.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 12 </span><span class="caption-text">Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the WBGT map by VITO cannot capture these details.</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the WBGT map by VITO cannot capture these details.</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <ul class="simple">
@@ -1000,6 +1001,7 @@ The objective is to facilitate the use of these data for heat risk analysis. The
 </section>
 <section id="wildfires">
 <h2>Wildfires<a class="headerlink" href="#wildfires" title="Permalink to this headline">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Content</span> <span class="pre">under</span> <span class="pre">development.</span></code></p>
 </section>
 </section>
 
@@ -1053,7 +1055,7 @@ The objective is to facilitate the use of these data for heat risk analysis. The
   
     By M. Amadio (GFDRR)<br/>
   
-    Last updated on May 05, 2023.<br/>
+    Last updated on May 08, 2023.<br/>
     <div class="extra_footer">
       <div>
     <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
