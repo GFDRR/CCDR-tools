@@ -32,7 +32,31 @@ Probabilistic scenarios of hazard data can be compared with observed disaster ev
 ---
 align: center
 ---
-Example of flood model extent validation between observed events (Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).
+Example of flood model extent validation between observed events (UNOSAT, Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).
+```
+
+```{figure} images/hzd_match_empirical.jpg
+---
+align: center
+---
+Example of flood model extent validation between observed events (UNOSAT, Nigeria 2022) and probabilistic model (Fathom RP 100 years).
+```
+
+### Cross-comparison between alternative models
+
+Run a statistical comparison between similar models or dataset to estimate their similarity.
+
+```{figure} images/hzd_match_models.jpg
+---
+align: center
+---
+Example of map showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years).
+```
+```{figure} images/hzd_match_stats.png
+---
+align: center
+---
+Example of chart showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years): share of affected sub-national area according to each model, and difference between the two models.
 ```
 
 ## Exposure
@@ -47,12 +71,9 @@ Example of flood model extent validation between observed events (Pakistan 2022)
 
 Identify artifacts in exposure data; if the errors are limited and a better source of truth is available for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.
 
-### Cross-comparison between similar datasets
+### Cross-comparison between alternative models
 
 Run a statistical comparison between similar dataset to estimate their similarity.
-An example is spatial correlation:
-
-`Insert figure`
 
 # Output interpretation
 The analytical model produces numbers; then is to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestable for a non-expert audience.

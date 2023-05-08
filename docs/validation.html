@@ -495,6 +495,11 @@ title="Print to PDF"
        Validation against empirical datasets
       </a>
      </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#cross-comparison-between-alternative-models">
+       Cross-comparison between alternative models
+      </a>
+     </li>
     </ul>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -513,8 +518,8 @@ title="Print to PDF"
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#cross-comparison-between-similar-datasets">
-       Cross-comparison between similar datasets
+      <a class="reference internal nav-link" href="#id2">
+       Cross-comparison between alternative models
       </a>
      </li>
     </ul>
@@ -587,6 +592,11 @@ title="Print to PDF"
        Validation against empirical datasets
       </a>
      </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#cross-comparison-between-alternative-models">
+       Cross-comparison between alternative models
+      </a>
+     </li>
     </ul>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -605,8 +615,8 @@ title="Print to PDF"
       </a>
      </li>
      <li class="toc-h3 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#cross-comparison-between-similar-datasets">
-       Cross-comparison between similar datasets
+      <a class="reference internal nav-link" href="#id2">
+       Cross-comparison between alternative models
       </a>
      </li>
     </ul>
@@ -671,10 +681,32 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <section id="validation-against-empirical-datasets">
 <h3>Validation against empirical datasets<a class="headerlink" href="#validation-against-empirical-datasets" title="Permalink to this headline">#</a></h3>
 <p>Probabilistic scenarios of hazard data can be compared with observed disaster events to corroborate the analysis, although this is often a difficult task due to lack of granular spatial data representing the events. Some hazards are better covered by observations than others - see the <a class="reference internal" href="disaster-data.html"><span class="doc std std-doc">disaster records</span></a>.</p>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id3">
 <img alt="../_images/hzd_validate.jpg" src="../_images/hzd_validate.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 27 </span><span class="caption-text">Example of flood model extent validation between observed events (Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 28 </span><span class="caption-text">Example of flood model extent validation between observed events (UNOSAT, Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id4">
+<img alt="../_images/hzd_match_empirical.jpg" src="../_images/hzd_match_empirical.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 29 </span><span class="caption-text">Example of flood model extent validation between observed events (UNOSAT, Nigeria 2022) and probabilistic model (Fathom RP 100 years).</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="cross-comparison-between-alternative-models">
+<h3>Cross-comparison between alternative models<a class="headerlink" href="#cross-comparison-between-alternative-models" title="Permalink to this headline">#</a></h3>
+<p>Run a statistical comparison between similar models or dataset to estimate their similarity.</p>
+<figure class="align-center" id="id5">
+<img alt="../_images/hzd_match_models.jpg" src="../_images/hzd_match_models.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 30 </span><span class="caption-text">Example of map showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years).</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id6">
+<img alt="../_images/hzd_match_stats.png" src="../_images/hzd_match_stats.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 31 </span><span class="caption-text">Example of chart showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years): share of affected sub-national area according to each model, and difference between the two models.</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -693,11 +725,9 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <h3>Comparison against basemap<a class="headerlink" href="#comparison-against-basemap" title="Permalink to this headline">#</a></h3>
 <p>Identify artifacts in exposure data; if the errors are limited and a better source of truth is available for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.</p>
 </section>
-<section id="cross-comparison-between-similar-datasets">
-<h3>Cross-comparison between similar datasets<a class="headerlink" href="#cross-comparison-between-similar-datasets" title="Permalink to this headline">#</a></h3>
-<p>Run a statistical comparison between similar dataset to estimate their similarity.
-An example is spatial correlation:</p>
-<p><code class="docutils literal notranslate"><span class="pre">Insert</span> <span class="pre">figure</span></code></p>
+<section id="id2">
+<h3>Cross-comparison between alternative models<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
+<p>Run a statistical comparison between similar dataset to estimate their similarity.</p>
 </section>
 </section>
 </section>
