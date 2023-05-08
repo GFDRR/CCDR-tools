@@ -4,10 +4,10 @@ A collection of scripted tools developed to inform risk analytics for the the Wo
 
 The tools collected in this repository allow to:
 
-- Perform spatial analytics of disaster risk for the present period ([**baseline**](intro-risk#annual-risk-baseline)) based on global datasets
-- Combine risk and poverty information into [**bi-variate maps**](risk-poverty.md)
-- Produce [**climate risk outlook**](climate-risk.md) based on CMIP6 idnices
-- Present results into an interactive [**dashboard**](presentation#dashboard)
+- Perform spatial analytics of disaster risk for the present period ([**baseline**](docs/intro-risk#annual-risk-baseline)) based on global datasets
+- Combine risk and poverty information into [**bi-variate maps**](docs/risk-poverty.md)
+- Produce [**climate risk outlook**](docs/climate-risk.md) based on CMIP6 idnices
+- Present results into an interactive [**dashboard**](docs/presentation#dashboard)
 
 As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
 
