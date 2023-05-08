@@ -1,19 +1,51 @@
 # Climate & Disaster Risk Screening Tools
 
-A collection of scripted tools developed alongside the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2023).
+A collection of scripted tools developed to inform risk analytics for the the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2023).
 
 The tools collected in this repository allow to:
 
-- Perform disaster risk analysis at sub-national level based on global datasets
-- Combine risk and poverty information
-- Produce climate outlook
-- Present results into a dashboard
+- Perform spatial analytics of disaster risk for the present period ([**baseline**](intro-risk#annual-risk-baseline)) based on global datasets
+- Combine risk and poverty information into [**bi-variate maps**](risk-poverty.md)
+- Produce [**climate risk outlook**](climate-risk.md) based on CMIP6 idnices
+- Present results into an interactive [**dashboard**](presentation#dashboard)
 
 As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
 
 - [**Cambodia**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/reports/KHM_RSK.pdf)
 - [**Nigeria**](Top-down/reports/NGA_RSK.pdf)
 - [**OECS countries**](Top-down/reports/OECS_RSK.pdf)
+
+Other countries that were covered by the risk analytics:
+
+**South & South-East Asia**
+- Pakistan
+- Nepal
+- Bangladesh
+- Cambodia
+- India
+
+**West Africa**
+- Burkina Faso
+- Mali
+- Niger
+- Chad
+- Mauritania
+- Guinea-Bissau
+- Nigeria
+- Senegal
+
+**East & Central Africa** 
+- Ethiopia
+- Rwanda
+
+**Latin America & Caribbean**
+- Dominican Republic
+- OECS countries (Antigua & Barbuda; Dominica; Saint Kitts & Nevis; Saint Lucia; Grenada; Saint Vincent & Grenadines)
+
+```{note}
+Tis documentation specifically reflects the approches and methods adopted for the CCDR disaster risk screening. They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
+Also note that our tools are not expected to reflect all existing risk perspectives and dimensions, rather producing standardised risk indicators.
+```
 
 ## Disaster risk framework
 
@@ -31,4 +63,3 @@ The **UN Global Assessment Report on Disaster Risk Reduction (GAR)** is the flag
 
 - **[UNDRR GAR 2022](https://www.undrr.org/global-assessment-report-disaster-risk-reduction-gar)**
 ```
-

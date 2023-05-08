@@ -21,7 +21,7 @@ Some of the hazards typically considered in risk screening are:
 Climate change has the potential to affect the frequency and intensity of hydrometeorological hazards (see [**climate outlook**](climate-risk)), while it doesn't significantly affect geophysical hazards.
 
 ```{seealso}
-**A hazard is a process or phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation. Hazards may be natural, anthropogenic or socionatural in origin (UNDRR 2017).**
+**A hazard is a process or phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation. Hazards may be natural, anthropogenic or socionatural in origin (UNDRR 2019).**
 
 - **[UNDRR Hazard overview](https://www.preventionweb.net/understanding-disaster-risk/component-risk/hazard)**
 
@@ -63,7 +63,7 @@ align: center
 A probabilistic hazard representation is required in order to produce [probabilistic risk](intro-risk#determimistic-and-probabilistic-risk) mapping.
 
 ```{note}
-Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.
+Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.<br><p align=center><b>RP 1,000 = change of occurring once every 1,000 years = 1/1,000 annual occurrence probability (0.001 or 0.1% any given year).</b></p>
 ```
 
 Hazard models carry **limitations related to their applicability**. Their quality depend on scale, resolution, model quality, training period and related input data quality.

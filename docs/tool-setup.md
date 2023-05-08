@@ -1,6 +1,6 @@
 # Tools setup
 
-The analytical script is provided in form of [**jupyter notebooks**](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/notebooks) and [**python code**](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization). The second form is more advanced and have overall better performances, making use of parallel processing.
+The analytical script is provided in form of [**jupyter notebooks**](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/notebooks) and [**python code**](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization) that can be downloaded and exectuted on any windows or linux machine. The second form is more advanced and have overall better performances, making use of parallel processing.
 In both cases, the script expects input data to be provided according to some rules.
 
 ### Expected directories and input format

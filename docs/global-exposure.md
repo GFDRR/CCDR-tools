@@ -19,7 +19,7 @@ Below is a quick link to openly-licensed datasets that are used by the CCDR stan
 | [WorldCover](https://esa-worldcover.org/en/data-access) | ESA | Land cover classes | 10 m | Annual |
 ```
 
-### EU-JRC Global Human Settlment Layer
+### EU-JRC Global Human Settlement Layer
 
 The Global Human Settlement population model [GHS-POP,  [Schiavina et al. 2022](https://doi.org/10.2905/D6D86A90-4351-4508-99C1-CB074B022C4A)] offers 100 meters global population data projected over built-up land cover. It is similar to [WorldPop](https://www.worldpop.org) in terms of approach, but the reliability is generally better, and the errors are contained.
 Note that high-resolution population mapping relies on census projections distributed in proportion to built-up density obtained from remote sensing data. This can induce model errors, particularly in mountainous and forest environments, resulting in an overestimation of natural hazard risk in those areas. The dataset is downloaded as regular tiles from the global map.

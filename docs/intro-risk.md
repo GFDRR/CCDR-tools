@@ -5,11 +5,11 @@ In this framework, Risk (**R**) is calculated as a function of: the hazard occur
 <span style="font-size: 120%;"><p align="center" size=+2><b>Risk = Hazard x Exposure x Vulnerability</b></p></span>
 
 ```{seealso}
-**Disaster risk is expressed as the likelihood of loss of life, injury or destruction and damage from a disaster in a given period of time (UNDRR 2017).**
+**Disaster risk is expressed as the likelihood of loss of life, injury or destruction and damage from a disaster in a given period of time (UNDRR 2019).**
 
 Measures of exposure can include the number of people or types of assets in an area. These can be combined with the specific vulnerability and capacity of the exposed elements to any particular hazard to estimate the quantitative risks associated with that hazard in the area of interest.
 
-- **[UNDRR Risk overview](https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk)**
+- __[**UNDRR Risk overview**](https://www.preventionweb.net/understanding-disaster-risk/component-risk/disaster-risk)__
 ```
 
 From these definitions, we understand that the concept of `risk` is inherently tied to the concept of `probability`, expressed in terms of frequency (also occurrence rate). In other words:
@@ -23,8 +23,8 @@ align: center
 Risk as impact - probability combination.
 ```
 
-## Determimistic impact and probabilistic risk
-While historical losses can explain the past, they do not necessarily provide a good guide to the future; *most disasters that could happen have not happened yet*. Probabilistic risk assessment simulates those future disasters which, based on scientific evidence, are likely to occur. As a result, these risk assessments resolve the problem posed by the limits of historical data. Probabilistic models therefore "complete" historical records by reproducing the physics of the phenomena and recreating the intensity of a large number of synthetic events.
+## Deterministic impact and probabilistic risk
+While historical losses can explain the past, they do not necessarily provide a good guide to the future; *most disasters that could happen have not happened yet*. Probabilistic risk assessment simulates those future disasters which, based on scientific evidence, are likely to occur. As a result, these risk assessments resolve the problem posed by the limits of historical data. Probabilistic models therefore *complement* historical records by reproducing the physics and/or the statistics/statistical distribution of the phenomena and recreating the intensity of a large number of synthetic events.
 
 ```{note}
 In the context of disaster risk, probability refers to the frequency of occurrence or the `return period` of impacts associated with hazardous events.
@@ -32,7 +32,7 @@ In the context of disaster risk, probability refers to the frequency of occurren
 
 **Probabilistic risk** is the chance of something adverse (impact) occurring. This method assesses the likelihood of an event(s) and it contains the idea of uncertainty because it incorporates the variability between frequent, low impact events and rare, high impact events.
 
-In contrast, a **deterministic risk** model typically models one scenarios, representing a real event or an individual, finite risk scenario (e.g. mean, median, worst case), but does not quantify the variability around it.
+In contrast, a **deterministic risk** model typically models one scenario representing a real event or an individual, finite risk scenario (e.g. mean, median, worst case), but cannot properly represent the full range of variability around it.
  
 When probabilistic hazard scenarios (multiple layers by Return Period) are available to calculate impacts in relation to occurrence frequency, an estimate of the **Expected Annual Impact (EAI)** over exposed categories can be calculated.
 
@@ -46,11 +46,22 @@ When probabilistic hazard scenarios (multiple layers by Return Period) are avail
 ### Lower and Upper bounds
 Originally, the calculation of EAI was performed using the customary approach, as exemplified [here](https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac) and [here](https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets).
 
-Due to requests from regional teams, a range estimate was included in the EAI calculation, outputting:
+Due to requests from regional teams, a refined calculation of the integral for probabilistic EAI and EAE was included:
 
-- **EAI Lower Bound**: calculated as the customary approach.
-- **EAI Upper Bound**:
+- **EAI Lower Bound (EAI_LB)**: calculated as the sum of the area of recangles built below the exceedance probability curve
+- **EAI Upper Bound (EAI_UB)**: calculated as the sum of the area of recangles built above the exceedance probability curve
 - **EAI**: mean between lower and upper bound
+
+```{figure} images/lowerupper.png
+---
+align: center
+---
+Risk as impact - probability combination.
+```
+
+### Direct and indirect impacts
+
+- FILL IN -
 
 ## Supported Hazard and exposure combinations
 The following matrix show the combinations of hazard and exposure for which a vulnerability model is provided, and the type of model, allowing to express the risk either in form of impact (damage) or exposure to hazard classes.
