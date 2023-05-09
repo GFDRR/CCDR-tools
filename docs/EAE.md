@@ -53,7 +53,7 @@ A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/T
   - Calculate the exceedance frequency for each RPi -> `RPi_ef = (1/RPi - 1/RPi+1)` where `RPi+1` means the next RP in the serie.
     Example using 3 RP scenarios: RP 10, 100, and 1000 years. Then: `RP10_ef = (1/10 - 1/100) = 0.09`
   - Multiply exposure for each scenario i and class j `(RPi_Cj_Exp)` with its exceedence frequency `(RPi_ef)` -> `RPi_Cj_EAE`
-  - Sum `RPi_Cj_Exp_EAE`across multiple RPi for the same class Cj -> `table [ADMi;Cj_Exp_EAE]`<br>
+  - Sum `RPi_Cj_Exp_EAE` across multiple RPi for the same class Cj -> `table [ADMi;Cj_Exp_EAE]`<br>
     Example using 4 classes (C1-4): `table [ADMi;C1_EAE;C2_EAE;C3_EAE;C4_EAE]`
 
 	| RP | Exc. frequency | C1_exp | C2_exp | C3_exp | C4_exp | C1_EAE | C2_EAE | C3_EAE | C4_EAE |
