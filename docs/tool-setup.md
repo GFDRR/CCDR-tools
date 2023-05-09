@@ -120,21 +120,4 @@ CACHE_DIR = ${DATA_DIR}/cache/
   ---
   Example of Anaconda cmd prompt
   ```
-- Run `jupyter notebook`
-- Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
-
-```{figure} images/ccdr-nb.png
----
-align: center
----
-Starting page for the CCDR python notebooks
-```
-
-- Execute all cells. The last one will present the user interface:
-
-```{figure} images/ccdr-nb_settings.png
----
-align: center
----
-Settings from one of the python notebooks
-```
+- Run `jupyter notebook`. The interface should pop up in your browser.

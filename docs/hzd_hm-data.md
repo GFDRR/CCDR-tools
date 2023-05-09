@@ -196,7 +196,7 @@ Various definitions regarding magnitude and duration thresholds and heat metrics
 **Time reference** | Baseline (1980-2009) | Baseline (1979-2020) | Baseline (1970-2000); Projections (2040-2070, 2070-2100)
 **Intensity metric** | Wet Bulb Globe Temperature [°C] | UTCI (°C) | Heat Index, Humidex
 **License** | Open data | Open data | Open data
-**Notes** | Accounts for air temperature, humidity, wind speed, radiation, fatigue-heating. Includes intensity-impact classification. | Accounts   for air temperature, humidity, wind speed, radiation. Includes intensity-impact classification. |  
+**Notes** | Accounts for air temperature, humidity, wind speed, radiation, fatigue-heating. Includes intensity-impact classification. | Accounts for air temperature, humidity. Includes intensity-impact classification. |  
 
 - **Wet-Bulb Globe Temperature** (WBGT °C): the WBGT combines temperature and humidity, both critical components in determining heat stress. A probabilistic dataset (3 return periods: 5, 20 and 100 years) based on 1980-2009 data has been developed for the GFDRR by VITO and has since been used to measure heat stress in risk screenings and assessment. This layer is generally sufficient for country-level hazard screening, but it has several limitations for any hazard and risk assessment. Although downscaled to consider gepmorphology and orography, the low grid resolution and relatively simple modelling makes it unfit to capture the heat island effect occurring in cities (Urban Heat Island) – nor the cooling effect of water bodies. That makes it unfit for any urban-scale assessment and generally sub-optimal for any sub-national assessment.
 
@@ -207,13 +207,11 @@ align: center
 Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the WBGT map by VITO cannot capture these details.
 ```
 
-- **Universal Thermal Climate Index** (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, skin wetness, skin blood flow and rectal, mean skin and face temperatures) as the actual environment.
-A polynomial approximation based on near-surface air temperature, solar radiation, vapor pressure, and wind speed is used for calculating the universal thermal climate index.
-
+- **Universal Thermal Climate Index** (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, skin wetness, skin blood flow and rectal, mean skin and face temperatures) as the actual environment. It is calculated based on near-surface air temperature, solar radiation, vapor pressure, and wind speed. For this specific dataset provided, the influence of solar radiation and wind speed is not considered and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
 
 ```{seealso}
-UTCI data from ERA-5 climate reanalysis has been processed into a probabilistic analysis of extremes from the [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). In this dataset, the influence of solar radiation and wind speed is not considered, and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
-A collection of scenarios representing the frequency distribution of heat has been produced in form of multiple layers representing return periods.
+UTCI data from ERA-5 climate reanalysis has been processed into a probabilistic analysis of extremes from the [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). 
+A collection of scenarios representing the frequency distribution of heat has been produced in form of multiple layers representing return periods.<br>
 The objective is to facilitate the use of these data for heat risk analysis. The scenarios include ten return periods for mean, min and max daily UTCI (C°) for the period 1940-2020. Return Period scenarios: 5, 10, 20, 50, 75, 100, 200, 250, 500 and 1000 years.<br>`NOT RELEASED YET`.
 ```
 
