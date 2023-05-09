@@ -2,7 +2,17 @@
 
 Once required input layers have been created according to [tool setup](tool-setup), the analysis can run.
 
-Select the country of interest, the exposure category and the level of administrative boundaries aggregation.
+- Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
+
+```{figure} images/ccdr-nb.png
+---
+align: center
+---
+Starting page for the CCDR python notebooks
+```
+
+- Execute all cells in the notebook (top bar > `Cell` > `Run all`). The last one will present the user interface. Select the country of interest, the exposure category and the level of administrative boundaries aggregation.
+
 
 ```{figure} images/ccdr-nb_settings.png
 ---

@@ -973,7 +973,7 @@ Not everyone reacts to the heat stresses in the same way, as individual response
 </tr>
 <tr class="row-even"><td class="text-align:right"><p><strong>Notes</strong></p></td>
 <td class="text-align:center"><p>Accounts for air temperature, humidity, wind speed, radiation, fatigue-heating. Includes intensity-impact classification.</p></td>
-<td class="text-align:center"><p>Accounts   for air temperature, humidity, wind speed, radiation. Includes intensity-impact classification.</p></td>
+<td class="text-align:center"><p>Accounts for air temperature, humidity. Includes intensity-impact classification.</p></td>
 <td class="text-align:center"><p></p></td>
 </tr>
 </tbody>
@@ -988,13 +988,12 @@ Not everyone reacts to the heat stresses in the same way, as individual response
 </figcaption>
 </figure>
 <ul class="simple">
-<li><p><strong>Universal Thermal Climate Index</strong> (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, skin wetness, skin blood flow and rectal, mean skin and face temperatures) as the actual environment.
-A polynomial approximation based on near-surface air temperature, solar radiation, vapor pressure, and wind speed is used for calculating the universal thermal climate index.</p></li>
+<li><p><strong>Universal Thermal Climate Index</strong> (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, skin wetness, skin blood flow and rectal, mean skin and face temperatures) as the actual environment. It is calculated based on near-surface air temperature, solar radiation, vapor pressure, and wind speed. For this specific dataset provided, the influence of solar radiation and wind speed is not considered and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.</p></li>
 </ul>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>UTCI data from ERA-5 climate reanalysis has been processed into a probabilistic analysis of extremes from the <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/sis-extreme-indices-cmip6?tab=overview">Copernicus CDS</a>. In this dataset, the influence of solar radiation and wind speed is not considered, and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
-A collection of scenarios representing the frequency distribution of heat has been produced in form of multiple layers representing return periods.
+<p>UTCI data from ERA-5 climate reanalysis has been processed into a probabilistic analysis of extremes from the <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#%21/dataset/sis-extreme-indices-cmip6?tab=overview">Copernicus CDS</a>.
+A collection of scenarios representing the frequency distribution of heat has been produced in form of multiple layers representing return periods.<br>
 The objective is to facilitate the use of these data for heat risk analysis. The scenarios include ten return periods for mean, min and max daily UTCI (C°) for the period 1940-2020. Return Period scenarios: 5, 10, 20, 50, 75, 100, 200, 250, 500 and 1000 years.<br><code class="docutils literal notranslate"><span class="pre">NOT</span> <span class="pre">RELEASED</span> <span class="pre">YET</span></code>.</p>
 </div>
 <p>The two indices are similar and <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S2212094717302037">correlated</a>, but while WBGT considers workload and overall effect on human health, UTCI is a more physically-based measure, thus it is easier to put it in relation to the physical measure of surface temperature (°C). It also has the advantage to consider cold stress extremes as well.</p>
