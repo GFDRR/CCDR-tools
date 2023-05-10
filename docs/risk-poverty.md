@@ -23,7 +23,7 @@ While the wealth quintiles are useful to understand relative wealth and equity w
 ```{table}
 :name: vln-se
 | **Name** | **Source** | **Model type** | **Scale** |
-|---:|---:|---:|---:|---:|---:|
+|---:|---:|---:|---:|
 | [Relative Wealth Index](https://data.humdata.org/dataset/relative-wealth-index) | META | Wealth index | National |
 | [Demographic Health Survey](https://dhsprogram.com/data/available-datasets.cfm) | USAID| Wealth index | National |
 ```

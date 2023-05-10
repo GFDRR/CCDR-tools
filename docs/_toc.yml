@@ -28,6 +28,8 @@ parts:
       - file: docs/climate-indices
       - file: docs/validation
       - file: docs/presentation
+        sections:
+        - file: docs/mapping.ipynb
   - caption: Jupyter Notebooks
     chapters:
       - file: docs/tool-setup
