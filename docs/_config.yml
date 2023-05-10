@@ -25,7 +25,7 @@ html:
 #######################################################################################
 # Execution settings
 execute:
-    execute_notebooks: force
+    execute_notebooks: off
     allow_errors: true
     exclude_patterns:
         - Top-down/notebooks/**/*.ipynb
