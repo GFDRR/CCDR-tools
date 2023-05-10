@@ -578,6 +578,11 @@ For example, flood hazard over agriculture is measured in terms of hectars of la
 <li><p><strong>Floods</strong>: using water depth as hazard intensity measure, calculates agricultural land area affected by water detph over 0.5 meters.</p></li>
 <li><p><a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Heat_stress.ipynb"><strong>Heat</strong></a>: using WBGT (°C) as hazard intensity measure, calculates the amount of population exposed to heat stress classes (strong, very strong, extreme).</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">For</span> <span class="pre">example</span></code>: there is no generalised impact model available for measuring flood impact over crops by means of water depth alone, because crop damage depends on a variety of additional factors, such as: duration of the submersion, water velocity, presence of pollutants, type of crop, stage of the crop cycle.</p>
+<p>For this reason, following a rule of thumb, the risk metric chosen to measure flood risk over crops is simply <strong>exposure to water depth over 0.5 m</strong>.</p>
+</div>
 <section id="script-overview">
 <h2>SCRIPT OVERVIEW<a class="headerlink" href="#script-overview" title="Permalink to this headline">#</a></h2>
 <p>The <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb">python notebooks</a> performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Exposure (EAE) for baseline (reference period).</p>
@@ -761,7 +766,7 @@ Example using 4 classes (C1-4): <code class="docutils literal notranslate"><span
   
     By M. Amadio (GFDRR)<br/>
   
-    Last updated on May 09, 2023.<br/>
+    Last updated on May 10, 2023.<br/>
     <div class="extra_footer">
       <div>
     <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>

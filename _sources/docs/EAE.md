@@ -9,7 +9,7 @@ This produces a mean estimate of **Expected Annual Exposure (EAE) by hazard inte
 - **Floods**: using water depth as hazard intensity measure, calculates agricultural land area affected by water detph over 0.5 meters.
 - [**Heat**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Heat_stress.ipynb): using WBGT (°C) as hazard intensity measure, calculates the amount of population exposed to heat stress classes (strong, very strong, extreme).
 
-```{example}
+```{note}
 `For example`: there is no generalised impact model available for measuring flood impact over crops by means of water depth alone, because crop damage depends on a variety of additional factors, such as: duration of the submersion, water velocity, presence of pollutants, type of crop, stage of the crop cycle.
 
 For this reason, following a rule of thumb, the risk metric chosen to measure flood risk over crops is simply **exposure to water depth over 0.5 m**.
