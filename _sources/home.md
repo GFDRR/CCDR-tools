@@ -15,32 +15,16 @@ As an example of the output produced using these tools, check some of the risk s
 - [**Nigeria**](Top-down/reports/NGA_RSK.pdf)
 - [**OECS countries**](Top-down/reports/OECS_RSK.pdf)
 
-Other countries that were covered by the risk analytics:
+Countries that have been covered by the risk analytics:
 
-**South & South-East Asia**
-- Pakistan
-- Nepal
-- Bangladesh
-- Cambodia
-- India
+<iframe src="docs/maps/CCDR_map.html" height="500" width="100%"></iframe>
 
-**West Africa**
-- Burkina Faso
-- Mali
-- Niger
-- Chad
-- Mauritania
-- Guinea-Bissau
-- Nigeria
-- Senegal
-
-**East & Central Africa** 
-- Ethiopia
-- Rwanda
-
-**Latin America & Caribbean**
-- Dominican Republic
-- OECS countries (Antigua & Barbuda; Dominica; Saint Kitts & Nevis; Saint Lucia; Grenada; Saint Vincent & Grenadines)
+```{table}
+:name: vln-data
+|**South & South-East Asia** | **West Africa**| **East & Central Africa**  | **Latin America & Caribbean** |
+|---|---|---|---|
+| <ul><li>Pakistan<li>Nepal<li>Bangladesh<li>Cambodia<li>India</ul> | <ul><li>Burkina Faso<li>Mali<li>Niger<li>Chad<li>Mauritania<li>Guinea-Bissau<li>Nigeria<li>Senegal</ul> | <ul><li>Ethiopia<li>Rwanda</ul> | <ul><li>Dominican Republic<li>Antigua & Barbuda<li>Dominica<li>Saint Kitts & Nevis<li>Saint Lucia<li>Grenada<li>Saint Vincent & Grenadines</ul> |
+```
 
 ```{note}
 Tis documentation specifically reflects the approches and methods adopted for the CCDR disaster risk screening. They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
