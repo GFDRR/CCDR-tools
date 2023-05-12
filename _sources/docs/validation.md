@@ -44,27 +44,29 @@ figclass: margin-caption
 Example of flood model extent validation between observed events (UNOSAT, Nigeria 2022) and probabilistic model (Fathom RP 100 years).
 ```
 
-### Cross-comparison between alternative models
+### Cross-comparison between alternative datasets
 
-Run a statistical comparison between similar models or dataset to estimate their similarity.
+Run a spatial and numerical comparison between models to estimate their similarity.
 
 ```{figure} images/hzd_match_models.jpg
+---
+align: left
+figclass: margin-caption
+---
 Example of map showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years).
 ```
 ```{figure} images/hzd_match_stats.png
+---
+align: left
+figclass: margin-caption
+---
 Example of chart showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years): share of affected sub-national area according to each model, and difference between the two models.
 ```
 
 ## Exposure
-
 ### Correct values interpretation and outliers
-
 - Check layer projection sysyem (CRS) and resolution
-
-
 - Check unit of measure (exposure metadata)
-
-
 - Check values distribution (histogram)
 
 ```{figure} images/exp_wpop_hst.jpg
@@ -76,7 +78,6 @@ In this example, we are examining the [WorldPop 2020 population layer](https://h
 ```
 
 ### Comparison against basemap
-
 Identify artifacts in exposure data by sample inspection; if the errors are limited and a better source of truth is available for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.
 
 ```{figure} images/exp_wpop_sample.jpg
@@ -88,8 +89,7 @@ Following on the previous example over Nepal; let's change the legend max to 1,0
 ```
 
 ### Cross-comparison between alternative models
-
-First perform a visual inspection, then run a statistical comparison between similar dataset to estimate their similarity.
+Run a spatial and numerical comparison between models to estimate their similarity.
 
 ```{figure} images/exp_wpop_sample_compare.jpg
 ---
