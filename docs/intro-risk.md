@@ -63,7 +63,11 @@ The integral below the curve is calculated as the mean of lower and upper bound 
 
 **Direct disaster losses** refer to directly quantifiable losses such as the number of people killed and the damage to buildings, infrastructure and natural resources.<br>**Indirect disaster losses** include declines in output or revenue, and impact on wellbeing of people, and generally arise from disruptions to the flow of goods and services as a result of a disaster [[GFDRR 2014](https://pure.iiasa.ac.at/id/eprint/11138/); [UNDRR](https://www.undrr.org/global-assessment-report-disaster-risk-reduction-gar)].
 
-In this framework we are only estimating **DIRECT disaster losses** in terms of impacts on mortality and built-up damage.
+```{seealso}
+[**UNDRR - Direct and indirect losses overview**](https://www.preventionweb.net/understanding-disaster-risk/key-concepts/direct-indirect-losses)
+```
+
+In this specific framework, we are only estimating **DIRECT disaster losses** in terms of impacts on mortality and built-up damage.
 
 ## Supported Hazard and exposure combinations
 The following matrix show the combinations of hazard and exposure for which a vulnerability model is provided, and the type of model, allowing to express the risk either in form of impact (damage) or exposure to hazard classes.
