@@ -662,10 +662,27 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <section id="correct-values-interpretation-and-outliers">
 <h3>Correct values interpretation and outliers<a class="headerlink" href="#correct-values-interpretation-and-outliers" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
-<li><p>Check layer projection sysyem (CRS) and resolution</p></li>
-<li><p>Check unit of measure (hazard metadata)</p></li>
-<li><p>Check values distribution (histogram)</p></li>
-<li><p>Set a proper cut for outliers before setting any hazard threshold or classification</p></li>
+<li><p>Check layer projection sysyem (CRS) and resolution</p>
+<ul>
+<li><p>The CRS should be the same for all layers involved in the analysis, e.g. <code class="docutils literal notranslate"><span class="pre">WGS</span> <span class="pre">84</span> <span class="pre">-</span> <span class="pre">EPSG:</span> <span class="pre">3857</span></code></p></li>
+</ul>
+</li>
+<li><p>Check unit of measure (hazard metadata)</p>
+<ul>
+<li><p>Is the unit of measure the same as expected by the vulnerability model? E.g. flood depth could be expressed in centimeters, meters, or by classes</p></li>
+</ul>
+</li>
+<li><p>Check values distribution (histogram)</p>
+<ul>
+<li><p>Is the range rapresented compatible with the unit of measure? Are there outliers?</p></li>
+<li><p>Set a proper cut for outliers</p></li>
+</ul>
+</li>
+<li><p>Set up appropriate classification and symbology (legend)</p>
+<ul>
+<li><p>This could be quantitative o categorical depending on the data</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="geographic-correlation">
@@ -716,9 +733,27 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <section id="id1">
 <h3>Correct values interpretation and outliers<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
-<li><p>Check layer projection sysyem (CRS) and resolution</p></li>
-<li><p>Check unit of measure (exposure metadata)</p></li>
-<li><p>Check values distribution (histogram)</p></li>
+<li><p>Check layer projection sysyem (CRS) and resolution</p>
+<ul>
+<li><p>The CRS should be the same for all layers involved in the analysis, e.g. <code class="docutils literal notranslate"><span class="pre">WGS</span> <span class="pre">84</span> <span class="pre">-</span> <span class="pre">EPSG:</span> <span class="pre">3857</span></code></p></li>
+</ul>
+</li>
+<li><p>Check the exposure category and unit of measure (exposure metadata)</p>
+<ul>
+<li><p>Is the unit of measure the same as expected by the vulnerability model? E.g. population could be expressed as count, density, percentage. Land cover values could be binary or categorical</p></li>
+</ul>
+</li>
+<li><p>Check values distribution (histogram)</p>
+<ul>
+<li><p>Is the range rapresented compatible with the unit of measure? Are there outliers?</p></li>
+<li><p>Set a proper cut for outliers</p></li>
+</ul>
+</li>
+<li><p>Set up appropriate classification and symbology (legend)</p>
+<ul>
+<li><p>This could be quantitative o categorical depending on the data</p></li>
+</ul>
+</li>
 </ul>
 <figure class="margin-caption align-left" id="id6">
 <img alt="../_images/exp_wpop_hst.jpg" src="../_images/exp_wpop_hst.jpg" />
