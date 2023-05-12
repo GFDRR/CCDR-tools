@@ -29,10 +29,18 @@ Some examples:
 Probabilistic scenarios of hazard data can be compared with observed disaster events to corroborate the analysis, although this is often a difficult task due to lack of granular spatial data representing the events. Some hazards are better covered by observations than others - see the [disaster records](disaster-data.md).
 
 ```{figure} images/hzd_validate.jpg
+---
+align: left
+figclass: margin-caption
+---
 Example of flood model extent validation between observed events (UNOSAT, Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).
 ```
 
 ```{figure} images/hzd_match_empirical.jpg
+---
+align: left
+figclass: margin-caption
+---
 Example of flood model extent validation between observed events (UNOSAT, Nigeria 2022) and probabilistic model (Fathom RP 100 years).
 ```
 
@@ -60,6 +68,10 @@ Example of chart showing cross-comparison between two different models represent
 - Check values distribution (histogram)
 
 ```{figure} images/exp_wpop_hst.jpg
+---
+align: left
+figclass: margin-caption
+---
 In this example, we are examining the [WorldPop 2020 population layer](https://hub.worldpop.org/geodata/summary?id=50027) for Nepal (UN-adjusted, constrained to built-up). The resolution is 100 x 100 meters = 1 Ha; initially, we set the max legend to spectral (blue-yellow-red) and the threshold to 100, to better spot high-density areas (red). Then we take a look at the histogram, and we notice that the population values go up to 35,000, equal to 3.5 per square meter. That seems reasonable only for very-high density areas with tall buildings (meaning that the people can distribute vertically over the same cell). While those value seems unrealistic elsewhere.
 ```
 
