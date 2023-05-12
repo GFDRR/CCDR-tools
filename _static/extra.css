@@ -16,3 +16,6 @@ table th:first-of-type {
   background-color: #0B3860;
   padding: 25px;
 }
+p {
+    text-align: justify;
+}
