@@ -70,6 +70,7 @@ Identify artifacts in exposure data by sample inspection; if the errors are limi
 ```{figure} images/exp_wpop_sample.jpg
 ---
 align: left
+figclass: margin-caption
 ---
 Following on the previous example over Nepal; let's change the legend max to 1,000 and take a closer look to high-density pixel (> 0.1 people per square meter). Let's go sampling now, select any high density area located outside large city areas. Then zoom in, and compare the value of the pixel with the size and type of built-up according to recent google basemap. In the higlighted case, it seems very unlikely that >1,800 people live in that hectar of rural built-up. We also notice how other built-up area are not captured by the data; we can conclude that the model _erroneously_ project population from the whole census area into a small portion of the real built-up. This would not have an important effect on more uniformely-distributed hazards (e.g. heat, air pollution), but it can introduce huge errors in risk calculations for localised hazards such as floods and landslides.
 ```
@@ -80,7 +81,8 @@ First perform a visual inspection, then run a statistical comparison between sim
 
 ```{figure} images/exp_wpop_sample_compare.jpg
 ---
-align: justify
+align: left
+figclass: margin-caption
 ---
 Following on the previous example over Nepal; we now load the [GHS-pop 2020 layer](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_54009_100/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_54009_100_V1_0_R7_C26.zip) and attribute the same projection and legend used for the WorldPop layer (and set the rendering to "overlay" for better visualization). We notice that the values are much more realistic in this case; on the counterside, low population values are distributed also in areas where no settlement is found. This can also introduce error in risk models, depending on the hazard. For this country, neither of the two population datasets examined is flawless and can't be manually fixed. This must be accounted in the interpretation of results and discussion of uncertainty.
 ```

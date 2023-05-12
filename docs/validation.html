@@ -730,7 +730,7 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <section id="comparison-against-basemap">
 <h3>Comparison against basemap<a class="headerlink" href="#comparison-against-basemap" title="Permalink to this headline">#</a></h3>
 <p>Identify artifacts in exposure data by sample inspection; if the errors are limited and a better source of truth is available for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.</p>
-<figure class="align-left" id="id8">
+<figure class="margin-caption align-left" id="id8">
 <img alt="../_images/exp_wpop_sample.jpg" src="../_images/exp_wpop_sample.jpg" />
 <figcaption>
 <p><span class="caption-number">Fig. 39 </span><span class="caption-text">Following on the previous example over Nepal; let’s change the legend max to 1,000 and take a closer look to high-density pixel (&gt; 0.1 people per square meter). Let’s go sampling now, select any high density area located outside large city areas. Then zoom in, and compare the value of the pixel with the size and type of built-up according to recent google basemap. In the higlighted case, it seems very unlikely that &gt;1,800 people live in that hectar of rural built-up. We also notice how other built-up area are not captured by the data; we can conclude that the model <em>erroneously</em> project population from the whole census area into a small portion of the real built-up. This would not have an important effect on more uniformely-distributed hazards (e.g. heat, air pollution), but it can introduce huge errors in risk calculations for localised hazards such as floods and landslides.</span><a class="headerlink" href="#id8" title="Permalink to this image">#</a></p>
@@ -740,6 +740,12 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <section id="id2">
 <h3>Cross-comparison between alternative models<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
 <p>First perform a visual inspection, then run a statistical comparison between similar dataset to estimate their similarity.</p>
+<figure class="margin-caption align-left" id="id9">
+<img alt="../_images/exp_wpop_sample_compare.jpg" src="../_images/exp_wpop_sample_compare.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 40 </span><span class="caption-text">Following on the previous example over Nepal; we now load the <a class="reference external" href="https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_54009_100/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_54009_100_V1_0_R7_C26.zip">GHS-pop 2020 layer</a> and attribute the same projection and legend used for the WorldPop layer (and set the rendering to “overlay” for better visualization). We notice that the values are much more realistic in this case; on the counterside, low population values are distributed also in areas where no settlement is found. This can also introduce error in risk models, depending on the hazard. For this country, neither of the two population datasets examined is flawless and can’t be manually fixed. This must be accounted in the interpretation of results and discussion of uncertainty.</span><a class="headerlink" href="#id9" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 </section>
