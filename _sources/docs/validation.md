@@ -29,16 +29,10 @@ Some examples:
 Probabilistic scenarios of hazard data can be compared with observed disaster events to corroborate the analysis, although this is often a difficult task due to lack of granular spatial data representing the events. Some hazards are better covered by observations than others - see the [disaster records](disaster-data.md).
 
 ```{figure} images/hzd_validate.jpg
----
-align: center
----
 Example of flood model extent validation between observed events (UNOSAT, Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).
 ```
 
 ```{figure} images/hzd_match_empirical.jpg
----
-align: center
----
 Example of flood model extent validation between observed events (UNOSAT, Nigeria 2022) and probabilistic model (Fathom RP 100 years).
 ```
 
@@ -47,15 +41,9 @@ Example of flood model extent validation between observed events (UNOSAT, Nigeri
 Run a statistical comparison between similar models or dataset to estimate their similarity.
 
 ```{figure} images/hzd_match_models.jpg
----
-align: center
----
 Example of map showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years).
 ```
 ```{figure} images/hzd_match_stats.png
----
-align: center
----
 Example of chart showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years): share of affected sub-national area according to each model, and difference between the two models.
 ```
 
@@ -72,9 +60,6 @@ Example of chart showing cross-comparison between two different models represent
 - Check values distribution (histogram)
 
   ```{figure} images/exp_wpop_hst.jpg
-  ---
-  align: center
-  ---
   In this example, we are examining the [WorldPop 2020 population layer](https://hub.worldpop.org/geodata/summary?id=50027) for Nepal (UN-adjusted, constrained to built-up). The resolution is 100 x 100 meters = 1 Ha; initially, we set the max legend to spectral (blue-yellow-red) and the threshold to 100, to better spot high-density areas (red). Then we take a look at the histogram, and we notice that the population values go up to 35,000, equal to 3.5 per square meter. That seems reasonable only for very-high density areas with tall buildings (meaning that the people can distribute vertically over the same cell). While those value seems unrealistic elsewhere.
   ```
 
@@ -83,10 +68,7 @@ Example of chart showing cross-comparison between two different models represent
 Identify artifacts in exposure data by sample inspection; if the errors are limited and a better source of truth is available for comparison, fix them manually; else, account for them in the results interpretation and uncertainty.
 
 ```{figure} images/exp_wpop_sample.jpg
----
-align: center
----
-Following on the previous example over Nepal; let's change the legend max to 1,000 and take a closer look to high-density pixel (> 0.1 people per square meter). Let's go sampling now, select any high density area located outside large city areas. Then zoom in, and compare the value of the pixel with the size and type of built-up according to recent google basemap. In the higlighted case, it seems very unlikely that >1,800 people live in that hectar of rural built-up. We also notice how other built-up area are not captured by the data; we can conclude that the model _erroneously_ project population from the whole census area into a small portion of the real land use. This would not have an important effect on more uniformely-distributed hazards (e.g. heat, air pollution), but it can introduce huge errors in risk calculations for localised hazards such as floods and landslides.
+Following on the previous example over Nepal; let's change the legend max to 1,000 and take a closer look to high-density pixel (> 0.1 people per square meter). Let's go sampling now, select any high density area located outside large city areas. Then zoom in, and compare the value of the pixel with the size and type of built-up according to recent google basemap. In the higlighted case, it seems very unlikely that >1,800 people live in that hectar of rural built-up. We also notice how other built-up area are not captured by the data; we can conclude that the model _erroneously_ project population from the whole census area into a small portion of the real built-up. This would not have an important effect on more uniformely-distributed hazards (e.g. heat, air pollution), but it can introduce huge errors in risk calculations for localised hazards such as floods and landslides.
 ```
 
 ### Cross-comparison between alternative models
@@ -94,9 +76,6 @@ Following on the previous example over Nepal; let's change the legend max to 1,0
 First perform a visual inspection, then run a statistical comparison between similar dataset to estimate their similarity.
 
 ```{figure} images/exp_wpop_sample_compare.jpg
----
-align: center
----
 Following on the previous example over Nepal; we now load the [GHS-pop 2020 layer](https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_54009_100/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_54009_100_V1_0_R7_C26.zip) and attribute the same projection and legend used for the WorldPop layer (and set the rendering to "overlay" for better visualization). We notice that the values are much more realistic in this case; on the counterside, low population values are distributed also in areas where no settlement is found. This can also introduce error in risk models, depending on the hazard. For this country, neither of the two population datasets examined is flawless and can't be manually fixed. This must be accounted in the interpretation of results and discussion of uncertainty.
 ```
 
