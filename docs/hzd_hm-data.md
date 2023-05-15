@@ -24,7 +24,7 @@ Flood hazard is commonly described in terms of flood frequency (multiple scenari
 **Notes** | Standard for WB analysis | The only open flood dataset addressing future hazard scenarios
 ```
 
-- Despite missing projections, **Fathom** modelling has consistently proven to be the preferred option due to its higher quality (better resolution, updated data and a more advanced modelling approach). There are, however, important details and limitations to consider for the correct use and interpretation of the model. The undefended model (FU) is typically the preferred product to use in assessments, since the defended model (FD) does not account for physical presence of defense measures, rather proxies the defense standard by using GDP as proxy (FLOPROS database).
+- Despite missing projections, **Fathom** modelling has consistently proven to be the preferred option due to its higher quality (better resolution, updated data and a more advanced modelling approach). There are, however, important details and limitations to consider for the correct use and interpretation of the model. The undefended model (FU) is typically the preferred product to use in assessments, since the defended model (FD) does not account for presence of physical defence measures, rather uses GDP as a proxy (FLOPROS database) to set defence standards.
 
 ```{seealso}
 The Fathom v2 global dataset can be requested for use in World Bank projects by filling the [**request form**](https://forms.office.com/r/RzNaVV3mft).

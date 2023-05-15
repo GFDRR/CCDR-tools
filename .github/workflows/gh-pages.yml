@@ -21,6 +21,8 @@ jobs:
       - name: Build Jupyter Book
         run: |
           jupyter-book build . --config docs/_config.yml --toc docs/_toc.yml
+	  mkdir ./_build/html/docs/maps
+	  cp ./docs/maps/*.* _build/html/docs/maps
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main' && job.status == 'success'
