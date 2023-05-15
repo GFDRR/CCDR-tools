@@ -18,6 +18,6 @@ table th:first-of-type {
   background-color: #0B3860;
   padding: 25px;
 }
-.article row:not(tbody, .colwidths-auto table) {
+.tex2jax_ignore:not(tbody, .colwidths-auto table) {
     text-align: justify;
 }
