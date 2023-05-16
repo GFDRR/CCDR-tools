@@ -526,15 +526,61 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="geophysical-hazards">
 <h1>Geophysical hazards<a class="headerlink" href="#geophysical-hazards" title="Permalink to this headline">#</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">Content</span> <span class="pre">under</span> <span class="pre">development.</span></code></p>
+<p>Geophysical hazards refer to natural hazards that originate from processes occurring within the Earth’s interior or its immediate surroundings. These processes can include seismic activity (earthquakes), volcanic eruptions, and tsunamis. Geophysical hazards often have a sudden onset, meaning they can occur with little to no warning for preparedness or evacuation and cause widespread impacts, affecting large areas far from the source of the hazard. Geophysical hazards are not influenced by climatic conditions, but they can <a class="reference external" href="https://www.usgs.gov/programs/VHP/volcanoes-can-affect-climate">affect climatic conditions</a>.
+<br><br>
+The NOAA offers a global map [<a class="reference external" href="https://www.ncei.noaa.gov/maps/hazards/?layers=3">Natural Hazard Viewer</a>] monitoring geophisical hazards (Earthquakes, tsunamis, volcanic activity).</p>
+<figure class="align-center">
+<img alt="../_images/NOAA_hzd_gp.jpg" src="../_images/NOAA_hzd_gp.jpg" />
+</figure>
 <section id="earthquake">
 <h2>Earthquake<a class="headerlink" href="#earthquake" title="Permalink to this headline">#</a></h2>
+<p>Earthquakes can strike any location at any time, but history shows they occur in the same general patterns year after year, principally in three large zones of the earth:</p>
+<ol class="simple">
+<li><p>The world’s greatest earthquake belt, the circum-Pacific seismic belt (“Ring of Fire”), is found along the rim of the Pacific Ocean, where about 81% of global earthquakes occur. Earthquakes in these subduction zones are caused by slip between plates and rupture within plates. Earthquakes in the curcum-Pacific seismic belt include the M9.5 Bio-Bio earthquake in Chile (1960) and the  M9.2 Great Alaska Earthquake (1964).</p></li>
+<li><p>The Alpide earthquake belt extends from Java to Sumatra through the Himalayas, the Mediterranean, and out into the Atlantic. This belt accounts for about 17% of the world’s largest earthquakes, including some of the most destructive, such as the 2005 M7.6 shock in Pakistan that killed over 80,000 and the 2004 M9.1 Indonesia earthquake, which generated a tsunami that killed over 230,000 people.</p></li>
+<li><p>The third prominent belt follows the mid-Atlantic Ridge running deep underwater and far from human development, with the exception of Iceland, which sits over the ridge.</p></li>
+</ol>
+<ul class="simple">
+<li><p>Open <a class="reference external" href="https://datacatalog.worldbank.org/search/dataset/0038576/Global-earthquake-hazard">global earthquake dataset</a> representing seismic hazard intensity as peak ground acceleration have been produced for the Global Assessment Report (GAR).</p></li>
+<li><p>The <a class="reference external" href="https://www.globalquakemodel.org/products?type=Dataset"><strong>Global Earthquake Model (GEM)</strong></a> offers a range of datasets related to seismic hazards, including an interactive <a class="reference external" href="https://maps.openquake.org/map/global-seismic-hazard-map/#2/24.7/-18.6">global seismic hazard map viewer</a>, global historical earthquake catalogue, <a class="reference external" href="https://www.globalquakemodel.org/product/active-faults-database">active faults</a>, <a class="reference external" href="https://platform.openquake.org/vulnerability/list?type_of_assessment=2">vulnerability functions</a>, <a class="reference external" href="https://www.globalquakemodel.org/product/meteor-exposure-data">exposure data</a> and <a class="reference external" href="https://www.globalquakemodel.org/country-risk-profiles">country risk profiles</a>. Some of the datasets have commercial licensing, while most of them are open for non-commercial use (CC-BY-SA).</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Open <a class="reference external" href="https://www.kaggle.com/code/mriduleecs/earthquake-analysis-on-world-map"><strong>Python script</strong></a> to generate earthquake &amp; volcanoes maps.</p>
+</div>
 </section>
 <section id="tsunami">
 <h2>Tsunami<a class="headerlink" href="#tsunami" title="Permalink to this headline">#</a></h2>
+<p>The <a class="reference external" href="https://edanya.uma.es/gtm/"><strong>Global Tsunami Model (GTM)</strong></a> has been created by a group of tsunami experts around the world to provide coordinate action for tsunami hazard and risk assessment. It offers a global probabilistic tsunami hazard assessment from earthquake sources <a class="reference external" href="https://www.lyellcollection.org/doi/10.1144/sp456.5">Davies et al. 2018</a>.</p>
+<figure class="align-center" id="id1">
+<img alt="../_images/hzd_gtm.jpg" src="../_images/hzd_gtm.jpg" />
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Global Tsunami Model - run-up height, RP 500 years.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="volcanic-activity">
 <h2>Volcanic activity<a class="headerlink" href="#volcanic-activity" title="Permalink to this headline">#</a></h2>
+<p>Volcanic eruptions occur most frequently at plate boundaries, but some volcanoes (e.g. Hawaiian Islands) occur in the interior of plates, at areas called <em>hot spots</em>. The greatest number of the Earth’s volcanoes are hidden from view, occurring on the ocean floor along spreading ridges.
+Volcanic hazards can include various phenomena, such as lava flows, pyroclastic flows, ashfall, volcanic gases, lahars (mudflows), and volcanic landslides. In disaster risk management, understanding the types of volcanoes and volcanic eruptions is crucial for assessing the associated hazard and risk levels.</p>
+<ul class="simple">
+<li><p><strong>Shield Volcanoes</strong>: broad, gently sloping sides formed by low-viscosity lava flows. Eruptions are typically non-explosive, with the lava flowing steadily from fissure vents or central craters. The primary hazard is the lava flow, which can move relatively slowly, allowing for evacuation and minimal loss of life. Risk levels can vary depending on population density near the volcano and the speed of lava flow.</p></li>
+<li><p><strong>Stratovolcanoes (Composite Volcanoes)</strong>: steep-sided cones composed of alternating layers of lava, ash, and volcanic debris. Eruptions can range from explosive to effusive, producing pyroclastic flows, ash clouds, and lava flows. The hazards associated with stratovolcanoes are diverse and include pyroclastic flows, lahars, ashfall, and volcanic gases. Risk levels can be high, particularly if densely populated areas are located near the volcano.</p></li>
+<li><p><strong>Cinder Cones</strong>: small, conical volcanoes built from ejected lava fragments (cinders) that accumulate around the vent. Eruptions are typically short-lived and explosive, characterized by gas-rich explosions that propel volcanic bombs and ash into the air. Hazard levels are generally moderate, with risks mainly related to ashfall, ballistic projectiles, and potential lava flows.</p></li>
+<li><p><strong>Calderas</strong>: large, basin-shaped depressions that form after the emptying of a magma chamber during a volcanic eruption. Eruptions associated with calderas can vary in explosivity, producing pyroclastic flows, ash clouds, and lava flows. Hazard levels can be extremely high, especially during large-scale eruptions, which may result in widespread devastation and long-term effects on climate and air quality.</p></li>
+</ul>
+<p>The Smithsonian Institution’s Global Volcanism Program (GVP) offers a <a class="reference external" href="https://ghin.pdc.org/ghin/catalog/search/resource/details.page?uuid=%7BC39F7FF9-AA89-462C-97D5-33DB4B2739B8%7D">catalogue</a> of current and past activity for all volcanoes on the planet active during the last 10,000 years. The <a class="reference external" href="https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.hazards:G10147"><strong>Significant Volcanic Eruptions Database</strong></a> is a global listing of over 600 eruptions from 4,360 BC to the present. A <em>significant eruption</em> is classified as one that meets at least one of the following criteria:</p>
+<ul class="simple">
+<li><p>caused fatalities</p></li>
+<li><p>caused moderate damage (approximately $1 million or more)</p></li>
+<li><p>Volcanic Explosivity Index (VEI) of 6 or greater</p></li>
+<li><p>generated a tsunami, or was associated with a significant earthquake.</p></li>
+</ul>
+<p>The <a class="reference external" href="https://hub.arcgis.com/datasets/fedmaps::significant-global-volcanic-eruptions-1/explore?location=4.658395%2C-127.089693%2C1.73">database layer</a> provides information on the latitude, longitude, elevation, type of volcano, last known eruption, VEI index, and socio-economic data such as the total number of casualties, injuries, houses destroyed, and houses damaged, and $ dollage damage estimates. References, political geography, and additional comments are also provided for each eruption. If the eruption was associated with a tsunami or significant earthquake, it is flagged and linked to the related database. An additional source is the British Geological Survey <a class="reference external" href="https://appliedvolc.biomedcentral.com/articles/10.1186/2191-5040-1-4">LaMEVE (Large Magnitude Explosive Volcanic Eruptions)</a> database.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Open <a class="reference external" href="https://www.kaggle.com/code/texasdave/volcano-eruption-distribution"><strong>Python script</strong></a> to generate interactive volcanoes map.</p>
+</div>
 </section>
 </section>
 
@@ -588,7 +634,7 @@ title="Print to PDF"
   
     By M. Amadio (GFDRR)<br/>
   
-    Last updated on May 15, 2023.<br/>
+    Last updated on May 16, 2023.<br/>
     <div class="extra_footer">
       <div>
     <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
