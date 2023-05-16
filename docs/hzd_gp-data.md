@@ -1,8 +1,8 @@
 # Geophysical hazards
 
-Geophysical hazards refer to natural hazards that originate from processes occurring within the Earth's interior or its immediate surroundings. These processes can include seismic activity (earthquakes), volcanic eruptions, and tsunamis. Geophysical hazards often have a sudden onset, meaning they can occur with little to no warning for preparedness or evacuation and cause widespread impacts, affecting large areas far from the source of the hazard. Geophysical hazards are not influenced by climatic conditions, but they can [affect climatic conditions](https://www.usgs.gov/programs/VHP/volcanoes-can-affect-climate).
+Geophysical hazards refer to natural hazards that originate from processes occurring within the Earth's interior or its immediate surroundings. These processes can include seismic activity (earthquakes), volcanic eruptions, and tsunamis. Geophysical hazards often have a sudden onset, meaning they can occur with little to no warning for preparedness or evacuation and cause widespread impacts, affecting large areas far from the source of the hazard. Geophysical hazards are not influenced by climatic conditions, but on the other side they can [affect climate](https://www.usgs.gov/programs/VHP/volcanoes-can-affect-climate).
 <br><br>
-The NOAA offers a global map [[Natural Hazard Viewer](https://www.ncei.noaa.gov/maps/hazards/?layers=3)] monitoring geophisical hazards (Earthquakes, tsunamis, volcanic activity).
+The National Oceanic and Atmospheric Administration (NOAA) offers a global map [[Natural Hazard Viewer](https://www.ncei.noaa.gov/maps/hazards/?layers=3)] monitoring geophisical hazards (Earthquakes, tsunamis, volcanic activity).
 
 ```{figure} images/NOAA_hzd_gp.jpg
 ---
