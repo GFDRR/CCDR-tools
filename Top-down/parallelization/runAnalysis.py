@@ -40,8 +40,6 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
     exp_cat : exposure category
     exp_nam : exposure user-specified file name or source
     adm_name : ADM level name
-    time_horizon : time horizon to be considered
-    rcp_scenario : rcp scenario to be considered
     analysis_type : type of analysis (class or function)
     class_edges : class edges for class-based analysis
     save_check_raster : save intermediate results to disk?
@@ -221,7 +219,7 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
 
     # Cleaning-up memory
     del (country, haz_cat, valid_RPs, min_haz_threshold, exp_cat, adm_name)
-    del (time_horizon, rcp_scenario, analysis_type, class_edges, save_check_raster)
+    del (analysis_type, class_edges, save_check_raster)
     del (adm_folder, haz_folder, exp_folder)
     del (exp_ras, exp_data)
     del (adm_data, adm_cols, all_adm_codes, all_adm_names)
