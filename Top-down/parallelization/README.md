@@ -73,17 +73,17 @@ Input data layers must be named and placed according to rules.
 ## Setting parameters
 
 Edit the `main.py` file to specify:
-- country (`country_dd`): [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
-- hazard type (`haz_cat_dd`): `'FL'` for floods; `'HS'` for heat stress; `'DR'` for drought; `'LS'` for landslide
-- return periods (`return_periods`): list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
-- exposure categories (`exp_cat_dd_list`): list of exposure categories: `['pop', 'builtup', 'agri']`
+- **country (`country_dd`)**: [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
+- **hazard type (`haz_cat_dd`)**: `'FL'` for floods; `'HS'` for heat stress; `'DR'` for drought; `'LS'` for landslide
+- **return periods (`return_periods`)**: list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
+- **exposure categories (`exp_cat_dd_list`)**: list of exposure categories: `['pop', 'builtup', 'agri']`
   - exposure categories file name (`exp_cat_dd_list`): list  of same length of `exp_cat_dd_list` with file names for exposure categories: `['WPOP20', 'WSF19', 'ESA20_agri']`
     If 'None', the default `['WPOP20', 'WSF19', 'ESA20_agri']` applies
-- analysis approach (`analysis_app_dd`): `['Classes', 'Function']`
+- **analysis approach (`analysis_app_dd`)**: `['Classes', 'Function']`
   - If `'Function'`, you can set minimum hazard threshold value (`min_haz_slider`). Hazard value below this threshold will be ignored
   - If `'Classes'`,  you can set the number and value of thresholds to consider to split hazard intensity values into bins (`class_edges`)
-- admin level (`adm_dd`): specify which boundary level to use for results summary (must exist in the `ISOa3`_ADM.gpkg file)
-- save check (`save_check_raster`): specify if you want to export intermediate rasters (increases processing time) `[True, False]`
+- **admin level (`adm_dd`)**: specify which boundary level to use for results summary (must exist in the `ISOa3`_ADM.gpkg file)
+- **save check (`save_check_raster`)**: specify if you want to export intermediate rasters (increases processing time) `[True, False]`
 
 Example of `main.py` running flood analysis (`haz_cat_dd`) over Cambodia (`country_dd`) for 10 return periods (`return_periods`) over three exposure categories (`exp_cat_dd_list`) using hazard classes according to thresholds (`class_edges`); results summarised at ADM3 level (`adm_dd`). Do not save intermediate rasters (`save_check_raster`).
 ```
@@ -91,7 +91,7 @@ Example of `main.py` running flood analysis (`haz_cat_dd`) over Cambodia (`count
     country_dd         = 'KHM'
     haz_cat_dd         = 'FL'
     return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
-    min_haz_slider     = 0.05 							# FL 0.05 # TC 25.0 # ASI 0.01
+    min_haz_slider     = 0.05
     exp_cat_dd_list    = ['pop', 'builtup', 'agri']
     exp_nam_dd_list    = ['WPOP20', 'WSF19', 'ESA20_agri']
     adm_dd             = 'ADM3'
