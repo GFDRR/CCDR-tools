@@ -1,8 +1,8 @@
 # STATUS
 
-- Code has been tested and is working on Linux and Windows (create dedicated enviroment). Not tested on Mac.
-- This version has some small changes with respect to the previous one:
-  - Cores is now automatic, using all available cores for the first zonal_stats and then using 1 core per RP analysis (in case there are more RPs then available cores, it will use all cores and serialize the analysis accordingly).
+- Code has been tested and is working on Linux and Windows (create dedicated enviroment). Not tested on Mac but most likely working as well.
+- This version has some small changes with respect to the previous one, listed below:
+  - The number of processors used (nCores) is now selected automatic, using all available cores for the first zonal_stats and then using 1 core per RP analysis (in case there are more RPs then available cores, it will use all cores and serialize the analysis accordingly).
   - Split the RPs computation into Exposure/Impact and EAE/EAI computation, the later becoming a stand-alone function
   - Computes now the EAE/EAI using 3 different formulation, a) Lower Bound LB; b) Upper Bound UB, and; c) Mean of the two
   - Removed the RP_EAI columns for better presentation of the results
@@ -47,15 +47,15 @@ $ conda update -name ccdr-tools --file Top-down/notebooks/win_env.yml
 # SCRIPT OVERVIEW
 
 - `common.py` setup the script libraries and specifies data directories
-- `damageFunctions.py` includes the impact models (mathematical relationship between hazard intensity and relative damage over exposure category)
+- `damageFunctions.py` includes the impact models (mathematical relationship between hazard intensity and relative damage/impact over exposure category)
 - `main.py` specifies the parameters of the analysis to run (country, hazards, return periods, classes, etc)
-- `runAnalysis.py` is used to run the program according to parameters set in `main.py`
+- `runAnalysis.py` the main function that is used to run the program according to parameters set in `main.py`
 
 ## Input data
 
-Input data layers must be named and placed according to rules.
+Input data layers must be named and placed according to some rules, as follows:
 
-- Create a working directory and set it as DATA_DIR in `common.py`.
+- Create a working directory and set it as DATA_DIR (e.g. ./data) in `common.py`.
   Inside the workdir, the data folders must follow this structure:
 ```
     DATA_DIR/ADM: Administrative boundaries as '.gpkg' (multiple levels)
