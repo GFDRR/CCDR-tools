@@ -8,7 +8,7 @@ Additional sources of risk data (hazard, exposure, disaster losses).
 | **Name** | **License** | **Description** | **Purpose** |
 |---:|---:|---:|---:|
 | [Planetary Computer](https://planetarycomputer.microsoft.com/) | GNU | Global environmental geodata as STAC catalog | Geodata catalog |
-| [GEE data catalog](https://developers.google.com/earth-engine/datasets/catalog) | GNU | Global environmental geodata as STAC catalog | Geodata catalog |
+| [GEE data catalog](https://developers.google.com/earth-engine/datasets/catalog) | GNU | Global environmental geodata as API catalog | Geodata catalog |
 | [Awesome GEE community catalog](https://gee-community-catalog.org) | GNU | Community-sourced geodata as Earth Engine assets | Geodata catalog |
 ```
 
