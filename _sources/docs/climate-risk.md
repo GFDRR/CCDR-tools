@@ -30,13 +30,14 @@ Data from climate models released under the [IPCC Sixth Assessment Report (AR) f
 
 The analysis relies on **CMIP6** data for modeling into the future, and takes into account four climate change scenarios, referred to as Shared Socioeconomic Pathways (SSPs) in CMIP6. These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b).
 
-Guidance for aligned scenario selection as follows:
+Guidance for aligned scenario selection is provided by the shared [**CCDR Global Climate Scenarios note**](CCDR_notes/CCDR Global Climate Scenarios.pdf).
 
 ```{figure} images/climate_scenarios.png
 ---
 width: 100%
 align: center
 ---
+Recommended CCDR Global Scenarios and characteristics for adaptation and development planning.
 ```
 
 - **SSP1/RCP2.6:** emissions peak between 2040 and 2060, declining by 2100. This results in warming of 3-3.5 °C by 2100.

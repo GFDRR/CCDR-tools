@@ -27,7 +27,7 @@ Countries that have been covered by the risk analytics:
 ```
 
 ```{note}
-This documentation specifically reflects the approches and methods adopted for the CCDR disaster risk screening. They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
+This documentation specifically reflects the approches and methods adopted for the CCDR disaster risk screening following the [**CCDR guidance note**](docs/CCDR_notes/CCDR Tools and Approaches.pdf). They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
 Also note that our tools are not expected to reflect all existing risk perspectives and dimensions, rather producing standardised risk indicators.
 ```
 
