@@ -11,7 +11,7 @@ repository:
 
 html:
     home_page_in_navbar: false
-    favicon: "images/favicon.ico"
+    favicon: "docs/images/favicon.ico"
     extra_navbar: ""
     use_edit_page_button: true
     use_repository_button: true
