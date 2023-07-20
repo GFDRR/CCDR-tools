@@ -6,7 +6,7 @@ The tools collected in this repository allow to:
 
 - Perform spatial analytics of disaster risk for the present period ([**baseline**](docs/intro-risk#annual-risk-baseline)) based on global datasets
 - Combine risk and poverty information into [**bi-variate maps**](docs/risk-poverty.md)
-- Produce [**climate risk outlook**](docs/climate-risk.md) based on CMIP6 idnices
+- Produce [**climate risk outlook**](docs/climate-risk.md) based on CMIP6 indices
 - Present results into an interactive [**dashboard**](docs/presentation#dashboard)
 
 As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
