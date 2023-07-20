@@ -184,10 +184,10 @@ FAO ASI global dataset showing historical drought frequency for >30% cropland ar
 
 The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2022, 39 years). For the risk screening in CCDR analytics, seasonal data has been agggregated into one layer measuring the frequency as percentage of years over the timeseries. Specifically:
 
-- S1_30p: Percentage of years when drought affected at least 1/3 of cropland area during the main growing season
-- S1_50p: Percentage of years when drought affected at least half of cropland area during the main growing season
-- S2_30p: Percentage of years when drought affected at least 1/3 of cropland area during the secondary growing season
-- S2_50p: Percentage of years when drought affected at least half of cropland area during the secondary growing season
+- **S1_30p**: Percentage of years when drought affected at least 1/3 of cropland area during the main growing season
+- **S1_50p**: Percentage of years when drought affected at least half of cropland area during the main growing season
+- **S2_30p**: Percentage of years when drought affected at least 1/3 of cropland area during the secondary growing season
+- **S2_50p**: Percentage of years when drought affected at least half of cropland area during the secondary growing season
 
 <hr>
 
