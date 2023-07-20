@@ -170,14 +170,25 @@ Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: ST
 
 ## Drought & Water scarcity
 
-The [**Agricultural Stress Index**](https://www.fao.org/giews/earthobservation/access.jsp) by **FAO** depicts the frequency of severe drought in areas where: i) 30 percent of the cropped land; or ii) 50 percent of the cropped land has been affected. The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2021). Data are available in 
- 
+The [**Agricultural Stress Index**](https://www.fao.org/giews/earthobservation/access.jsp) produced by **FAO** depicts the frequency of severe drought affecting crop areas by means of remote-sensed [Vegetation Health Index (VHI)](https://www.fao.org/giews/earthobservation/asis/index_2.jsp?lang=en).
+FAO provides annual drought frequency data split as the main crop season (S1) and secondary crop season (S2). For each season there are two indicators, according to two exposure intensity thresholds:
+- 30 percent (1/3) of cropland area being affected by the drought event
+- 50 percent (1/2) of cropland area being affected by the drought event
+
 ```{figure} images/fao_asi.jpg
 ---
 align: center
 ---
 FAO ASI global dataset showing historical drought frequency for >30% cropland area affected along the period 1984-2021.
 ```
+
+The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2022, 39 years). For the risk screening in CCDR analytics, seasonal data has been agggregated into one layer measuring the frequency as percentage of years over the timeseries. Specifically:
+
+- S1_30p: Percentage of years when drought affected at least 1/3 of cropland area during the main growing season
+- S1_50p: Percentage of years when drought affected at least half of cropland area during the main growing season
+- S2_30p: Percentage of years when drought affected at least 1/3 of cropland area during the secondary growing season
+- S2_50p: Percentage of years when drought affected at least half of cropland area during the secondary growing season
+
 <hr>
 
 ## Heat stress
