@@ -170,7 +170,7 @@ Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: ST
 
 ## Drought & Water scarcity
 
-The [**Agricultural Stress Index**](https://www.fao.org/giews/earthobservation/access.jsp) produced by **FAO** depicts the frequency of severe drought affecting crop areas by means of remote-sensed [Vegetation Health Index (VHI)](https://www.fao.org/giews/earthobservation/asis/index_2.jsp?lang=en).
+The [**Agricultural Stress Index (ASI)**](https://www.fao.org/giews/earthobservation/access.jsp) produced by **FAO** depicts the frequency of severe drought affecting crop areas by means of remote-sensed [Vegetation Health Index (VHI)](https://www.fao.org/giews/earthobservation/asis/index_2.jsp?lang=en).
 FAO provides annual drought frequency data split as the main crop season (S1) and secondary crop season (S2). For each season there are two indicators, according to two exposure intensity thresholds:
 - 30 percent (1/3) of cropland area being affected by the drought event
 - 50 percent (1/2) of cropland area being affected by the drought event
