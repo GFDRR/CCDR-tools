@@ -39,11 +39,9 @@ align: center
 ---
 Recommended CCDR Global Scenarios and characteristics for adaptation and development planning.
 ```
-
-- **SSP1/RCP2.6:** emissions peak between 2040 and 2060, declining by 2100. This results in warming of 3-3.5 °C by 2100.
-- **SSP2/RCP4.5:** emissions continue to increase through the end of the century, with resulting warming of 3.8-4.2 °C by 2100.
-- **SSP3/RCP7.0:** models describe a large emission variability for this scenario. Warming is estimated at 3.9-4.6 °C by 2100.
-- **SSP5/RCP8.5:** high emissions scenario resulting in warming of 4.7-5.1 °C by 2100.
+- **SSP1-1.9 / RCP2.6:** emissions peak between 2040 and 2060, declining by 2100. This results in warming of 3-3.5 °C by 2100.
+- **SSP2-4.5 / RCP4.5:** emissions continue to increase through the end of the century, with resulting warming of 3.8-4.2 °C by 2100.
+- **SSP3-7.0 / RCP8.5:** models describe a large emission variability for this scenario. Warming is estimated at 3.9-4.6 °C by 2100.
 
 Each climate scenarios predicts different spatial patterns, resulting into a range of possible futures in terms of intensities, and frequencies of natural hazards. Key climate variables connected to the changing patterns of precipitation and temperature are collected from the [Climate Change Knowledge Portal](https://climateknowledgeportal.worldbank.org/) and the [Copernicus Data Store](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6).
 
