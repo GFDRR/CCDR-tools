@@ -9,13 +9,17 @@ The tools collected in this repository allow to:
 - Produce [**climate risk outlook**](docs/climate-risk.md) based on CMIP6 indices
 - Present results into an interactive [**dashboard**](docs/presentation#dashboard)
 
+```{note}
+Are you a World Bank TTL? You can request for availability to produce a new country screening using [**this form**](https://forms.office.com/r/UU3LXBNz4T).
+```
+
 As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
 
 - [**Cambodia**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/reports/KHM_RSK.pdf)
 - [**Senegal**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/reports/Top-down/reports/SEN_RSK.pdf)
 - [**OECS countries**](Top-down/reports/OECS_RSK.pdf)
 
-Countries that have been covered by the risk analytics:
+Countries that have been already covered by the risk analytics:
 
 <iframe src="docs/maps/CCDR_map.html" height="500" width="100%"></iframe>
 
