@@ -25,7 +25,6 @@ def zonal_stats_parallel(args):
 # Defining the main function to run the analysis
 def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
                  min_haz_threshold: float, exp_cat: str, exp_nam: str, adm_name: str,
-                 time_horizon: list[int], rcp_scenario: list[str],
                  analysis_type: str, class_edges: list[float], 
                  save_check_raster: bool):
     """
@@ -73,28 +72,24 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
 
     # Checking which kind of exposed category is being considered...
     # If the exposed category is population...
-    if exp_cat == 'pop':
+    if exp_cat == 'POP':
         damage_factor = mortality_factor
-        exp_ras = f"{exp_folder}/{country}_WPOP20.tif"
+        exp_ras = f"{exp_folder}/{country}_POP.tif"
     # If the exposed category is builtup area...
-    elif exp_cat == 'builtup':
+    elif exp_cat == 'BU':
         damage_factor = damage_factor_builtup
-        exp_ras = f"{exp_folder}/{country}_WSF19.tif"
+        exp_ras = f"{exp_folder}/{country}_BU.tif"
     # If the exposed category is agriculture...
-    elif exp_cat == 'agri':
+    elif exp_cat == 'AGR':
         damage_factor = damage_factor_agri
-        exp_ras = f"{exp_folder}/{country}_ESA20_agri.tif"
-    # If the exposed category is capital stock...
-    elif exp_cat == 'cstk':
-        damage_factor = damage_factor_builtup
-        exp_ras = f"{exp_folder}/{country}_CSTK19.tif"
+        exp_ras = f"{exp_folder}/{country}_AGR.tif"
     # If the exposed category is missing, then give an error
     else:
         exp_ras = None
         ValueError(f"Missing or unknown data layer {exp_cat}")
     # If user-specified exposure file name is passed, then
     if exp_nam is not None: 
-        exp_cat = str(exp_cat+'_'+exp_nam)
+        exp_cat = str(exp_cat)
         exp_ras = f"{exp_folder}/{country}_{exp_nam}.tif"
 
     # Running the analysis
