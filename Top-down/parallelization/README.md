@@ -90,7 +90,7 @@ Edit the `main.py` file to specify:
 Example of `main.py` running flood analysis (`haz_cat`) over Cambodia (`country`) for 10 return periods (`return_periods`) over three exposure categories (`exp_cat_list`) using hazard classes according to thresholds (`class_edges`); results summarised at ADM3 level (`adm`). Do not save intermediate rasters (`save_check_raster`).
 
 ```
-    # Defining the initial parameters
+    # Defining the initial parameters - Example for function analysis
     country            = 'KHM'
     haz_cat            = 'FL'
     return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
@@ -98,10 +98,25 @@ Example of `main.py` running flood analysis (`haz_cat`) over Cambodia (`country`
     exp_cat_list       = ['POP', 'BU', 'AGR']
     exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
     adm                = 'ADM3'
+    analysis_app       = 'Function'
+    # class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
+    save_check_raster  = False
+```
+
+```
+    # Defining the initial parameters - Example for class analysis
+    country            = 'KHM'
+    haz_cat            = 'FL'
+    return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
+    # min_haz_slider     = 0.05
+    exp_cat_list       = ['POP', 'BU', 'AGR']
+    exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
+    adm                = 'ADM3'
     analysis_app       = 'Classes'
     class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
     save_check_raster  = False
 ```
+
 
 ## Running the analysis
 
