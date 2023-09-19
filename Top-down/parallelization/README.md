@@ -102,3 +102,12 @@ Example of `main.py` running flood analysis (`haz_cat`) over Cambodia (`country`
     class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
     save_check_raster  = False
 ```
+
+## Running the analysis
+
+```bash
+$ python main.py
+```
+
+The analysis runs on all selected exposed categories, in sequence. Depending on the number of cores, the size and resolution of the data, and power of CPU, the analysis can take from less than a minute to few minutes.
+E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.

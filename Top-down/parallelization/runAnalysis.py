@@ -67,9 +67,6 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
         bin_seq = class_edges + [np.inf]
         num_bins = len(bin_seq)
     
-    # Testing data file locations
-    # TODO: Temp data store, to be replaced with a config spec (.env file?) before deployment
-
     # Checking which kind of exposed category is being considered...
     # If the exposed category is population...
     if exp_cat == 'POP':

@@ -11,7 +11,7 @@ def main():
     haz_cat         = 'FL' 			  #'FL' for floods; 'HS' for heat stress; 'DR' for drought; 'LS' for landslide
     return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000] # FL [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000] # TC [10, 20, 50, 100, 200, 500] # add here as will
     min_haz_slider     = 0.05 			  # FL 0.05 # TC 25.0 # ASI 0.01
-    exp_cat_list    = ['pop', 'BU', 'AGR']	  # ['pop', 'builtup', 'agri']
+    exp_cat_list    = ['POP', 'BU', 'AGR']	  # ['POP', 'BU', 'AGR']
     exp_nam_list    = ['POP', 'BU', 'AGR']	  # if None, the default applies: 'Population':'POP', 'Built-up':'BU', 'Agricultural land':'AGR' - If not None, expect a list of same length of exp_cat_list
     adm             = 'ADM3' 			  #['ADM1', 'ADM2', 'ADM3']
     analysis_app    = 'Function'		  #['Classes', 'Function']
