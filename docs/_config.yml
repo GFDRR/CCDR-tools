@@ -1,7 +1,7 @@
 # Book settings
 title: Climate & Disaster Risk Screening Tools 
 author: M. Amadio (GFDRR)
-logo: docs/images/gfdrr-logo.png
+logo: docs/images/logo.png
 exclude_patterns: [_build, Thumbs.db, .DS_Store, "**.ipynb_checkpoints"]
 only_build_toc_files: true
 
