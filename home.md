@@ -1,4 +1,5 @@
-<img src="docs/images/GFDRR_logo.png">
+```{figure} docs/images/GFDRR_logo.png
+```
 # Climate & Disaster Risk Screening Tools
 
 A collection of scripted tools developed to inform risk analytics for the the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2023).
