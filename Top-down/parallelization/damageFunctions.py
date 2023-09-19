@@ -1,8 +1,10 @@
 # Importing the required packages
 import numpy as np
 
-# Defining the damage function - FLOODS over Built-Up areas
-def damage_factor_builtup(x):
+# Defining the damage functions
+# Floods (river and coastal) over Built-Up areas
+
+def damage_factor_FL_builtup(x):
     """A polynomial fit to average damage across builtup land cover relative
     to water depth in meters.
 
@@ -16,10 +18,12 @@ def damage_factor_builtup(x):
     """
     # return np.maximum(0.0, np.minimum(1.0, -0.0028 * x ** 3 + 0.0362 * x ** 2 + 0.0095 * x)) # Floods - AFRICA
     return np.maximum(0.0, np.minimum(1.0, 0.00723 * x ** 3 - 0.1000 * x ** 2 + 0.5060 * x)) # Floods - ASIA
-    
+
+# Tropical cyclones over Built-Up areas
+
+def damage_factor_TC_builtup(x):
     """
     Tropical Cyclone - Global equation from Climada
-    
     """
     #Vhalf  = 59.6         # m/s, where half damage occurs - NA1 - Caribbean and Mexico
     #Vhalf  = 91.8         # m/s, where half damage occurs - NA2 - USA and Canada
@@ -32,11 +36,12 @@ def damage_factor_builtup(x):
     #Vhalf  = 183.7        # m/s, where half damage occurs - WP4 - North West Pacific
     Vthres = 25.7         # m/s, below to wihch no damage occurs - Global
     v = np.maximum(0.0, (x-Vthres))/(Vhalf-Vthres)
-    # return (v**3)/(1+(v**3)) # Tropical Cyclone - Global equation
+    return (v**3)/(1+(v**3)) # Tropical Cyclone - Global equation
     # return (x+999)/(x+999)
 
 
-# Defining the damage function - Agriculture
+# Flood over Agricultural areas
+
 def damage_factor_agri(x):
     """A polynomial fit to average damage across agricultural land cover relative
     to water depth in meters.
@@ -54,7 +59,7 @@ def damage_factor_agri(x):
     # return (x+999)/(x+999)
 
 
-# Defining the damage function - Mortality
+# Flood over Population mortality
 def mortality_factor(x):
     """A polynomial fit to average population mortality due to nearby flooding.
 

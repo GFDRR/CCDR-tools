@@ -1,6 +1,6 @@
 # Importing the required packages
 from common import *
-from damageFunctions import damage_factor_builtup, damage_factor_agri, mortality_factor
+from damageFunctions import damage_factor_FL_builtup, damage_factor_TC_builtup, damage_factor_agri, mortality_factor
 from tqdm import tqdm
 
 # Importing the libraries for parallel processing
@@ -72,10 +72,15 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
     if exp_cat == 'POP':
         damage_factor = mortality_factor
         exp_ras = f"{exp_folder}/{country}_POP.tif"
-    # If the exposed category is builtup area...
+
+    # If the exposed category is builtup area... check hazard type
     elif exp_cat == 'BU':
-        damage_factor = damage_factor_builtup
+        if haz_cat == 'FL':
+            damage_factor = damage_factor_FL_builtup
+        elif haz_cat == 'TC':
+            damage_factor = damage_factor_TC_builtup
         exp_ras = f"{exp_folder}/{country}_BU.tif"
+
     # If the exposed category is agriculture...
     elif exp_cat == 'AGR':
         damage_factor = damage_factor_agri
@@ -131,8 +136,8 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
     
     # Defining the list of valid prob_RPs - probability of return period
     prob_RPs = 1./np.array(valid_RPs)
-    prob_RPs_LB = np.append(-np.diff(prob_RPs),prob_RPs[-1]).tolist()          # Lower bound
-    prob_RPs_UB = np.insert(-np.diff(prob_RPs),0,0.).tolist()                  # Upper bound
+    prob_RPs_LB = np.append(-np.diff(prob_RPs),prob_RPs[-1]).tolist()          # Lower bound - alternative --> prob_RPs_LB = np.append(1-prob_RPs[0],-np.diff(prob_RPs)).tolist() # Lower bound [0-1]
+    prob_RPs_UB = np.insert(-np.diff(prob_RPs),0,0.).tolist()                  # Upper bound - alternative --> prob_RPs_UB = np.append(1-prob_RPs[0],-np.diff(prob_RPs)).tolist() # Upper bound [0-1]
     prob_RPs_Mean = ((np.array(prob_RPs_LB)+np.array(prob_RPs_UB))/2).tolist() # Mean value
     prob_RPs_df = pd.DataFrame({'RPs':valid_RPs,
                                 'prob_RPs':prob_RPs,
