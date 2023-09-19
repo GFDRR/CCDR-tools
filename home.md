@@ -1,4 +1,8 @@
 ```{figure} docs/images/GFDRR_logo.png
+---
+align: center
+width: 70%
+---
 ```
 # Climate & Disaster Risk Screening Tools
 
