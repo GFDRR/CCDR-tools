@@ -37,8 +37,6 @@ def damage_factor_TC_builtup(x):
     Vthres = 25.7         # m/s, below to wihch no damage occurs - Global
     v = np.maximum(0.0, (x-Vthres))/(Vhalf-Vthres)
     return (v**3)/(1+(v**3)) # Tropical Cyclone - Global equation
-    # return (x+999)/(x+999)
-
 
 # Flood over Agricultural areas
 
