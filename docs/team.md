@@ -9,3 +9,12 @@ The core team behind the CCDR tools:
 | [Takuya Iwanaga](mailto:iwanaga.takuya@anu.edu.au) | Programmer - Development of original python code for spatial analysis and EAI calculation | WB GFDRR |
 
 Important contribution and feedback in the development process came from [Lander Bosh](mailto:lbosh@worldbank.org), WB Geographer, and the whole SEA poverty team.
+
+The CCDR tools have been developed alongside CCDR project activities in partnership with [**GFDRR**](https://www.gfdrr.org).
+
+```{figure} docs/images/GFDRR_logo.png
+---
+align: center
+width: 70%
+---
+```
