@@ -12,7 +12,7 @@ Important contribution and feedback in the development process came from [Lander
 
 The CCDR tools have been developed alongside CCDR project activities in partnership with [**GFDRR**](https://www.gfdrr.org).
 
-```{figure} docs/images/GFDRR_logo.png
+```{figure} images/GFDRR_logo.png
 ---
 align: center
 width: 70%

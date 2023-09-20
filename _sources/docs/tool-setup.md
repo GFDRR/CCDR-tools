@@ -68,12 +68,12 @@ Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to 
   |---|---|---|---|---|---|---|---|
   | Integer | String (20) | Integer | String(20) | Integer | String(20) | Integer | String(20) |
 
-- **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_HZD_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
+- **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_`HZD`_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
 
-- **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_EXP.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). The same suggestion about resolution applies here.
+- **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_`EXP`.tif. The same suggestion about resolution applies here.
 
 	- Population from GHSL, 90 m: `ISO`_POP.tif
-	- Built-up from World Settlement Footprint or equivalent, 90 m: `ISO`_BUP.tif
+	- Built-up from World Settlement Footprint or equivalent, 90 m: `ISO`_BU.tif
 	- Agriculture from land cover map, ESA land cover or equivalent, 90 m: `ISO`_AGR.tif
 
 ```{caution}
@@ -115,9 +115,7 @@ OUTPUT_DIR = ${DATA_DIR}/RSK/
 CACHE_DIR = ${DATA_DIR}/cache/
 ```
 
-## Run CCDR tool notebooks
-
-### Baseline risk
+## Run Jupyter notebooks
 
 - Navigate to your working directory: `cd <Your work directory>`
   ```{figure} images/cmd_prompt.png
@@ -127,3 +125,76 @@ CACHE_DIR = ${DATA_DIR}/cache/
   Example of Anaconda cmd prompt
   ```
 - Run `jupyter notebook`. The interface should pop up in your browser.
+- You can now run the [baseline risk screening](run-baseline.md).
+
+## Parallel processing
+
+### Setting parameters
+
+Edit the `main.py` file to specify:
+- **country (`country`)**: [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
+- **hazard type (`haz_cat`)**: `'FL'` for floods; `'HS'` for heat stress; `'DR'` for drought; `'LS'` for landslide
+- **return periods (`return_periods`)**: list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
+- **exposure categories (`exp_cat_list`)**: list of exposure categories: `['POP', 'BU', 'AGR']`
+  - exposure categories file name (`exp_cat_list`): list  of same length of `exp_cat_list` with file names for exposure categories, e.g.: `['GHS', 'WSF19', 'ESA20']`
+    If 'None', the default `['POP', 'BU', 'AGR']` applies
+- **analysis approach (`analysis_app`)**: `['Classes', 'Function']`
+  - If `'Function'`, you can set minimum hazard threshold value (`min_haz_slider`). Hazard value below this threshold will be ignored
+  - If `'Classes'`,  you can set the number and value of thresholds to consider to split hazard intensity values into bins (`class_edges`)
+- **admin level (`adm`)**: specify which boundary level to use for results summary (must exist in the `ISOa3`_ADM.gpkg file)
+- **save check (`save_check_raster`)**: specify if you want to export intermediate rasters (increases processing time) `[True, False]`
+
+Example of `main.py` running flood analysis (`haz_cat`) over Cambodia [KHM] (`country`) for 10 return periods (`return_periods`) over three exposure categories (`exp_cat_list`) using hazard classes according to thresholds (`class_edges`); results summarised at ADM3 level (`adm`). Do not save intermediate rasters (`save_check_raster`).
+
+Example for function analysis:
+```
+    # Defining the initial parameters
+    country            = 'KHM'
+    haz_cat            = 'FL'
+    return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
+    min_haz_slider     = 0.05
+    exp_cat_list       = ['POP', 'BU', 'AGR']
+    exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
+    adm                = 'ADM3'
+    analysis_app       = 'Function'
+    # class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
+    save_check_raster  = False
+```
+
+Example for class analysis:
+```
+    # Defining the initial parameters
+    country            = 'KHM'
+    haz_cat            = 'FL'
+    return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
+    # min_haz_slider     = 0.05
+    exp_cat_list       = ['POP', 'BU', 'AGR']
+    exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
+    adm                = 'ADM3'
+    analysis_app       = 'Classes'
+    class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
+    save_check_raster  = False
+```
+
+### Run the analysis
+
+```bash
+$ python main.py
+```
+
+The analysis runs on all selected exposed categories, in sequence. It will print a separate message for each iteration. In case of 3 exposure caterories, it will take three iterations to get all results.
+
+```bash
+$ Running analysis...
+$ Finished analysis
+$ Running analysis...
+$ Finished analysis
+$ Running analysis...
+$ Finished analysis
+```
+
+Depending on the number of cores, the size and resolution of the data, and power of CPU, the analysis can take from less than a minute to few minutes.
+E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.
+
+
+

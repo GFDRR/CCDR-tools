@@ -477,13 +477,23 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#run-ccdr-tool-notebooks">
-   Run CCDR tool notebooks
+  <a class="reference internal nav-link" href="#run-jupyter-notebooks">
+   Run Jupyter notebooks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#parallel-processing">
+   Parallel processing
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#baseline-risk">
-     Baseline risk
+    <a class="reference internal nav-link" href="#setting-parameters">
+     Setting parameters
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#run-the-analysis">
+     Run the analysis
     </a>
    </li>
   </ul>
@@ -518,13 +528,23 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#run-ccdr-tool-notebooks">
-   Run CCDR tool notebooks
+  <a class="reference internal nav-link" href="#run-jupyter-notebooks">
+   Run Jupyter notebooks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#parallel-processing">
+   Parallel processing
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#baseline-risk">
-     Baseline risk
+    <a class="reference internal nav-link" href="#setting-parameters">
+     Setting parameters
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#run-the-analysis">
+     Run the analysis
     </a>
    </li>
   </ul>
@@ -669,11 +689,11 @@ In both cases, the script expects input data to be provided according to some ru
 </tbody>
 </table>
 <ul class="simple">
-<li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_HZD_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
-<li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_EXP.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). The same suggestion about resolution applies here.</p>
+<li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">HZD</span></code>_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
+<li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">EXP</span></code>.tif. The same suggestion about resolution applies here.</p>
 <ul>
 <li><p>Population from GHSL, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</p></li>
-<li><p>Built-up from World Settlement Footprint or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BUP.tif</p></li>
+<li><p>Built-up from World Settlement Footprint or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BU.tif</p></li>
 <li><p>Agriculture from land cover map, ESA land cover or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</p></li>
 </ul>
 </li>
@@ -716,10 +736,8 @@ CACHE_DIR = ${DATA_DIR}/cache/
 </pre></div>
 </div>
 </section>
-<section id="run-ccdr-tool-notebooks">
-<h2>Run CCDR tool notebooks<a class="headerlink" href="#run-ccdr-tool-notebooks" title="Permalink to this headline">#</a></h2>
-<section id="baseline-risk">
-<h3>Baseline risk<a class="headerlink" href="#baseline-risk" title="Permalink to this headline">#</a></h3>
+<section id="run-jupyter-notebooks">
+<h2>Run Jupyter notebooks<a class="headerlink" href="#run-jupyter-notebooks" title="Permalink to this headline">#</a></h2>
 <ul>
 <li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p>
 <figure class="align-center" id="id2">
@@ -730,7 +748,79 @@ CACHE_DIR = ${DATA_DIR}/cache/
 </figure>
 </li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code>. The interface should pop up in your browser.</p></li>
+<li><p>You can now run the <a class="reference internal" href="run-baseline.html"><span class="doc std std-doc">baseline risk screening</span></a>.</p></li>
 </ul>
+</section>
+<section id="parallel-processing">
+<h2>Parallel processing<a class="headerlink" href="#parallel-processing" title="Permalink to this headline">#</a></h2>
+<section id="setting-parameters">
+<h3>Setting parameters<a class="headerlink" href="#setting-parameters" title="Permalink to this headline">#</a></h3>
+<p>Edit the <code class="docutils literal notranslate"><span class="pre">main.py</span></code> file to specify:</p>
+<ul class="simple">
+<li><p><strong>country (<code class="docutils literal notranslate"><span class="pre">country</span></code>)</strong>: <a class="reference external" href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3"><code class="docutils literal notranslate"><span class="pre">ISO3166_a3</span></code></a> country code</p></li>
+<li><p><strong>hazard type (<code class="docutils literal notranslate"><span class="pre">haz_cat</span></code>)</strong>: <code class="docutils literal notranslate"><span class="pre">'FL'</span></code> for floods; <code class="docutils literal notranslate"><span class="pre">'HS'</span></code> for heat stress; <code class="docutils literal notranslate"><span class="pre">'DR'</span></code> for drought; <code class="docutils literal notranslate"><span class="pre">'LS'</span></code> for landslide</p></li>
+<li><p><strong>return periods (<code class="docutils literal notranslate"><span class="pre">return_periods</span></code>)</strong>: list of return period scenarios as in the data, e.g. <code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">10,</span> <span class="pre">20,</span> <span class="pre">50,</span> <span class="pre">75,</span> <span class="pre">100,</span> <span class="pre">200,</span> <span class="pre">250,</span> <span class="pre">500,</span> <span class="pre">1000]</span></code></p></li>
+<li><p><strong>exposure categories (<code class="docutils literal notranslate"><span class="pre">exp_cat_list</span></code>)</strong>: list of exposure categories: <code class="docutils literal notranslate"><span class="pre">['POP',</span> <span class="pre">'BU',</span> <span class="pre">'AGR']</span></code></p>
+<ul>
+<li><p>exposure categories file name (<code class="docutils literal notranslate"><span class="pre">exp_cat_list</span></code>): list  of same length of <code class="docutils literal notranslate"><span class="pre">exp_cat_list</span></code> with file names for exposure categories, e.g.: <code class="docutils literal notranslate"><span class="pre">['GHS',</span> <span class="pre">'WSF19',</span> <span class="pre">'ESA20']</span></code>
+If ‘None’, the default <code class="docutils literal notranslate"><span class="pre">['POP',</span> <span class="pre">'BU',</span> <span class="pre">'AGR']</span></code> applies</p></li>
+</ul>
+</li>
+<li><p><strong>analysis approach (<code class="docutils literal notranslate"><span class="pre">analysis_app</span></code>)</strong>: <code class="docutils literal notranslate"><span class="pre">['Classes',</span> <span class="pre">'Function']</span></code></p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'Function'</span></code>, you can set minimum hazard threshold value (<code class="docutils literal notranslate"><span class="pre">min_haz_slider</span></code>). Hazard value below this threshold will be ignored</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'Classes'</span></code>,  you can set the number and value of thresholds to consider to split hazard intensity values into bins (<code class="docutils literal notranslate"><span class="pre">class_edges</span></code>)</p></li>
+</ul>
+</li>
+<li><p><strong>admin level (<code class="docutils literal notranslate"><span class="pre">adm</span></code>)</strong>: specify which boundary level to use for results summary (must exist in the <code class="docutils literal notranslate"><span class="pre">ISOa3</span></code>_ADM.gpkg file)</p></li>
+<li><p><strong>save check (<code class="docutils literal notranslate"><span class="pre">save_check_raster</span></code>)</strong>: specify if you want to export intermediate rasters (increases processing time) <code class="docutils literal notranslate"><span class="pre">[True,</span> <span class="pre">False]</span></code></p></li>
+</ul>
+<p>Example of <code class="docutils literal notranslate"><span class="pre">main.py</span></code> running flood analysis (<code class="docutils literal notranslate"><span class="pre">haz_cat</span></code>) over Cambodia [KHM] (<code class="docutils literal notranslate"><span class="pre">country</span></code>) for 10 return periods (<code class="docutils literal notranslate"><span class="pre">return_periods</span></code>) over three exposure categories (<code class="docutils literal notranslate"><span class="pre">exp_cat_list</span></code>) using hazard classes according to thresholds (<code class="docutils literal notranslate"><span class="pre">class_edges</span></code>); results summarised at ADM3 level (<code class="docutils literal notranslate"><span class="pre">adm</span></code>). Do not save intermediate rasters (<code class="docutils literal notranslate"><span class="pre">save_check_raster</span></code>).</p>
+<p>Example for function analysis:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Defining the initial parameters</span>
+    <span class="n">country</span>            <span class="o">=</span> <span class="s1">&#39;KHM&#39;</span>
+    <span class="n">haz_cat</span>            <span class="o">=</span> <span class="s1">&#39;FL&#39;</span>
+    <span class="n">return_periods</span>     <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+    <span class="n">min_haz_slider</span>     <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="n">exp_cat_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;POP&#39;</span><span class="p">,</span> <span class="s1">&#39;BU&#39;</span><span class="p">,</span> <span class="s1">&#39;AGR&#39;</span><span class="p">]</span>
+    <span class="n">exp_nam_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GHS&#39;</span><span class="p">,</span> <span class="s1">&#39;WSF19&#39;</span><span class="p">,</span> <span class="s1">&#39;ESA20&#39;</span><span class="p">]</span>
+    <span class="n">adm</span>                <span class="o">=</span> <span class="s1">&#39;ADM3&#39;</span>
+    <span class="n">analysis_app</span>       <span class="o">=</span> <span class="s1">&#39;Function&#39;</span>
+    <span class="c1"># class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]</span>
+    <span class="n">save_check_raster</span>  <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>Example for class analysis:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Defining the initial parameters</span>
+    <span class="n">country</span>            <span class="o">=</span> <span class="s1">&#39;KHM&#39;</span>
+    <span class="n">haz_cat</span>            <span class="o">=</span> <span class="s1">&#39;FL&#39;</span>
+    <span class="n">return_periods</span>     <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+    <span class="c1"># min_haz_slider     = 0.05</span>
+    <span class="n">exp_cat_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;POP&#39;</span><span class="p">,</span> <span class="s1">&#39;BU&#39;</span><span class="p">,</span> <span class="s1">&#39;AGR&#39;</span><span class="p">]</span>
+    <span class="n">exp_nam_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GHS&#39;</span><span class="p">,</span> <span class="s1">&#39;WSF19&#39;</span><span class="p">,</span> <span class="s1">&#39;ESA20&#39;</span><span class="p">]</span>
+    <span class="n">adm</span>                <span class="o">=</span> <span class="s1">&#39;ADM3&#39;</span>
+    <span class="n">analysis_app</span>       <span class="o">=</span> <span class="s1">&#39;Classes&#39;</span>
+    <span class="n">class_edges</span>        <span class="o">=</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">,</span> <span class="mf">2.00</span><span class="p">]</span>
+    <span class="n">save_check_raster</span>  <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</section>
+<section id="run-the-analysis">
+<h3>Run the analysis<a class="headerlink" href="#run-the-analysis" title="Permalink to this headline">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>main.py
+</pre></div>
+</div>
+<p>The analysis runs on all selected exposed categories, in sequence. It will print a separate message for each iteration. In case of 3 exposure caterories, it will take three iterations to get all results.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>Running<span class="w"> </span>analysis...
+$<span class="w"> </span>Finished<span class="w"> </span>analysis
+$<span class="w"> </span>Running<span class="w"> </span>analysis...
+$<span class="w"> </span>Finished<span class="w"> </span>analysis
+$<span class="w"> </span>Running<span class="w"> </span>analysis...
+$<span class="w"> </span>Finished<span class="w"> </span>analysis
+</pre></div>
+</div>
+<p>Depending on the number of cores, the size and resolution of the data, and power of CPU, the analysis can take from less than a minute to few minutes.
+E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.</p>
 </section>
 </section>
 </section>
