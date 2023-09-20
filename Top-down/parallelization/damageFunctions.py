@@ -54,7 +54,6 @@ def damage_factor_agri(x):
     # return (x)             # For DR impacts
     # return np.maximum(0.0, np.minimum(1.0, -0.0039 * x ** 3 + 0.0383 * x ** 2 + 0.0768 * x)) # Floods - AFRICA
     return np.maximum(0.0, np.minimum(1.0, 0.00723 * x ** 3 - 0.1000 * x ** 2 + 0.5060 * x)) # Floods - ASIA
-    # return (x+999)/(x+999)
 
 
 # Flood over Population mortality
@@ -66,4 +65,3 @@ def mortality_factor(x):
     Jonkman SN, 2008 - Loss of life due to floods
     """
     return np.maximum(0.0, np.minimum(1.0, 0.985 / (1 + np.exp(6.32 - 1.412 * x))))  # Floods - Global
-    # return (x+999)/(x+999)
