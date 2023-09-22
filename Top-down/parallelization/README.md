@@ -46,17 +46,36 @@ $ conda update -name ccdr-tools --file Top-down/notebooks/win_env.yml
 
 # SCRIPT OVERVIEW
 
+- `.env` specifies the directories where data are stored
 - `common.py` setup the script libraries and specifies data directories
 - `damageFunctions.py` includes the impact models (mathematical relationship between hazard intensity and relative damage/impact over exposure category)
 - `main.py` specifies the parameters of the analysis to run (country, hazards, return periods, classes, etc)
 - `runAnalysis.py` the main function that is used to run the program according to parameters set in `main.py`
 
+## Working directory
+
+Edit the `.env` file to specify the data folder (DATA_DIR).
+You don't need to change the cache and output directory.
+
+```
+# Environment variables for the CCDR Hazard analysis notebooks
+
+# Specify working directory, location of data files
+# Use absolute paths, and keep the trailing slash
+DATA_DIR = C:/Work/data
+
+# Location to store downloaded rasters and other data
+# for the analysis notebooks
+CACHE_DIR = ${DATA_DIR}/cache
+OUTPUT_DIR = ${DATA_DIR}/output
+
+```
+
 ## Input data
 
 Input data layers must be named and placed according to some rules, as follows:
 
-- Create a working directory and set it as DATA_DIR (e.g. ./data) in `common.py`.
-  Inside the workdir, the data folders must follow this structure:
+- Inside the workdir, the data folders must follow this structure:
 
 ```
     DATA_DIR/ADM: Administrative boundaries as '.gpkg' (multiple levels)
