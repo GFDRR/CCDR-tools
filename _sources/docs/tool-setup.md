@@ -104,7 +104,7 @@ Edit the `.env` file inside the notebook directories to specify the working dire
 
 # Fill the below with the location of data files
 # Use absolute paths with forward slashes ("/"), and keep the trailing slash
-DATA_DIR = ""
+DATA_DIR = C:/Work/data
 
 # THE ENTRIES BELOW DO NOT NEED TO BE EDITED
 # Location to store results of analyses
