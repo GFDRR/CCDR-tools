@@ -49,12 +49,12 @@ def damage_factor_agri(x):
     References
     ----------
     Huizinga et al., 2017 - Global flood depth-damage functions: Methodology and the database. EU-JRC.
+    Point fitting by cubic regression (R2 = 0.98)
     """
     # return (x+999)/(x+999) # For Agri exposure
     # return (x)             # For DR impacts
-    # return np.maximum(0.0, np.minimum(1.0, -0.0039 * x ** 3 + 0.0383 * x ** 2 + 0.0768 * x)) # Floods - AFRICA
-    return np.maximum(0.0, np.minimum(1.0, 0.00723 * x ** 3 - 0.1000 * x ** 2 + 0.5060 * x)) # Floods - ASIA
-
+    # return np.maximum(0.0, np.minimum(1.0, 0.01108 * x ** 3 + 0.1578 * x ** 2 + 0.7209 * x - 0.042)) # Floods - AFRICA
+    return np.maximum(0.0, np.minimum(1.0, 0.00455 * x ** 3 - 0.0648 * x ** 2 + 0.3960 * x - 0.000049)) # Floods - ASIA
 
 # Flood over Population mortality
 def mortality_factor(x):
