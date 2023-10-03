@@ -122,7 +122,7 @@ Landslides (mass movements) are affected by geological features (rock type and s
 | **Analysis type** | Deterministic | Deterministic |
 | **Frequency type** | none | none |
 | **Time reference** | Baseline (rainfall trigger) (1980-2018) | |
-| **Intensity metric** | Hazard index [-] | Susceptibility index [-] |
+| **Intensity metric** | Hazard frequency [-] | Susceptibility index [-] |
 | **License** | Open | |
 | **Notes** | Based on NASA landslide susceptibility layer. Median and Mean layers provided. | Although not a hazard layer, it can be accounted for in addition to the ARUP layer. |
 ```
@@ -133,7 +133,7 @@ Landslide hazard description can rely on either the NASA Landslide Hazard Suscep
 ---
 align: center
 ---
-Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuous index is displayed into 3 discrete classes (Low, Medium, High).
+Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuous index is displayed into 3 discrete classes (Low, Medium, High) according to thresholds set by ARUP (Low: <0.01; Moderate: 0.01-0.1; High: >0.1).
 ```
 <hr>
 
