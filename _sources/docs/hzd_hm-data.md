@@ -217,7 +217,7 @@ Various definitions regarding magnitude and duration thresholds and heat metrics
 ---
 align: center
 ---
-Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the WBGT map by VITO cannot capture these details.
+Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the global WBGT map based on global models resolution cannot capture these details.
 ```
 
 - **Universal Thermal Climate Index** (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, skin wetness, skin blood flow and rectal, mean skin and face temperatures) as the actual environment. It is calculated based on near-surface air temperature, solar radiation, vapor pressure, and wind speed. For this specific dataset provided, the influence of solar radiation and wind speed is not considered and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
