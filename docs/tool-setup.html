@@ -627,7 +627,7 @@ In Anaconda cmd prompt:</p>
 </figure>
 <p>Each layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:</p>
 <ul class="simple">
-<li><p><strong>ADM0</strong></p></li>
+<li><p><strong>ADM0</strong> layer</p></li>
 </ul>
 <table class="colwidths-auto table">
 <thead>
@@ -646,7 +646,7 @@ In Anaconda cmd prompt:</p>
 </tbody>
 </table>
 <ul class="simple">
-<li><p><strong>ADM1</strong></p></li>
+<li><p><strong>ADM1</strong> layer</p></li>
 </ul>
 <table class="colwidths-auto table">
 <thead>
@@ -665,7 +665,7 @@ In Anaconda cmd prompt:</p>
 </tbody>
 </table>
 <ul class="simple">
-<li><p><strong>ADM2</strong></p></li>
+<li><p><strong>ADM2</strong> layer</p></li>
 </ul>
 <table class="colwidths-auto table">
 <thead>
@@ -688,7 +688,7 @@ In Anaconda cmd prompt:</p>
 </tbody>
 </table>
 <ul class="simple">
-<li><p><strong>ADM3</strong></p></li>
+<li><p><strong>ADM3</strong> layer</p></li>
 </ul>
 <table class="colwidths-auto table">
 <thead>
@@ -714,22 +714,15 @@ In Anaconda cmd prompt:</p>
 </tr>
 </tbody>
 </table>
-<ul class="simple">
+<ul>
 <li><p>Download probabilistic <a class="reference internal" href="global-hazard.html"><span class="doc std std-doc"><strong>hazard data</strong></span></a>, consisting of multiple RP scenarios. Each scenario is expected as a raster file (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">HZD</span></code>_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
 <li><p>Download <a class="reference internal" href="global-exposure.html"><span class="doc std std-doc"><strong>exposure data</strong></span></a> for population, built-up and agricolture. Layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">EXP</span></code>.tif.</p>
-<ul>
+<ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</strong>: Population, as from <a class="reference external" href="https://ghsl.jrc.ec.europa.eu/download.php?ds=pop">Global Human Settlement Layer</a> or <a class="reference external" href="https://hub.worldpop.org/geodata/listing?id=79">Worldpop</a></p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BU.tif</strong>: Built-up from <a class="reference external" href="https://ghsl.jrc.ec.europa.eu/download.php?ds=bu">Global Human Settlement Layer</a> or <a class="reference external" href="https://download.geoservice.dlr.de/WSF2019/">World Settlement Footprint</a></p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</strong>: Agriculture from land cover map, <a class="reference external" href="https://esa-worldcover.org/en">ESA land cover</a> or equivalent</p></li>
 </ul>
 </li>
-</ul>
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
-<p>When resampling exposure layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid, or viceversa.</p>
-</div>
-<img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
-<ul>
 <li><p>Move verified input data into the proper folders</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
