@@ -31,10 +31,10 @@ In both cases, the script requires proper environment setup and input data to be
    - Parallel/		Place the parallel processing script in a sub-folder
      - ...
    - Data/
-     - ADM		Administrative unit layer for each country
-     - HZD		Hazard layers
-     - EXP		Exposure layers - Population (count), Built-up (ratio or binary), Agriculture (ratio or binary)
-     - RSK		Output directory
+     - ADM/		Administrative boundaries layer for each country
+     - HZD/		Hazard layers
+     - EXP/		Exposure layers
+     - RSK/		Output directory
   ```
 
 - Download **country boundaries** for multiple administrative levels (national, sub-national) sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.
@@ -88,9 +88,24 @@ In both cases, the script requires proper environment setup and input data to be
 - Download [**exposure data**](global-exposure.md) for population, built-up and agricolture. Layers are expected as raster files (`.tif`) named as `ISO`_`EXP`.tif.
 	- **`ISO`_POP.tif**: Population, as from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=pop) or [Worldpop](https://hub.worldpop.org/geodata/listing?id=79). Value as number of peope per pixel.
 	- **`ISO`_BU.tif**: Built-up from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=bu) or [World Settlement Footprint](https://download.geoservice.dlr.de/WSF2019/). Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel).
-	- **`ISO`_AGR.tif**: Agriculture from land cover map, [ESA land cover](https://esa-worldcover.org/en) or equivalent. Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel)
+	- **`ISO`_AGR.tif**: Agriculture from land cover map, [ESA land cover](https://esa-worldcover.org/en) or equivalent. Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel).
 
-- Move verified input data into the proper folders
+- Move verified input data into the proper folders:
+  ```
+  Work dir/Data/
+  - ADM/
+    - ISO_ADM.gpkg
+  - HZD/
+    - ISO_FL_RP10.tif
+    - ISO_FL_RP100.tif
+    - ISO_FL_RP1000.tif
+    - ...
+  - EXP/
+    - ISO_POP.tif
+    - ISO_BU.tif
+    - ISO_AGR.tif
+  ```
+
   ```{caution}
   All spatial data must use the same CRS, suggested: `EPSG 4326` (WGS 84)
   ```
