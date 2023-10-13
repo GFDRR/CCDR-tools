@@ -86,9 +86,9 @@ In both cases, the script requires proper environment setup and input data to be
 - Download probabilistic [**hazard data**](global-hazard.md), consisting of multiple RP scenarios. Each scenario is expected as a raster file (`.tif`) named as `ISO`_`HZD`_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
 
 - Download [**exposure data**](global-exposure.md) for population, built-up and agricolture. Layers are expected as raster files (`.tif`) named as `ISO`_`EXP`.tif.
-	- **`ISO`_POP.tif**: Population, as from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=pop) or [Worldpop](https://hub.worldpop.org/geodata/listing?id=79)
-	- **`ISO`_BU.tif**: Built-up from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=bu) or [World Settlement Footprint](https://download.geoservice.dlr.de/WSF2019/) 
-	- **`ISO`_AGR.tif**: Agriculture from land cover map, [ESA land cover](https://esa-worldcover.org/en) or equivalent
+	- **`ISO`_POP.tif**: Population, as from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=pop) or [Worldpop](https://hub.worldpop.org/geodata/listing?id=79). Value as number of peope per pixel.
+	- **`ISO`_BU.tif**: Built-up from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=bu) or [World Settlement Footprint](https://download.geoservice.dlr.de/WSF2019/). Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel).
+	- **`ISO`_AGR.tif**: Agriculture from land cover map, [ESA land cover](https://esa-worldcover.org/en) or equivalent. Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel)
 
 - Move verified input data into the proper folders
   ```{caution}
