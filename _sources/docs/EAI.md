@@ -36,15 +36,10 @@ align: center
 
 - The exposure and impact estimates are then summarised for the chosen administrative boundary (ADM) level using `zonal statistic`. The expected annual impact (EAI) is computed by multiplying the impact value with its exceedence frequency depending on the scenario. The `exceedance frequency curve (EFC)` is plotted. These outputs represent the core of the disaster risk historical baseline. The output is exported in form of tables, statistics, charts (excel format) and maps (geopackage).
 
-## DATA MANAGEMENT
-
-- Download country boundaries for multiple administrative levels sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.
-- Download [exposure data](global-exposure.md).
-- Download probabilistic [hazard data](global-hazard.md), consisting of multiple RP scenarios.
-
 ## SETUP THE NOTEBOOK
 
-- Create environment and folder structure as explained in [tool setup](tool-setup.md)
+As explained in [tool setup](tool-setup.md):
+- Create environment and folder structure
 - Move verified input data into the tools folders
 - Use the interface to select the settings and start the processing
 

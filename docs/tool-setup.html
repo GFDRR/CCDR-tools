@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Tools setup &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>TOOLS SETUP &#8212; Climate &amp; Disaster Risk Screening Tools</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -239,7 +239,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Tools setup
+   TOOLS SETUP
   </a>
  </li>
  <li class="toctree-l1">
@@ -467,13 +467,18 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#expected-directories-and-input-format">
-   Expected directories and input format
+  <a class="reference internal nav-link" href="#python-environment">
+   Python environment
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#environment-and-libraries">
-   Environment and libraries
+  <a class="reference internal nav-link" href="#input-data-management">
+   Input data management
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#settings">
+   Settings
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -507,7 +512,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Tools setup</h1>
+                <h1>TOOLS SETUP</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -518,13 +523,18 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#expected-directories-and-input-format">
-   Expected directories and input format
+  <a class="reference internal nav-link" href="#python-environment">
+   Python environment
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#environment-and-libraries">
-   Environment and libraries
+  <a class="reference internal nav-link" href="#input-data-management">
+   Input data management
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#settings">
+   Settings
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -560,7 +570,7 @@ title="Print to PDF"
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="tools-setup">
-<h1>Tools setup<a class="headerlink" href="#tools-setup" title="Permalink to this headline">#</a></h1>
+<h1>TOOLS SETUP<a class="headerlink" href="#tools-setup" title="Permalink to this headline">#</a></h1>
 <p>The analytical scripts can be downloaded as:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/notebooks"><strong>Jupyter notebooks</strong></a>: user-friendly script that run via browser interface.
@@ -568,23 +578,39 @@ Read more about <a class="reference external" href="https://jupyter-notebook.rea
 <li><p><a class="reference external" href="https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization"><strong>Python code</strong></a>: give the user more control, and has overall better performances making use of parallel processing.</p></li>
 </ul>
 <p>These can be downloaded and exectuted on any windows or linux machine.
-In both cases, the script expects input data to be provided according to some rules.</p>
-<section id="expected-directories-and-input-format">
-<h2>Expected directories and input format<a class="headerlink" href="#expected-directories-and-input-format" title="Permalink to this headline">#</a></h2>
-<p>The script expects input data folders to be structured as:</p>
+In both cases, the script requires proper environment setup and input data to be provided according to the instructions below.</p>
+<section id="python-environment">
+<h2>Python environment<a class="headerlink" href="#python-environment" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>Python 3 needs to be installed on your system. We suggest the latest <a class="reference external" href="https://www.anaconda.com/download">Anaconda</a> distribution. Mamba is also encouraged.</p></li>
+<li><p>Create new <code class="docutils literal notranslate"><span class="pre">CCDR-tools</span></code> environment according to your operating system: win.yml or linux.yml.
+In Anaconda cmd prompt:</p>
+<p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">CCDR</span> <span class="pre">--file</span> <span class="pre">&lt;dir/win_env.yml&gt;</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">CCDR</span></code></p>
+</li>
+</ul>
+</section>
+<section id="input-data-management">
+<h2>Input data management<a class="headerlink" href="#input-data-management" title="Permalink to this headline">#</a></h2>
+<ul>
+<li><p>Download the latest version of the notebooks or the the parallel code.</p></li>
+<li><p>Create folder structure as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Work</span> <span class="nb">dir</span><span class="o">/</span>
- <span class="o">-</span> <span class="n">Hazard</span><span class="o">.</span><span class="n">ipynb</span>
+ <span class="o">-</span> <span class="n">Hazard</span><span class="o">.</span><span class="n">ipynb</span>	<span class="n">Place</span> <span class="n">the</span> <span class="n">notebooks</span> <span class="ow">and</span> <span class="n">related</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">main</span> <span class="n">work</span> <span class="n">directory</span>
  <span class="o">-</span> <span class="n">common</span><span class="o">.</span><span class="n">py</span>
+ <span class="o">-</span> <span class="n">Parallel</span><span class="o">/</span>		<span class="n">Place</span> <span class="n">the</span> <span class="n">parallel</span> <span class="n">processing</span> <span class="n">script</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">sub</span><span class="o">-</span><span class="n">folder</span>
+   <span class="o">-</span> <span class="o">...</span>
  <span class="o">-</span> <span class="n">Data</span><span class="o">/</span>
-   <span class="o">-</span> <span class="n">ADM</span>	<span class="n">Administrative</span> <span class="n">unit</span> <span class="n">layer</span> <span class="k">for</span> <span class="n">each</span> <span class="n">country</span>
-   <span class="o">-</span> <span class="n">HZD</span>	<span class="n">Hazard</span> <span class="n">layers</span>
-   <span class="o">-</span> <span class="n">EXP</span>	<span class="n">Exposure</span> <span class="n">layers</span> <span class="o">-</span> <span class="n">Population</span> <span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">Built</span><span class="o">-</span><span class="n">up</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">),</span> <span class="n">Agriculture</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">)</span>
-   <span class="o">-</span> <span class="n">RSK</span>	<span class="n">Output</span> <span class="n">directory</span>
+   <span class="o">-</span> <span class="n">ADM</span>		<span class="n">Administrative</span> <span class="n">unit</span> <span class="n">layer</span> <span class="k">for</span> <span class="n">each</span> <span class="n">country</span>
+   <span class="o">-</span> <span class="n">HZD</span>		<span class="n">Hazard</span> <span class="n">layers</span>
+   <span class="o">-</span> <span class="n">EXP</span>		<span class="n">Exposure</span> <span class="n">layers</span> <span class="o">-</span> <span class="n">Population</span> <span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">Built</span><span class="o">-</span><span class="n">up</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">),</span> <span class="n">Agriculture</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">)</span>
+   <span class="o">-</span> <span class="n">RSK</span>		<span class="n">Output</span> <span class="n">directory</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p><strong>ADMINISTRATIVE</strong> boundaries are provided as geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (e.g. <code class="docutils literal notranslate"><span class="pre">NPL</span></code>_ADM.gpkg) made of multiple layers represening different administrative boundary levels.</p></li>
+</li>
+<li><p>Download <strong>country boundaries</strong> for multiple administrative levels (national, sub-national) sourced from <a class="reference external" href="https://data.humdata.org/dataset">HDX</a> or <a class="reference external" href="https://www.geoboundaries.org">Geoboundaries</a>. Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.</p></li>
 </ul>
+<p>Boundaries must be provided as a geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (e.g. <code class="docutils literal notranslate"><span class="pre">NPL</span></code>_ADM.gpkg) containing multiple layers, each one represening a different administrative boundary levels:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">ISO_ADM</span>
   <span class="o">-</span> <span class="n">ADM0</span> <span class="p">(</span><span class="n">country</span><span class="p">)</span>
   <span class="o">-</span> <span class="n">ADM1</span> <span class="p">(</span><span class="n">first</span><span class="o">-</span><span class="n">level</span> <span class="n">sub</span><span class="o">-</span><span class="n">national</span> <span class="n">division</span><span class="p">)</span>
@@ -599,7 +625,7 @@ In both cases, the script expects input data to be provided according to some ru
 <p><span class="caption-number">Fig. 45 </span><span class="caption-text">Example of sub-national administrative boundaries for Senegal.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p>Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:</p>
+<p>Each layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:</p>
 <ul class="simple">
 <li><p><strong>ADM0</strong></p></li>
 </ul>
@@ -689,12 +715,12 @@ In both cases, the script expects input data to be provided according to some ru
 </tbody>
 </table>
 <ul class="simple">
-<li><p><strong>HAZARD</strong> layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">HZD</span></code>_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
-<li><p><strong>EXPOSURE</strong> are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">EXP</span></code>.tif. The same suggestion about resolution applies here.</p>
+<li><p>Download probabilistic <a class="reference internal" href="global-hazard.html"><span class="doc std std-doc"><strong>hazard data</strong></span></a>, consisting of multiple RP scenarios. Each scenario is expected as a raster file (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">HZD</span></code>_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
+<li><p>Download <a class="reference internal" href="global-exposure.html"><span class="doc std std-doc"><strong>exposure data</strong></span></a> for population, built-up and agricolture. Layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">EXP</span></code>.tif.</p>
 <ul>
-<li><p>Population from GHSL, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</p></li>
-<li><p>Built-up from World Settlement Footprint or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BU.tif</p></li>
-<li><p>Agriculture from land cover map, ESA land cover or equivalent, 90 m: <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</strong>: Population, as from <a class="reference external" href="https://ghsl.jrc.ec.europa.eu/download.php?ds=pop">Global Human Settlement Layer</a> or <a class="reference external" href="https://hub.worldpop.org/geodata/listing?id=79">Worldpop</a></p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BU.tif</strong>: Built-up from <a class="reference external" href="https://ghsl.jrc.ec.europa.eu/download.php?ds=bu">Global Human Settlement Layer</a> or <a class="reference external" href="https://download.geoservice.dlr.de/WSF2019/">World Settlement Footprint</a></p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</strong>: Agriculture from land cover map, <a class="reference external" href="https://esa-worldcover.org/en">ESA land cover</a> or equivalent</p></li>
 </ul>
 </li>
 </ul>
@@ -703,22 +729,19 @@ In both cases, the script expects input data to be provided according to some ru
 <p>When resampling exposure layers to a lower resolution, it is <strong>strongly recommended</strong> to align the resampled grid to exactly match the hazard grid, or viceversa.</p>
 </div>
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
+<ul>
+<li><p>Move verified input data into the proper folders</p>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>All spatial data must use the same CRS, suggested: <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code> (WGS 84)</p>
 </div>
+</li>
+<li><p>Use the interface to select the settings and start the processing</p></li>
+</ul>
 <hr>
 </section>
-<section id="environment-and-libraries">
-<h2>Environment and libraries<a class="headerlink" href="#environment-and-libraries" title="Permalink to this headline">#</a></h2>
-<ul>
-<li><p>The script requires python3 - conda or mamba are encouraged</p></li>
-<li><p>Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
-In Anaconda cmd prompt:</p>
-<p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">CCDR</span> <span class="pre">--file</span> <span class="pre">&lt;dir/win_env.yml&gt;</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">CCDR</span></code></p>
-</li>
-</ul>
+<section id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">#</a></h2>
 <p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file inside the notebook directories to specify the working directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
 
@@ -875,7 +898,7 @@ E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.</
   
     By M. Amadio (GFDRR)<br/>
   
-    Last updated on Oct 04, 2023.<br/>
+    Last updated on Oct 13, 2023.<br/>
     <div class="extra_footer">
       <div>
     <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>

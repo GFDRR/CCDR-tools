@@ -1,4 +1,4 @@
-# Tools setup
+# TOOLS SETUP
 
 The analytical scripts can be downloaded as:
 
@@ -7,24 +7,39 @@ Read more about [**Jupyter Notebooks**](https://jupyter-notebook.readthedocs.io/
 - [**Python code**](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization): give the user more control, and has overall better performances making use of parallel processing.
 
 These can be downloaded and exectuted on any windows or linux machine. 
-In both cases, the script expects input data to be provided according to some rules.
+In both cases, the script requires proper environment setup and input data to be provided according to the instructions below.
 
-### Expected directories and input format
+## Python environment
 
-The script expects input data folders to be structured as:
+- Python 3 needs to be installed on your system. We suggest the latest [Anaconda](https://www.anaconda.com/download) distribution. Mamba is also encouraged.
+- Create new `CCDR-tools` environment according to your operating system: win.yml or linux.yml.
+  In Anaconda cmd prompt:
 
-```
-Work dir/
- - Hazard.ipynb
- - common.py
- - Data/
-   - ADM	Administrative unit layer for each country
-   - HZD	Hazard layers
-   - EXP	Exposure layers - Population (count), Built-up (ratio or binary), Agriculture (ratio or binary)
-   - RSK	Output directory
-```
+	`conda create --name CCDR --file <dir/win_env.yml>`
+	
+	`activate CCDR`
 
-- **ADMINISTRATIVE** boundaries are provided as geopackage files named as `ISO`_ADM.gpkg (e.g. `NPL`_ADM.gpkg) made of multiple layers represening different administrative boundary levels.
+## Input data management
+
+- Download the latest version of the notebooks or the the parallel code.
+- Create folder structure as:
+
+  ```
+  Work dir/
+   - Hazard.ipynb	Place the notebooks and related files in the main work directory
+   - common.py
+   - Parallel/		Place the parallel processing script in a sub-folder
+     - ...
+   - Data/
+     - ADM		Administrative unit layer for each country
+     - HZD		Hazard layers
+     - EXP		Exposure layers - Population (count), Built-up (ratio or binary), Agriculture (ratio or binary)
+     - RSK		Output directory
+  ```
+
+- Download **country boundaries** for multiple administrative levels (national, sub-national) sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.
+
+Boundaries must be provided as a geopackage files named as `ISO`_ADM.gpkg (e.g. `NPL`_ADM.gpkg) containing multiple layers, each one represening a different administrative boundary levels:
 
 ```
 - ISO_ADM
@@ -42,7 +57,7 @@ align: center
 Example of sub-national administrative boundaries for Senegal.
 ```
 
-Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:
+Each layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:
 
   - **ADM0**
 
@@ -68,13 +83,12 @@ Each ADM layer should include relative ADMi_CODE and ADMi_NAME across levels to 
   |---|---|---|---|---|---|---|---|
   | Integer | String (20) | Integer | String(20) | Integer | String(20) | Integer | String(20) |
 
-- **HAZARD** layers are expected as raster files (`.tif`) named as `ISO`_`HZD`_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
+- Download probabilistic [**hazard data**](global-hazard.md), consisting of multiple RP scenarios. Each scenario is expected as a raster file (`.tif`) named as `ISO`_`HZD`_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
 
-- **EXPOSURE** are expected as raster files (`.tif`) named as `ISO`_`EXP`.tif. The same suggestion about resolution applies here.
-
-	- Population from GHSL, 90 m: `ISO`_POP.tif
-	- Built-up from World Settlement Footprint or equivalent, 90 m: `ISO`_BU.tif
-	- Agriculture from land cover map, ESA land cover or equivalent, 90 m: `ISO`_AGR.tif
+- Download [**exposure data**](global-exposure.md) for population, built-up and agricolture. Layers are expected as raster files (`.tif`) named as `ISO`_`EXP`.tif.
+	- **`ISO`_POP.tif**: Population, as from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=pop) or [Worldpop](https://hub.worldpop.org/geodata/listing?id=79)
+	- **`ISO`_BU.tif**: Built-up from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=bu) or [World Settlement Footprint](https://download.geoservice.dlr.de/WSF2019/) 
+	- **`ISO`_AGR.tif**: Agriculture from land cover map, [ESA land cover](https://esa-worldcover.org/en) or equivalent
 
 ```{caution}
 When resampling exposure layers to a lower resolution, it is **strongly recommended** to align the resampled grid to exactly match the hazard grid, or viceversa.
@@ -82,20 +96,15 @@ When resampling exposure layers to a lower resolution, it is **strongly recommen
 
 <img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
 
-```{caution}
-All spatial data must use the same CRS, suggested: `EPSG 4326` (WGS 84)
-```
+- Move verified input data into the proper folders
+  ```{caution}
+  All spatial data must use the same CRS, suggested: `EPSG 4326` (WGS 84)
+  ```
+- Use the interface to select the settings and start the processing
 
 <hr>
 
-## Environment and libraries
-- The script requires python3 - conda or mamba are encouraged
-- Create a new environment named CCDR based on win_env.yml o linux_env.yml depending on your operating system.
-  In Anaconda cmd prompt:
-
-	`conda create --name CCDR --file <dir/win_env.yml>`
-	
-	`activate CCDR`
+## Settings
 
 Edit the `.env` file inside the notebook directories to specify the working directory:
 
