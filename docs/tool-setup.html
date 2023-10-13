@@ -497,8 +497,8 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#run-the-analysis">
-     Run the analysis
+    <a class="reference internal nav-link" href="#run-the-analysis-with-parallel-processing">
+     Run the analysis with parallel processing
     </a>
    </li>
   </ul>
@@ -553,8 +553,8 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#run-the-analysis">
-     Run the analysis
+    <a class="reference internal nav-link" href="#run-the-analysis-with-parallel-processing">
+     Run the analysis with parallel processing
     </a>
    </li>
   </ul>
@@ -583,10 +583,12 @@ In both cases, the script requires proper environment setup and input data to be
 <h2>Python environment<a class="headerlink" href="#python-environment" title="Permalink to this headline">#</a></h2>
 <ul>
 <li><p>Python 3 needs to be installed on your system. We suggest the latest <a class="reference external" href="https://www.anaconda.com/download">Anaconda</a> distribution. Mamba is also encouraged.</p></li>
-<li><p>Create new <code class="docutils literal notranslate"><span class="pre">CCDR-tools</span></code> environment according to your operating system: win.yml or linux.yml.
+<li><p>Create new <code class="docutils literal notranslate"><span class="pre">CCDR</span></code> environment according to your operating system: win.yml or linux.yml.
 In Anaconda cmd prompt:</p>
-<p><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">--name</span> <span class="pre">CCDR</span> <span class="pre">--file</span> <span class="pre">&lt;dir/win_env.yml&gt;</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">activate</span> <span class="pre">CCDR</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>conda create --name CCDR --file &lt;dir/win_env.yml&gt;`
+activate CCDR
+</pre></div>
+</div>
 </li>
 </ul>
 </section>
@@ -608,8 +610,7 @@ In Anaconda cmd prompt:</p>
 </pre></div>
 </div>
 </li>
-<li><p>Download <strong>country boundaries</strong> for multiple administrative levels (national, sub-national) sourced from <a class="reference external" href="https://data.humdata.org/dataset">HDX</a> or <a class="reference external" href="https://www.geoboundaries.org">Geoboundaries</a>. Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.</p></li>
-</ul>
+<li><p>Download <strong>country boundaries</strong> for multiple administrative levels (national, sub-national) sourced from <a class="reference external" href="https://data.humdata.org/dataset">HDX</a> or <a class="reference external" href="https://www.geoboundaries.org">Geoboundaries</a>. Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.</p>
 <p>Boundaries must be provided as a geopackage files named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_ADM.gpkg (e.g. <code class="docutils literal notranslate"><span class="pre">NPL</span></code>_ADM.gpkg) containing multiple layers, each one represening a different administrative boundary levels:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">ISO_ADM</span>
   <span class="o">-</span> <span class="n">ADM0</span> <span class="p">(</span><span class="n">country</span><span class="p">)</span>
@@ -714,7 +715,7 @@ In Anaconda cmd prompt:</p>
 </tr>
 </tbody>
 </table>
-<ul>
+</li>
 <li><p>Download probabilistic <a class="reference internal" href="global-hazard.html"><span class="doc std std-doc"><strong>hazard data</strong></span></a>, consisting of multiple RP scenarios. Each scenario is expected as a raster file (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">HZD</span></code>_RPi.tif (exampe for Nepal flood, RP100: <code class="docutils literal notranslate"><span class="pre">NPL_FL_RP100.tif</span></code>). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.</p></li>
 <li><p>Download <a class="reference internal" href="global-exposure.html"><span class="doc std std-doc"><strong>exposure data</strong></span></a> for population, built-up and agricolture. Layers are expected as raster files (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as <code class="docutils literal notranslate"><span class="pre">ISO</span></code>_<code class="docutils literal notranslate"><span class="pre">EXP</span></code>.tif.</p>
 <ul class="simple">
@@ -729,7 +730,6 @@ In Anaconda cmd prompt:</p>
 <p>All spatial data must use the same CRS, suggested: <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code> (WGS 84)</p>
 </div>
 </li>
-<li><p>Use the interface to select the settings and start the processing</p></li>
 </ul>
 <hr>
 </section>
@@ -755,7 +755,15 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <section id="run-jupyter-notebooks">
 <h2>Run Jupyter notebooks<a class="headerlink" href="#run-jupyter-notebooks" title="Permalink to this headline">#</a></h2>
 <ul>
+<li><p>Be sure to activate the correct environment</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">activate</span> <span class="n">CCDR</span>
+</pre></div>
+</div>
+</li>
 <li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Dir</span>\<span class="n">Workdir</span>\
+</pre></div>
+</div>
 <figure class="align-center" id="id2">
 <img alt="../_images/cmd_prompt.png" src="../_images/cmd_prompt.png" />
 <figcaption>
@@ -763,7 +771,14 @@ CACHE_DIR = ${DATA_DIR}/cache/
 </figcaption>
 </figure>
 </li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code>. The interface should pop up in your browser.</p></li>
+<li><p>Run the jupyter notebook.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>The interface should pop up in your browser.</p>
+<ul class="simple">
 <li><p>You can now run the <a class="reference internal" href="run-baseline.html"><span class="doc std std-doc">baseline risk screening</span></a>.</p></li>
 </ul>
 </section>
@@ -821,8 +836,8 @@ If ‘None’, the default <code class="docutils literal notranslate"><span clas
 </pre></div>
 </div>
 </section>
-<section id="run-the-analysis">
-<h3>Run the analysis<a class="headerlink" href="#run-the-analysis" title="Permalink to this headline">#</a></h3>
+<section id="run-the-analysis-with-parallel-processing">
+<h3>Run the analysis with parallel processing<a class="headerlink" href="#run-the-analysis-with-parallel-processing" title="Permalink to this headline">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>main.py
 </pre></div>
 </div>
