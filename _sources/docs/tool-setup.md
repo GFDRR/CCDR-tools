@@ -126,12 +126,6 @@ CACHE_DIR = ${DATA_DIR}/cache/
   ```bash
   cd C:\Dir\Workdir\
   ```
-  ```{figure} images/cmd_prompt.png
-  ---
-  align: center
-  ---
-  Example of Anaconda cmd prompt
-  ```
 - Run the jupyter notebook.
   ```bash
   jupyter notebook
