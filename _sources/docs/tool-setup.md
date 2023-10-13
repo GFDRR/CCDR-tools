@@ -26,7 +26,7 @@ In both cases, the script requires proper environment setup and input data to be
 
   ```
   Work dir/
-   - Hazard.ipynb	Place the notebooks and related files in the main work directory
+   - Hazard.ipynb		Place the notebooks and related files in the main work directory
    - common.py
    - Parallel/		Place the parallel processing script in a sub-folder
      - ...
