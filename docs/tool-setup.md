@@ -59,25 +59,25 @@ Example of sub-national administrative boundaries for Senegal.
 
 Each layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:
 
-  - **ADM0**
+  - **ADM0** layer
 
   | ISO3166_a2 | ISO3166_a3 | ADM0_CODE | ADM0_NAME | 
   |---|---|---|---|
   | String(2) | String(3) | Integer | String (20) |
  
-  - **ADM1**
+  - **ADM1** layer
 
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | 
   |---|---|---|---|
   | Integer | String (20) | Integer | String(20) |
 
-  - **ADM2**
+  - **ADM2** layer
 
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | 
   |---|---|---|---|---|---|
   | Integer | String (20) | Integer | String(20) | Integer | String(20) |
 
-  - **ADM3**
+  - **ADM3** layer
   
   | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | ADM3_CODE | ADM3_NAME | 
   |---|---|---|---|---|---|---|---|
@@ -89,12 +89,6 @@ Each layer should include relative ADMi_CODE and ADMi_NAME across levels to faci
 	- **`ISO`_POP.tif**: Population, as from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=pop) or [Worldpop](https://hub.worldpop.org/geodata/listing?id=79)
 	- **`ISO`_BU.tif**: Built-up from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=bu) or [World Settlement Footprint](https://download.geoservice.dlr.de/WSF2019/) 
 	- **`ISO`_AGR.tif**: Agriculture from land cover map, [ESA land cover](https://esa-worldcover.org/en) or equivalent
-
-```{caution}
-When resampling exposure layers to a lower resolution, it is **strongly recommended** to align the resampled grid to exactly match the hazard grid, or viceversa.
-```
-
-<img width=600 src="https://user-images.githubusercontent.com/44863827/157419284-64e16285-6284-45ba-bc9c-01eab713c2f1.png">
 
 - Move verified input data into the proper folders
   ```{caution}
