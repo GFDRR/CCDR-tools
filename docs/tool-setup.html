@@ -603,10 +603,10 @@ activate<span class="w"> </span>CCDR-tools
  <span class="o">-</span> <span class="n">Parallel</span><span class="o">/</span>		<span class="n">Place</span> <span class="n">the</span> <span class="n">parallel</span> <span class="n">processing</span> <span class="n">script</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">sub</span><span class="o">-</span><span class="n">folder</span>
    <span class="o">-</span> <span class="o">...</span>
  <span class="o">-</span> <span class="n">Data</span><span class="o">/</span>
-   <span class="o">-</span> <span class="n">ADM</span>		<span class="n">Administrative</span> <span class="n">unit</span> <span class="n">layer</span> <span class="k">for</span> <span class="n">each</span> <span class="n">country</span>
-   <span class="o">-</span> <span class="n">HZD</span>		<span class="n">Hazard</span> <span class="n">layers</span>
-   <span class="o">-</span> <span class="n">EXP</span>		<span class="n">Exposure</span> <span class="n">layers</span> <span class="o">-</span> <span class="n">Population</span> <span class="p">(</span><span class="n">count</span><span class="p">),</span> <span class="n">Built</span><span class="o">-</span><span class="n">up</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">),</span> <span class="n">Agriculture</span> <span class="p">(</span><span class="n">ratio</span> <span class="ow">or</span> <span class="n">binary</span><span class="p">)</span>
-   <span class="o">-</span> <span class="n">RSK</span>		<span class="n">Output</span> <span class="n">directory</span>
+   <span class="o">-</span> <span class="n">ADM</span><span class="o">/</span>		<span class="n">Administrative</span> <span class="n">boundaries</span> <span class="n">layer</span> <span class="k">for</span> <span class="n">each</span> <span class="n">country</span>
+   <span class="o">-</span> <span class="n">HZD</span><span class="o">/</span>		<span class="n">Hazard</span> <span class="n">layers</span>
+   <span class="o">-</span> <span class="n">EXP</span><span class="o">/</span>		<span class="n">Exposure</span> <span class="n">layers</span>
+   <span class="o">-</span> <span class="n">RSK</span><span class="o">/</span>		<span class="n">Output</span> <span class="n">directory</span>
 </pre></div>
 </div>
 </li>
@@ -721,10 +721,24 @@ activate<span class="w"> </span>CCDR-tools
 <ul class="simple">
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_POP.tif</strong>: Population, as from <a class="reference external" href="https://ghsl.jrc.ec.europa.eu/download.php?ds=pop">Global Human Settlement Layer</a> or <a class="reference external" href="https://hub.worldpop.org/geodata/listing?id=79">Worldpop</a>. Value as number of peope per pixel.</p></li>
 <li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_BU.tif</strong>: Built-up from <a class="reference external" href="https://ghsl.jrc.ec.europa.eu/download.php?ds=bu">Global Human Settlement Layer</a> or <a class="reference external" href="https://download.geoservice.dlr.de/WSF2019/">World Settlement Footprint</a>. Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel).</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</strong>: Agriculture from land cover map, <a class="reference external" href="https://esa-worldcover.org/en">ESA land cover</a> or equivalent. Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel)</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ISO</span></code>_AGR.tif</strong>: Agriculture from land cover map, <a class="reference external" href="https://esa-worldcover.org/en">ESA land cover</a> or equivalent. Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel).</p></li>
 </ul>
 </li>
-<li><p>Move verified input data into the proper folders</p>
+<li><p>Move verified input data into the proper folders:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Work</span> <span class="nb">dir</span><span class="o">/</span><span class="n">Data</span><span class="o">/</span>
+<span class="o">-</span> <span class="n">ADM</span><span class="o">/</span>
+  <span class="o">-</span> <span class="n">ISO_ADM</span><span class="o">.</span><span class="n">gpkg</span>
+<span class="o">-</span> <span class="n">HZD</span><span class="o">/</span>
+  <span class="o">-</span> <span class="n">ISO_FL_RP10</span><span class="o">.</span><span class="n">tif</span>
+  <span class="o">-</span> <span class="n">ISO_FL_RP100</span><span class="o">.</span><span class="n">tif</span>
+  <span class="o">-</span> <span class="n">ISO_FL_RP1000</span><span class="o">.</span><span class="n">tif</span>
+  <span class="o">-</span> <span class="o">...</span>
+<span class="o">-</span> <span class="n">EXP</span><span class="o">/</span>
+  <span class="o">-</span> <span class="n">ISO_POP</span><span class="o">.</span><span class="n">tif</span>
+  <span class="o">-</span> <span class="n">ISO_BU</span><span class="o">.</span><span class="n">tif</span>
+  <span class="o">-</span> <span class="n">ISO_AGR</span><span class="o">.</span><span class="n">tif</span>
+</pre></div>
+</div>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>All spatial data must use the same CRS, suggested: <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code> (WGS 84)</p>
