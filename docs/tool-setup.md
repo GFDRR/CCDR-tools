@@ -12,12 +12,12 @@ In both cases, the script requires proper environment setup and input data to be
 ## Python environment
 
 - Python 3 needs to be installed on your system. We suggest the latest [Anaconda](https://www.anaconda.com/download) distribution. Mamba is also encouraged.
-- Create new `CCDR-tools` environment according to your operating system: win.yml or linux.yml.
+- Create new `CCDR` environment according to your operating system: win.yml or linux.yml.
   In Anaconda cmd prompt:
-
-	`conda create --name CCDR --file <dir/win_env.yml>`
-	
-	`activate CCDR`
+  ```
+  conda create --name CCDR --file <dir/win_env.yml>`
+  activate CCDR
+  ```
 
 ## Input data management
 
@@ -39,25 +39,25 @@ In both cases, the script requires proper environment setup and input data to be
 
 - Download **country boundaries** for multiple administrative levels (national, sub-national) sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.
 
-Boundaries must be provided as a geopackage files named as `ISO`_ADM.gpkg (e.g. `NPL`_ADM.gpkg) containing multiple layers, each one represening a different administrative boundary levels:
+  Boundaries must be provided as a geopackage files named as `ISO`_ADM.gpkg (e.g. `NPL`_ADM.gpkg) containing multiple layers, each one represening a different administrative boundary levels:
 
-```
-- ISO_ADM
-  - ADM0 (country)
-  - ADM1 (first-level sub-national division)
-  - ADM2 (second-level sub-national division)
-  - ADM3 (third-level sub-national division)
-  - ...
-```
+  ```
+  - ISO_ADM
+    - ADM0 (country)
+    - ADM1 (first-level sub-national division)
+    - ADM2 (second-level sub-national division)
+    - ADM3 (third-level sub-national division)
+    - ...
+  ```
 
-```{figure} images/adm_lvl.jpg
----
-align: center
----
-Example of sub-national administrative boundaries for Senegal.
-```
+  ```{figure} images/adm_lvl.jpg
+  ---
+  align: center
+  ---
+  Example of sub-national administrative boundaries for Senegal.
+  ```
 
-Each layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:
+  Each layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:
 
   - **ADM0** layer
 
@@ -94,8 +94,6 @@ Each layer should include relative ADMi_CODE and ADMi_NAME across levels to faci
   ```{caution}
   All spatial data must use the same CRS, suggested: `EPSG 4326` (WGS 84)
   ```
-- Use the interface to select the settings and start the processing
-
 <hr>
 
 ## Settings
@@ -120,14 +118,25 @@ CACHE_DIR = ${DATA_DIR}/cache/
 
 ## Run Jupyter notebooks
 
+- Be sure to activate the correct environment
+  ```
+  activate CCDR
+  ```
 - Navigate to your working directory: `cd <Your work directory>`
+  ```
+  cd C:\Dir\Workdir\
+  ```
   ```{figure} images/cmd_prompt.png
   ---
   align: center
   ---
   Example of Anaconda cmd prompt
   ```
-- Run `jupyter notebook`. The interface should pop up in your browser.
+- Run the jupyter notebook.
+  ```
+  jupyter notebook
+  ```
+The interface should pop up in your browser.
 - You can now run the [baseline risk screening](run-baseline.md).
 
 ## Parallel processing
@@ -179,7 +188,7 @@ Example for class analysis:
     save_check_raster  = False
 ```
 
-### Run the analysis
+### Run the analysis with parallel processing
 
 ```bash
 $ python main.py
