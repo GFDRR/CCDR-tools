@@ -12,11 +12,11 @@ In both cases, the script requires proper environment setup and input data to be
 ## Python environment
 
 - Python 3 needs to be installed on your system. We suggest the latest [Anaconda](https://www.anaconda.com/download) distribution. Mamba is also encouraged.
-- Create new `CCDR` environment according to your operating system: win.yml or linux.yml.
+- Create new `CCDR-tools` environment according to your operating system: win.yml or linux.yml.
   In Anaconda cmd prompt:
-  ```
-  conda create --name CCDR --file <dir/win_env.yml>`
-  activate CCDR
+  ```bash
+  conda create --name CCDR-tools --file <dir/win_env.yml>`
+  activate CCDR-tools
   ```
 
 ## Input data management
@@ -119,11 +119,11 @@ CACHE_DIR = ${DATA_DIR}/cache/
 ## Run Jupyter notebooks
 
 - Be sure to activate the correct environment
-  ```
-  activate CCDR
+  ```bash
+  activate CCDR-tools
   ```
 - Navigate to your working directory: `cd <Your work directory>`
-  ```
+  ```bash
   cd C:\Dir\Workdir\
   ```
   ```{figure} images/cmd_prompt.png
@@ -133,7 +133,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
   Example of Anaconda cmd prompt
   ```
 - Run the jupyter notebook.
-  ```
+  ```bash
   jupyter notebook
   ```
 The interface should pop up in your browser.

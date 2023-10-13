@@ -583,10 +583,10 @@ In both cases, the script requires proper environment setup and input data to be
 <h2>Python environment<a class="headerlink" href="#python-environment" title="Permalink to this headline">#</a></h2>
 <ul>
 <li><p>Python 3 needs to be installed on your system. We suggest the latest <a class="reference external" href="https://www.anaconda.com/download">Anaconda</a> distribution. Mamba is also encouraged.</p></li>
-<li><p>Create new <code class="docutils literal notranslate"><span class="pre">CCDR</span></code> environment according to your operating system: win.yml or linux.yml.
+<li><p>Create new <code class="docutils literal notranslate"><span class="pre">CCDR-tools</span></code> environment according to your operating system: win.yml or linux.yml.
 In Anaconda cmd prompt:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>conda create --name CCDR --file &lt;dir/win_env.yml&gt;`
-activate CCDR
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>CCDR-tools<span class="w"> </span>--file<span class="w"> </span>&lt;dir/win_env.yml&gt;<span class="sb">`</span>
+activate<span class="w"> </span>CCDR-tools
 </pre></div>
 </div>
 </li>
@@ -756,12 +756,12 @@ CACHE_DIR = ${DATA_DIR}/cache/
 <h2>Run Jupyter notebooks<a class="headerlink" href="#run-jupyter-notebooks" title="Permalink to this headline">#</a></h2>
 <ul>
 <li><p>Be sure to activate the correct environment</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">activate</span> <span class="n">CCDR</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>activate<span class="w"> </span>CCDR-tools
 </pre></div>
 </div>
 </li>
 <li><p>Navigate to your working directory: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">&lt;Your</span> <span class="pre">work</span> <span class="pre">directory&gt;</span></code></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">C</span><span class="p">:</span>\<span class="n">Dir</span>\<span class="n">Workdir</span>\
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>C:<span class="se">\D</span>ir<span class="se">\W</span>orkdir<span class="se">\</span>
 </pre></div>
 </div>
 <figure class="align-center" id="id2">
@@ -772,7 +772,7 @@ CACHE_DIR = ${DATA_DIR}/cache/
 </figure>
 </li>
 <li><p>Run the jupyter notebook.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jupyter</span> <span class="n">notebook</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter<span class="w"> </span>notebook
 </pre></div>
 </div>
 </li>
