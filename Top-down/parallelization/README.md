@@ -76,19 +76,24 @@ OUTPUT_DIR = ${DATA_DIR}/output
 Input data layers must be named and placed according to some rules, as follows:
 
 - Inside the workdir, the data folders must follow this structure:
-
-```
+  ```
     DATA_DIR/ADM: Administrative boundaries as '.gpkg' (multiple levels)
     DATA_DIR/HZD: Hazard layers as '.tif' using CRS 4326
     DATA_DIR/EXP: Exposure layers as '.tif' using CRS 4326
+  ```
+- Datasets naming requires to specify [`{ISO3166_a3}`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code followed by specific data identifier. 
+  ```
+    DATA_DIR/ADM: {ISO}_ADM.gpkg		E.g. SEN_ADM.gpkg
+    DATA_DIR/HZD: {ISO}_{HZD}_RP{n}.tif		E.g. SEN_FL_RP100.tif
+    DATA_DIR/EXP: {ISO}_{EXP}.gpkg		E.g. SEN_POP.tif
+  ```
+Allowed exposure categories are:
 ```
-- To name datasets, use [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code followed by specific data identifier - which is not fixed, you need to edit it in `runAnalysis.py`.
+	- **`ISO`_POP.tif**: Population, as from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=pop) or [Worldpop](https://hub.worldpop.org/geodata/listing?id=79). Value representing population count per cell.
+	- **`ISO`_BU.tif**: Built-up from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=bu) or [World Settlement Footprint](https://download.geoservice.dlr.de/WSF2019/). Value as density (0-1) per cell.
+	- **`ISO`_AGR.tif**: Agriculture from land cover map, [ESA land cover](https://esa-worldcover.org/en) or equivalent. Value as density (0-1) per cell.
+```
 
-```
-    CCDR_tools/ADM/SEN_ADM.gpkg
-    CCDR_tools/HZD/SEN_FL_RP10.tif
-    CCDR_tools/EXP/SEN_POP.tif
-```
 - Read more about data formatting in the [documentation](https://gfdrr.github.io/CCDR-tools/docs/tool-setup.html).
 
 ## Setting parameters
