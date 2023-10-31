@@ -10,42 +10,62 @@
 # SETUP
 We strongly recommend using the mamba package manager.
 
-## Using MAMBA
+## Using MAMBA (WINDOWS)
 
 Environment creation:
-
 ```bash
-$ mamba create -n CCDR-tools --file Top-down/notebooks/win_env.yml
+$ mamba create -n CCDR-tools --file Top-down/parallelization/win_env.yml
 ```
-
 Updating the environment spec (e.g., if package version changed or a package is added/removed):
-
 ```bash
 $ mamba list -n CCDR-tools --explicit > win_env.yml
 ```
-
 Updating the environment (e.g., after code updates)
-
 ```bash
-$ mamba update -n CCDR-tools --file Top-down/notebooks/win_env.yml
+$ mamba update -n CCDR-tools --file Top-down/parallelization/win_env.yml
 ```
 
-## Using CONDA
+## Using MAMBA (LINUX)
 
 Environment creation:
-
 ```bash
-$ conda create -name CCDR-tools --file Top-down/notebooks/win_env.yml
+$ mamba create -n CCDR-tools --file Top-down/parallelization/linux_env.yml
 ```
-
+Updating the environment spec:
+```bash
+$ mamba list -n CCDR-tools --explicit > linux_env.yml
+```
 Updating the environment (e.g., after code updates)
-
 ```bash
-$ conda update -name CCDR-tools --file Top-down/notebooks/win_env.yml
+$ mamba update -n CCDR-tools --file Top-down/parallelization/linux_env.yml
 ```
 
-Activate the environment (e.g., after code updates)
+## Using CONDA (WINDOWS)
 
+Environment creation:
+```bash
+$ conda create -name CCDR-tools --file Top-down/parallelization/win_env.yml
+```
+Updating the environment (e.g., after code updates)
+```bash
+$ conda update -name CCDR-tools --file Top-down/parallelization/win_env.yml
+```
+Activate the environment (e.g., after code updates)
+```bash
+$ activate CCDR-tools
+```
+
+## Using CONDA (LINUX)
+
+Environment creation:
+```bash
+$ conda create -name CCDR-tools --file Top-down/parallelization/linux_env.yml
+```
+Updating the environment (e.g., after code updates)
+```bash
+$ conda update -name CCDR-tools --file Top-down/parallelization/linux_env.yml
+```
+Activate the environment (e.g., after code updates)
 ```bash
 $ activate CCDR-tools
 ```
