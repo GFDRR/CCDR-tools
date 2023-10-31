@@ -8,7 +8,7 @@
   - Removed the RP_EAI columns for better presentation of the results
 
 # SETUP
-We strongly recommend using the mamba package manager.
+We strongly recommend using the mamba or conda package manager.
 
 ## Using MAMBA (WINDOWS)
 
@@ -50,10 +50,6 @@ Updating the environment (e.g., after code updates)
 ```bash
 $ conda update -name CCDR-tools --file Top-down/parallelization/win_env.yml
 ```
-Activate the environment (e.g., after code updates)
-```bash
-$ activate CCDR-tools
-```
 
 ## Using CONDA (LINUX)
 
@@ -65,7 +61,8 @@ Updating the environment (e.g., after code updates)
 ```bash
 $ conda update -name CCDR-tools --file Top-down/parallelization/linux_env.yml
 ```
-Activate the environment (e.g., after code updates)
+-------------
+Activate the environment
 ```bash
 $ activate CCDR-tools
 ```
