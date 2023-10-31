@@ -44,6 +44,12 @@ Updating the environment (e.g., after code updates)
 $ conda update -name CCDR-tools --file Top-down/notebooks/win_env.yml
 ```
 
+Activate the environment (e.g., after code updates)
+
+```bash
+$ activate CCDR-tools
+```
+
 # SCRIPT OVERVIEW
 
 - `.env` specifies the directories where data are stored
