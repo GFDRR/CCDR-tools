@@ -594,6 +594,16 @@ Note that high-resolution population mapping relies on census projections distri
 <p><span class="caption-number">Fig. 19 </span><span class="caption-text">Built-up land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019 and resampled into 100 m built-up density grid.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>How to create the WSF19 layer and resample it to 100 m for faster analysis.</p>
+<ol class="simple">
+<li><p>Download country tiles from WSF <a class="reference external" href="https://download.geoservice.dlr.de/WSF2019">download page</a></p></li>
+<li><p>Load tiles in QGIS and build a virtual raster made of all tiles.</p></li>
+<li><p>Use GDAL Warp (reproject) on the vrt, set the resolution to original resolution x 10 (e.g. 8.983e-05 becomes 8.983e-04). Resampling method: “mean”. Advanced parameters &gt; creation profile: “deflate”. This will return a resampled layer (c.a. 100m).</p></li>
+<li><p>Use GDAL Calc on step 3 output and set the calculation as A/255. This will return a 0-1 raster.</p></li>
+</ol>
+</div>
 </section>
 <section id="esa-world-cover">
 <h2>ESA World Cover<a class="headerlink" href="#esa-world-cover" title="Permalink to this headline">#</a></h2>
@@ -685,7 +695,7 @@ Note that high-resolution population mapping relies on census projections distri
   
     By M. Amadio (GFDRR)<br/>
   
-    Last updated on Oct 31, 2023.<br/>
+    Last updated on Nov 02, 2023.<br/>
     <div class="extra_footer">
       <div>Cite as: <i>"Amadio M. (GFDRR) - CCDR tools data and methodology, 2023. Available at https://gfdrr.github.io/CCDR-tools"</i><br>
     <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>

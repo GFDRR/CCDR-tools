@@ -44,6 +44,14 @@ align: center
 Built-up land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019 and resampled into 100 m built-up density grid.
 ```
 
+```{note}
+How to create the WSF19 layer and resample it to 100 m for faster analysis.
+1. Download country tiles from WSF [download page](https://download.geoservice.dlr.de/WSF2019)
+2. Load tiles in QGIS and build a virtual raster made of all tiles.
+3. Use GDAL Warp (reproject) on the vrt, set the resolution to original resolution x 10 (e.g. 8.983e-05 becomes 8.983e-04). Resampling method: "mean". Advanced parameters > creation profile: "deflate". This will return a resampled layer (c.a. 100m).
+4. Use GDAL Calc on step 3 output and set the calculation as A/255. This will return a 0-1 raster.
+```
+
 ### ESA World Cover
 
 The 2020 WorldCover dataset at 10m resolution from the European Space Agency can be used to identify specific types, e.g. agricultural land.
