@@ -66,7 +66,7 @@ Input data layers must be named and placed according to some rules, as follows:
     DATA_DIR/HZD: Hazard layers as '.tif' using CRS 4326
     DATA_DIR/EXP: Exposure layers as '.tif' using CRS 4326
 ```
-- To name datasets, use [`ISO3166_a2`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code followed by specific data identifier - which is not fixed, you need to edit it in `runAnalysis.py`.
+- To name datasets, use [`ISO3166_a2`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code followed by specific data identifier - which is not fixed, you need to edit it in `runAnalysis.py`.
 
 ```
     CCDR_tools/ADM/PK_ADM.gpkg
@@ -78,7 +78,7 @@ Input data layers must be named and placed according to some rules, as follows:
 ## Setting parameters
 
 Edit the `main.py` file to specify:
-- **country (`country`)**: [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
+- **country (`country`)**: [`ISO3166_a2`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code
 - **hazard type (`haz_cat`)**: `'FL'` for river floods; `'PL'` for pluvial floods; `'CF'` for coastal floods; 
 - **return periods (`return_periods`)**: list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
 - **exposure categories (`exp_cat_list`)**: list of exposure categories: `['POP', 'BU', 'AGR']`
