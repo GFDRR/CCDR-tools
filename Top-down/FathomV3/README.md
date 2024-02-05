@@ -5,7 +5,7 @@ This script runs on Fathom v3 scenarios in combination with population, exposure
 
 
 # STATUS
-  - The number of processors used (nCores) is now selected automatic, using all available cores for the first zonal_stats and then using 1 core per RP analysis (in case there are more RPs then available cores, it will use all cores and serialize the analysis accordingly).
+  - The number of processors used (nCores) is selected automatically, using all available cores for the first zonal_stats and then using 1 core per RP analysis (in case there are more RPs then available cores, it will use all cores and serialize the analysis accordingly).
   - Split the RPs computation into Exposure/Impact and EAE/EAI computation, the later becoming a stand-alone function
   - Computes now the EAE/EAI using 3 different formulation, a) Lower Bound LB; b) Upper Bound UB, and; c) Mean of the two
   - Removed the RP_EAI columns for better presentation of the results
@@ -124,7 +124,7 @@ Example of `main.py` running flood analysis (`haz_cat`) over Cambodia (`country`
 ## Running the analysis
 
 ```bash
-$ python main.py
+$ python FathomV3.py
 ```
 
 The analysis runs on all selected exposed categories, in sequence. Depending on the number of cores, the size and resolution of the data, and power of CPU, the analysis can take from less than a minute to few minutes.
