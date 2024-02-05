@@ -1,7 +1,7 @@
 # FATHOM v3 - FLOOD EXPOSURE AND RISK PROCESSING
 
-This script runs on Fathom v3 scenarios in combination with population, exposure and land cover maps to produce Expeceted Annual Exposure (EAE) or Expected Annual Impact (EAI). Please check https://gfdrr.github.io/CCDR-tools for more details on the approach.
-
+This python script processes Fathom v3 scenarios in combination with population, exposure and land cover maps to produce Expeceted Annual Exposure (EAE) or Expected Annual Impact (EAI). Please check https://gfdrr.github.io/CCDR-tools for more details on the approach.
+It runs in the command prompt once properly installed.
 
 
 # STATUS
