@@ -56,7 +56,7 @@ Due to requests from regional teams, a refined calculation of the integral for p
 ---
 align: center
 ---
-The integral below the curve is calculated as the mean of lower and upper bound rectangles areas.
+The integral below the curve is calculated as the mean of lower and upper bound rectangles areas ([Riemann sum](https://www.math.net/riemann-sum)).
 ```
 
 ### Direct and indirect losses
