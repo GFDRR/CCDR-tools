@@ -23,7 +23,7 @@ def zonal_stats_parallel(args):
     return zonal_stats_partial(*args)
 
 # Defining the main function to run the analysis
-def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
+def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_RPs: list[int],
                  min_haz_threshold: float, exp_cat: str, exp_nam: str, adm_name: str,
                  analysis_type: str, class_edges: list[float], 
                  save_check_raster: bool, n_cores=None):
@@ -34,6 +34,8 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
     ----------
     country : country ISOa2 code
     haz_cat : hazard category
+    period: time period
+    scenario: SSP scenario
     valid_RPs : return period values to be considered
     min_haz_threshold : minimum value for hazard values
     exp_cat : exposure category
@@ -51,7 +53,7 @@ def run_analysis(country: str, haz_cat: str, valid_RPs: list[int],
 
     # Defining the location of administrative, hazard and exposure folders
     adm_folder = f"{DATA_DIR}/ADM"  # Administrative (gpkg) folder
-    haz_folder = f"{DATA_DIR}/HZD"  # Hazard folder
+    haz_folder = f"{DATA_DIR}/HZD/{country}/{haz_cat}/{period}/{scenario}"  # Hazard folder
     exp_folder = f"{DATA_DIR}/EXP"  # Exposure folder
 
     # If the analysis type is "Classes", then make sure that the user-defined classes are valid
@@ -244,7 +246,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, exp_cat, exp_
             # We reproject using WarpedVRT as this applies the operation from disk
             # https://github.com/corteva/rioxarray/discussions/207
             # https://rasterio.readthedocs.io/en/latest/api/rasterio.vrt.html
-            with rasterio.open(os.path.join(haz_folder, f"{country}_{haz_cat}_RP{rp}.tif")) as src:
+            with rasterio.open(os.path.join(haz_folder, f"1in{rp}.tif")) as src:
                 vrt_options = {
                     'src_crs': src.crs,
                     'crs': exp_data.rio.crs,
@@ -257,7 +259,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, exp_cat, exp_
                     haz_data.rio.write_nodata(-1.0, inplace=True)
 
         except rasterio._err.CPLE_OpenFailedError:
-            raise IOError(f"Error occurred trying to open raster file: {country}_{haz_cat}_RP{rp}.tif")
+            raise IOError(f"Error occurred trying to open raster file: 1in{rp}.tif")
 
         # Set values below min threshold to nan
         haz_data = haz_data.where(haz_data.data > min_haz_threshold, np.nan)
@@ -267,7 +269,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, exp_cat, exp_
             # Assign impact factor (this is F_i in the equations)
             haz_data = damage_factor(haz_data)
             if save_check_raster:
-                haz_data.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{rp}_{exp_cat}_haz_imp_factor.tif"))
+                haz_data.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_haz_imp_factor.tif"))
         elif analysis_type == "Classes":
             # Assign bin values to raster data - Follows: x_{i-1} <= x_{i} < x_{i+1}
             bin_idx = np.digitize(haz_data, bin_seq)
@@ -277,7 +279,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, exp_cat, exp_
         affected_exp = exp_data.where(haz_data.data > 0, np.nan)
 
         if save_check_raster:
-            affected_exp.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{exp_cat}_{rp}_affected.tif"))
+            affected_exp.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_affected.tif"))
         
         # Conduct analyses for classes
         if analysis_type == "Classes":
@@ -303,7 +305,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, exp_cat, exp_
             impact_exp = affected_exp.data * haz_data
             # If save intermediate to disk is TRUE, then
             if save_check_raster:
-                impact_exp.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{exp_cat}_{rp}_impact.tif"))
+                impact_exp.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{period}_{scenario}_{rp}_{exp_cat}_impact.tif"))
             # Compute the impact per ADM level
             impact_exp_per_ADM = gen_zonal_stats(vectors=adm_data["geometry"], raster=impact_exp.data, stats=["sum"],
                                                  affine=impact_exp.rio.transform(), nodata=np.nan)
@@ -357,7 +359,7 @@ def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, country, haz_c
                 result_df[f"RP{rp}_EAI_tmp"] = result_df[f"RP{rp}_{exp_cat}_imp"] * freq
                 if save_check_raster:
                     EAI_i = impact_exp * freq
-                    EAI_i.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{exp_cat}_{rp}_EAI.tif"))
+                    EAI_i.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_EAI.tif"))
         
     # Computing the EAE or EAI, if probabilistic (len(valid_RPs)>1)
     if n_valid_RPs_gt_1:
