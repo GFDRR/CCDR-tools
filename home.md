@@ -27,7 +27,7 @@ Countries that have been already covered by the risk analytics:
 :name: vln-data
 |**South & South-East Asia** | **West Africa & Sahel countries**| **Central & East Africa**  | **Latin America & Caribbean** |
 |---|---|---|---|
-| <ul><li>Pakistan<li>Nepal<li>Bangladesh<li>Cambodia<li>India</ul> | <ul><li>Ghana<li>Burkina Faso<li>Mali<li>Niger<li>Chad<li>Mauritania<li>Guinea-Bissau<li>Nigeria<li>Senegal</ul> | <ul><li>Ethiopia<li>Rwanda</ul> | <ul><li>Dominican Republic<li>Antigua & Barbuda<li>Dominica<li>Saint Kitts & Nevis<li>Saint Lucia<li>Grenada<li>Saint Vincent & Grenadines</ul> |
+| <ul><li>Pakistan<li>Nepal<li>Bangladesh<li>Cambodia<li>India<li>Thailand<li>Malaysia</ul> | <ul><li>Ghana<li>Burkina Faso<li>Mali<li>Niger<li>Chad<li>Mauritania<li>Guinea-Bissau<li>Nigeria<li>Senegal</ul> | <ul><li>Ethiopia</ul> | <ul><li>Dominican Republic<li>Antigua & Barbuda<li>Dominica<li>Saint Kitts & Nevis<li>Saint Lucia<li>Grenada<li>Saint Vincent & Grenadines</ul> |
 ```
 
 ```{note}
