@@ -15,9 +15,9 @@ Are you a World Bank TTL? You can request for availability to produce a new coun
 
 As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
 
-- [**Cambodia**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/reports/KHM_RSK.pdf)
-- [**Senegal**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/reports/Top-down/reports/SEN_RSK.pdf)
-- [**OECS countries**](Top-down/reports/OECS_RSK.pdf)
+- [**Cambodia**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/KHM_RSK.pdf)
+- [**Senegal**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/SEN_RSK.pdf)
+- [**OECS countries**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/OECS_RSK.pdf)
 
 Countries that have been already covered by the risk analytics:
 

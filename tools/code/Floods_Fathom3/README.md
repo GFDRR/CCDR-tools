@@ -14,7 +14,7 @@ We strongly recommend using the mamba package manager.
 Environment creation:
 
 ```bash
-$ mamba create -n ccdr-tools --file Top-down/notebooks/win_env.yml
+$ mamba create -n ccdr-tools --file tools/notebooks/win_env.yml
 ```
 
 Updating the environment spec (e.g., if package version changed or a package is added/removed):
@@ -26,7 +26,7 @@ $ mamba list -n ccdr-tools --explicit > win_env.yml
 Updating the environment (e.g., after code updates)
 
 ```bash
-$ mamba update -n ccdr-tools --file Top-down/notebooks/win_env.yml
+$ mamba update -n ccdr-tools --file tools/notebooks/win_env.yml
 ```
 
 ## Using CONDA
@@ -34,13 +34,13 @@ $ mamba update -n ccdr-tools --file Top-down/notebooks/win_env.yml
 Environment creation:
 
 ```bash
-$ conda create -name ccdr-tools --file Top-down/notebooks/win_env.yml
+$ conda create -name ccdr-tools --file tools/notebooks/win_env.yml
 ```
 
 Updating the environment (e.g., after code updates)
 
 ```bash
-$ conda update -name ccdr-tools --file Top-down/notebooks/win_env.yml
+$ conda update -name ccdr-tools --file tools/notebooks/win_env.yml
 ```
 
 # SCRIPT OVERVIEW

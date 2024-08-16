@@ -6,7 +6,7 @@
 ## OVERVIEW
 This is an open tool for risk screening based on globally-avaialble datasets. For more details see full online [**DOCUMENTATION**](https://gfdrr.github.io/CCDR-tools).
 
-The ‘top-down’ approach offers analytical notebooks allowing non-experts to perform comprehensive, multi-hazard risk screening using regionally available and comparable geodata. The work under this tier is characterized by: 
+The ‘tools’ approach offers analytical notebooks allowing non-experts to perform comprehensive, multi-hazard risk screening using regionally available and comparable geodata. The work under this tier is characterized by: 
 
  - Global and regional-scale geodata inputs 
  - User-friendly, and easily interpretable tools and outputs
@@ -34,7 +34,7 @@ The analysis workflow:
 
    - **[Procedures](procedures/)** - explains the analytical workflow used by notebooks with examples for different hazards
    - **[Notebooks](notebooks/)** - include jupyter notebooks to perform the spatial analytics for each hazard
-   - **[Parallelization](parallelization/)** - include python scripts (beta) to perform the spatial analytics with better efficiency for each hazard
+   - **[Code](code/)** - include python scripts (beta) to perform the spatial analytics with better efficiency for each hazard
 
 --------------------------------------
 

@@ -53,7 +53,7 @@ align: center
 
 ```{seealso}
 A script in R is provided to produce population-weighted RWI maps at sub-national level starting from RWI points, GHS population and boundaries data.<br>`Work in progress - we are looking to make it more user friendly!`
-[**RWI-Pop weighted Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/scripts/RWI-pop.R)
+[**RWI-Pop weighted Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/tools/utility/RWI-pop.R)
 ```
 
 ## Bi-variate maps
@@ -77,5 +77,5 @@ Classification of total exposure on an administrative unit is done both on the b
 
 ```{seealso}
 A script in R is provided to create bi-variate maps starting from risk and poverty data.<br>`Work in progress - we are looking to make it more user friendly!`
-[**Bivariate Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/scripts/BivariateMap.R)
+[**Bivariate Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/tools/utility/BivariateMap.R)
 ```

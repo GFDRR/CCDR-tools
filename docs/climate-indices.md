@@ -52,7 +52,7 @@ Compared to the information directly offered by the [CCKP country page](https://
 
 - Navigate to your working directory: `cd <Your work directory>`
 - Run `jupyter notebook`
-- Select [CCDR-climate.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR-climate.ipynb) and chose the indices to plot.
+- Select [CCDR-climate.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/tools/notebooks/CCDR-climate.ipynb) and chose the indices to plot.
 
 ```{figure} images/ccdr-clim.png
 ---

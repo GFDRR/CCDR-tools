@@ -2,9 +2,9 @@
 
 The analytical scripts can be downloaded as:
 
-- [**Jupyter notebooks**](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/notebooks): user-friendly script that run via browser interface.
+- [**Jupyter notebooks**](https://github.com/GFDRR/CCDR-tools/tree/main/tools/notebooks): user-friendly script that run via browser interface.
 Read more about [**Jupyter Notebooks**](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
-- [**Python code**](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization): give the user more control, and has overall better performances making use of parallel processing.
+- [**Python code**](https://github.com/GFDRR/CCDR-tools/tree/main/tools/code): give the user more control, and has overall better performances making use of parallel processing.
 
 These can be downloaded and exectuted on any windows or linux machine. 
 In both cases, the script requires proper environment setup and input data to be provided according to the instructions below.

@@ -7,7 +7,7 @@ For example, flood hazard over agriculture is measured in terms of hectars of la
 This produces a mean estimate of **Expected Annual Exposure (EAE) by hazard intensity classes** for the historical baseline, as explained in the [**risk concepts**](intro-risk.md). This is applied for:
 
 - **Floods**: using water depth as hazard intensity measure, calculates agricultural land area affected by water detph over 0.5 meters.
-- [**Heat**](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Heat_stress.ipynb): using WBGT (°C) as hazard intensity measure, calculates the amount of population exposed to heat stress classes (strong, very strong, extreme).
+- [**Heat**](https://github.com/GFDRR/CCDR-tools/blob/main/tools/notebooks/Heat_stress.ipynb): using WBGT (°C) as hazard intensity measure, calculates the amount of population exposed to heat stress classes (strong, very strong, extreme).
 
 ```{note}
 `For example`: there is no generalised impact model available for measuring flood impact over crops by means of water depth alone, because crop damage depends on a variety of additional factors, such as: duration of the submersion, water velocity, presence of pollutants, type of crop, stage of the crop cycle.
@@ -17,10 +17,10 @@ For this reason, following a rule of thumb, the risk metric chosen to measure fl
 
 ## SCRIPT OVERVIEW
 
-The [python notebooks](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Exposure (EAE) for baseline (reference period). 
+The [python notebooks](https://github.com/GFDRR/CCDR-tools/blob/main/tools/notebooks/CCDR.ipynb) performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Exposure (EAE) for baseline (reference period). 
 
 ```{note}
-A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization) of these scripts makes use of cpu parallelization.
+A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/tools/code) of these scripts makes use of cpu parallelization.
 ```
 
 - User input is required to define country, exposure layer, and settings. Settings is used to define the classes thresholds. The script runs on one country and one hazard at time to keep the calculation time manageable.

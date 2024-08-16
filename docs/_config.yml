@@ -28,7 +28,7 @@ execute:
     execute_notebooks: off
     allow_errors: true
     exclude_patterns:
-        - Top-down/notebooks/**/*.ipynb
+        - tools/notebooks/**/*.ipynb
 
 #######################################################################################
 # Bibliography settings

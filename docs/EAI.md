@@ -3,8 +3,8 @@
 This analytical approach applies to probabilistic hazard scenarios (multiple layers by Return Period) and aims to produce a mean estimate of Expected Annual Impact (EAI) over exposed categories for the historical baseline, as explained in the [**risk concepts**](intro-risk.md).
 In order to calculate impacts, we need some [**probabilistic hazards datasets**](intro-hazard.md) depticting hazard intensity and aligned [**physical vulnerability model**](intro-vulnerability.md) to translate the intensity into impact over exposed categories. In relation to the global datasets currently available, this is possible for:
 
-- **[Floods](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Flood.ipynb)**: using water depth as hazard intensity measure, calculates mortality over population and damage over built-up.
-- **[Tropical Cyclone - Strong Winds](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/Tropical_cyclones.ipynb)**: using wind speed as hazard intensity measure, calculates wind damage over built-up.
+- **[Floods](https://github.com/GFDRR/CCDR-tools/blob/main/tools/notebooks/Flood.ipynb)**: using water depth as hazard intensity measure, calculates mortality over population and damage over built-up.
+- **[Tropical Cyclone - Strong Winds](https://github.com/GFDRR/CCDR-tools/blob/main/tools/notebooks/Tropical_cyclones.ipynb)**: using wind speed as hazard intensity measure, calculates wind damage over built-up.
 
 The EAI is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.
 
@@ -20,7 +20,7 @@ align: center
 The [notebooks for EAI calculation](run-baseline) performs combination of hazard and exposure geodata from global datasets according to user input and settings, and returns a risk score in the form of Expected Annual Impact (EAI) for baseline (reference period).
 
 ```{note}
-A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/Top-down/parallelization) of these scripts makes use of cpu parallelization.
+A [developer version (**beta**)](https://github.com/GFDRR/CCDR-tools/tree/main/tools/code) of these scripts makes use of cpu parallelization.
 ```
 
 - User input is required to define country, exposure layer, and settings. Settings affect how the processing runs (min theshold). The script runs on one country and one hazard at time to keep the calculation time manageable.

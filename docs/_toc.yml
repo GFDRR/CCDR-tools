@@ -36,7 +36,7 @@ parts:
       - file: docs/run-baseline
       - file: docs/utility
         sections:
-        - file: utility/merge_tiles/Merge_tiles.ipynb
+        - file: tools/utility/merge_tiles/Merge_tiles.ipynb
   - caption: External resources
     chapters:
       - file: docs/external-tools
