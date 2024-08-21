@@ -31,9 +31,10 @@ def damage_factor_builtup(x: np.array, wb_region: str):
     """
     x = x/100  # convert cm to m
     function_mapping = {
-        'AFRICA': np.maximum(0.0, np.minimum(1.0, -0.0028*x**3 + 0.0362*x**2 + 0.0095*x)),
-        'ASIA': np.maximum(0.0, np.minimum(1.0, 0.00723*x**3 - 0.1000*x**2 + 0.5060*x)),
-        'LAC': np.maximum(0.0, np.minimum(1.0, 0.9981236 - 0.9946279*np.exp(-1.711056*x))), 
+        'AFRICA': np.maximum(0.0, np.minimum(1.0, 1.246282 + (0.004404681 - 1.246282)/(1 + (x/1.888094)**1.245007))),
+        'ASIA': np.maximum(0.0, np.minimum(1.0, 1.267385 + (0.002553797 - 1.267385)/(1 + (x/1.511393)**1.011526))),
+        'LAC': np.maximum(0.0, np.minimum(1.0, 1.04578 + (0.001490579 - 1.04578)/(1 + (x/0.5619431)**1.509554))),
+        'GLOBAL': np.maximum(0.0, np.minimum(1.0, 2.100049 + (-0.00003530885 - 2.100049)/(1 + (x/6.632485)**0.559315))),
     }
     
     return function_mapping.get(wb_to_region.get(wb_region))
@@ -51,8 +52,10 @@ def damage_factor_agri(x: np.array, wb_region: str):
     """
     x = x/100  # convert cm to m
     function_mapping = {
-        'AFRICA': np.maximum(0.0, np.minimum(1.0, 0.0111 * x ** 3 - 0.158 * x ** 2 + 0.721 * x - 0.0418)),
-        'ASIA': np.maximum(0.0, np.minimum(1.0, 0.00455 * x ** 3 - 0.0648 * x ** 2 + 0.396 * x - 0.000049)),
+        'AFRICA': np.maximum(0.0, np.minimum(1.0, 1.006324 + (0.01417282 - 1.006324)/(1 + (x/8621.368)**1.675571)**2665027)),
+        'ASIA': np.maximum(0.0, np.minimum(1.0, (1.672909*x)/(3.917017+x))),
+        'LAC': np.maximum(0.0, np.minimum(1.0, 1.04578 + (0.001490579 - 1.04578)/(1 + (x/0.5619431)**1.509554))),
+        'GLOBAL': np.maximum(0.0, np.minimum(1.0, 1.167022 + (-0.002602531 - 1.167022)/(1 + (x/1.398796)**1.246833))),
     }
     
     region = wb_to_region.get(wb_region)
