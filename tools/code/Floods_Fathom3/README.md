@@ -14,7 +14,7 @@ We strongly recommend using the mamba package manager.
 Environment creation:
 
 ```bash
-$ mamba create -n ccdr-tools --file tools/notebooks/win_env.yml
+$ mamba create -n ccdr-tools --file Top-down/notebooks/win_env.yml
 ```
 
 Updating the environment spec (e.g., if package version changed or a package is added/removed):
@@ -26,7 +26,7 @@ $ mamba list -n ccdr-tools --explicit > win_env.yml
 Updating the environment (e.g., after code updates)
 
 ```bash
-$ mamba update -n ccdr-tools --file tools/notebooks/win_env.yml
+$ mamba update -n ccdr-tools --file Top-down/notebooks/win_env.yml
 ```
 
 ## Using CONDA
@@ -34,13 +34,13 @@ $ mamba update -n ccdr-tools --file tools/notebooks/win_env.yml
 Environment creation:
 
 ```bash
-$ conda create -name ccdr-tools --file tools/notebooks/win_env.yml
+$ conda create -name ccdr-tools --file Top-down/notebooks/win_env.yml
 ```
 
 Updating the environment (e.g., after code updates)
 
 ```bash
-$ conda update -name ccdr-tools --file tools/notebooks/win_env.yml
+$ conda update -name ccdr-tools --file Top-down/notebooks/win_env.yml
 ```
 
 # SCRIPT OVERVIEW
@@ -48,7 +48,7 @@ $ conda update -name ccdr-tools --file tools/notebooks/win_env.yml
 - `common.py` setup the script libraries and specifies data directories
 - `damageFunctions.py` includes the impact models (mathematical relationship between hazard intensity and relative damage/impact over exposure category)
 - `try.py` specifies the parameters of the analysis to run (country, hazards, return periods, classes, etc)
-- `runAnalysis.py` the main function that is used to run the program according to parameters set in `try.py`
+- `runAnalysis.py` the main function that is used to run the program according to parameters set in `main.py`
 
 ## Input data
 
@@ -71,7 +71,7 @@ Input data layers must be named and placed according to some rules, as follows:
 
 ## Setting parameters
 
-Edit the `try.py` file to specify:
+Edit the `main.py` file to specify:
 - **country (`country`)**: [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
 - **hazard type (`haz_cat`)**: `'FL'` for floods; `'HS'` for heat stress; `'DR'` for drought; `'LS'` for landslide
 - **return periods (`return_periods`)**: list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
@@ -84,55 +84,42 @@ Edit the `try.py` file to specify:
 - **admin level (`adm`)**: specify which boundary level to use for results summary (must exist in the `ISOa3`_ADM.gpkg file)
 - **save check (`save_check_raster`)**: specify if you want to export intermediate rasters (increases processing time) `[True, False]`
 
-Example of `try.py` running river flood (undefended) analysis (`haz_cat`) over Cambodia (`country`) for 10 return periods (`return_periods`) calculated for baseline (2020) over three exposure categories (`exp_cat_list`) using impact function; results summarised at ADM3 level (`adm_level`). Do not save intermediate rasters (`save_check_raster`).
+Example of `main.py` running flood analysis (`haz_cat`) over Cambodia (`country`) for 10 return periods (`return_periods`) over three exposure categories (`exp_cat_list`) using hazard classes according to thresholds (`class_edges`); results summarised at ADM3 level (`adm`). Do not save intermediate rasters (`save_check_raster`).
 
 ```
-    # Defining the initial parameters
-    country         = 'KHM'						  # ISO3166-a3 code
-    haz_cat         = 'FLUVIAL_UNDEFENDED' 				  # Hazard type:'FLUVIAL_UNDEFENDED'; 'FLUVIAL_DEFENDED', 'PLUVIAL_DEFENDED'; 'COASTAL_UNDEFENDED'; 'COASTAL_DEFENDED'
-    period          = '2020'						  # Period of the analysis: '2020', '2030', '2050', '2080'
-    scenario        = 'SSP3_7.0'					  # Climate scenario: 'SSP1_2.6', 'SSP2_4.5', 'SSP3_7.0', 'SSP5_8.5'. Empty '' if period = 2020.
-    return_periods  = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]	  # example for Fathom  [5, 10, 20, 50, 100, 200, 500, 1000]
-    exp_cat_list    = ['POP', 'BU', 'AGR']	  			  # ['POP', 'BU', 'AGR']
-    exp_nam_list    = ['GHS_P', 'WSF19', 'ESA20']			  # Naming of population file. If None, the default applies, Population:'POP', Built-up:'BU', Agricultural land:'AGR'.
-    exp_year        = ''						  # Specifies the reference time of the WorldPOP population data (always constrained type)
-                                               				  # If not None, expect a list of same length of exp_cat_list e.g. ['Tunisia_GHSL_pop_2020'].
-    adm_level       = 3 						  # [1, 2, 3] depending on source availability for each country
-    analysis_app    = 'Function'					  # ['Classes', 'Function']
-    min_haz_slider  = 10			 			  # Data to be ignored below threshold
-    class_edges        = []			 			  # Floods (cm) [5, 25, 50, 100, 200]
+    # Defining the initial parameters - Example for function analysis
+    country            = 'KHM'
+    haz_cat            = 'FL'
+    return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
+    min_haz_slider     = 0.05
+    exp_cat_list       = ['POP', 'BU', 'AGR']
+    exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
+    adm                = 'ADM3'
+    analysis_app       = 'Function'
+    # class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
     save_check_raster  = False
-    n_cores	       = None						  # If None, max available applies. This can overload ram genereting errors. If it happens, try reducing the number of cores.
 ```
 
-Example of `try.py` running coastal flood (undefended) analysis (`haz_cat`) over Tunisia (`country`) for 10 return periods (`return_periods`) calculated for projected `period` and `scenario` (2050, SSP3-7.0), over two exposure categories (`exp_cat_list`), provided by user (`exp_nam_list`) using classes approach and specified thresholds; results summarised at ADM2 level (`adm_level`). Do not save intermediate rasters (`save_check_raster`).
-
 ```
-    # Defining the initial parameters
-    country         = 'TUN'						  # ISO3166-a3 code
-    haz_cat         = 'COASTAL_UNDEFENDED' 				  # Hazard type:'FLUVIAL_UNDEFENDED'; 'FLUVIAL_DEFENDED', 'PLUVIAL_DEFENDED'; 'COASTAL_UNDEFENDED'; 'COASTAL_DEFENDED'
-    period          = '2050'						  # Period of the analysis: '2020', '2030', '2050', '2080'
-    scenario        = 'SSP3_7.0'					  # Climate scenario: 'SSP1_2.6', 'SSP2_4.5', 'SSP3_7.0', 'SSP5_8.5'. Empty '' if period = 2020.
-    return_periods  = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]	  # example for Fathom  [5, 10, 20, 50, 100, 200, 500, 1000]
-    exp_cat_list    = ['POP', 'BU', 'AGR']	  			  # ['POP', 'BU', 'AGR']
-    exp_nam_list    = None		 				  # Naming of population file. If None, the default applies, Population:'POP', Built-up:'BU', Agricultural land:'AGR'.
-    exp_year        = ''						  # Specifies the reference time of the WorldPOP population data (always constrained type)
-                                               				  # If not None, expect a list of same length of exp_cat_list e.g. ['Tunisia_GHSL_pop_2020'].
-    adm_level       = 2 						  # [1, 2, 3] depending on source availability for each country
-    analysis_app    = 'Classes'					 	  # ['Classes', 'Function']
-    min_haz_slider  = 10			 			  # Data to be ignored below threshold
-    class_edges        = [5, 25, 50, 100, 200]			 	  # Floods (cm) [5, 25, 50, 100, 200]
+    # Defining the initial parameters - Example for class analysis
+    country            = 'KHM'
+    haz_cat            = 'FL'
+    return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
+    # min_haz_slider     = 0.05
+    exp_cat_list       = ['POP', 'BU', 'AGR']
+    exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
+    adm                = 'ADM3'
+    analysis_app       = 'Classes'
+    class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
     save_check_raster  = False
-    n_cores	       = None						  # If None, max available applies. This can overload ram genereting errors. If it happens, try reducing the number of cores.
-
 ```
 
 
 ## Running the analysis
 
 ```bash
-$ python try.py
+$ python main.py
 ```
 
-The analysis runs on all selected exposed categories, in sequence. Depending on the size of the country, the number of exposure categories, the power of CPU and the number of cores used, the analysis can take from less than a minute to a few minutes.
+The analysis runs on all selected exposed categories, in sequence. Depending on the number of cores, the size and resolution of the data, and power of CPU, the analysis can take from less than a minute to few minutes.
 E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.

@@ -5,7 +5,7 @@ from common import wb_to_region
 # Defining the damage functions
 
 # Floods (river and coastal) over Population mortality
-def mortality_factor(x: np.array):
+def mortality_factor(x: np.array, wb_region: str = None):
     """A polynomial fit to average population mortality due to nearby flooding.
     Values are capped between 0 and 1
 

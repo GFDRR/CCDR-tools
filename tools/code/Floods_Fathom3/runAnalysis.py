@@ -139,7 +139,28 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
             exit()
         bin_seq = class_edges + [np.inf]
         num_bins = len(bin_seq)
-    
+
+    # Fetch the ADM data based on country code and adm_level values
+    adm_data = get_adm_data(country, adm_level)
+
+    if adm_data is not None:
+        # Get the correct field names based on the administrative level
+        field_names = adm_field_mapping.get(adm_level, {})
+        code_field = field_names.get('code')
+        name_field = field_names.get('name')
+        wb_region = adm_data['WB_REGION'].iloc[0]
+
+        if code_field and name_field:
+            # Extract the relevant columns
+            all_adm_codes = adm_data.columns.str.contains(r"HASC_\d$")
+            all_adm_names = adm_data.columns.str.contains(r"NAM_\d$")
+            all_adm_codes = adm_data.columns[all_adm_codes].to_list()
+            all_adm_names = adm_data.columns[all_adm_names].to_list()
+        else:
+            print(f"Field names for ADM level {adm_level} not found.")
+    else:
+        raise ValueError("ADM data not available or WB_REGION attribute not found!")
+
     # Checking which kind of exposed category is being considered...
     print("Looking for exposure data...")
 
@@ -176,27 +197,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
     exp_data.rio.write_nodata(-1.0, inplace=True)
     exp_data.data[exp_data < 0.0] = 0.0
 
-    # Fetch the ADM data based on country code and adm_level values
-    adm_data = get_adm_data(country, adm_level)
-
-    if adm_data is not None:
-        # Get the correct field names based on the administrative level
-        field_names = adm_field_mapping.get(adm_level, {})
-        code_field = field_names.get('code')
-        name_field = field_names.get('name')
-        wb_region = adm_data['WB_REGION'].iloc[0]
-
-        if code_field and name_field:
-            # Extract the relevant columns
-            all_adm_codes = adm_data.columns.str.contains(r"HASC_\d$")
-            all_adm_names = adm_data.columns.str.contains(r"NAM_\d$")
-            all_adm_codes = adm_data.columns[all_adm_codes].to_list()
-            all_adm_names = adm_data.columns[all_adm_names].to_list()
-        else:
-            print(f"Field names for ADM level {adm_level} not found.")
-    else:
-        raise ValueError("ADM data not available or WB_REGION attribute not found!")
-
+    # Parallel processing setup
     cores = min(len(valid_RPs), mp.cpu_count()) if n_cores is None else n_cores
 
     with mp.Pool(cores) as p:
@@ -244,7 +245,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
             "num_bins": num_bins,
             "adm_data": adm_data,
         }
-        func = partial(calc_imp_RPs, **params)
+        func = partial(calc_imp_RPs, wb_region=wb_region, **params)
         res = p.map(func, np.array_split(valid_RPs, cores))
     if not isinstance(res, list):
         to_concat = [result_df, res]
@@ -301,7 +302,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
 
 
 def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, exp_cat, exp_data, min_haz_threshold,
-                 damage_factor, save_check_raster, bin_seq, num_bins, adm_data):
+                 damage_factor, save_check_raster, bin_seq, num_bins, adm_data, wb_region):
     """
     Apply calculates for each given return period.
     """
