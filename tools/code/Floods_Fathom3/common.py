@@ -1,3 +1,5 @@
+# This file includes common configuration elements used by the script.
+
 import os
 
 # Load env vars from dotenv file
