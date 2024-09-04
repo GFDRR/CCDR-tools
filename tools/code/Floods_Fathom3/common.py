@@ -1,20 +1,4 @@
-# Required libraries
-import tempfile, os, gc
-import warnings
-from collections import OrderedDict
-
-import numpy as np
-import pandas as pd
-import geopandas as gpd
-from tqdm import tqdm
-
-import rasterio
-import xarray as xr
-import rioxarray as rxr
-from rasterstats import gen_zonal_stats, zonal_stats
-
-import requests
-from shapely.geometry import shape
+import os
 
 # Load env vars from dotenv file
 from dotenv import dotenv_values
@@ -30,6 +14,7 @@ os.makedirs(CACHE_DIR,  exist_ok=True)
 
 # Define the REST API URL
 rest_api_url = "https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer"
+worldpop_url = "https://data.worldpop.org/GIS/Population/"
 
 # Mapping of administrative levels to field names for WB GAD dataset
 adm_field_mapping = {
