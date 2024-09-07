@@ -1,7 +1,5 @@
 # Importing the required packages
 import sys
-from common import *
-from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 from runAnalysis import run_analysis
 
 # Defining the main function

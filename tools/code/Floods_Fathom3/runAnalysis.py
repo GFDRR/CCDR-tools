@@ -2,117 +2,24 @@
 import os, gc
 import numpy as np
 import pandas as pd
-import geopandas as gpd
-import folium
-from folium import Choropleth
-from folium.plugins import MiniMap
 import rasterio
 import rioxarray as rxr
-from rasterstats import gen_zonal_stats, zonal_stats
-
-import requests
-from shapely.geometry import shape, MultiPolygon
+from rasterstats import gen_zonal_stats
 
 # Importing the required functions
 import common
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
-from IPython.display import display
+import data_utils
+import utils
 
 # Importing the libraries for parallel processing
 import itertools as it
 from functools import partial
 import multiprocess as mp
 
-
 DATA_DIR = common.DATA_DIR
 OUTPUT_DIR = common.OUTPUT_DIR
 
-# Defining functions for parallel processing of zonal_stats
-def chunks(iterable_data, n):
-    it_data = it.iter(iterable_data)
-    for chunk in it.iter(lambda: list(it.islice(it_data, n)), []):
-        yield chunk
-
-def zonal_stats_partial(feats, raster, stats="*", affine=None, nodata=None, all_touched=True):
-    # Partial zonal stats for parallel processing on a list of features
-    return zonal_stats(feats, raster, stats=stats, affine=affine, nodata=nodata, all_touched=all_touched)
-
-def zonal_stats_parallel(args):
-    # Zonal stats for a parallel processing on a list of features
-    return zonal_stats_partial(*args)
-
-# Function to get the correct layer ID based on administrative level
-def get_layer_id_for_adm(adm_level):
-    layers_url = f"{common.rest_api_url}/layers"
-    target_layer_name = f"WB_GAD_ADM{adm_level}"
-
-    response = requests.get(layers_url, params={'f': 'json'})
-    
-    if response.status_code != 200:
-        print(f"Failed to fetch layers. Status code: {response.status_code}")
-        return None
-
-    layers_info = response.json().get('layers', [])
-    
-    for layer in layers_info:
-        if layer['name'] == target_layer_name:
-            return layer['id']
-    
-    print(f"Layer matching {target_layer_name} not found.")
-    return None
-
-# Function to fetch the ADM data using the correct layer ID
-def get_adm_data(country, adm_level):
-    layer_id = get_layer_id_for_adm(adm_level)
-    
-    if not layer_id:
-        print("Invalid administrative level or layer mapping not found.")
-        return None
-    
-    query_url = f"{common.rest_api_url}/{layer_id}/query"
-    params = {
-        'where': f"ISO_A3 = '{country}'",
-        'outFields': '*',
-        'f': 'geojson'
-    }
-    
-    response = requests.get(query_url, params=params)
-    
-    if response.status_code != 200:
-        print(f"Error fetching data: {response.status_code}")
-        return None
-    
-    data = response.json()
-    features = data.get('features', [])
-    
-    if not features:
-        print("No features found for the specified query.")
-        return None
-    
-    geometry = [shape(feature['geometry']) for feature in features]
-    properties = [feature['properties'] for feature in features]
-    gdf = gpd.GeoDataFrame(properties, geometry=geometry)
-    return gdf
-
-# Defining the function to download WorldPop data
-def fetch_population_data(country: str, exp_year: str):
-    dataset_path = f"Global_2000_2020_Constrained/{exp_year}/BSGM/{country}/{country.lower()}_ppp_{exp_year}_UNadj_constrained.tif"
-    download_url = f"{common.worldpop_url}{dataset_path}"
-
-    try:
-        response = requests.get(download_url)
-        
-        if response.status_code != 200:
-            print(f"Failed to fetch data. Status code: {response.status_code}")
-            print(f"Response text: {response.text}")
-
-        file_name = f"{DATA_DIR}/EXP/{country}_POP{exp_year}.tif"
-        with open(file_name, 'wb') as file:
-            file.write(response.content)
-        print(f"Data downloaded successfully and saved as {file_name}")
-
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
 
 # Defining the main function to run the analysis
 def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_RPs: list[int],
@@ -152,14 +59,12 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
         # Ensure class threshold values are valid
         is_seq = np.all(np.diff(class_edges) > 0)
         if not is_seq:
-            ValueError(
-                "Class thresholds are not sequential. Lower classes must be less than class thresholds above.")
-            exit()
+            raise ValueError("Class thresholds are not sequential. Lower classes must be less than class thresholds above.")
         bin_seq = class_edges + [np.inf]
         num_bins = len(bin_seq)
 
     # Fetch the ADM data based on country code and adm_level values
-    adm_data = get_adm_data(country, adm_level)
+    adm_data = data_utils.get_adm_data(country, adm_level)
 
     if adm_data is not None:
         # Get the correct field names based on the administrative level
@@ -184,7 +89,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
 
     # If the exposed category is population
     if exp_cat == 'POP' and exp_nam is None:
-        fetch_population_data(country, exp_year)
+        data_utils.fetch_population_data(country, exp_year, DATA_DIR)
         damage_factor = mortality_factor
         exp_ras = f"{exp_folder}/{country}_POP{exp_year}.tif"
 
@@ -220,7 +125,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
 
     with mp.Pool(cores) as p:
         # Get total exposure for each ADM area
-        func = partial(zonal_stats_partial, raster=exp_ras, stats="sum")
+        func = partial(utils.zonal_stats_partial, raster=exp_ras, stats="sum")
         stats_parallel = p.map(func, np.array_split(adm_data.geometry, cores))
 
     exp_per_ADM = list(it.chain(*stats_parallel))
@@ -267,15 +172,15 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
         }
         func = partial(calc_imp_RPs, wb_region=wb_region, **params)
         res = p.map(func, np.array_split(valid_RPs, cores))
-    if not isinstance(res, list):
-        to_concat = [result_df, res]
-    else:
-        to_concat = [result_df] + res
+        
+    to_concat = [result_df] + (res if isinstance(res, list) else [res])
 
-    result_df = pd.concat(to_concat, axis=1) # Concatenating the results
-    result_df = result_df.replace(np.nan, 0) # Converting eventual nan/null to zero
-    result_df = result_df_reorder_columns(result_df, valid_RPs, analysis_type, exp_cat, 
-                                          adm_level, all_adm_codes, all_adm_names)
+    result_df = pd.concat(to_concat, axis=1).replace(np.nan, 0) # Concatenating the results and converting nan/null to zero
+    
+    if analysis_type == 'Function':
+        result_df = utils.result_df_reorder_columns(
+            result_df, valid_RPs, exp_cat, adm_level, all_adm_codes, all_adm_names)
+    
     result_df = calc_EAEI(result_df, valid_RPs, prob_RPs_df, 'LB', 
                           analysis_type, country, haz_cat, period, scenario, exp_cat, 
                           adm_level, save_check_raster, num_bins, n_valid_RPs_gt_1)
@@ -294,18 +199,11 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
     result_df.set_axis(result_df_colnames, axis=1, inplace=True)
     
     # Write output csv table and geopackages
-    save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
+    data_utils.save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
 
     # Trying to fix output not being passed to plot_results
     return result_df
 
-    # Cleaning-up memory
-    del (country, haz_cat, valid_RPs, min_haz_threshold, exp_cat, adm_level)
-    del (analysis_type, class_edges, save_check_raster)
-    del (haz_folder, exp_folder)
-    del (exp_ras, exp_data)
-    del (adm_data, all_adm_codes, all_adm_names)
-    del (result_df)
 
 def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scenario, exp_cat, exp_data, min_haz_threshold,
                  damage_factor, save_check_raster, bin_seq, num_bins, adm_data, wb_region):
@@ -392,20 +290,6 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
     return result_df
 
 
-def result_df_reorder_columns(result_df, RPs, analysis_type, exp_cat, adm_level, all_adm_codes, all_adm_names):
-    """
-    Reorders the columns of result_df.
-    """
-    # Re-ordering and dropping selected columns for better presentation of the results
-    if analysis_type == "Function":
-        all_RPs = ["RP" + str(rp) for rp in RPs]
-        all_exp = [x + f"_{exp_cat}_exp" for x in all_RPs]
-        all_imp = [x + f"_{exp_cat}_imp" for x in all_RPs]
-        col_order = all_adm_codes + all_adm_names + [f"ADM{adm_level}_{exp_cat}"] + all_exp + all_imp + ["geometry"]
-        result_df = result_df.loc[:, col_order]
-
-    return result_df
-
 def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, country, haz_cat, period, scenario, exp_cat, 
               adm_level, save_check_raster, num_bins, n_valid_RPs_gt_1):
     """
@@ -453,97 +337,14 @@ def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, country, haz_c
                 # Calculate Exp_EAI% (Percent affected exposure per year)
                 result_df.loc[:, f"{exp_cat}_EAI%_{method}"] = (result_df.loc[:, f"{exp_cat}_EAI_{method}"] / 
                                                                 result_df.loc[:,f"ADM{adm_level}_{exp_cat}"]) * 100.0
-
-    # Dropping selected columns for better presentation of the results
-    if analysis_type == "Function":
-        all_EAI = [col for col in result_df.columns if '_EAI_tmp' in col] if n_valid_RPs_gt_1 else []
-        result_df = result_df.drop(all_EAI, axis=1) # dropping
-    if analysis_type == "Classes":
-        all_EAE = [col for col in result_df.columns if '_EAE_tmp' in col] if n_valid_RPs_gt_1 else []
-        result_df = result_df.drop(all_EAE, axis=1) # dropping
-        
+ 
+    column_filter = { "Function": "_EAI_tmp", "Classes": "_EAE_tmp" }
+    
+    if analysis_type in column_filter and n_valid_RPs_gt_1:
+        columns_to_drop = [col for col in result_df.columns if column_filter[analysis_type] in col]
+        result_df = result_df.drop(columns_to_drop, axis=1)
+    
     return result_df
+ 
 
-def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs):
-    # Ensure that the geometry column is correctly recognized
-    if 'geometry' not in result_df.columns and 'geom' in result_df.columns:
-        result_df = result_df.rename(columns={'geom': 'geometry'})
-    elif 'geometry' not in result_df.columns:
-        raise ValueError("The DataFrame does not contain a geometry column.")
-   
-    # Convert to GeoDataFrame if it's not already one
-    if not isinstance(result_df, gpd.GeoDataFrame):
-        result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
-   
-    # Set the CRS to EPSG:4326
-    result_df.set_crs(epsg=4326, inplace=True)
-   
-    # Remove the geometry column for the CSV export
-    df_cols = result_df.columns
-    no_geom = result_df.loc[:, df_cols[~df_cols.isin(['geometry'])]].fillna(0)
-   
-    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{exp_cat}_{exp_year}"
 
-    if analysis_type == "Function":
-        EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
-        no_geom.to_csv(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAI_string}function.csv"), index=False)
-        result_df.to_file(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAI_string}function.gpkg"), driver='GPKG')
-    elif analysis_type == "Classes":
-        EAE_string = "EAE_" if len(valid_RPs) > 1 else ""
-        no_geom.to_csv(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAE_string}class.csv"), index=False)
-        result_df.to_file(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAE_string}class.gpkg"), driver='GPKG')
-    else:
-        raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
-    
-    return result_df  # Return the GeoDataFrame
-
-def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
-    # Convert result_df to GeoDataFrame if it's not already
-    if not isinstance(result_df, gpd.GeoDataFrame):
-        result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
-    
-    # Determine the column to plot based on analysis_app
-    if analysis_type == "Function":
-        column = f'{country}_{exp_cat}_EAI'
-    elif analysis_type == "Classes":
-        column = f'RP10_{country}_{exp_cat}_C1'
-    else:
-        print("Unknown analysis approach")
-        return
-
-    # Ensure the CRS is EPSG:4326
-    result_df = result_df.to_crs(epsg=4326)
-    
-    # Calculate the bounding box
-    bounds = result_df.total_bounds  # [minx, miny, maxx, maxy]
-
-    # Calculate the center of the bounding box
-    center_lat = (bounds[1] + bounds[3]) / 2
-    center_lon = (bounds[0] + bounds[2]) / 2
-
-    # Initialize the folium map centered on the GeoDataFrame extent
-    m = folium.Map(location=[center_lat, center_lon], zoom_start=5)
-
-    # Determine the key column (replace 'ADM1_TUN_POP' with your actual key column name)
-    key_column = f'HASC_{adm_level}'  # Replace with the actual column that corresponds to your features
-
-    # Add GeoDataFrame to the map as a choropleth with a custom name
-    Choropleth(
-        geo_data=result_df.to_json(),  # Convert GeoDataFrame to GeoJSON format
-        name=column,  # Set the name that will appear in the layer control
-        data=result_df,
-        columns=[key_column, column],
-        key_on=f"feature.properties.{key_column}",  # Adjust to the correct key
-        fill_color="YlOrRd",
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        legend_name=column,
-        use_jenks=True,
-    ).add_to(m)
-
-    # Add layer control
-    folium.LayerControl().add_to(m)
-    MiniMap(toggle_display=True).add_to(m)
-
-    # Display the map
-    display(m)
