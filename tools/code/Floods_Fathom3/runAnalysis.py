@@ -3,17 +3,20 @@ import os, gc
 import numpy as np
 import pandas as pd
 import geopandas as gpd
-
+import folium
+from folium import Choropleth
+from folium.plugins import MiniMap
 import rasterio
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
 
 import requests
-from shapely.geometry import shape
+from shapely.geometry import shape, MultiPolygon
 
-# Importing the required packages
+# Importing the required functions
 import common
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
+from IPython.display import display
 
 # Importing the libraries for parallel processing
 import itertools as it
@@ -24,24 +27,18 @@ import multiprocess as mp
 DATA_DIR = common.DATA_DIR
 OUTPUT_DIR = common.OUTPUT_DIR
 
-
-
-
-
 # Defining functions for parallel processing of zonal_stats
 def chunks(iterable_data, n):
     it_data = it.iter(iterable_data)
     for chunk in it.iter(lambda: list(it.islice(it_data, n)), []):
         yield chunk
 
-
-
 def zonal_stats_partial(feats, raster, stats="*", affine=None, nodata=None, all_touched=True):
-    # Partial zonal stats for a parallel processing a list of features
+    # Partial zonal stats for parallel processing on a list of features
     return zonal_stats(feats, raster, stats=stats, affine=affine, nodata=nodata, all_touched=all_touched)
 
 def zonal_stats_parallel(args):
-    # Zonal stats for a parallel processing a list of features
+    # Zonal stats for a parallel processing on a list of features
     return zonal_stats_partial(*args)
 
 # Function to get the correct layer ID based on administrative level
@@ -141,8 +138,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
     class_edges : class edges for class-based analysis
     save_check_raster : save intermediate results to disk?
     """
-    print("Running analysis...")
-    
+
     # Running the initial checks =======================================================================================
  
     # Defining the location of administrative, hazard and exposure folders
@@ -297,18 +293,11 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
     result_df_colnames = [s.replace(replace_string, '') for s in result_df.columns]
     result_df.set_axis(result_df_colnames, axis=1, inplace=True)
     
-    # Write output csv table
-    df_cols = result_df.columns
-    no_geom = result_df.loc[:, df_cols[~df_cols.isin(['geometry'])]].fillna(0)
-    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{exp_cat}_{exp_year}"
-    if analysis_type == "Function":
-        EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
-        no_geom.to_csv(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAI_string}function.csv"), index=False)
-        result_df.to_file(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAI_string}function.gpkg"))
-    elif analysis_type == "Classes":
-        EAE_string = "EAE_" if len(valid_RPs) > 1 else ""
-        no_geom.to_csv(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAE_string}class.csv"), index=False)
-        result_df.to_file(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAE_string}class.gpkg"))
+    # Write output csv table and geopackages
+    save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
+
+    # Trying to fix output not being passed to plot_results
+    return result_df
 
     # Cleaning-up memory
     del (country, haz_cat, valid_RPs, min_haz_threshold, exp_cat, adm_level)
@@ -317,10 +306,6 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
     del (exp_ras, exp_data)
     del (adm_data, all_adm_codes, all_adm_names)
     del (result_df)
-
-    # Finishing the analysis
-    print("Finished analysis.")
-
 
 def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scenario, exp_cat, exp_data, min_haz_threshold,
                  damage_factor, save_check_raster, bin_seq, num_bins, adm_data, wb_region):
@@ -428,7 +413,7 @@ def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, country, haz_c
     """
     for rp in RPs:
 
-        # Probability of return period
+        # Exceedance Probability of return period
         freq = float(prob_RPs_df['prob_RPs_'+method].loc[prob_RPs_df['RPs'] == rp])
 
         # Conduct analyses for classes
@@ -479,3 +464,86 @@ def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, country, haz_c
         
     return result_df
 
+def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs):
+    # Ensure that the geometry column is correctly recognized
+    if 'geometry' not in result_df.columns and 'geom' in result_df.columns:
+        result_df = result_df.rename(columns={'geom': 'geometry'})
+    elif 'geometry' not in result_df.columns:
+        raise ValueError("The DataFrame does not contain a geometry column.")
+   
+    # Convert to GeoDataFrame if it's not already one
+    if not isinstance(result_df, gpd.GeoDataFrame):
+        result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
+   
+    # Set the CRS to EPSG:4326
+    result_df.set_crs(epsg=4326, inplace=True)
+   
+    # Remove the geometry column for the CSV export
+    df_cols = result_df.columns
+    no_geom = result_df.loc[:, df_cols[~df_cols.isin(['geometry'])]].fillna(0)
+   
+    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{exp_cat}_{exp_year}"
+
+    if analysis_type == "Function":
+        EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
+        no_geom.to_csv(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAI_string}function.csv"), index=False)
+        result_df.to_file(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAI_string}function.gpkg"), driver='GPKG')
+    elif analysis_type == "Classes":
+        EAE_string = "EAE_" if len(valid_RPs) > 1 else ""
+        no_geom.to_csv(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAE_string}class.csv"), index=False)
+        result_df.to_file(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAE_string}class.gpkg"), driver='GPKG')
+    else:
+        raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
+    
+    return result_df  # Return the GeoDataFrame
+
+def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
+    # Convert result_df to GeoDataFrame if it's not already
+    if not isinstance(result_df, gpd.GeoDataFrame):
+        result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
+    
+    # Determine the column to plot based on analysis_app
+    if analysis_type == "Function":
+        column = f'{country}_{exp_cat}_EAI'
+    elif analysis_type == "Classes":
+        column = f'RP10_{country}_{exp_cat}_C1'
+    else:
+        print("Unknown analysis approach")
+        return
+
+    # Ensure the CRS is EPSG:4326
+    result_df = result_df.to_crs(epsg=4326)
+    
+    # Calculate the bounding box
+    bounds = result_df.total_bounds  # [minx, miny, maxx, maxy]
+
+    # Calculate the center of the bounding box
+    center_lat = (bounds[1] + bounds[3]) / 2
+    center_lon = (bounds[0] + bounds[2]) / 2
+
+    # Initialize the folium map centered on the GeoDataFrame extent
+    m = folium.Map(location=[center_lat, center_lon], zoom_start=5)
+
+    # Determine the key column (replace 'ADM1_TUN_POP' with your actual key column name)
+    key_column = f'HASC_{adm_level}'  # Replace with the actual column that corresponds to your features
+
+    # Add GeoDataFrame to the map as a choropleth with a custom name
+    Choropleth(
+        geo_data=result_df.to_json(),  # Convert GeoDataFrame to GeoJSON format
+        name=column,  # Set the name that will appear in the layer control
+        data=result_df,
+        columns=[key_column, column],
+        key_on=f"feature.properties.{key_column}",  # Adjust to the correct key
+        fill_color="YlOrRd",
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        legend_name=column,
+        use_jenks=True,
+    ).add_to(m)
+
+    # Add layer control
+    folium.LayerControl().add_to(m)
+    MiniMap(toggle_display=True).add_to(m)
+
+    # Display the map
+    display(m)
