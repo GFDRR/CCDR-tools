@@ -5,7 +5,6 @@ import pandas as pd
 import geopandas as gpd
 import folium
 from folium import Choropleth
-from folium.plugins import MiniMap
 import rasterio
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
@@ -497,12 +496,12 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, a
     
     return result_df  # Return the GeoDataFrame
 
-def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
+def plot_results(m, result_df, country, adm_level, exp_cat, analysis_type):
     # Convert result_df to GeoDataFrame if it's not already
     if not isinstance(result_df, gpd.GeoDataFrame):
         result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
     
-    # Determine the column to plot based on analysis_app
+    # Determine the column to plot based on analysis_type
     if analysis_type == "Function":
         column = f'{country}_{exp_cat}_EAI'
     elif analysis_type == "Classes":
@@ -514,16 +513,6 @@ def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
     # Ensure the CRS is EPSG:4326
     result_df = result_df.to_crs(epsg=4326)
     
-    # Calculate the bounding box
-    bounds = result_df.total_bounds  # [minx, miny, maxx, maxy]
-
-    # Calculate the center of the bounding box
-    center_lat = (bounds[1] + bounds[3]) / 2
-    center_lon = (bounds[0] + bounds[2]) / 2
-
-    # Initialize the folium map centered on the GeoDataFrame extent
-    m = folium.Map(location=[center_lat, center_lon], zoom_start=5)
-
     # Determine the key column (replace 'ADM1_TUN_POP' with your actual key column name)
     key_column = f'HASC_{adm_level}'  # Replace with the actual column that corresponds to your features
 
@@ -540,10 +529,4 @@ def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
         legend_name=column,
         use_jenks=True,
     ).add_to(m)
-
-    # Add layer control
-    folium.LayerControl().add_to(m)
-    MiniMap(toggle_display=True).add_to(m)
-
-    # Display the map
-    display(m)
+    return result_df.total_bounds  # [minx, miny, maxx, maxy]
