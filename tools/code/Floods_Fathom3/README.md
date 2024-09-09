@@ -1,10 +1,11 @@
-# STATUS
+# FATHOM 3 RISK ANALYTICS
 
-- Code has been tested and is working on Linux and Windows (create dedicated enviroment). Not tested on Mac but most likely working as well.
-- The number of processors used (nCores) is selected automatically, using all available cores for the first zonal_stats and then using 1 core per RP analysis (in case there are more RPs then available cores, it will use all cores and serialize the analysis accordingly).
-- ADM units are fetched automatically from the WB ArcGIS repository (GAD).
-- Population is fetched automatically from Worldpop - US constrained for the specified year. A different source can be specified by filename (without .tif extension).
-- World region is fetched from country code to select appropriate damage function.
+The program runs in jupyter notebook. Launch GUI_F3.ipynb and follow instructions.
+
+The analysis runs on all selected exposed categories, in sequence, and save results as geopackage and csv. Also plots preview of results and charts.
+
+The processing can take from less than a minute to a few minutes, sepending on the size of the country, computer power, and number of options selected. 
+E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM, 3 exposure categories: below 100 seconds.
 
 # SETUP
 We strongly recommend using the mamba package manager.
@@ -14,7 +15,7 @@ We strongly recommend using the mamba package manager.
 Environment creation:
 
 ```bash
-$ mamba create -n ccdr-tools --file Top-down/notebooks/win_env.yml
+$ mamba create -n ccdr-tools --file tools/win_env.yml
 ```
 
 Updating the environment spec (e.g., if package version changed or a package is added/removed):
@@ -26,7 +27,7 @@ $ mamba list -n ccdr-tools --explicit > win_env.yml
 Updating the environment (e.g., after code updates)
 
 ```bash
-$ mamba update -n ccdr-tools --file Top-down/notebooks/win_env.yml
+$ mamba update -n ccdr-tools --file tools/win_env.yml
 ```
 
 ## Using CONDA
@@ -34,25 +35,21 @@ $ mamba update -n ccdr-tools --file Top-down/notebooks/win_env.yml
 Environment creation:
 
 ```bash
-$ conda create -name ccdr-tools --file Top-down/notebooks/win_env.yml
+$ conda create -name ccdr-tools --file tools/win_env.yml
 ```
 
 Updating the environment (e.g., after code updates)
 
 ```bash
-$ conda update -name ccdr-tools --file Top-down/notebooks/win_env.yml
+$ conda update -name ccdr-tools --file tools/win_env.yml
 ```
 
 # SCRIPT OVERVIEW
 
-- `common.py` setup the script libraries and specifies data directories
-- `damageFunctions.py` includes the impact models (mathematical relationship between hazard intensity and relative damage/impact over exposure category)
-- `try.py` specifies the parameters of the analysis to run (country, hazards, return periods, classes, etc)
-- `runAnalysis.py` the main function that is used to run the program according to parameters set in `main.py`
-
 ## Input data
 
-Input data layers must be named and placed according to some rules, as follows:
+Default input data are sourced by the program.
+Custom layers can be used, just place those as follows:
 
 - Create a working directory and set it as DATA_DIR (e.g. ./data) in `common.py`.
   Inside the workdir, the data folders must follow this structure:
@@ -69,9 +66,14 @@ Input data layers must be named and placed according to some rules, as follows:
 ```
 - Read more about data formatting in the [documentation](https://gfdrr.github.io/CCDR-tools/docs/tool-setup.html).
 
-## Setting parameters
+## Running the analysis
 
-Edit the `main.py` file to specify:
+Run the GUI and follow instructions.
+
+### Manual run
+You can also use manual_run.py to run the program without jupyter notebook.
+
+Edit the `manual_run.py` file to specify:
 - **country (`country`)**: [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
 - **hazard type (`haz_cat`)**: `'FL'` for floods; `'HS'` for heat stress; `'DR'` for drought; `'LS'` for landslide
 - **return periods (`return_periods`)**: list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
@@ -82,9 +84,9 @@ Edit the `main.py` file to specify:
   - If `'Function'`, you can set minimum hazard threshold value (`min_haz_slider`). Hazard value below this threshold will be ignored
   - If `'Classes'`,  you can set the number and value of thresholds to consider to split hazard intensity values into bins (`class_edges`)
 - **admin level (`adm`)**: specify which boundary level to use for results summary (must exist in the `ISOa3`_ADM.gpkg file)
-- **save check (`save_check_raster`)**: specify if you want to export intermediate rasters (increases processing time) `[True, False]`
+- **save check (`save_check_raster`)**: specify if you want to export intermediate rasters (greatly increases processing time) `[True, False]`
 
-Example of `main.py` running flood analysis (`haz_cat`) over Cambodia (`country`) for 10 return periods (`return_periods`) over three exposure categories (`exp_cat_list`) using hazard classes according to thresholds (`class_edges`); results summarised at ADM3 level (`adm`). Do not save intermediate rasters (`save_check_raster`).
+Example of `manual_run.py` running flood analysis (`haz_cat`) over Cambodia (`country`) for 10 return periods (`return_periods`) over three exposure categories (`exp_cat_list`) using hazard classes according to thresholds (`class_edges`); results summarised at ADM3 level (`adm`). Do not save intermediate rasters (`save_check_raster`).
 
 ```
     # Defining the initial parameters - Example for function analysis
@@ -115,11 +117,8 @@ Example of `main.py` running flood analysis (`haz_cat`) over Cambodia (`country`
 ```
 
 
-## Running the analysis
+After saving the file, to run the analysis:
 
 ```bash
-$ python main.py
+$ python manual_run.py
 ```
-
-The analysis runs on all selected exposed categories, in sequence. Depending on the number of cores, the size and resolution of the data, and power of CPU, the analysis can take from less than a minute to few minutes.
-E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.
