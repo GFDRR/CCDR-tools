@@ -3,28 +3,21 @@ import os, gc
 import numpy as np
 import pandas as pd
 import geopandas as gpd
-import folium
 from folium import Choropleth
 import rasterio
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
+from shapely.geometry import shape
 
-import requests
-from shapely.geometry import shape, MultiPolygon
-
-# Importing the required functions
+# Importing internal libraries
 import common
+from input_utils import *
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
-from IPython.display import display
 
 # Importing the libraries for parallel processing
 import itertools as it
 from functools import partial
 import multiprocess as mp
-
-
-DATA_DIR = common.DATA_DIR
-OUTPUT_DIR = common.OUTPUT_DIR
 
 # Defining functions for parallel processing of zonal_stats
 def chunks(iterable_data, n):
@@ -40,78 +33,53 @@ def zonal_stats_parallel(args):
     # Zonal stats for a parallel processing on a list of features
     return zonal_stats_partial(*args)
 
-# Function to get the correct layer ID based on administrative level
-def get_layer_id_for_adm(adm_level):
-    layers_url = f"{common.rest_api_url}/layers"
-    target_layer_name = f"WB_GAD_ADM{adm_level}"
-
-    response = requests.get(layers_url, params={'f': 'json'})
-    
-    if response.status_code != 200:
-        print(f"Failed to fetch layers. Status code: {response.status_code}")
-        return None
-
-    layers_info = response.json().get('layers', [])
-    
-    for layer in layers_info:
-        if layer['name'] == target_layer_name:
-            return layer['id']
-    
-    print(f"Layer matching {target_layer_name} not found.")
-    return None
-
-# Function to fetch the ADM data using the correct layer ID
-def get_adm_data(country, adm_level):
-    layer_id = get_layer_id_for_adm(adm_level)
-    
-    if not layer_id:
-        print("Invalid administrative level or layer mapping not found.")
-        return None
-    
-    query_url = f"{common.rest_api_url}/{layer_id}/query"
-    params = {
-        'where': f"ISO_A3 = '{country}'",
-        'outFields': '*',
-        'f': 'geojson'
-    }
-    
-    response = requests.get(query_url, params=params)
-    
-    if response.status_code != 200:
-        print(f"Error fetching data: {response.status_code}")
-        return None
-    
-    data = response.json()
-    features = data.get('features', [])
-    
-    if not features:
-        print("No features found for the specified query.")
-        return None
-    
-    geometry = [shape(feature['geometry']) for feature in features]
-    properties = [feature['properties'] for feature in features]
-    gdf = gpd.GeoDataFrame(properties, geometry=geometry)
-    return gdf
-
-# Defining the function to download WorldPop data
-def fetch_population_data(country: str, exp_year: str):
-    dataset_path = f"Global_2000_2020_Constrained/{exp_year}/BSGM/{country}/{country.lower()}_ppp_{exp_year}_UNadj_constrained.tif"
-    download_url = f"{common.worldpop_url}{dataset_path}"
+# Process exposure data
+def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_region):
+    exp_ras = None
+    damage_factor = None
 
     try:
-        response = requests.get(download_url)
-        
-        if response.status_code != 200:
-            print(f"Failed to fetch data. Status code: {response.status_code}")
-            print(f"Response text: {response.text}")
+        if exp_cat == 'POP':
+            exp_ras = f"{exp_folder}/{country}_POP{exp_year}.tif"
+            if not os.path.exists(exp_ras):
+                print(f"Population data not found. Fetching data for {country}...")
+                fetch_population_data(country, exp_year)
+                if not os.path.exists(exp_ras):
+                    raise FileNotFoundError(f"Failed to fetch population data for {country}")
+            damage_factor = mortality_factor
 
-        file_name = f"{DATA_DIR}/EXP/{country}_POP{exp_year}.tif"
-        with open(file_name, 'wb') as file:
-            file.write(response.content)
-        print(f"Data downloaded successfully and saved as {file_name}")
+        elif exp_cat == 'BU':
+            exp_ras = f"{exp_folder}/{country}_BU.tif"
+            if not os.path.exists(exp_ras):
+                print(f"Built-up data not found. Fetching data for {country}...")
+                fetch_built_up_data(country)
+                if not os.path.exists(exp_ras):
+                    raise FileNotFoundError(f"Failed to fetch built-up data for {country}")
+            damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
 
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
+        elif exp_cat == 'AGR':
+            exp_ras = f"{exp_folder}/{country}_AGR.tif"
+            if not os.path.exists(exp_ras):
+                raise FileNotFoundError(f"Agriculture data not found for {country}. Please provide the data manually.")
+            damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
+
+        elif exp_nam is not None:
+            exp_ras = f"{exp_folder}/{exp_nam}.tif"
+            if not os.path.exists(exp_ras):
+                raise FileNotFoundError(f"Custom exposure data not found: {exp_ras}")
+            damage_factor = mortality_factor
+
+        else:
+            raise ValueError(f"Missing or unknown exposure category: {exp_cat}")
+
+        if not os.path.exists(exp_ras):
+            raise FileNotFoundError(f"Exposure raster not found after processing: {exp_ras}")
+
+        return exp_ras, damage_factor
+
+    except Exception as e:
+        print(f"Error in process_exposure_data: {str(e)}")
+        raise
 
 # Defining the main function to run the analysis
 def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_RPs: list[int],
@@ -138,173 +106,135 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
     save_check_raster : save intermediate results to disk?
     """
 
-    # Running the initial checks =======================================================================================
- 
-    # Defining the location of administrative, hazard and exposure folders
-    haz_folder = f"{DATA_DIR}/HZD/{country}/{haz_cat}/{period}/{scenario}"  # Hazard folder
-    exp_folder = f"{DATA_DIR}/EXP"  # Exposure folder
+    try:
+        # Defining the location of administrative, hazard and exposure folders
+        haz_folder = f"{DATA_DIR}/HZD/{country}/{haz_cat}/{period}/{scenario}"
+        exp_folder = f"{DATA_DIR}/EXP"
 
-    # If the analysis type is "Classes", then make sure that the user-defined classes are valid
-    bin_seq = None
-    num_bins = None
-    if analysis_type == "Classes":
-        # Ensure class threshold values are valid
-        is_seq = np.all(np.diff(class_edges) > 0)
-        if not is_seq:
-            ValueError(
-                "Class thresholds are not sequential. Lower classes must be less than class thresholds above.")
-            exit()
-        bin_seq = class_edges + [np.inf]
-        num_bins = len(bin_seq)
+        # Validating Classes analysis parameters
+        if analysis_type == "Classes":
+            if not class_edges:
+                raise ValueError("Class edges must be provided for Classes analysis")
+            is_seq = np.all(np.diff(class_edges) > 0)
+            if not is_seq:
+                raise ValueError("Class thresholds are not sequential. Lower classes must be less than class thresholds above.")
+            bin_seq = class_edges + [np.inf]
+            num_bins = len(bin_seq)
+        else:
+            bin_seq = None
+            num_bins = None
 
-    # Fetch the ADM data based on country code and adm_level values
-    adm_data = get_adm_data(country, adm_level)
+        # Fetch the ADM data
+        print(f"Fetching ADM data for {country}, level {adm_level}")
+        adm_data = get_adm_data(country, adm_level)
+        if adm_data is None:
+            raise ValueError(f"ADM data not available for {country}, level {adm_level}")
 
-    if adm_data is not None:
-        # Get the correct field names based on the administrative level
+        # Extract relevant ADM data
         field_names = common.adm_field_mapping.get(adm_level, {})
         code_field = field_names.get('code')
         name_field = field_names.get('name')
+        if not (code_field and name_field):
+            raise ValueError(f"Field names for ADM level {adm_level} not found")
+        
         wb_region = adm_data['WB_REGION'].iloc[0]
+        all_adm_codes = adm_data.columns[adm_data.columns.str.contains(r"HASC_\d$")].to_list()
+        all_adm_names = adm_data.columns[adm_data.columns.str.contains(r"NAM_\d$")].to_list()
 
-        if code_field and name_field:
-            # Extract the relevant columns
-            all_adm_codes = adm_data.columns.str.contains(r"HASC_\d$")
-            all_adm_names = adm_data.columns.str.contains(r"NAM_\d$")
-            all_adm_codes = adm_data.columns[all_adm_codes].to_list()
-            all_adm_names = adm_data.columns[all_adm_names].to_list()
+        # Handle exposure data
+        print(f"Processing exposure data for {exp_cat}")
+        exp_ras, damage_factor = process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_region)
+
+        # Running the analysis
+        # Importing the exposure data
+        exp_data = rxr.open_rasterio(exp_ras)[0]  # Open exposure dataset
+        exp_data.rio.write_nodata(-1.0, inplace=True)
+        exp_data.data[exp_data < 0.0] = 0.0
+
+        # Parallel processing setup
+        cores = min(len(valid_RPs), mp.cpu_count()) if n_cores is None else n_cores
+
+        with mp.Pool(cores) as p:
+            # Get total exposure for each ADM area
+            func = partial(zonal_stats_partial, raster=exp_ras, stats="sum")
+            stats_parallel = p.map(func, np.array_split(adm_data.geometry, cores))
+
+        exp_per_ADM = list(it.chain(*stats_parallel))
+
+        # Creating the results pandas dataframe
+        result_df = adm_data.loc[:, all_adm_codes + all_adm_names + ["geometry"]]
+        result_df[f"ADM{adm_level}_{exp_cat}"] = [x['sum'] for x in exp_per_ADM]
+
+        # Cleaning-up memory
+        del (stats_parallel, exp_per_ADM)
+        gc.collect()
+        
+        # Defining the list of valid prob_RPs - probability of return period
+        prob_RPs = 1./np.array(valid_RPs)
+        prob_RPs_LB = np.append(-np.diff(prob_RPs), prob_RPs[-1]).tolist()           # Lower bound - alternative --> prob_RPs_LB = np.append(1-prob_RPs[0],-np.diff(prob_RPs)).tolist() # Lower bound [0-1]
+        prob_RPs_UB = np.insert(-np.diff(prob_RPs), 0, 0.).tolist()                  # Upper bound - alternative --> prob_RPs_UB = np.append(1-prob_RPs[0],-np.diff(prob_RPs)).tolist() # Upper bound [0-1]
+        prob_RPs_Mean = ((np.array(prob_RPs_LB) + np.array(prob_RPs_UB))/2).tolist() # Mean value
+        prob_RPs_df = pd.DataFrame({'RPs':valid_RPs,
+                                    'prob_RPs':prob_RPs,
+                                    'prob_RPs_LB':prob_RPs_LB,
+                                    'prob_RPs_UB':prob_RPs_UB,
+                                    'prob_RPs_Mean':prob_RPs_Mean})
+        prob_RPs_df.to_csv(os.path.join(common.OUTPUT_DIR, f"{country}_{haz_cat}_prob_RPs.csv"), index=False)
+        
+        # Computing the results for each RP
+        n_valid_RPs_gt_1 = len(valid_RPs) > 1
+        cores = min(len(valid_RPs), mp.cpu_count()) if n_cores is None else n_cores
+        with mp.Pool(cores) as p:
+            params = {
+                "haz_folder": haz_folder,
+                "analysis_type": analysis_type,
+                "country": country,
+                "haz_cat": haz_cat,
+                "period": period,
+                "scenario": scenario,
+                "exp_cat": exp_cat,
+                "exp_data": exp_data,
+                "min_haz_threshold": min_haz_threshold,
+                "damage_factor": damage_factor,
+                "save_check_raster": save_check_raster,
+                "bin_seq": bin_seq,
+                "num_bins": num_bins,
+                "adm_data": adm_data,
+            }
+            func = partial(calc_imp_RPs, wb_region=wb_region, **params)
+            res = p.map(func, np.array_split(valid_RPs, cores))
+        if not isinstance(res, list):
+            to_concat = [result_df, res]
         else:
-            print(f"Field names for ADM level {adm_level} not found.")
-    else:
-        raise ValueError("ADM data not available or WB_REGION attribute not found!")
+            to_concat = [result_df] + res
 
-    # Checking which kind of exposed category is being considered...
-    print("Looking for exposure data...")
+        result_df = pd.concat(to_concat, axis=1) # Concatenating the results
+        result_df = result_df.replace(np.nan, 0) # Converting eventual nan/null to zero
+        result_df = result_df_reorder_columns(result_df, valid_RPs, analysis_type, exp_cat, 
+                                            adm_level, all_adm_codes, all_adm_names)
+        result_df = calc_EAEI(result_df, valid_RPs, prob_RPs_df, 'LB', 
+                            analysis_type, exp_cat, adm_level, num_bins, n_valid_RPs_gt_1)
+        result_df = calc_EAEI(result_df, valid_RPs, prob_RPs_df, 'UB', 
+                            analysis_type, exp_cat, adm_level, num_bins, n_valid_RPs_gt_1)
+        result_df = calc_EAEI(result_df, valid_RPs, prob_RPs_df, 'Mean', 
+                            analysis_type, exp_cat, adm_level, num_bins, n_valid_RPs_gt_1)
+        result_df = result_df.round(3) # Round to three decimal places to avoid giving the impression of high precision
+        
+        # If method == 'Mean', then simplify it's name    
+        # If not n_valid_RPs_gt_1 and any column contains the initial part as 'RP1_', it is removed then
+        replace_string = '_Mean' if n_valid_RPs_gt_1 else 'RP1'
+        result_df_colnames = [s.replace(replace_string, '') for s in result_df.columns]
+        result_df.set_axis(result_df_colnames, axis=1, inplace=True)
+        
+        # Write output csv table and geopackages
+        save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
 
-    # If the exposed category is population
-    if exp_cat == 'POP' and exp_nam is None:
-        fetch_population_data(country, exp_year)
-        damage_factor = mortality_factor
-        exp_ras = f"{exp_folder}/{country}_POP{exp_year}.tif"
+        # Trying to fix output not being passed to plot_results
+        return result_df
 
-    # If the exposed category is built-up area
-    elif exp_cat == 'BU' and exp_nam is None:
-        damage_factor = damage_factor_builtup
-        exp_ras = f"{exp_folder}/{country}_BU.tif"
-
-    # If the exposed category is agriculture
-    elif exp_cat == 'AGR' and exp_nam is None:
-        damage_factor = lambda x: damage_factor_agri(x, wb_region)
-        exp_ras = f"{exp_folder}/{country}_AGR.tif"
-
-    # If user-specified exposure file name is passed. Please specify appropriate damage factor to use from DamageFunctions.py
-    elif exp_nam is not None:
-        exp_ras = f"{exp_folder}/{exp_nam}.tif"
-        damage_factor = mortality_factor
-        exp_cat = str(exp_nam)
-
-    # If the exposed category is missing, then give an error
-    else:
-        exp_ras = None
-        raise ValueError(f"Missing or unknown data layer {exp_cat}")
-
-    # Running the analysis
-    # Importing the exposure data
-    exp_data = rxr.open_rasterio(exp_ras)[0]  # Open exposure dataset
-    exp_data.rio.write_nodata(-1.0, inplace=True)
-    exp_data.data[exp_data < 0.0] = 0.0
-
-    # Parallel processing setup
-    cores = min(len(valid_RPs), mp.cpu_count()) if n_cores is None else n_cores
-
-    with mp.Pool(cores) as p:
-        # Get total exposure for each ADM area
-        func = partial(zonal_stats_partial, raster=exp_ras, stats="sum")
-        stats_parallel = p.map(func, np.array_split(adm_data.geometry, cores))
-
-    exp_per_ADM = list(it.chain(*stats_parallel))
-
-    # Creating the results pandas dataframe
-    result_df = adm_data.loc[:, all_adm_codes + all_adm_names + ["geometry"]]
-    result_df[f"ADM{adm_level}_{exp_cat}"] = [x['sum'] for x in exp_per_ADM]
-
-    # Cleaning-up memory
-    del (stats_parallel, exp_per_ADM)
-    gc.collect()
-    
-    # Defining the list of valid prob_RPs - probability of return period
-    prob_RPs = 1./np.array(valid_RPs)
-    prob_RPs_LB = np.append(-np.diff(prob_RPs), prob_RPs[-1]).tolist()           # Lower bound - alternative --> prob_RPs_LB = np.append(1-prob_RPs[0],-np.diff(prob_RPs)).tolist() # Lower bound [0-1]
-    prob_RPs_UB = np.insert(-np.diff(prob_RPs), 0, 0.).tolist()                  # Upper bound - alternative --> prob_RPs_UB = np.append(1-prob_RPs[0],-np.diff(prob_RPs)).tolist() # Upper bound [0-1]
-    prob_RPs_Mean = ((np.array(prob_RPs_LB) + np.array(prob_RPs_UB))/2).tolist() # Mean value
-    prob_RPs_df = pd.DataFrame({'RPs':valid_RPs,
-                                'prob_RPs':prob_RPs,
-                                'prob_RPs_LB':prob_RPs_LB,
-                                'prob_RPs_UB':prob_RPs_UB,
-                                'prob_RPs_Mean':prob_RPs_Mean})
-    prob_RPs_df.to_csv(os.path.join(common.OUTPUT_DIR, f"{country}_{haz_cat}_prob_RPs.csv"), index=False)
-    
-    # Computing the results for each RP
-    n_valid_RPs_gt_1 = len(valid_RPs) > 1
-    cores = min(len(valid_RPs), mp.cpu_count()) if n_cores is None else n_cores
-    with mp.Pool(cores) as p:
-        params = {
-            "haz_folder": haz_folder,
-            "analysis_type": analysis_type,
-            "country": country,
-            "haz_cat": haz_cat,
-            "period": period,
-            "scenario": scenario,
-            "exp_cat": exp_cat,
-            "exp_data": exp_data,
-            "min_haz_threshold": min_haz_threshold,
-            "damage_factor": damage_factor,
-            "save_check_raster": save_check_raster,
-            "bin_seq": bin_seq,
-            "num_bins": num_bins,
-            "adm_data": adm_data,
-        }
-        func = partial(calc_imp_RPs, wb_region=wb_region, **params)
-        res = p.map(func, np.array_split(valid_RPs, cores))
-    if not isinstance(res, list):
-        to_concat = [result_df, res]
-    else:
-        to_concat = [result_df] + res
-
-    result_df = pd.concat(to_concat, axis=1) # Concatenating the results
-    result_df = result_df.replace(np.nan, 0) # Converting eventual nan/null to zero
-    result_df = result_df_reorder_columns(result_df, valid_RPs, analysis_type, exp_cat, 
-                                          adm_level, all_adm_codes, all_adm_names)
-    result_df = calc_EAEI(result_df, valid_RPs, prob_RPs_df, 'LB', 
-                          analysis_type, country, haz_cat, period, scenario, exp_cat, 
-                          adm_level, save_check_raster, num_bins, n_valid_RPs_gt_1)
-    result_df = calc_EAEI(result_df, valid_RPs, prob_RPs_df, 'UB', 
-                          analysis_type, country, haz_cat, period, scenario, exp_cat, 
-                          adm_level, save_check_raster, num_bins, n_valid_RPs_gt_1)
-    result_df = calc_EAEI(result_df, valid_RPs, prob_RPs_df, 'Mean', 
-                          analysis_type, country, haz_cat, period, scenario, exp_cat, 
-                          adm_level, save_check_raster, num_bins, n_valid_RPs_gt_1)
-    result_df = result_df.round(3) # Round to three decimal places to avoid giving the impression of high precision
-    
-    # If method == 'Mean', then simplify it's name    
-    # If not n_valid_RPs_gt_1 and any column contains the initial part as 'RP1_', it is removed then
-    replace_string = '_Mean' if n_valid_RPs_gt_1 else 'RP1'
-    result_df_colnames = [s.replace(replace_string, '') for s in result_df.columns]
-    result_df.set_axis(result_df_colnames, axis=1, inplace=True)
-    
-    # Write output csv table and geopackages
-    save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
-
-    # Trying to fix output not being passed to plot_results
-    return result_df
-
-    # Cleaning-up memory
-    del (country, haz_cat, valid_RPs, min_haz_threshold, exp_cat, adm_level)
-    del (analysis_type, class_edges, save_check_raster)
-    del (haz_folder, exp_folder)
-    del (exp_ras, exp_data)
-    del (adm_data, all_adm_codes, all_adm_names)
-    del (result_df)
+    except Exception as e:
+        print(f"An error occurred in run_analysis: {str(e)}")
+        raise    
 
 def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scenario, exp_cat, exp_data, min_haz_threshold,
                  damage_factor, save_check_raster, bin_seq, num_bins, adm_data, wb_region):
@@ -405,8 +335,8 @@ def result_df_reorder_columns(result_df, RPs, analysis_type, exp_cat, adm_level,
 
     return result_df
 
-def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, country, haz_cat, period, scenario, exp_cat, 
-              adm_level, save_check_raster, num_bins, n_valid_RPs_gt_1):
+def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, exp_cat, 
+              adm_level, num_bins, n_valid_RPs_gt_1):
     """
     Computes the EAE/EAI over each given return period.
     """
@@ -427,9 +357,6 @@ def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, country, haz_c
             # Compute the EAI for this RP, if probabilistic (len(valid_RPs)>1)
             if n_valid_RPs_gt_1:
                 result_df[f"RP{rp}_EAI_tmp"] = result_df[f"RP{rp}_{exp_cat}_imp"] * freq
-                if save_check_raster:
-                    EAI_i = impact_exp * freq
-                    EAI_i.rio.to_raster(os.path.join(common.OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_EAI.tif"))
         
     # Computing the EAE or EAI, if probabilistic (len(valid_RPs)>1)
     if n_valid_RPs_gt_1:
@@ -503,9 +430,9 @@ def plot_results(m, result_df, country, adm_level, exp_cat, analysis_type):
     
     # Determine the column to plot based on analysis_type
     if analysis_type == "Function":
-        column = f'{country}_{exp_cat}_EAI'
+        column = f'{exp_cat}_EAI'
     elif analysis_type == "Classes":
-        column = f'RP10_{country}_{exp_cat}_C1'
+        column = f'RP10_{exp_cat}_C1'
     else:
         print("Unknown analysis approach")
         return

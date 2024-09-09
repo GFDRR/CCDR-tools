@@ -36,10 +36,13 @@ def damage_factor_builtup(x: np.array, wb_region: str):
         'LAC': np.maximum(0.0, np.minimum(1.0, 1.04578 + (0.001490579 - 1.04578)/(1 + (x/0.5619431)**1.509554))),
         'GLOBAL': np.maximum(0.0, np.minimum(1.0, 2.100049 + (-0.00003530885 - 2.100049)/(1 + (x/6.632485)**0.559315))),
     }
-    
+    region = wb_to_region.get(wb_region)
+    if region not in function_mapping.keys():
+        return np.maximum(0.0, np.minimum(1.0, 2.100049 + (-0.00003530885 - 2.100049)/(1 + (x/6.632485)**0.559315)))
     return function_mapping.get(wb_to_region.get(wb_region))
 
-# Floods (river and coastal) over Agricultural areas
+
+# Floods (river and coastal) impact function over Agricultural areas
 
 def damage_factor_agri(x: np.array, wb_region: str):
     """A polynomial fit to average damage across agricultural land cover relative to water depth in meters.
@@ -60,6 +63,6 @@ def damage_factor_agri(x: np.array, wb_region: str):
     
     region = wb_to_region.get(wb_region)
     if region not in function_mapping.keys():
-        return np.maximum(0.0, np.minimum(1.0, 1.0244 - 1.0267*np.exp(-0.589*x)))
+        return np.maximum(0.0, np.minimum(1.0, 1.167022 + (-0.002602531 - 1.167022)/(1 + (x/1.398796)**1.246833)))
     return function_mapping.get(wb_to_region.get(wb_region))
 
