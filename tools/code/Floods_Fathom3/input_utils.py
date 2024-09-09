@@ -69,10 +69,8 @@ def get_adm_data(country, adm_level):
 def fetch_population_data(country: str):
     dataset_path = f"Global_2000_2020_Constrained/2020/BSGM/{country}/{country.lower()}_ppp_2020_UNadj_constrained.tif"
     download_url = f"{common.worldpop_url}{dataset_path}"
-
     try:
-        response = requests.get(download_url)
-        
+        response = requests.get(download_url)        
         if response.status_code != 200:
             print(f"Failed to fetch data. Status code: {response.status_code}")
             print(f"Response text: {response.text}")
@@ -169,6 +167,24 @@ def fetch_built_up_data(country: str):
             print(f"Error {response.status_code}: {response.text}")
     else:
         print("Missing ADM data!")
+
+# Defining the function to download Agricultural data (TEMP, replace source)
+def fetch_agri_data(country: str):
+    dataset_path = f"Global_2000_2020_Constrained/2020/BSGM/{country}/{country.lower()}_ppp_2020_UNadj_constrained.tif"
+    download_url = f"{common.worldpop_url}{dataset_path}"
+    try:
+        response = requests.get(download_url)
+        if response.status_code != 200:
+            print(f"Failed to fetch data. Status code: {response.status_code}")
+            print(f"Response text: {response.text}")
+
+        file_name = f"{DATA_DIR}/EXP/{country}_AGR.tif"
+        with open(file_name, 'wb') as file:
+            file.write(response.content)
+        print(f"Data downloaded successfully and saved as {file_name}")
+
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
 
 # Function to download files with progress bar
 def download_file(url, dest_folder):

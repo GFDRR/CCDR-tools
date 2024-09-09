@@ -3,7 +3,8 @@ import os, gc
 import numpy as np
 import pandas as pd
 import geopandas as gpd
-from folium import Choropleth
+import folium
+from branca.colormap import LinearColormap
 import rasterio
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
@@ -60,7 +61,10 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
         elif exp_cat == 'AGR':
             exp_ras = f"{exp_folder}/{country}_AGR.tif"
             if not os.path.exists(exp_ras):
-                raise FileNotFoundError(f"Agriculture data not found for {country}. Please provide the data manually.")
+                print(f"Agriculture data not found. Fetching data for {country}...")
+                fetch_agri_data(country)
+                if not os.path.exists(exp_ras):
+                    raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
             damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
 
         elif exp_nam is not None:
@@ -440,20 +444,48 @@ def plot_results(m, result_df, country, adm_level, exp_cat, analysis_type):
     # Ensure the CRS is EPSG:4326
     result_df = result_df.to_crs(epsg=4326)
     
-    # Determine the key column (replace 'ADM1_TUN_POP' with your actual key column name)
-    key_column = f'HASC_{adm_level}'  # Replace with the actual column that corresponds to your features
+    # Determine the key column
+    key_column = f'HASC_{adm_level}'
 
-    # Add GeoDataFrame to the map as a choropleth with a custom name
-    Choropleth(
-        geo_data=result_df.to_json(),  # Convert GeoDataFrame to GeoJSON format
-        name=column,  # Set the name that will appear in the layer control
-        data=result_df,
-        columns=[key_column, column],
-        key_on=f"feature.properties.{key_column}",  # Adjust to the correct key
-        fill_color="YlOrRd",
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        legend_name=column,
-        use_jenks=True,
-    ).add_to(m)
+    # Filter out zero and negative values for color scaling
+    non_zero_data = result_df[result_df[column] > 0]
+
+    if len(non_zero_data) > 0:
+        vmin = non_zero_data[column].min()
+        vmax = non_zero_data[column].max()
+        
+        # Create a custom colormap
+        colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+        colormap = LinearColormap(colors=colors, vmin=vmin, vmax=vmax)
+        
+        # Create a style function that colors features based on their value
+        def style_function(feature):
+            value = feature['properties'][column]
+            if value <= 0:
+                return {
+                    'fillColor': 'transparent',
+                    'fillOpacity': 0,
+                    'color': 'black',
+                    'weight': 1,
+                }
+            return {
+                'fillColor': colormap(value),
+                'fillOpacity': 0.7,
+                'color': 'black',
+                'weight': 1,
+            }
+        
+        # Add the GeoJson layer to the map
+        folium.GeoJson(
+            result_df,
+            style_function=style_function,
+            name=column
+        ).add_to(m)
+        
+        # Add colormap to the map
+        colormap.add_to(m)
+        colormap.caption = column
+    else:
+        print("No positive values to plot.")
+
     return result_df.total_bounds  # [minx, miny, maxx, maxy]
