@@ -68,7 +68,7 @@ Custom layers can be used, just place those as follows:
 
 ## Running the analysis
 
-Run the GUI and follow instructions.
+Run the [GUI](GUI.ipynb) and follow instructions.
 Check preview results to generate map output and output charts.
 
 
