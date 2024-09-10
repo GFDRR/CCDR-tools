@@ -232,7 +232,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
         
         # Write output csv table and geopackages
         save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
-
+        
         # Trying to fix output not being passed to plot_results
         return result_df
 
@@ -393,6 +393,30 @@ def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, exp_cat,
         result_df = result_df.drop(all_EAE, axis=1) # dropping
         
     return result_df
+
+def create_summary_df(result_df, valid_RPs, exp_cat):
+    summary_data = []
+    for rp in valid_RPs:
+        row = {'RP': rp, 'Freq': 1/rp}
+        
+        # Check for impact column
+        impact_col = next((col for col in result_df.columns if f'RP{rp}_{exp_cat}_imp' in col), None)
+        if impact_col:
+            row[f'{exp_cat}_impact'] = result_df[impact_col].sum()
+        
+        summary_data.append(row)
+    
+    summary_df = pd.DataFrame(summary_data)
+    
+    # Calculate Ex_freq
+    summary_df['Ex_freq'] = summary_df['Freq'].diff().abs().shift(-1)
+    summary_df.loc[summary_df.index[-1], 'Ex_freq'] = summary_df.loc[summary_df.index[-1], 'Freq']
+    
+    # Calculate EAI
+    if f'{exp_cat}_impact' in summary_df.columns:
+        summary_df[f'{exp_cat}_EAI'] = summary_df[f'{exp_cat}_impact'] * summary_df['Ex_freq']
+    
+    return summary_df
 
 def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs):
     # Ensure that the geometry column is correctly recognized
