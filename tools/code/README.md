@@ -69,6 +69,11 @@ Custom layers can be used, just place those as follows:
 ## Running the analysis
 
 Run the GUI and follow instructions.
+Check preview results to generate map output and output charts.
+
+
+<img width="594" alt="fqwf" src="https://github.com/user-attachments/assets/41f8d337-6b61-4392-b96b-8138d56c2df5">
+
 
 ### Manual run
 You can also use manual_run.py to run the program without jupyter notebook.
