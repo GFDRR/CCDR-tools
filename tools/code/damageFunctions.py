@@ -57,7 +57,7 @@ def damage_factor_agri(x: np.array, wb_region: str):
     function_mapping = {
         'AFRICA': np.maximum(0.0, np.minimum(1.0, 1.006324 + (0.01417282 - 1.006324)/(1 + (x/8621.368)**1.675571)**2665027)),
         'ASIA': np.maximum(0.0, np.minimum(1.0, (1.672909*x)/(3.917017+x))),
-        'LAC': np.maximum(0.0, np.minimum(1.0, 1.876076 + (0.01855393 - 1.876076)/(1 + (x/5.08262)^0.7629432))),
+        'LAC': np.maximum(0.0, np.minimum(1.0, 1.876076 + (0.01855393 - 1.876076)/(1 + (x/5.08262)**0.7629432))),
         'GLOBAL': np.maximum(0.0, np.minimum(1.0, 1.167022 + (-0.002602531 - 1.167022)/(1 + (x/1.398796)**1.246833))),
     }
 
