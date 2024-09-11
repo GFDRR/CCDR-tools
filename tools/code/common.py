@@ -1,5 +1,4 @@
 # This file includes common configuration elements used by the script.
-
 import os
 
 # Load env vars from dotenv file
@@ -17,6 +16,8 @@ os.makedirs(CACHE_DIR,  exist_ok=True)
 # Define the REST API URL
 rest_api_url = "https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer"
 worldpop_url = "https://data.worldpop.org/GIS/Population/"
+stac_search_url = "https://geoservice.dlr.de/eoc/ogc/stac/v1/search"
+
 
 # Mapping of administrative levels to field names for WB GAD dataset
 adm_field_mapping = {
