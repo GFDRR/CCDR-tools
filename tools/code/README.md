@@ -18,7 +18,7 @@ $ mamba create -n rdl-tools --file rdl-tools.yml
 ```
 or
 ```bash
-$ conda create -name ccdr-tools --file tools/win_env.yml
+$ conda create -name rdl-tools --file rdl-tools.yml
 ```
 
 # SCRIPT OVERVIEW
@@ -61,7 +61,7 @@ You can also use manual_run.py to run the program without jupyter notebook.
 
 Edit the `manual_run.py` file to specify:
 - **country (`country`)**: [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
-- **hazard type (`haz_cat`)**: `'FL'` for floods; `'HS'` for heat stress; `'DR'` for drought; `'LS'` for landslide
+- **flood hazard type (`haz_cat`)**: `'FLUVIAL_UNDEFENDED'`,`'FLUVIAL_DEFENDED'`, `'PLUVIAL_DEFENDED'`, `'COASTAL_UNDEFENDED'`,`'COASTAL_DEFENDED'`, 
 - **return periods (`return_periods`)**: list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
 - **exposure categories (`exp_cat_list`)**: list of exposure categories: `['POP', 'BU', 'AGR']`
   - exposure categories file name (`exp_cat_list`): list  of same length of `exp_cat_list` with file names for exposure categories, e.g.: `['GHS', 'WSF19', 'ESA20']`
@@ -77,28 +77,28 @@ Example of `manual_run.py` running flood analysis (`haz_cat`) over Cambodia (`co
 ```
     # Defining the initial parameters - Example for function analysis
     country            = 'KHM'
-    haz_cat            = 'FL'
+    haz_cat            = 'FLUVIAL_UNDEFENDED'
     return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
-    min_haz_slider     = 0.05
+    min_haz_slider     = 20
     exp_cat_list       = ['POP', 'BU', 'AGR']
     exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
     adm                = 'ADM3'
     analysis_app       = 'Function'
-    # class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
+    # class_edges        = []
     save_check_raster  = False
 ```
 
 ```
     # Defining the initial parameters - Example for class analysis
     country            = 'KHM'
-    haz_cat            = 'FL'
+    haz_cat            = 'COASTAL_DEFENDED'
     return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
-    # min_haz_slider     = 0.05
+    # min_haz_slider     = 20
     exp_cat_list       = ['POP', 'BU', 'AGR']
     exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
     adm                = 'ADM3'
     analysis_app       = 'Classes'
-    class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
+    class_edges        = [50, 100, 150, 200, 250]
     save_check_raster  = False
 ```
 
