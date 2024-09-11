@@ -1,5 +1,6 @@
 # Required libraries
 import os, gc
+import warnings
 import numpy as np
 import pandas as pd
 import geopandas as gpd
@@ -19,6 +20,8 @@ from damageFunctions import mortality_factor, damage_factor_builtup, damage_fact
 import itertools as it
 from functools import partial
 import multiprocess as mp
+
+warnings.filterwarnings("ignore", message="'GeoSeries.swapaxes' is deprecated", category=FutureWarning)
 
 # Defining functions for parallel processing of zonal_stats
 def chunks(iterable_data, n):
@@ -228,7 +231,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
         # If not n_valid_RPs_gt_1 and any column contains the initial part as 'RP1_', it is removed then
         replace_string = '_Mean' if n_valid_RPs_gt_1 else 'RP1'
         result_df_colnames = [s.replace(replace_string, '') for s in result_df.columns]
-        result_df.set_axis(result_df_colnames, axis=1, inplace=True)
+        result_df.columns = result_df_colnames
         
         # Write output csv table and geopackages
         save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
@@ -347,7 +350,7 @@ def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, exp_cat,
     for rp in RPs:
 
         # Exceedance Probability of return period
-        freq = float(prob_RPs_df['prob_RPs_'+method].loc[prob_RPs_df['RPs'] == rp])
+        freq = float(prob_RPs_df.loc[prob_RPs_df['RPs'] == rp, f'prob_RPs_{method}'].iloc[0])
 
         # Conduct analyses for classes
         if analysis_type == "Classes":
@@ -418,7 +421,7 @@ def create_summary_df(result_df, valid_RPs, exp_cat):
     
     return summary_df
 
-def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs):
+def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, analysis_type, valid_RPs):
     # Ensure that the geometry column is correctly recognized
     if 'geometry' not in result_df.columns and 'geom' in result_df.columns:
         result_df = result_df.rename(columns={'geom': 'geometry'})
@@ -432,26 +435,34 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, a
     # Set the CRS to EPSG:4326
     result_df.set_crs(epsg=4326, inplace=True)
    
-    # Remove the geometry column for the CSV export
+    # Remove the geometry column for the Excel export
     df_cols = result_df.columns
     no_geom = result_df.loc[:, df_cols[~df_cols.isin(['geometry'])]].fillna(0)
    
-    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{exp_cat}_{exp_year}"
+    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"
 
-    if analysis_type == "Function":
-        EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
-        no_geom.to_csv(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAI_string}function.csv"), index=False)
-        result_df.to_file(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAI_string}function.gpkg"), driver='GPKG')
-    elif analysis_type == "Classes":
-        EAE_string = "EAE_" if len(valid_RPs) > 1 else ""
-        no_geom.to_csv(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAE_string}class.csv"), index=False)
-        result_df.to_file(os.path.join(common.OUTPUT_DIR, f"{file_prefix}_{EAE_string}class.gpkg"), driver='GPKG')
-    else:
-        raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
+    # Create Excel writer object
+    excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.xlsx")
+    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
+
+    # Create GeoPackage file
+    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.gpkg")
+
+    with pd.ExcelWriter(excel_file, engine='openpyxl') as excel_writer:
+        if analysis_type == "Function":
+            EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
+            sheet_name = f"{exp_cat}_{EAI_string}function"
+            no_geom.to_excel(excel_writer, sheet_name=sheet_name, index=False)
+        elif analysis_type == "Classes":
+            EAE_string = "EAE_" if len(valid_RPs) > 1 else ""
+            sheet_name = f"{exp_cat}_{EAE_string}class"
+            no_geom.to_excel(excel_writer, sheet_name=sheet_name, index=False)
+        else:
+            raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
     
     return result_df  # Return the GeoDataFrame
 
-def plot_results(m, result_df, country, adm_level, exp_cat, analysis_type):
+def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
     # Convert result_df to GeoDataFrame if it's not already
     if not isinstance(result_df, gpd.GeoDataFrame):
         result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
@@ -463,7 +474,7 @@ def plot_results(m, result_df, country, adm_level, exp_cat, analysis_type):
         column = f'RP10_{exp_cat}_C1'
     else:
         print("Unknown analysis approach")
-        return
+        return None, None
 
     # Ensure the CRS is EPSG:4326
     result_df = result_df.to_crs(epsg=4326)
@@ -499,17 +510,13 @@ def plot_results(m, result_df, country, adm_level, exp_cat, analysis_type):
                 'weight': 1,
             }
         
-        # Add the GeoJson layer to the map
-        folium.GeoJson(
+        # Create the GeoJson layer
+        geojson_layer = folium.GeoJson(
             result_df,
             style_function=style_function,
-            name=column
-        ).add_to(m)
+            name=f"{exp_cat} - {column}"
+        )
         
-        # Add colormap to the map
-        colormap.add_to(m)
-        colormap.caption = column
-    else:
-        print("No positive values to plot.")
+        return geojson_layer, colormap
 
-    return result_df.total_bounds  # [minx, miny, maxx, maxy]
+    return None, None
