@@ -37,8 +37,8 @@ Default input data are sourced by the program. Custom layers can be used, just p
 - To name datasets, use ISO_A3 country code followed by specific data identifier (default applies).
 
 ```
-    CCDR_tools/HZD/SEN_FL_RP10.tif
-    CCDR_tools/EXP/SEN_POP.tif
+    DATA_DIR/HZD/SEN_FL_RP10.tif
+    DATA_DIR/EXP/SEN_POP.tif
 ```
 - Read more about data formatting in the [documentation](https://gfdrr.github.io/CCDR-tools/docs/tool-setup.html).
 
