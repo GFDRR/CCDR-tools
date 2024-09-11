@@ -8,50 +8,26 @@ The processing can take from less than a minute to a few minutes, sepending on t
 E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM, 3 exposure categories: below 100 seconds.
 
 # SETUP
-We strongly recommend using the mamba package manager.
+We strongly recommend using the mamba package manager, but conda should work too.
 
-## Using MAMBA
-
-Environment creation:
-
-```bash
-$ mamba create -n ccdr-tools --file tools/win_env.yml
-```
-
-Updating the environment spec (e.g., if package version changed or a package is added/removed):
-
-```bash
-$ mamba list -n ccdr-tools --explicit > win_env.yml
-```
-
-Updating the environment (e.g., after code updates)
-
-```bash
-$ mamba update -n ccdr-tools --file tools/win_env.yml
-```
-
-## Using CONDA
 
 Environment creation:
 
+```bash
+$ mamba create -n rdl-tools --file rdl-tools.yml
+```
+or
 ```bash
 $ conda create -name ccdr-tools --file tools/win_env.yml
-```
-
-Updating the environment (e.g., after code updates)
-
-```bash
-$ conda update -name ccdr-tools --file tools/win_env.yml
 ```
 
 # SCRIPT OVERVIEW
 
 ## Input data
 
-Default input data are sourced by the program.
-Custom layers can be used, just place those as follows:
+Default input data are sourced by the program. Custom layers can be used, just place those as follows:
 
-- Create a working directory and set it as DATA_DIR (e.g. ./data) in `common.py`.
+- Create a working directory and set it as DATA_DIR (e.g. ./data) editing `common.py`.
   Inside the workdir, the data folders must follow this structure:
 
 ```
@@ -68,9 +44,14 @@ Custom layers can be used, just place those as follows:
 
 ## Running the analysis
 
-Run the [GUI](GUI.ipynb) and follow instructions.
+Activate the environment, point to your work directory, run jupyter notebook and start the [GUI](GUI.ipynb).
+```bash
+$ activate rdl-tools
+$ cd path/to/work_directory
+$ jupyter notebook 
+```
+Follow GUI instructions to run the analysis.
 Check preview results to generate map output and output charts.
-
 
 <img width="594" alt="fqwf" src="https://github.com/user-attachments/assets/41f8d337-6b61-4392-b96b-8138d56c2df5">
 
