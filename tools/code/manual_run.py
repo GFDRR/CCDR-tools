@@ -1,7 +1,5 @@
 # Importing the required packages
 import sys
-from common import *
-from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 from runAnalysis import run_analysis
 
 # Defining the main function
@@ -17,7 +15,7 @@ def main():
     exp_nam_list    = ['TUN_POP','TUN_BU']	  # Naming of population file. If None, the default applies, Population:'POP', Built-up:'BU', Agricultural land:'AGR'.
                                                   # If not None, expect a list of same length of exp_cat_list e.g. ['Tunisia_GHSL_pop_2020'].
     adm_level       = 2 			  # [1, 2, 3] depending on source availability for each country
-    analysis_app    = 'Function'		  # ['Classes', 'Function']
+    analysis_type    = 'Function'		  # ['Classes', 'Function']
     min_haz_slider  = 10			  # Data to be ignored below threshold
     class_edges        = [50]			  # FL [5, 25, 50, 100, 200]
     save_check_raster  = False
@@ -34,7 +32,7 @@ def main():
         exp_cat = exp_cat_list[i]
         exp_nam = exp_nam_list[i]
         run_analysis(country, haz_cat, period, scenario, return_periods, min_haz_slider,
-                   exp_cat, exp_nam, exp_year, adm_level, analysis_app, class_edges, save_check_raster, n_cores)
+                   exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, save_check_raster, n_cores)
 
     print("--- %s seconds ---" % (time.time() - start_time))
 
