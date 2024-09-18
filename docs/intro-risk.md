@@ -69,9 +69,47 @@ In this specific framework, we are only estimating **DIRECT disaster losses** in
 ## Supported combinations of hazard and exposure 
 Based on the available data, the following matrix show the combinations of hazard and exposure for which a vulnerability model is provided, and the type of model, allowing to express the risk either in form of impact (damage) or exposure to hazard classes.
 
-```{figure} images/rsk_combo.png
----
-align: center
----
-Matrix showing hazard-exposure combinations that can be 1. calculated in terms of impact via a vulnerability model, or 2. classified in terms of exposure to hazard thresholds.
-```
+<table style="border-collapse: collapse; width: 100%; border: 2px solid black;">
+  <tr>
+    <th style="background-color: #118AB2; color: white; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Hazard types</th>
+    <th style="background-color: #06D6A0; color: black; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Population<br>[Mortality]</th>
+    <th style="background-color: #06D6A0; color: black; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Built-up assets<br>[Physical damage]</th>
+    <th style="background-color: #06D6A0; color: black; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Agricultural land<br>[Production losses]</th>
+  </tr>
+  <tr>
+    <td style="background-color: #B7DCE8; padding: 10px; text-align: center; border: 2px solid black;"><b>River and Coastal floods</b><br><i>Probabilistic</i><br>[Water extent and depth]</td>
+    <td style="background-color: #EF466F; color: white; padding: 10px; text-align: center; border: 2px solid black;">Impact model</td>
+    <td style="background-color: #EF466F; color: white; padding: 10px; text-align: center; border: 2px solid black;">Impact model</td>
+    <td style="background-color: #EF466F; color: white; padding: 10px; text-align: center; border: 2px solid black;">Impact model</td>
+  </tr>
+  <tr>
+    <td style="background-color: #B7DCE8; padding: 10px; text-align: center; border: 2px solid black;"><b>Landslides</b><br><i>Deterministic</i><br>[Landslide hazard index]</td>
+    <td style="background-color: #35CBB6; color: white; padding: 10px; text-align: center; border: 2px solid black;">Exposure<br>by hazard classes</td>
+    <td style="background-color: #35CBB6; color: white; padding: 10px; text-align: center; border: 2px solid black;">Exposure<br>by hazard classes</td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+  </tr>
+  <tr>
+    <td style="background-color: #B7DCE8; padding: 10px; text-align: center; border: 2px solid black;"><b>Tropical cyclones (wind)</b><br><i>Probabilistic</i><br>[Cyclone tracks]</td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+    <td style="background-color: #EF466F; color: white; padding: 10px; text-align: center; border: 2px solid black;">Impact model</td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+  </tr>
+  <tr>
+    <td style="background-color: #B7DCE8; padding: 10px; text-align: center; border: 2px solid black;"><b>Agricultural drought</b><br><i>Deterministic</i><br>[Agricultural Stress Index]</td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+    <td style="background-color: #35CBB6; color: white; padding: 10px; text-align: center; border: 2px solid black;">Exposure<br>by hazard classes</td>
+  </tr>
+  <tr>
+    <td style="background-color: #B7DCE8; padding: 10px; text-align: center; border: 2px solid black;"><b>Heat stress</b><br><i>Probabilistic</i><br>[Heat index]</td>
+    <td style="background-color: #35CBB6; color: white; padding: 10px; text-align: center; border: 2px solid black;">Exposure<br>by hazard classes</td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+  </tr>
+  <tr>
+    <td style="background-color: #B7DCE8; padding: 10px; text-align: center; border: 2px solid black;"><b>Air pollution</b><br><i>Deterministic</i><br>[PM2.5 concentration]</td>
+    <td style="background-color: #35CBB6; color: white; padding: 10px; text-align: center; border: 2px solid black;">Exposure<br>by hazard classes</td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+    <td style="background-color: #d3d3d3; padding: 10px;"></td>
+  </tr>
+</table>
