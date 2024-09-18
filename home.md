@@ -1,37 +1,27 @@
-# Climate & Disaster Risk Screening Tools
+# Risk Data Library - Coutry Climate & Disaster Risk Screening Tools
 
-A collection of scripted tools developed to inform risk analytics for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2023).
+This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards' risk screening at the national or sub-national level. The tools have originally being created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2024) and then furtherly developed within the [**Risk Data Library project**](docs/rdl.md).
 
-The tools collected in this repository allow to:
-
-- Perform spatial analytics of disaster risk for the present period ([**baseline**](docs/intro-risk#annual-risk-baseline)) based on global datasets
+The CCDR-tools allow to perform spatial analytics of disaster risk based on global datasets.
+Additionally, we are looking to offer approaches and methods to:
 - Combine risk and poverty information into [**bi-variate maps**](docs/risk-poverty.md)
 - Produce [**climate risk outlook**](docs/climate-risk.md) based on CMIP6 indices
-- Present results into an interactive [**dashboard**](docs/presentation#dashboard)
+- Present results into an interactive [**dashboard**](docs/presentation.md)
 
 ```{note}
 Are you a World Bank TTL? You can request for availability to produce a new country screening using [**this form**](https://forms.office.com/r/UU3LXBNz4T).
 ```
-
-As an example of the output produced using these tools, check some of the risk screening reports produced (2022/2023):
-
-- [**Cambodia**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/KHM_RSK.pdf)
-- [**Senegal**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/SEN_RSK.pdf)
-- [**OECS countries**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/OECS_RSK.pdf)
-
-Countries that have been already covered by the risk analytics:
+The map shows countries that have been already covered by the risk analytics. Click on the country name to download the risk screening report.
 
 <iframe src="docs/maps/CCDR_map.html" height="500" width="100%"></iframe>
 
-```{table}
-:name: vln-data
-|**South & South-East Asia** | **West Africa & Sahel countries**| **Central & East Africa**  | **Latin America & Caribbean** |
-|---|---|---|---|
-| <ul><li>Pakistan<li>Nepal<li>Bangladesh<li>Cambodia<li>India<li>Thailand<li>Malaysia</ul> | <ul><li>Ghana<li>Burkina Faso<li>Mali<li>Niger<li>Chad<li>Mauritania<li>Guinea-Bissau<li>Nigeria<li>Senegal</ul> | <ul><li>Ethiopia</ul> | <ul><li>Dominican Republic<li>Antigua & Barbuda<li>Dominica<li>Saint Kitts & Nevis<li>Saint Lucia<li>Grenada<li>Saint Vincent & Grenadines</ul> |
-```
+<!-- Table of CCDR Countries -->
+| South & South-East Asia | West Africa & Sahel countries | Central & East Africa | Latin America & Caribbean |
+|-------------------------|--------------------------------|------------------------|----------------------------|
+| - Pakistan<br>- Nepal<br>- Bangladesh<br>- [**Cambodia**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/KHM_RSK.pdf)<br>- India<br>- Thailand<br>- Malaysia<br>- Philippines<br>- Mongolia | - Ghana<br>- Burkina Faso<br>- Mali<br>- Niger<br>- Chad<br>- Mauritania<br>- Guinea-Bissau<br>- Nigeria<br>- [**Senegal**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/SEN_RSK.pdf) | - Ethiopia | - Dominican Republic<br>- [**OECS countries**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/OECS_RSK.pdf)<br>&nbsp;&nbsp;- Antigua & Barbuda<br>&nbsp;&nbsp;- Dominica<br>&nbsp;&nbsp;- Saint Kitts & Nevis<br>&nbsp;&nbsp;- Saint Lucia<br>&nbsp;&nbsp;- Grenada<br>&nbsp;&nbsp;- Saint Vincent & Grenadines |
 
 ```{note}
-This documentation specifically reflects the approches and methods adopted for the CCDR disaster risk screening following the [**CCDR guidance note**](https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Tools%20and%20Approaches.pdf). They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
+This documentation reflects the approches and methods adopted for the CCDR disaster risk screening following the [**CCDR guidance note**](https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Tools%20and%20Approaches.pdf). They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
 Also note that our tools are not expected to reflect all existing risk perspectives and dimensions, rather producing standardised risk indicators.
 ```
 The CCDR risk screening tools has been developed in agreement with regional geography and poverty teams, and with the support of the World Bank Global Facility for Disaster Risk and Recovery ([**GFDRR**](https://www.gfdrr.org)).
@@ -51,7 +41,7 @@ In the field of Disaster Risk Management (DRM), Risk (**R**) is typically calcul
 ---
 align: center
 ---
-Conceptual framework of Disaster Risk as a combination of an hazard (described by intensity in relation to its occurrence frequency or probability) occurring in the same location of Exposed asset or capital (which can include population, built-up asset, or else) which is vulnerable to suffer impact from that specific hazard.
+Conceptual framework of Disaster Risk as a combination of an hazard (described by intensity in relation to its occurrence frequency or probability) occurring in the same location of Exposed asset or capital (can include population, built-up asset, or else) which is vulnerable to suffer impact from that specific hazard.
 ```
 
 ```{seealso}

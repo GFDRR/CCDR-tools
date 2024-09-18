@@ -1,10 +1,11 @@
 # Results presentation
+This section is still work in progress.
 
 [//]: # (Comment)
 
 # Maps
 The best way to depict spatial variability is through maps.
-For baseline risk mapping, there is no automation produced at the moment; [QGIS](external-tools.md) is used to import the data and print into maps.
+For baseline risk mapping, there is no automation produced at the moment; [QGIS](external-tools) is used to import the data and print into maps.
 
 [quick tutorial]
 

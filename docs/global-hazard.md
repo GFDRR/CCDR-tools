@@ -6,20 +6,22 @@
 Hazard datasets developed by WB disaster risk projects have been placed in a special collection of the WB Development Data Hub: [Risk Data Library Collection: **HAZARD**](https://datacatalog.worldbank.org/search?fq=(identification%2Fcollection_code%2Fany(col:col%20eq%20%27RDL%27))&q=hazard).
 ```
 
-The most relevant datasets (updated, high resolution, scientific quality) representing extreme events and long-term hazards that were considered for inclusion in the CCDR and other risk-related activities across the Bank have been listed below for each hazard, explaining their pros and cons and providing suggestions for improvement. Most datasets only cover the historical period (*baseline*); while a few of the hydro-met hazards also offer some *hazard projections*.
-
-```{table}
-:name: hzd_datasets
-| [**GEOPHYSICAL**](hzd_gp-data.md) | [**HYDRO-METEOROLOGICAL**](hzd_hm-data.md) | [**ENVIRONMENTAL FACTORS**](hzd_env-data.md) |
-| :--: | :--: | :--: |
-| [Earthquake](hzd_gp-data#earthquake) | [River floods](hzd_hm-data#river-floods) | [Air pollution](hzd_env-data#air-pollution) |
-| [Tsunami](hzd_gp-data#tsunami) | [Landslides](hzd_hm-data#landslides) |   |
-| [Volcanic activity](hzd_gp-data#volcanic-activity) | [Coastal flood](hzd_hm-data#coastal-floods-storm-surge)  |  |
-|   | [Tropical cyclones](hzd_hm-data#tropical-cyclones) |   |
-|   | [Drought](hzd_hm-data#drought-water-scarcity) |  |
-|   | [Heat stress](hzd_hm-data#heat-stress) |  |
-|   | Wildfires |  |
-```
+The most relevant datasets (updated, high resolution, scientific quality) representing extreme events and long-term hazards that were considered for inclusion in the CCDR and other risk-related activities across the Bank have been reviewed, explaining their pros and cons and providing suggestions for their use. Most datasets only cover the historical period (*baseline*); while a few of the hydro-met hazards also offer some *hazard projections*.
 
 Some hazards are modelled using a **probabilistic approach**, providing a set of scenarios linked to hazard frequency for the period of reference. For the current data availability, this is the case for floods, storm surges, cyclones, heatwaves, and wildfires.
 Others, such as landslides, use a **deterministic approach**, providing an individual map of hazard intensity or susceptibility.
+
+```{table}
+:name: hzd_datasets
+:align: center
+:width: 75%
+
+| [**GEOPHYSICAL**](hzd_gp-data.md) | [**HYDRO-METEOROLOGICAL**](hzd_hm-data.md) | [**ENVIRONMENTAL**](hzd_env-data.md) |
+| :---: | :---: | :---: |
+| [Earthquake<br>![Earthquake](images/hzd_icons/earthquake.png)](hzd_gp_eq)| [River floods<br>![River flood](images/hzd_icons/flood.png)](hzd_hm_fl) | [Air pollution<br>![Air pollution](images/hzd_icons/air-pollution.png)](hzd_env_ap) |
+| [Tsunami<br>![Tsunami](images/hzd_icons/tsunami.png)](hzd_gp_ts) | [Landslide<br>![Landslide](images/hzd_icons/landslide.png)](hzd_hm_ls) |   |
+| [Volcanic activity<br>![Volcanic activity](images/hzd_icons/volcano.png)](hzd_gp_vo) | [Coastal flood<br>![Coastal flood](images/hzd_icons/storm-surge.png)](hzd_hm_ss)  |  |
+|   | [Tropical cyclones<br>![Tropical cyclones](images/hzd_icons/wind.png)](hzd_hm_tc) |   |
+|   | [Drought<br>![Drought](images/hzd_icons/drought.png)](hzd_hm_dr) |  |
+|   | [Heat stress<br>![Heat stress](images/hzd_icons/heat-wave.png)](hzd_hm_hs) |  |
+```

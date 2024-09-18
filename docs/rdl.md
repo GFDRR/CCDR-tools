@@ -7,9 +7,9 @@ Building on GFDRR experience, extensive & intensive review of risk literature an
 <br><br>
 More information are available in the [**RDL documentation**](https://rdl-standard.readthedocs.io/en/docs.mat/).
 
-The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/collections/rdl) is a catalogue where **Risk Datasets** produced or used by World Bank analytics are stored and organised by the **RDL standard metadata schema**.
+The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/collections/rdl) is a catalogue where **Risk Datasets** produced or used by World Bank analytics are stored and organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
 
-```{image} images/rdl_attributes.png
-:class: bg-rdl
+```{image} images/rdl.png
 :align: center
+:width: 60%
 ```
