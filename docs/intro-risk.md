@@ -72,9 +72,9 @@ Based on the available data, the following matrix show the combinations of hazar
 <table style="border-collapse: collapse; width: 100%; border: 2px solid black;">
   <tr>
     <th style="background-color: #118AB2; color: white; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Hazard types</th>
-    <th style="background-color: #06D6A0; color: black; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Population<br>[Mortality]</th>
-    <th style="background-color: #06D6A0; color: black; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Built-up assets<br>[Physical damage]</th>
-    <th style="background-color: #06D6A0; color: black; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Agricultural land<br>[Production losses]</th>
+    <th style="background-color: #06D6A0; color: #454545; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Population<br>[Mortality]</th>
+    <th style="background-color: #06D6A0; color: #454545; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Built-up assets<br>[Physical damage]</th>
+    <th style="background-color: #06D6A0; color: #454545; padding: 10px; text-align: center; width: 25%; border: 2px solid black;">Agricultural land<br>[Production losses]</th>
   </tr>
   <tr>
     <td style="background-color: #B7DCE8; padding: 10px; text-align: center; border: 2px solid black;"><b>River and Coastal floods</b><br><i>Probabilistic</i><br>[Water extent and depth]</td>
