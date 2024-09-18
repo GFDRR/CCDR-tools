@@ -6,14 +6,6 @@
 ## OVERVIEW
 This is an open tool for risk screening based on globally-avaialble datasets. For more details see full online [**DOCUMENTATION**](https://gfdrr.github.io/CCDR-tools).
 
-The ‘tools’ approach offers analytical notebooks allowing non-experts to perform comprehensive, multi-hazard risk screening using regionally available and comparable geodata. The work under this tier is characterized by: 
-
- - Global and regional-scale geodata inputs 
- - User-friendly, and easily interpretable tools and outputs
- - Some degree of customisation, but ensuring transferability and comparability between countries 
-
-Analysis runs over high resolution exposure data (90 m) and is then aggregated at the required administrative level. This approach provides sub-national mapping of natural hazards, exposure and risk,  which can inform policy and targeted interventions. Risk is calculated independently for each individual hazard.
-
 --------------------------------------
 
 ## RATIONALE
@@ -25,40 +17,17 @@ Following this established approach, the risk originating from hazard affecting 
 <img width=250 src="https://user-images.githubusercontent.com/44863827/198075495-b2235f1e-755d-461a-9c4a-ceca8bd2b79e.png">
 </div>
 
-The analysis workflow:
-<div align="center"><img width=500 src="https://user-images.githubusercontent.com/44863827/200046878-b0eaa822-3fde-4ce4-94bc-685cba483a64.png"></div>
-
 --------------------------------------
 
 ## CONTENT
 
-   - **[Procedures](procedures/)** - explains the analytical workflow used by notebooks with examples for different hazards
-   - **[Notebooks](notebooks/)** - include jupyter notebooks to perform the spatial analytics for each hazard
-   - **[Code](code/)** - include python scripts (beta) to perform the spatial analytics with better efficiency for each hazard
-
---------------------------------------
-
-## ANALYSES
-
-  - **Flood** [[Procedure](procedures/Analytical_procedure_function.md) - [Notebook](notebooks/Flood.ipynb)] - uses flood model (water depth for multiple return periods) to calculate:
-	1) Expected Annual Impact (EAI) over population (mortality) and built-up (physical damage) according to vulnerability functions;
-	2) distribution of any exposed category (population, built-up or agricultural land) across hazard thresholds.
-
-  - **Heat stress** [[Procedure](procedures/Analytical_procedure_classes.md) - [Notebook](notebooks/Heat_stress.ipynb)] - uses heat stress index (multiple return periods) to calculate distribution of exposed population across hazard thresholds (3 classes).
- 
-  - **Drought** - uses drought frequency index (multiple hazard thresholds) to calculate distribution of exposed agricultural land across hazard thresholds.
-  
-  - **Landslide** [[Procedure](procedures/Analytical_procedure_classes.md) - [Notebook](notebooks/Landslide.ipynb)] - uses landslide hazard index (individual layer) to calculate distribution of exposed categories (population, built-up) across hazard thresholds (3 classes).
-  
-  - **Tropical cyclones** [[Procedure](procedures/Analytical_procedure_function.md) - [Notebook](notebooks/Tropical_cyclones.ipynb)] - uses wind hazard model (gust speed for 3 return periods) to calculate impact over built-up according to damage function.
-  
-  - **Air Pollution** [[Procedure](procedures/Analytical_procedure_classes.md) - [Notebook](notebooks/AirPollution.ipynb)] - uses PM2.5 hazard map (individual layer) to calculate health impact on population according to mortality function.
+   - **[Code](code/)** - Core jupyter notebooks to run the risk screening analytics for each hazard type
+   - **[Utility](utility/)** Additional notebook to perform specific spatial operations
 
 --------------------------------------
 
 ## CREDITS
 
 Tools developed in the context of World Bank CCDR analytics
-- Concept: [Mattia Amadio](https://www.github.com/matamadio)
-- Coding: [Takuya Iwanaga](https://github.com/ConnectedSystems)
-- Additional coding: [Arthur H. Essenfelder](https://github.com/artessen)
+- Concept and coding: [Mattia Amadio](https://www.github.com/matamadio)
+- Additional coding: [Arthur H. Essenfelder](https://github.com/artessen) and [Takuya Iwanaga](https://github.com/ConnectedSystems)
