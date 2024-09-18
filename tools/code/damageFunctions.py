@@ -1,6 +1,6 @@
 # Importing the required packages
 import numpy as np
-from common import wb_to_region
+from tools.code.common import wb_to_region
 
 # Defining the damage functions
 

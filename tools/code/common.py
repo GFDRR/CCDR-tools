@@ -1,10 +1,9 @@
 # This file includes common configuration elements used by the script.
+
 import os
+from dotenv import dotenv_values, find_dotenv
 
-# Load env vars from dotenv file
-from dotenv import dotenv_values
-
-config     = dotenv_values(".env")
+config = dotenv_values(find_dotenv())
 DATA_DIR   = config["DATA_DIR"]
 OUTPUT_DIR = config["OUTPUT_DIR"]
 CACHE_DIR  = config["CACHE_DIR"]
@@ -32,7 +31,7 @@ wb_to_region = {
     'MENA': 'AFRICA',       # Middle East and North Africa
     'EAP': 'ASIA',          # East Asia and Pacific
     'SAR': 'ASIA',          # South Asia
-    'LCR': 'LAC',           # Latin America and Caribbean
     'ECA': 'ASIA',          # East Europe and Central Asia
+    'LCR': 'LAC',           # Latin America and Caribbean
     'Other': 'GLOBAL',      # North America, Europe, Japan, Korea, Australia and New Zealand
 }
