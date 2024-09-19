@@ -44,7 +44,7 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
 
     try:
         if exp_cat == 'POP':
-            exp_ras = f"{exp_folder}/{country}_POP{exp_year}.tif"
+            exp_ras = f"{exp_folder}/{country}_POP.tif"
             if not os.path.exists(exp_ras):
                 print(f"Population data not found. Fetching data for {country}...")
                 fetch_population_data(country, exp_year)
