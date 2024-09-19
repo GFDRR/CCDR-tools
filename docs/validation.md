@@ -27,9 +27,9 @@ This is easier to check for hazards with strong dependency to the geomorphology,
 Some examples:
 - River flood extent occurring too far from its catchment; depth values not matching with the elevation from digital terrain model.
 - High landslide hazard on flat terrain.
-- Coastal floods spreading for kilometers over the whole coastal plain; ignoring coastal defence measures.
+- Coastal floods spreading inland for kilometers on coastal plains.
 
-#### Validation against empirical datasets
+#### Comparison against empirical datasets
 
 Probabilistic scenarios of hazard data can be compared with observed disaster events to corroborate the analysis, although this is often a difficult task due to lack of granular spatial data representing the events. Some hazards are better covered by observations than others - see the [disaster records](disaster-data.md).
 
@@ -126,4 +126,4 @@ In the development of risk models, many different data sets are used as input co
 
 A risk model can produce a very precise result—it may show, for example, that a 1-in-100-year flood will affect 388,123 people—but in reality the accuracy of the model and input data may provide only an order of magnitude estimate. Similarly, sharply delineated flood zones on a hazard map do not adequately reflect the uncertainty associated with the estimate and could lead to decisions such as locating critical facilities just outside the flood line, where the actual risk is the same as if the facility was located inside the flood zone.
 
-We should not be apprehensive of using information that is uncertain so long as any decisions and actions based upon the information are made with a full understanding of the associated uncertainty and its implications. It should be remembered that uncertainty will usually promote an analytical debate that should lead to robust decisions, which is a positive manifestation of uncertainty. Credible scientific results should also have associated uncertainty clearly presented.
+We should not be apprehensive of using information that is uncertain so long as any decisions and actions based upon the information are made with a full understanding of the associated uncertainty and its implications. It should be remembered that uncertainty will usually promote an analytical debate that should lead to robust decisions, which is a positive manifestation of uncertainty. Credible scientific results should always be presented together with their associated uncertainty.

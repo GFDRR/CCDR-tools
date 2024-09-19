@@ -41,7 +41,7 @@ align: center
 ```
 
 ```{note}
-Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.<br><p align=center><b>RP 1,000 = change of occurring once every 1,000 years = 1/1,000 annual occurrence probability (0.001 or 0.1% any given year).</b></p>Read more:
+Note that a return period of 1,000 years, while very unlikely, can occur anyday! Therefore it is important to consider all range of probabilities when assessing risk.<br><p align=center><b>RP 1,000 = chance of occurring once every 1,000 years<br>= 1/1,000 annual occurrence probability (0.001 or 0.1% any given year).</b></p>Read more:
 - [Understanding flood risk](https://thefloodhub.co.uk/blog/understanding-flood-risk)
 - [Communicating the chance of a flood: The use and abuse of probability, frequency and return period](https://www.researchgate.net/publication/328368702_Communicating_the_chance_of_a_flood_The_use_and_abuse_of_probability_frequency_and_return_period)
 ```
@@ -56,5 +56,5 @@ When it comes to natural hazards and risk,<center>**MISINFORMATION CAN BE WORSE 
 ```
 
 ```{seealso}
-- **[Geospatial data and GIS](https://centre.humdata.org/learning-path/an-introduction-to-geospatial-data/geospatial-data-geographic-information-systems/)**
+An introduction to **[Geospatial data and GIS](https://centre.humdata.org/learning-path/an-introduction-to-geospatial-data/geospatial-data-geographic-information-systems/)**.
 ```

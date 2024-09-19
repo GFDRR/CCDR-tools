@@ -2,7 +2,7 @@ format: jb-book
 root: home
 
 parts:
-  - caption: Disaster Risk concepts
+  - caption: Disaster Risk Concepts
     chapters:
       - file: docs/intro-hazard
       - file: docs/intro-exposure

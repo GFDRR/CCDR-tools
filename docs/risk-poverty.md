@@ -35,7 +35,7 @@ AI-based indices such as the **Relative Wealth Index** (**RWI**) [(*Chi et al. 2
 ## Index normalisation
 
 While the DHS index is already population-weighted, the RWI data needs to be weighted using population density to render the survey demographically representative.
-We provide a simple [Notebook](../tools/utility/RWI/RWI-norm.ipynb) to quickly perform this operation based on RWI csv data downloaded from HDX and any population raster layer.
+We provide a simple [**notebook**](../tools/utility/RWI/RWI-norm.ipynb) to quickly perform this operation based on RWI csv data downloaded from HDX and any population raster layer.
 
 ```{figure} images/rwi1.jpg
 ---

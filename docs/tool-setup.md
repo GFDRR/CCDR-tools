@@ -1,8 +1,8 @@
 # Tool setup and run
 To run correctly, the script requires proper setup according to the instructions below. It can be executed on any windows or linux machine.
 
-Download the latest stable version as .zip from [here](http://dummylink). Unzip it in your work directory, e.g. wd/RDL-tools/.
-The script has been developed to run as [Jupyter notebook](https://jupyter.org/), but also allows to run as pure python (`manual_run.py`). 
+Download the latest stable version of the code as zip from [**here**](http://dummylink). Unzip it in your work directory, e.g. wd/RDL-tools/.
+The script has been developed to run as [jupyter notebook](https://jupyter.org/), but also allows to run as pure python (`manual_run.py`). 
 
 ## Python environment
 - Python 3 needs to be installed on your system. We suggest the latest [Anaconda](https://www.anaconda.com/download) distribution. Mamba is also encouraged.
