@@ -10,6 +10,9 @@ The best way to depict spatial variability is through maps. For baseline risk ma
 - A proper [symbology](https://docs.qgis.org/3.34/en/docs/training_manual/basic_map/symbology.html) should be applied to each layer.
 - The [print layout](https://docs.qgis.org/3.34/en/docs/user_manual/print_composer/index.html) window is used to build the map to export as a picture, adding legends, scale bar, etc.
 
+```{seealso}
+Do you prefer to map using python? Take a [**Python data-viz free course**](https://courses.spatialthoughts.com/python-dataviz.html)!
+```
 # Figures
 
 - Charts allow to give a quick snapshots of key output, e.g. the most risk-prone units in a country.
