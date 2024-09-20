@@ -56,6 +56,7 @@ align: center
 ---
 Comparing modelled flood extent under historical scenario RP 100 years for a random location (Philippines): Fathom v3 2023 (left); Fathom v3 2023 (mid-left); JRC 2024 (mid-right) RWI - Aqueduct 2020 (right). Note how the Fathom model is able to better capture smaller discharge basins thanks to a better DTM resolution (30 m). Fathom 2 and JRC are comparable. The RWI data show its limitation at 1 km resolution.
 ```
+(hzd_hm_ss)=
 Additional datasets that have been previously used in WB coastal flood analytics are those from **Muis et al (2016)** and **Climate central**. Both these models are not endorsed as they tend to project unrealistic flood extent  under baseline climate conditions, which might be due an oversimplified bathtub modelling approach, or due to the relatively low resolution and vertical accuracy of the Digital Terrain Model (DTM).
 
 ```{table}
