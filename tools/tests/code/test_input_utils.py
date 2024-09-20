@@ -30,9 +30,6 @@ def test_get_layer_id_for_adm():
     
     with pytest.raises(ValueError) as exc_info:
         _ = get_layer_id_for_adm(adm_level=None)
-    assert str(exc_info.value) == 'Layer matching WB_GAD_ADMnone not found.'
+    assert str(exc_info.value) == 'Layer matching WB_GAD_ADMNone not found.'
     
-    
-    
-    
-    
+# TODO: Test get_adm_data function
