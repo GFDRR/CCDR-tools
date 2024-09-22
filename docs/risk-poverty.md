@@ -23,7 +23,7 @@ While the wealth quintiles are useful to understand relative wealth and equity w
 ```{table}
 :name: vln-se
 | **Name** | **Source** | **Model type** | **Scale** |
-|---:|---:|---:|---:|
+|---:|:---:|:---:|:---:|
 | [Relative Wealth Index](https://data.humdata.org/dataset/relative-wealth-index) | META | Wealth index | National |
 | [Demographic Health Survey](https://dhsprogram.com/data/available-datasets.cfm) | USAID| Wealth index | National |
 ```
@@ -34,8 +34,8 @@ AI-based indices such as the **Relative Wealth Index** (**RWI**) [(*Chi et al. 2
 
 ## Index normalisation
 
-The DHS data is weighted using population density to render the survey demographically representative; while the RWI needs to be weighted in a similar fashon.
-The **High-Resolution Settlement Layer** [(**HRSL**)](https://arxiv.org/abs/1712.05839) is used to obtain the population estimates at 100 m resolution.
+While the DHS index is already population-weighted, the RWI data needs to be weighted using population density to render the survey demographically representative.
+We provide a simple [**notebook**](../tools/utility/RWI/RWI-norm.ipynb) to quickly perform this operation based on RWI csv data downloaded from HDX and any population raster layer.
 
 ```{figure} images/rwi1.jpg
 ---
@@ -52,8 +52,7 @@ align: center
 ```
 
 ```{seealso}
-A script in R is provided to produce population-weighted RWI maps at sub-national level starting from RWI points, GHS population and boundaries data.<br>`Work in progress - we are looking to make it more user friendly!`
-[**RWI-Pop weighted Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/tools/utility/RWI-pop.R)
+See a full tutorial on how to normalise RWI using population and plot it as maps! [**RWI-Pop weighted tutorial**](https://learn.geo4.dev/Population-Weighted-Wealth.html)
 ```
 
 ## Bi-variate maps

@@ -18,7 +18,7 @@ html:
     use_issues_button: true
     baseurl: https://GFDRR.github.io/CCDR-tools
     extra_footer: |
-        <div>Cite as: <i>"Amadio M. (GFDRR) - CCDR tools data and methodology, 2023. Available at https://gfdrr.github.io/CCDR-tools"</i><br>
+        <div>Cite as: <i>"Amadio M. (GFDRR) - CCDR tools data and methodology, 2024. Available at https://gfdrr.github.io/CCDR-tools"</i><br>
             <b>All content (unless otherwise specified) is subject to the <a href="https://raw.githubusercontent.com/worldbank/template/main/LICENSE">World Bank Master Community License Agreement.</a></b>
         </div>
 
@@ -31,15 +31,22 @@ execute:
         - tools/notebooks/**/*.ipynb
 
 #######################################################################################
-# Bibliography settings
-bibtex_bibfiles:
-    - docs/bibliography.bib
+# Root-level configuration
+markdown_extensions:
+  - attr_list
+  - md_in_html
+
+plugins:
+  - search
+  - mkdocs-simple-hooks:
+      hooks:
+        on_page_markdown: "hooks:on_page_markdown"
+
 
 #######################################################################################
 # Sphinx settings
 sphinx:
     config:
-        bibtex_reference_style: author_year
         mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
         html_last_updated_fmt: "%b %d, %Y"
         html_show_copyright: false

@@ -1,77 +1,63 @@
 # Hydro-Meteorological hazards
-
 Process or phenomenon of atmospheric, hydrological or oceanographic nature that may cause loss of life, injury or other health impacts, property damage, loss of livelihoods and services, social and economic disruption, or environmental damage [(UNISDR)](https://link.springer.com/referenceworkentry/10.1007/978-1-4020-4399-4_179#ref-CR8537).
-<hr>
 
-## River floods
-Flood hazard is commonly described in terms of flood frequency (multiple scenarios) and severity, which is measured in terms of water extent and related depth modelled over Digital Elevation Model (DEM). Inland flood events can be split into 2 categories:
+(hzd_hm_fl)=
+## Floods
+Flood hazard is commonly described in terms of flood frequency (multiple scenarios) and severity, which is measured in terms of water extent and related depth modelled over Digital Elevation Model (DEM).
+Flooding hazard can be triggered in different contexts. We can identify three main flood types:
 - **Fluvial (or river) floods** occur when intense precipitation or snow melt collects in a catchment, causing river(s) to exceed capacity, triggering the overflow, or breaching of barriers and causing the submersion of land, especially along the floodplains.
-- **Pluvial (or surface water) floods** are a consequence of heavy rainfall, but unrelated to the presence of water bodies. Fast accumulation of rainfall is due to reduced soil absorbing capacity or due to the saturation of the drainage infrastructures; meaning that the same event intensity can trigger very different risk outcomes depending on those parameters. For this reason, static hazard maps based on rainfall and DEM alone should be used with extreme caution.
+- **Pluvial (or surface water) floods** are a consequence of heavy rainfall, but unrelated to the presence of water bodies. Fast accumulation of rainfall is due to reduced soil absorbing capacity or due to the saturation of the drainage infrastructures; meaning that the same event intensity can trigger very different risk outcomes depending on those parameters. For this reason, static hazard maps based on rainfall and DEM alone should be used with extreme caution. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures.
+- **Coastal floods (storm surge)** occur when the level in a water body (sea, estuary) rises to engulf otherwise dry land. This happens mainly due to storm surges, triggered by tropical cyclones and/or strong winds pushing surface water inland. Like for inland floods, hazard intensity is measured using the water extent and associated depth.
+
+The global **Fathom** model has consistently proven to be the best option for flood risk screening across WB projects. Recently (2023) Fathom v3 has been released, rising the quality standard: compared to v2, it uses a more advanced modelling approach based on a high-resolution DEM (30m), and includes additional output, such as coastal flooding and future climate projections. Like v2, for each flood type it offers both the _defended_ and the _undefended_ options. The _undefended_ model is typically the preferred product to use for risk screening; the defended model (FD) uses GDP as a proxy (FLOPROS database) to set defence standards, while it does not account for presence of physical defence measures. The difference between the two options is much more tangible in wealthier countries.
 
 ```{table}
 :name: FL_data
-**Name** | [Fathom flood hazard maps](https://www.fathom.global/) | [Aqueduct flood hazard maps](https://www.wri.org/data/aqueduct-floods-hazard-maps)
+**Name** | [Fathom global v2](https://www.fathom.global/) | [Fathom global v3](https://www.fathom.global/) 
 --: | :--: | :--:
-**Developer** | Fathom | WRI
-**Hazard process** | Fluvial flood, Pluvial flood | Fluvial flood
-**Resolution** | 90 m | 900 m
+**Developer** | Fathom | Fathom
+**Version/Release** | v2 (2019) | v3 (2023)
+**Hazard process** | Fluvial flood, Pluvial flood | Fluvial flood, Pluvial flood, Coastal flood
+**Resolution** | 90 m | 30 m
 **Analysis type** | Probabilistic | Probabilistic
-**Frequency type** | Return Period (11 scenarios) | Return Period (10 scenarios)
-**Time reference** | Baseline (1989-2018) | Baseline (1960-1999); Projections  – CMIP5 (2030-2050-2080)
+**Frequency type** | Return Period (11 scenarios) | Return Period (8 scenarios)
+**Time reference** | Baseline (1989-2018) | Baseline (1989-2018)<br>Projections  – CMIP6 (2030-2050-2080)
 **Intensity metric** | Water depth [m] | Water depth [m]
-**License** | Commercial | Open data
-**Other** | Includes defended/undefended option |  
-**Notes** | Standard for WB analysis | The only open flood dataset addressing future hazard scenarios
+**License** | Commercial | Commercial
+**Other** | Includes defended/undefended option |  Includes defended/undefended option
+**Notes** | Previous standard for WB analysis | New standard for WB analysis
 ```
-
-- Despite missing projections, **Fathom** modelling has consistently proven to be the preferred option due to its higher quality (better resolution, updated data and a more advanced modelling approach). There are, however, important details and limitations to consider for the correct use and interpretation of the model. The undefended model (FU) is typically the preferred product to use in assessments, since the defended model (FD) does not account for presence of physical defence measures, rather uses GDP as a proxy (FLOPROS database) to set defence standards.
-
 ```{seealso}
-The Fathom v2 global dataset can be requested for use in World Bank projects by filling the [**request form**](https://forms.office.com/r/RzNaVV3mft).
+The Fathom v3 global dataset can be requested for use in World Bank projects by filling the [**request form**](https://forms.office.com/r/sG0qWTnC0L).
 ```
+When an open dataset is preferred, there are a few alternatives that can be considered.
+- **JRC** hazard maps based on LISFLOOD model were recently updated. These can be used for risk screening that requires open data input.
+- **WRI** hazard maps are the preferred choice in cases when data needs to be open/public and explicit climate scenarios are required. However the low resolution of this dataset makes it far from optimal to measure exposure and risk.
+- **Deltares** updated the WRI coastal flood model at 90 m, representing the best option in terms of resolution and time coverage (baseline + scenarios), and water routing, including inundation attenuation to generate more realistic flood extent.
 
-- **WRI** hazard maps are the preferred choice only in cases when 1) data needs to be open/public; 2) explicit climate scenarios are required, however the scientific quality and granularity of this dataset is far from the one offered by Fathom – and far from optimal, in general (low resolution, old baseline, simplified modelling).
+```{table}
+:name: FL_data2
+**Name** | [Global river flood hazard maps](https://data.jrc.ec.europa.eu/dataset/jrc-floods-floodmapgl_rp50y-tif) | [Aqueduct flood hazard maps](https://www.wri.org/data/aqueduct-floods-hazard-maps) | [Global Coastal Flood maps](https://planetarycomputer.microsoft.com/dataset/deltares-floods)
+--: | :--: | :--: | :--:
+**Developer** | JRC | WRI | Deltares
+**Version/Release** | v2 (2024) | v2 (2020) | v3 (2022)
+**Hazard process** | Fluvial flood | Fluvial flood, Coastal flood | Coastal flood
+**Resolution** | 90 m | 900 m | 90 m, 1 km, 5 km
+**Analysis type** | Probabilistic | Probabilistic | Probabilistic
+**Frequency type** | Return Period (7 scenarios) | Return Period (10 scenarios) | Return Period (6 scenarios)
+**Time reference** | Baseline (1989-2020) | Baseline (1960-1999)<br>Projections  – CMIP5 (2030-2050-2080) | Baseline (2018)<br>Projections – SLR (2050)
+**Intensity metric** | Water depth [m] | Water depth [m] | Water depth [m]
+**License** | Open data | Open data | Open data
+```
 
 ```{figure} images/hzd_fl_models.jpg
 ---
 align: center
 ---
-Comparing modelled flood extent and depth across Ethiopia: Fathom 2019 (right); RWI - Aqueduct 2020 (center); Global Assessment Report 2015 (left). Note how the Fathom model is the only one capable of capturing smaller discharge basins thanks to a better DTM resolution (90 m). The RWI and GAR data, both at 1 km resolution, cannot capture them. 
+Comparing modelled flood extent under historical scenario RP 100 years for a random location (Philippines): Fathom v3 2023 (left); Fathom v3 2023 (mid-left); JRC 2024 (mid-right) RWI - Aqueduct 2020 (right). Note how the Fathom model is able to better capture smaller discharge basins thanks to a better DTM resolution (30 m). Fathom 2 and JRC are comparable. The RWI data show its limitation at 1 km resolution.
 ```
-
-It is important to note that pluvial (flash) flood events are extremely hard to model properly on the base of global static hazard maps alone. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures. Because of this, while Fathom does offer pluvial hazard maps, their application for pluvial risk assessment is questionable as it cannot account for these key drivers.
-
-A complementary perspective on flood risk is offered by the [Global Surface Water layer](https://planetarycomputer.microsoft.com/dataset/jrc-gsw) produced by JRC using remote sensing data (Landsat 5, 7, 8) over the period1984-2020. It provides information on all the locations ever detected as max water level, water occurrence, occurrence change, recurrence, seasonality, and seasonality change. However, this layer does not seem to properly account for extreme flood events, I.e. recorded flood events for the period 1984-2020 most often exceed the extent of this layer. Hence it can be used to identify permanent and semi-permanent water bodies, but not to identify the baseline flood extent from past events.
-
-```{figure} images/GSWL.jpg
----
-align: center
----
-Global Surface Water Layer
-```
-<hr>
-
-## Coastal floods (storm surge)
-Coastal floods occur when the level in a water body (sea, estuary) rises to engulf otherwise dry land. This happens mainly due to storm surges, triggered by tropical cyclones and/or strong winds pushing surface water inland. Like for inland floods, hazard intensity is measured using the water extent and associated depth.
-
-```{table}
-:name: CF_data
-| **Name** | [Aqueduct flood hazard maps](https://www.wri.org/data/aqueduct-floods-hazard-maps) | [Global Flood map](https://planetarycomputer.microsoft.com/dataset/deltares-floods) |
-|---:|:---:|:---:|
-| **Developer** | WRI-Deltares | Deltares |
-| **Hazard process** | Coastal flood | Coastal flood, SLR |
-| **Resolution** | 1 km | 90 m, 1 km, 5 km |
-| **Analysis type** | Probabilistic | |
-| **Frequency type** | Return Period (10 scenarios) | Return Period (6 scenarios) |
-| **Time reference** | Baseline (1960–1999);<br>Projections – CMIP5 (2030-2050-2080) | Baseline (2018);<br>Projections – SLR (2050) |
-| **Intensity metric** | Water depth [m] | Water depth [m] |
-| **License** | Open data | Access requested |
-| **Notes** | Includes effect of local subsidence (2 datasets) and flood attenuation. Modelled future scenarios. | Essentially an evolution of the WRI |
-```
-
-The current availability of global dataset is poor, with WRI products (recently updated by Deltares) representing the best option in terms of resolution and time coverage (baseline + scenarios), and water routing, including inundation attenuation to generate more realistic flood extent. The latest version has a much better resolution of 90 m based on MeritDEM or NASADEM, overcoming WRI limitations for local-scale assessment. Note that the Fathom is working to include coastal floods and climate scenarios in the next version (3) of the dataset (coming sometime in 2023/24), which will likely become the best option for risk assessment in the next future.
-
-Additional datasets that have been previously used in WB coastal flood analytics are:
+(hzd_hm_ss)=
+Additional datasets that have been previously used in WB coastal flood analytics are those from **Muis et al (2016)** and **Climate central**. Both these models are not endorsed as they tend to project unrealistic flood extent  under baseline climate conditions, which might be due an oversimplified bathtub modelling approach, or due to the relatively low resolution and vertical accuracy of the Digital Terrain Model (DTM).
 
 ```{table}
 :name: CF_data_more
@@ -79,17 +65,14 @@ Additional datasets that have been previously used in WB coastal flood analytics
 |---:|:---:|:---:|
 | **Developer** | Muis et al. (2016, 2020) | Climate Central |
 | **Hazard process** | Coastal flood | Mean sea level |
-| **Resolution** | 1 km | |
+| **Resolution** | 1 km | ? |
 | **Analysis type** | Probabilistic | |
 | **Frequency type** | Return Period (10 scenarios) | One layer per period |
-| **Time reference** | Baseline (1979–2014) | Baseline; Projections |
+| **Time reference** | Baseline (1979–2014) | Baseline<br>Projections |
 | **Intensity metric** | Water depth [m] | Water extent |
 | **License** | Open data | Licensed |
-| **Notes** | The update of Muis 2020 has been considered; however, the available data does include easily applicable land inundation, only extreme sea levels. | Does use simple bathtub distribution without flood attenuation – does not simulate extreme sea events. |
+| **Notes** | Retired data | Simple bathtub distribution without flood attenuation |
 ```
-
-Both these models tend to project unrealistic flood extent already under baseline climate conditions, which might be due an oversimplified bathtub modelling approach, or due to the relatively low resolution and vertical accuracy of the Digital Terrain Model (DTM).
-
 As shown in figure below, considering the minimum baseline values (least impact criteria), the flood extent drawn by the Climate Central layer is similar to the baseline RP100 from Muis, in the middle - both generously overestimating water spreading inland even under less extreme scenarios [*the locaiton of comparison is chosen as both the Netherlands and N Italy are low-lying areas, which are typically the most difficult to model*].
 In comparison, the WRI is far from perfection (it is also a bathtub model), but it seems to apply a more realistic max flood extent, which ultimately makes it more realistic for application.
 
@@ -100,13 +83,11 @@ align: center
 Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.
 ```
 ### Sea level rise
-
 Most of the listed models include flood hazard simulations that account for the effect of Sea Level Rise under climate change projections: RWI uses CMIP5 climate data, while Deltares and ClimateCentral dataset is based on CMIP6. In addition to increasing water volumes, sea level projections account for land movements (sinking or rising land) caused by tectonic activity, large-scale underground extraction, or glacial isostatic adjustment.
 
 In additon to coastal flood projections, the [NASA Sea Level Projection Tool](https://sealevel.nasa.gov/ipcc-ar6-sea-level-projection-tool) allows users to visualize and download the sea level projection data from the IPCC 6th Assessment Report (AR6). The tool shows both global and regional sea level projections from 2020 to 2150, along with how these projections differ depending on future scenario or warming level. Data can be downloaded in multiple formats.
 
-<hr>
-
+(hzd_hm_ls)=
 ## Landslides
 Landslides (mass movements) are affected by geological features (rock type and structure) and geomorphological setting (slope gradient). Landslides can be split into two categories depending on their trigger:
 - **Dry mass movement** (rockfalls, debris flows) is driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation. 
@@ -122,41 +103,40 @@ Landslides (mass movements) are affected by geological features (rock type and s
 | **Analysis type** | Deterministic | Deterministic |
 | **Frequency type** | none | none |
 | **Time reference** | Baseline (rainfall trigger) (1980-2018) | |
-| **Intensity metric** | Hazard frequency [-] | Susceptibility index [-] |
+| **Intensity metric** | Mean and Median intensity/frequency [-] | Susceptibility index [-] |
 | **License** | Open | |
 | **Notes** | Based on NASA landslide susceptibility layer. Median and Mean layers provided. | Although not a hazard layer, it can be accounted for in addition to the ARUP layer. |
 ```
 
-Landslide hazard description can rely on either the NASA Landslide Hazard Susceptibility map (LHASA) or the derived ARUP layer funded by GFDRR in 2019. This dataset considers empirical events from the COOLR database and model both the earthquake and rainfall triggers over the existing LHASA map. The metric of choice is frequency of occurrence of a significant landslide per km2, which is however provided as synthetic index (not directly translatable as time occurrence probability).
+Landslide hazard description can rely on either the NASA Landslide Hazard Susceptibility map (LHASA) or the derived ARUP layer funded by GFDRR in 2019. This dataset considers empirical events from the COOLR database and model both the earthquake and rainfall triggers over the existing LHASA map. The metric of choice is frequency of occurrence of a significant landslide per sq km, which is however provided as synthetic index (not directly translatable as time occurrence probability).
 
-```{figure} images/LS_data.jpg
+```{figure} images/landslide.png
 ---
 align: center
 ---
-Example from the ARUP landslide hazard layer (rainfall trigger, median): Pakistan. The continuous index is displayed into 3 discrete classes (Low, Medium, High) according to thresholds set by ARUP (Low: <0.01; Moderate: 0.01-0.1; High: >0.1).
+ARUP landslide hazard layer. The qualitative index is displayed into 3 discrete classes (Low, Medium, High) according to thresholds set by ARUP (Low: <0.01; Moderate: 0.01-0.1; High: >0.1).
 ```
-<hr>
 
+(hzd_hm_tc)=
 ## Tropical cyclones
 Tropical cyclones (including hurricanes, typhoons) are events that can trigger different hazard processes at once such as strong winds, intense rainfall, extreme waves, and storm surges. In this category, we consider only the wind component of cyclone hazard, while other components (floods, storm surge) are typically considered separately.
-
 ```{table}
 :name: SW_data
-| **Name** | [GAR15-IBTrACS](https://www.geonode-gfdrrlab.org/search/?hazard_type=strong_wind&limit=50&offset=0&title__icontains=CY-GLOBAL) | [IBTrACSv4](https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access) | [STORMv3](https://data.4tu.nl/articles/dataset/STORM_tropical_cyclone_wind_speed_return_periods/12705164/3) |
+| **Name** | [GAR15-IBTrACS](https://www.geonode-gfdrrlab.org/search/?hazard_type=strong_wind&limit=50&offset=0&title__icontains=CY-GLOBAL) | [IBTrACSv4](https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access) | [STORMv4](https://data.4tu.nl/datasets/0ea98bdd-5772-4da8-ae97-99735e891aff/4) |
 |---:|:---:|:---:|:---:|
-| **Developer** | NOAA | NOAA | IVM |
+| **Developer** | NOAA | NOAA | TU Delft |
+| **Version/Release** | 2015 | v4 (2024) | v4 (2023) |
 | **Hazard process** | Strong winds | Strong winds | Strong winds |
-| **Resolution** | 30 km | 10 km | 10 km |
-| **Analysis type** | Probabilistic | Empirical | Empirical, Probabilistic |
+| **Resolution** | 30 km | | 10 km |
+| **Analysis type** | Probabilistic | Empirical | Probabilistic |
 | **Frequency type** | Return Period (5 scenarios) | | Return periods (10 to 10,000 years) |
-| **Time reference** | Baseline (1989-2007) | Baseline (1980-2022) | Baseline (1984-2022);<br>Projections (2015-2050; SSP5/8.5) |
-| **Intensity metric** | Wind gust speed [5-sec m/s] | Many variables | Many variables |
+| **Time reference** | Baseline (1989-2007) | Baseline (1980-2022) | Baseline (1984-2022)<br>Projections (2015-2050; SSP5/8.5) |
+| **Intensity metric** | Wind gust speed [5-sec m/s] | Many variables | Wind speed, tracks |
 | **License** | Open data | Open data | Open data |
 ```
-
-A newer version ([IBTrACSv4](https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access)) has been released in 2018 and could be leveraged to generate an updated wind-hazard layer, with better resolution and possibly the inclusion of orography effect. There are several attributes tied to each event; the map in figure below shows the USA_WIND variable (Maximum sustained wind speed in knots: 0 - 300 kts) as general intensity measure.
-
-The STORM database has recently released their new version ([STORMv3](https://data.4tu.nl/articles/dataset/STORM_tropical_cyclone_wind_speed_return_periods/12705164/3)), which includes synthetic global maps of 1) maximum wind speeds for a fixed set of return periods; and 2) return periods for a fixed set of maximum wind speeds, at 10 km resolution over all ocean basins. In addition, it contains the same set for events occurring within 100 km from a selection of 18 coastal cities and another for events occurring within 100 km from the capital city of an island.
+- The Global Assessment Report (2015) offered return period layers of max wind speed based on the first version of IBTrACS. These data have been superseeded. 
+- The latest version of [IBTrACS](https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access) has been released in 2018 and could be leveraged to generate an updated wind-hazard layer, with better resolution and possibly the inclusion of orography effect. There are several attributes tied to each event; the map in figure below shows the USA_WIND variable (Maximum sustained wind speed in knots: 0 - 300 kts) as general intensity measure.
+- The [STORM](https://data.4tu.nl/datasets/0ea98bdd-5772-4da8-ae97-99735e891aff/4) database has recently released their new version, which includes synthetic global maps of 1. maximum wind speeds for a fixed set of return periods; and 2. return periods for a fixed set of maximum wind speeds, at 10 km resolution over all ocean basins. In addition, it contains the same set for events occurring within 100 km from a selection of 18 coastal cities and another for events occurring within 100 km from the capital city of an island.
 The STORM dataset comes with [projections](https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1) as described in [Bloemendaal, et al., 2022](https://www.science.org/doi/10.1126/sciadv.abm8438): those are generated by extracting the climate change signal from each of the four general circulation models listed below, and adding this signal to the historical data from IBTrACS. This new dataset is then used as input for STORM, and resembles future-climate (2015-2050; RCP8.5/SSP5) conditions. Both [synthetic tracks](https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1) and [wind speed maps](https://data.4tu.nl/articles/dataset/STORM_climate_change_tropical_cyclone_wind_speed_return_periods/14510817) are available.
 These data can be used to calculate tropical cyclone risk in all (coastal) regions prone to tropical cyclones.
 
@@ -166,8 +146,7 @@ align: center
 ---
 Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.
 ```
-<hr>
-
+(hzd_hm_dr)=
 ## Drought & Water scarcity
 
 The [**Agricultural Stress Index (ASI)**](https://www.fao.org/giews/earthobservation/access.jsp) produced by **FAO** depicts the frequency of severe drought affecting crop areas by means of remote-sensed [Vegetation Health Index (VHI)](https://www.fao.org/giews/earthobservation/asis/index_2.jsp?lang=en).
@@ -182,22 +161,22 @@ align: center
 FAO ASI global dataset showing historical drought frequency for >30% cropland area affected along the period 1984-2021.
 ```
 
-The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2022, 39 years). For the risk screening in CCDR analytics, seasonal data has been agggregated into one layer measuring the frequency as percentage of years over the timeseries. Specifically:
+The historical frequency of severe droughts (as defined by ASI) is based on the entire the times series (1984-2022, 39 years). For the risk screening in CCDR analytics, seasonal data has been agggregated into four layers measuring the frequency as percentage of years over the timeseries. Specifically:
 
-- **S1_30p**: Percentage of years when drought affected at least 1/3 of cropland area during the main growing season
-- **S1_50p**: Percentage of years when drought affected at least half of cropland area during the main growing season
-- **S2_30p**: Percentage of years when drought affected at least 1/3 of cropland area during the secondary growing season
-- **S2_50p**: Percentage of years when drought affected at least half of cropland area during the secondary growing season
+- **S1, 30p**: Percentage of years when drought affected at least 1/3 of cropland area during the main growing season
+- **S1, 50p**: Percentage of years when drought affected at least half of cropland area during the main growing season
+- **S2, 30p**: Percentage of years when drought affected at least 1/3 of cropland area during the secondary growing season
+- **S2, 50p**: Percentage of years when drought affected at least half of cropland area during the secondary growing season
 
-<hr>
-
+(hzd_hm_hs)=
 ## Heat stress
 
 Heat discomfort increases when hot temperatures are associated with high humidity [[Coffel et al 2018](https://doi.org/10.1088/1748-9326/aaa00e)]. Heat stress can cause long-term impairment and reduce labour productivity and incomes [[Goodman et al 2018](https://scholar.harvard.edu/files/joshuagoodman/files/w24639.pdf)].
 Extreme heat events lead to heat stress and can increase morbidity and mortality as well as losses of work productivity [Kjellstrom et al 2009, Singh et al 2015].
 Not everyone reacts to the heat stresses in the same way, as individual responses are conditional on their medical condition, level of fitness, body weight, age, and economic situation [National Institute for Occupational Safety and Health 2016].
 
-Various definitions regarding magnitude and duration thresholds and heat metrics exist. There are several heat indices involving both temperature and relative humidity, here are listed the most common ones.
+Various definitions regarding magnitude and duration thresholds and heat metrics exist. There are several heat indices involving both temperature and relative humidity, here are listed the most common ones: Wet-Bulb Globe Temperature (WBGT °C) and Universal Thermal Climate Index (UTCI °C).
+The two indices are similar and [correlated](https://www.sciencedirect.com/science/article/pii/S2212094717302037), but while WBGT considers workload and overall effect on human health, UTCI is a more physically-based measure, thus it is easier to put it in relation to the physical measure of surface temperature (°C). It also has the advantage to consider cold stress extremes as well.
 
 **Name** | [Global extreme temperatures (WBGT)](https://datacatalog.worldbank.org/search/dataset/0040194/Global-extreme-heat-hazard) | [Universal Thermal Climate Index (UTCI)](https://climate.copernicus.eu/ESOTC/2019/heat-and-cold-stress) | [Heat-humidity index](https://cds.climate.copernicus.eu/cdsapp#!/dataset/projections-cordex-domains-single-levels?tab=overview)
 --: | :--: | :--: | :--:
@@ -207,7 +186,7 @@ Various definitions regarding magnitude and duration thresholds and heat metrics
 **Analysis type** | Probabilistic | Index | Probabilistic
 **Frequency type** | Return Period (3 scenarios) | None |  
 **Time reference** | Baseline (1980-2009) | Baseline (1979-2020) | Baseline (1970-2000); Projections (2040-2070, 2070-2100)
-**Intensity metric** | Wet Bulb Globe Temperature [°C] | UTCI (°C) | Heat Index, Humidex
+**Intensity metric** | Wet Bulb Globe Temperature [°C] | UTCI [°C] | Heat Index, Humidex
 **License** | Open data | Open data | Open data
 **Notes** | Accounts for air temperature, humidity, wind speed, radiation, fatigue-heating. Includes intensity-impact classification. | Accounts for air temperature, humidity. Includes intensity-impact classification. |  
 
@@ -219,26 +198,6 @@ align: center
 ---
 Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the global WBGT map based on global models resolution cannot capture these details.
 ```
+- **Universal Thermal Climate Index** (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, internal temperatures) as the actual environment. It is calculated based on near-surface air temperature, solar radiation, vapor pressure, and wind speed. For this specific dataset provided, the influence of solar radiation and wind speed is not considered and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
 
-- **Universal Thermal Climate Index** (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, skin wetness, skin blood flow and rectal, mean skin and face temperatures) as the actual environment. It is calculated based on near-surface air temperature, solar radiation, vapor pressure, and wind speed. For this specific dataset provided, the influence of solar radiation and wind speed is not considered and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.
-
-```{seealso}
-UTCI data from ERA-5 climate reanalysis has been processed into a probabilistic analysis of extremes from the [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). 
-A collection of scenarios representing the frequency distribution of heat has been produced in form of multiple layers representing return periods.<br>
-The objective is to facilitate the use of these data for heat risk analysis. The scenarios include ten return periods for mean, min and max daily UTCI (C°) for the period 1940-2020. Return Period scenarios: 5, 10, 20, 50, 75, 100, 200, 250, 500 and 1000 years.<br>`NOT RELEASED YET`.
-```
-
-The two indices are similar and [correlated](https://www.sciencedirect.com/science/article/pii/S2212094717302037), but while WBGT considers workload and overall effect on human health, UTCI is a more physically-based measure, thus it is easier to put it in relation to the physical measure of surface temperature (°C). It also has the advantage to consider cold stress extremes as well.
-
-```{figure} images/hzd_hs_class.png
----
-align: center
-width: 60%
----
-```
 In terms of future projections, both UTCI and WBGT projections have been produced under CMIP6 scenarios and are available via [Copernicus CDS](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview). The indices are provided for historical and future climate projections (SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5) included in the Coupled Model Intercomparison Project Phase 6 (CMIP6) and used in the 6th Assessment Report of the Intergovernmental Panel on Climate Change (IPCC). These have daily resolution and would allow to derive downscaled extreme temperature projections. These projections have not yet been processed into a frequency analysis, but that can be produced using the same approach.
-<hr>
-
-## Wildfires
-
-`Content under development.`

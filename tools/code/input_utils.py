@@ -60,7 +60,7 @@ def get_adm_data(country: str, adm_level):
     return gdf
 
 # Defining the function to download WorldPop data
-def fetch_population_data(country: str):
+def fetch_population_data(country: str, year: str):
     dataset_path = f"Global_2000_2020_Constrained/2020/BSGM/{country}/{country.lower()}_ppp_2020_UNadj_constrained.tif"
     download_url = f"{common.worldpop_url}{dataset_path}"
     try:

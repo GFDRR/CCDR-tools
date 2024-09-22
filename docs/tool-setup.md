@@ -1,160 +1,115 @@
-# TOOLS SETUP
+# Tool setup and run
+To run correctly, the script requires proper setup according to the instructions below. It can be executed on any windows or linux machine.
 
-The analytical scripts can be downloaded as:
-
-- [**Jupyter notebooks**](https://github.com/GFDRR/CCDR-tools/tree/main/tools/notebooks): user-friendly script that run via browser interface.
-Read more about [**Jupyter Notebooks**](https://jupyter-notebook.readthedocs.io/en/stable/notebook.html).
-- [**Python code**](https://github.com/GFDRR/CCDR-tools/tree/main/tools/code): give the user more control, and has overall better performances making use of parallel processing.
-
-These can be downloaded and exectuted on any windows or linux machine. 
-In both cases, the script requires proper environment setup and input data to be provided according to the instructions below.
+Download the latest stable version of the code as zip from [**here**](http://dummylink). Unzip it in your work directory, e.g. wd/RDL-tools/.
+The script has been developed to run as [jupyter notebook](https://jupyter.org/), but also allows to run as pure python (`manual_run.py`). 
 
 ## Python environment
-
 - Python 3 needs to be installed on your system. We suggest the latest [Anaconda](https://www.anaconda.com/download) distribution. Mamba is also encouraged.
-- Create new `CCDR-tools` environment according to your operating system: win.yml or linux.yml.
-  In Anaconda cmd prompt:
+- Create new `RDL-tools` environment from the provided rdl-tools.yml file. It can be done via Anaconda navigator interface (environments > Import ) or from the Anaconda cmd prompt:
   ```bash
-  conda create --name CCDR-tools --file <dir/win_env.yml>`
-  activate CCDR-tools
+  conda create --name RDL-tools --file <dir/rdl-tools.yml>`
+  activate RDL-tools
   ```
-
-## Input data management
-
-- Download the latest version of the notebooks or the the parallel code.
-- Create folder structure as:
-
-  ```
-  Work dir/
-   - Hazard.ipynb		Place the notebooks and related files in the main work directory
-   - common.py
-   - Parallel/		Place the parallel processing script in a sub-folder
-     - ...
-   - Data/
-     - ADM/		Administrative boundaries layer for each country
-     - HZD/		Hazard layers
-     - EXP/		Exposure layers
-     - RSK/		Output directory
-  ```
-
-- Download **country boundaries** for multiple administrative levels (national, sub-national) sourced from [HDX](https://data.humdata.org/dataset) or [Geoboundaries](https://www.geoboundaries.org). Note that oftern there are several versions for the same country, so be sure to use the most updated from official agencies (eg. United Nations). Verify that shapes, names and codes are consistent across different levels.
-
-  Boundaries must be provided as a geopackage files named as `ISO`_ADM.gpkg (e.g. `NPL`_ADM.gpkg) containing multiple layers, each one represening a different administrative boundary levels:
-
-  ```
-  - ISO_ADM
-    - ADM0 (country)
-    - ADM1 (first-level sub-national division)
-    - ADM2 (second-level sub-national division)
-    - ADM3 (third-level sub-national division)
-    - ...
-  ```
-
-  ```{figure} images/adm_lvl.jpg
-  ---
-  align: center
-  ---
-  Example of sub-national administrative boundaries for Senegal.
-  ```
-
-  Each layer should include relative ADMi_CODE and ADMi_NAME across levels to facilitate the summary of results:
-
-  - **ADM0** layer
-
-  | ISO3166_a2 | ISO3166_a3 | ADM0_CODE | ADM0_NAME | 
-  |---|---|---|---|
-  | String(2) | String(3) | Integer | String (20) |
- 
-  - **ADM1** layer
-
-  | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | 
-  |---|---|---|---|
-  | Integer | String (20) | Integer | String(20) |
-
-  - **ADM2** layer
-
-  | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | 
-  |---|---|---|---|---|---|
-  | Integer | String (20) | Integer | String(20) | Integer | String(20) |
-
-  - **ADM3** layer
-  
-  | ADM0_CODE | ADM0_NAME | ADM1_CODE | ADM1_NAME | ADM2_CODE | ADM2_NAME | ADM3_CODE | ADM3_NAME | 
-  |---|---|---|---|---|---|---|---|
-  | Integer | String (20) | Integer | String(20) | Integer | String(20) | Integer | String(20) |
-
-- Download probabilistic [**hazard data**](global-hazard.md), consisting of multiple RP scenarios. Each scenario is expected as a raster file (`.tif`) named as `ISO`_`HZD`_RPi.tif (exampe for Nepal flood, RP100: `NPL_FL_RP100.tif`). Any resolution should work, but using resolution below 90m over large countries could cause very long processing and memory cap issues.
-
-- Download [**exposure data**](global-exposure.md) for population, built-up and agricolture. Layers are expected as raster files (`.tif`) named as `ISO`_`EXP`.tif.
-	- **`ISO`_POP.tif**: Population, as from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=pop) or [Worldpop](https://hub.worldpop.org/geodata/listing?id=79). Value as number of peope per pixel.
-	- **`ISO`_BU.tif**: Built-up from [Global Human Settlement Layer](https://ghsl.jrc.ec.europa.eu/download.php?ds=bu) or [World Settlement Footprint](https://download.geoservice.dlr.de/WSF2019/). Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel).
-	- **`ISO`_AGR.tif**: Agriculture from land cover map, [ESA land cover](https://esa-worldcover.org/en) or equivalent. Value could be binary (0/1: absence/presence per pixel) or float (0-1: density per pixel).
-
-- Move verified input data into the proper folders:
-  ```
-  Work dir/Data/
-  - ADM/
-    - ISO_ADM.gpkg
-  - HZD/
-    - ISO_FL_RP10.tif
-    - ISO_FL_RP100.tif
-    - ISO_FL_RP1000.tif
-    - ...
-  - EXP/
-    - ISO_POP.tif
-    - ISO_BU.tif
-    - ISO_AGR.tif
-  ```
-
-  ```{caution}
-  All spatial data must use the same CRS, suggested: `EPSG 4326` (WGS 84)
-  ```
-<hr>
 
 ## Settings
-
-Edit the `.env` file inside the notebook directories to specify the working directory:
+Edit the `.env` file inside the notebook directories to specify your working directory:
 
 ```
 # Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
 
 # Fill the below with the location of data files
 # Use absolute paths with forward slashes ("/"), and keep the trailing slash
-DATA_DIR = C:/Work/data
-
-# THE ENTRIES BELOW DO NOT NEED TO BE EDITED
-# Location to store results of analyses
-OUTPUT_DIR = ${DATA_DIR}/RSK/
-
-# Location to store downloaded rasters and other data
-# for the analysis notebooks
-CACHE_DIR = ${DATA_DIR}/cache/
+DATA_DIR = C:/Workdir/RDL-tools
 ```
 
 ## Run Jupyter notebooks
-
-- Be sure to activate the correct environment
-  ```bash
-  activate CCDR-tools
-  ```
 - Navigate to your working directory: `cd <Your work directory>`
   ```bash
-  cd C:\Dir\Workdir\
+  cd C:/Workdir/RDL-tools
   ```
 - Run the jupyter notebook.
   ```bash
-  jupyter notebook
+  jupyter notebook GUI.ipynb
   ```
-The interface should pop up in your browser.
-- You can now run the [baseline risk screening](run-baseline.md).
+The main interface should pop up in your browser.
 
-## Parallel processing
+```{figure} images/GUI.png
+---
+width: 100%
+align: center
+---
+```
+Select the hazard of interest to open the analytical notebook. E.g. for floods:
 
-### Setting parameters
+```{figure} images/GUI_F3.png
+---
+width: 100%
+align: center
+---
+```
 
-Edit the `main.py` file to specify:
+## Input data management
+
+The script fetches default data automatically. This includes:
+
+- National and sub-national boundaries from the [WB ArcGIS repository](https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer).
+- Population data from WorldPop
+- Built-up data from WSF 2019
+- Land-cover (agriculture) data from ESA WorldCover
+
+Default exposure datasets can be overridden by placing custom datasets in the EXP folder and pointing at those file in the interface.
+
+The [**hazard data**](global-hazard.md), when not automatically fetched, need to be downloaded and placed in the HZD folder; in case of tiled data, use pre-processing scripts to merge those into country-sized data. Each RP scenario is expected as a raster file (`.tif`) named as 1in`years`.tif.<br>
+
+Exampe for Nepal, running analysis on undefended flood, 2020, RP100:
+
+  ```
+  Work dir/
+   - GUI.ipynb		Place the notebooks and related files in the main work directory
+   - common.py
+   - ...
+   - Data/
+     - HZD/NPL/FLUVIAL_UNDEFENDED/2020/1in100.tif	  Hazard layers
+     - EXP/		                                      Exposure layers
+     - RSK/		                                      Output directory
+  ```
+
+  ```{caution}
+  All spatial data must use the same CRS: `EPSG 4326` (WGS 84)
+  ```
+<hr>
+
+## Running the analysis
+
+- Select the country first.
+- Select one or more (CTRL+Click / drag mouse) Return Periods.
+- Select one or more (CTRL+Click / drag mouse) Exposure categories.
+- Select custom exposure and enter the name of the file in the EXP folder if you don't want to use the default sources.
+- Select the approach to use for the analysis:
+  - When using "function", the best impact function is selected for the selected country and exposure categories.
+  - When using "classes", hazard intensity thresholds must be specified by the user.
+- Check "Preview results" to generate map and charts output in the GUI.
+
+```{figure} images/GUI_pre_map.png
+---
+width: 100%
+align: center
+---
+```
+```{figure} images/GUI_pre_charts.jpg
+---
+width: 100%
+align: center
+---
+```
+
+### Manual Run
+Edit the `manual_run.py` file to specify:
 - **country (`country`)**: [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
-- **hazard type (`haz_cat`)**: `'FL'` for floods; `'HS'` for heat stress; `'DR'` for drought; `'LS'` for landslide
+- **flood hazard type (`haz_cat`)**: `'FLUVIAL_UNDEFENDED'`,`'FLUVIAL_DEFENDED'`, `'PLUVIAL_DEFENDED'`, `'COASTAL_UNDEFENDED'`,`'COASTAL_DEFENDED'`,
+- **hazard period (`period`)**: the reference period of the hazard data
+- **climate scenario (`scenario`)**: when future period, the associated climate scenario: 'SSP1_2.6', 'SSP2_4.5', 'SSP3_7.0', 'SSP5_8.5'.
 - **return periods (`return_periods`)**: list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
 - **exposure categories (`exp_cat_list`)**: list of exposure categories: `['POP', 'BU', 'AGR']`
   - exposure categories file name (`exp_cat_list`): list  of same length of `exp_cat_list` with file names for exposure categories, e.g.: `['GHS', 'WSF19', 'ESA20']`
@@ -163,58 +118,56 @@ Edit the `main.py` file to specify:
   - If `'Function'`, you can set minimum hazard threshold value (`min_haz_slider`). Hazard value below this threshold will be ignored
   - If `'Classes'`,  you can set the number and value of thresholds to consider to split hazard intensity values into bins (`class_edges`)
 - **admin level (`adm`)**: specify which boundary level to use for results summary (must exist in the `ISOa3`_ADM.gpkg file)
-- **save check (`save_check_raster`)**: specify if you want to export intermediate rasters (increases processing time) `[True, False]`
+- **save check (`save_check_raster`)**: specify if you want to export intermediate rasters (greatly increases processing time) `[True, False]`
 
-Example of `main.py` running flood analysis (`haz_cat`) over Cambodia [KHM] (`country`) for 10 return periods (`return_periods`) over three exposure categories (`exp_cat_list`) using hazard classes according to thresholds (`class_edges`); results summarised at ADM3 level (`adm`). Do not save intermediate rasters (`save_check_raster`).
+Example of `manual_run.py` running undefended river flood analysis (`haz_cat`) over Cambodia (`country`) over period 2020.
+Include 10 return periods (`return_periods`) over three default exposure categories (`exp_cat_list`) using function approach; results summarised at ADM level 2 (`adm`). Do not save intermediate rasters (`save_check_raster`).
 
-Example for function analysis:
 ```
-    # Defining the initial parameters
+    # Defining the initial parameters - Example for function analysis
     country            = 'KHM'
-    haz_cat            = 'FL'
+    haz_cat            = 'FLUVIAL_UNDEFENDED'
+    period	       = 2020
+    scenario           = ''
     return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
-    min_haz_slider     = 0.05
+    min_haz_slider     = 20
     exp_cat_list       = ['POP', 'BU', 'AGR']
-    exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
-    adm                = 'ADM3'
+    exp_nam_list       = []
+    adm_level          = 2
     analysis_app       = 'Function'
-    # class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
+    # class_edges      = []
     save_check_raster  = False
 ```
 
-Example for class analysis:
+Example of `manual_run.py` running defended coastal flood analysis (`haz_cat`) over Tunisia (`country`) over period 2030, scenario SSP2 - 4.5.
+Include 5 return periods (`return_periods`) over three custom exposure categories (`exp_cat_list`) using hazard classes according to thresholds (`class_edges`); results summarised at ADM3 level (`adm`). Do not save intermediate rasters (`save_check_raster`).
+
 ```
-    # Defining the initial parameters
-    country            = 'KHM'
-    haz_cat            = 'FL'
-    return_periods     = [5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]
-    # min_haz_slider     = 0.05
+    # Defining the initial parameters - Example for class analysis
+    country            = 'TUN'
+    haz_cat            = 'COASTAL_DEFENDED'
+    period	       = 2030
+    scenario           = 'SSP2-4.5'
+    return_periods     = [10, 50, 100, 250, 500]
+    min_haz_slider     = 0
     exp_cat_list       = ['POP', 'BU', 'AGR']
     exp_nam_list       = ['GHS', 'WSF19', 'ESA20']
-    adm                = 'ADM3'
+    adm                = '3'
     analysis_app       = 'Classes'
-    class_edges        = [0.05, 0.25, 0.50, 1.00, 2.00]
+    class_edges        = [50, 100, 150, 200, 250]
     save_check_raster  = False
 ```
 
-### Run the analysis with parallel processing
+
+After saving the file, to run the analysis:
 
 ```bash
-$ python main.py
+$ python manual_run.py
 ```
 
 The analysis runs on all selected exposed categories, in sequence. It will print a separate message for each iteration. In case of 3 exposure caterories, it will take three iterations to get all results.
-
-```bash
-$ Running analysis...
-$ Finished analysis
-$ Running analysis...
-$ Finished analysis
-$ Running analysis...
-$ Finished analysis
-```
-
-Depending on the number of cores, the size and resolution of the data, and power of CPU, the analysis can take from less than a minute to few minutes.
+The output is created as multi-tab .xlsx and multi-layer .gpkg.
+Depending on the power and number of cores on your CPU and the size and resolution of the data, the analysis can take from less than a minute to few minutes.
 E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.
 
 
