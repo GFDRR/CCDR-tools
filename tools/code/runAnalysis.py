@@ -443,13 +443,12 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, ana
 
     # Create Excel writer object
     excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.xlsx")
-    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
+    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
 
     # Create GeoPackage file
     gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.gpkg")
 
-    # with pd.ExcelWriter(excel_file, engine='openpyxl', engine_kwargs={'mode': 'a'}) as excel_writer:
-    with excel_writer:
+    with pd.ExcelWriter(excel_file, engine='openpyxl', engine_kwargs={'mode': 'a'}) as excel_writer:
         if analysis_type == "Function":
             EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
             sheet_name = f"{exp_cat}_{EAI_string}function"
