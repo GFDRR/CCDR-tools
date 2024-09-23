@@ -10,8 +10,6 @@ import rasterio
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
 from shapely.geometry import shape
-import openpyxl
-from openpyxl.utils.exceptions import InvalidFileException
 
 # Importing internal libraries
 import common
@@ -437,21 +435,20 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, ana
     # Set the CRS to EPSG:4326
     result_df.set_crs(epsg=4326, inplace=True)
    
-    # Set filname
-    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"
-
-    # Create GeoPackage file
-    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.gpkg")
-
     # Remove the geometry column for the Excel export
     df_cols = result_df.columns
     no_geom = result_df.loc[:, df_cols[~df_cols.isin(['geometry'])]].fillna(0)
    
+    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"
+
     # Create Excel writer object
     excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.xlsx")
-    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
+    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
 
-    with excel_writer:
+    # Create GeoPackage file
+    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.gpkg")
+
+    with pd.ExcelWriter(excel_file, engine='openpyxl') as excel_writer:
         if analysis_type == "Function":
             EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
             sheet_name = f"{exp_cat}_{EAI_string}function"
