@@ -43,41 +43,53 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
     damage_factor = None
 
     try:
-        if exp_cat == 'POP':
-            exp_ras = f"{exp_folder}/{country}_POP.tif"
-            if not os.path.exists(exp_ras):
-                print(f"Population data not found. Fetching data for {country}...")
-                fetch_population_data(country, exp_year)
-                if not os.path.exists(exp_ras):
-                    raise FileNotFoundError(f"Failed to fetch population data for {country}")
-            damage_factor = mortality_factor
-
-        elif exp_cat == 'BU':
-            exp_ras = f"{exp_folder}/{country}_BU.tif"
-            if not os.path.exists(exp_ras):
-                print(f"Built-up data not found. Fetching data for {country}...")
-                fetch_built_up_data(country)
-                if not os.path.exists(exp_ras):
-                    raise FileNotFoundError(f"Failed to fetch built-up data for {country}")
-            damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
-
-        elif exp_cat == 'AGR':
-            exp_ras = f"{exp_folder}/{country}_AGR.tif"
-            if not os.path.exists(exp_ras):
-                print(f"Agriculture data not found. Fetching data for {country}...")
-                fetch_agri_data(country)
-                if not os.path.exists(exp_ras):
-                    raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
-            damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
-
-        elif exp_nam is not None:
+        if exp_nam is not None:
+            # Use the custom exposure data if provided
             exp_ras = f"{exp_folder}/{exp_nam}.tif"
             if not os.path.exists(exp_ras):
                 raise FileNotFoundError(f"Custom exposure data not found: {exp_ras}")
-            damage_factor = mortality_factor
-
+            
+            # Assign a default damage factor based on the exp_cat
+            if exp_cat == 'POP':
+                damage_factor = mortality_factor
+            elif exp_cat == 'BU':
+                damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
+            elif exp_cat == 'AGR':
+                damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
+            else:
+                # For unknown categories, use a default damage factor
+                damage_factor = mortality_factor
         else:
-            raise ValueError(f"Missing or unknown exposure category: {exp_cat}")
+            # Use default exposure data based on exp_cat
+            if exp_cat == 'POP':
+                exp_ras = f"{exp_folder}/{country}_POP.tif"
+                if not os.path.exists(exp_ras):
+                    print(f"Population data not found. Fetching data for {country}...")
+                    fetch_population_data(country, exp_year)
+                    if not os.path.exists(exp_ras):
+                        raise FileNotFoundError(f"Failed to fetch population data for {country}")
+                damage_factor = mortality_factor
+
+            elif exp_cat == 'BU':
+                exp_ras = f"{exp_folder}/{country}_BU.tif"
+                if not os.path.exists(exp_ras):
+                    print(f"Built-up data not found. Fetching data for {country}...")
+                    fetch_built_up_data(country)
+                    if not os.path.exists(exp_ras):
+                        raise FileNotFoundError(f"Failed to fetch built-up data for {country}")
+                damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
+
+            elif exp_cat == 'AGR':
+                exp_ras = f"{exp_folder}/{country}_AGR.tif"
+                if not os.path.exists(exp_ras):
+                    print(f"Agriculture data not found. Fetching data for {country}...")
+                    fetch_agri_data(country)
+                    if not os.path.exists(exp_ras):
+                        raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
+                damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
+
+            else:
+                raise ValueError(f"Missing or unknown exposure category: {exp_cat}")
 
         if not os.path.exists(exp_ras):
             raise FileNotFoundError(f"Exposure raster not found after processing: {exp_ras}")
