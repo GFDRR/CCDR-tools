@@ -443,24 +443,39 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, ana
 
     # Create Excel writer object
     excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.xlsx")
-    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
+    
+    excel_helper(excel_file, analysis_type, valid_RPs, exp_cat, df=no_geom)
+    
+    return result_df  # Return the GeoDataFrame
 
-    # Create GeoPackage file
-    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.gpkg")
 
-    with pd.ExcelWriter(excel_file, engine='openpyxl') as excel_writer:
+def excel_helper(excel_file, analysis_type, valid_RPs, exp_cat, df, export_sheet_name = False):
+
+    if os.path.exists(excel_file):
+        excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
+    else:
+        excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
+    
+    with excel_writer:
         if analysis_type == "Function":
             EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
             sheet_name = f"{exp_cat}_{EAI_string}function"
-            no_geom.to_excel(excel_writer, sheet_name=sheet_name, index=False)
+            df.to_excel(excel_writer, sheet_name=sheet_name, index=False)
         elif analysis_type == "Classes":
             EAE_string = "EAE_" if len(valid_RPs) > 1 else ""
             sheet_name = f"{exp_cat}_{EAE_string}class"
-            no_geom.to_excel(excel_writer, sheet_name=sheet_name, index=False)
+            df.to_excel(excel_writer, sheet_name=sheet_name, index=False)
         else:
             raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
     
-    return result_df  # Return the GeoDataFrame
+    print("Successfully saved file to {}.".format(excel_file))
+    
+    if export_sheet_name:
+        return sheet_name    
+    
+    
+    
+
 
 def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
     # Convert result_df to GeoDataFrame if it's not already
