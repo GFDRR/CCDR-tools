@@ -164,9 +164,15 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
         print(f"Processing exposure data for {exp_cat}")
         exp_ras, damage_factor = process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_region)
 
-        # Running the analysis
         # Importing the exposure data
+        # Open the raster dataset
+        with rasterio.open(exp_ras) as src:
+            original_nodata = src.nodata
         exp_data = rxr.open_rasterio(exp_ras)[0]  # Open exposure dataset
+        # Handle nodata values
+        if original_nodata is not None:
+            # Mask the original nodata values
+            exp_data = exp_data.where(exp_data != original_nodata)
         exp_data.rio.write_nodata(-1.0, inplace=True)
         exp_data.data[exp_data < 0.0] = 0.0
 
