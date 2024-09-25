@@ -252,7 +252,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
         result_df.columns = result_df_colnames
         
         # Write output csv table and geopackages
-        save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
+        save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, scenario, analysis_type, valid_RPs)
         
         # Trying to fix output not being passed to plot_results
         return result_df
@@ -439,7 +439,7 @@ def create_summary_df(result_df, valid_RPs, exp_cat):
     
     return summary_df
 
-def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, analysis_type, valid_RPs):
+def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, scenario, analysis_type, valid_RPs):
     # Ensure that the geometry column is correctly recognized
     if 'geometry' not in result_df.columns and 'geom' in result_df.columns:
         result_df = result_df.rename(columns={'geom': 'geometry'})
@@ -457,7 +457,11 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, ana
     df_cols = result_df.columns
     no_geom = result_df.loc[:, df_cols[~df_cols.isin(['geometry'])]].fillna(0)
    
-    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"
+    # Prepare Excel writer
+    if period == '2020':
+        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"   
+    else:
+        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}_{scenario}"
 
     # Create Excel writer object
     excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.xlsx")
