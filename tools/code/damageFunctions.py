@@ -1,6 +1,6 @@
 # Importing the required packages
 import numpy as np
-from tools.code.common import wb_to_region
+from common import wb_to_region
 
 # Defining the damage functions
 
@@ -36,10 +36,8 @@ def damage_factor_builtup(x: np.array, wb_region: str):
         'LAC': np.maximum(0.0, np.minimum(1.0, 1.04578 + (0.001490579 - 1.04578)/(1 + (x/0.5619431)**1.509554))),
         'GLOBAL': np.maximum(0.0, np.minimum(1.0, 2.100049 + (-0.00003530885 - 2.100049)/(1 + (x/6.632485)**0.559315))),
     }
-    region = wb_to_region.get(wb_region)
-    if region not in function_mapping.keys():
-        return np.maximum(0.0, np.minimum(1.0, 2.100049 + (-0.00003530885 - 2.100049)/(1 + (x/6.632485)**0.559315)))
-    return function_mapping.get(wb_to_region.get(wb_region))
+    region = wb_to_region.get(wb_region, 'GLOBAL')
+    return function_mapping.get(region)
 
 
 # Floods (river and coastal) impact function over Agricultural areas
@@ -60,9 +58,6 @@ def damage_factor_agri(x: np.array, wb_region: str):
         'LAC': np.maximum(0.0, np.minimum(1.0, 1.876076 + (0.01855393 - 1.876076)/(1 + (x/5.08262)**0.7629432))),
         'GLOBAL': np.maximum(0.0, np.minimum(1.0, 1.167022 + (-0.002602531 - 1.167022)/(1 + (x/1.398796)**1.246833))),
     }
-
-    region = wb_to_region.get(wb_region)
-    if region not in function_mapping.keys():
-        return np.maximum(0.0, np.minimum(1.0, 1.167022 + (-0.002602531 - 1.167022)/(1 + (x/1.398796)**1.246833)))
-    return function_mapping.get(wb_to_region.get(wb_region))
+    region = wb_to_region.get(wb_region, 'GLOBAL')
+    return function_mapping.get(region)
 

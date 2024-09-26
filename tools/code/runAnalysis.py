@@ -11,9 +11,9 @@ import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
 
 # Importing internal libraries
-import tools.code.common as common
-import tools.code.input_utils as input_utils
-from tools.code.damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
+import common
+import input_utils
+from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 
 # Importing the libraries for parallel processing
 import itertools as it
@@ -66,7 +66,7 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
                 exp_ras = f"{exp_folder}/{country}_POP.tif"
                 if not os.path.exists(exp_ras):
                     print(f"Population data not found. Fetching data for {country}...")
-                    fetch_population_data(country, exp_year)
+                    input_utils.fetch_population_data(country, exp_year)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch population data for {country}")
                 damage_factor = mortality_factor
@@ -75,7 +75,7 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
                 exp_ras = f"{exp_folder}/{country}_BU.tif"
                 if not os.path.exists(exp_ras):
                     print(f"Built-up data not found. Fetching data for {country}...")
-                    fetch_built_up_data(country)
+                    input_utils.fetch_built_up_data(country)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch built-up data for {country}")
                 damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
@@ -85,7 +85,7 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
 
                 if not os.path.exists(exp_ras):
                     print(f"Agriculture data not found. Fetching data for {country}...")
-                    fetch_agri_data(country)
+                    input_utils.fetch_agri_data(country)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
                 damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
