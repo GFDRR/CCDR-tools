@@ -2,11 +2,11 @@
 
 This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards' risk screening at the national or sub-national level. The tools have originally being created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2024) and then furtherly developed within the [**Risk Data Library project**](docs/rdl.md).
 
-The CCDR-tools allow to perform spatial analytics of disaster risk based on global datasets.
-Additionally, we are looking to offer approaches and methods to:
+The CCDR toolkit allow to perform spatial analytics of disaster risk based on global datasets.
+Additionally, it offers open-source approaches and methods to:
 - Combine risk and poverty information into [**bi-variate maps**](docs/risk-poverty.md)
 - Produce [**climate risk outlook**](docs/climate-risk.md) based on CMIP6 indices
-- Present results into an interactive [**dashboard**](docs/presentation.md)
+- Present results into an interactive [**dashboard**](https://matamadio.github.io/CCDR-geoboard)
 
 ```{note}
 Are you a World Bank TTL? You can request for availability to produce a new country screening using [**this form**](https://forms.office.com/r/UU3LXBNz4T).

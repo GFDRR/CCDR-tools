@@ -44,41 +44,54 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
     damage_factor = None
 
     try:
-        if exp_cat == 'POP':
-            exp_ras = f"{exp_folder}/{country}_POP.tif"
-            if not os.path.exists(exp_ras):
-                print(f"Population data not found. Fetching data for {country}...")
-                input_utils.fetch_population_data(country, exp_year)
-                if not os.path.exists(exp_ras):
-                    raise FileNotFoundError(f"Failed to fetch population data for {country}")
-            damage_factor = mortality_factor
-
-        elif exp_cat == 'BU':
-            exp_ras = f"{exp_folder}/{country}_BU.tif"
-            if not os.path.exists(exp_ras):
-                print(f"Built-up data not found. Fetching data for {country}...")
-                input_utils.fetch_built_up_data(country)
-                if not os.path.exists(exp_ras):
-                    raise FileNotFoundError(f"Failed to fetch built-up data for {country}")
-            damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
-
-        elif exp_cat == 'AGR':
-            exp_ras = f"{exp_folder}/{country}_AGR.tif"
-            if not os.path.exists(exp_ras):
-                print(f"Agriculture data not found. Fetching data for {country}...")
-                input_utils.fetch_agri_data(country)
-                if not os.path.exists(exp_ras):
-                    raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
-            damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
-
-        elif exp_nam is not None:
+        if exp_nam is not None:
+            # Use the custom exposure data if provided
             exp_ras = f"{exp_folder}/{exp_nam}.tif"
             if not os.path.exists(exp_ras):
                 raise FileNotFoundError(f"Custom exposure data not found: {exp_ras}")
-            damage_factor = mortality_factor
-
+            
+            # Assign a default damage factor based on the exp_cat
+            if exp_cat == 'POP':
+                damage_factor = mortality_factor
+            elif exp_cat == 'BU':
+                damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
+            elif exp_cat == 'AGR':
+                damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
+            else:
+                # For unknown categories, use a default damage factor
+                damage_factor = mortality_factor
         else:
-            raise ValueError(f"Missing or unknown exposure category: {exp_cat}")
+            # Use default exposure data based on exp_cat
+            if exp_cat == 'POP':
+                exp_ras = f"{exp_folder}/{country}_POP.tif"
+                if not os.path.exists(exp_ras):
+                    print(f"Population data not found. Fetching data for {country}...")
+                    fetch_population_data(country, exp_year)
+                    if not os.path.exists(exp_ras):
+                        raise FileNotFoundError(f"Failed to fetch population data for {country}")
+                damage_factor = mortality_factor
+
+            elif exp_cat == 'BU':
+                exp_ras = f"{exp_folder}/{country}_BU.tif"
+                if not os.path.exists(exp_ras):
+                    print(f"Built-up data not found. Fetching data for {country}...")
+                    fetch_built_up_data(country)
+                    if not os.path.exists(exp_ras):
+                        raise FileNotFoundError(f"Failed to fetch built-up data for {country}")
+                damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
+
+            elif exp_cat == 'AGR':
+                exp_ras = f"{exp_folder}/{country}_AGR.tif"
+
+                if not os.path.exists(exp_ras):
+                    print(f"Agriculture data not found. Fetching data for {country}...")
+                    fetch_agri_data(country)
+                    if not os.path.exists(exp_ras):
+                        raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
+                damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
+
+            else:
+                raise ValueError(f"Missing or unknown exposure category: {exp_cat}")
 
         if not os.path.exists(exp_ras):
             raise FileNotFoundError(f"Exposure raster not found after processing: {exp_ras}")
@@ -153,9 +166,15 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
         print(f"Processing exposure data for {exp_cat}")
         exp_ras, damage_factor = process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_region)
 
-        # Running the analysis
         # Importing the exposure data
+        # Open the raster dataset
+        with rasterio.open(exp_ras) as src:
+            original_nodata = src.nodata
         exp_data = rxr.open_rasterio(exp_ras)[0]  # Open exposure dataset
+        # Handle nodata values
+        if original_nodata is not None:
+            # Mask the original nodata values
+            exp_data = exp_data.where(exp_data != original_nodata)
         exp_data.rio.write_nodata(-1.0, inplace=True)
         exp_data.data[exp_data < 0.0] = 0.0
 
@@ -235,7 +254,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
         result_df.columns = result_df_colnames
         
         # Write output csv table and geopackages
-        save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, exp_year, analysis_type, valid_RPs)
+        save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, scenario, analysis_type, valid_RPs)
         
         # Trying to fix output not being passed to plot_results
         return result_df
@@ -427,7 +446,7 @@ def create_summary_df(result_df, valid_RPs, exp_cat):
     
     return summary_df
 
-def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, analysis_type, valid_RPs):
+def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, scenario, analysis_type, valid_RPs):
     # Ensure that the geometry column is correctly recognized
     if 'geometry' not in result_df.columns and 'geom' in result_df.columns:
         result_df = result_df.rename(columns={'geom': 'geometry'})
@@ -445,7 +464,11 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, ana
     df_cols = result_df.columns
     no_geom = result_df.loc[:, df_cols[~df_cols.isin(['geometry'])]].fillna(0)
    
-    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"
+    # Prepare Excel writer
+    if period == '2020':
+        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"   
+    else:
+        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}_{scenario}"
 
     # Create Excel writer object
     excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.xlsx")
