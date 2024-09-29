@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           # $CONDA is an environment variable pointing to the root of the miniconda directory
-          $CONDA/bin/conda env update --file tools/rdl-tools.yml --name base
+          $CONDA/bin/conda env update --file tools/code/rdl-tools.yml --name base
 
       - name: Test with pytest
         run: |
