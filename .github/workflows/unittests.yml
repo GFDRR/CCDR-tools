@@ -2,6 +2,7 @@ name: Run Unit Tests
 
 # Trigger the action on push or pull request
 on:
+  # TODO: Specify appropriate branches
   push:
     branches:
       - js/implement_unit_tests
