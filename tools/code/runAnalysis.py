@@ -104,7 +104,10 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
 def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_RPs: list[int],
                  min_haz_threshold: float, exp_cat: str, exp_nam: str, exp_year: str, adm_level: str,
                  analysis_type: str, class_edges: list[float], 
-                 save_check_raster: bool, n_cores: int = None):
+                 save_check_raster: bool, n_cores: int = None,
+                 use_custom_boundaries=False, custom_boundaries_file_path=None, custom_code_field=None,
+                 custom_name_field=None, wb_region=None
+                 ):
     """
     Run specified analysis.
 
@@ -127,7 +130,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
 
     try:
         # Defining the location of administrative, hazard and exposure folders
-        haz_folder = f"{DATA_DIR}/HZD/{country}/{haz_cat}/{period}/{scenario}"
+        haz_folder = f"{DATA_DIR}/HZD/{country}/{haz_cat}/{period}/{scenario.replace('-', '_')}"
         exp_folder = f"{DATA_DIR}/EXP"
 
         # Validating Classes analysis parameters
@@ -144,19 +147,21 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
             num_bins = None
 
         # Fetch the ADM data
-        print(f"Fetching ADM data for {country}, level {adm_level}")
-        adm_data = get_adm_data(country, adm_level)
-        if adm_data is None:
-            raise ValueError(f"ADM data not available for {country}, level {adm_level}")
+        if use_custom_boundaries:
+            print(f"Using custom boundaries from file: {custom_boundaries_file_path}")
+            adm_data = gpd.read_file(custom_boundaries_file_path)
+            code_field = custom_code_field
+            name_field = custom_name_field
+        else:
+            print(f"Fetching ADM data for {country}, level {adm_level}")
+            adm_data = get_adm_data(country, adm_level)
+            field_names = common.adm_field_mapping.get(adm_level, {})
+            code_field = field_names.get('code')
+            name_field = field_names.get('name')
 
-        # Extract relevant ADM data
-        field_names = common.adm_field_mapping.get(adm_level, {})
-        code_field = field_names.get('code')
-        name_field = field_names.get('name')
         if not (code_field and name_field):
             raise ValueError(f"Field names for ADM level {adm_level} not found")
         
-        wb_region = adm_data['WB_REGION'].iloc[0]
         all_adm_codes = adm_data.columns[adm_data.columns.str.contains(r"HASC_\d$")].to_list()
         all_adm_names = adm_data.columns[adm_data.columns.str.contains(r"NAM_\d$")].to_list()
 
@@ -464,11 +469,11 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, sce
         file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}_{scenario}"
 
     # Create Excel writer object
-    excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.xlsx")
+    excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.xlsx")
     excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
 
     # Create GeoPackage file
-    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}_results.gpkg")
+    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
 
     with pd.ExcelWriter(excel_file, engine='openpyxl') as excel_writer:
         if analysis_type == "Function":
