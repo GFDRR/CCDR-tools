@@ -152,18 +152,19 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
             adm_data = gpd.read_file(custom_boundaries_file_path)
             code_field = custom_code_field
             name_field = custom_name_field
+            all_adm_codes = [code_field]
+            all_adm_names = [name_field]
         else:
             print(f"Fetching ADM data for {country}, level {adm_level}")
             adm_data = get_adm_data(country, adm_level)
             field_names = common.adm_field_mapping.get(adm_level, {})
             code_field = field_names.get('code')
             name_field = field_names.get('name')
+            all_adm_codes = adm_data.columns[adm_data.columns.str.contains(r"HASC_\d$")].to_list()
+            all_adm_names = adm_data.columns[adm_data.columns.str.contains(r"NAM_\d$")].to_list()
 
         if not (code_field and name_field):
             raise ValueError(f"Field names for ADM level {adm_level} not found")
-        
-        all_adm_codes = adm_data.columns[adm_data.columns.str.contains(r"HASC_\d$")].to_list()
-        all_adm_names = adm_data.columns[adm_data.columns.str.contains(r"NAM_\d$")].to_list()
 
         # Handle exposure data
         print(f"Processing exposure data for {exp_cat}")
@@ -349,7 +350,6 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
         gc.collect()
 
     return result_df
-
 
 def result_df_reorder_columns(result_df, RPs, analysis_type, exp_cat, adm_level, all_adm_codes, all_adm_names):
     """
