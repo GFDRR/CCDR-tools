@@ -158,7 +158,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
             all_adm_names = [name_field]
         else:
             print(f"Fetching ADM data for {country}, level {adm_level}")
-            adm_data = get_adm_data(country, adm_level)
+            adm_data = input_utils.get_adm_data(country, adm_level)
             field_names = common.adm_field_mapping.get(adm_level, {})
             code_field = field_names.get('code')
             name_field = field_names.get('name')
