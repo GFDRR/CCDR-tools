@@ -9,11 +9,10 @@ from branca.colormap import LinearColormap
 import rasterio
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
-from shapely.geometry import shape
 
 # Importing internal libraries
 import common
-from input_utils import *
+import input_utils
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 
 # Importing the libraries for parallel processing
@@ -21,12 +20,14 @@ import itertools as it
 from functools import partial
 import multiprocess as mp
 
+DATA_DIR = common.DATA_DIR
+OUTPUT_DIR = common.OUTPUT_DIR
 warnings.filterwarnings("ignore", message="'GeoSeries.swapaxes' is deprecated", category=FutureWarning)
 
 # Defining functions for parallel processing of zonal_stats
 def chunks(iterable_data, n):
-    it_data = it.iter(iterable_data)
-    for chunk in it.iter(lambda: list(it.islice(it_data, n)), []):
+    it_data = iter(iterable_data)
+    for chunk in iter(lambda: list(it.islice(it_data, n)), []):
         yield chunk
 
 def zonal_stats_partial(feats, raster, stats="*", affine=None, nodata=None, all_touched=True):
@@ -65,7 +66,7 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
                 exp_ras = f"{exp_folder}/{country}_POP.tif"
                 if not os.path.exists(exp_ras):
                     print(f"Population data not found. Fetching data for {country}...")
-                    fetch_population_data(country, exp_year)
+                    input_utils.fetch_population_data(country, exp_year)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch population data for {country}")
                 damage_factor = mortality_factor
@@ -74,16 +75,17 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
                 exp_ras = f"{exp_folder}/{country}_BU.tif"
                 if not os.path.exists(exp_ras):
                     print(f"Built-up data not found. Fetching data for {country}...")
-                    fetch_built_up_data(country)
+                    input_utils.fetch_built_up_data(country)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch built-up data for {country}")
                 damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
 
             elif exp_cat == 'AGR':
                 exp_ras = f"{exp_folder}/{country}_AGR.tif"
+
                 if not os.path.exists(exp_ras):
                     print(f"Agriculture data not found. Fetching data for {country}...")
-                    fetch_agri_data(country)
+                    input_utils.fetch_agri_data(country)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
                 damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
@@ -210,7 +212,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
                                     'prob_RPs_LB':prob_RPs_LB,
                                     'prob_RPs_UB':prob_RPs_UB,
                                     'prob_RPs_Mean':prob_RPs_Mean})
-        prob_RPs_df.to_csv(os.path.join(common.OUTPUT_DIR, f"{country}_{haz_cat}_prob_RPs.csv"), index=False)
+        prob_RPs_df.to_csv(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_prob_RPs.csv"), index=False)
         
         # Computing the results for each RP
         n_valid_RPs_gt_1 = len(valid_RPs) > 1
@@ -303,7 +305,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
             # Assign impact factor (this is F_i in the equations)
             haz_data = damage_factor(haz_data, wb_region)
             if save_check_raster:
-                haz_data.rio.to_raster(os.path.join(common.OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_haz_imp_factor.tif"))
+                haz_data.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_haz_imp_factor.tif"))
         elif analysis_type == "Classes":
             # Assign bin values to raster data - Follows: x_{i-1} <= x_{i} < x_{i+1}
             bin_idx = np.digitize(haz_data, bin_seq)
@@ -313,7 +315,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
         affected_exp = exp_data.where(haz_data.data > 0, np.nan)
 
         if save_check_raster:
-            affected_exp.rio.to_raster(os.path.join(common.OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_affected.tif"))
+            affected_exp.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_affected.tif"))
         
         # Conduct analyses for classes
         if analysis_type == "Classes":
@@ -339,7 +341,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
             impact_exp = affected_exp.data * haz_data
             # If save intermediate to disk is TRUE, then
             if save_check_raster:
-                impact_exp.rio.to_raster(os.path.join(common.OUTPUT_DIR, f"{country}_{period}_{scenario}_{rp}_{exp_cat}_impact.tif"))
+                impact_exp.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{period}_{scenario}_{rp}_{exp_cat}_impact.tif"))
             # Compute the impact per ADM level
             impact_exp_per_ADM = gen_zonal_stats(vectors=adm_data["geometry"], raster=impact_exp.data, stats=["sum"],
                                                  affine=impact_exp.rio.transform(), nodata=np.nan)
@@ -356,12 +358,17 @@ def result_df_reorder_columns(result_df, RPs, analysis_type, exp_cat, adm_level,
     Reorders the columns of result_df.
     """
     # Re-ordering and dropping selected columns for better presentation of the results
-    if analysis_type == "Function":
-        all_RPs = ["RP" + str(rp) for rp in RPs]
-        all_exp = [x + f"_{exp_cat}_exp" for x in all_RPs]
-        all_imp = [x + f"_{exp_cat}_imp" for x in all_RPs]
-        col_order = all_adm_codes + all_adm_names + [f"ADM{adm_level}_{exp_cat}"] + all_exp + all_imp + ["geometry"]
-        result_df = result_df.loc[:, col_order]
+    
+    if analysis_type != "Function":
+        return result_df
+    
+    adm_column = f"ADM{adm_level}_{exp_cat}"
+    
+    all_RPs = ["RP" + str(rp) for rp in RPs]
+    all_exp = [x + f"_{exp_cat}_exp" for x in all_RPs]
+    all_imp = [x + f"_{exp_cat}_imp" for x in all_RPs]
+    col_order = all_adm_codes + all_adm_names + [adm_column] + all_exp + all_imp + ["geometry"]
+    result_df = result_df.loc[:, col_order]
 
     return result_df
 
