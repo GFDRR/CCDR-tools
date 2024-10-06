@@ -18,7 +18,7 @@ import tkinter as tk
 
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 from input_utils import get_adm_data
-from runAnalysis import run_analysis, plot_results, create_summary_df
+from runAnalysis import run_analysis, plot_results, create_summary_df, instantiate_excel_writer
 
 
 # Load the image data
@@ -652,7 +652,8 @@ def run_analysis_script(b):
         gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
 
         # Use ExcelWriter as a context manager
-        with pd.ExcelWriter(excel_file, engine='openpyxl') as excel_writer:
+        excel_writer = instantiate_excel_writer(excel_file)
+        with excel_writer:
             # Run analysis for each exposure category
             for i in range(len(exp_cat_list)):
                 exp_cat = exp_cat_list[i]

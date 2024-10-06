@@ -38,6 +38,13 @@ def zonal_stats_parallel(args):
     # Zonal stats for a parallel processing on a list of features
     return zonal_stats_partial(*args)
 
+def instantiate_excel_writer(excel_file):
+    
+    if os.path.exists(excel_file):
+        return pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
+    else:
+        return pd.ExcelWriter(excel_file, engine='openpyxl')
+
 # Process exposure data
 def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_region):
     exp_ras = None
@@ -477,12 +484,9 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, sce
 
     # Create Excel writer object
     excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.xlsx")
-    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
-
-    # Create GeoPackage file
-    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
-
-    with pd.ExcelWriter(excel_file, engine='openpyxl') as excel_writer:
+    excel_writer = instantiate_excel_writer(excel_file)
+    
+    with excel_writer:
         if analysis_type == "Function":
             EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
             sheet_name = f"{exp_cat}_{EAI_string}function"
@@ -551,4 +555,3 @@ def plot_results(result_df, exp_cat, analysis_type):
     )
     
     return geojson_layer, colormap
-
