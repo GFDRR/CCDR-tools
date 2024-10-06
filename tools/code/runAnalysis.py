@@ -158,7 +158,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
             all_adm_names = [name_field]
         else:
             print(f"Fetching ADM data for {country}, level {adm_level}")
-            adm_data = get_adm_data(country, adm_level)
+            adm_data = input_utils.get_adm_data(country, adm_level)
             field_names = common.adm_field_mapping.get(adm_level, {})
             code_field = field_names.get('code')
             name_field = field_names.get('name')
@@ -496,7 +496,7 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, sce
     
     return result_df  # Return the GeoDataFrame
 
-def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
+def plot_results(result_df, exp_cat, analysis_type):
     # Convert result_df to GeoDataFrame if it's not already
     if not isinstance(result_df, gpd.GeoDataFrame):
         result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
@@ -512,45 +512,43 @@ def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
 
     # Ensure the CRS is EPSG:4326
     result_df = result_df.to_crs(epsg=4326)
-    
-    # Determine the key column
-    key_column = f'HASC_{adm_level}'
 
     # Filter out zero and negative values for color scaling
     non_zero_data = result_df[result_df[column] > 0]
+    
+    if len(non_zero_data) == 0:
+        return None, None
 
-    if len(non_zero_data) > 0:
-        vmin = non_zero_data[column].min()
-        vmax = non_zero_data[column].max()
-        
-        # Create a custom colormap
-        colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
-        colormap = LinearColormap(colors=colors, vmin=vmin, vmax=vmax)
-        
-        # Create a style function that colors features based on their value
-        def style_function(feature):
-            value = feature['properties'][column]
-            if value <= 0:
-                return {
-                    'fillColor': 'transparent',
-                    'fillOpacity': 0,
-                    'color': 'black',
-                    'weight': 1,
-                }
+    vmin = non_zero_data[column].min()
+    vmax = non_zero_data[column].max()
+    
+    # Create a custom colormap
+    colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    colormap = LinearColormap(colors=colors, vmin=vmin, vmax=vmax)
+    
+    # Create a style function that colors features based on their value
+    def style_function(feature):
+        value = feature['properties'][column]
+        if value <= 0:
             return {
-                'fillColor': colormap(value),
-                'fillOpacity': 0.7,
+                'fillColor': 'transparent',
+                'fillOpacity': 0,
                 'color': 'black',
                 'weight': 1,
             }
-        
-        # Create the GeoJson layer
-        geojson_layer = folium.GeoJson(
-            result_df,
-            style_function=style_function,
-            name=f"{exp_cat} - {column}"
-        )
-        
-        return geojson_layer, colormap
+        return {
+            'fillColor': colormap(value),
+            'fillOpacity': 0.7,
+            'color': 'black',
+            'weight': 1,
+        }
+    
+    # Create the GeoJson layer
+    geojson_layer = folium.GeoJson(
+        result_df,
+        style_function=style_function,
+        name=f"{exp_cat} - {column}"
+    )
+    
+    return geojson_layer, colormap
 
-    return None, None
