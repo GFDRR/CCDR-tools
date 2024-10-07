@@ -14,7 +14,6 @@ import pandas as pd
 import requests
 import seaborn as sns
 import time
-import tkinter as tk
 
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 from input_utils import get_adm_data
@@ -145,28 +144,31 @@ custom_boundaries_name_field = widgets.Text(
 custom_boundaries_name_field_id = f'custom-boundaries-name-field-{id(custom_boundaries_name_field)}'
 custom_boundaries_name_field.add_class(custom_boundaries_name_field_id)
 
-select_file_button = widgets.Button(
+# Create the file upload button
+select_file_button = widgets.FileUpload(
     description='Select File',
-    disabled=True,
-    button_style='info', layout=widgets.Layout(width='250px')
+    accept='.gpkg,.shp',  # Accept only GeoPackage and Shapefile
+    multiple=False,
+    layout=widgets.Layout(width='250px'),
+    button_style='info'
 )
 
 # Custom ADM Functions
-def select_file(b):
-    root = tk.Tk()
-    root.withdraw()  # Hide the main window
-    root.attributes('-topmost', True)  # Make the dialog appear on top
-    root.geometry(f'+{root.winfo_screenwidth()//2-300}+0')  # Position at the top center of the screen
-    file_path = tk.filedialog.askopenfilename(
-        filetypes=[("GeoPackage", "*.gpkg"), ("Shapefile", "*.shp")],
-        parent=root
-    )
-    if file_path:
-        custom_boundaries_file.value = file_path
+def on_file_upload(change):
+    if select_file_button.value:
+        file_name = list(select_file_button.value.keys())[0]
+        file_content = select_file_button.value[file_name]['content']
+        
+        # If needed, you can save the file content or do other operations here
+        custom_boundaries_file.value = file_name
         update_preview_map()
-    root.destroy()
 
-select_file_button.on_click(select_file)
+# Attach the callback to the button
+select_file_button.observe(on_file_upload, names='value')
+
+# # Display the button
+# display(select_file_button)
+
 
 def update_custom_boundaries_visibility(*args):
     is_custom = custom_boundaries_radio.value == 'Custom boundaries'
@@ -645,8 +647,8 @@ def run_analysis_script(b):
         summary_dfs, charts, layers, colormaps = [], [], [], []
         
         # Prepare Excel writer
-        suffix_2020 = f"{scenario}" if period == '2020' else ''
-        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}_{suffix_2020}"
+        suffix_2020 = f"_{scenario}" if period == '2020' else ''
+        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}{suffix_2020}"
         
         excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.xlsx")
         gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
