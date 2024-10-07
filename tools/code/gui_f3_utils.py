@@ -646,10 +646,10 @@ def run_analysis_script(b):
         minx, miny, maxx, maxy = float('inf'), float('inf'), float('-inf'), float('-inf')
         summary_dfs, charts, layers, colormaps = [], [], [], []
         
-        # Prepare Excel writer
-        suffix_2020 = f"_{scenario}" if period == '2020' else ''
-        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}{suffix_2020}"
-        
+        # Prepare Excel writer      
+        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"
+        if period != '2020':
+            file_prefix += f"_{scenario}"        
         excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.xlsx")
         gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
 
