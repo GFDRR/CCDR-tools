@@ -654,92 +654,94 @@ def run_analysis_script(b):
         gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
 
         # Use ExcelWriter as a context manager
-        excel_writer = instantiate_excel_writer(excel_file)
-        with excel_writer:
-            # Run analysis for each exposure category
-            for i in range(len(exp_cat_list)):
-                exp_cat = exp_cat_list[i]
-                exp_nam = exp_nam_list[i]
-                print(f"Running analysis for {exp_cat}...")
-                result_df = run_analysis(country, haz_cat, period, scenario, return_periods, min_haz_slider,
-                                exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, 
-                                save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
-                                custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
-                                custom_name_field=custom_name_field, wb_region=wb_region)
-                
-                # Save results to Excel and GeoPackage
-                if analysis_type == "Function":
-                    EAI_string = "EAI_" if len(return_periods) > 1 else ""
-                    sheet_name = f"{exp_cat}_{EAI_string}function"
-                elif analysis_type == "Classes":
-                    EAE_string = "EAE_" if len(return_periods) > 1 else ""
-                    sheet_name = f"{exp_cat}_{EAE_string}class"
-                else:
-                    raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
-
-                # Save to Excel
+        # Run analysis for each exposure category
+        for i in range(len(exp_cat_list)):
+            exp_cat = exp_cat_list[i]
+            exp_nam = exp_nam_list[i]
+            print(f"Running analysis for {exp_cat}...")
+            result_df = run_analysis(country, haz_cat, period, scenario, return_periods, min_haz_slider,
+                            exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, 
+                            save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
+                            custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
+                            custom_name_field=custom_name_field, wb_region=wb_region)
+            
+            # Save results to Excel and GeoPackage
+            if analysis_type == "Function":
+                EAI_string = "EAI_" if len(return_periods) > 1 else ""
+                sheet_name = f"{exp_cat}_{EAI_string}function"
+            elif analysis_type == "Classes":
+                EAE_string = "EAE_" if len(return_periods) > 1 else ""
+                sheet_name = f"{exp_cat}_{EAE_string}class"
+            else:
+                raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
+            
+            # Save to Excel
+            excel_writer = instantiate_excel_writer(excel_file)
+            with excel_writer:
                 result_df.drop('geometry', axis=1, errors='ignore').to_excel(excel_writer, sheet_name=sheet_name, index=False)
-                
-                # Save to GeoPackage
-                if isinstance(result_df, gpd.GeoDataFrame):
-                    result_df.to_file(gpkg_file, layer=sheet_name, driver='GPKG')
-                else:
-                    print(f"Warning: Result for {exp_cat} is not a GeoDataFrame. Skipping GeoPackage export for this layer.")
+            
+            # Save to GeoPackage
+            if isinstance(result_df, gpd.GeoDataFrame):
+                result_df.to_file(gpkg_file, layer=sheet_name, driver='GPKG')
+            else:
+                print(f"Warning: Result for {exp_cat} is not a GeoDataFrame. Skipping GeoPackage export for this layer.")
 
-                # Create summary DataFrame
-                summary_df = create_summary_df(result_df, return_periods, exp_cat)
-                summary_dfs.append(summary_df)
+            # Create summary DataFrame
+            summary_df = create_summary_df(result_df, return_periods, exp_cat)
+            summary_dfs.append(summary_df)
 
-                if preview_chk.value:
-                    # Add each result as a layer
-                    layer, colormap = plot_results(result_df, exp_cat, analysis_type)
-                    if layer is not None:
-                        layers.append(layer)
-                        colormaps.append(colormap)
-                        # Update the overall bounding box using result_df
-                        bounds = result_df.total_bounds
-                        minx = min(minx, bounds[0])
-                        miny = min(miny, bounds[1])
-                        maxx = max(maxx, bounds[2])
-                        maxy = max(maxy, bounds[3])
+            if preview_chk.value:
+                # Add each result as a layer
+                layer, colormap = plot_results(result_df, exp_cat, analysis_type)
+                if layer is not None:
+                    layers.append(layer)
+                    colormaps.append(colormap)
+                    # Update the overall bounding box using result_df
+                    bounds = result_df.total_bounds
+                    minx = min(minx, bounds[0])
+                    miny = min(miny, bounds[1])
+                    maxx = max(maxx, bounds[2])
+                    maxy = max(maxy, bounds[3])
                         
-            # Combine all summary DataFrames
-            if summary_dfs:
-                combined_summary = summary_dfs[0]
-                for df in summary_dfs[1:]:
-                    combined_summary = pd.merge(combined_summary, df, on=['RP', 'Freq', 'Ex_freq'], how='outer')
+        # Combine all summary DataFrames
+        if summary_dfs:
+            combined_summary = summary_dfs[0]
+            for df in summary_dfs[1:]:
+                combined_summary = pd.merge(combined_summary, df, on=['RP', 'Freq', 'Ex_freq'], how='outer')
 
-                # Round values
-                combined_summary = combined_summary.round(3)
-            
-                # Reorder columns
-                ordered_columns = ['RP', 'Freq', 'Ex_freq']
-                for exp_cat in exp_cat_list:
-                    ordered_columns.extend([f'{exp_cat}_impact', f'{exp_cat}_EAI'])
-            
-                # Ensure all expected columns are present, fill with NaN if missing
-                for col in ordered_columns:
-                    if col not in combined_summary.columns:
-                        combined_summary[col] = np.nan
-            
-                # Select only the ordered columns
-                combined_summary = combined_summary[ordered_columns]
-            
-                # Save combined summary to Excel
+            # Round values
+            combined_summary = combined_summary.round(3)
+        
+            # Reorder columns
+            ordered_columns = ['RP', 'Freq', 'Ex_freq']
+            for exp_cat in exp_cat_list:
+                ordered_columns.extend([f'{exp_cat}_impact', f'{exp_cat}_EAI'])
+        
+            # Ensure all expected columns are present, fill with NaN if missing
+            for col in ordered_columns:
+                if col not in combined_summary.columns:
+                    combined_summary[col] = np.nan
+        
+            # Select only the ordered columns
+            combined_summary = combined_summary[ordered_columns]
+        
+            # Save combined summary to Excel
+            excel_writer = instantiate_excel_writer(excel_file)
+            with excel_writer:
                 combined_summary.to_excel(excel_writer, sheet_name='Summary', index=False)
 
-                # Add custom exposure information
-                row_offset = len(combined_summary) + 4  # Start two rows below the table
-                for i, exp_cat in enumerate(exp_cat_list):
-                    if custom_exposure_radio.value == 'Custom exposure':
-                        custom_name = custom_exposure_container.children[i].value
-                        if custom_name:
-                            excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
-                            row_offset += 1
-    
-            # Generate charts only once
-            colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
-            charts = [create_eai_chart(combined_summary, exp_cat, period, scenario, colors[exp_cat]) for exp_cat in exp_cat_list]
+            # Add custom exposure information
+            row_offset = len(combined_summary) + 4  # Start two rows below the table
+            for i, exp_cat in enumerate(exp_cat_list):
+                if custom_exposure_radio.value == 'Custom exposure':
+                    custom_name = custom_exposure_container.children[i].value
+                    if custom_name:
+                        excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
+                        row_offset += 1
+
+        # Generate charts only once
+        colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
+        charts = [create_eai_chart(combined_summary, exp_cat, period, scenario, colors[exp_cat]) for exp_cat in exp_cat_list]
 
         print(f"Analysis completed in {time.time() - start_time:.2f} seconds")
         print(f"Results saved to Excel file: {excel_file}")
