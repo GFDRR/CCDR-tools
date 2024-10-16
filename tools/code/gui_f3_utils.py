@@ -17,7 +17,7 @@ import time
 
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 from input_utils import get_adm_data
-from runAnalysis import run_analysis, plot_results, create_summary_df, instantiate_excel_writer
+from runAnalysis import run_analysis, plot_results, create_summary_df, save_excel_file
 
 
 # Load the image data
@@ -568,6 +568,8 @@ def validate_input():
             if not is_seq:
                 print(f"Error: Class thresholds must be in increasing  order.")
                 return False
+            
+    # TODO: Ensure that administrative layer is selected
                 
     print("User input accepted!")
     return True
@@ -676,10 +678,9 @@ def run_analysis_script(b):
                 raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
             
             # Save to Excel
-            excel_writer = instantiate_excel_writer(excel_file)
-            with excel_writer:
-                result_df.drop('geometry', axis=1, errors='ignore').to_excel(excel_writer, sheet_name=sheet_name, index=False)
-            
+            df_to_save = result_df.drop('geometry', axis=1, errors='ignore')
+            save_excel_file(excel_file, df_to_save, sheet_name, summary_sheet=False)
+                        
             # Save to GeoPackage
             if isinstance(result_df, gpd.GeoDataFrame):
                 result_df.to_file(gpkg_file, layer=sheet_name, driver='GPKG')
@@ -726,11 +727,10 @@ def run_analysis_script(b):
             combined_summary = combined_summary[ordered_columns]
         
             # Save combined summary to Excel
-            excel_writer = instantiate_excel_writer(excel_file)
-            with excel_writer:
-                combined_summary.to_excel(excel_writer, sheet_name='Summary', index=False)
+            save_excel_file(excel_file, combined_summary, sheet_name='Summary', summary_sheet=True)
 
             # Add custom exposure information
+            excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
             row_offset = len(combined_summary) + 4  # Start two rows below the table
             for i, exp_cat in enumerate(exp_cat_list):
                 if custom_exposure_radio.value == 'Custom exposure':
