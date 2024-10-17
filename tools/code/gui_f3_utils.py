@@ -14,6 +14,8 @@ import pandas as pd
 import requests
 import seaborn as sns
 import time
+import tkinter as tk
+from tkinter import filedialog
 
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 from input_utils import get_adm_data
@@ -144,30 +146,28 @@ custom_boundaries_name_field = widgets.Text(
 custom_boundaries_name_field_id = f'custom-boundaries-name-field-{id(custom_boundaries_name_field)}'
 custom_boundaries_name_field.add_class(custom_boundaries_name_field_id)
 
-# Create the file upload button
-select_file_button = widgets.FileUpload(
+select_file_button = widgets.Button(
     description='Select File',
-    accept='.gpkg,.shp',  # Accept only GeoPackage and Shapefile
-    multiple=False,
-    layout=widgets.Layout(width='250px'),
-    button_style='info'
+    disabled=True,
+    button_style='info', layout=widgets.Layout(width='250px')
 )
 
 # Custom ADM Functions
-def on_file_upload(change):
-    if select_file_button.value:
-        file_name = list(select_file_button.value.keys())[0]
-        file_content = select_file_button.value[file_name]['content']
-        
-        # If needed, you can save the file content or do other operations here
-        custom_boundaries_file.value = file_name
+def select_file(b):
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    root.attributes('-topmost', True)  # Make the dialog appear on top
+    root.geometry(f'+{root.winfo_screenwidth()//2-300}+0')  # Position at the top center of the screen
+    file_path = filedialog.askopenfilename(
+        filetypes=[("GeoPackage", "*.gpkg"), ("Shapefile", "*.shp")],
+        parent=root
+    )
+    if file_path:
+        custom_boundaries_file.value = file_path
         update_preview_map()
+    root.destroy()
 
-# Attach the callback to the button
-select_file_button.observe(on_file_upload, names='value')
-
-# # Display the button
-# display(select_file_button)
+select_file_button.on_click(select_file)
 
 
 def update_custom_boundaries_visibility(*args):
@@ -569,7 +569,9 @@ def validate_input():
                 print(f"Error: Class thresholds must be in increasing  order.")
                 return False
             
-    # TODO: Ensure that administrative layer is selected
+    if custom_boundaries_radio.value == 'Default boundaries' and adm_level_selector.value is None:
+        print("Error: Please select an Administrative Level when working with default boundaries.")
+        return False
                 
     print("User input accepted!")
     return True
@@ -781,7 +783,6 @@ def run_analysis_script(b):
                 for chart in charts:
                     display(chart)
                     plt.close(chart)  # Close the figure after displaying
-
 
 run_button.on_click(run_analysis_script)
 
