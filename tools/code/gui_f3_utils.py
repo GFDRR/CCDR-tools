@@ -1,8 +1,6 @@
-import base64
 import common
 import folium
 from folium.plugins import MiniMap, Fullscreen
-from functools import reduce
 import geopandas as gpd
 from IPython.display import display, clear_output, HTML
 import ipywidgets as widgets
@@ -19,13 +17,8 @@ from tkinter import filedialog
 
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 from input_utils import get_adm_data
+import notebook_utils
 from runAnalysis import run_analysis, plot_results, create_summary_df, save_excel_file
-
-
-# Load the image data
-with open("rdl_logo.png", "rb") as img_file:
-    img_data = img_file.read()
-    img_base64 = base64.b64encode(img_data).decode('utf-8')
 
 # Load country data
 df = pd.read_csv('countries.csv')
@@ -434,12 +427,7 @@ def update_class_edges_table(*args):
 
 approach_selector.observe(update_class_edges_table, 'value')
 
-preview_chk = widgets.Checkbox(
-    value=True,
-    description='Preview Results',
-    disabled=False,
-    indent=False
-)
+preview_chk = notebook_utils.preview_chk
 
 # Observe changes in relevant widgets
 country_selector.observe(update_preview, names='value')
@@ -512,7 +500,7 @@ info_box = widgets.Textarea(
 info_box.add_class('info-box')
 
 # Button to run the script
-run_button = widgets.Button(description="Run Analysis", layout=widgets.Layout(width='250px'), button_style='danger')
+run_button = notebook_utils.run_button
 
 # Functions to run the analysis
 def validate_input():
@@ -668,6 +656,10 @@ def run_analysis_script(b):
                             save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
                             custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
                             custom_name_field=custom_name_field, wb_region=wb_region)
+            
+            if result_df is None:
+                print("Encountered Exception! Please fix issue above.")
+                return
             
             # Save results to Excel and GeoPackage
             if analysis_type == "Function":
@@ -841,133 +833,35 @@ def create_eai_chart(dfData, exp_cat, period, scenario, color):
     return fig
 
 # Displaying the GUI
-header_html = f"""
-<div style='
-    background: linear-gradient(to bottom, #003366, transparent);
-    padding: 20px;
-    border-radius: 10px 10px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-'>
-    <div style="flex: 1; min-width: 0;">
-        <h1 style='color: #FFFFFF; margin: 0; font-size: 1.5vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>RISK DATA LIBRARY</h1>
-        <h2 style='color: #ff5733; margin: 10px 0; font-size: 1.2vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>ANALYTICAL TOOL</b></h2>
-        <h4 style='color: #118AB2; margin: 0; font-size: 1vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>FLOOD HAZARD (FATHOM 3)</b></h4>
-    </div>
-    <img src="data:image/png;base64,{img_base64}" style="width: 200px; max-width: 200px; height: auto; margin-left: 20px;">
-</div>
-"""
-
 # Create the header widget
-header = widgets.HTML(value=header_html, layout=widgets.Layout(width='99%'))
+header = notebook_utils.create_header_widget()
 
 # Footer
-footer = widgets.VBox([
-    preview_chk,
-    widgets.HBox([run_button], layout=widgets.Layout(display='flex', justify_content='center', width='100%'))
-], layout=widgets.Layout(width='100%', height='100px', padding='10px'))
+footer = notebook_utils.create_footer()
 
 # Output area
-output = widgets.Output()
-chart_output = widgets.Output(layout=widgets.Layout(width='100%', height='auto'))
+output = notebook_utils.output_widget
+chart_output = notebook_utils.chart_output
 
 # Sidebar
-sidebar_content = widgets.VBox([
-    info_box,
-    tabs,
-    output
-], layout=widgets.Layout(overflow='auto'))
-
-sidebar = widgets.VBox([
-    sidebar_content,
-    footer
-], layout=widgets.Layout(width='370px', height='100%'))
-
-# Function to create and display the default map
-def create_default_map():
-    return folium.Map(location=[0, 0], zoom_start=2)
-
-# Create the default map
-default_map = create_default_map()
-
-# Convert the map to HTML string
-map_html = default_map._repr_html_()
+sidebar = notebook_utils.create_sidebar(info_box, tabs, output, footer)
 
 # Create an HTML widget to display the map
-map_widget = widgets.HTML(
-    value=map_html,
-    layout=widgets.Layout(width='98%', height='600px')
-)
+map_widget = notebook_utils.map_widget
 
 # Chart output area (below the map)
-chart_output = widgets.Output(layout={'width': '98%', 'height': 'auto'})
+chart_output = notebook_utils.chart_output
 
-# Combine map and chart output
-map_and_chart = widgets.VBox([map_widget, chart_output], layout=widgets.Layout(width='750px', height='100%'))
-
-# Full UI
-content_layout = widgets.HBox([sidebar, map_and_chart], layout=widgets.Layout(width='100%', height='800px'))
-
-# Combine header and content in a vertical layout
-final_layout = widgets.VBox([header, content_layout], layout=widgets.Layout(width='100%'))
+# Combine map and chart output, get full ui and final layout
+map_and_chart, content_layout, final_layout = notebook_utils.get_ui_components(sidebar, header)
 
 # JavaScript to handle hover events and update the info box
-js_code = f"""
-<script>
-document.querySelector('.{country_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Enter the country name.';
-}};
-document.querySelector('.{adm_level_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Select the boundaries associated with administrative level.';
-}};
-document.querySelector('.{custom_boundaries_radio_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Choose between default administrative boundaries or custom boundaries provided by the user.';
-}};
-document.querySelector('.{custom_boundaries_file_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Enter the path to your custom boundaries file (Shapefile or GeoPackage).';
-}};
-document.querySelector('.{custom_boundaries_id_field_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Enter the field name in your custom boundaries file that contains the unique identifier for each zone.';
-}};
-document.querySelector('.{custom_boundaries_name_field_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Enter the field name in your custom boundaries file that contains the name or label for each zone.';
-}};
-document.querySelector('.{hazard_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Select the type of flood hazard.\\nThe DEFENDED option accounts for protection standards set proportional to country GDP; it does not account for geolocated physical defence measures.';
-}};
-document.querySelector('.{hazard_threshold_slider_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Set the minimum hazard threshold, in the unit of the dataset.\\nValues below this threshold will be ignored.';
-}};
-document.querySelector('.{period_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Select the reference time period for the hazard analysis:\\n\\n- Historical baseline: 2020\\n- Future periods: 2030, 2050, 2080';
-}};
-document.querySelector('.{scenario_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Choose the climate scenario for future projections.';
-}};
-document.querySelector('.{return_periods_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Choose the return periods to consider.\\nCtrl + click or drag mouse for multiple choices.\\n\\nReturn period defines the intensity of the hazard in relation to its occurrence probability.\\nWhen using the function approach, the whole range selection is preferred for best results.';
-}};
-document.querySelector('.{exposure_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Select the exposure category on which the risk is calculated.\\nCtrl + click or drag mouse for multiple choices.';
-}};
-document.querySelector('.{custom_exposure_radio_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Choose between default exposure data or custom exposure data provided by the user.\\n\\nDefault data sources are:\\n- Population: WorldPop 2020 (100 m)\\n- Built-up: World Settlement Footprint 2019 (100 m)\\n- Agricolture: ESA World Cover 2019 - Crop area (1 km)';
-}};
-document.querySelector('.{custom_exposure_textbox_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Enter the filename (without extension) of your custom exposure data.\\n- Must be a valid .tif file using CRS:4326\\n- Must be located in the EXP folder. ';
-}};
-document.querySelector('.{approach_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Select the approach for risk classification: Classes or Function.\\n\\n- Function approach is based on default impact functions for each exposure category.\\n- Classes approach measures the average annual exposure to user-defined hazard thresholds. Thresholds must be inserted in incremental order.';
-}};
-document.querySelector('.{adm_level_selector_id}').onmouseover = function() {{
-    document.querySelector('.info-box textarea').value = 'Select the administrative level to aggregate and present the results of the analysis.';
-}};
-</script>
-"""
+js_code = notebook_utils.create_js_code(
+    country_selector_id, adm_level_selector_id, custom_boundaries_radio_id, custom_boundaries_file_id,
+    custom_boundaries_id_field_id, custom_boundaries_name_field_id, hazard_selector_id, 
+    hazard_threshold_slider_id, period_selector_id, scenario_selector_id, return_periods_selector_id, 
+    exposure_selector_id, custom_exposure_radio_id, custom_exposure_textbox_id, approach_selector_id
+)
 
 def initialize_tool():
     # Display the layout and inject the JavaScript code

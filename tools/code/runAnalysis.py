@@ -149,9 +149,21 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
 
     except Exception as e:
         print(f"Error in process_exposure_data: {str(e)}")
-        raise
+
+
+def exception_handler(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
+            
+    return wrapper
+
 
 # Defining the main function to run the analysis
+@exception_handler
 def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_RPs: list[int],
                  min_haz_threshold: float, exp_cat: str, exp_nam: str, exp_year: str, adm_level: str,
                  analysis_type: str, class_edges: list[float], 
