@@ -6,6 +6,7 @@ import pandas as pd
 import geopandas as gpd
 import folium
 from branca.colormap import LinearColormap
+from openpyxl import load_workbook
 import rasterio
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
@@ -37,6 +38,54 @@ def zonal_stats_partial(feats, raster, stats="*", affine=None, nodata=None, all_
 def zonal_stats_parallel(args):
     # Zonal stats for a parallel processing on a list of features
     return zonal_stats_partial(*args)
+
+def save_excel_file(excel_file, dataset, sheet_name, summary_sheet=False):
+
+    if os.path.exists(excel_file):
+        excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
+        summary_exists = 'Summary' in load_workbook(excel_file, read_only=True).sheetnames
+    else:
+        excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
+        
+    if summary_sheet and summary_exists:
+        summary_df = pd.read_excel(excel_file, sheet_name='Summary')
+        dataset = merge_dfs(summary_df, dataset)
+        
+    with excel_writer:
+        dataset.to_excel(excel_writer, sheet_name=sheet_name, index=False)
+        
+        
+def merge_dfs(df_left, df_right, on_columns='RP', how='outer'):
+    
+    # Get the unique columns from both DataFrames
+    all_columns = list(df_left.columns.union(df_right.columns, sort=False))
+
+    # Perform the merge
+    merged_df = pd.merge(df_left, df_right, on=on_columns, how=how, suffixes=('_x', '_y'))
+    common_columns = [col for col in df_left.columns if col in df_right.columns and col not in on_columns]
+
+    for col in common_columns:
+        merged_df[col] = merged_df[f'{col}_x'].combine_first(merged_df[f'{col}_y'])
+        merged_df.drop([f'{col}_x', f'{col}_y'], axis=1, inplace=True)
+        
+    return merged_df[all_columns]
+        
+
+def create_summary_df(df_left, df_right, on='RP', how='outer'):
+    
+    # Get the unique columns from both dfs
+    all_columns = list(df_left.columns.union(df_right.columns, sort=False))
+    
+    # Perform merge
+    merged_df = pd.merge(df_left, df_right, on=on, how=how, suffixes=('_x', '_y'))
+    common_columns = [col for col in df_left.columns if col in df_right.columns and col != on]
+    
+    for col in common_columns:
+        merged_df[col] = merged_df[f'{col}_x'].combine_first(merged_df[f'{col}_y'])
+        merged_df.drop([f'{col}_x', f'{col}_y'], axis=1, inplace=True)
+    
+    return merged_df[all_columns]
+
 
 # Process exposure data
 def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_region):
@@ -100,9 +149,21 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
 
     except Exception as e:
         print(f"Error in process_exposure_data: {str(e)}")
-        raise
+
+
+def exception_handler(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return None
+            
+    return wrapper
+
 
 # Defining the main function to run the analysis
+@exception_handler
 def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_RPs: list[int],
                  min_haz_threshold: float, exp_cat: str, exp_nam: str, exp_year: str, adm_level: str,
                  analysis_type: str, class_edges: list[float], 
@@ -158,7 +219,7 @@ def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_R
             all_adm_names = [name_field]
         else:
             print(f"Fetching ADM data for {country}, level {adm_level}")
-            adm_data = get_adm_data(country, adm_level)
+            adm_data = input_utils.get_adm_data(country, adm_level)
             field_names = common.adm_field_mapping.get(adm_level, {})
             code_field = field_names.get('code')
             name_field = field_names.get('name')
@@ -477,26 +538,21 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, sce
 
     # Create Excel writer object
     excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.xlsx")
-    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl')
-
-    # Create GeoPackage file
-    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
-
-    with pd.ExcelWriter(excel_file, engine='openpyxl') as excel_writer:
-        if analysis_type == "Function":
-            EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
-            sheet_name = f"{exp_cat}_{EAI_string}function"
-            no_geom.to_excel(excel_writer, sheet_name=sheet_name, index=False)
-        elif analysis_type == "Classes":
-            EAE_string = "EAE_" if len(valid_RPs) > 1 else ""
-            sheet_name = f"{exp_cat}_{EAE_string}class"
-            no_geom.to_excel(excel_writer, sheet_name=sheet_name, index=False)
-        else:
-            raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
     
+    if analysis_type == "Function":
+        EAI_string = "EAI_" if len(valid_RPs) > 1 else ""
+        sheet_name = f"{exp_cat}_{EAI_string}function"
+        save_excel_file(excel_file, no_geom, sheet_name)
+    elif analysis_type == "Classes":
+        EAE_string = "EAE_" if len(valid_RPs) > 1 else ""
+        sheet_name = f"{exp_cat}_{EAE_string}class"
+        save_excel_file(excel_file, no_geom, sheet_name)
+    else:
+        raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
+        
     return result_df  # Return the GeoDataFrame
 
-def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
+def plot_results(result_df, exp_cat, analysis_type):
     # Convert result_df to GeoDataFrame if it's not already
     if not isinstance(result_df, gpd.GeoDataFrame):
         result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
@@ -512,45 +568,42 @@ def plot_results(result_df, country, adm_level, exp_cat, analysis_type):
 
     # Ensure the CRS is EPSG:4326
     result_df = result_df.to_crs(epsg=4326)
-    
-    # Determine the key column
-    key_column = f'HASC_{adm_level}'
 
     # Filter out zero and negative values for color scaling
     non_zero_data = result_df[result_df[column] > 0]
+    
+    if len(non_zero_data) == 0:
+        return None, None
 
-    if len(non_zero_data) > 0:
-        vmin = non_zero_data[column].min()
-        vmax = non_zero_data[column].max()
-        
-        # Create a custom colormap
-        colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
-        colormap = LinearColormap(colors=colors, vmin=vmin, vmax=vmax)
-        
-        # Create a style function that colors features based on their value
-        def style_function(feature):
-            value = feature['properties'][column]
-            if value <= 0:
-                return {
-                    'fillColor': 'transparent',
-                    'fillOpacity': 0,
-                    'color': 'black',
-                    'weight': 1,
-                }
+    vmin = non_zero_data[column].min()
+    vmax = non_zero_data[column].max()
+    
+    # Create a custom colormap
+    colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    colormap = LinearColormap(colors=colors, vmin=vmin, vmax=vmax)
+    
+    # Create a style function that colors features based on their value
+    def style_function(feature):
+        value = feature['properties'][column]
+        if value <= 0:
             return {
-                'fillColor': colormap(value),
-                'fillOpacity': 0.7,
+                'fillColor': 'transparent',
+                'fillOpacity': 0,
                 'color': 'black',
                 'weight': 1,
             }
-        
-        # Create the GeoJson layer
-        geojson_layer = folium.GeoJson(
-            result_df,
-            style_function=style_function,
-            name=f"{exp_cat} - {column}"
-        )
-        
-        return geojson_layer, colormap
-
-    return None, None
+        return {
+            'fillColor': colormap(value),
+            'fillOpacity': 0.7,
+            'color': 'black',
+            'weight': 1,
+        }
+    
+    # Create the GeoJson layer
+    geojson_layer = folium.GeoJson(
+        result_df,
+        style_function=style_function,
+        name=f"{exp_cat} - {column}"
+    )
+    
+    return geojson_layer, colormap
