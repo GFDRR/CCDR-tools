@@ -7,7 +7,6 @@ import ipywidgets as widgets
 import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
 import numpy as np
-import os
 import pandas as pd
 import requests
 import seaborn as sns
@@ -18,7 +17,10 @@ from tkinter import filedialog
 from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
 from input_utils import get_adm_data
 import notebook_utils
-from runAnalysis import run_analysis, plot_results, create_summary_df, save_excel_file
+from runAnalysis import (
+    run_analysis, plot_results, create_summary_df, prepare_excel_gpkg_files,
+    prepare_sheet_name, saving_excel_and_gpgk_file, prepare_and_save_summary_df
+)
 
 # Load country data
 df = pd.read_csv('countries.csv')
@@ -622,7 +624,7 @@ def run_analysis_script(b):
             custom_code_field = None
             custom_name_field = None
     
-        start_time = time.time()
+        start_time = time.perf_counter()
 
         print(f"Starting analysis for {iso_to_country[country]} ({country})...")
         
@@ -638,12 +640,8 @@ def run_analysis_script(b):
         minx, miny, maxx, maxy = float('inf'), float('inf'), float('-inf'), float('-inf')
         summary_dfs, charts, layers, colormaps = [], [], [], []
         
-        # Prepare Excel writer      
-        file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"
-        if period != '2020':
-            file_prefix += f"_{scenario}"        
-        excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.xlsx")
-        gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
+        # Prepare Excel writer
+        excel_file, gpkg_file = prepare_excel_gpkg_files(country, adm_level, haz_cat, period, scenario)
 
         # Use ExcelWriter as a context manager
         # Run analysis for each exposure category
@@ -661,25 +659,9 @@ def run_analysis_script(b):
                 print("Encountered Exception! Please fix issue above.")
                 return
             
-            # Save results to Excel and GeoPackage
-            if analysis_type == "Function":
-                EAI_string = "EAI_" if len(return_periods) > 1 else ""
-                sheet_name = f"{exp_cat}_{EAI_string}function"
-            elif analysis_type == "Classes":
-                EAE_string = "EAE_" if len(return_periods) > 1 else ""
-                sheet_name = f"{exp_cat}_{EAE_string}class"
-            else:
-                raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")
-            
-            # Save to Excel
-            df_to_save = result_df.drop('geometry', axis=1, errors='ignore')
-            save_excel_file(excel_file, df_to_save, sheet_name, summary_sheet=False)
+            sheet_name = prepare_sheet_name(analysis_type, return_periods, exp_cat)
                         
-            # Save to GeoPackage
-            if isinstance(result_df, gpd.GeoDataFrame):
-                result_df.to_file(gpkg_file, layer=sheet_name, driver='GPKG')
-            else:
-                print(f"Warning: Result for {exp_cat} is not a GeoDataFrame. Skipping GeoPackage export for this layer.")
+            saving_excel_and_gpgk_file(result_df, excel_file, sheet_name, gpkg_file, exp_cat)
 
             # Create summary DataFrame
             summary_df = create_summary_df(result_df, return_periods, exp_cat)
@@ -700,29 +682,8 @@ def run_analysis_script(b):
                         
         # Combine all summary DataFrames
         if summary_dfs:
-            combined_summary = summary_dfs[0]
-            for df in summary_dfs[1:]:
-                combined_summary = pd.merge(combined_summary, df, on=['RP', 'Freq', 'Ex_freq'], how='outer')
-
-            # Round values
-            combined_summary = combined_summary.round(3)
-        
-            # Reorder columns
-            ordered_columns = ['RP', 'Freq', 'Ex_freq']
-            for exp_cat in exp_cat_list:
-                ordered_columns.extend([f'{exp_cat}_impact', f'{exp_cat}_EAI'])
-        
-            # Ensure all expected columns are present, fill with NaN if missing
-            for col in ordered_columns:
-                if col not in combined_summary.columns:
-                    combined_summary[col] = np.nan
-        
-            # Select only the ordered columns
-            combined_summary = combined_summary[ordered_columns]
-        
-            # Save combined summary to Excel
-            save_excel_file(excel_file, combined_summary, sheet_name='Summary', summary_sheet=True)
-
+            combined_summary = prepare_and_save_summary_df(summary_dfs, exp_cat_list, excel_file, return_file=True)
+ 
             # Add custom exposure information
             excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
             row_offset = len(combined_summary) + 4  # Start two rows below the table
@@ -737,7 +698,7 @@ def run_analysis_script(b):
         colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
         charts = [create_eai_chart(combined_summary, exp_cat, period, scenario, colors[exp_cat]) for exp_cat in exp_cat_list]
 
-        print(f"Analysis completed in {time.time() - start_time:.2f} seconds")
+        print(f"Analysis completed in {time.perf_counter() - start_time:.2f} seconds")
         print(f"Results saved to Excel file: {excel_file}")
         print(f"Results saved to GeoPackage file: {gpkg_file}")
 

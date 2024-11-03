@@ -54,8 +54,8 @@ def save_excel_file(excel_file, dataset, sheet_name, summary_sheet=False):
     with excel_writer:
         dataset.to_excel(excel_writer, sheet_name=sheet_name, index=False)
         
-        
-def merge_dfs(df_left, df_right, on_columns='RP', how='outer'):
+
+def merge_dfs(df_left, df_right, on_columns=['RP', 'Freq', 'Ex_freq'], how='outer'):
     
     # Get the unique columns from both DataFrames
     all_columns = list(df_left.columns.union(df_right.columns, sort=False))
@@ -68,22 +68,8 @@ def merge_dfs(df_left, df_right, on_columns='RP', how='outer'):
         merged_df[col] = merged_df[f'{col}_x'].combine_first(merged_df[f'{col}_y'])
         merged_df.drop([f'{col}_x', f'{col}_y'], axis=1, inplace=True)
         
-    return merged_df[all_columns]
+    merged_df = merged_df.groupby(on_columns, as_index=False).first()
         
-
-def create_summary_df(df_left, df_right, on='RP', how='outer'):
-    
-    # Get the unique columns from both dfs
-    all_columns = list(df_left.columns.union(df_right.columns, sort=False))
-    
-    # Perform merge
-    merged_df = pd.merge(df_left, df_right, on=on, how=how, suffixes=('_x', '_y'))
-    common_columns = [col for col in df_left.columns if col in df_right.columns and col != on]
-    
-    for col in common_columns:
-        merged_df[col] = merged_df[f'{col}_x'].combine_first(merged_df[f'{col}_y'])
-        merged_df.drop([f'{col}_x', f'{col}_y'], axis=1, inplace=True)
-    
     return merged_df[all_columns]
 
 
@@ -164,13 +150,14 @@ def exception_handler(func):
 
 # Defining the main function to run the analysis
 @exception_handler
-def run_analysis(country: str, haz_cat: str, period: str, scenario: str, valid_RPs: list[int],
-                 min_haz_threshold: float, exp_cat: str, exp_nam: str, exp_year: str, adm_level: str,
-                 analysis_type: str, class_edges: list[float], 
-                 save_check_raster: bool, n_cores: int = None,
-                 use_custom_boundaries=False, custom_boundaries_file_path=None, custom_code_field=None,
-                 custom_name_field=None, wb_region=None
-                 ):
+def run_analysis(
+    country: str, haz_cat: str, period: str, scenario: str,
+    valid_RPs: list[int], min_haz_threshold: float, exp_cat: str,
+    exp_nam: str, exp_year: str, adm_level: str, analysis_type: str, 
+    class_edges: list[float], save_check_raster: bool, n_cores: int = None,
+    use_custom_boundaries=False, custom_boundaries_file_path=None, custom_code_field=None,
+    custom_name_field=None, wb_region=None
+):
     """
     Run specified analysis.
 
@@ -607,3 +594,67 @@ def plot_results(result_df, exp_cat, analysis_type):
     )
     
     return geojson_layer, colormap
+
+
+def prepare_excel_gpkg_files(country, adm_level, haz_cat, period, scenario):
+
+    file_prefix = f"{country}_ADM{adm_level}_{haz_cat}_{period}"
+
+    if period != '2020':
+        file_prefix += f"_{scenario}"
+
+    excel_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.xlsx")
+    gpkg_file = os.path.join(common.OUTPUT_DIR, f"{file_prefix}.gpkg")
+
+    return excel_file, gpkg_file
+
+
+def prepare_sheet_name(analysis_type, return_periods, exp_cat):
+    
+    # Save results to Excel and GeoPackage
+    if analysis_type == "Function":
+        EAI_string = "EAI_" if len(return_periods) > 1 else ""
+        sheet_name = f"{exp_cat}_{EAI_string}function"
+    elif analysis_type == "Classes":
+        EAE_string = "EAE_" if len(return_periods) > 1 else ""
+        sheet_name = f"{exp_cat}_{EAE_string}class"
+    else:
+        raise ValueError("Unknown analysis type. Use 'Function' or 'Classes'.")    
+    return sheet_name
+
+
+def saving_excel_and_gpgk_file(result_df, excel_file, sheet_name, gpkg_file, exp_cat):
+    # Save to Excel
+    df_to_save = result_df.drop('geometry', axis=1, errors='ignore')
+    save_excel_file(excel_file, df_to_save, sheet_name, summary_sheet=False)
+                
+    # Save to GeoPackage
+    if isinstance(result_df, gpd.GeoDataFrame):
+        result_df.to_file(gpkg_file, layer=sheet_name, driver='GPKG')
+    else:
+        print(f"Warning: Result for {exp_cat} is not a GeoDataFrame. Skipping GeoPackage export for this layer.")
+
+
+def prepare_and_save_summary_df(summary_dfs, exp_cat_list, excel_file, return_file:bool = False):
+    combined_summary = summary_dfs[0].copy().round(3)
+    for df in summary_dfs[1:]:
+        combined_summary = pd.merge(combined_summary, df.round(3), on=['RP', 'Freq', 'Ex_freq'], how='outer')
+
+    # Reorder columns
+    ordered_columns = ['RP', 'Freq', 'Ex_freq']
+    for exp_cat in exp_cat_list:
+        ordered_columns.extend([f'{exp_cat}_impact', f'{exp_cat}_EAI'])
+
+    # Ensure all expected columns are present, fill with NaN if missing
+    for col in ordered_columns:
+        if col not in combined_summary.columns:
+            combined_summary[col] = np.nan
+
+    # Select only the ordered columns
+    combined_summary = combined_summary[ordered_columns]
+
+    # Save combined summary to Excel
+    save_excel_file(excel_file, combined_summary, sheet_name='Summary', summary_sheet=True)
+    
+    if return_file:
+        return combined_summary
