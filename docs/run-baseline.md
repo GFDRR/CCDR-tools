@@ -2,7 +2,7 @@
 
 Once required input layers have been created according to [tool setup](tool-setup), the analysis can run.
 
-- Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/Top-down/notebooks/CCDR.ipynb) and chose the hazard to analyse.
+- Select [CCDR.ipynb](https://github.com/GFDRR/CCDR-tools/blob/main/tools/notebooks/CCDR.ipynb) and chose the hazard to analyse.
 
 ```{figure} images/ccdr-nb.png
 ---

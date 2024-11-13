@@ -2,7 +2,7 @@ format: jb-book
 root: home
 
 parts:
-  - caption: Disaster Risk concepts
+  - caption: Disaster Risk Concepts
     chapters:
       - file: docs/intro-hazard
       - file: docs/intro-exposure
@@ -20,27 +20,20 @@ parts:
         - file: docs/global-vulnerability
         - file: docs/disaster-data
         - file: docs/rdl
-  - caption: Analytical approaches
-    chapters:
-      - file: docs/EAI
-      - file: docs/EAE
-      - file: docs/risk-poverty
-      - file: docs/climate-indices
-      - file: docs/validation
-      - file: docs/presentation
-        sections:
-        - file: docs/mapping.ipynb
-  - caption: Jupyter Notebooks
+        - file: docs/external-data
+  - caption: Disaster Risk Analytics
     chapters:
       - file: docs/tool-setup
-      - file: docs/run-baseline
+      - file: docs/validation
+      - file: docs/risk-poverty
+      - file: docs/climate-indices
+      - file: docs/presentation
       - file: docs/utility
         sections:
-        - file: utility/merge_tiles/Merge_tiles.ipynb
-  - caption: External resources
-    chapters:
-      - file: docs/external-tools
-      - file: docs/external-data
+        - file: tools/utility/merge_tiles/Merge_tiles.ipynb
+        - file: tools/utility/Fetch_data/Fetch_WSF19.ipynb
+        - file: tools/utility/mapping.ipynb
+        - file: tools/utility/RWI/RWI-norm.ipynb
   - caption: Credits
     chapters:
       - file: docs/team

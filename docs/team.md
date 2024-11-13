@@ -15,6 +15,6 @@ The CCDR tools have been developed alongside CCDR project activities in partners
 ```{figure} images/GFDRR_logo.png
 ---
 align: center
-width: 70%
+width: 50%
 ---
 ```

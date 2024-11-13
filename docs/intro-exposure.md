@@ -11,15 +11,16 @@ Measures of exposure can include the number of people or types of assets in an a
 ```
 
 **Exposure data** can include a variety of indicators that are used to represent the value exposed to a disaster impact. In this sense, any data representing a potential receptor of risk can be considered exposure data.
-In this tools, the standard exposure indicators include:
+
+In our tools, the standard exposure categories include:
 
 ```{figure} images/exp.png
 ---
 align: center
+width: 70%
 ---
 Example of exposure indicators considered in CCDR risk screening tool.
 ```
 
-For the purpose of the CCDR tools risk screening, datasets representing these indicators are collected in form of raster datasets representing the presence or density for each one. There are of course alternative options for exposure representation, including vector data representing building-level footprints or infrastructures.
-<br><br>
-For a selection of global datasets, see [Exposure Datasets](global-exposure.md).
+In our tools, exposure datasets are collected in form of geospatial raster representing presence (1/0) or amount (count, density) for the each category. There are of course alternative options for exposure representation, including polygons representing building-level footprints (perimeter, area), or lines representing distribution infrastructures.
+<br>For a selection of global datasets, see **[Exposure Datasets]**(global-exposure.md).

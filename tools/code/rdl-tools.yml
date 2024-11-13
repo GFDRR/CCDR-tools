@@ -1,0 +1,40 @@
+# This file may be used to create an environment using:
+# conda env create --name rdl-tools --file rdl-tools.yml
+
+name: rdl-tools
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pandas
+  - geopandas
+  - numpy
+  - matplotlib
+  - seaborn
+  - folium
+  - rasterio
+  - rioxarray
+  - rasterstats
+  - shapely
+  - requests
+  - ipywidgets
+  - jupyter
+  - notebook
+  - openpyxl
+  - gdal
+  - tqdm
+  - multiprocess
+  - pillow
+  - branca
+  - python-dotenv
+  - pyproj
+  - rtree
+  - scikit-learn
+  - scipy
+  - xarray
+  - contextily
+  - pytest
+  - pip
+  - pip:
+    - geopy

@@ -1,7 +1,7 @@
 # Geophysical hazards
 
-Geophysical hazards refer to natural hazards that originate from processes occurring within the Earth's interior or its immediate surroundings. These processes can include seismic activity (earthquakes), volcanic eruptions, and tsunamis. Geophysical hazards often have a sudden onset, meaning they can occur with little to no warning for preparedness or evacuation and cause widespread impacts, affecting large areas far from the source of the hazard. Geophysical hazards are not influenced by climatic conditions, but on the other side they can [affect climate](https://www.usgs.gov/programs/VHP/volcanoes-can-affect-climate).
-<br><br>
+Natural hazards that originate from processes occurring within the Earth's interior or its immediate surroundings. These processes can include seismic activity (earthquakes), volcanic eruptions, and tsunamis. Geophysical hazards often have a sudden onset, meaning they can occur with little to no warning for preparedness or evacuation and cause widespread impacts, affecting large areas far from the source of the hazard. Geophysical hazards are not influenced by climatic conditions, but on the other side they can [affect climate](https://www.usgs.gov/programs/VHP/volcanoes-can-affect-climate).
+
 The National Oceanic and Atmospheric Administration (NOAA) offers a global map [[Natural Hazard Viewer](https://www.ncei.noaa.gov/maps/hazards/?layers=3)] monitoring geophisical hazards (Earthquakes, tsunamis, volcanic activity).
 
 ```{figure} images/NOAA_hzd_gp.jpg
@@ -9,7 +9,7 @@ The National Oceanic and Atmospheric Administration (NOAA) offers a global map [
 align: center
 ---
 ```
-
+(hzd_gp_eq)=
 ## Earthquake
 
 Earthquakes can strike any location at any time, but history shows they occur in the same general patterns year after year, principally in three large zones of the earth:
@@ -22,9 +22,9 @@ Earthquakes can strike any location at any time, but history shows they occur in
 - The [**Global Earthquake Model (GEM)**](https://www.globalquakemodel.org/products?type=Dataset) offers a range of datasets related to seismic hazards, including an interactive [global seismic hazard map viewer](https://maps.openquake.org/map/global-seismic-hazard-map/#2/24.7/-18.6), global historical earthquake catalogue, [active faults](https://www.globalquakemodel.org/product/active-faults-database), [vulnerability functions](https://platform.openquake.org/vulnerability/list?type_of_assessment=2), [exposure data](https://www.globalquakemodel.org/product/meteor-exposure-data) and [country risk profiles](https://www.globalquakemodel.org/country-risk-profiles). Some of the datasets have commercial licensing, while most of them are open for non-commercial use (CC-BY-SA). 
 
 ```{seealso}
-Open [**Python script**](https://www.kaggle.com/code/mriduleecs/earthquake-analysis-on-world-map) to generate earthquake & volcanoes maps.
+Open [**Python script**](https://www.kaggle.com/code/mriduleecs/earthquake-analysis-on-world-map) to generate earthquake maps.
 ```
-
+(hzd_gp_ts)=
 ## Tsunami
 
 The [**Global Tsunami Model (GTM)**](https://edanya.uma.es/gtm/) has been created by a group of tsunami experts around the world to provide coordinate action for tsunami hazard and risk assessment. It offers a global probabilistic tsunami hazard assessment from earthquake sources [Davies et al. 2018](https://www.lyellcollection.org/doi/10.1144/sp456.5#).
@@ -35,7 +35,7 @@ align: center
 ---
 Global Tsunami Model - run-up height, RP 500 years.
 ```
-
+(hzd_gp_vo)=
 ## Volcanic activity
 
 Volcanic eruptions occur most frequently at plate boundaries, but some volcanoes (e.g. Hawaiian Islands) occur in the interior of plates, at areas called _hot spots_. The greatest number of the Earth's volcanoes are hidden from view, occurring on the ocean floor along spreading ridges.
