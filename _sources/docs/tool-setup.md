@@ -70,7 +70,7 @@ Exampe for Nepal, running analysis on undefended flood, 2020, RP100:
    - common.py
    - ...
    - Data/
-     - HZD/NPL/FLUVIAL_UNDEFENDED/2020/1in100.tif	  	Hazard layers
+     - HZD/NPL/FLUVIAL_UNDEFENDED/2020/1in100.tif	  	  Hazard layers
      - EXP/		                                  Exposure layers
      - RSK/		                                  Output directory
   ```
@@ -82,22 +82,39 @@ Exampe for Nepal, running analysis on undefended flood, 2020, RP100:
 
 ## Running the analysis
 
-- Select the country first.
-- Select one or more (CTRL+Click / drag mouse) Return Periods.
-- Select one or more (CTRL+Click / drag mouse) Exposure categories.
-- Select custom exposure and enter the name of the file in the EXP folder if you don't want to use the default sources.
+- Select the country first. Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).
+    ```{figure} images/GUI_F3_country.png
+    ---
+    width: 100%
+    align: center
+    ---
+    ```
+- Move to Hazard tab: select the hazard process, the minimum hazard intensity threshold, the time period and climate scenario. Select one or more Return Periods (CTRL+Click / drag mouse).
+    ```{figure} images/GUI_F3_hzd.png
+    ---
+    width: 100%
+    align: center
+    ---
+    ```
+- Select one or more Exposure categories (CTRL+Click / drag mouse). You can select a custom exposure layer for each selected category (.tif raster, WGS 84).
+    ```{figure} images/GUI_F3_exp.png
+    ---
+    width: 100%
+    align: center
+    ---
+    ```
 - Select the approach to use for the analysis:
   - When using "function", the best impact function is selected for the selected country and exposure categories.
   - When using "classes", hazard intensity thresholds must be specified by the user.
+    ```{figure} images/GUI_F3_vln.png
+    ---
+    width: 100%
+    align: center
+    ---
+    ```
 - Check "Preview results" to generate map and charts output in the GUI.
 
-```{figure} images/GUI_pre_map.png
----
-width: 100%
-align: center
----
-```
-```{figure} images/GUI_pre_charts.jpg
+```{figure} images/GUI_F3_rsk.png
 ---
 width: 100%
 align: center

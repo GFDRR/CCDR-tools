@@ -851,7 +851,7 @@ activate<span class="w"> </span>RDL-tools
  <span class="o">-</span> <span class="n">common</span><span class="o">.</span><span class="n">py</span>
  <span class="o">-</span> <span class="o">...</span>
  <span class="o">-</span> <span class="n">Data</span><span class="o">/</span>
-   <span class="o">-</span> <span class="n">HZD</span><span class="o">/</span><span class="n">NPL</span><span class="o">/</span><span class="n">FLUVIAL_UNDEFENDED</span><span class="o">/</span><span class="mi">2020</span><span class="o">/</span><span class="mi">1</span><span class="n">in100</span><span class="o">.</span><span class="n">tif</span>	  	<span class="n">Hazard</span> <span class="n">layers</span>
+   <span class="o">-</span> <span class="n">HZD</span><span class="o">/</span><span class="n">NPL</span><span class="o">/</span><span class="n">FLUVIAL_UNDEFENDED</span><span class="o">/</span><span class="mi">2020</span><span class="o">/</span><span class="mi">1</span><span class="n">in100</span><span class="o">.</span><span class="n">tif</span>	  	  <span class="n">Hazard</span> <span class="n">layers</span>
    <span class="o">-</span> <span class="n">EXP</span><span class="o">/</span>		                                  <span class="n">Exposure</span> <span class="n">layers</span>
    <span class="o">-</span> <span class="n">RSK</span><span class="o">/</span>		                                  <span class="n">Output</span> <span class="n">directory</span>
 </pre></div>
@@ -864,24 +864,36 @@ activate<span class="w"> </span>RDL-tools
 </section>
 <section id="running-the-analysis">
 <h2>Running the analysis<a class="headerlink" href="#running-the-analysis" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Select the country first.</p></li>
-<li><p>Select one or more (CTRL+Click / drag mouse) Return Periods.</p></li>
-<li><p>Select one or more (CTRL+Click / drag mouse) Exposure categories.</p></li>
-<li><p>Select custom exposure and enter the name of the file in the EXP folder if you don’t want to use the default sources.</p></li>
+<ul>
+<li><p>Select the country first. Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GUI_F3_country.png"><img alt="../_images/GUI_F3_country.png" src="../_images/GUI_F3_country.png" style="width: 100%;" /></a>
+</figure>
+</li>
+<li><p>Move to Hazard tab: select the hazard process, the minimum hazard intensity threshold, the time period and climate scenario. Select one or more Return Periods (CTRL+Click / drag mouse).</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GUI_F3_hzd.png"><img alt="../_images/GUI_F3_hzd.png" src="../_images/GUI_F3_hzd.png" style="width: 100%;" /></a>
+</figure>
+</li>
+<li><p>Select one or more Exposure categories (CTRL+Click / drag mouse). You can select a custom exposure layer for each selected category (.tif raster, WGS 84).</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GUI_F3_exp.png"><img alt="../_images/GUI_F3_exp.png" src="../_images/GUI_F3_exp.png" style="width: 100%;" /></a>
+</figure>
+</li>
 <li><p>Select the approach to use for the analysis:</p>
 <ul>
 <li><p>When using “function”, the best impact function is selected for the selected country and exposure categories.</p></li>
-<li><p>When using “classes”, hazard intensity thresholds must be specified by the user.</p></li>
+<li><p>When using “classes”, hazard intensity thresholds must be specified by the user.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/GUI_F3_vln.png"><img alt="../_images/GUI_F3_vln.png" src="../_images/GUI_F3_vln.png" style="width: 100%;" /></a>
+</figure>
+</li>
 </ul>
 </li>
 <li><p>Check “Preview results” to generate map and charts output in the GUI.</p></li>
 </ul>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_pre_map.png"><img alt="../_images/GUI_pre_map.png" src="../_images/GUI_pre_map.png" style="width: 100%;" /></a>
-</figure>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_pre_charts.jpg"><img alt="../_images/GUI_pre_charts.jpg" src="../_images/GUI_pre_charts.jpg" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_F3_rsk.png"><img alt="../_images/GUI_F3_rsk.png" src="../_images/GUI_F3_rsk.png" style="width: 100%;" /></a>
 </figure>
 <section id="manual-run">
 <h3>Manual Run<a class="headerlink" href="#manual-run" title="Permalink to this heading">#</a></h3>
