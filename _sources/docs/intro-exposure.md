@@ -23,4 +23,4 @@ Example of exposure indicators considered in CCDR risk screening tool.
 ```
 
 In our tools, exposure datasets are collected in form of geospatial raster representing presence (1/0) or amount (count, density) for the each category. There are of course alternative options for exposure representation, including polygons representing building-level footprints (perimeter, area), or lines representing distribution infrastructures.
-<br>For a selection of global datasets, see **[Exposure Datasets]**(global-exposure.md).
+<br>For a selection of global datasets, see [**Exposure Datasets**](global-exposure.md).
