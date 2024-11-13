@@ -1,15 +1,27 @@
-# Climate outlook
+(climate-change-and-disaster-risk)=
+# Climate change and disaster risk
+Climate change can increase disaster risk in a variety of ways:
+- by altering the frequency, intensity and geographic distribution of weather-related hazards, which may lead to new patterns of risk.
+- by affecting vulnerability to hazards, and changing exposure patterns.
+
+In other words, disaster risk can be magnified by climate change: it can increase the hazard while at the same time decreasing the resilience of households and communities. Below are some of the main changes expected by the [IPCC Sixth Assessment Report](https://www.ipcc.ch/report/sixth-assessment-report-cycle/).
+
+- **Storms and flooding:** the water cycle will continue to intensify as the planet warms. That includes extreme monsoon rainfall, but also increasing drought, greater melting of mountain glaciers, decreasing snow cover and earlier snowmelt. Annual average precipitation is projected to increase in many areas as the planet warms, particularly in the higher latitudes.
+
+- **Sea level rise:** the population of coastal areas has grown faster than the overall increase in global population; coastal flooding events could threaten assets worth up to 20% of the global GDP by 2100. Low-lying island states could be completely wiped out by sea level rise.
+
+- **Heat stress:** the most direct impact of global warming will be an increase of temperatures, which will aggravate heat stress consequences on human health and agricultural production, in particular in tropical countries with low capacity for adaptation.
+
+- **Droughts:** there will likely be a large reduction in natural land water storage in two-thirds of the world, especially in the Southern Hemisphere. The number of people suffering extreme droughts across the world could double in less than 80 years, which has major implications for the livelihoods of the rural poor, and can also lead to increased migration streams.
+
+- **Tropical cyclones:** even though the attribution of these events to climate change is difficult, a robust increase of the most devastating storms with climate change is expected. Under 2.5°C of global warming, the most devastating storms are projected to occur up to twice as often as today.
 
 Hydro-meteorological hazards are affected by climate forcing, and, as such, climate change should be accounted when estimating future risk conditions. A forward-looking analysis makes use of climate projections to explore how environmental risks could develop spatially over time.
 
-```{figure} images/hzd_spectrum.png
----
-width: 100%
-align: center
----
-```
+## Climate indices
+Climate indices are standardized measurements used to track and summarize complex climate patterns over time. These indices distill vast amounts of climate data, such as temperature, precipitation, and atmospheric pressure, into simpler, more understandable metrics. By providing insights into trends and variations in these phenomena, climate indices assist in predicting weather patterns, understanding climate variability, and informing climate-related decisions across various sectors.
 
-The long-term averages of climate indices (observed or simulated) serve as the baseline conditions, against which the effects of climate change are measured for future scenarios. Changes in projected climate indices against this baseline (anomalies) and used to estimate changes in natural hazard frequency and intensity. 
+In the context of disaster risk, climate indices play a critical role in understanding and anticipating the impact of climate-related hazards. These indices help assess the likelihood of extreme weather events such as droughts, floods, hurricanes, and heatwaves by tracking patterns in atmospheric and oceanic conditions that influence climate variability. Projected changes of climate indices against  baseline (anomalies) can be used to infer changes in natural hazard frequency and intensity. 
 
 ```{table} Climate variables underlying hazard projections
 :name: climate_indices
