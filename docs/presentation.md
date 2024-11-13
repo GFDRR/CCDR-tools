@@ -33,12 +33,11 @@ Do you prefer to map using python? Take a [**Python data-viz free course**](http
     ```
 # Dashboard
 
-An open dashboard based on R-shiny has been developed in order to quickly disseminate results of risk screening and assessment.
-See the [**DEMO for Nigeria**](https://szhaider.shinyapps.io/NigeriaDisasterRisks).
+An [**open-source online dashboard**](https://matamadio.github.io/CCDR-geoboard) has been developed in order to quickly disseminate results of risk screening and assessment.
 
-```{figure} images/dashboard.jpg
+```{figure} images/ccdr-dashboard.png
 ---
 align: center
 ---
-Example of R-shiny dashboard for dissemination of risk screening results.
+Geo-dashboard for dissemination of risk screening results.
 ```
