@@ -30,4 +30,4 @@ Following this established approach, the risk originating from hazard affecting 
 
 Tools developed in the context of World Bank CCDR analytics
 - Concept and coding: [Mattia Amadio](https://www.github.com/matamadio)
-- Additional coding: [Arthur H. Essenfelder](https://github.com/artessen) and [Takuya Iwanaga](https://github.com/ConnectedSystems)
+- Additional coding: [Arthur H. Essenfelder](https://github.com/artessen), [Takuya Iwanaga](https://github.com/ConnectedSystems), Jasper Schröder
