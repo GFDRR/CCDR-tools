@@ -70,7 +70,7 @@ Exampe for Nepal, running analysis on undefended flood, 2020, RP100:
    - common.py
    - ...
    - Data/
-     - HZD/NPL/FLUVIAL_UNDEFENDED/2020/1in100.tif	  Hazard layers
+     - HZD/NPL/FLUVIAL_UNDEFENDED/2020/1in100.tif	  	Hazard layers
      - EXP/		                                  Exposure layers
      - RSK/		                                  Output directory
   ```
