@@ -21,6 +21,13 @@ Earthquakes can strike any location at any time, but history shows they occur in
 - Open [global earthquake dataset](https://datacatalog.worldbank.org/search/dataset/0038576/Global-earthquake-hazard) representing seismic hazard intensity as peak ground acceleration have been produced for the Global Assessment Report (GAR).
 - The [**Global Earthquake Model (GEM)**](https://www.globalquakemodel.org/products?type=Dataset) offers a range of datasets related to seismic hazards, including an interactive [global seismic hazard map viewer](https://maps.openquake.org/map/global-seismic-hazard-map/#2/24.7/-18.6), global historical earthquake catalogue, [active faults](https://www.globalquakemodel.org/product/active-faults-database), [vulnerability functions](https://platform.openquake.org/vulnerability/list?type_of_assessment=2), [exposure data](https://www.globalquakemodel.org/product/meteor-exposure-data) and [country risk profiles](https://www.globalquakemodel.org/country-risk-profiles). Some of the datasets have commercial licensing, while most of them are open for non-commercial use (CC-BY-SA). 
 
+```{figure} images/hzd_GEM_EQ.png
+---
+align: center
+---
+Global Earthquake Model 2023 - Peak Ground Acceleration (PGA) with a 10% probability of being exceeded in 50 years, computed for reference rock conditions (shear wave velocity, Vs30, of 760-800 m/s).
+```
+
 ```{seealso}
 Open [**Python script**](https://www.kaggle.com/code/mriduleecs/earthquake-analysis-on-world-map) to generate earthquake maps.
 ```
