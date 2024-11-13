@@ -14,7 +14,7 @@ The applied methodology centers around the concept of Risk. In the field of Disa
 Following this established approach, the risk originating from hazard affecting exposed categories is defined as: `R = f(H,E,V)`
 
 <div align="center">
-<img width=250 src="https://user-images.githubusercontent.com/44863827/198075495-b2235f1e-755d-461a-9c4a-ceca8bd2b79e.png">
+<img width=500 src="https://gfdrr.github.io/CCDR-tools/_images/rdl.png">
 </div>
 
 --------------------------------------
