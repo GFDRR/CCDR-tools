@@ -1,7 +1,7 @@
 # Tool setup and run
 To run correctly, the script requires proper setup according to the instructions below. It can be executed on any windows or linux machine.
 
-Download the latest stable version of the code as zip from [**here**](http://dummylink). Unzip it in your work directory, e.g. wd/RDL-tools/.
+Download the latest stable version of the code as zip from [**here**](https://github.com/GFDRR/CCDR-tools/tree/main/tools/code). Unzip it in your work directory, e.g. wd/RDL-tools/.
 The script has been developed to run as [jupyter notebook](https://jupyter.org/), but also allows to run as pure python (`manual_run.py`). 
 
 ## Python environment
@@ -71,8 +71,8 @@ Exampe for Nepal, running analysis on undefended flood, 2020, RP100:
    - ...
    - Data/
      - HZD/NPL/FLUVIAL_UNDEFENDED/2020/1in100.tif	  Hazard layers
-     - EXP/		                                      Exposure layers
-     - RSK/		                                      Output directory
+     - EXP/		                                  Exposure layers
+     - RSK/		                                  Output directory
   ```
 
   ```{caution}
