@@ -222,6 +222,7 @@ country_selector.observe(on_country_change, names='value')
 adm_level_selector.observe(on_adm_level_change, names='value')
 
 # Hazard
+
 hazard_selector = widgets.Dropdown(options=[
     ('Fluvial Undefended', 'FLUVIAL_UNDEFENDED'), 
     ('Fluvial Defended', 'FLUVIAL_DEFENDED'),
@@ -231,18 +232,22 @@ hazard_selector = widgets.Dropdown(options=[
 ], value='FLUVIAL_UNDEFENDED', layout=widgets.Layout(width='250px'), style={'description_width': '150px'})
 hazard_selector_id = f'hazard-selector-{id(hazard_selector)}'
 hazard_selector.add_class(hazard_selector_id)
+
 ## Hazard threshold
 hazard_threshold_slider = widgets.IntSlider(value=20, min=0, max=200, layout=widgets.Layout(width='250px'))
 hazard_threshold_slider_id = f'hazard-threshold-slider-{id(hazard_threshold_slider)}'
 hazard_threshold_slider.add_class(hazard_threshold_slider_id)
+
 ## Period
 period_selector = widgets.Dropdown(options=['2020', '2030', '2050', '2080'], value='2020', layout=widgets.Layout(width='250px'))
 period_selector_id = f'period-selector-{id(period_selector)}'
 period_selector.add_class(period_selector_id)
+
 ## Scenario
 scenario_selector = widgets.Dropdown(options=['SSP1-2.6', 'SSP2-4.5', 'SSP3-7.0', 'SSP5-8.5'], value='SSP3-7.0', layout=widgets.Layout(width='250px'))
 scenario_selector_id = f'scenario-selector-{id(scenario_selector)}'
 scenario_selector.add_class(scenario_selector_id)
+
 ## Hazard return periods
 return_periods_selector = widgets.SelectMultiple(
     options=[5, 10, 20, 50, 100, 200, 500, 1000],
@@ -261,6 +266,7 @@ period_selector.observe(update_scenario_visibility, 'value')
 update_scenario_visibility()
 
 # Exposure
+
 exposure_selector = widgets.SelectMultiple(options=[
     ('Population', 'POP'),
     ('Built-up', 'BU'),
@@ -268,12 +274,12 @@ exposure_selector = widgets.SelectMultiple(options=[
 ], value=['POP'], layout=widgets.Layout(width='250px'))
 exposure_selector_id = f'exposure-selector-{id(exposure_selector)}'
 exposure_selector.add_class(exposure_selector_id)
+
 ## Custom exposure
 custom_exposure_container = widgets.VBox([])
 custom_exposure_radio = widgets.RadioButtons(options=['Default exposure', 'Custom exposure'], layout=widgets.Layout(width='250px'))
 custom_exposure_radio_id = f'custom-exposure-radio-{id(custom_exposure_radio)}'
 custom_exposure_radio.add_class(custom_exposure_radio_id)
-
 custom_exposure_textbox = widgets.Text(value='', placeholder='Enter filename (without extension)', layout=widgets.Layout(width='250px'))
 custom_exposure_textbox_id = f'custom-exposure-textbox-{id(custom_exposure_textbox)}'
 custom_exposure_textbox.add_class(custom_exposure_textbox_id)
@@ -694,9 +700,13 @@ def run_analysis_script(b):
                         excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
                         row_offset += 1
 
-        # Generate charts only once
-        colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
-        charts = [create_eai_chart(combined_summary, exp_cat, period, scenario, colors[exp_cat]) for exp_cat in exp_cat_list]
+        # Generate charts only for Function approach
+        if analysis_type == "Function" and preview_chk.value:
+            colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
+            charts = [create_eai_chart(combined_summary, exp_cat, period, scenario, colors[exp_cat]) 
+                     for exp_cat in exp_cat_list]
+        else:
+            charts = []
 
         print(f"Analysis completed in {time.perf_counter() - start_time:.2f} seconds")
         print(f"Results saved to Excel file: {excel_file}")
@@ -829,7 +839,17 @@ def initialize_tool():
     display(final_layout)
     display(HTML(js_code))
 
-    # Initial update
+    # Initial updates
     update_custom_boundaries_visibility()
     update_custom_exposure_visibility()
-    update_class_edges_table() 
+    update_class_edges_table()
+    update_preview_availability()
+
+def update_preview_availability(*args):
+    """Update preview checkbox availability based on analysis type"""
+    preview_chk.disabled = approach_selector.value == 'Classes'
+    if approach_selector.value == 'Classes':
+        preview_chk.value = False
+
+# Add observer to approach selector
+approach_selector.observe(update_preview_availability, 'value')
