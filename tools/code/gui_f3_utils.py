@@ -43,40 +43,26 @@ def on_country_change(change):
     with output:
         output.clear_output()
         selected_country = change['new']
-        if selected_country in country_dict:
-            iso_a3 = country_dict[selected_country]
-            print(f'Selected Country: {selected_country}, ISO_A3 Code: {iso_a3}')
-            
-            # Reset ADM level selector
-            adm_level_selector.value = None
-            
-            # Fetch and display country boundaries
-            try:
-                gdf = get_adm_data(iso_a3, 0)
-                gdf = gdf.set_crs("EPSG:4326")  # Assign WGS 84 CRS
-                m = folium.Map()
-                folium.GeoJson(
-                    gdf,
-                    style_function=lambda x: {
-                        'fillColor': 'none',
-                        'color': 'black',
-                        'weight': 1,
-                        'fillOpacity': 0
-                    }
-                ).add_to(m)
-                m.fit_bounds(m.get_bounds())
-                map_widget.value = m._repr_html_()
-            except Exception as e:
-                print(f"Error loading country boundaries: {str(e)}")
-        else:
-            print('Please select a valid country from the list.')
+
+        iso_a3 = country_dict[selected_country]
+        print(f'Selected Country: {selected_country}, ISO_A3 Code: {iso_a3}')
+        
+        # Reset ADM level selector
+        adm_level_selector.value = None
+        
+        # Fetch and display country boundaries
+        try:
+            gdf = get_adm_data(iso_a3, 0)
+            plot_geospatial_boundaries(gdf)
+        except Exception as e:
+            print(f"Error loading country boundaries: {str(e)}")
 
 # Attach the function to the combobox
 country_selector.observe(on_country_change, names='value')
 
 # Administrative level boundaries
 adm_level_selector = widgets.Dropdown(
-    options=[(str(i), i) for i in range(1, 3)],
+    options=[('1', 1), ('2', 2)],
     value=None,
     placeholder='Select ADM level',
     layout=widgets.Layout(width='250px')
@@ -86,27 +72,31 @@ adm_level_selector.add_class(adm_level_selector_id)
 
 def on_adm_level_change(change):
     selected_country = country_selector.value
-    if selected_country in country_dict:
-        iso_a3 = country_dict[selected_country]
-        adm_level = change['new']
-        if adm_level is not None:  # Only proceed if a valid ADM level is selected
-            try:
-                gdf = get_adm_data(iso_a3, adm_level)
-                gdf = gdf.set_crs("EPSG:4326")  # Assign WGS 84 CRS
-                m = folium.Map()
-                folium.GeoJson(
-                    gdf,
-                    style_function=lambda x: {
-                        'fillColor': 'none',
-                        'color': 'black',
-                        'weight': 1,
-                        'fillOpacity': 0
-                    }
-                ).add_to(m)
-                m.fit_bounds(m.get_bounds())
-                map_widget.value = m._repr_html_()
-            except Exception as e:
-                print(f"Error loading ADM{adm_level} boundaries: {str(e)}")
+
+    iso_a3 = country_dict[selected_country]
+    adm_level = change['new']
+    try:
+        gdf = get_adm_data(iso_a3, adm_level)
+        plot_geospatial_boundaries(gdf)
+    except Exception as e:
+        print(f"Error loading ADM{adm_level} boundaries: {str(e)}")
+
+
+def plot_geospatial_boundaries(gdf, crs: str = "EPSG:4326"):
+    gdf = gdf.set_crs(crs)  # Assign WGS 84 CRS by default
+    m = folium.Map()
+    folium.GeoJson(
+        gdf,
+        style_function=lambda x: {
+            'fillColor': 'none',
+            'color': 'black',
+            'weight': 1,
+            'fillOpacity': 0
+        }
+    ).add_to(m)
+    m.fit_bounds(m.get_bounds())
+    map_widget.value = m._repr_html_()
+    
 
 # Custom Adm data
 # Add these to your existing UI elements
@@ -180,19 +170,7 @@ def update_preview_map(*args):
     if custom_boundaries_radio.value == 'Custom boundaries':
         try:
             gdf = gpd.read_file(custom_boundaries_file.value)
-            gdf = gdf.set_crs("EPSG:4326")  # Assign WGS 84 CRS if not already set
-            m = folium.Map()
-            folium.GeoJson(
-                gdf,
-                style_function=lambda x: {
-                    'fillColor': 'none',
-                    'color': 'black',
-                    'weight': 1,
-                    'fillOpacity': 0
-                }
-            ).add_to(m)
-            m.fit_bounds(m.get_bounds())
-            map_widget.value = m._repr_html_()
+            plot_geospatial_boundaries(gdf)
         except Exception as e:
             print(f"Error loading custom boundaries: {str(e)}")
     elif country_selector.value:
@@ -201,19 +179,9 @@ def update_preview_map(*args):
         try:
             # If no ADM level is selected, default to level 0 (country boundaries)
             level = adm_level if adm_level is not None else 0
-            gdf = get_adm_data(country, level).set_crs("EPSG:4326")  # Assign WGS 84 CRS
-            m = folium.Map()
-            folium.GeoJson(
-                gdf,
-                style_function=lambda x: {
-                    'fillColor': 'none',
-                    'color': 'black',
-                    'weight': 1,
-                    'fillOpacity': 0
-                }
-            ).add_to(m)
-            m.fit_bounds(m.get_bounds())
-            map_widget.value = m._repr_html_()
+            gdf = get_adm_data(country, level)
+            plot_geospatial_boundaries(gdf)
+
         except Exception as e:
             print(f"Error loading boundaries: {str(e)}")
 
@@ -266,7 +234,6 @@ period_selector.observe(update_scenario_visibility, 'value')
 update_scenario_visibility()
 
 # Exposure
-
 exposure_selector = widgets.SelectMultiple(options=[
     ('Population', 'POP'),
     ('Built-up', 'BU'),
