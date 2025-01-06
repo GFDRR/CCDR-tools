@@ -752,23 +752,23 @@ title="Print to PDF"
 <p>This script downloads WSF 2019 binary data at 10m for a given country, resample it to 100 m and convert values on a 0 to 1 range.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">shape</span><span class="p">,</span> <span class="n">MultiPolygon</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry.base</span> <span class="kn">import</span> <span class="n">BaseGeometry</span>
-<span class="kn">from</span> <span class="nn">shapely.ops</span> <span class="kn">import</span> <span class="n">unary_union</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>  <span class="c1"># For progress bar</span>
-<span class="kn">from</span> <span class="nn">gdal_utils</span> <span class="kn">import</span> <span class="n">merge_tifs</span><span class="p">,</span> <span class="n">gdalwarp_wsf19</span><span class="p">,</span> <span class="n">gdal_calc_wsf19</span>  <span class="c1"># Custom functions for geoprocessing</span>
-<span class="kn">import</span> <span class="nn">concurrent.futures</span>  <span class="c1"># For threading</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">osgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">gdal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">shape</span><span class="p">,</span> <span class="n">MultiPolygon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseGeometry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.ops</span><span class="w"> </span><span class="kn">import</span> <span class="n">unary_union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>  <span class="c1"># For progress bar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gdal_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge_tifs</span><span class="p">,</span> <span class="n">gdalwarp_wsf19</span><span class="p">,</span> <span class="n">gdal_calc_wsf19</span>  <span class="c1"># Custom functions for geoprocessing</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>  <span class="c1"># For threading</span>
 
 <span class="c1"># Define the REST API URL</span>
 <span class="n">rest_api_url</span> <span class="o">=</span> <span class="s2">&quot;https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer&quot;</span>
 
 <span class="c1"># Function to get the correct layer ID based on administrative level</span>
-<span class="k">def</span> <span class="nf">get_layer_id_for_adm</span><span class="p">(</span><span class="n">adm_level</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_layer_id_for_adm</span><span class="p">(</span><span class="n">adm_level</span><span class="p">):</span>
     <span class="n">layers_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rest_api_url</span><span class="si">}</span><span class="s2">/layers&quot;</span>
     <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">layers_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;f&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">})</span>
 
@@ -787,7 +787,7 @@ title="Print to PDF"
         <span class="k">return</span> <span class="kc">None</span>
 
 <span class="c1"># Function to fetch the ADM data using the correct layer ID</span>
-<span class="k">def</span> <span class="nf">get_adm_data</span><span class="p">(</span><span class="n">country</span><span class="p">,</span> <span class="n">adm_level</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_adm_data</span><span class="p">(</span><span class="n">country</span><span class="p">,</span> <span class="n">adm_level</span><span class="p">):</span>
     <span class="n">layer_id</span> <span class="o">=</span> <span class="n">get_layer_id_for_adm</span><span class="p">(</span><span class="n">adm_level</span><span class="p">)</span>
     
     <span class="k">if</span> <span class="n">layer_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -820,7 +820,7 @@ title="Print to PDF"
         <span class="k">return</span> <span class="kc">None</span>
 
 <span class="c1"># Function to download files with progress bar</span>
-<span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">dest_folder</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">download_file</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">dest_folder</span><span class="p">):</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_folder</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dest_folder</span><span class="p">)</span>
 
@@ -1034,7 +1034,7 @@ By M. Amadio (GFDRR)
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Dec 03, 2024.<br>
+Last updated on Jan 06, 2025.<br>
 </p>
   </div>
   

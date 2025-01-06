@@ -743,8 +743,8 @@ title="Print to PDF"
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#intensity-and-frequency">
-   Intensity and frequency
+  <a class="reference internal nav-link" href="#intensity-frequency-relationship">
+   Intensity - frequency relationship
   </a>
  </li>
 </ul>
@@ -760,7 +760,7 @@ title="Print to PDF"
 <h1>Natural hazards<a class="headerlink" href="#natural-hazards" title="Permalink to this heading">#</a></h1>
 <p>Natural phenomena, whether extreme events or long-term processes, become hazards only when they pose potential harm to people, property, or socioeconomic systems. The occurrence of these natural hazards is primarily determined by physical factors, such as weather system dynamics, tectonic plate movements and terrain characteristics (e.g., slopes, drainage, vegetation).
 Anthropogenic factors, such as urbanization, environmental degradation and climate change, are known as <em>risk drivers</em> as they can influence the location, frequency, and intensity of natural hazards.
-The inherently geographical nature of both natural hazards and exposure necessessarily requires a geospatial approach to properly understandi and interpret the risk.
+The inherently geographical nature of both natural hazards and exposure necessessarily requires a geospatial approach to properly understand and interpret the risk.
 In other words, the spatial dimension is crucial for effective risk assessment and management strategies.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -778,13 +778,22 @@ In other words, the spatial dimension is crucial for effective risk assessment a
 <figure class="align-center">
 <img alt="../_images/hzd_spectrum.png" src="../_images/hzd_spectrum.png" />
 </figure>
-<section id="intensity-and-frequency">
-<h2>Intensity and frequency<a class="headerlink" href="#intensity-and-frequency" title="Permalink to this heading">#</a></h2>
-<p><strong>Hazard intensity</strong> is one of the key factors that determine the size of the impact over exposed elements. Hazard data usually come in the form of one or more georeferenced layers representing their intensity in relation to location. The modelling of hazard intensity (sometimes called magnitude) can be either:</p>
+<section id="intensity-frequency-relationship">
+<h2>Intensity - frequency relationship<a class="headerlink" href="#intensity-frequency-relationship" title="Permalink to this heading">#</a></h2>
+<p><strong>Hazard intensity</strong> is one of the key factors that determine the size of the impact over exposed elements. Hazard data usually come in the form of one or more georeferenced layers representing hazard intensity metric in relation to frequency distribution.</p>
+<p>The modelling of hazard intensity (sometimes called <em>magnitude</em>) can be described in different ways:</p>
 <ul class="simple">
-<li><p><strong>Deterministic</strong>, in the form of an individual geodata layer measuring the mean, median or maximum intensity of a hazard aggregating historical data and modelling.</p></li>
-<li><p><strong>Probabilistic</strong>, in the form of multiple geodata layers, each representing a range of hazard physical intensities corresponding to a specific occurrence frequency, measured as Return Period (RP), in years.</p></li>
+<li><p><strong>Deterministic</strong>, by statistical indices (such as mean, median or maximum) aggregating historical observations or reanalysis.</p></li>
 </ul>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/hzd_obs.jpg"><img alt="../_images/hzd_obs.jpg" src="../_images/hzd_obs.jpg" style="width: 100%;" /></a>
+</figure>
+<ul class="simple">
+<li><p><strong>Probabilistic</strong>, by means of simulations that produce multiple geodata layers, each representing a range of hazard physical intensities corresponding to a specific occurrence frequency, measured as Return Period (RP), in years.</p></li>
+</ul>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/freq-intensity.png"><img alt="../_images/freq-intensity.png" src="../_images/freq-intensity.png" style="width: 100%;" /></a>
+</figure>
 <p>See the picture below as example: the landslide hazard (<em>left</em>) is represented by one aggregated mean index value; while the flood hazard is shows as a series of events (scenarios) of increasing magnitude and decreasing probability. A probabilistic hazard representation is required in order to produce <a class="reference internal" href="intro-risk.html#probabilistic-risk"><span class="std std-ref">probabilistic risk</span></a> mapping.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/hzd_models.jpg"><img alt="../_images/hzd_models.jpg" src="../_images/hzd_models.jpg" style="width: 100%;" /></a>
@@ -797,7 +806,7 @@ In other words, the spatial dimension is crucial for effective risk assessment a
 <li><p><a class="reference external" href="https://www.researchgate.net/publication/328368702_Communicating_the_chance_of_a_flood_The_use_and_abuse_of_probability_frequency_and_return_period">Communicating the chance of a flood: The use and abuse of probability, frequency and return period</a></p></li>
 </ul>
 </div>
-<p>Hazard models carry <strong>limitations related to their applicability</strong>. Their quality depend on scale, resolution, model quality, training period and related input data quality.
+<p>All kind of hazard models carry <strong>limitations related to their applicability</strong>. Their quality depend on scale, resolution, model quality, training period and related input data quality.
 As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expeceted to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.</p>
 <p>In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations. See <a class="reference internal" href="validation.html#uncertainty"><span class="std std-ref"><strong>uncertainty</strong></span></a>.</p>
 <div class="admonition caution">
@@ -870,8 +879,8 @@ As a rule of thumb, their fitness for application in the context of a risk scree
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#intensity-and-frequency">
-   Intensity and frequency
+  <a class="reference internal nav-link" href="#intensity-frequency-relationship">
+   Intensity - frequency relationship
   </a>
  </li>
 </ul>
@@ -902,7 +911,7 @@ By M. Amadio (GFDRR)
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Dec 03, 2024.<br>
+Last updated on Jan 06, 2025.<br>
 </p>
   </div>
   
