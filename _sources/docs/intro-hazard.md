@@ -30,10 +30,10 @@ align: center
 
 The modelling of hazard intensity (sometimes called _magnitude_) can be described in different ways:
 
-- **Deterministic**, by statistical indices (such as mean, median or maximum) aggregating historical observations or reanalysis.
+- **Deterministic**, by statistical indices (such as mean, median or maximum) aggregating historical events observations or reanalysis.
 ```{figure} images/hzd_obs.jpg
 ---
-width: 100%
+width: 50%
 align: center
 ---
 ```
@@ -41,7 +41,7 @@ align: center
 - **Probabilistic**, by means of simulations that produce multiple geodata layers, each representing a range of hazard physical intensities corresponding to a specific occurrence frequency, measured as Return Period (RP), in years.
 ```{figure} images/freq-intensity.png
 ---
-width: 100%
+width: 50%
 align: center
 ---
 ```
