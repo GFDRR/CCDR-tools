@@ -153,8 +153,8 @@ Drought hazard can be measured in different ways depending on the impact perspec
 - To describe water supply balance in terms of availability over demand, as well as other indices, the [**Water Risk Atlas**](https://wri.org/aqueduct) produced by WRI Aqueduct provide an historical and future perspective.
 - To describe the observed agricultural impacts of droughts, the [**Agricultural Stress Index (ASI)**](https://www.fao.org/giews/earthobservation/access.jsp) produced by **FAO** depicts the frequency of severe drought affecting crop areas by means of remote-sensed [Vegetation Health Index (VHI)](https://www.fao.org/giews/earthobservation/asis/index_2.jsp?lang=en).
 FAO provides decadal, monthly and annual drought frequency over the period 1984-2024 split as the main crop season (S1) and secondary crop season (S2). For each season there are two indicators, according to two exposure intensity thresholds:
-- 30 percent (1/3) of cropland area being affected by the drought event
-- 50 percent (1/2) of cropland area being affected by the drought event
+  - 30 percent (1/3) of cropland area being affected by the drought event
+  - 50 percent (1/2) of cropland area being affected by the drought event
 
 ```{figure} images/fao_asi.jpg
 ---
