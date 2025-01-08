@@ -1,4 +1,4 @@
-# Risk Data Library - Coutry Climate & Disaster Risk Screening Tools
+# Risk Data Library - Country Climate & Disaster Risk Screening Tools
 
 This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards' risk screening at the national or sub-national level. The tools have originally being created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2024) and then furtherly developed within the [**Risk Data Library project**](docs/rdl.md).
 
