@@ -128,3 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 tools/data/HZD/TUN/FLUVIAL_UNDEFENDED/2020/desktop.ini
+
+.vscode
