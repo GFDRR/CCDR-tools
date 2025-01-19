@@ -122,7 +122,7 @@ def fetch_built_up_data(country: str):
     
     with tqdm(total=total_files, desc="Downloading .tif files") as pbar:
         for item in items:
-            for asset_key, asset_value in item['assets'].items():
+            for _, asset_value in item['assets'].items():
                 if asset_value['href'].endswith('.tif'):
                     tif_file = download_file(asset_value['href'], download_folder)
                     tif_files.append(tif_file)
