@@ -64,9 +64,11 @@ def create_js_code(
     return js_code
 
 
-def create_header_widget():
+def create_header_widget(img_path:str=None):
     
-    with open("rdl_logo.png", "rb") as img_file:
+    img_path = 'rdl_logo.png' if img_path is None else img_path
+       
+    with open(img_path, "rb") as img_file:
         img_base64 = b64encode(img_file.read()).decode('utf-8')
     
     header_html = f"""
