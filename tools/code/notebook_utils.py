@@ -31,10 +31,10 @@ def create_js_code(
         document.querySelector('.info-box textarea').value = 'Enter the field name in your custom boundaries file that contains the name or label for each zone.';
     }};
     document.querySelector('.{hazard_selector_id}').onmouseover = function() {{
-        document.querySelector('.info-box textarea').value = 'Select the type of flood hazard.\\nThe DEFENDED option accounts for protection standards set proportional to country GDP; it does not account for geolocated physical defence measures.';
+        document.querySelector('.info-box textarea').value = 'Select the type of hazard process.';
     }};
     document.querySelector('.{hazard_threshold_slider_id}').onmouseover = function() {{
-        document.querySelector('.info-box textarea').value = 'Set the minimum hazard threshold, in the unit of the dataset.\\nValues below this threshold will be ignored.';
+        document.querySelector('.info-box textarea').value = 'Set the minimum hazard threshold, in the unit of the hazard dataset.\\nValues below this threshold will be ignored.';
     }};
     document.querySelector('.{period_selector_id}').onmouseover = function() {{
         document.querySelector('.info-box textarea').value = 'Select the reference time period for the hazard analysis:\\n\\n- Historical baseline: 2020\\n- Future periods: 2030, 2050, 2080';

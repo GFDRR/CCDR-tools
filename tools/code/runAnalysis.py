@@ -14,7 +14,7 @@ from rasterstats import gen_zonal_stats, zonal_stats
 # Importing internal libraries
 import common
 import input_utils
-from damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
+from damageFunctions import FL_mortality_factor, FL_damage_factor_builtup, FL_damage_factor_agri, TC_damage_factor_builtup 
 
 # Importing the libraries for parallel processing
 import itertools as it
@@ -74,7 +74,7 @@ def merge_dfs(df_left, df_right, on_columns=['RP', 'Freq', 'Ex_freq'], how='oute
 
 
 # Process exposure data
-def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_region):
+def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder, wb_region):
     exp_ras = None
     damage_factor = None
 
@@ -84,17 +84,7 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
             exp_ras = f"{exp_folder}/{exp_nam}.tif"
             if not os.path.exists(exp_ras):
                 raise FileNotFoundError(f"Custom exposure data not found: {exp_ras}")
-            
-            # Assign a default damage factor based on the exp_cat
-            if exp_cat == 'POP':
-                damage_factor = mortality_factor
-            elif exp_cat == 'BU':
-                damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
-            elif exp_cat == 'AGR':
-                damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
-            else:
-                # For unknown categories, use a default damage factor
-                damage_factor = mortality_factor
+                 
         else:
             # Use default exposure data based on exp_cat
             if exp_cat == 'POP':
@@ -104,8 +94,6 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
                     input_utils.fetch_population_data(country, exp_year)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch population data for {country}")
-                damage_factor = mortality_factor
-
             elif exp_cat == 'BU':
                 exp_ras = f"{exp_folder}/{country}_BU.tif"
                 if not os.path.exists(exp_ras):
@@ -113,8 +101,6 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
                     input_utils.fetch_built_up_data(country)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch built-up data for {country}")
-                damage_factor = lambda x, region=wb_region: damage_factor_builtup(x, region)
-
             elif exp_cat == 'AGR':
                 exp_ras = f"{exp_folder}/{country}_AGR.tif"
 
@@ -123,13 +109,27 @@ def process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_re
                     input_utils.fetch_agri_data(country)
                     if not os.path.exists(exp_ras):
                         raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
-                damage_factor = lambda x, region=wb_region: damage_factor_agri(x, region)
-
             else:
                 raise ValueError(f"Missing or unknown exposure category: {exp_cat}")
 
         if not os.path.exists(exp_ras):
             raise FileNotFoundError(f"Exposure raster not found after processing: {exp_ras}")
+
+        # Assign a default damage factor based on the haz_type and exp_cat
+        if haz_type == 'FL':
+            if exp_cat == 'POP':
+                damage_factor = FL_mortality_factor
+            elif exp_cat == 'BU':
+                damage_factor = lambda x, region=wb_region: FL_damage_factor_builtup(x, region)
+            elif exp_cat == 'AGR':
+                damage_factor = lambda x, region=wb_region: FL_damage_factor_agri(x, region)
+        elif haz_type == 'TC':
+            if exp_cat == 'BU':
+                damage_factor = lambda x, region=country: TC_damage_factor_builtup(x, region)
+            else:
+                raise ValueError(f"Tropical cyclone damage functions not available for {exp_cat}")
+        else:
+                raise ValueError(f"Unknown hazard type: {haz_type}")
 
         return exp_ras, damage_factor
 
@@ -151,7 +151,7 @@ def exception_handler(func):
 # Defining the main function to run the analysis
 @exception_handler
 def run_analysis(
-    country: str, haz_cat: str, period: str, scenario: str,
+    country: str, haz_type: str, haz_cat: str, period: str, scenario: str,
     valid_RPs: list[int], min_haz_threshold: float, exp_cat: str,
     exp_nam: str, exp_year: str, adm_level: str, analysis_type: str, 
     class_edges: list[float], save_check_raster: bool, n_cores: int = None,
@@ -164,6 +164,7 @@ def run_analysis(
     Parameters
     ----------
     country : country ISOa3 code
+    haz_type : hazard type 'FL' for floods or 'TC' for tropical cyclones
     haz_cat : hazard category
     period: time period
     scenario: SSP scenario
@@ -180,7 +181,11 @@ def run_analysis(
 
     try:
         # Defining the location of administrative, hazard and exposure folders
-        haz_folder = f"{DATA_DIR}/HZD/{country}/{haz_cat}/{period}/{scenario.replace('-', '_')}"
+        if haz_type == 'TC':  # Strong Wind (Tropical Cyclones)
+            haz_folder = f"{DATA_DIR}/HZD/GLB/STORM/{period}"
+        elif haz_type == 'FL':  # Floods (FLUVIAL_UNDEFENDED, FLUVIAL_DEFENDED, etc.)
+            haz_folder = f"{DATA_DIR}/HZD/{country}/{haz_cat}/{period}/{scenario.replace('-', '_')}"
+
         exp_folder = f"{DATA_DIR}/EXP"
 
         # Validating Classes analysis parameters
@@ -218,7 +223,7 @@ def run_analysis(
 
         # Handle exposure data
         print(f"Processing exposure data for {exp_cat}")
-        exp_ras, damage_factor = process_exposure_data(country, exp_cat, exp_nam, exp_year, exp_folder, wb_region)
+        exp_ras, damage_factor = process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder, wb_region)
 
         # Importing the exposure data
         # Open the raster dataset

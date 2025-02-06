@@ -9,6 +9,7 @@ from runAnalysis import (
 def main():
     # Defining the initial parameters
     country         = 'PHL'			  # ISO3166-a3 code
+    haz_type        = 'FL'            # Hazard type: 'FL', 'TC'
     haz_cat         = 'FLUVIAL_UNDEFENDED' 	  # Hazard type:'FLUVIAL_UNDEFENDED'; 'FLUVIAL_DEFENDED', 'PLUVIAL_DEFENDED'; 'COASTAL_UNDEFENDED'; 'COASTAL_DEFENDED'
     period          = '2020'			  # Period of the analysis: '2020', '2030', '2050', '2080'
     scenario        = ''		  	  # Climate scenario: 'SSP1_2.6', 'SSP2_4.5', 'SSP3_7.0', 'SSP5_8.5'. Empty '' if period = 2020.

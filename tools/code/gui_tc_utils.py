@@ -1,4 +1,5 @@
 import common
+import os
 import folium
 from folium.plugins import MiniMap, Fullscreen
 import geopandas as gpd
@@ -14,7 +15,7 @@ import time
 import tkinter as tk
 from tkinter import filedialog
 
-from damageFunctions import FL_mortality_factor, FL_damage_factor_builtup, FL_damage_factor_agri
+from damageFunctions import TC_damage_factor_builtup
 from input_utils import get_adm_data
 import notebook_utils
 from runAnalysis import (
@@ -23,7 +24,71 @@ from runAnalysis import (
 )
 
 # Define hazard type
-haz_type = 'FL'
+haz_type = 'TC'
+
+DATA_DIR = common.DATA_DIR
+OUTPUT_DIR = common.OUTPUT_DIR
+
+def create_initial_map():
+    m = folium.Map(location=[0, 0], zoom_start=2)
+    
+    try:
+        rp100_layer = gpd.read_file(f"{DATA_DIR}/HZD/GLB/STORM/RP100_WS.gpkg", layer='RP100_WS')
+        
+        # Define wind speed classes and colors
+        wind_breaks = [10, 20, 30, 40, 50, float('inf')]
+        colors = ['#b1f162', '#fff71d', '#ffb300', '#ff0400', '#fe00d4']
+        
+        def get_color(wind_speed):
+            for i, (lower, upper) in enumerate(zip(wind_breaks[:-1], wind_breaks[1:])):
+                if lower <= wind_speed < upper:
+                    return colors[i]
+            return colors[-1]
+        
+        def style_function(feature):
+            wind_speed = feature['properties']['WIND_MIN']
+            return {
+                'fillColor': get_color(wind_speed),
+                'fillOpacity': 0.7,
+                'color': 'black',
+                'weight': 0
+            }
+        
+        # Add the wind speed layer
+        wind_layer = folium.GeoJson(
+            rp100_layer,
+            name='RP100 Wind Speed',
+            style_function=style_function
+        )
+        wind_layer.add_to(m)
+        
+        # Add a legend
+        legend_html = '''
+        <div style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; background-color: white; 
+                    padding: 10px; border-radius: 5px; border: 2px solid grey;">
+            <p style="margin-bottom: 5px;"><strong>Wind Speed (m/s)</strong></p>
+        '''
+        for i, (lower, upper) in enumerate(zip(wind_breaks[:-1], wind_breaks[1:])):
+            if upper == float('inf'):
+                label = f'≥ {lower}'
+            else:
+                label = f'{lower} - {upper}'
+            legend_html += f'''
+            <p style="margin: 2px;">
+                <span style="background-color: {colors[i]}; display: inline-block; width: 20px; height: 20px;"></span>
+                {label}
+            </p>'''
+        legend_html += '</div>'
+        
+        m.get_root().html.add_child(folium.Element(legend_html))
+        
+        # Add layer control
+        folium.LayerControl().add_to(m)
+        
+    except Exception as e:
+        print(f"Could not load RP100_WS layer: {str(e)}")
+    
+    return m
 
 # Load country data
 df = pd.read_csv('countries.csv')
@@ -88,8 +153,65 @@ def on_adm_level_change(change):
 def plot_geospatial_boundaries(gdf, crs: str = "EPSG:4326"):
     gdf = gdf.set_crs(crs)  # Assign WGS 84 CRS by default
     m = folium.Map()
+
+    # Add the wind speed layer first
+    try:
+        rp100_layer = gpd.read_file(f"{DATA_DIR}/HZD/GLB/STORM/RP100_WS.gpkg", layer='RP100_WS')
+        
+        # Define wind speed classes and colors
+        wind_breaks = [10, 20, 30, 40, 50, float('inf')]
+        colors = ['#b1f162', '#fff71d', '#ffb300', '#ff0400', '#fe00d4']
+        
+        def get_color(wind_speed):
+            for i, (lower, upper) in enumerate(zip(wind_breaks[:-1], wind_breaks[1:])):
+                if lower <= wind_speed < upper:
+                    return colors[i]
+            return colors[-1]
+        
+        def style_function(feature):
+            wind_speed = feature['properties']['WIND_MIN']
+            return {
+                'fillColor': get_color(wind_speed),
+                'fillOpacity': 0.7,
+                'color': 'black',
+                'weight': 0
+            }
+        
+        # Add the wind speed layer
+        wind_layer = folium.GeoJson(
+            rp100_layer,
+            name='RP100 Wind Speed',
+            style_function=style_function
+        )
+        wind_layer.add_to(m)
+        
+        # Add a legend
+        legend_html = '''
+        <div style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; background-color: white; 
+                    padding: 10px; border-radius: 5px; border: 2px solid grey;">
+            <p style="margin-bottom: 5px;"><strong>Wind Speed (m/s)</strong></p>
+        '''
+        for i, (lower, upper) in enumerate(zip(wind_breaks[:-1], wind_breaks[1:])):
+            if upper == float('inf'):
+                label = f'≥ {lower}'
+            else:
+                label = f'{lower} - {upper}'
+            legend_html += f'''
+            <p style="margin: 2px;">
+                <span style="background-color: {colors[i]}; display: inline-block; width: 20px; height: 20px;"></span>
+                {label}
+            </p>'''
+        legend_html += '</div>'
+        
+        m.get_root().html.add_child(folium.Element(legend_html))
+        
+    except Exception as e:
+        print(f"Could not load RP100_WS layer: {str(e)}")
+
+    # Add the boundary layer
     folium.GeoJson(
         gdf,
+        name='Administrative Boundaries',
         style_function=lambda x: {
             'fillColor': 'none',
             'color': 'black',
@@ -97,9 +219,15 @@ def plot_geospatial_boundaries(gdf, crs: str = "EPSG:4326"):
             'fillOpacity': 0
         }
     ).add_to(m)
-    m.fit_bounds(m.get_bounds())
-    map_widget.value = m._repr_html_()
+
+    # Add layer control
+    folium.LayerControl().add_to(m)
     
+    # Get the total bounds of all features
+    total_bounds = gdf.total_bounds  # Returns [minx, miny, maxx, maxy]
+    m.fit_bounds([[total_bounds[1], total_bounds[0]], [total_bounds[3], total_bounds[2]]])
+  
+    map_widget.value = m._repr_html_()
 
 # Custom Adm data
 # Add these to your existing UI elements
@@ -195,35 +323,31 @@ adm_level_selector.observe(on_adm_level_change, names='value')
 # Hazard
 
 hazard_selector = widgets.Dropdown(options=[
-    ('Fluvial Undefended', 'FLUVIAL_UNDEFENDED'), 
-    ('Fluvial Defended', 'FLUVIAL_DEFENDED'),
-    ('Pluvial Defended', 'PLUVIAL_DEFENDED'), 
-    ('Coastal Undefended', 'COASTAL_UNDEFENDED'), 
-    ('Coastal Defended', 'COASTAL_DEFENDED')
-], value='FLUVIAL_UNDEFENDED', layout=widgets.Layout(width='250px'), style={'description_width': '150px'})
+    ('Strong Wind', 'SW')     
+], value='SW', layout=widgets.Layout(width='250px'), style={'description_width': '150px'})
 hazard_selector_id = f'hazard-selector-{id(hazard_selector)}'
 hazard_selector.add_class(hazard_selector_id)
 
 ## Hazard threshold
-hazard_threshold_slider = widgets.IntSlider(value=20, min=0, max=200, layout=widgets.Layout(width='250px'))
+hazard_threshold_slider = widgets.IntSlider(value=20, min=10, max=500, layout=widgets.Layout(width='250px'))
 hazard_threshold_slider_id = f'hazard-threshold-slider-{id(hazard_threshold_slider)}'
 hazard_threshold_slider.add_class(hazard_threshold_slider_id)
 
 ## Period
-period_selector = widgets.Dropdown(options=['2020', '2030', '2050', '2080'], value='2020', layout=widgets.Layout(width='250px'))
+period_selector = widgets.Dropdown(options=['2020','2050'], value='2020', layout=widgets.Layout(width='250px'))
 period_selector_id = f'period-selector-{id(period_selector)}'
 period_selector.add_class(period_selector_id)
 
 ## Scenario
-scenario_selector = widgets.Dropdown(options=['SSP1-2.6', 'SSP2-4.5', 'SSP3-7.0', 'SSP5-8.5'], value='SSP3-7.0', layout=widgets.Layout(width='250px'))
+scenario_selector = widgets.Dropdown(options=['SSP5-8.5'], value='SSP5-8.5', layout=widgets.Layout(width='250px'))
 scenario_selector_id = f'scenario-selector-{id(scenario_selector)}'
 scenario_selector.add_class(scenario_selector_id)
 
 ## Hazard return periods
 return_periods_selector = widgets.SelectMultiple(
-    options=[5, 10, 20, 50, 100, 200, 500, 1000],
-    value=[5, 10, 20, 50, 100, 200, 500, 1000],
-    rows=8,
+    options=[10, 20, 50, 100, 200, 500, 1000],
+    value=[10, 20, 50, 100, 200, 500, 1000],
+    rows=7,
     disabled=False,
     layout=widgets.Layout(width='250px'))
 return_periods_selector_id = f'return_periods-selector-{id(return_periods_selector)}'
@@ -303,33 +427,24 @@ def preview_impact_func(*args):
             print(f"Error: Could not find ISO_A3 code for {selected_country}")
             return
         
-        # Get the World Bank region from the countries.csv file
-        wb_region = df.loc[df['ISO_A3'] == iso_a3, 'WB_REGION'].values[0]
-        
         if selected_exposures:
-            steps = np.arange(0, 6, 0.1)
+            # Use appropriate wind speed range for TC damage functions (0-300 m/s)
+            steps = np.arange(0, 300, 1)
             fig, ax = plt.subplots(figsize=(4, 3))
             
             for exposure in selected_exposures:
-                if exposure == 'POP':
-                    damage_factor = lambda x: FL_mortality_factor(x*100)
-                elif exposure == 'BU':
-                    damage_factor = lambda x: FL_damage_factor_builtup(x*100, wb_region)
-                elif exposure == 'AGR':
-                    damage_factor = lambda x: FL_damage_factor_agri(x*100, wb_region)
+                if exposure in ['BU']:
+                    damage_factor = lambda x: TC_damage_factor_builtup(x, iso_a3)
                 else:
-                    print(f"Unknown exposure category: {exposure}")
+                    print(f"Tropical cyclone damage functions not available for {exposure}")
                     continue
                 
-                _, = ax.plot([damage_factor(x) for x in steps], label=exposure)
+                _, = ax.plot(steps, [damage_factor(x) for x in steps], label=exposure)
             
             ax.grid(True)
             ax.legend()
             
-            label_steps = range(0, len(steps)+10, 10)
-            ax.set_xticks(label_steps)
-            ax.set_xticklabels([i / 10 for i in label_steps])
-            ax.set_xlabel("Water depth (m)")
+            ax.set_xlabel("Wind speed (m/s)")
             ax.set_ylabel("Impact Factor")
             
             plt.title(f"Impact Functions for {selected_country}")
@@ -432,14 +547,14 @@ country_boundaries = widgets.VBox([
 hazard_info = widgets.VBox([
     widgets.Label("Hazard process:"),
     hazard_selector,
-    widgets.Label("Min threshold:"),
+    widgets.Label("Min threshold (m/s):"),
     hazard_threshold_slider,
     widgets.Label("Reference period:"),
     period_selector,
     widgets.Label("Climate scenario:"),
     scenario_selector,
     widgets.Label("Return periods:"),
-    return_periods_selector
+    return_periods_selector,
 ])
 
 exposure_category = widgets.VBox([
@@ -555,7 +670,7 @@ def run_analysis_script(b):
             print("Error: Invalid country selection.")
             return
         
-        # Rest of the input gathering remains the same
+        # Input gathering
         haz_cat = hazard_selector.value
         period = period_selector.value
         scenario = scenario_selector.value if period != '2020' else ''
@@ -565,7 +680,7 @@ def run_analysis_script(b):
         adm_level = adm_level_selector.value
         analysis_type = approach_selector.value
         min_haz_slider = hazard_threshold_slider.value
-        
+               
         # Get class thresholds if applicable
         class_edges = []
         if analysis_type == 'Classes':
@@ -625,7 +740,7 @@ def run_analysis_script(b):
             exp_cat = exp_cat_list[i]
             exp_nam = exp_nam_list[i]
             print(f"Running analysis for {exp_cat}...")
-            result_df = run_analysis(country, haz_cat, period, scenario, return_periods, min_haz_slider,
+            result_df = run_analysis(country, haz_type, haz_cat, period, scenario, return_periods, min_haz_slider,
                             exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, 
                             save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
                             custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
@@ -721,7 +836,7 @@ run_button.on_click(run_analysis_script)
 
 def create_eai_chart(dfData, exp_cat, period, scenario, color):
     # Defining the title and sub-title
-    title = f'Flood x {exp_cat} EAI - {period} {scenario}'
+    title = f'Wind x {exp_cat} EAI - {period} {scenario}'
     subtitle = 'Exceedance frequency curve'
 
     # Defining the x- and y-axis data and text
@@ -809,6 +924,10 @@ def initialize_tool():
     display(final_layout)
     display(HTML(js_code))
 
+    # Initialize map with wind speed layer
+    m = create_initial_map()
+    map_widget.value = m._repr_html_()
+    
     # Initial updates
     update_custom_boundaries_visibility()
     update_custom_exposure_visibility()

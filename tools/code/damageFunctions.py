@@ -1,11 +1,11 @@
 # Importing the required packages
 import numpy as np
-from common import wb_to_region
+from common import wb_to_region, tc_region_mapping
 
 # Defining the damage functions
 
 # Floods (river and coastal) over Population mortality
-def mortality_factor(x: np.array, wb_region: str = None):
+def FL_mortality_factor(x: np.array, wb_region: str = None):
     """A polynomial fit to average population mortality due to nearby flooding.
     Values are capped between 0 and 1
 
@@ -18,7 +18,7 @@ def mortality_factor(x: np.array, wb_region: str = None):
 
 # Floods (river and coastal) over Built-Up areas
 
-def damage_factor_builtup(x: np.array, wb_region: str):
+def FL_damage_factor_builtup(x: np.array, wb_region: str):
     """A polynomial fit to average damage across builtup land cover relative to water depth in meters.
 
     The sectors are commercial, industry, transport, infrastructure and residential.
@@ -42,7 +42,7 @@ def damage_factor_builtup(x: np.array, wb_region: str):
 
 # Floods (river and coastal) impact function over Agricultural areas
 
-def damage_factor_agri(x: np.array, wb_region: str):
+def FL_damage_factor_agri(x: np.array, wb_region: str):
     """A polynomial fit to average damage across agricultural land cover relative to water depth in meters.
     Values are capped between 0 and 1.
 
@@ -61,3 +61,55 @@ def damage_factor_agri(x: np.array, wb_region: str):
     region = wb_to_region.get(wb_region, 'GLOBAL')
     return function_mapping.get(region)
 
+# Tropical Cyclone - Regional equations
+
+def TC_damage_factor_builtup(x: np.array, country_iso3: str):
+    """Calculate damage factor for tropical cyclone wind impact on built-up areas based on region-specific vulnerability curves.
+
+       Parameters
+    ----------
+    x : np.array
+        Wind speed in meters per second
+    country_iso3 : str
+        ISO3 country code to determine regional vulnerability curve
+        
+    Returns
+    -------
+    np.array
+        Damage factor between 0 and 1
+    
+    Asigmoidal function is applied in the calibration process, based on the general impact function by Emanuel (2011).
+    While Vhalf is fitted during the calibration process, the lower threshold Vthresh is kept constant throughout the study.
+
+    References
+    ----------
+    Eberenz et al., 2021 - Regional tropical cyclone impact functions for globally consistent risk assessments. CLIMADA project.
+    (https://nhess.copernicus.org/articles/21/393/2021/)
+    """
+
+    # Get region from country code, default to GLOBAL if not found
+    region = tc_region_mapping.get(country_iso3, 'GLOBAL')
+    
+    # Regional v_half values (wind speed at which 50% damage occurs)
+    v_half = {
+        'NA1': 59.6,   # Caribbean and Mexico
+        'NA2': 91.8,   # USA and Canada
+        'NI':  67.3,   # North Indian
+        'OC':  54.4,   # Oceania
+        'SI':  42.6,   # South Indian
+        'WP1': 58.9,   # South East Asia
+        'WP2': 87.6,   # Philippines
+        'WP3': 86.3,   # China Mainland
+        'WP4': 183.7,  # North West Pacific
+        'GLOBAL': 83.7  # Global average
+    }
+    
+    # Get Vhalf value for specified region
+    Vhalf = v_half.get(region)
+
+    # Global threshold value
+    Vthres = 25.7  # m/s, below which no damage occurs
+        
+    # Calculate damage factor
+    v = np.maximum(0.0, (x - Vthres))/(Vhalf - Vthres)
+    return (v**3)/(1 + (v**3))
