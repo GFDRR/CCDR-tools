@@ -94,10 +94,17 @@ def create_header_widget(img_path:str=None):
     
     return HTML(value=header_html, layout=Layout(width='99%'))
     
-
 preview_chk = Checkbox(
     value=True,
     description='Preview Results',
+    disabled=False,
+    indent=False
+)
+
+# checkbox for exporting charts
+export_charts_chk = Checkbox(
+    value=False,
+    description='Export Charts as PNG',
     disabled=False,
     indent=False
 )
@@ -109,14 +116,16 @@ run_button = Button(
 )
 
 def create_footer():
-    return VBox(
-        [
-            preview_chk, HBox([run_button], 
-            layout=Layout(display='flex', justify_content='center', width='100%'))
-        ], layout=Layout(width='100%', height='100px', padding='10px')
-    )
+    preview_container = HBox([
+        preview_chk,
+        export_charts_chk
+    ], layout=Layout(width='100%', justify_content='space-around'))
     
-
+    return VBox([
+        preview_container,
+        HBox([run_button], layout=Layout(display='flex', justify_content='center', width='100%'))
+    ], layout=Layout(width='100%', height='100px', padding='10px'))
+    
 output_widget = Output()
 chart_output = Output(layout=Layout(width='100%', height='auto'))
 
@@ -139,7 +148,6 @@ map_widget = HTML(
     value=Map(location=[0,0], zoom_start=2)._repr_html_(),
     layout=Layout(width='98%', height='600px')    
 )
-
 
 def get_ui_components(sidebar, header):
     
