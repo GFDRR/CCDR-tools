@@ -64,7 +64,12 @@ def create_js_code(
     return js_code
 
 
-def create_header_widget(img_path:str=None):
+def create_header_widget(hazard:str="FL", img_path:str=None):
+    
+    if hazard == 'FL':
+        hazard_text = "FLOOD HAZARD (FATHOM 3)"
+    elif hazard == 'TC':
+        hazard_text = "TROPICAL CYCLONE HAZARD (STORM v4)"
     
     img_path = 'rdl_logo.png' if img_path is None else img_path
        
@@ -86,7 +91,7 @@ def create_header_widget(img_path:str=None):
         <div style="flex: 1; min-width: 0;">
             <h1 style='color: #FFFFFF; margin: 0; font-size: 1.5vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>RISK DATA LIBRARY</h1>
             <h2 style='color: #ff5733; margin: 10px 0; font-size: 1.2vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>ANALYTICAL TOOL</b></h2>
-            <h4 style='color: #118AB2; margin: 0; font-size: 1vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>FLOOD HAZARD (FATHOM 3)</b></h4>
+            <h4 style='color: #118AB2; margin: 0; font-size: 1vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'><b>{hazard_text}</b></h4>
         </div>
         <img src="data:image/png;base64,{img_base64}" style="width: 200px; max-width: 200px; height: auto; margin-left: 20px;">
     </div>
