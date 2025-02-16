@@ -40,7 +40,7 @@ def main():
         # Defining the list variable to pass to run_analysis
         exp_cat = exp_cat_list[i]
         exp_nam = exp_nam_list[i]
-        result_df = run_analysis(country, haz_cat, period, scenario, return_periods, min_haz_slider,
+        result_df = run_analysis(country, haz_type, haz_cat, period, scenario, return_periods, min_haz_slider,
                    exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, save_check_raster, n_cores)
 
         if result_df is None:

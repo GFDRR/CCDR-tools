@@ -1,4 +1,4 @@
-from tools.code.damageFunctions import mortality_factor, damage_factor_builtup, damage_factor_agri
+from tools.code.damageFunctions import FL_mortality_factor, FL_damage_factor_builtup, FL_damage_factor_agri
 import numpy as np
 import pytest
 
@@ -12,7 +12,7 @@ def test_mortality_factor():
     # Case 1: Typical input values
     x = np.array([0, 10, 50, 100, 200])
     expected = np.array([0.00176976, 0.0020376 , 0.00357871, 0.00722308, 0.02898486])    
-    result = mortality_factor(x)
+    result = FL_mortality_factor(x)
     compare_outcomes(result, expected)
     
     # TODO
@@ -24,14 +24,14 @@ def test_mortality_factor():
     
     # Case 4: Failing with Invalid input types
     with pytest.raises(TypeError):
-        mortality_factor("invalid INPUT!")
+        FL_mortality_factor("invalid INPUT!")
     
     # Case 5: Failing with None passed
     with pytest.raises(TypeError):
-        mortality_factor()
+        FL_mortality_factor()
         
     with pytest.raises(TypeError):
-        mortality_factor(None)
+        FL_mortality_factor(None)
 
 
 def test_damage_factor_builtup():
@@ -48,11 +48,11 @@ def test_damage_factor_builtup():
     ])
     
     # Case 1a: Passing 'AFR'
-    result_1a = damage_factor_builtup(x, 'AFR')
+    result_1a = FL_damage_factor_builtup(x, 'AFR')
     assert test_outcomes(result_1a, expected_africa)
     
     # Case 1b: Passing 'MENA'
-    result_1b = damage_factor_builtup(x, 'MENA')
+    result_1b = FL_damage_factor_builtup(x, 'MENA')
     assert test_outcomes(result_1b, expected_africa)    
 
 
@@ -63,15 +63,15 @@ def test_damage_factor_builtup():
     ])
     
     # Case 2a: Passing 'EAP'
-    result_2a = damage_factor_builtup(x, 'EAP')
+    result_2a = FL_damage_factor_builtup(x, 'EAP')
     assert test_outcomes(result_2a, expected_asia)
         
     # Case 2b: Passing 'SAR'
-    result_2b = damage_factor_builtup(x, 'SAR')
+    result_2b = FL_damage_factor_builtup(x, 'SAR')
     assert test_outcomes(result_2b, expected_asia)
     
     # Case 2c: Passing 'ECA'
-    result_2c = damage_factor_builtup(x, 'ECA')
+    result_2c = FL_damage_factor_builtup(x, 'ECA')
     assert test_outcomes(result_2c, expected_asia)
     
     
@@ -82,7 +82,7 @@ def test_damage_factor_builtup():
     ])
     
     # Only one LAC so far
-    result_3 = damage_factor_builtup(x, 'LCR')
+    result_3 = FL_damage_factor_builtup(x, 'LCR')
     assert test_outcomes(result_3, expected_lac)
     
     
@@ -93,11 +93,11 @@ def test_damage_factor_builtup():
     ])
     
     # Case 4a: Passing 'Other'
-    result_4a = damage_factor_builtup(x, 'Other')
+    result_4a = FL_damage_factor_builtup(x, 'Other')
     assert test_outcomes(result_4a, expected_global)
     
     # Case 4b: Passing another variable that is not in dict, should default to GLOBAL
-    result_4b = damage_factor_builtup(x, 'ANY_OTHER_REGION')
+    result_4b = FL_damage_factor_builtup(x, 'ANY_OTHER_REGION')
     assert test_outcomes(result_4b, expected_global)
     
     
@@ -113,11 +113,11 @@ def test_damage_factor_agri():
     ])
     
     # Case 1a: Passing 'AFR'
-    result_1a = damage_factor_agri(x, 'AFR')
+    result_1a = FL_damage_factor_agri(x, 'AFR')
     assert compare_outcomes(result_1a, expected_africa)
     
     # Case 1b: Passing 'MENA'
-    result_1b = damage_factor_agri(x, 'MENA')
+    result_1b = FL_damage_factor_agri(x, 'MENA')
     assert compare_outcomes(result_1b, expected_africa)
     
     
@@ -128,15 +128,15 @@ def test_damage_factor_agri():
     ])
     
     # Case 2a: Passing 'EAP'
-    result_2a = damage_factor_agri(x, 'EAP')
+    result_2a = FL_damage_factor_agri(x, 'EAP')
     assert compare_outcomes(result_2a, expected_asia)
     
     # Case 2b: Passing 'SAR'
-    result_2b = damage_factor_agri(x, 'SAR')
+    result_2b = FL_damage_factor_agri(x, 'SAR')
     assert compare_outcomes(result_2b, expected_asia)
     
     # Case 2c: Passing 'ECA'
-    result_2c = damage_factor_agri(x, 'ECA')
+    result_2c = FL_damage_factor_agri(x, 'ECA')
     assert compare_outcomes(result_2c, expected_asia)
     
     
@@ -147,7 +147,7 @@ def test_damage_factor_agri():
     ])
     
     # Only one LAC so far
-    result_3 = damage_factor_agri(x, 'LCR')
+    result_3 = FL_damage_factor_agri(x, 'LCR')
     assert compare_outcomes(result_3, expected_lac)
     
     
@@ -158,9 +158,12 @@ def test_damage_factor_agri():
     ])
     
     # Case 4a: Passing 'Other'
-    result_4a = damage_factor_agri(x, 'Other')
+    result_4a = FL_damage_factor_agri(x, 'Other')
     assert compare_outcomes(result_4a, expected_global)
     
     # Case 4b: Passing another variable that is not in dict, should default to GLOBAL
-    result_4b = damage_factor_agri(x, 'ANY_OTHER_REGION')
+    result_4b = FL_damage_factor_agri(x, 'ANY_OTHER_REGION')
     assert compare_outcomes(result_4b, expected_global)
+
+
+#TODO: Test TC damage factor

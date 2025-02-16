@@ -625,7 +625,7 @@ def run_analysis_script(b):
             exp_cat = exp_cat_list[i]
             exp_nam = exp_nam_list[i]
             print(f"Running analysis for {exp_cat}...")
-            result_df = run_analysis(country, haz_cat, period, scenario, return_periods, min_haz_slider,
+            result_df = run_analysis(country, haz_type, haz_cat, period, scenario, return_periods, min_haz_slider,
                             exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, 
                             save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
                             custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
@@ -775,7 +775,7 @@ def create_eai_chart(dfData, exp_cat, period, scenario, color):
 
 # Displaying the GUI
 # Create the header widget
-header = notebook_utils.create_header_widget()
+header = notebook_utils.create_header_widget(hazard="FL")
 
 # Footer
 footer = notebook_utils.create_footer()

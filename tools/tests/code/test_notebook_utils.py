@@ -1,12 +1,9 @@
 from tools.code.notebook_utils import create_header_widget
 from ipywidgets import HTML
-import os 
 
 
 def test_create_header_widget():
-    
-    print(os.getcwd())
-    
+        
     widget = create_header_widget('tools/code/rdl_logo.png')
     assert isinstance(widget, HTML)
 
