@@ -890,7 +890,7 @@ def create_eai_chart(dfData, exp_cat, period, scenario, color):
 
 # Displaying the GUI
 # Create the header widget
-header = notebook_utils.create_header_widget()
+header = notebook_utils.create_header_widget(hazard="TC")
 
 # Footer
 footer = notebook_utils.create_footer()
