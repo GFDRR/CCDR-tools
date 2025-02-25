@@ -1,6 +1,24 @@
 from base64 import b64encode
-from ipywidgets import Checkbox, Button, Layout, HTML, VBox, HBox, Output
+from ipywidgets import (
+    Button,
+    Checkbox,
+    Dropdown,
+    FloatText,
+    HBox,
+    HTML,
+    Layout,
+    Label,
+    Output,
+    RadioButtons,
+    SelectMultiple,
+    Text,
+    Textarea,
+    VBox
+)
 from folium import Map
+import common
+import numpy as np
+import requests
 
 
 def create_js_code(
@@ -98,20 +116,7 @@ def create_header_widget(hazard:str="FL", img_path:str=None):
     """
     
     return HTML(value=header_html, layout=Layout(width='99%'))
-    
 
-preview_chk = Checkbox(
-    value=True,
-    description='Preview Results',
-    disabled=False,
-    indent=False
-)
-
-run_button = Button(
-    description="Run Analysis",
-    layout=Layout(width='250px'),
-    button_style='danger'
-)
 
 def create_footer():
     return VBox(
@@ -121,9 +126,6 @@ def create_footer():
         ], layout=Layout(width='100%', height='100px', padding='10px')
     )
     
-
-output_widget = Output()
-chart_output = Output(layout=Layout(width='100%', height='auto'))
 
 def create_sidebar(info_box, tabs, output, footer):
     
@@ -137,13 +139,6 @@ def create_sidebar(info_box, tabs, output, footer):
         sidebar_content,
         footer
     ], layout=Layout(width='370px', height='100%'))
-    
-chart_output = Output(layout={'width': '98%', 'height': 'auto'})
-  
-map_widget = HTML(
-    value=Map(location=[0,0], zoom_start=2)._repr_html_(),
-    layout=Layout(width='98%', height='600px')    
-)
 
 
 def get_ui_components(sidebar, header):
@@ -164,3 +159,241 @@ def get_ui_components(sidebar, header):
     )
 
     return map_and_chart, content_layout, final_layout
+
+
+def create_country_selector_widget(country_options: list[str]):
+    
+    country_selector = Dropdown(
+        options=country_options,
+        value=None,
+        placeholder='Select Country',
+        layout=Layout(width='250px')
+    )
+    
+    return country_selector
+
+
+def run_input_checks(
+    country_selector, country_dict, haz_type,
+    return_periods_selector, preview_chk,
+    custom_boundaries_radio, 
+    custom_boundaries_id_field,
+    custom_boundaries_name_field,
+    custom_boundaries_file,
+    approach_selector,
+    class_edges_table
+):
+    
+    # 1 Check ISO_A3 code
+    print("Checking country boundaries...")
+    selected_country = country_selector.value
+    iso_a3 = country_dict.get(selected_country)
+    if not iso_a3:
+        print(f"Error: {selected_country} is not a valid country selection.")
+        return False
+
+    if haz_type == "TC":
+        if iso_a3 not in common.tc_region_mapping.keys():
+            print(f"Error: {selected_country} is not a valid country selection for TC analysis.")
+            return False
+
+    # 2 Validate country code 
+    params = {
+        'where': f"ISO_A3 = '{iso_a3}'",
+        'outFields': 'ISO_A3',
+        'returnDistinctValues': 'true',
+        'f': 'json'
+    }
+    
+    url = f"{common.rest_api_url}/5/query"
+    response = requests.get(url=url, params=params)
+
+    if response.status_code != 200:
+        print("Error: Unable to validate country code. Please ensure you are connected to the internet.")
+        return False
+
+    data = response.json()
+    if not 'features' in data.keys():
+        print(f"Error: {iso_a3} is not a valid ISO_A3 code.")
+        return False
+    
+    
+    # Preview only possible if several return periods are selected
+    if len(return_periods_selector.value) == 1 and preview_chk.value:
+        print("Cannot preview results if only one return period is selected.")
+        return False
+    
+    # Check use of custom boundaries    
+    if custom_boundaries_radio.value == 'Custom boundaries':
+        if not all([custom_boundaries_id_field.value, custom_boundaries_name_field.value]):
+            print("Error: Custom boundaries ID and Name fields must be specified.")
+            return False          
+        if not custom_boundaries_file.value: 
+            print("Error: Custom boundaries file not specified.")
+            return False
+
+    # Check class thresholds
+    print("Checking class thresholds...")
+    if approach_selector.value == 'Classes':
+        class_values = [child.children[1].value for child in class_edges_table.children[:-1]]  # Exclude "Add Class" button
+        if len(class_values) > 1:
+            is_seq = np.all(np.diff(class_values) > 0)
+            if not is_seq:
+                print(f"Error: Class thresholds must be in increasing  order.")
+                return False
+            
+    if custom_boundaries_radio.value == 'Default boundaries' and adm_level_selector.value is None:
+        print("Error: Please select an Administrative Level when working with default boundaries.")
+        return False
+                
+    print("User input accepted!")
+    return True
+
+
+def create_row_box(index, delete_button):
+    return HBox(
+        [
+            Label(f'Class {index}:', layout=Layout(width='100px')),
+            FloatText(value=0.0, description='', layout=Layout(width='100px')),
+            delete_button
+        ]
+    )
+    
+
+def create_country_boundaries(
+    country_selector, adm_level_selector, custom_boundaries_radio,
+    select_file_button, custom_boundaries_file,
+    custom_boundaries_id_field, custom_boundaries_name_field
+):
+    return VBox([
+        Label("Country:"),
+        country_selector,
+        Label("Administrative Level:"),
+        adm_level_selector,
+        Label("Boundaries:"),
+        custom_boundaries_radio,
+        select_file_button,
+        custom_boundaries_file,
+        custom_boundaries_id_field,
+        custom_boundaries_name_field
+    ])
+
+
+def create_hazard_info(
+    hazard_selector, min_threshold_text, hazard_threshold_slider,
+    period_selector, scenario_selector, return_periods_selector
+):
+    return VBox([
+        Label("Hazard process:"),
+        hazard_selector,
+        Label(min_threshold_text),
+        hazard_threshold_slider,
+        Label("Reference period:"),
+        period_selector,
+        Label("Climate scenario:"),
+        scenario_selector,
+        Label("Return periods:"),
+        return_periods_selector,
+    ])
+    
+
+def create_exposure_category(custom_exposure_radio, custom_exposure_container):
+    return VBox([
+        Label("Exposure Category:"),
+        exposure_selector,
+        Label("Exposure Data:"),
+        custom_exposure_radio,
+        custom_exposure_container
+    ])
+
+
+def create_vulnerability_approach(approach_selector, approach_box):
+    return VBox([
+        Label("Vulnerability Approach:"),
+        approach_selector,
+        approach_box
+    ])
+
+
+preview_chk = Checkbox(
+    value=True,
+    description='Preview Results',
+    disabled=False,
+    indent=False
+)
+
+run_button = Button(
+    description="Run Analysis",
+    layout=Layout(width='250px'),
+    button_style='danger'
+)
+ 
+output_widget = Output()
+chart_output = Output(layout={'width': '98%', 'height': 'auto'})
+  
+map_widget = HTML(
+    value=Map(location=[0,0], zoom_start=2)._repr_html_(),
+    layout=Layout(width='98%', height='600px')    
+)
+
+adm_level_selector = Dropdown(
+    options=[('1', 1), ('2', 2)],
+    value=None,
+    placeholder='Select ADM level',
+    layout=Layout(width='250px')
+)
+
+custom_boundaries_radio = RadioButtons(
+    options=['Default boundaries', 'Custom boundaries'],
+    disabled=False
+)
+
+exposure_selector = SelectMultiple(options=[
+    ('Population', 'POP'),
+    ('Built-up', 'BU'),
+    ('Agriculture', 'AGR')
+], value=['POP'], layout=Layout(width='250px'))
+
+custom_boundaries_file = Text(
+    value='',
+    placeholder='Enter path to custom boundaries file',
+    disabled=True, layout=Layout(width='250px')
+)
+
+custom_boundaries_id_field = Text(
+    value='',
+    placeholder='Enter field name for zonal ID',
+    disabled=True, layout=Layout(width='250px')
+)
+
+custom_boundaries_name_field = Text(
+    value='',
+    placeholder='Enter field name for zonal name',
+    disabled=True, layout=Layout(width='250px')
+)
+
+select_file_button = Button(
+    description='Select File',
+    disabled=True,
+    button_style='info', layout=Layout(width='250px')
+)
+
+approach_selector = Dropdown(
+    options=[
+        ('Classes', 'Classes'),
+        ('Function', 'Function')
+    ],
+    value='Function',
+    layout=Layout(width='250px')
+)
+
+delete_button = Button(
+    description="Delete",
+    layout=Layout(width='70px')
+)
+
+info_box = Textarea(
+    value='Hover over items for descriptions.',
+    disabled=True,
+    layout=Layout(width='350px', height='100px')
+)

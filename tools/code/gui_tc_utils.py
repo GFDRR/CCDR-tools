@@ -1,5 +1,4 @@
 import common
-import os
 import folium
 from folium.plugins import MiniMap, Fullscreen
 import geopandas as gpd
@@ -9,7 +8,6 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
 import numpy as np
 import pandas as pd
-import requests
 import seaborn as sns
 import time
 import tkinter as tk
@@ -23,11 +21,23 @@ from runAnalysis import (
     prepare_sheet_name, saving_excel_and_gpgk_file, prepare_and_save_summary_df
 )
 
-# Define hazard type
-haz_type = 'TC'
 
 DATA_DIR = common.DATA_DIR
 OUTPUT_DIR = common.OUTPUT_DIR
+
+# Define hazard type
+haz_type = 'TC'
+
+# Load country data
+df = pd.read_csv('countries.csv')
+country_dict = dict(zip(df['NAM_0'], df['ISO_A3']))
+iso_to_country = dict(zip(df['ISO_A3'], df['NAM_0']))
+
+# Create the Combobox widget with auto-complete functionality
+country_selector = notebook_utils.create_country_selector_widget(list(country_dict.keys()))
+country_selector_id = f'country-selector-{id(country_selector)}'
+country_selector.add_class(country_selector_id)
+
 
 def create_initial_map():
     m = folium.Map(location=[0, 0], zoom_start=2)
@@ -90,21 +100,6 @@ def create_initial_map():
     
     return m
 
-# Load country data
-df = pd.read_csv('countries.csv')
-country_dict = dict(zip(df['NAM_0'], df['ISO_A3']))
-iso_to_country = dict(zip(df['ISO_A3'], df['NAM_0']))
-
-# Create the Combobox widget with auto-complete functionality
-country_selector = widgets.Combobox(
-    placeholder='Type country name...',
-    options=list(country_dict.keys()),  # Available country options
-    layout=widgets.Layout(width='250px'),
-    ensure_option=True,  # Ensure that only valid options can be selected
-)
-
-country_selector_id = f'country-selector-{id(country_selector)}'
-country_selector.add_class(country_selector_id)
 
 # Define a function to handle changes in the combobox
 def on_country_change(change):
@@ -129,12 +124,7 @@ def on_country_change(change):
 country_selector.observe(on_country_change, names='value')
 
 # Administrative level boundaries
-adm_level_selector = widgets.Dropdown(
-    options=[('1', 1), ('2', 2)],
-    value=None,
-    placeholder='Select ADM level',
-    layout=widgets.Layout(width='250px')
-)
+adm_level_selector = notebook_utils.adm_level_selector
 adm_level_selector_id = f'adm-level-selector-{id(adm_level_selector)}'
 adm_level_selector.add_class(adm_level_selector_id)
 
@@ -231,42 +221,23 @@ def plot_geospatial_boundaries(gdf, crs: str = "EPSG:4326"):
 
 # Custom Adm data
 # Add these to your existing UI elements
-custom_boundaries_radio = widgets.RadioButtons(
-    options=['Default boundaries', 'Custom boundaries'],
-    disabled=False
-)
+custom_boundaries_radio = notebook_utils.custom_boundaries_radio
 custom_boundaries_radio_id = f'custom-boundaries-radio-{id(custom_boundaries_radio)}'
 custom_boundaries_radio.add_class(custom_boundaries_radio_id)
 
-custom_boundaries_file = widgets.Text(
-    value='',
-    placeholder='Enter path to custom boundaries file',
-    disabled=True, layout=widgets.Layout(width='250px')
-)
+custom_boundaries_file = notebook_utils.custom_boundaries_file
 custom_boundaries_file_id = f'custom-boundaries-file-{id(custom_boundaries_file)}'
 custom_boundaries_file.add_class(custom_boundaries_file_id)
 
-custom_boundaries_id_field = widgets.Text(
-    value='',
-    placeholder='Enter field name for zonal ID',
-    disabled=True, layout=widgets.Layout(width='250px')
-)
+custom_boundaries_id_field = notebook_utils.custom_boundaries_id_field
 custom_boundaries_id_field_id = f'custom-boundaries-id-field-{id(custom_boundaries_id_field)}'
 custom_boundaries_id_field.add_class(custom_boundaries_id_field_id)
 
-custom_boundaries_name_field = widgets.Text(
-    value='',
-    placeholder='Enter field name for zonal name',
-    disabled=True, layout=widgets.Layout(width='250px')
-)
+custom_boundaries_name_field = notebook_utils.custom_boundaries_name_field
 custom_boundaries_name_field_id = f'custom-boundaries-name-field-{id(custom_boundaries_name_field)}'
 custom_boundaries_name_field.add_class(custom_boundaries_name_field_id)
 
-select_file_button = widgets.Button(
-    description='Select File',
-    disabled=True,
-    button_style='info', layout=widgets.Layout(width='250px')
-)
+select_file_button = notebook_utils.select_file_button
 
 # Custom ADM Functions
 def select_file(b):
@@ -361,11 +332,7 @@ period_selector.observe(update_scenario_visibility, 'value')
 update_scenario_visibility()
 
 # Exposure
-exposure_selector = widgets.SelectMultiple(options=[
-    ('Population', 'POP'),
-    ('Built-up', 'BU'),
-    ('Agriculture', 'AGR')
-], value=['POP'], layout=widgets.Layout(width='250px'))
+exposure_selector = notebook_utils.exposure_selector
 exposure_selector_id = f'exposure-selector-{id(exposure_selector)}'
 exposure_selector.add_class(exposure_selector_id)
 
@@ -403,7 +370,7 @@ custom_exposure_radio.observe(update_custom_exposure_visibility, 'value')
 # Create a new output widget for the preview chart and class edges table
 approach_box = widgets.Output(layout=widgets.Layout(width='280px', height='250px'))
 
-approach_selector = widgets.Dropdown(options=[('Classes', 'Classes'), ('Function', 'Function')], value='Function', layout=widgets.Layout(width='250px'))
+approach_selector = notebook_utils.approach_selector
 approach_selector_id = f'approach-selector-{id(approach_selector)}'
 approach_selector.add_class(approach_selector_id)
 
@@ -423,9 +390,6 @@ def preview_impact_func(*args):
         
         # Get the ISO_A3 code for the selected country
         iso_a3 = country_dict.get(selected_country, False)
-        if not iso_a3:
-            print(f"Error: Could not find ISO_A3 code for {selected_country}")
-            return
         
         if selected_exposures:
             # Use appropriate wind speed range for TC damage functions (0-300 m/s)
@@ -458,8 +422,6 @@ def preview_impact_func(*args):
 def update_preview(*args):
     preview_impact_func()
 
-class_edges_table = widgets.VBox()
-
 ## Define add_class_button before using it
 add_class_button = widgets.Button(description="Add Class", layout=widgets.Layout(width='150px'))
 
@@ -468,12 +430,8 @@ class_edges_table = widgets.VBox()
 
 # Functions to dynamically add class edges
 def create_class_row(index):
-    delete_button = widgets.Button(description="Delete", layout=widgets.Layout(width='70px'))
-    row = widgets.HBox([
-        widgets.Label(f'Class {index}:', layout=widgets.Layout(width='100px')),
-        widgets.FloatText(value=0.0, description='', layout=widgets.Layout(width='100px')),
-        delete_button
-    ])
+    delete_button = notebook_utils.delete_button
+    row = notebook_utils.create_row_box(index, delete_button)
     delete_button.on_click(lambda b: delete_class(row))
     return row
 
@@ -531,45 +489,28 @@ exposure_selector.observe(update_preview, names='value')
 approach_selector.observe(update_preview, names='value')
 
 # Create components for the four sections
-country_boundaries = widgets.VBox([
-    widgets.Label("Country:"),
-    country_selector,
-    widgets.Label("Administrative Level:"),
-    adm_level_selector,
-    widgets.Label("Boundaries:"),
-    custom_boundaries_radio,
-    select_file_button,
-    custom_boundaries_file,
-    custom_boundaries_id_field,
-    custom_boundaries_name_field
-])
+country_boundaries = notebook_utils.create_country_boundaries(
+    country_selector, adm_level_selector, custom_boundaries_radio,
+    select_file_button, custom_boundaries_file,
+    custom_boundaries_id_field, custom_boundaries_name_field
+)
 
-hazard_info = widgets.VBox([
-    widgets.Label("Hazard process:"),
+hazard_info = notebook_utils.create_hazard_info(
     hazard_selector,
-    widgets.Label("Min threshold (m/s):"),
+    "Min threshold (m/s):",
     hazard_threshold_slider,
-    widgets.Label("Reference period:"),
     period_selector,
-    widgets.Label("Climate scenario:"),
     scenario_selector,
-    widgets.Label("Return periods:"),
-    return_periods_selector,
-])
+    return_periods_selector
+)
 
-exposure_category = widgets.VBox([
-    widgets.Label("Exposure Category:"),
-    exposure_selector,
-    widgets.Label("Exposure Data:"),
-    custom_exposure_radio,
-    custom_exposure_container
-])
+exposure_category = notebook_utils.create_exposure_category(
+    custom_exposure_radio, custom_exposure_container
+)
 
-vulnerability_approach = widgets.VBox([
-    widgets.Label("Vulnerability Approach:"),
-    approach_selector,
-    approach_box
-])
+vulnerability_approach = notebook_utils.create_vulnerability_approach(
+    approach_selector, approach_box    
+)
 
 # Arrange the sections in tabs
 tabs = widgets.Tab(layout={'width': '350px', 'height': '500px'})
@@ -585,11 +526,7 @@ for child in tabs.children:
     child.layout.padding = '5px'
 
 # Info box
-info_box = widgets.Textarea(
-    value='Hover over items for descriptions.',
-    disabled=True,
-    layout=widgets.Layout(width='350px', height='100px')
-)
+info_box = notebook_utils.info_box
 info_box.add_class('info-box')
 
 # Button to run the script
@@ -599,63 +536,16 @@ run_button = notebook_utils.run_button
 def validate_input():
     output.clear_output()
     
-    # Check ISO_A3 code
-    print("Checking country boundaries...")
-    selected_country = country_selector.value
-    iso_a3 = country_dict.get(selected_country)
-    if not iso_a3:
-        print(f"Error: {selected_country} is not a valid country selection.")
-        return False
+    return notebook_utils.run_input_checks(
+        country_selector, country_dict, haz_type,
+        return_periods_selector, preview_chk,
+        custom_boundaries_radio, 
+        custom_boundaries_id_field,
+        custom_boundaries_name_field,
+        custom_boundaries_file, 
+        approach_selector, class_edges_table
+    )
 
-    params = {
-        'where': f"ISO_A3 = '{iso_a3}'",
-        'outFields': 'ISO_A3',
-        'returnDistinctValues': 'true',
-        'f': 'json'
-    }
-    
-    url = f"{common.rest_api_url}/5/query"
-    response = requests.get(url=url, params=params)
-
-    if response.status_code != 200:
-        print("Error: Unable to validate country code. Please ensure you are connected to the internet.")
-        return False
-
-    data = response.json()
-    if not 'features' in data.keys():
-        print(f"Error: {iso_a3} is not a valid ISO_A3 code.")
-        return False
-    
-    # Preview only possible if several return periods are selected
-    if len(return_periods_selector.value) == 1 and preview_chk.value:
-        print("Cannot preview results if only one return period is selected.")
-        return False
-    
-    # Check use of custom boundaries    
-    if custom_boundaries_radio.value == 'Custom boundaries':
-        if not all([custom_boundaries_id_field.value, custom_boundaries_name_field.value]):
-            print("Error: Custom boundaries ID and Name fields must be specified.")
-            return False          
-        if not custom_boundaries_file.value: 
-            print("Error: Custom boundaries file not specified.")
-            return False
-
-    # Check class thresholds
-    print("Checking class thresholds...")
-    if approach_selector.value == 'Classes':
-        class_values = [child.children[1].value for child in class_edges_table.children[:-1]]  # Exclude "Add Class" button
-        if len(class_values) > 1:
-            is_seq = np.all(np.diff(class_values) > 0)
-            if not is_seq:
-                print(f"Error: Class thresholds must be in increasing  order.")
-                return False
-            
-    if custom_boundaries_radio.value == 'Default boundaries' and adm_level_selector.value is None:
-        print("Error: Please select an Administrative Level when working with default boundaries.")
-        return False
-                
-    print("User input accepted!")
-    return True
 
 def run_analysis_script(b):
     with output:
