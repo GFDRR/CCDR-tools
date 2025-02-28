@@ -194,7 +194,7 @@ def run_input_checks(
 
     if haz_type == "TC":
         if iso_a3 not in common.tc_region_mapping.keys():
-            print(f"Error: {selected_country} is not a valid country selection for TC analysis.")
+            print(f"Error: {selected_country} is located outside the hazard extent for Tropical Cyclones.")
             return False
 
     # 2 Validate country code 
