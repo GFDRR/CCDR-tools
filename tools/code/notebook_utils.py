@@ -119,13 +119,17 @@ def create_header_widget(hazard:str="FL", img_path:str=None):
 
 
 def create_footer():
-    return VBox(
-        [
-            preview_chk, HBox([run_button], 
-            layout=Layout(display='flex', justify_content='center', width='100%'))
-        ], layout=Layout(width='100%', height='100px', padding='10px')
-    )
     
+    preview_container = HBox([
+        preview_chk,
+        export_chearts_chk
+    ], layout=Layout(width='100%', justify_content='space-around'))
+    
+    return VBox([
+        preview_container, 
+        HBox([run_button], layout=Layout(display='flex', justify_content='center', width='100%'))
+    ], layout=Layout(width='100%', height='100px', padding='10px'))
+        
 
 def create_sidebar(info_box, tabs, output, footer):
     
@@ -318,6 +322,13 @@ def create_vulnerability_approach(approach_selector, approach_box):
 preview_chk = Checkbox(
     value=True,
     description='Preview Results',
+    disabled=False,
+    indent=False
+)
+
+export_chearts_chk = Checkbox(
+    value=False,
+    description='Export Charts as PNG',
     disabled=False,
     indent=False
 )
