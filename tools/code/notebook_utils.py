@@ -1,4 +1,6 @@
 from base64 import b64encode
+import common
+from folium import Map
 from ipywidgets import (
     Button,
     Checkbox,
@@ -15,10 +17,14 @@ from ipywidgets import (
     Textarea,
     VBox
 )
-from folium import Map
-import common
+import matplotlib.pyplot as plt
+from matplotlib.ticker import StrMethodFormatter
 import numpy as np
+import os
+import pandas as pd
 import requests
+import seaborn as sns
+import tkinter as tk
 
 
 def create_js_code(
@@ -317,6 +323,135 @@ def create_vulnerability_approach(approach_selector, approach_box):
         approach_selector,
         approach_box
     ])
+
+
+def export_charts(output_dir: str, country: str, haz_cat: str, period: str, scenario: str,
+                  charts: dict, exp_cat_list: list[str]):
+    chart_dir = os.path.join(output_dir, 'charts')
+    os.makedirs(chart_dir, exist_ok=True)
+    basee_file_name = f"{country}_{haz_cat}_{period}"
+
+    if period != "2020":
+        base_file_name += f"_{scenario}"
+        
+    for i, (chart, exp_cat) in enumerate(zip(charts, exp_cat_list)):
+        chart_filename = os.path.join(chart_dir, f"{basee_file_name}_{exp_cat}.png")
+        chart.savefig(chart_filename, dpi=300, bbox_inches='tight')
+        print(f"Saved chart to: {chart_filename}.")
+
+
+def create_eai_chart(title_prefix, dfData, exp_cat, period, scenario, color):
+    
+    title = f"{title_prefix} x {exp_cat} EAI - {period} {scenario}"
+    
+    subtitle = "Exceedance frequency curve"
+    
+    # Defining the x- and y-axis data and text
+    x = dfData['Freq'].values
+    y = dfData[f'{exp_cat}_impact'].values
+    xlbl = 'Frequency'
+    ylbl = f'Impact ({exp_cat.lower()})'
+    
+    # Defining if plotting total EAI
+    txtTotal = True
+    xpos = 0.70
+    totEAI = dfData[f'{exp_cat}_EAI'].sum()
+
+    # Defining the plot style and colours
+    sns.set_style('whitegrid')
+    plt_color = color
+    xFreqAsRP = True
+
+    # Increase font sizes
+    plt.rcParams.update({'font.size': 12})
+    plt.rcParams.update({'axes.labelsize': 14})
+    plt.rcParams.update({'axes.titlesize': 16})
+
+    # Creating the plot with smaller size
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.plot(x, y, color=plt_color, lw=2, marker="o", markersize=6)
+    ax.fill_between(x, 0, y, alpha=.3, color=plt_color)
+    ax.set(xlim=(0, max(x)), ylim=(0, max(y)*1.05), xticks=np.linspace(0, max(x), 5))
+    ax.ticklabel_format(style='plain', axis='y')
+    ax.yaxis.set_major_formatter(StrMethodFormatter('{x:,.0f}'))
+    ax.set_xlabel(xlbl, fontsize=14)
+    ax.set_ylabel(ylbl, fontsize=14)
+    ax.set_title(f'{title}\n{subtitle}', fontsize=16, fontweight='bold')
+
+    if xFreqAsRP:
+        rp_lbl = dfData['RP'].values.tolist()
+        rp_lbl = ['RP '+str(item) for item in rp_lbl]
+        for i, rp in enumerate(rp_lbl):
+            ax.text(x[i]/max(x)+0.01, y[i]/(max(y)*1.05)+0.01, rp, color='#4D4D4D',
+                    ha='left', va='bottom', transform=ax.transAxes, fontsize=10,
+                    bbox=dict(facecolor='#FAFAFA', edgecolor='#4D4D4D', boxstyle='round,pad=0.1', alpha=0.4))
+
+    if txtTotal:
+        vtext = f'EAI = {totEAI:,.2f}'
+        ax.text(xpos, 0.8, vtext, fontsize=15, color='black', fontweight='bold',
+                ha='left', va='bottom', transform=ax.transAxes, 
+                bbox=dict(facecolor='#FAFAFA', edgecolor='#4D4D4D', boxstyle='square,pad=0.4', alpha=1))
+
+    plt.tight_layout()
+    return fig
+
+
+def on_adm_level_change(
+    change, country_selector, country_dict: dict,
+    get_adm_data, plot_geospation_boundaries
+):
+    selected_country = country_selector.value
+    iso_a3 = country_dict[selected_country]
+    adm_level = change['new']
+    try:
+        gdf = get_adm_data(iso_a3, adm_level)
+        plot_geospation_boundaries(gdf)
+    except Exception as e:
+        print(f"Error loading ADM {adm_level} boundaries: {e}")
+        
+        
+def on_country_change(
+    change, country_dict: dict, get_adm_data,
+    plot_geospation_boundaries
+):
+    selected_country = change['new']
+    iso_a3 = country_dict[selected_country]
+    print(f"Selected country: {selected_country}, ISO_A3 Code: {iso_a3}")
+    try:
+        gdf = get_adm_data(iso_a3, 0)
+        plot_geospation_boundaries(gdf)
+    except Exception as e:
+        print(f"Error loading country boundaries: {e}")
+
+
+def select_file(b, update_preview_map):
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    root.attributes('-topmost', True)  # Make the dialog appear on top
+    root.geometry(f'+{root.winfo_screenwidth()//2-300}+0')  # Position at the top center of the screen
+    file_path = tk.filedialog.askopenfilename(
+        filetypes=[("GeoPackage", "*.gpkg"), ("Shapefile", "*.shp")],
+        parent=root
+    )
+    if file_path:
+        custom_boundaries_file.value = file_path
+        update_preview_map()
+    root.destroy()
+
+
+def write_combined_summary_to_excel(
+    excel_file: str, combined_summary, exp_cat_list,
+    custom_exposure_radio, custom_exposure_container
+):
+    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
+    row_offset = len(combined_summary) + 4  # Start two rows below the table
+    for i, exp_cat in enumerate(exp_cat_list):
+        if custom_exposure_radio.value == 'Custom exposure':
+            custom_name = custom_exposure_container.children[i].value
+            if custom_name:
+                excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
+                row_offset += 1
+    
 
 
 preview_chk = Checkbox(
