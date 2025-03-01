@@ -122,7 +122,7 @@ def create_footer():
     
     preview_container = HBox([
         preview_chk,
-        export_chearts_chk
+        export_charts_chk
     ], layout=Layout(width='100%', justify_content='space-around'))
     
     return VBox([
@@ -326,7 +326,7 @@ preview_chk = Checkbox(
     indent=False
 )
 
-export_chearts_chk = Checkbox(
+export_charts_chk = Checkbox(
     value=False,
     description='Export Charts as PNG',
     disabled=False,

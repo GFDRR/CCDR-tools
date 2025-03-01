@@ -13,6 +13,7 @@ import time
 import tkinter as tk
 from tkinter import filedialog
 
+import common
 from damageFunctions import FL_mortality_factor, FL_damage_factor_builtup, FL_damage_factor_agri
 from input_utils import get_adm_data
 import notebook_utils
@@ -570,7 +571,7 @@ def run_analysis_script(b):
                          for exp_cat in exp_cat_list]
                 
                 # Export charts if requested
-                if export_charts_chk.value and charts:
+                if notebook_utils.export_charts_chk.value and charts:
                     chart_dir = os.path.join(common.OUTPUT_DIR, 'charts')
                     os.makedirs(chart_dir, exist_ok=True)
                     base_filename = f"{country}_{haz_cat}_{period}"
@@ -732,12 +733,12 @@ def initialize_tool():
 
 def update_preview_availability(*args):
     """Update preview and export charts checkboxes availability based on analysis type"""
-    is_classes = apprach_selector.value == 'Classes'
+    is_classes = approach_selector.value == 'Classes'
     preview_chk.disabled = is_classes
-    export_charts_chk.disabled = is_classes
+    notebook_utils.export_charts_chk.disabled = is_classes
     if is_classes:
         preview_chk.value = False
-        export_charts_chk.value = False
+        notebook_utils.export_charts_chk.value = False
 
 # Add observer to approach selector
 approach_selector.observe(update_preview_availability, 'value')
