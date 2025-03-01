@@ -6,6 +6,7 @@ import ipywidgets as widgets
 import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
 import numpy as np
+import os
 import pandas as pd
 import seaborn as sns
 import time
@@ -431,179 +432,205 @@ def validate_input():
         
 
 def run_analysis_script(b):
-    with output:
-        output.clear_output(wait=True)
-        
-        if not validate_input():
-            return 
-
-        # Gather input values
-        country = country_dict.get(country_selector.value, False)
-        if not country:
-            print("Error: Invalid country selection.")
-            return
-        
-        # Rest of the input gathering remains the same
-        haz_cat = hazard_selector.value
-        period = period_selector.value
-        scenario = scenario_selector.value if period != '2020' else ''
-        return_periods = list(return_periods_selector.value)
-        exp_cat_list = list(exposure_selector.value)
-        exp_year = '2020'  # This is fixed as per the original script
-        adm_level = adm_level_selector.value
-        analysis_type = approach_selector.value
-        min_haz_slider = hazard_threshold_slider.value
-        
-        # Get class thresholds if applicable
-        class_edges = []
-        if analysis_type == 'Classes':
-            class_edges = [child.children[1].value for child in class_edges_table.children[:-1]]  # Exclude "Add Class" button
-        
-        # Determine exp_nam_list
-        exp_nam_list = []
-        if custom_exposure_radio.value == 'Custom exposure':
-            for i, exp_cat in enumerate(exp_cat_list):
-                custom_name = custom_exposure_container.children[i].value
-                exp_nam_list.append(custom_name if custom_name else f"{country}_{exp_cat}")
-        else:
-            exp_nam_list = [f"{country}_{exp}" for exp in exp_cat_list]
-
-        # Additional parameters
-        save_check_raster = False
-        n_cores = None
-
-        # Look up WB_REGION
-        df = pd.read_csv('countries.csv')
-        wb_region = df.loc[df['ISO_A3'] == country, 'WB_REGION'].iloc[0]
-
-        # Handle custom boundaries
-        use_custom_boundaries = custom_boundaries_radio.value == 'Custom boundaries'
-        
-        if use_custom_boundaries:
-            custom_boundaries_file_path = custom_boundaries_file.value
-            custom_code_field = custom_boundaries_id_field.value
-            custom_name_field = custom_boundaries_name_field.value
-        else:
-            custom_boundaries_file_path = None
-            custom_code_field = None
-            custom_name_field = None
-    
-        start_time = time.perf_counter()
-
-        print(f"Starting analysis for {iso_to_country[country]} ({country})...")
-        
-        # Validate exp_nam_list
-        if len(exp_nam_list) != len(exp_cat_list):
-            print("ERROR: Parameter 'exp_nam_list' should have the same length as 'exp_cat_list'")
-            return
-        
-        # Initialize the folium preview map before the loop
-        m = folium.Map(location=[0, 0], zoom_start=5, draw_control=False, scale_control=False, measure_control=False)
-
-        # Initialize variables
-        minx, miny, maxx, maxy = float('inf'), float('inf'), float('-inf'), float('-inf')
-        summary_dfs, charts, layers, colormaps = [], [], [], []
-        
-        # Prepare Excel writer
-        excel_file, gpkg_file = prepare_excel_gpkg_files(country, adm_level, haz_cat, period, scenario)
-
-        # Use ExcelWriter as a context manager
-        # Run analysis for each exposure category
-        for i in range(len(exp_cat_list)):
-            exp_cat = exp_cat_list[i]
-            exp_nam = exp_nam_list[i]
-            print(f"Running analysis for {exp_cat}...")
-            result_df = run_analysis(country, haz_type, haz_cat, period, scenario, return_periods, min_haz_slider,
-                            exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, 
-                            save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
-                            custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
-                            custom_name_field=custom_name_field, wb_region=wb_region)
+    # Disable the run button while analysis is running
+    run_button.disabled = True
+    run_button.description = "Analysis Running..."
+    try:
+        with output:
+            output.clear_output(wait=True)
             
-            if result_df is None:
-                print("Encountered Exception! Please fix issue above.")
+            if not validate_input():
+                return 
+    
+            # Gather input values
+            country = country_dict.get(country_selector.value, False)
+            if not country:
+                print("Error: Invalid country selection.")
                 return
             
-            sheet_name = prepare_sheet_name(analysis_type, return_periods, exp_cat)
-                        
-            saving_excel_and_gpgk_file(result_df, excel_file, sheet_name, gpkg_file, exp_cat)
-
-            # Create summary DataFrame
-            summary_df = create_summary_df(result_df, return_periods, exp_cat)
-            summary_dfs.append(summary_df)
-
-            if preview_chk.value:
-                # Add each result as a layer
-                layer, colormap = plot_results(result_df, exp_cat, analysis_type)
-                if layer is not None:
-                    layers.append(layer)
-                    colormaps.append(colormap)
-                    # Update the overall bounding box using result_df
-                    bounds = result_df.total_bounds
-                    minx = min(minx, bounds[0])
-                    miny = min(miny, bounds[1])
-                    maxx = max(maxx, bounds[2])
-                    maxy = max(maxy, bounds[3])
-                        
-        # Combine all summary DataFrames
-        if summary_dfs:
-            combined_summary = prepare_and_save_summary_df(summary_dfs, exp_cat_list, excel_file, return_file=True)
- 
-            # Add custom exposure information
-            excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
-            row_offset = len(combined_summary) + 4  # Start two rows below the table
-            for i, exp_cat in enumerate(exp_cat_list):
-                if custom_exposure_radio.value == 'Custom exposure':
+            # Rest of the input gathering remains the same
+            haz_cat = hazard_selector.value
+            period = period_selector.value
+            scenario = scenario_selector.value if period != '2020' else ''
+            return_periods = list(return_periods_selector.value)
+            exp_cat_list = list(exposure_selector.value)
+            exp_year = '2020'  # This is fixed as per the original script
+            adm_level = adm_level_selector.value
+            analysis_type = approach_selector.value
+            min_haz_slider = hazard_threshold_slider.value
+            
+            # Get class thresholds if applicable
+            class_edges = []
+            if analysis_type == 'Classes':
+                class_edges = [child.children[1].value for child in class_edges_table.children[:-1]]  # Exclude "Add Class" button
+            
+            # Determine exp_nam_list
+            exp_nam_list = []
+            if custom_exposure_radio.value == 'Custom exposure':
+                for i, exp_cat in enumerate(exp_cat_list):
                     custom_name = custom_exposure_container.children[i].value
-                    if custom_name:
-                        excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
-                        row_offset += 1
-
-        # Generate charts only for Function approach
-        if analysis_type == "Function" and preview_chk.value:
-            colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
-            charts = [create_eai_chart(combined_summary, exp_cat, period, scenario, colors[exp_cat]) 
-                     for exp_cat in exp_cat_list]
-        else:
-            charts = []
-
-        print(f"Analysis completed in {time.perf_counter() - start_time:.2f} seconds")
-        print(f"Results saved to Excel file: {excel_file}")
-        print(f"Results saved to GeoPackage file: {gpkg_file}")
-
-        # Plot results if preview is checked
-        if preview_chk.value and minx != float('inf'):
-            center_lat = (miny + maxy) / 2
-            center_lon = (minx + maxx) / 2
-            m.location = [center_lat, center_lon]
-            m.fit_bounds([[miny, minx], [maxy, maxx]])
-            print("Plotting results preview as map...")
-
-            # Add layers to the map
-            for layer in layers:
-                layer.add_to(m)
-
-            # Add colormaps to the map
-            for colormap in colormaps:
-                colormap.add_to(m)
-
-            # Create a custom layer control
-            folium.LayerControl(position='topright', collapsed=False).add_to(m)
-
-            # Add the MiniMap
-            MiniMap(toggle_display=True, position='bottomright').add_to(m)
-
-            # Add the Fullscreen button
-            Fullscreen(position='bottomleft').add_to(m)
-
-            # Update the map_widget with the new map
-            map_widget.value = m._repr_html_()
+                    exp_nam_list.append(custom_name if custom_name else f"{country}_{exp_cat}")
+            else:
+                exp_nam_list = [f"{country}_{exp}" for exp in exp_cat_list]
+    
+            # Additional parameters
+            save_check_raster = False
+            n_cores = None
+    
+            # Look up WB_REGION
+            df = pd.read_csv('countries.csv')
+            wb_region = df.loc[df['ISO_A3'] == country, 'WB_REGION'].iloc[0]
+    
+            # Handle custom boundaries
+            use_custom_boundaries = custom_boundaries_radio.value == 'Custom boundaries'
+            
+            if use_custom_boundaries:
+                custom_boundaries_file_path = custom_boundaries_file.value
+                custom_code_field = custom_boundaries_id_field.value
+                custom_name_field = custom_boundaries_name_field.value
+            else:
+                custom_boundaries_file_path = None
+                custom_code_field = None
+                custom_name_field = None
+        
+            start_time = time.perf_counter()
+    
+            print(f"Starting analysis for {iso_to_country[country]} ({country})...")
+            
+            # Validate exp_nam_list
+            if len(exp_nam_list) != len(exp_cat_list):
+                print("ERROR: Parameter 'exp_nam_list' should have the same length as 'exp_cat_list'")
+                return
+            
+            # Initialize the folium preview map before the loop
+            m = folium.Map(location=[0, 0], zoom_start=5, draw_control=False, scale_control=False, measure_control=False)
+    
+            # Initialize variables
+            minx, miny, maxx, maxy = float('inf'), float('inf'), float('-inf'), float('-inf')
+            summary_dfs, charts, layers, colormaps = [], [], [], []
+            
+            # Prepare Excel writer
+            excel_file, gpkg_file = prepare_excel_gpkg_files(country, adm_level, haz_cat, period, scenario)
+    
+            # Use ExcelWriter as a context manager
+            # Run analysis for each exposure category
+            for i in range(len(exp_cat_list)):
+                exp_cat = exp_cat_list[i]
+                exp_nam = exp_nam_list[i]
+                print(f"Running analysis for {exp_cat}...")
+                result_df = run_analysis(country, haz_type, haz_cat, period, scenario, return_periods, min_haz_slider,
+                                exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, 
+                                save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
+                                custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
+                                custom_name_field=custom_name_field, wb_region=wb_region)
                 
-            with chart_output:
-                clear_output(wait=True)
-                # Display charts only once
-                for chart in charts:
-                    display(chart)
-                    plt.close(chart)  # Close the figure after displaying
+                if result_df is None:
+                    print("Encountered Exception! Please fix issue above.")
+                    return
+                
+                sheet_name = prepare_sheet_name(analysis_type, return_periods, exp_cat)
+                            
+                saving_excel_and_gpgk_file(result_df, excel_file, sheet_name, gpkg_file, exp_cat)
+    
+                # Create summary DataFrame
+                summary_df = create_summary_df(result_df, return_periods, exp_cat)
+                summary_dfs.append(summary_df)
+    
+                if preview_chk.value:
+                    # Add each result as a layer
+                    layer, colormap = plot_results(result_df, exp_cat, analysis_type)
+                    if layer is not None:
+                        layers.append(layer)
+                        colormaps.append(colormap)
+                        # Update the overall bounding box using result_df
+                        bounds = result_df.total_bounds
+                        minx = min(minx, bounds[0])
+                        miny = min(miny, bounds[1])
+                        maxx = max(maxx, bounds[2])
+                        maxy = max(maxy, bounds[3])
+                            
+            # Combine all summary DataFrames
+            if summary_dfs:
+                combined_summary = prepare_and_save_summary_df(summary_dfs, exp_cat_list, excel_file, return_file=True)
+     
+                # Add custom exposure information
+                excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
+                row_offset = len(combined_summary) + 4  # Start two rows below the table
+                for i, exp_cat in enumerate(exp_cat_list):
+                    if custom_exposure_radio.value == 'Custom exposure':
+                        custom_name = custom_exposure_container.children[i].value
+                        if custom_name:
+                            excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
+                            row_offset += 1
+    
+            # Generate charts only for Function approach
+            if analysis_type == "Function" and preview_chk.value:
+                colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
+                charts = [create_eai_chart(combined_summary, exp_cat, period, scenario, colors[exp_cat]) 
+                         for exp_cat in exp_cat_list]
+                
+                # Export charts if requested
+                if export_charts_chk.value and charts:
+                    chart_dir = os.path.join(common.OUTPUT_DIR, 'charts')
+                    os.makedirs(chart_dir, exist_ok=True)
+                    base_filename = f"{country}_{haz_cat}_{period}"
+                    if period != '2020':
+                        base_filename += f"_{scenario}"
+                    
+                    for i, (chart, exp_cat) in enumerate(zip(charts, exp_cat_list)):
+                        chart_filename = os.path.join(chart_dir, f"{base_filename}_{exp_cat}.png")
+                        chart.savefig(chart_filename, dpi=300, bbox_inches='tight')
+                        print(f"Saved chart to: {chart_filename}")
+ 
+            else:
+                charts = []
+    
+            print(f"Analysis completed in {time.perf_counter() - start_time:.2f} seconds")
+            print(f"Results saved to Excel file: {excel_file}")
+            print(f"Results saved to GeoPackage file: {gpkg_file}")
+    
+            # Plot results if preview is checked
+            if preview_chk.value and minx != float('inf'):
+                center_lat = (miny + maxy) / 2
+                center_lon = (minx + maxx) / 2
+                m.location = [center_lat, center_lon]
+                m.fit_bounds([[miny, minx], [maxy, maxx]])
+                print("Plotting results preview as map...")
+    
+                # Add layers to the map
+                for layer in layers:
+                    layer.add_to(m)
+    
+                # Add colormaps to the map
+                for colormap in colormaps:
+                    colormap.add_to(m)
+    
+                # Create a custom layer control
+                folium.LayerControl(position='topright', collapsed=False).add_to(m)
+    
+                # Add the MiniMap
+                MiniMap(toggle_display=True, position='bottomright').add_to(m)
+    
+                # Add the Fullscreen button
+                Fullscreen(position='bottomleft').add_to(m)
+    
+                # Update the map_widget with the new map
+                map_widget.value = m._repr_html_()
+                    
+                with chart_output:
+                    clear_output(wait=True)
+                    # Display charts only once
+                    for chart in charts:
+                        display(chart)
+                        plt.close(chart)  # Close the figure after displaying
+    
+    except Exception as e:
+        print(f"An error occurred during analysis: {str(e)}")
+    finally:
+        # Re-enable the run button and restore its original text
+        run_button.disabled = False
+        run_button.description = "Run Analysis"
+        
 
 run_button.on_click(run_analysis_script)
 
@@ -704,10 +731,13 @@ def initialize_tool():
     update_preview_availability()
 
 def update_preview_availability(*args):
-    """Update preview checkbox availability based on analysis type"""
-    preview_chk.disabled = approach_selector.value == 'Classes'
-    if approach_selector.value == 'Classes':
+    """Update preview and export charts checkboxes availability based on analysis type"""
+    is_classes = apprach_selector.value == 'Classes'
+    preview_chk.disabled = is_classes
+    export_charts_chk.disabled = is_classes
+    if is_classes:
         preview_chk.value = False
+        export_charts_chk.value = False
 
 # Add observer to approach selector
 approach_selector.observe(update_preview_availability, 'value')
