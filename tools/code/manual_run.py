@@ -9,6 +9,7 @@ from runAnalysis import (
 def main():
     # Defining the initial parameters
     country         = 'PHL'			  # ISO3166-a3 code
+    haz_type        = 'FL'            # Hazard type: 'FL', 'TC'
     haz_cat         = 'FLUVIAL_UNDEFENDED' 	  # Hazard type:'FLUVIAL_UNDEFENDED'; 'FLUVIAL_DEFENDED', 'PLUVIAL_DEFENDED'; 'COASTAL_UNDEFENDED'; 'COASTAL_DEFENDED'
     period          = '2020'			  # Period of the analysis: '2020', '2030', '2050', '2080'
     scenario        = ''		  	  # Climate scenario: 'SSP1_2.6', 'SSP2_4.5', 'SSP3_7.0', 'SSP5_8.5'. Empty '' if period = 2020.
@@ -39,7 +40,7 @@ def main():
         # Defining the list variable to pass to run_analysis
         exp_cat = exp_cat_list[i]
         exp_nam = exp_nam_list[i]
-        result_df = run_analysis(country, haz_cat, period, scenario, return_periods, min_haz_slider,
+        result_df = run_analysis(country, haz_type, haz_cat, period, scenario, return_periods, min_haz_slider,
                    exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, save_check_raster, n_cores)
 
         if result_df is None:

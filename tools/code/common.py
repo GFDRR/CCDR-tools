@@ -35,3 +35,45 @@ wb_to_region = {
     'LCR': 'LAC',           # Latin America and Caribbean
     'Other': 'GLOBAL',      # North America, Europe, Japan, Korea, Australia and New Zealand
 }
+
+# Tropical cyclone regions list with constituent countries
+tc_region_list = {
+    'NA1': [  # Caribbean and Mexico
+        'ABW', 'AIA', 'ATG', 'BHS', 'BLZ', 'BRB', 'CUB', 'CYM', 'DMA', 'DOM',
+        'GRD', 'GTM', 'HND', 'HTI', 'JAM', 'KNA', 'LCA', 'MEX', 'MSR', 'NIC',
+        'PRI', 'SLV', 'TCA', 'TTO', 'VCT', 'VGB', 'VIR'
+    ],
+    'NA2': [  # USA and Canada
+        'CAN', 'USA'
+    ],
+    'NI': [   # North Indian
+        'BGD', 'IND', 'LKA', 'MDV', 'MMR', 'OMN', 'PAK', 'YEM'
+    ],
+    'OC': [   # Oceania
+        'AUS', 'COK', 'FJI', 'FSM', 'KIR', 'MHL', 'NCL', 'NFK', 'NIU', 'NRU',
+        'NZL', 'PCN', 'PLW', 'PNG', 'SLB', 'TKL', 'TON', 'TUV', 'VUT', 'WLF',
+        'WSM'
+    ],
+    'SI': [   # South Indian
+        'COM', 'MDG', 'MOZ', 'MUS', 'MYT', 'REU', 'SYC', 'TZA'
+    ],
+    'WP1': [  # South East Asia
+        'BRN', 'IDN', 'KHM', 'LAO', 'MYS', 'SGP', 'THA', 'TLS', 'VNM'
+    ],
+    'WP2': [  # Philippines and Taiwan
+        'PHL', 'TWN'
+    ],
+    'WP3': [  # China Mainland
+        'CHN', 'HKG', 'MAC'
+    ],
+    'WP4': [  # North West Pacific
+        'JPN', 'KOR', 'PRK'
+    ]
+}
+
+# Create the reverse mapping for TC regions (country to region)
+tc_region_mapping = {
+    country: region
+    for region, countries in tc_region_list.items()
+    for country in countries
+}
