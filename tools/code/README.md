@@ -1,15 +1,14 @@
-# FATHOM 3 RISK ANALYTICS
+# RDL-CCDR RISK ANALYTICS
 
-The program runs in jupyter notebook. Launch GUI_F3.ipynb and follow instructions.
+The program runs in jupyter notebook. Launch GUI.ipynb and follow instructions.
 
 The analysis runs on all selected exposed categories, in sequence, and save results as geopackage and csv. Also plots preview of results and charts.
 
 The processing can take from less than a minute to a few minutes, sepending on the size of the country, computer power, and number of options selected. 
-E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM, 3 exposure categories: below 100 seconds.
+E.g. for Flood analysis in Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM, 3 exposure categories: below 100 seconds.
 
 # SETUP
 We strongly recommend using the mamba package manager, but conda should work too.
-
 
 Environment creation:
 
@@ -34,10 +33,10 @@ Default input data are sourced by the program. Custom layers can be used, just p
     DATA_DIR/HZD: Hazard layers as '.tif' using CRS 4326
     DATA_DIR/EXP: Exposure layers as '.tif' using CRS 4326
 ```
-- To name datasets, use ISO_A3 country code followed by specific data identifier (default applies).
+- To name datasets, use ISO_A3 country code followed by specific data identifier (default applies). Examples: 
 
 ```
-    DATA_DIR/HZD/SEN_FL_RP10.tif
+    DATA_DIR/HZD/SEN/FLUVIAL_UNDEFENDED/2020/1in20.tif
     DATA_DIR/EXP/SEN_POP.tif
 ```
 - Read more about data formatting in the [documentation](https://gfdrr.github.io/CCDR-tools/docs/tool-setup.html).
@@ -57,7 +56,7 @@ Check preview results to generate map output and output charts.
 
 
 ### Manual run
-You can also use manual_run.py to run the program without jupyter notebook.
+You can also use manual_run.py to run the program without jupyter notebook. Example for Flood analysis.
 
 Edit the `manual_run.py` file to specify:
 - **country (`country`)**: [`ISO3166_a3`](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3) country code
