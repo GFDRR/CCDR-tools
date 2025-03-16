@@ -74,9 +74,7 @@ def merge_dfs(df_left, df_right, on_columns=['RP', 'Freq', 'Ex_freq'], how='oute
 
 
 # Process exposure data
-def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder, wb_region):
-    exp_ras = None
-    damage_factor = None
+def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder):
 
     try:
         if exp_nam is not None:
@@ -223,7 +221,7 @@ def run_analysis(
 
         # Handle exposure data
         print(f"Processing exposure data for {exp_cat}")
-        exp_ras, damage_factor = process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder, wb_region)
+        exp_ras, damage_factor = process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder)
 
         # Importing the exposure data
         # Open the raster dataset
