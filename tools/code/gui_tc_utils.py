@@ -225,7 +225,7 @@ select_file_button = notebook_utils.select_file_button
 
 # Custom ADM Functions
 def select_file(b):
-    notebook_utils.select_file(b, custom_boundaries_file)
+    notebook_utils.select_file(b, update_preview_map)
 
 select_file_button.on_click(select_file)
 
