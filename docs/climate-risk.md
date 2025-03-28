@@ -23,26 +23,38 @@ Climate indices are standardized measurements used to track and summarize comple
 
 In the context of disaster risk, climate indices play a critical role in understanding and anticipating the impact of climate-related hazards. These indices help assess the likelihood of extreme weather events such as droughts, floods, hurricanes, and heatwaves by tracking patterns in atmospheric and oceanic conditions that influence climate variability. Projected changes of climate indices against  baseline (anomalies) can be used to infer changes in natural hazard frequency and intensity. 
 
-```{table} Climate variables underlying hazard projections
-:name: climate_indices
-**Hazard** | **Associated climate indices** | **Unit of measurement**
----:|---|---
-Floods and Landslides | Rainfall > 10 mm | Days per year
-Floods and Landslides | Consecutive wet days | Days per year
-Floods and Landslides | Maximum 5-day precipitation | mm
-Floods and Landslides | Extremely wet days | mm
-Coastal floods | Sea Level Rise	| m
-Drought	| Annual SPEI | [-]
-Drought	| Consecutive dry days | Days per year
-Heat stress | Heat index (WBGT or UTCI) for *moderate* or *extreme* stress | Days per year
-```
+# Climate indices
 
-Given that specific unit of measurement varies across climate indices, in order to give a comparable metric of change the projected anomalies against the baseline are expressed in terms of Standard Deviation (SD) of the anomaly compared to historical variability [E3CI, 2020](https://www.ifabfoundation.org/e3ci/).
-Data from climate models released under the [IPCC Sixth Assessment Report (AR) framework](https://www.ipcc.ch/assessment-report/ar6/) are used to establish estimates of baseline and future projected climate anomalies. ARs are supported by coordinated climate modeling efforts referred to as Coupled Model Intercomparison Projects (**CMIP**).
+The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated climate modelling (**CMIP6**).
+The [Climate Indices tools](run_ci) allow to compute climate indices for the desired sub-national boundary level.
+The table below summarises the relationship between a few climate indices and associated hazards. 
 
-The analysis relies on **CMIP6** data for modeling into the future, and takes into account four climate change scenarios, referred to as Shared Socioeconomic Pathways (SSPs) in CMIP6. These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b).
+|   Name   |                  Description                  |  Related hazard  |
+|:--------:|:---------------------------------------------:|:----------------:|
+| CWD      | Consecutive Wet Days [days/month]             | Flood, Landslide |
+| R20mm    | Days with rainfall > 20 mm [days]             | Flood, Landslide |
+| Rx5day   | Maximum 5-day precipitation [mm]              | Flood, Landslide |
+| R99p     | Extremely wet day precipitation [days]  	   | Flood, Landslide |
+| slr      | Sea Level Rise [m]                            | Coastal floods   |
+| CDD      | Consecutive Dry Days [days/month]             |      Drought     |
+| SPEI     | Standard Precipitation-EvapoT Index [-]       |      Drought     |
+| WBGT/UTCI | Composite heat index [°C]                    |       Heat       |
+| tas      | Mean surface temperature [°C]                 |       Heat       |
+| hi35     | Days with heat index above 35°C [Days]        |       Heat       |
 
-Guidance for aligned scenario selection is provided by the shared [**CCDR Global Climate Scenarios note**](https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Global%20Climate%20Scenarios.pdf).
+Given that specific unit of measurement varies across climate indices, these could be hard to compare and combine. In some cases, it's useful to express the projected anomalies in terms of % change in relation to historical variability.
+Data from climate models released under the [IPCC Sixth Assessment Report (AR) framework](https://www.ipcc.ch/assessment-report/ar6/) are used to establish estimates of baseline and future projected climate anomalies.
+
+ARs are supported by coordinated climate modeling efforts referred to as Coupled Model Intercomparison Projects (**CMIP**). The most recent is version is **v6**, and it includes 
+modeling of future climate scenarios referred to as Shared Socioeconomic Pathways (SSPs). These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b).
+
+## Dimensions of climate indices:
+   - **SSPs:** scenarios SSP1/RCP2.6, SSP2/RCP4.5, SSP3/RCP7.0, SSP5/RCP8
+   - **Models ensemble range:** percentiles p10, p50, p90
+   - **Period:** Historical (1981-2015), [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]
+   - **Time scale:** Monthly, Seasonal, Annual 
+
+Additional Guidance for aligned scenario selection is provided by the shared [**CCDR Global Climate Scenarios note**](https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Global%20Climate%20Scenarios.pdf).
 
 ```{figure} images/climate_scenarios.png
 ---
@@ -55,12 +67,15 @@ Recommended CCDR Global Scenarios and characteristics for adaptation and develop
 - **SSP2-4.5 / RCP4.5:** emissions continue to increase through the end of the century, with resulting warming of 3.8-4.2 °C by 2100.
 - **SSP3-7.0 / RCP8.5:** models describe a large emission variability for this scenario. Warming is estimated at 3.9-4.6 °C by 2100.
 
-Each climate scenarios predicts different spatial patterns, resulting into a range of possible futures in terms of intensities, and frequencies of natural hazards. Key climate variables connected to the changing patterns of precipitation and temperature are collected from the [Climate Change Knowledge Portal](https://climateknowledgeportal.worldbank.org/) and the [Copernicus Data Store](https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6).
+## Data sources
+The climate indices are primarily sourced from the [**Cimate Change Knowledge Portal**](https://climateknowledgeportal.worldbank.org) by the World Bank, which provides a large selection of climate indices for both trends and extremes, accessible via raster download or API.
+Additional indices could also be obtained from external sources.
 
-```{seealso}
-- The [**Climate Knowledge Portal**](https://climateknowledgeportal.worldbank.org) by the World Bank provides a large selection of climate indices for both trends and extremes as table, geodata and charts.
-- The [**Climate analytics repository**](https://bennyistanto.github.io/gost-climate) by the Global Operational Support Team (**GOST**) describes a list of data provider, derived products, step-by-step to do the analysis to produce climate analytics.
-- The [**CLIMADA project**](https://github.com/CLIMADA-project/climada_python) by ETH Zurich provides global coverage of major climate-related extreme-weather hazards at high resolution via data API.
-- The [**European Extreme Events Climate Index**](https://www.ifabfoundation.org/e3ci/) based on the [Actuaries Climate Index (ACI)](https://actuariesclimateindex.org) offers an ensemble of indices to describe different types of weather-induced hazards and their severity.
-```
+| **Name** | **Developer** | **Description** | **Data format** |
+| --- |:---:|---|---|
+| [Copernicus Climate Data Store](https://cds.climate.copernicus.eu) | EU | Large  collection of global variables and indices | Geodata |
+| [Climate analytics repository](https://bennyistanto.github.io/gost-climate) | GOST | Full selection of variables, model members, periods | Geodata |
+| [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information) | IPCC | Selection of climate variables for a range of periods and scenario | Table, geodata, maps, charts |
+| [Global Drought Indices](https://data.ceda.ac.uk/badc/hydro-jules/data/Global_drought_indices) | CEDA | Global high-resolution drought datasets from 1981-2022 | Geodata | 
+      
 
