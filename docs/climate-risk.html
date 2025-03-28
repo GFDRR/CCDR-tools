@@ -208,13 +208,6 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="climate-indices.html">
-                        Climate indices
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="rdl.html">
                         Risk Data Library
                       </a>
@@ -411,13 +404,6 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="climate-indices.html">
-                        Climate indices
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="rdl.html">
                         Risk Data Library
                       </a>
@@ -542,6 +528,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="intro-vulnerability.html">Vulnerability</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro-risk.html">Impact and risk</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Climate change and disaster risk</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Global Risk Datasets</span></p>
 <ul class="nav bd-sidenav">
@@ -555,7 +542,6 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
-<li class="toctree-l1"><a class="reference internal" href="climate-indices.html">Climate indices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="external-data.html">Additional data sources</a></li>
 </ul>
@@ -747,10 +733,34 @@ title="Print to PDF"
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#climate-indices">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Climate change and disaster risk
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#climate-indices">
+     Climate indices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
    Climate indices
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dimensions-of-climate-indices">
+     Dimensions of climate indices:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-sources">
+     Data sources
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -781,53 +791,76 @@ title="Print to PDF"
 <h2>Climate indices<a class="headerlink" href="#climate-indices" title="Permalink to this heading">#</a></h2>
 <p>Climate indices are standardized measurements used to track and summarize complex climate patterns over time. These indices distill vast amounts of climate data, such as temperature, precipitation, and atmospheric pressure, into simpler, more understandable metrics. By providing insights into trends and variations in these phenomena, climate indices assist in predicting weather patterns, understanding climate variability, and informing climate-related decisions across various sectors.</p>
 <p>In the context of disaster risk, climate indices play a critical role in understanding and anticipating the impact of climate-related hazards. These indices help assess the likelihood of extreme weather events such as droughts, floods, hurricanes, and heatwaves by tracking patterns in atmospheric and oceanic conditions that influence climate variability. Projected changes of climate indices against  baseline (anomalies) can be used to infer changes in natural hazard frequency and intensity.</p>
-<table class="table" id="id2">
-<caption><span class="caption-number">Table 1 </span><span class="caption-text">Climate variables underlying hazard projections</span><a class="headerlink" href="#id2" title="Permalink to this table">#</a></caption>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="id2">
+<h1>Climate indices<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h1>
+<p>The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated climate modelling (<strong>CMIP6</strong>).
+The <a class="reference internal" href="run_ci.html#run-ci"><span class="std std-ref">Climate Indices tools</span></a> allow to compute climate indices for the desired sub-national boundary level.
+The table below summarises the relationship between a few climate indices and associated hazards.</p>
+<table class="table">
 <thead>
-<tr class="row-odd"><th class="head text-right"><p><strong>Hazard</strong></p></th>
-<th class="head"><p><strong>Associated climate indices</strong></p></th>
-<th class="head"><p><strong>Unit of measurement</strong></p></th>
+<tr class="row-odd"><th class="head text-center"><p>Name</p></th>
+<th class="head text-center"><p>Description</p></th>
+<th class="head text-center"><p>Related hazard</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-right"><p>Floods and Landslides</p></td>
-<td><p>Rainfall &gt; 10 mm</p></td>
-<td><p>Days per year</p></td>
+<tr class="row-even"><td class="text-center"><p>CWD</p></td>
+<td class="text-center"><p>Consecutive Wet Days [days/month]</p></td>
+<td class="text-center"><p>Flood, Landslide</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p>Floods and Landslides</p></td>
-<td><p>Consecutive wet days</p></td>
-<td><p>Days per year</p></td>
+<tr class="row-odd"><td class="text-center"><p>R20mm</p></td>
+<td class="text-center"><p>Days with rainfall &gt; 20 mm [days]</p></td>
+<td class="text-center"><p>Flood, Landslide</p></td>
 </tr>
-<tr class="row-even"><td class="text-right"><p>Floods and Landslides</p></td>
-<td><p>Maximum 5-day precipitation</p></td>
-<td><p>mm</p></td>
+<tr class="row-even"><td class="text-center"><p>Rx5day</p></td>
+<td class="text-center"><p>Maximum 5-day precipitation [mm]</p></td>
+<td class="text-center"><p>Flood, Landslide</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p>Floods and Landslides</p></td>
-<td><p>Extremely wet days</p></td>
-<td><p>mm</p></td>
+<tr class="row-odd"><td class="text-center"><p>R99p</p></td>
+<td class="text-center"><p>Extremely wet day precipitation [days]</p></td>
+<td class="text-center"><p>Flood, Landslide</p></td>
 </tr>
-<tr class="row-even"><td class="text-right"><p>Coastal floods</p></td>
-<td><p>Sea Level Rise</p></td>
-<td><p>m</p></td>
+<tr class="row-even"><td class="text-center"><p>slr</p></td>
+<td class="text-center"><p>Sea Level Rise [m]</p></td>
+<td class="text-center"><p>Coastal floods</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p>Drought</p></td>
-<td><p>Annual SPEI</p></td>
-<td><p>[-]</p></td>
+<tr class="row-odd"><td class="text-center"><p>CDD</p></td>
+<td class="text-center"><p>Consecutive Dry Days [days/month]</p></td>
+<td class="text-center"><p>Drought</p></td>
 </tr>
-<tr class="row-even"><td class="text-right"><p>Drought</p></td>
-<td><p>Consecutive dry days</p></td>
-<td><p>Days per year</p></td>
+<tr class="row-even"><td class="text-center"><p>SPEI</p></td>
+<td class="text-center"><p>Standard Precipitation-EvapoT Index [-]</p></td>
+<td class="text-center"><p>Drought</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p>Heat stress</p></td>
-<td><p>Heat index (WBGT or UTCI) for <em>moderate</em> or <em>extreme</em> stress</p></td>
-<td><p>Days per year</p></td>
+<tr class="row-odd"><td class="text-center"><p>WBGT/UTCI</p></td>
+<td class="text-center"><p>Composite heat index [°C]</p></td>
+<td class="text-center"><p>Heat</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>tas</p></td>
+<td class="text-center"><p>Mean surface temperature [°C]</p></td>
+<td class="text-center"><p>Heat</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>hi35</p></td>
+<td class="text-center"><p>Days with heat index above 35°C [Days]</p></td>
+<td class="text-center"><p>Heat</p></td>
 </tr>
 </tbody>
 </table>
-<p>Given that specific unit of measurement varies across climate indices, in order to give a comparable metric of change the projected anomalies against the baseline are expressed in terms of Standard Deviation (SD) of the anomaly compared to historical variability <a class="reference external" href="https://www.ifabfoundation.org/e3ci/">E3CI, 2020</a>.
-Data from climate models released under the <a class="reference external" href="https://www.ipcc.ch/assessment-report/ar6/">IPCC Sixth Assessment Report (AR) framework</a> are used to establish estimates of baseline and future projected climate anomalies. ARs are supported by coordinated climate modeling efforts referred to as Coupled Model Intercomparison Projects (<strong>CMIP</strong>).</p>
-<p>The analysis relies on <strong>CMIP6</strong> data for modeling into the future, and takes into account four climate change scenarios, referred to as Shared Socioeconomic Pathways (SSPs) in CMIP6. These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b).</p>
-<p>Guidance for aligned scenario selection is provided by the shared <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Global%20Climate%20Scenarios.pdf"><strong>CCDR Global Climate Scenarios note</strong></a>.</p>
+<p>Given that specific unit of measurement varies across climate indices, these could be hard to compare and combine. In some cases, it’s useful to express the projected anomalies in terms of % change in relation to historical variability.
+Data from climate models released under the <a class="reference external" href="https://www.ipcc.ch/assessment-report/ar6/">IPCC Sixth Assessment Report (AR) framework</a> are used to establish estimates of baseline and future projected climate anomalies.</p>
+<p>ARs are supported by coordinated climate modeling efforts referred to as Coupled Model Intercomparison Projects (<strong>CMIP</strong>). The most recent is version is <strong>v6</strong>, and it includes
+modeling of future climate scenarios referred to as Shared Socioeconomic Pathways (SSPs). These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b).</p>
+<section id="dimensions-of-climate-indices">
+<h2>Dimensions of climate indices:<a class="headerlink" href="#dimensions-of-climate-indices" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>SSPs:</strong> scenarios SSP1/RCP2.6, SSP2/RCP4.5, SSP3/RCP7.0, SSP5/RCP8</p></li>
+<li><p><strong>Models ensemble range:</strong> percentiles p10, p50, p90</p></li>
+<li><p><strong>Period:</strong> Historical (1981-2015), [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]</p></li>
+<li><p><strong>Time scale:</strong> Monthly, Seasonal, Annual</p></li>
+</ul>
+<p>Additional Guidance for aligned scenario selection is provided by the shared <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Global%20Climate%20Scenarios.pdf"><strong>CCDR Global Climate Scenarios note</strong></a>.</p>
 <figure class="align-center" id="id3">
 <a class="reference internal image-reference" href="../_images/climate_scenarios.png"><img alt="../_images/climate_scenarios.png" src="../_images/climate_scenarios.png" style="width: 100%;" /></a>
 <figcaption>
@@ -839,16 +872,43 @@ Data from climate models released under the <a class="reference external" href="
 <li><p><strong>SSP2-4.5 / RCP4.5:</strong> emissions continue to increase through the end of the century, with resulting warming of 3.8-4.2 °C by 2100.</p></li>
 <li><p><strong>SSP3-7.0 / RCP8.5:</strong> models describe a large emission variability for this scenario. Warming is estimated at 3.9-4.6 °C by 2100.</p></li>
 </ul>
-<p>Each climate scenarios predicts different spatial patterns, resulting into a range of possible futures in terms of intensities, and frequencies of natural hazards. Key climate variables connected to the changing patterns of precipitation and temperature are collected from the <a class="reference external" href="https://climateknowledgeportal.worldbank.org/">Climate Change Knowledge Portal</a> and the <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6">Copernicus Data Store</a>.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<ul class="simple">
-<li><p>The <a class="reference external" href="https://climateknowledgeportal.worldbank.org"><strong>Climate Knowledge Portal</strong></a> by the World Bank provides a large selection of climate indices for both trends and extremes as table, geodata and charts.</p></li>
-<li><p>The <a class="reference external" href="https://bennyistanto.github.io/gost-climate"><strong>Climate analytics repository</strong></a> by the Global Operational Support Team (<strong>GOST</strong>) describes a list of data provider, derived products, step-by-step to do the analysis to produce climate analytics.</p></li>
-<li><p>The <a class="reference external" href="https://github.com/CLIMADA-project/climada_python"><strong>CLIMADA project</strong></a> by ETH Zurich provides global coverage of major climate-related extreme-weather hazards at high resolution via data API.</p></li>
-<li><p>The <a class="reference external" href="https://www.ifabfoundation.org/e3ci/"><strong>European Extreme Events Climate Index</strong></a> based on the <a class="reference external" href="https://actuariesclimateindex.org">Actuaries Climate Index (ACI)</a> offers an ensemble of indices to describe different types of weather-induced hazards and their severity.</p></li>
-</ul>
-</div>
+</section>
+<section id="data-sources">
+<h2>Data sources<a class="headerlink" href="#data-sources" title="Permalink to this heading">#</a></h2>
+<p>The climate indices are primarily sourced from the <a class="reference external" href="https://climateknowledgeportal.worldbank.org"><strong>Cimate Change Knowledge Portal</strong></a> by the World Bank, which provides a large selection of climate indices for both trends and extremes, accessible via raster download or API.
+Additional indices could also be obtained from external sources.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Name</strong></p></th>
+<th class="head text-center"><p><strong>Developer</strong></p></th>
+<th class="head"><p><strong>Description</strong></p></th>
+<th class="head"><p><strong>Data format</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://cds.climate.copernicus.eu">Copernicus Climate Data Store</a></p></td>
+<td class="text-center"><p>EU</p></td>
+<td><p>Large  collection of global variables and indices</p></td>
+<td><p>Geodata</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://bennyistanto.github.io/gost-climate">Climate analytics repository</a></p></td>
+<td class="text-center"><p>GOST</p></td>
+<td><p>Full selection of variables, model members, periods</p></td>
+<td><p>Geodata</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://interactive-atlas.ipcc.ch/regional-information">IPCC atlas</a></p></td>
+<td class="text-center"><p>IPCC</p></td>
+<td><p>Selection of climate variables for a range of periods and scenario</p></td>
+<td><p>Table, geodata, maps, charts</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://data.ceda.ac.uk/badc/hydro-jules/data/Global_drought_indices">Global Drought Indices</a></p></td>
+<td class="text-center"><p>CEDA</p></td>
+<td><p>Global high-resolution drought datasets from 1981-2022</p></td>
+<td><p>Geodata</p></td>
+</tr>
+</tbody>
+</table>
+<p></p>
 </section>
 </section>
 
@@ -910,10 +970,34 @@ Data from climate models released under the <a class="reference external" href="
 </div>
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#climate-indices">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Climate change and disaster risk
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#climate-indices">
+     Climate indices
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
    Climate indices
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dimensions-of-climate-indices">
+     Dimensions of climate indices:
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-sources">
+     Data sources
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
