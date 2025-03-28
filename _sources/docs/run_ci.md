@@ -49,7 +49,7 @@ Data are sourced at 0.25° resolution from the [World Bank Climate Knowledge Por
     ```
 - Next select the climate index to extract, then the years of interest. Drag mouse for multiple selection.
 
-    ```{figure} images/GUI_CI_selection2.png
+    ```{figure} images/GUI_CI_selection_year.png
     ---
     width: 50%
     align: center
@@ -74,7 +74,7 @@ Data are sourced at 0.25° resolution from the [World Bank Climate Knowledge Por
 ### Projections Anomaly Visualization Tool
 
 - Select the country first. Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).
-    ```{figure} images/GUI_CI_boundaries.png
+    ```{figure} images/GUI_CI_boundaries2.png
     ---
     width: 100%
     align: center
