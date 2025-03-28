@@ -1,4 +1,4 @@
-# Flood analysis tool
+# Flood Analytics
 
 ## Input data management
 
