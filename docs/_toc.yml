@@ -19,11 +19,16 @@ parts:
         - file: docs/global-exposure
         - file: docs/global-vulnerability
         - file: docs/disaster-data
+        - file: docs/climate-data
         - file: docs/rdl
         - file: docs/external-data
   - caption: Disaster Risk Analytics
     chapters:
       - file: docs/tool-setup
+        sections:
+          - file: docs/run_fl
+          - file: docs/run_tc
+          - file: docs/run_ci
       - file: docs/validation
       - file: docs/risk-poverty
       - file: docs/climate-indices
