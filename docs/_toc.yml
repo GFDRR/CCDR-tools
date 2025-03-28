@@ -31,7 +31,6 @@ parts:
           - file: docs/run_ci
       - file: docs/validation
       - file: docs/risk-poverty
-      - file: docs/climate-indices
       - file: docs/presentation
       - file: docs/utility
         sections:
