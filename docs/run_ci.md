@@ -8,8 +8,8 @@ Results can be exported as pictures and geodata.
 
 There are two notebooks for the visualisation and extraction of climate indices
 
-- Historical Timeseries Visualization Tool: visualize and extract mean annual values of climate indices for historical period (1950-2023) at country level.
-- Projections Anomaly Visualization Tool: visualize historical mean and projected anomalies for 20-year periods up to end of the century.
+- **Historical Timeseries Visualization Tool**: visualize and extract mean annual values of climate indices for historical period (1950-2023) at country level.
+- **Projections Anomaly Visualization Tool**: visualize historical mean and projected anomalies for 20-year periods up to end of the century.
 
 ## Reference Guide
 
