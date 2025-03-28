@@ -51,7 +51,7 @@ Data are sourced at 0.25° resolution from the [World Bank Climate Knowledge Por
 
     ```{figure} images/GUI_CI_selection2.png
     ---
-    width: 30%
+    width: 50%
     align: center
     ---
     ```
@@ -84,7 +84,7 @@ Data are sourced at 0.25° resolution from the [World Bank Climate Knowledge Por
 
     ```{figure} images/GUI_CI_selection.png
     ---
-    width: 100%
+    width: 50%
     align: center
     ---
     ```
