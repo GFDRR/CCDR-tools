@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Tropical cyclone analysis tool &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>Tropical Cyclone Analytics &#8212; Climate &amp; Disaster Risk Screening Tools</title>
   
   
   
@@ -64,8 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Climate indices analysis tool" href="run_ci.html" />
-    <link rel="prev" title="Flood analysis tool" href="run_fl.html" />
+    <link rel="next" title="Climate Indices Analytics" href="run_ci.html" />
+    <link rel="prev" title="Flood Analytics" href="run_fl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -576,9 +576,9 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood analysis tool</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Tropical cyclone analysis tool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="run_ci.html">Climate indices analysis tool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Tropical Cyclone Analytics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_ci.html">Climate Indices Analytics</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
@@ -752,7 +752,7 @@ title="Print to PDF"
             
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Tropical cyclone analysis tool</h1>
+    <h1>Tropical Cyclone Analytics</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -781,8 +781,8 @@ title="Print to PDF"
 
             <article class="bd-article" role="main">
               
-  <section class="tex2jax_ignore mathjax_ignore" id="tropical-cyclone-analysis-tool">
-<h1>Tropical cyclone analysis tool<a class="headerlink" href="#tropical-cyclone-analysis-tool" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="tropical-cyclone-analytics">
+<h1>Tropical Cyclone Analytics<a class="headerlink" href="#tropical-cyclone-analytics" title="Permalink to this heading">#</a></h1>
 <p>Based on <a class="reference external" href="https://data.4tu.nl/datasets/0ea98bdd-5772-4da8-ae97-99735e891aff/4"><strong>STORM v4</strong></a> (2023) hazard data as max wind spead (m/s) by Return Period scenario.</p>
 <ol class="arabic simple">
 <li><p>Exposure by hazard thresholds on population, built-up and agricultural area<br>2. Expected Annual Impact estimates on built-up area using regional-specific damage curves from <a class="reference external" href="https://nhess.copernicus.org/articles/21/393/2021/"><strong>CLIMADA</strong></a>.</p></li>
@@ -815,35 +815,32 @@ title="Print to PDF"
 <section id="running-the-analysis">
 <h2>Running the analysis<a class="headerlink" href="#running-the-analysis" title="Permalink to this heading">#</a></h2>
 <ul>
-<li><p>Select the country first. Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).</p>
+<li><p>Select the country first. The country must be located within the hazard extent (tropics) for the analysis to start.
+Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/GUI_TC_country.png"><img alt="../_images/GUI_TC_country.png" src="../_images/GUI_TC_country.png" style="width: 100%;" /></a>
 </figure>
 </li>
 <li><p>Move to Hazard tab: select the hazard process, the minimum hazard intensity threshold, the time period and climate scenario. Select one or more Return Periods (CTRL+Click / drag mouse).</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_TC_hzd.png"><img alt="../_images/GUI_TC_hzd.png" src="../_images/GUI_TC_hzd.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_TC_hzd.png"><img alt="../_images/GUI_TC_hzd.png" src="../_images/GUI_TC_hzd.png" style="width: 30%;" /></a>
 </figure>
 </li>
 <li><p>Select one or more Exposure categories (CTRL+Click / drag mouse). You can select a custom exposure layer for each selected category (.tif raster, WGS 84).</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_TC_exp.png"><img alt="../_images/GUI_TC_exp.png" src="../_images/GUI_TC_exp.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_TC_exp.png"><img alt="../_images/GUI_TC_exp.png" src="../_images/GUI_TC_exp.png" style="width: 30%;" /></a>
 </figure>
 </li>
 <li><p>Select the approach to use for the analysis:</p>
-<ul>
+<ul class="simple">
 <li><p>When using “function”, the best impact function is selected for the selected country. Only built-up damage functions are available for wind impact.</p></li>
-<li><p>When using “classes”, hazard intensity thresholds must be specified by the user.</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_vln.png"><img alt="../_images/GUI_F3_vln.png" src="../_images/GUI_F3_vln.png" style="width: 100%;" /></a>
-</figure>
-</li>
+<li><p>When using “classes”, hazard intensity thresholds must be specified by the user.</p></li>
 </ul>
 </li>
 <li><p>Check “Preview results” to generate map and charts output in the GUI.</p></li>
 </ul>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_rsk.png"><img alt="../_images/GUI_F3_rsk.png" src="../_images/GUI_F3_rsk.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_TC_rsk.png"><img alt="../_images/GUI_TC_rsk.png" src="../_images/GUI_TC_rsk.png" style="width: 100%;" /></a>
 </figure>
 </section>
 </section>
@@ -880,13 +877,13 @@ title="Print to PDF"
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Flood analysis tool</p>
+          <p class="prev-next-title">Flood Analytics</p>
       </div>
   </a>
   <a class='right-next' id="next-link" href="run_ci.html" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Climate indices analysis tool</p>
+      <p class="prev-next-title">Climate Indices Analytics</p>
   </div>
   <i class="fa-solid fa-angle-right"></i>
   </a>

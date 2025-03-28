@@ -1,4 +1,4 @@
-# Climate indices analysis tool
+# Climate Indices Analytics
 
 Choose from a selection of climate indices to analyze temperature extremes, precipitation patterns, heat stress indicators, and drought metrics.
 Select a country, administrative level, climate index, and a specific year to visualize both raw grid data and zonal statistics.
@@ -51,7 +51,7 @@ Data are sourced at 0.25° resolution from the [World Bank Climate Knowledge Por
 
     ```{figure} images/GUI_CI_selection2.png
     ---
-    width: 100%
+    width: 30%
     align: center
     ---
     ```
