@@ -1,3 +1,4 @@
+(run_ci)=
 # Climate Indices Analytics
 
 Choose from a selection of climate indices to analyze temperature extremes, precipitation patterns, heat stress indicators, and drought metrics.

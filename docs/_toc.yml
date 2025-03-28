@@ -19,7 +19,7 @@ parts:
         - file: docs/global-exposure
         - file: docs/global-vulnerability
         - file: docs/disaster-data
-        - file: docs/climate-data
+        - file: docs/climate-indices
         - file: docs/rdl
         - file: docs/external-data
   - caption: Disaster Risk Analytics
