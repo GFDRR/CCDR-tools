@@ -23,10 +23,7 @@ Climate indices are standardized measurements used to track and summarize comple
 
 In the context of disaster risk, climate indices play a critical role in understanding and anticipating the impact of climate-related hazards. These indices help assess the likelihood of extreme weather events such as droughts, floods, hurricanes, and heatwaves by tracking patterns in atmospheric and oceanic conditions that influence climate variability. Projected changes of climate indices against  baseline (anomalies) can be used to infer changes in natural hazard frequency and intensity. 
 
-# Climate indices
-
-The climate component offers an overview of climate indices related to hydro-meteorological hazards based on the most updated climate modelling (**CMIP6**).
-The [Climate Indices tools](run_ci) allow to compute climate indices for the desired sub-national boundary level.
+The [Climate Indices tools](run_ci) allow to compute climate indices for the desired sub-national boundary level based on the most updated climate modelling (**CMIP6**).
 The table below summarises the relationship between a few climate indices and associated hazards. 
 
 |   Name   |                  Description                  |  Related hazard  |
