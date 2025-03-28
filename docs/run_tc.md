@@ -44,14 +44,14 @@ Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, yo
 - Move to Hazard tab: select the hazard process, the minimum hazard intensity threshold, the time period and climate scenario. Select one or more Return Periods (CTRL+Click / drag mouse).
     ```{figure} images/GUI_TC_hzd.png
     ---
-    width: 30%
+    width: 50%
     align: center
     ---
     ```
 - Select one or more Exposure categories (CTRL+Click / drag mouse). You can select a custom exposure layer for each selected category (.tif raster, WGS 84).
     ```{figure} images/GUI_TC_exp.png
     ---
-    width: 30%
+    width: 50%
     align: center
     ---
     ```
