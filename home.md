@@ -1,5 +1,48 @@
 # Risk Data Library - Country Climate & Disaster Risk Screening Tools
 
+<div class="news-container">
+    <div class="news-ticker">
+        <span class="news-item"><strong>UPDATE:</strong> Climate Indices Tool released for CMIP6 indicators! </span>
+        <span class="news-item"><strong>UPDATE:</strong> STORM v4 tropical cyclone global model analysis notebook</span>
+        <span class="news-item"><strong>ANNOUNCEMENT:</strong> New CCDR dashboard released for interactive exploration of risk </span>
+        <span class="news-item"><strong>WEBINAR:</strong> Join our upcoming training session on disaster risk screening tools - April 30, 2025 </span>
+    </div>
+</div>
+
+<style>
+    .news-container {
+        width: 100%;
+        background-color: #f0f7fa;
+        overflow: hidden;
+        margin: 10px 0 20px 0;
+        border-radius: 4px;
+        border-left: 4px solid #118AB2;
+    }
+    .news-ticker {
+        white-space: nowrap;
+        padding: 10px 0;
+        animation: ticker 30s linear infinite;
+        color: #333;
+        font-size: 14px;
+    }
+    @keyframes ticker {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+    .news-item {
+        display: inline-block;
+        padding: 0 30px;
+    }
+    .news-item strong {
+        color: #118AB2;
+        font-weight: bold;
+    }
+    /* Pause animation on hover */
+    .news-container:hover .news-ticker {
+        animation-play-state: paused;
+    }
+</style>
+
 This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards' risk screening at the national or sub-national level. The tools have originally being created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2024) and then furtherly developed within the [**Risk Data Library project**](docs/rdl.md).
 
 The CCDR toolkit allow to perform spatial analytics of disaster risk based on global datasets.
