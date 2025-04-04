@@ -329,13 +329,13 @@ def export_charts(output_dir: str, country: str, haz_cat: str, period: str, scen
                   charts: dict, exp_cat_list: list[str]):
     chart_dir = os.path.join(output_dir, 'charts')
     os.makedirs(chart_dir, exist_ok=True)
-    basee_file_name = f"{country}_{haz_cat}_{period}"
+    base_file_name = f"{country}_{haz_cat}_{period}"
 
     if period != "2020":
         base_file_name += f"_{scenario}"
         
     for i, (chart, exp_cat) in enumerate(zip(charts, exp_cat_list)):
-        chart_filename = os.path.join(chart_dir, f"{basee_file_name}_{exp_cat}.png")
+        chart_filename = os.path.join(chart_dir, f"{base_file_name}_{exp_cat}.png")
         chart.savefig(chart_filename, dpi=300, bbox_inches='tight')
         print(f"Saved chart to: {chart_filename}.")
 
