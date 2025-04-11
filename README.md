@@ -2,12 +2,12 @@
 
 ## Overview
 
-A collection of scripted tools developed alongside the World Bank's [Country Climate and Development Report](https://www.worldbank.org/en/publication/country-climate-development-reports) (CCDR) risk screening activities (2022/2024).
+A collection of scripted tools developed alongside the World Bank's [Country Climate and Development Report](https://www.worldbank.org/en/publication/country-climate-development-reports) (CCDR) risk screening activities (2022/2025).
 
-The tool allows to perform subnational disaster risk analysis based on global datasets.
-In the next stage, the following components will be included:
-- Combine risk and poverty information
-- Produce climate outlook
+The tool allows to:
+- Perform sub-national disaster risk analysis based on global datasets (Floods, Tropical Cyclones, Custom Hazard).
+- Combine risk and poverty information into bivariate maps
+- Extract climate anomaly and timeseries information by administrative units
 - Present results into a dashboard
 
-Please refer to online [**DOCUMENTATION**](https://gfdrr.github.io/CCDR-tools/)
+Please refer to the online [**DOCUMENTATION**](https://gfdrr.github.io/CCDR-tools/).

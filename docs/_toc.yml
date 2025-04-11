@@ -20,7 +20,7 @@ parts:
         - file: docs/global-vulnerability
         - file: docs/disaster-data
         - file: docs/rdl
-        - file: docs/external-data
+        - file: docs/external-tools
   - caption: Disaster Risk Analytics
     chapters:
       - file: docs/tool-setup
