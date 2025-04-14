@@ -758,12 +758,16 @@ def create_bivariate_legend(bivariate_colors, poverty_label, hazard_label, num_q
     
     # Set labels at the middle of each axis with color information
     ax.text(num_quantiles/2, -0.7, f"{poverty_label} ({poverty_color})", ha='center', va='center', fontsize=12)
-    ax.text(-0.7, num_quantiles/2, f"{hazard_label} ({hazard_color})", ha='center', va='center', rotation=90, fontsize=12)
+    ax.text(-1.2, num_quantiles/2, f"{hazard_label} ({hazard_color})", ha='center', va='center', rotation=90, fontsize=12)
     
-    # Adjust "Low" and "High" positions for both axes to put "High" at the end
-    # For exposure to hazard (y-axis): Low at bottom, High at top
-    ax.text(-0.3, 0, "Low", ha='right', va='center', fontsize=10)  # Hazard low (bottom)
-    ax.text(-0.3, num_quantiles, "High", ha='right', va='center', fontsize=10)  # Hazard high (top)
+    # Calculate percentage labels for fixed scale exposure
+    max_exposure = 0.40  # 40%
+    exposure_percentages = [f"{x*100:.1f}%" for x in np.linspace(0, max_exposure, num_quantiles+1)]
+    
+    # For exposure (y-axis): Add percentage labels at each level
+    # Position further to the left to avoid overlap
+    for i in range(num_quantiles+1):
+        ax.text(-0.1, i, exposure_percentages[i], ha='right', va='center', fontsize=10)
     
     # For poverty (x-axis): Low at left, High at right
     ax.text(0, -0.3, "Low", ha='center', va='top', fontsize=10)  # Poverty low (left)
@@ -773,7 +777,7 @@ def create_bivariate_legend(bivariate_colors, poverty_label, hazard_label, num_q
     plt.title(f"Bivariate Legend: {hazard_color}-{poverty_color}", fontsize=12)
     
     # Set axis limits with more space for labels
-    ax.set_xlim(-1.2, num_quantiles + 0.2)
+    ax.set_xlim(-1.5, num_quantiles + 0.2)
     ax.set_ylim(-1.2, num_quantiles + 0.2)
     
     plt.tight_layout()
@@ -1333,18 +1337,24 @@ def export_static_map(gdf, colors_list, output_path, num_quantiles, bivariate_pa
                 )
             )
     
-    # Add labels for the axes
+    # Add labels for the axes with proper positioning
     legend_ax.text(num_quantiles/2, -0.7, f"Poverty ({poverty_color})", ha='center', va='center', fontsize=12)
-    legend_ax.text(-0.7, num_quantiles/2, f"Hazard ({hazard_color})", ha='center', va='center', rotation=90, fontsize=12)
+    legend_ax.text(-1.2, num_quantiles/2, f"Exposure ({hazard_color})", ha='center', va='center', rotation=90, fontsize=12)
     
-    # Add "Low" and "High" labels
-    legend_ax.text(0, -0.3, "Low", ha='center', va='top', fontsize=10)
-    legend_ax.text(num_quantiles, -0.3, "High", ha='center', va='top', fontsize=10)
-    legend_ax.text(-0.3, 0, "Low", ha='right', va='center', fontsize=10)
-    legend_ax.text(-0.3, num_quantiles, "High", ha='right', va='center', fontsize=10)
+    # Calculate percentage labels for fixed scale exposure
+    max_exposure = 0.40  # 40%
+    exposure_percentages = [f"{x*100:.1f}%" for x in np.linspace(0, max_exposure, num_quantiles+1)]
+    
+    # For exposure (y-axis): Add percentage labels at each level
+    for i in range(num_quantiles+1):
+        legend_ax.text(-0.1, i, exposure_percentages[i], ha='right', va='center', fontsize=10)
+    
+    # Add "Low" and "High" labels only for the poverty axis
+    legend_ax.text(0, -0.3, "Low", ha='center', va='top', fontsize=10)  # Poverty low (left)
+    legend_ax.text(num_quantiles, -0.3, "High", ha='center', va='top', fontsize=10)  # Poverty high (right)
     
     # Set limits for legend with more space for labels
-    legend_ax.set_xlim(-1.2, num_quantiles + 0.2)
+    legend_ax.set_xlim(-1.5, num_quantiles + 0.2)
     legend_ax.set_ylim(-1.2, num_quantiles + 0.2)
     
     # Add a title to the legend
@@ -1454,10 +1464,50 @@ def run_analysis(b):
             gdf['relative_exposure'] = gdf[hazard_field] / gdf[pop_field]
             print(f"Relative Exposure Range: {gdf['relative_exposure'].min():.6f} to {gdf['relative_exposure'].max():.6f}\n")
 
-            # Create quantile classifications (using relative exposure)
-            print(f"Creating {num_quantiles}×{num_quantiles} quantile classifications...")
-            gdf = classify_data(gdf, 'w_RWIxPOP_scaled', 'relative_exposure', num_quantiles)
-                    
+            # Instead of using quantiles, use a fixed scale from 0% to 40% for exposure
+            print(f"Creating fixed-scale classification for exposure (0-40%)...")
+            # Calculate fixed scale breaks for exposure (0% to 40%)
+            exposure_max = 0.40  # 40%
+            exposure_breaks = np.linspace(0, exposure_max, num_quantiles+1)
+            exposure_percentages = [f"{x*100:.1f}%" for x in exposure_breaks]
+            print(f"Exposure scale breaks: {', '.join(exposure_percentages)}")
+
+            # Create wealth quantiles normally
+            try:
+                # Create wealth quantiles using standard method
+                gdf['wealth_quantile'] = pd.qcut(
+                    gdf['w_RWIxPOP_scaled'], 
+                    q=num_quantiles, 
+                    labels=False, 
+                    duplicates='drop'
+                )
+            except Exception as e:
+                print(f"Error in wealth quantile calculation: {str(e)}")
+                print("Using manual quantile calculation...")
+                wealth_values = gdf['w_RWIxPOP_scaled'].values
+                gdf['wealth_quantile'] = np.digitize(
+                    wealth_values,
+                    np.percentile(wealth_values, np.linspace(0, 100, num_quantiles+1)[1:-1]),
+                    right=True
+                )
+
+            # Manually classify exposure using fixed scale
+            gdf['hazard_quantile'] = pd.cut(
+                gdf['relative_exposure'], 
+                bins=exposure_breaks,
+                labels=False, 
+                include_lowest=True
+            )
+
+            # Handle values above the max scale (40%)
+            above_max = gdf['relative_exposure'] > exposure_max
+            if above_max.any():
+                print(f"Warning: {above_max.sum()} features have exposure above {exposure_max*100:.1f}% and are classified in the highest category")
+                gdf.loc[above_max, 'hazard_quantile'] = num_quantiles - 1
+
+            # Create combined classification
+            gdf['bivariate_class'] = gdf['wealth_quantile'] * num_quantiles + gdf['hazard_quantile']
+
             # Generate bivariate color scheme
             print("Generating bivariate color scheme with enhanced saturation...")
             bivariate_colors, colors_list = create_bivariate_colormap(bivariate_palette, num_quantiles)
