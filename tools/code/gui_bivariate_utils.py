@@ -899,28 +899,32 @@ def create_bivariate_map(gdf, colors_list, id_field, name_field, num_quantiles, 
             <p><b>Exposure quantile:</b> {hazard_q}</p>
         </div>
         """
-    
+
     def popup_function(feature):
         feature_id = feature['properties'][id_field]
         feature_data = gdf[gdf[id_field] == feature_id]
         
         if not feature_data.empty:
             row = feature_data.iloc[0]
-            return folium.Popup(
-                html.format(
-                    name=row[name_field],
-                    pop=row[population_field_selector.value],
-                    area=row['area_km2'],
-                    pop_dens=row['pop_density'],
-                    rwi=row[wealth_field_selector.value],
-                    w_rwi=row['w_RWIxPOP_scaled'],
-                    hazard=row[hazard_field_selector.value],
-                    rel_exposure=row['relative_exposure'],
-                    wealth_q=int(row['wealth_quantile']) + 1,
-                    hazard_q=int(row['hazard_quantile']) + 1
-                ),
-                max_width=350
-            )
+            try:
+                return folium.Popup(
+                    html.format(
+                        name=row[name_field],
+                        pop=row[population_field_selector.value],
+                        area=row['area_km2'],
+                        pop_dens=row['pop_density'],
+                        rwi=row[wealth_field_selector.value],
+                        w_rwi=row['w_RWIxPOP_scaled'],
+                        hazard=row[hazard_field_selector.value],
+                        rel_exposure=row['relative_exposure'],
+                        wealth_q=int(row['wealth_quantile']) + 1,
+                        hazard_q=int(row['hazard_quantile']) + 1
+                    ),
+                    max_width=350
+                )
+            except Exception as e:
+                print(f"Error creating popup: {str(e)}")
+                return folium.Popup(f"Error displaying data for {row[name_field]}", max_width=350)
         else:
             return folium.Popup("No data available", max_width=350)
     
