@@ -138,6 +138,33 @@ bivariate_palette_selector = widgets.Dropdown(
 bivariate_palette_selector_id = f'bivariate-palette-selector-{id(bivariate_palette_selector)}'
 bivariate_palette_selector.add_class(bivariate_palette_selector_id)
 
+# RWI normalization checkbox
+normalize_rwi_chk = widgets.Checkbox(
+    value=True,
+    description='Normalize RWI with population density',
+    disabled=False,
+    indent=False
+)
+normalize_rwi_chk_id = f'normalize-rwi-chk-{id(normalize_rwi_chk)}'
+normalize_rwi_chk.add_class(normalize_rwi_chk_id)
+
+# Max exposure slider
+max_exposure_slider = widgets.FloatSlider(
+    value=0.50,
+    min=0.1,
+    max=1.0,
+    step=0.05,
+    description='Max Exposure:',
+    disabled=False,
+    continuous_update=False,
+    orientation='horizontal',
+    readout=True,
+    readout_format='.2f',
+    layout=widgets.Layout(width='250px')
+)
+max_exposure_slider_id = f'max-exposure-slider-{id(max_exposure_slider)}'
+max_exposure_slider.add_class(max_exposure_slider_id)
+
 # Info box
 info_box = widgets.Textarea(
     value='Hover over items for descriptions.',
@@ -322,7 +349,7 @@ def update_preview_map(gdf):
 def calculate_weighted_rwi(gdf, pop_field, rwi_field):
     # Create a copy to avoid modifying the original
     result_gdf = gdf.copy()
-    
+   
     # Check CRS and reproject to a projected CRS if needed
     if result_gdf.crs is None:
         print("Warning: CRS is not defined. Assuming EPSG:4326 for area calculation.")
@@ -365,7 +392,11 @@ def calculate_weighted_rwi(gdf, pop_field, rwi_field):
     return result_gdf
 
 # Function to create quantile classifications
-def classify_data(gdf, wealth_field, hazard_field, num_quantiles):
+# Here's a fixed version of the classify_data function:
+
+# Here's a completely revised approach to fix the quantile mapping problem:
+
+def classify_data(gdf, wealth_field, hazard_field, num_quantiles, wealth_field_for_classification=None):
     """
     Classify data into quantiles for bivariate mapping.
     
@@ -379,6 +410,8 @@ def classify_data(gdf, wealth_field, hazard_field, num_quantiles):
         Field containing hazard data
     num_quantiles : int
         Number of quantiles to create
+    wealth_field_for_classification : str, optional
+        Field to use for wealth classification, if different from wealth_field
         
     Returns:
     --------
@@ -391,48 +424,90 @@ def classify_data(gdf, wealth_field, hazard_field, num_quantiles):
     # Create a copy to avoid modifying the original
     result_gdf = gdf.copy()
     
-    # Check if there are enough unique values for the requested number of quantiles
-    unique_wealth_values = result_gdf[wealth_field].nunique()
-    unique_hazard_values = result_gdf[hazard_field].nunique()
+    # Determine which field to use for wealth classification
+    if wealth_field_for_classification is None:
+        wealth_field_for_classification = wealth_field
     
-    if unique_wealth_values < num_quantiles or unique_hazard_values < num_quantiles:
-        print(f"Warning: Not enough unique values for {num_quantiles} quantiles")
-        print(f"Unique wealth values: {unique_wealth_values}, Unique hazard values: {unique_hazard_values}")
-        print("Some quantiles may be merged.")
+    # Get wealth values and check for pre-binned data
+    wealth_values = sorted(result_gdf[wealth_field_for_classification].unique())
+    unique_wealth_values = len(wealth_values)
     
-    try:
-        # NOTE: No inversion of wealth field since it's already a poverty scale (higher = poorer)
-        result_gdf['wealth_quantile'] = pd.qcut(
-            result_gdf[wealth_field], 
-            q=num_quantiles, 
-            labels=False, 
-            duplicates='drop'
-        )
+    print(f"Unique wealth values: {unique_wealth_values}")
+    print(f"Wealth values: {wealth_values}")
+    
+    # Flag for whether to use pre-binned direct mapping approach
+    use_direct_mapping = False
+    
+    # Check if data appears to be pre-binned (small number of discrete values)
+    if unique_wealth_values <= 10:  # Reasonable limit for pre-binned data
+        # Check if values are all integers or integer-like floats
+        if all(isinstance(v, (int, np.integer)) or 
+               (isinstance(v, float) and v.is_integer()) for v in wealth_values):
+            use_direct_mapping = True
+            print("Detected pre-binned integer-like wealth data. Using direct mapping approach.")
+    
+    # Process wealth quantiles
+    if use_direct_mapping:
+        # Direct mapping approach for pre-binned data
+        min_val = min(wealth_values)
+        max_val = max(wealth_values)
+        range_val = max_val - min_val
         
-        # Check if wealth quantiles are limited
-        if result_gdf['wealth_quantile'].max() < (num_quantiles - 1):
-            print(f"Warning: Wealth quantiles only range from 0 to {result_gdf['wealth_quantile'].max()}")
-            print("Using manual quantile calculation instead.")
-            
-            # Manually create quantiles to ensure full range
-            wealth_values = result_gdf[wealth_field].values
-            result_gdf['wealth_quantile'] = np.digitize(
-                wealth_values,
-                np.percentile(wealth_values, np.linspace(0, 100, num_quantiles+1)[1:-1]),
-                right=True
+        # Create mapping dictionary from original values to quantiles
+        wealth_mapping = {}
+        for val in wealth_values:
+            # Calculate relative position in range (0 to 1)
+            rel_pos = (val - min_val) / range_val if range_val > 0 else 0
+            # Map to quantile (0 to num_quantiles-1) using floor to ensure full range
+            quantile = min(int(rel_pos * num_quantiles), num_quantiles - 1)
+            wealth_mapping[val] = quantile
+        
+        print(f"Wealth value mapping: {wealth_mapping}")
+        
+        # Apply mapping to create wealth quantiles
+        result_gdf['wealth_quantile'] = result_gdf[wealth_field_for_classification].map(wealth_mapping)
+    else:
+        # Standard quantile approach for continuous data
+        try:
+            result_gdf['wealth_quantile'] = pd.qcut(
+                result_gdf[wealth_field_for_classification], 
+                q=num_quantiles, 
+                labels=False, 
+                duplicates='drop'
             )
-    except Exception as e:
-        print(f"Error in wealth quantile calculation: {str(e)}")
-        print("Using manual quantile calculation instead.")
-        
-        # Manually create quantiles as a fallback
-        wealth_values = result_gdf[wealth_field].values
-        result_gdf['wealth_quantile'] = np.digitize(
-            wealth_values,
-            np.percentile(wealth_values, np.linspace(0, 100, num_quantiles+1)[1:-1]),
-            right=True
-        )
+            
+            # Check if we got the full range of quantiles
+            if result_gdf['wealth_quantile'].max() < (num_quantiles - 1):
+                print(f"Warning: Wealth quantiles only range from 0 to {result_gdf['wealth_quantile'].max()}")
+                print("Using manual quantile calculation...")
+                
+                # Try manual quantile calculation as fallback
+                wealth_values = result_gdf[wealth_field_for_classification].values
+                percentiles = np.linspace(0, 100, num_quantiles+1)[1:-1]
+                breaks = np.percentile(wealth_values, percentiles)
+                result_gdf['wealth_quantile'] = np.digitize(wealth_values, breaks)
+                
+                # Ensure proper range from 0 to num_quantiles-1
+                result_gdf['wealth_quantile'] = result_gdf['wealth_quantile'].clip(0, num_quantiles-1)
+        except Exception as e:
+            print(f"Error in wealth quantile calculation: {str(e)}")
+            print("Falling back to linear mapping...")
+            
+            # Linear mapping from min to max as emergency fallback
+            vals = result_gdf[wealth_field_for_classification].values
+            min_val, max_val = vals.min(), vals.max()
+            range_val = max_val - min_val
+            
+            if range_val > 0:
+                # Create normalized values and map to quantiles
+                norm_vals = (vals - min_val) / range_val
+                result_gdf['wealth_quantile'] = (norm_vals * (num_quantiles - 1)).astype(int)
+                result_gdf['wealth_quantile'] = result_gdf['wealth_quantile'].clip(0, num_quantiles - 1)
+            else:
+                # If all values are the same, assign to middle quantile
+                result_gdf['wealth_quantile'] = (num_quantiles - 1) // 2
     
+    # Process hazard quantiles
     try:
         # Calculate hazard quantiles
         result_gdf['hazard_quantile'] = pd.qcut(
@@ -445,26 +520,37 @@ def classify_data(gdf, wealth_field, hazard_field, num_quantiles):
         # Check if hazard quantiles are limited
         if result_gdf['hazard_quantile'].max() < (num_quantiles - 1):
             print(f"Warning: Hazard quantiles only range from 0 to {result_gdf['hazard_quantile'].max()}")
-            print("Using manual quantile calculation instead.")
+            print("Using manual hazard quantile calculation...")
             
-            # Manually create quantiles to ensure full range
+            # Try manual quantile calculation as fallback
             hazard_values = result_gdf[hazard_field].values
-            result_gdf['hazard_quantile'] = np.digitize(
-                hazard_values,
-                np.percentile(hazard_values, np.linspace(0, 100, num_quantiles+1)[1:-1]),
-                right=True
-            )
+            percentiles = np.linspace(0, 100, num_quantiles+1)[1:-1]
+            breaks = np.percentile(hazard_values, percentiles)
+            result_gdf['hazard_quantile'] = np.digitize(hazard_values, breaks)
+            
+            # Ensure proper range from 0 to num_quantiles-1
+            result_gdf['hazard_quantile'] = result_gdf['hazard_quantile'].clip(0, num_quantiles-1)
     except Exception as e:
         print(f"Error in hazard quantile calculation: {str(e)}")
-        print("Using manual quantile calculation instead.")
+        print("Falling back to linear hazard mapping...")
         
-        # Manually create quantiles as a fallback
-        hazard_values = result_gdf[hazard_field].values
-        result_gdf['hazard_quantile'] = np.digitize(
-            hazard_values,
-            np.percentile(hazard_values, np.linspace(0, 100, num_quantiles+1)[1:-1]),
-            right=True
-        )
+        # Linear mapping from min to max as emergency fallback
+        vals = result_gdf[hazard_field].values
+        min_val, max_val = vals.min(), vals.max()
+        range_val = max_val - min_val
+        
+        if range_val > 0:
+            # Create normalized values and map to quantiles
+            norm_vals = (vals - min_val) / range_val
+            result_gdf['hazard_quantile'] = (norm_vals * (num_quantiles - 1)).astype(int)
+            result_gdf['hazard_quantile'] = result_gdf['hazard_quantile'].clip(0, num_quantiles - 1)
+        else:
+            # If all values are the same, assign to middle quantile
+            result_gdf['hazard_quantile'] = (num_quantiles - 1) // 2
+    
+    # Ensure quantile columns are integers and have no nulls
+    result_gdf['wealth_quantile'] = result_gdf['wealth_quantile'].fillna(0).astype(int)
+    result_gdf['hazard_quantile'] = result_gdf['hazard_quantile'].fillna(0).astype(int)
     
     # Verify quantile ranges and print diagnostics
     wealth_range = (result_gdf['wealth_quantile'].min(), result_gdf['wealth_quantile'].max())
@@ -472,6 +558,10 @@ def classify_data(gdf, wealth_field, hazard_field, num_quantiles):
     
     print(f"Wealth quantile range: {wealth_range}")
     print(f"Hazard quantile range: {hazard_range}")
+    
+    # Confirm we have the full range of quantiles for the wealth dimension
+    if wealth_range[1] < (num_quantiles - 1):
+        print(f"Warning: Still missing some wealth quantiles. Expected max {num_quantiles-1}, got {wealth_range[1]}")
     
     # Create combined classification
     result_gdf['bivariate_class'] = result_gdf['wealth_quantile'] * num_quantiles + result_gdf['hazard_quantile']
@@ -712,7 +802,7 @@ def create_bivariate_colormap(palette_key, num_quantiles):
     return bivariate_colors, colors_list
 
 # Also update the legend creation to reflect the new color mixing logic
-def create_bivariate_legend(bivariate_colors, poverty_label, hazard_label, num_quantiles, palette_name):
+def create_bivariate_legend(bivariate_colors, poverty_label, hazard_label, num_quantiles, palette_name, max_exposure):
     """
     Create a legend for the bivariate map with proper labels based on palette type.
     
@@ -728,6 +818,8 @@ def create_bivariate_legend(bivariate_colors, poverty_label, hazard_label, num_q
         Number of quantiles used
     palette_name : str
         Name of the palette (e.g., 'blue_red')
+    max_exposure : float
+        Maximum exposure value for the scale
         
     Returns:
     --------
@@ -761,9 +853,8 @@ def create_bivariate_legend(bivariate_colors, poverty_label, hazard_label, num_q
     ax.text(-1.2, num_quantiles/2, f"{hazard_label} ({hazard_color})", ha='center', va='center', rotation=90, fontsize=12)
     
     # Calculate percentage labels for fixed scale exposure
-    max_exposure = 0.40  # 40%
-    exposure_percentages = [f"{x*100:.1f}%" for x in np.linspace(0, max_exposure, num_quantiles+1)]
-    
+    exposure_percentages = [f"{int(x*100)}%" for x in np.linspace(0, max_exposure, num_quantiles+1)]
+
     # For exposure (y-axis): Add percentage labels at each level
     # Position further to the left to avoid overlap
     for i in range(num_quantiles+1):
@@ -795,7 +886,9 @@ def create_summary_table(gdf, pop_field, wealth_field, hazard_field, bivariate_p
         'Max Population Density': f"{gdf['pop_density'].max():,.2f} people/km²",
         'Wealth Index Range': f"{gdf[wealth_field].min():.4f} to {gdf[wealth_field].max():.4f}",
         'Weighted RWI Range': f"{gdf['w_RWIxPOP_scaled'].min():.2f} to {gdf['w_RWIxPOP_scaled'].max():.2f}",
+        'RWI Normalization': 'Population density-weighted' if normalize_rwi_chk.value else 'Raw values (no normalization)',
         'Relative Exposure Range': f"{gdf['relative_exposure'].min():.6f} to {gdf['relative_exposure'].max():.6f}",
+        'Max Exposure Scale': f"{int(max_exposure_slider.value*100)}%",
         'Number of Features': f"{len(gdf)}",
         'Quantile Grid': f"{num_quantiles}×{num_quantiles}",
         'Bivariate Palette': f"{bivariate_palette}"
@@ -1203,7 +1296,8 @@ def save_geopackage_with_qgis_style(gdf, output_path, colors_list, id_field, nam
         if conn:
             conn.close()
 
-def export_static_map(gdf, colors_list, output_path, num_quantiles, bivariate_palette, dpi=300, figsize=(10, 10), title=None):
+def export_static_map(gdf, colors_list, output_path, num_quantiles, bivariate_palette, 
+                     max_exposure, dpi=300, figsize=(10, 10), title=None):
     """
     Export a high-quality static map of the bivariate choropleth using matplotlib.
     
@@ -1346,8 +1440,7 @@ def export_static_map(gdf, colors_list, output_path, num_quantiles, bivariate_pa
     legend_ax.text(-1.2, num_quantiles/2, f"Exposure ({hazard_color})", ha='center', va='center', rotation=90, fontsize=12)
     
     # Calculate percentage labels for fixed scale exposure
-    max_exposure = 0.40  # 40%
-    exposure_percentages = [f"{x*100:.1f}%" for x in np.linspace(0, max_exposure, num_quantiles+1)]
+    exposure_percentages = [f"{int(x*100)}%" for x in np.linspace(0, max_exposure, num_quantiles+1)]
     
     # For exposure (y-axis): Add percentage labels at each level
     for i in range(num_quantiles+1):
@@ -1401,6 +1494,8 @@ def run_analysis(b):
             pop_field = population_field_selector.value
             wealth_field = wealth_field_selector.value
             hazard_field = hazard_field_selector.value
+            normalize_rwi = normalize_rwi_chk.value
+            print(f"RWI normalization: {'Enabled' if normalize_rwi else 'Disabled'}")
             
             if not (id_field and name_field and pop_field and wealth_field and hazard_field):
                 print("Error: Please select all required fields")
@@ -1450,10 +1545,66 @@ def run_analysis(b):
                 print(f"Warning: Found {invalid_geoms.sum()} invalid geometries. Attempting to fix them...")
                 gdf.geometry = gdf.geometry.buffer(0)  # Standard fix for many invalid geometries
             
-            # Calculate population density-weighted RWI
-            print("Calculating population density-weighted wealth index...")
-            gdf = calculate_weighted_rwi(gdf, pop_field, wealth_field)
-            
+            # Get normalization preference
+            normalize_rwi = normalize_rwi_chk.value
+            print(f"RWI normalization: {'Enabled' if normalize_rwi else 'Disabled'}")
+
+            if normalize_rwi:
+                print("Calculating population density-weighted wealth index...")
+                gdf = calculate_weighted_rwi(gdf, pop_field, wealth_field)
+                # Use the weighted RWI for classification
+                wealth_field_for_classification = 'w_RWIxPOP_scaled'
+            else:
+                print("Using raw wealth index values (no normalization)...")
+                # Create a copy to avoid modifying the original, just as in calculate_weighted_rwi
+                result_gdf = gdf.copy()
+                
+                # Check CRS and reproject to a projected CRS if needed
+                if result_gdf.crs is None:
+                    print("Warning: CRS is not defined. Assuming EPSG:4326 for area calculation.")
+                    result_gdf.set_crs(epsg=4326, inplace=True)
+                
+                # If using a geographic CRS (like WGS84/EPSG:4326), reproject to a suitable projected CRS
+                if result_gdf.crs.is_geographic:
+                    print("Converting to projected CRS for accurate area calculation...")
+                    # Get centroid to determine appropriate UTM zone
+                    centroid = result_gdf.unary_union.centroid
+                    lon, lat = centroid.x, centroid.y
+                    
+                    # Calculate UTM zone
+                    utm_zone = int(1 + (lon + 180) // 6)
+                    epsg = 32600 + utm_zone + (0 if lat >= 0 else 100)  # North vs South hemisphere
+                    
+                    # Reproject for area calculation
+                    area_gdf = result_gdf.to_crs(epsg=epsg)
+                    # Calculate area in square kilometers
+                    result_gdf['area_km2'] = area_gdf.geometry.area / 10**6  # Convert from m² to km²
+                else:
+                    # Already in projected CRS
+                    result_gdf['area_km2'] = result_gdf.geometry.area / 10**6  # Convert from m² to km²
+                
+                # Calculate population density (people per km²)
+                result_gdf['pop_density'] = result_gdf[pop_field] / result_gdf['area_km2']
+                
+                # Create a copy of the wealth field for the scaled version even when not normalizing
+                # This ensures consistent field names in subsequent code
+                result_gdf['w_RWIxPOP'] = result_gdf[wealth_field]
+                
+                # Scale to 0-100 for easier interpretation
+                min_val = result_gdf[wealth_field].min()
+                max_val = result_gdf[wealth_field].max()
+                result_gdf['w_RWIxPOP_scaled'] = 100 * (result_gdf[wealth_field] - min_val) / (max_val - min_val)
+                
+                # Assign back to gdf to maintain consistency with the rest of the function
+                gdf = result_gdf
+                
+                # Use the scaled version of the original wealth field for classification
+                wealth_field_for_classification = 'w_RWIxPOP_scaled'
+
+            # Now use the classify_data function to create the quantiles
+            print(f"Classifying data with {num_quantiles}×{num_quantiles} grid...")
+            gdf = classify_data(gdf, wealth_field, hazard_field, num_quantiles, wealth_field_for_classification)
+         
             # Print summary statistics
             print(f"\nSummary Statistics:")
             print(f"Total Population: {gdf[pop_field].sum():,.0f}")
@@ -1468,12 +1619,12 @@ def run_analysis(b):
             gdf['relative_exposure'] = gdf[hazard_field] / gdf[pop_field]
             print(f"Relative Exposure Range: {gdf['relative_exposure'].min():.6f} to {gdf['relative_exposure'].max():.6f}\n")
 
-            # Instead of using quantiles, use a fixed scale from 0% to 40% for exposure
-            print(f"Creating fixed-scale classification for exposure (0-40%)...")
-            # Calculate fixed scale breaks for exposure (0% to 40%)
-            exposure_max = 0.40  # 40%
+            # Instead of using quantiles, use a fixed scale from 0% to max_exposure% for exposure
+            print(f"Creating fixed-scale classification for exposure (0-{max_exposure_slider.value*100:.1f}%)...")
+            # Calculate fixed scale breaks for exposure
+            exposure_max = max_exposure_slider.value  # Get value from slider
             exposure_breaks = np.linspace(0, exposure_max, num_quantiles+1)
-            exposure_percentages = [f"{x*100:.1f}%" for x in exposure_breaks]
+            exposure_percentages = [f"{int(x*100)}%" for x in exposure_breaks]
             print(f"Exposure scale breaks: {', '.join(exposure_percentages)}")
 
             # Create wealth quantiles normally
@@ -1518,7 +1669,9 @@ def run_analysis(b):
 
             # Create legend
             print("Creating legend...")
-            legend_fig = create_bivariate_legend(bivariate_colors, "Poverty →", "Exp to Hazard →", num_quantiles, bivariate_palette)
+            legend_fig = create_bivariate_legend(bivariate_colors, "Poverty →", "Exp to Hazard →", 
+                                                num_quantiles, bivariate_palette, max_exposure_slider.value)
+
             # Create bivariate map
             print("Creating bivariate map...")
             title = f"Bivariate Map: Poverty × Exposure to Hazard"
@@ -1574,6 +1727,7 @@ def run_analysis(b):
                         static_map_path, 
                         num_quantiles, 
                         bivariate_palette,
+                        max_exposure_slider.value,
                         dpi=300,
                         figsize=(12, 12),
                         title=map_title
@@ -1717,6 +1871,12 @@ def create_js_code():
     document.querySelector('.{bivariate_palette_selector_id}').onmouseover = function() {{
         document.querySelector('.info-box textarea').value = 'Select the bivariate color palette to use for the map. Each palette is designed to show both poverty and hazard risk with appropriate color relationships.';
     }};
+    document.querySelector('.{normalize_rwi_chk_id}').onmouseover = function() {{
+    document.querySelector('.info-box textarea').value = 'Toggle whether to normalize the wealth index by population density. When enabled, areas with higher population density will have more weight in the wealth classification.';
+    }};
+    document.querySelector('.{max_exposure_slider_id}').onmouseover = function() {{
+    document.querySelector('.info-box textarea').value = 'Set the maximum exposure value for the hazard classification scale. This defines the upper limit for the hazard dimension in the bivariate map.';
+    }};
     </script>
     """
 
@@ -1743,6 +1903,10 @@ def create_tabs():
         widgets.HTML("<hr style='margin: 10px 0;'>"),
         widgets.Label("Color Palettes:"),
         bivariate_palette_selector,
+        widgets.HTML("<hr style='margin: 10px 0;'>"),
+        widgets.Label("Analysis Options:"),
+        max_exposure_slider,
+        normalize_rwi_chk,
     ], layout=widgets.Layout(padding='10px'))
     
     # Create tabs
