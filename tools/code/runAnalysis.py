@@ -227,7 +227,7 @@ def run_analysis(
         # Open the raster dataset
         with rasterio.open(exp_ras) as src:
             original_nodata = src.nodata
-        exp_data = rxr.open_rasterio(exp_ras)[0]  # Open exposure dataset
+        exp_data = rxr.open_rasterio(exp_ras)[0].astype('float32')  # Open exposure dataset
         # Handle nodata values
         if original_nodata is not None:
             # Mask the original nodata values
