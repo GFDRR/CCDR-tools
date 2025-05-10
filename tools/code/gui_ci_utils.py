@@ -7,8 +7,6 @@ import cartopy.crs as ccrs
 import geopandas as gpd
 from matplotlib.colors import TwoSlopeNorm
 from urllib.request import urlretrieve
-from shapely.geometry import shape
-import requests
 from IPython.display import display, clear_output, HTML
 import ipywidgets as widgets
 import pandas as pd
@@ -18,7 +16,6 @@ import folium
 import tkinter as tk
 from tkinter import filedialog
 from input_utils import get_adm_data
-import rasterstats
 from rasterstats import zonal_stats
 import rioxarray
 import warnings
@@ -779,10 +776,6 @@ def create_choropleth_maps(admin_boundaries_with_stats, historical_col, change_c
     
     # Plot historical data
     try:
-        # Get value range for historical data
-        vmin_hist = admin_boundaries_with_stats[historical_col].min()
-        vmax_hist = admin_boundaries_with_stats[historical_col].max()
-        
         # Plot historical data
         admin_boundaries_with_stats.plot(
             column=historical_col,
@@ -909,10 +902,6 @@ def create_climate_plots(historical_ds, future_ds, admin_boundaries, index, proj
     if admin_boundaries is not None:
         # Get bounds of the country
         bounds = admin_boundaries.total_bounds
-        
-        # Create a mask for the area within the country bounds
-        lon_mask = (lons >= bounds[0]) & (lons <= bounds[2])
-        lat_mask = (lats >= bounds[1]) & (lats <= bounds[3])
         
         # Apply the mask to extract data within the country extent
         country_data = historical_var.where(
@@ -1093,7 +1082,7 @@ def create_climate_plots(historical_ds, future_ds, admin_boundaries, index, proj
                         standardization_method
                     )
                 else:
-                    print(f"Warning: Required columns for zonal statistics not found.")
+                    print("Warning: Required columns for zonal statistics not found.")
                     print(f"Available columns: {gdf_change.columns.tolist()}")
             
         except Exception as e:
@@ -1301,7 +1290,7 @@ def run_analysis(b):
                 return
 
             # Get administrative boundaries
-            print(f"Loading boundaries...")
+            print("Loading boundaries...")
             try:
                 if custom_boundaries_radio.value == 'Custom boundaries':
                     # Load custom boundaries
@@ -1316,7 +1305,7 @@ def run_analysis(b):
                     try:
                         admin_boundaries = gpd.read_file(custom_boundaries_file.value)
                         if admin_boundaries is None or admin_boundaries.empty:
-                            print(f"Error: No boundary data found in the specified file")
+                            print("Error: No boundary data found in the specified file")
                             return
                         print(f"Successfully loaded custom boundaries with {len(admin_boundaries)} features")
                     except Exception as e:

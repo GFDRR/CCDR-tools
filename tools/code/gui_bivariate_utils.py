@@ -4,9 +4,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-from matplotlib.patches import Patch
-from matplotlib.colors import ListedColormap
-from matplotlib.colors import LinearSegmentedColormap
 import folium
 from folium.plugins import MiniMap, Fullscreen
 import ipywidgets as widgets
@@ -418,8 +415,6 @@ def classify_data(gdf, wealth_field, hazard_field, num_quantiles, wealth_field_f
     result_gdf : GeoDataFrame
         Copy of input geodataframe with added classification fields
     """
-    import pandas as pd
-    import numpy as np
     
     # Create a copy to avoid modifying the original
     result_gdf = gdf.copy()
@@ -433,7 +428,6 @@ def classify_data(gdf, wealth_field, hazard_field, num_quantiles, wealth_field_f
     unique_wealth_values = len(wealth_values)
     
     print(f"Unique wealth values: {unique_wealth_values}")
-    print(f"Wealth values: {wealth_values}")
     
     # Flag for whether to use pre-binned direct mapping approach
     use_direct_mapping = False
@@ -597,10 +591,6 @@ def create_bivariate_colormap(palette_key, num_quantiles):
     colors_list : list
         Flattened list of colors
     """
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import matplotlib.colors as mcolors
-    from matplotlib.colors import LinearSegmentedColormap
     
     # Function to convert hex to RGB float values (0-1)
     def hex_to_rgb(hex_color):
@@ -770,34 +760,26 @@ def create_bivariate_colormap(palette_key, num_quantiles):
     base_palette = stevens_palettes[palette_key]
     
     # Select or generate the palette for the requested number of quantiles
-    if num_quantiles == 3:
-        palette = base_palette
-    elif num_quantiles == 4:
-        palette = create_4x4_palette(base_palette)
-    elif num_quantiles == 5:
-        palette = create_5x5_palette(base_palette)
-    else:
-        # Fall back to 3×3 for any other value
-        palette = base_palette
-        num_quantiles = 3
+    match num_quantiles:
+        case 3:
+            palette = base_palette
+        case 4:
+            palette = create_4x4_palette(base_palette)
+        case 5:
+            palette = create_5x5_palette(base_palette)
+        case _:
+            # Fall back to 3×3 for any other value
+            palette = base_palette
+            num_quantiles = 3
     
-    # Create the color matrix from the palette
-    bivariate_colors = np.zeros((num_quantiles, num_quantiles, 4))
-    
-    # Fill the matrix with colors from the palette
-    # In Stevens palette, rows are typically hazard (bottom to top = low to high)
-    # and columns are typically poverty (left to right = low to high)
-    for i in range(num_quantiles):
-        for j in range(num_quantiles):
-            # Convert hex to RGB with alpha
-            rgb = hex_to_rgb(palette[(i, j)])
-            bivariate_colors[i, j, :] = rgb
-    
+    # Create the color matrix from the palette using list comprehension
+    bivariate_colors = np.array([
+        [hex_to_rgb(palette[(i, j)]) for j in range(num_quantiles)]
+        for i in range(num_quantiles)
+    ])
+
     # Create a flattened list of colors
-    colors_list = []
-    for i in range(num_quantiles):
-        for j in range(num_quantiles):
-            colors_list.append(bivariate_colors[i, j, :])
+    colors_list = [bivariate_colors[i, j, :] for i in range(num_quantiles) for j in range(num_quantiles)]
     
     return bivariate_colors, colors_list
 
@@ -837,8 +819,8 @@ def create_bivariate_legend(bivariate_colors, poverty_label, hazard_label, num_q
     ax.set_axis_off()
     
     # Create the legend grid - with fixed orientation
-    for i in range(num_quantiles):  # i = hazard (rows)
-        for j in range(num_quantiles):  # j = poverty (columns)
+    for i in range(num_quantiles):  # i capturing hazard (rows)
+        for j in range(num_quantiles):  # j capturing poverty (columns)
             # Add colored square
             ax.add_patch(
                 plt.Rectangle(
@@ -936,7 +918,7 @@ def create_summary_table(gdf, pop_field, wealth_field, hazard_field, bivariate_p
     return fig
 
 # Function to create a folium bivariate choropleth map without title overlay
-def create_bivariate_map(gdf, colors_list, id_field, name_field, num_quantiles, title):
+def create_bivariate_map(gdf, colors_list, id_field, name_field, num_quantiles):
     # Convert colors to hex
     hex_colors = [mcolors.to_hex(c) for c in colors_list]
     
@@ -1065,26 +1047,19 @@ def create_qgis_style(gdf, colors_list, num_quantiles, palette_name):
     qgis_style : str
         XML string containing the QGIS style (QML)
     """
-    import matplotlib.colors as mcolors
-    import datetime
-    
-    # Function to convert RGBA values to hex
-    def rgba_to_hex(rgba):
-        return mcolors.to_hex(rgba[:3])
-    
-    # Convert colors to hex
-    hex_colors = [rgba_to_hex(c) for c in colors_list]
+
+    hex_colors = [mcolors.to_hex(c[:3]) for c in colors_list]
     
     # Start building the QML style
-    qml = f"""<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+    qml = """<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
 <qgis version="3.22.0-Białowieża" styleCategories="Symbology" readOnly="0">
   <renderer-v2 type="categorizedSymbol" attr="bivariate_class" forceraster="0" symbollevels="0" enableorderby="0">
     <categories>
 """
     
     # Create a category for each bivariate class
-    for j in range(num_quantiles):  # j = poverty/wealth (columns)
-        for i in range(num_quantiles):  # i = hazard (rows)
+    for j in range(num_quantiles):  # j capturing poverty/wealth (columns)
+        for i in range(num_quantiles):  # i capturing hazard (rows)
             # Calculate bivariate class CORRECTLY
             # In the classify_data function:
             # result_gdf['bivariate_class'] = result_gdf['wealth_quantile'] * num_quantiles + result_gdf['hazard_quantile']
@@ -1110,8 +1085,8 @@ def create_qgis_style(gdf, colors_list, num_quantiles, palette_name):
 """
 
     # Create a symbol for each bivariate class
-    for j in range(num_quantiles):  # j = poverty/wealth (columns)
-        for i in range(num_quantiles):  # i = hazard (rows)
+    for j in range(num_quantiles):  # j capturing poverty/wealth (columns)
+        for i in range(num_quantiles):  # i capturing hazard (rows)
             # Calculate bivariate class CORRECTLY
             bivariate_class = j * num_quantiles + i
             
@@ -1319,23 +1294,17 @@ def export_static_map(gdf, colors_list, output_path, num_quantiles, bivariate_pa
         Size of the figure (width, height) in inches
     title : str, optional
         Title for the map. If None, a default title is generated.
-    """
-    import matplotlib.pyplot as plt
-    from matplotlib.colors import ListedColormap
-    import os
-    import numpy as np
-    from shapely.geometry import Polygon, MultiPolygon
-    
+    """    
     # Close any existing plots to avoid interference
     plt.close('all')
     
     # Create a new figure for the map
-    fig, ax = plt.subplots(figsize=figsize)
+    _, ax = plt.subplots(figsize=figsize)
     
     # Create a mapping from bivariate_class to color
     color_map = {}
-    for j in range(num_quantiles):  # j = poverty (columns)
-        for i in range(num_quantiles):  # i = hazard (rows)
+    for j in range(num_quantiles):  # j capturing poverty (columns)
+        for i in range(num_quantiles):  # i capturing hazard (rows)
             # Calculate class as used in the GeoDataFrame
             bivariate_class = j * num_quantiles + i
             
@@ -1410,7 +1379,7 @@ def export_static_map(gdf, colors_list, output_path, num_quantiles, bivariate_pa
     
     # Create a separate figure for the legend
     plt.close('all')  # Close the map figure
-    legend_fig, legend_ax = plt.subplots(figsize=(4, 4))
+    _, legend_ax = plt.subplots(figsize=(4, 4))
     legend_ax.set_axis_off()
     
     # Parse the palette name to get descriptive colors for labels
@@ -1419,8 +1388,8 @@ def export_static_map(gdf, colors_list, output_path, num_quantiles, bivariate_pa
     poverty_color = palette_parts[1].capitalize() if len(palette_parts) > 1 else "Red"
     
     # Create a grid of colored squares for the legend
-    for i in range(num_quantiles):  # i = hazard (rows)
-        for j in range(num_quantiles):  # j = poverty (columns)
+    for i in range(num_quantiles):  # i capturing hazard (rows)
+        for j in range(num_quantiles):  # j capturing poverty (columns)
             # Get color from colors_list
             color_index = i * num_quantiles + j
             color = colors_list[color_index][:3]  # Use only RGB
@@ -1606,7 +1575,7 @@ def run_analysis(b):
             gdf = classify_data(gdf, wealth_field, hazard_field, num_quantiles, wealth_field_for_classification)
          
             # Print summary statistics
-            print(f"\nSummary Statistics:")
+            print("\nSummary Statistics:")
             print(f"Total Population: {gdf[pop_field].sum():,.0f}")
             print(f"Total Area: {gdf['area_km2'].sum():,.2f} km²")
             print(f"Average Population Density: {gdf['pop_density'].mean():,.2f} people/km²")
@@ -1674,8 +1643,7 @@ def run_analysis(b):
 
             # Create bivariate map
             print("Creating bivariate map...")
-            title = f"Bivariate Map: Poverty × Exposure to Hazard"
-            bivariate_map = create_bivariate_map(gdf, colors_list, id_field, name_field, num_quantiles, title)
+            bivariate_map = create_bivariate_map(gdf, colors_list, id_field, name_field, num_quantiles)
             
             # Create summary table
             print("Creating summary statistics table...")
@@ -1707,12 +1675,12 @@ def run_analysis(b):
                 os.makedirs(output_dir, exist_ok=True)
                 
                 # Save summary table
-                summary_path = os.path.join(output_dir, f"bivariate_summary.png")
+                summary_path = os.path.join(output_dir, "bivariate_summary.png")
                 summary_table.savefig(summary_path, dpi=300, bbox_inches='tight')
                 print(f"Saved summary table to {summary_path}")
                 
                 # Save interactive map as HTML
-                html_map_path = os.path.join(output_dir, f"bivariate_map.html")
+                html_map_path = os.path.join(output_dir, "bivariate_map.html")
                 bivariate_map.save(html_map_path)
                 print(f"Saved interactive map to {html_map_path}")
                 
@@ -1732,7 +1700,7 @@ def run_analysis(b):
                         figsize=(12, 12),
                         title=map_title
                     )
-                    print(f"Successfully exported high-quality static maps:")
+                    print("Successfully exported high-quality static maps:")
                     print(f"- Map: {map_path}")
                     print(f"- Legend: {legend_path}")
                 except Exception as e:
@@ -1882,12 +1850,14 @@ def create_js_code():
 
 # Function to create tabs for the UI
 def create_tabs():
+    
+    HTML_STYLE = "<hr style='margin: 10px 0;'>"
     # Create data tab
     data_tab = widgets.VBox([
         widgets.Label("Input Data:"),
         widgets.HBox([file_path_text, select_file_button]),
         layer_selector,
-        widgets.HTML("<hr style='margin: 10px 0;'>"),
+        widgets.HTML(HTML_STYLE),
         widgets.Label("Field Selection:"),
         id_field_selector,
         name_field_selector,
@@ -1900,10 +1870,10 @@ def create_tabs():
     bivariate_tab = widgets.VBox([
         widgets.Label("Bivariate Map Settings:"),
         quantiles_selector,
-        widgets.HTML("<hr style='margin: 10px 0;'>"),
+        widgets.HTML(HTML_STYLE),
         widgets.Label("Color Palettes:"),
         bivariate_palette_selector,
-        widgets.HTML("<hr style='margin: 10px 0;'>"),
+        widgets.HTML(HTML_STYLE),
         widgets.Label("Analysis Options:"),
         max_exposure_slider,
         normalize_rwi_chk,
@@ -1936,7 +1906,7 @@ def initialize_tool():
     sidebar = create_sidebar(info_box, tabs, output, footer)
     
     # Combine components to create final layout
-    map_and_chart, content_layout, final_layout = get_ui_components(sidebar, header)
+    _, _, final_layout = get_ui_components(sidebar, header)
     
     # Display the layout
     display(final_layout)

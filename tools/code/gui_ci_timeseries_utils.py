@@ -2,13 +2,10 @@ import os
 import xarray as xr
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
 import cartopy.crs as ccrs
 import geopandas as gpd
-from matplotlib.colors import TwoSlopeNorm
 from urllib.request import urlretrieve
 from shapely.geometry import shape
-import requests
 from IPython.display import display, clear_output, HTML
 import ipywidgets as widgets
 import pandas as pd
@@ -18,9 +15,7 @@ import folium
 import tkinter as tk
 from tkinter import filedialog
 from input_utils import get_adm_data
-import rasterstats
 from rasterstats import zonal_stats
-import rioxarray
 import warnings
 warnings.filterwarnings("ignore", message=".*crs.*", category=UserWarning)
 
@@ -536,7 +531,7 @@ def extract_year_from_timeseries(ds, variable_name, year):
         return None
 
 # Function to prepare xarray for zonal statistics
-def prepare_xarray_for_zonal_stats(xds, var_name):
+def prepare_xarray_for_zonal_stats(xds):
     """Convert xarray DataArray to a format suitable for zonal statistics."""
     try:
         # Create a copy to avoid modifying the original
@@ -686,7 +681,7 @@ def calculate_zonal_stats(data_array, admin_boundaries, stat='mean'):
         temp_tif = os.path.join(temp_dir, f"temp_{data_array.name}_raster.tif")
         
         # Prepare the data array
-        data_array_rio = prepare_xarray_for_zonal_stats(data_array, data_array.name)
+        data_array_rio = prepare_xarray_for_zonal_stats(data_array)
         if data_array_rio is None:
             print("Failed to prepare xarray for zonal statistics")
             return use_fallback_values(admin_boundaries, data_array, column_name)
@@ -838,11 +833,7 @@ def create_choropleth_map(admin_boundaries_with_stats, data_col, title, unit, cm
     # Ensure admin_boundaries_with_stats has a proper CRS
     if admin_boundaries_with_stats.crs is None:
         admin_boundaries_with_stats = admin_boundaries_with_stats.set_crs("EPSG:4326")
-    
-    # Get value range for data
-    vmin = admin_boundaries_with_stats[data_col].min()
-    vmax = admin_boundaries_with_stats[data_col].max()
-    
+        
     # Plot the data
     admin_boundaries_with_stats.plot(
         column=data_col,
@@ -969,11 +960,7 @@ def create_single_climate_plot(data, admin_boundaries, index, title, unit, cmap,
     if admin_boundaries is not None:
         # Get bounds of the country
         bounds = admin_boundaries.total_bounds
-        
-        # Create a mask for the area within the country bounds
-        lon_mask = (lons >= bounds[0]) & (lons <= bounds[2])
-        lat_mask = (lats >= bounds[1]) & (lats <= bounds[3])
-        
+                
         # Apply the mask to extract data within the country extent
         country_data = data.where(
             (data.lon >= bounds[0]) & 
@@ -1262,7 +1249,7 @@ def generate_summary_statistics(zonal_data_list, index, timescale, output_dir):
                     plt.figure(figsize=(12, 8))
                     
                     # Create subplots for different statistics
-                    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+                    _, axes = plt.subplots(2, 2, figsize=(14, 10))
                     
                     # Plot Mean values by season
                     for season in seasons:
@@ -1511,7 +1498,7 @@ def export_boundaries_to_gpkg(gdf, country, adm_level, index, year, output_dir, 
                             all_gdf[year_col] = gdf_copy[year_col].values
                             key_col = None
                         else:
-                            print(f"Error: Cannot merge data with different lengths")
+                            print("Error: Cannot merge data with different lengths")
                             key_col = None
                     
                     if key_col:
@@ -1723,7 +1710,7 @@ def run_analysis(b):
                     try:
                         admin_boundaries = gpd.read_file(custom_boundaries_file.value)
                         if admin_boundaries is None or admin_boundaries.empty:
-                            print(f"Error: No boundary data found in the specified file")
+                            print("Error: No boundary data found in the specified file")
                             return
                         print(f"Successfully loaded custom boundaries with {len(admin_boundaries)} features")
                     except Exception as e:
@@ -1839,7 +1826,7 @@ def run_analysis(b):
                 generate_summary_statistics(all_zonal_data, selected_index, selected_timescale, output_dir)
             
             # Summary
-            print(f"\nAnalysis summary:")
+            print("\nAnalysis summary:")
             print(f"Successfully processed {len(set([y for y, _, _ in all_grid_figs]))} out of {len(selected_years)} selected years")
             
             if selected_timescale == 'Seasonal':
