@@ -151,7 +151,7 @@ def create_sidebar(info_box, tabs, output, footer):
     ], layout=Layout(width='370px', height='100%'))
 
 
-def get_ui_components(sidebar, header):
+def get_ui_components(sidebar, header, map_widget):
     
     map_and_chart = VBox(
         [map_widget, chart_output],
