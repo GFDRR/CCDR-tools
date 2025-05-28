@@ -6,35 +6,49 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  # Core Python
   - python=3.10
+  
+  # Data manipulation and analysis
   - pandas
-  - geopandas
   - numpy
-  - matplotlib
-  - seaborn
-  - folium
+  
+  # Geospatial libraries
+  - geopandas
   - rasterio
   - rioxarray
   - rasterstats
   - shapely
+  - fiona
+  - gdal
+  - cartopy
+  
+  # Scientific computing and parallel processing
+  - xarray
+  - dask
+  - multiprocess
+  
+  # Visualization
+  - matplotlib
+  - seaborn
+  - folium
+  - branca
+  
+  # Web and networking
   - requests
-  - ipywidgets
+  - urllib3
+  
+  # Jupyter and interactive widgets
   - jupyter
   - notebook
+  - ipywidgets
+  
+  # File formats and I/O
   - openpyxl
-  - gdal
-  - tqdm
-  - multiprocess
-  - pillow
-  - branca
   - python-dotenv
-  - pyproj
-  - rtree
-  - scikit-learn
-  - scipy
-  - xarray
-  - contextily
-  - pytest
+  
+  # Progress bars and utilities
+  - tqdm
+  
+  # Package manager
   - pip
-  - pip:
-    - geopy
