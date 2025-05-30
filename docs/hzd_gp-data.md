@@ -42,6 +42,13 @@ align: center
 ---
 Global Tsunami Model - run-up height, RP 500 years.
 ```
+The NOAA offers global long-term historical database of [tsunami runup](https://www.ngdc.noaa.gov/hazel/view/hazards/tsunami/runup-data) documenting the impacts of tsunami events worldwide. This database provides detailed information on tsunami runup occurrences—instances where tsunami waves inundate coastal areas. Each entry in the database includes critical data such as:
+    - Geographic Coordinates: Precise latitude and longitude of observation points.
+    - Event Details: Date, time, and location of the tsunami event.
+    - Runup Measurements: Maximum water heights recorded, which indicate the extent of inland penetration by tsunami waves.
+    NGDC
+    - Impact Assessments: Information on casualties, property damage, and other effects associated with each runup event.
+
 (hzd_gp_vo)=
 ## Volcanic activity
 

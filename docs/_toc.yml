@@ -31,6 +31,8 @@ parts:
       - file: docs/validation
       - file: docs/risk-poverty
       - file: docs/presentation
+        sections:
+          - file: docs/philosophy_of_mapping
       - file: docs/utility
         sections:
         - file: tools/utility/merge_tiles/Merge_tiles.ipynb
