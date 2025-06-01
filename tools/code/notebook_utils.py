@@ -183,6 +183,7 @@ def create_country_selector_widget(country_options: list[str]):
     return country_selector
 
 
+#TODO: Move this to a class and make it expandable for other notebooks
 def run_input_checks(
     country_selector, country_dict, haz_type,
     return_periods_selector, preview_chk,

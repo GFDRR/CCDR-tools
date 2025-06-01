@@ -125,7 +125,7 @@ def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_fol
             if exp_cat == 'BU':
                 damage_factor = TC_damage_factor_builtup
             else:
-                damage_factor = lambda x: x
+                damage_factor = lambda x, _: x
         else:
                 raise ValueError(f"Unknown hazard type: {haz_type}")
 

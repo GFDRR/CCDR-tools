@@ -56,6 +56,29 @@ layer_selector = widgets.Dropdown(
 layer_selector_id = f'layer-selector-{id(layer_selector)}'
 layer_selector.add_class(layer_selector_id)
 
+#TODO: Merge this with run_input_check class from notebook_utils.py once it is implemented as a class
+def validate_input(
+    id_field_selector,
+    name_field_selector,
+    population_field_selector,
+    poverty_field_selector,
+    hazard_field_selector
+):
+    # Return False if any selector is None
+    if (
+        id_field_selector.value is None or
+        name_field_selector.value is None or
+        population_field_selector.value is None or
+        poverty_field_selector.value is None or
+        hazard_field_selector.value is None
+    ):
+        print("Ensure all fields are selected.")
+        return False
+    
+    return True
+
+
+
 # Field selection dropdowns
 id_field_selector = widgets.Dropdown(
     options=[],
@@ -1442,10 +1465,16 @@ def run_analysis(b):
     run_button.disabled = True
     run_button.description = "Creating Map..."
     
-    with output:
-        output.clear_output(wait=True)
-        
-        try:
+    try:
+        with output:
+            output.clear_output(wait=True)
+                    
+            if not validate_input(
+                id_field_selector, name_field_selector, population_field_selector,
+                wealth_field_selector, hazard_field_selector
+            ):
+                return
+
             # Get input file and parameters
             file_path = file_path_text.value
             if not file_path:
@@ -1731,11 +1760,11 @@ def run_analysis(b):
                 print(f"Saved data with embedded QGIS styling to {output_file}")
                 print("This GeoPackage includes styling information for QGIS.")
                 print("If the style doesn't load automatically, you can also use the separate .qml file that was created.")       
-        except Exception as e:
-            print(f"Error in analysis: {str(e)}")
-            import traceback
-            traceback.print_exc()
-        
+    except Exception as e:
+        print(f"Error in analysis: {str(e)}")
+        import traceback
+        traceback.print_exc()
+    finally:
         run_button.disabled = False
         run_button.description = "Create Bivariate Map"
 
