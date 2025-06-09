@@ -9,8 +9,13 @@ The practice of mapping the world is not simply a technical endeavor—it is a *
 One of the earliest systematic attempts at mapping the known world came from the Greek scholar **Eratosthenes of Cyrene** (c. 276–194 BCE), a polymath who served as the chief librarian at the Library of Alexandria. He is often credited as the "father of geography." 
 His most notable contribution was the calculation of the Earth's circumference with remarkable accuracy for his time, using simple geometry and observations of shadows in Syene and Alexandria during the summer solstice. Based on this, Eratosthenes devised one of the first known *gridded* maps of the inhabited world, laying out meridians and parallels in an early conceptualization of geographic coordinates.
 
-![Eratosthenes' Map](https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Mappa_di_Eratostene.jpg/960px-Mappa_di_Eratostene.jpg)
+```{figure} https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Mappa_di_Eratostene.jpg/960px-Mappa_di_Eratostene.jpg
+:alt: Eratosthenes' Map
+:width: 90%
+:align: center
+
 *Reconstruction of Eratosthenes' map of the known world*
+```
 
 Eratosthenes' map was an extraordinary achievement: not just in terms of its scale and detail, but in how it was underpinned by a clear theoretical understanding of the Earth as a sphere and of geography as a branch of mathematical science. This highlights how Eratosthenes' work went beyond empirical observation into the realm of abstract reasoning—a hallmark of Greek philosophical inquiry.
 
@@ -19,8 +24,13 @@ Eratosthenes' map was an extraordinary achievement: not just in terms of its sca
 Prior to Eratosthenes, **Anaximander of Miletus** (c. 610–546 BCE) is often cited as the first to draw a map of the world, though none of his works survive. According to later sources, his map represented the known world as a circular disk floating in space, surrounded by ocean. 
 This representation was not just geographical—it reflected a **metaphysical cosmology**. The Earth was conceived as a central, balanced entity, suggesting an underlying harmony and order to the universe, a theme common in pre-Socratic thought.
 
-![Anaximander's Map](images/map_anaxim.jpg)
+```{figure} images/map_anaxim.jpg
+:alt: Anaximander's Map
+:width: 70%
+:align: center
+
 *Reconstruction of Anaximander's world map*
+```
 
 ### Ptolemy: Systematizing Cartographic Principles
 
@@ -36,4 +46,4 @@ Today, as we navigate digital maps, satellite imagery, and GIS systems, we conti
 
 ## Suggested Reading
 
-📖 *"A History of the World in Twelve Maps"* by Jerry Brotton
+📖 [*"A History of the World in Twelve Maps"*](https://books.google.it/books/about/A_History_of_the_World_in_Twelve_Maps.html?id=Qsi_7_DQ3L4C&redir_esc=y) by Jerry Brotton
