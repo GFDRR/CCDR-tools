@@ -75,6 +75,13 @@ Poverty maps are combined with EAE/EAI maps to generate bi-variate maps. These m
 Classification of total exposure on an administrative unit is done both on the basis of absolute numbers or ratios. For instance, as severe fluvial flooding and landslides represent very localized threats, the classification is based on total counts. In comparison, heat waves, droughts and air pollution are more widespread across geographic units and therefore classified into groups based on proportions. 
 
 ```{seealso}
-A script in R is provided to create bi-variate maps starting from risk and poverty data.<br>`Work in progress - we are looking to make it more user friendly!`
-[**Bivariate Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/tools/utility/BivariateMap.R)
+We offer a python GUI to create bi-variate maps starting from risk and poverty data.
+[**Bivariate Maps Script**](https://github.com/GFDRR/CCDR-tools/blob/main/tools/code/GUI_bivariate-maps.ipynb)
+
+    ```{figure} images/bivariate_GUI.png
+    ---
+    align: center
+    ---
+    ```
+
 ```

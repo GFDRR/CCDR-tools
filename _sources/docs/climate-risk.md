@@ -73,6 +73,6 @@ Additional indices could also be obtained from external sources.
 | [Copernicus Climate Data Store](https://cds.climate.copernicus.eu) | EU | Large  collection of global variables and indices | Geodata |
 | [Climate analytics repository](https://bennyistanto.github.io/gost-climate) | GOST | Full selection of variables, model members, periods | Geodata |
 | [IPCC atlas](https://interactive-atlas.ipcc.ch/regional-information) | IPCC | Selection of climate variables for a range of periods and scenario | Table, geodata, maps, charts |
-| [Global Drought Indices](https://data.ceda.ac.uk/badc/hydro-jules/data/Global_drought_indices) | CEDA | Global high-resolution drought datasets from 1981-2022 | Geodata | 
+| [Global Drought Layers](https://www.ciesin.columbia.edu/data/globaldrought/) | SEDAC | Global Drought Indices SPI and SPEI for 3, 6 and 12 months covering past and future (1980-2100) at 25 km resolution based on Downscaled CMIP6 Models and SSP-RCP Combinations | Geodata | 
       
 

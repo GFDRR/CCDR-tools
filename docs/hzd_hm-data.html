@@ -215,8 +215,8 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="external-data.html">
-                        Additional data sources
+                      <a class="nav-link nav-internal" href="external-tools.html">
+                        Additional resources
                       </a>
                     </li>
                 
@@ -411,8 +411,8 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="external-data.html">
-                        Additional data sources
+                      <a class="nav-link nav-internal" href="external-tools.html">
+                        Additional resources
                       </a>
                     </li>
                 
@@ -542,7 +542,7 @@ const thebe_selector_output = ".output, .cell_output"
 
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="external-data.html">Additional data sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external-tools.html">Additional resources</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="nav bd-sidenav">
@@ -736,13 +736,6 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#floods">
    Floods
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#sea-level-rise">
-     Sea level rise
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#landslides">
@@ -785,7 +778,7 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 <li><p><strong>Pluvial (or surface water) floods</strong> are a consequence of heavy rainfall, but unrelated to the presence of water bodies. Fast accumulation of rainfall is due to reduced soil absorbing capacity or due to the saturation of the drainage infrastructures; meaning that the same event intensity can trigger very different risk outcomes depending on those parameters. For this reason, static hazard maps based on rainfall and DEM alone should be used with extreme caution. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures.</p></li>
 <li><p><strong>Coastal floods (storm surge)</strong> occur when the level in a water body (sea, estuary) rises to engulf otherwise dry land. This happens mainly due to storm surges, triggered by tropical cyclones and/or strong winds pushing surface water inland. Like for inland floods, hazard intensity is measured using the water extent and associated depth.</p></li>
 </ul>
-<p>The global <strong>Fathom</strong> model has consistently proven to be the best option for flood risk screening across WB projects. Recently (2023) Fathom v3 has been released, rising the quality standard: compared to v2, it uses a more advanced modelling approach based on a high-resolution DEM (30m), and includes additional output, such as coastal flooding and future climate projections. Like v2, for each flood type it offers both the <em>defended</em> and the <em>undefended</em> options. The <em>undefended</em> model is typically the preferred product to use for risk screening; the defended model (FD) uses GDP as a proxy (FLOPROS database) to set defence standards, while it does not account for presence of physical defence measures. The difference between the two options is much more tangible in wealthier countries.</p>
+<p>The global <strong>Fathom</strong> model has consistently proven to be the best option for flood risk screening across WB projects. Fathom v3 is the latest release, improving the resolution to 30m and including additional features, such as coastal flooding and future climate projections.</p>
 <table class="table" id="fl-data">
 <thead>
 <tr class="row-odd"><th class="head text-right"><p><strong>Name</strong></p></th>
@@ -844,40 +837,40 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 <p class="admonition-title">See also</p>
 <p>The Fathom v3 global dataset can be requested for use in World Bank projects by filling the <a class="reference external" href="https://forms.office.com/r/sG0qWTnC0L"><strong>request form</strong></a>.</p>
 </div>
-<p>When an open dataset is preferred, there are a few alternatives that can be considered.</p>
+<p>When an open-access global dataset is preferred, there are a few alternatives that can be considered.</p>
 <ul class="simple">
-<li><p><strong>JRC</strong> hazard maps based on LISFLOOD model were recently updated. These can be used for risk screening that requires open data input.</p></li>
-<li><p><strong>WRI</strong> hazard maps are the preferred choice in cases when data needs to be open/public and explicit climate scenarios are required. However the low resolution of this dataset makes it far from optimal to measure exposure and risk.</p></li>
-<li><p><strong>Deltares</strong> updated the WRI coastal flood model at 90 m, representing the best option in terms of resolution and time coverage (baseline + scenarios), and water routing, including inundation attenuation to generate more realistic flood extent.</p></li>
+<li><p><strong>JRC</strong> flood hazard maps based on LISFLOOD model were recently updated. There are 7 probabilistic scenarios using 90 m resolution, those can be used for risk screening under current climate.</p></li>
+<li><p><strong>WRI</strong> “Aqueduct” flood hazard maps include both historical and future periods scenarios, using a resolution of 1 km.</p></li>
+<li><p><strong>UNEP/CDRI</strong> offers fluvial flood hazard maps as 9 return period scenarios under existing climate and long-term projected scenarios (SSP1 and SSP5) at 90 m resolution.</p></li>
 </ul>
 <table class="table" id="fl-data2">
 <thead>
 <tr class="row-odd"><th class="head text-right"><p><strong>Name</strong></p></th>
 <th class="head text-center"><p><a class="reference external" href="https://data.jrc.ec.europa.eu/dataset/jrc-floods-floodmapgl_rp50y-tif">Global river flood hazard maps</a></p></th>
 <th class="head text-center"><p><a class="reference external" href="https://www.wri.org/data/aqueduct-floods-hazard-maps">Aqueduct flood hazard maps</a></p></th>
-<th class="head text-center"><p><a class="reference external" href="https://planetarycomputer.microsoft.com/dataset/deltares-floods">Global Coastal Flood maps</a></p></th>
+<th class="head text-center"><p><a class="reference external" href="https://giri.unepgrid.ch/map">UNEP/CDRI</a></p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td class="text-right"><p><strong>Developer</strong></p></td>
 <td class="text-center"><p>JRC</p></td>
 <td class="text-center"><p>WRI</p></td>
-<td class="text-center"><p>Deltares</p></td>
+<td class="text-center"><p>UNEP/CDRI</p></td>
 </tr>
 <tr class="row-odd"><td class="text-right"><p><strong>Version/Release</strong></p></td>
 <td class="text-center"><p>v2 (2024)</p></td>
 <td class="text-center"><p>v2 (2020)</p></td>
-<td class="text-center"><p>v3 (2022)</p></td>
+<td class="text-center"><p>v1 (2023)</p></td>
 </tr>
 <tr class="row-even"><td class="text-right"><p><strong>Hazard process</strong></p></td>
 <td class="text-center"><p>Fluvial flood</p></td>
-<td class="text-center"><p>Fluvial flood, Coastal flood</p></td>
-<td class="text-center"><p>Coastal flood</p></td>
+<td class="text-center"><p>Fluvial flood</p></td>
+<td class="text-center"><p>Fluvial flood</p></td>
 </tr>
 <tr class="row-odd"><td class="text-right"><p><strong>Resolution</strong></p></td>
 <td class="text-center"><p>90 m</p></td>
 <td class="text-center"><p>900 m</p></td>
-<td class="text-center"><p>90 m, 1 km, 5 km</p></td>
+<td class="text-center"><p>90 m</p></td>
 </tr>
 <tr class="row-even"><td class="text-right"><p><strong>Analysis type</strong></p></td>
 <td class="text-center"><p>Probabilistic</p></td>
@@ -887,12 +880,12 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 <tr class="row-odd"><td class="text-right"><p><strong>Frequency type</strong></p></td>
 <td class="text-center"><p>Return Period (7 scenarios)</p></td>
 <td class="text-center"><p>Return Period (10 scenarios)</p></td>
-<td class="text-center"><p>Return Period (6 scenarios)</p></td>
+<td class="text-center"><p>Return Period (9 scenarios)</p></td>
 </tr>
 <tr class="row-even"><td class="text-right"><p><strong>Time reference</strong></p></td>
 <td class="text-center"><p>Baseline (1989-2020)</p></td>
 <td class="text-center"><p>Baseline (1960-1999)<br>Projections  – CMIP5 (2030-2050-2080)</p></td>
-<td class="text-center"><p>Baseline (2018)<br>Projections – SLR (2050)</p></td>
+<td class="text-center"><p>Baseline (2018)<br>Projections (2100)</p></td>
 </tr>
 <tr class="row-odd"><td class="text-right"><p><strong>Intensity metric</strong></p></td>
 <td class="text-center"><p>Water depth [m]</p></td>
@@ -912,89 +905,93 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 <p><span class="caption-number">Fig. 10 </span><span class="caption-text">Comparing modelled flood extent under historical scenario RP 100 years for a random location (Philippines): Fathom v3 2023 (left); Fathom v3 2023 (mid-left); JRC 2024 (mid-right) RWI - Aqueduct 2020 (right). Note how the Fathom model is able to better capture smaller discharge basins thanks to a better DTM resolution (30 m). Fathom 2 and JRC are comparable. The RWI data show its limitation at 1 km resolution.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<p id="hzd-hm-ss">Additional datasets that have been previously used in WB coastal flood analytics are those from <strong>Muis et al (2016)</strong> and <strong>Climate central</strong>. Both these models are not endorsed as they tend to project unrealistic flood extent  under baseline climate conditions, which might be due an oversimplified bathtub modelling approach, or due to the relatively low resolution and vertical accuracy of the Digital Terrain Model (DTM).</p>
+<p id="hzd-hm-ss">Regarding specific coastal flood and storm surge datasets, all models listed below include flood hazard simulations that account for the effect of Sea Level Rise under climate change projections: RWI uses CMIP5 climate data, while Deltares and UNEP-CDRI dataset is based on CMIP6. In addition to increasing water volumes, sea level projections account for land movements (sinking or rising land) caused by tectonic activity, large-scale underground extraction, or glacial isostatic adjustment.</p>
+<ul class="simple">
+<li><p><strong>WRI</strong> “Aqueduct” storm surge hazard maps include both historical and future periods scenarios, using a resolution of 1 km.</p></li>
+<li><p><strong>Deltares</strong> updated the WRI coastal flood model at 90 m, representing the best option in terms of resolution and time coverage (baseline + scenarios), and water routing, including inundation attenuation to generate more realistic flood extent.</p></li>
+<li><p><strong>UNEP/CDRI</strong> offers coastal flood hazard maps as 7 return period scenarios (10 to 1000 years) under existing climate and long-term projected scenarios (SSP1 and SSP5) at 90 m resolution.</p></li>
+</ul>
 <table class="table" id="cf-data-more">
 <thead>
 <tr class="row-odd"><th class="head text-right"><p><strong>Name</strong></p></th>
-<th class="head text-center"><p><a class="reference external" href="https://www.geonode-gfdrrlab.org/search/?hazard_type=coastal_flood&amp;limit=5&amp;offset=5&amp;type__in=raster&amp;title__icontains=muis">Coastal flood hazard maps</a></p></th>
-<th class="head text-center"><p><a class="reference external" href="https://coastal.climatecentral.org">Coastal risk screening</a></p></th>
+<th class="head text-center"><p><a class="reference external" href="https://www.wri.org/data/aqueduct-floods-hazard-maps">Aqueduct flood hazard maps</a></p></th>
+<th class="head text-center"><p><a class="reference external" href="https://planetarycomputer.microsoft.com/dataset/deltares-floods">Global Coastal Flood maps</a></p></th>
+<th class="head text-center"><p><a class="reference external" href="https://giri.unepgrid.ch/map">Storm surge on coastaline</a></p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td class="text-right"><p><strong>Developer</strong></p></td>
-<td class="text-center"><p>Muis et al. (2016, 2020)</p></td>
-<td class="text-center"><p>Climate Central</p></td>
+<td class="text-center"><p>WRI</p></td>
+<td class="text-center"><p>Deltares</p></td>
+<td class="text-center"><p>UNEP/CDRI</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p><strong>Hazard process</strong></p></td>
+<tr class="row-odd"><td class="text-right"><p><strong>Version/Release</strong></p></td>
+<td class="text-center"><p>v2 (2020)</p></td>
+<td class="text-center"><p>v3 (2022)</p></td>
+<td class="text-center"><p>v1 (2023)</p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p><strong>Hazard process</strong></p></td>
 <td class="text-center"><p>Coastal flood</p></td>
-<td class="text-center"><p>Mean sea level</p></td>
+<td class="text-center"><p>Coastal flood</p></td>
+<td class="text-center"><p>Coastal flood</p></td>
 </tr>
-<tr class="row-even"><td class="text-right"><p><strong>Resolution</strong></p></td>
-<td class="text-center"><p>1 km</p></td>
-<td class="text-center"><p>?</p></td>
+<tr class="row-odd"><td class="text-right"><p><strong>Resolution</strong></p></td>
+<td class="text-center"><p>900 m</p></td>
+<td class="text-center"><p>90 m</p></td>
+<td class="text-center"><p>90 m</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p><strong>Analysis type</strong></p></td>
+<tr class="row-even"><td class="text-right"><p><strong>Analysis type</strong></p></td>
 <td class="text-center"><p>Probabilistic</p></td>
-<td class="text-center"><p></p></td>
+<td class="text-center"><p>Probabilistic</p></td>
+<td class="text-center"><p>Probabilistic</p></td>
 </tr>
-<tr class="row-even"><td class="text-right"><p><strong>Frequency type</strong></p></td>
+<tr class="row-odd"><td class="text-right"><p><strong>Frequency type</strong></p></td>
+<td class="text-center"><p>Return Period (6 scenarios)</p></td>
 <td class="text-center"><p>Return Period (10 scenarios)</p></td>
-<td class="text-center"><p>One layer per period</p></td>
+<td class="text-center"><p>Return Period (7 scenarios)</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p><strong>Time reference</strong></p></td>
-<td class="text-center"><p>Baseline (1979–2014)</p></td>
-<td class="text-center"><p>Baseline<br>Projections</p></td>
+<tr class="row-even"><td class="text-right"><p><strong>Time reference</strong></p></td>
+<td class="text-center"><p>Baseline (1960-1999)<br>Projections (CMIP5 2030-2050-2080)</p></td>
+<td class="text-center"><p>Baseline (2018)<br>Projections – (CMIP6 2050)</p></td>
+<td class="text-center"><p>Baseline (1989-2020)<br>Projections (2100)</p></td>
 </tr>
-<tr class="row-even"><td class="text-right"><p><strong>Intensity metric</strong></p></td>
+<tr class="row-odd"><td class="text-right"><p><strong>Intensity metric</strong></p></td>
 <td class="text-center"><p>Water depth [m]</p></td>
-<td class="text-center"><p>Water extent</p></td>
+<td class="text-center"><p>Water depth [m]</p></td>
+<td class="text-center"><p>Water depth [m]</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p><strong>License</strong></p></td>
+<tr class="row-even"><td class="text-right"><p><strong>License</strong></p></td>
 <td class="text-center"><p>Open data</p></td>
-<td class="text-center"><p>Licensed</p></td>
-</tr>
-<tr class="row-even"><td class="text-right"><p><strong>Notes</strong></p></td>
-<td class="text-center"><p>Retired data</p></td>
-<td class="text-center"><p>Simple bathtub distribution without flood attenuation</p></td>
+<td class="text-center"><p>Open data</p></td>
+<td class="text-center"><p>Open data</p></td>
 </tr>
 </tbody>
 </table>
-<p>As shown in figure below, considering the minimum baseline values (least impact criteria), the flood extent drawn by the Climate Central layer is similar to the baseline RP100 from Muis, in the middle - both generously overestimating water spreading inland even under less extreme scenarios [<em>the locaiton of comparison is chosen as both the Netherlands and N Italy are low-lying areas, which are typically the most difficult to model</em>].
-In comparison, the WRI is far from perfection (it is also a bathtub model), but it seems to apply a more realistic max flood extent, which ultimately makes it more realistic for application.</p>
-<figure class="align-center" id="id2">
-<img alt="../_images/CF_data.jpg" src="../_images/CF_data.jpg" />
-<figcaption>
-<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-<section id="sea-level-rise">
-<h3>Sea level rise<a class="headerlink" href="#sea-level-rise" title="Permalink to this heading">#</a></h3>
-<p>Most of the listed models include flood hazard simulations that account for the effect of Sea Level Rise under climate change projections: RWI uses CMIP5 climate data, while Deltares and ClimateCentral dataset is based on CMIP6. In addition to increasing water volumes, sea level projections account for land movements (sinking or rising land) caused by tectonic activity, large-scale underground extraction, or glacial isostatic adjustment.</p>
 <p>In additon to coastal flood projections, the <a class="reference external" href="https://sealevel.nasa.gov/ipcc-ar6-sea-level-projection-tool">NASA Sea Level Projection Tool</a> allows users to visualize and download the sea level projection data from the IPCC 6th Assessment Report (AR6). The tool shows both global and regional sea level projections from 2020 to 2150, along with how these projections differ depending on future scenario or warming level. Data can be downloaded in multiple formats.</p>
-</section>
 </section>
 <section id="landslides">
 <span id="hzd-hm-ls"></span><h2>Landslides<a class="headerlink" href="#landslides" title="Permalink to this heading">#</a></h2>
 <p>Landslides (mass movements) are affected by geological features (rock type and structure) and geomorphological setting (slope gradient). Landslides can be split into two categories depending on their trigger:</p>
 <ul class="simple">
 <li><p><strong>Dry mass movement</strong> (rockfalls, debris flows) is driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation.</p></li>
-<li><p><strong>Wet mass movement</strong> can be triggered by heavy precipitation and flooding and are strongly affected by geological features (e.g. soil type and structure) and geomorphological settings (e.g., slope gradient). They do not typically include avalanches.</p></li>
+<li><p><strong>Wet mass movement</strong> can be triggered by heavy precipitation and flooding and are strongly affected by geological features (e.g. soil type and structure) and geomorphological settings (e.g., slope gradient). They do not typically include avalanches.
+Landslide hazard description comes in form of deterministic susceptibility indices such as the NASA Landslide Hazard Susceptibility map (LHASA), the ARUP layer producded by GFDRR in 2019, and the most recent UNEP/CDRI layer, which improves the resolution to 90 m and offers both historical and future scenarios for the precipitation trigger. In addition, the <a class="reference external" href="https://gpm.nasa.gov/landslides/data.html"><strong>Cooperative Open Online Landslide Repository (COOLR)</strong></a> reports on recorded landslide events, that can be used together with the susceptibility maps to validate their output.</p></li>
 </ul>
 <table class="table" id="ls-data">
 <thead>
 <tr class="row-odd"><th class="head text-right"><p><strong>Name</strong></p></th>
-<th class="head text-center"><p><a class="reference external" href="https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map">Global landslide hazard layer</a></p></th>
 <th class="head text-center"><p><a class="reference external" href="https://gpm.nasa.gov/landslides/projects.html">Global landslide susceptibility<br>(LHASA)</a></p></th>
+<th class="head text-center"><p><a class="reference external" href="https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map">Global landslide hazard layer</a></p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td class="text-right"><p><strong>Developer</strong></p></td>
-<td class="text-center"><p>ARUP</p></td>
 <td class="text-center"><p>NASA</p></td>
+<td class="text-center"><p>ARUP</p></td>
 </tr>
 <tr class="row-odd"><td class="text-right"><p><strong>Hazard process</strong></p></td>
+<td class="text-center"><p>None</p></td>
 <td class="text-center"><p>Dry (seismic) mass movement<br>Wet (rainfall) mass movement</p></td>
-<td class="text-center"><p>none</p></td>
 </tr>
 <tr class="row-even"><td class="text-right"><p><strong>Resolution</strong></p></td>
 <td class="text-center"><p>1 km</p></td>
@@ -1009,28 +1006,27 @@ In comparison, the WRI is far from perfection (it is also a bathtub model), but 
 <td class="text-center"><p>none</p></td>
 </tr>
 <tr class="row-odd"><td class="text-right"><p><strong>Time reference</strong></p></td>
+<td class="text-center"><p>none</p></td>
 <td class="text-center"><p>Baseline (rainfall trigger) (1980-2018)</p></td>
-<td class="text-center"><p></p></td>
 </tr>
 <tr class="row-even"><td class="text-right"><p><strong>Intensity metric</strong></p></td>
-<td class="text-center"><p>Mean and Median intensity/frequency [-]</p></td>
 <td class="text-center"><p>Susceptibility index [-]</p></td>
+<td class="text-center"><p>Mean and Median intensity/frequency [-]</p></td>
 </tr>
 <tr class="row-odd"><td class="text-right"><p><strong>License</strong></p></td>
 <td class="text-center"><p>Open</p></td>
-<td class="text-center"><p></p></td>
+<td class="text-center"><p>Open</p></td>
 </tr>
 <tr class="row-even"><td class="text-right"><p><strong>Notes</strong></p></td>
-<td class="text-center"><p>Based on NASA landslide susceptibility layer. Median and Mean layers provided.</p></td>
-<td class="text-center"><p>Although not a hazard layer, it can be accounted for in addition to the ARUP layer.</p></td>
+<td class="text-center"><p>Susceptibility obtained from land morphology variables</p></td>
+<td class="text-center"><p>Based on NASA landslide susceptibility layer, adding the hazard triggers</p></td>
 </tr>
 </tbody>
 </table>
-<p>Landslide hazard description can rely on either the NASA Landslide Hazard Susceptibility map (LHASA) or the derived ARUP layer funded by GFDRR in 2019. This dataset considers empirical events from the COOLR database and model both the earthquake and rainfall triggers over the existing LHASA map. The metric of choice is frequency of occurrence of a significant landslide per sq km, which is however provided as synthetic index (not directly translatable as time occurrence probability).</p>
-<figure class="align-center" id="id3">
+<figure class="align-center" id="id2">
 <img alt="../_images/landslide1.png" src="../_images/landslide1.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 12 </span><span class="caption-text">ARUP landslide hazard layer. The qualitative index is displayed into 3 discrete classes (Low, Medium, High) according to thresholds set by ARUP (Low: &lt;0.01; Moderate: 0.01-0.1; High: &gt;0.1).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">ARUP landslide hazard layer. The qualitative index is displayed into 3 discrete classes (Low, Medium, High) according to thresholds set by ARUP (Low: &lt;0.01; Moderate: 0.01-0.1; High: &gt;0.1).</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1100,10 +1096,10 @@ In comparison, the WRI is far from perfection (it is also a bathtub model), but 
 The STORM dataset comes with <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1">projections</a> as described in <a class="reference external" href="https://www.science.org/doi/10.1126/sciadv.abm8438">Bloemendaal, et al., 2022</a>: those are generated by extracting the climate change signal from each of the four general circulation models listed below, and adding this signal to the historical data from IBTrACS. This new dataset is then used as input for STORM, and resembles future-climate (2015-2050; RCP8.5/SSP5) conditions. Both <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1">synthetic tracks</a> and <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_climate_change_tropical_cyclone_wind_speed_return_periods/14510817">wind speed maps</a> are available.
 These data can be used to calculate tropical cyclone risk in all (coastal) regions prone to tropical cyclones.</p></li>
 </ul>
-<figure class="align-center" id="id4">
+<figure class="align-center" id="id3">
 <img alt="../_images/SW_data.jpg" src="../_images/SW_data.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 12 </span><span class="caption-text">Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1121,10 +1117,10 @@ FAO provides decadal, monthly and annual drought frequency over the period 1984-
 </ul>
 </li>
 </ul>
-<figure class="align-center" id="id5">
+<figure class="align-center" id="id4">
 <img alt="../_images/fao_asi.jpg" src="../_images/fao_asi.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 14 </span><span class="caption-text">FAO ASI global dataset showing historical drought frequency for &gt;30% cropland area affected along the period 1984-2021.</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">FAO ASI global dataset showing historical drought frequency for &gt;30% cropland area affected along the period 1984-2021.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1194,10 +1190,10 @@ The two indices are similar and <a class="reference external" href="https://www.
 <ul class="simple">
 <li><p><strong>Wet-Bulb Globe Temperature</strong> (WBGT °C): the WBGT combines temperature and humidity, both critical components in determining heat stress. A probabilistic dataset (3 return periods: 5, 20 and 100 years) based on 1980-2009 data has been developed for the GFDRR by VITO and has since been used to measure heat stress in risk screenings and assessment. This layer is generally sufficient for country-level hazard screening, but it has several limitations for any hazard and risk assessment. Although downscaled to consider gepmorphology and orography, the low grid resolution and relatively simple modelling makes it unfit to capture the heat island effect occurring in cities (Urban Heat Island) – nor the cooling effect of water bodies. That makes it unfit for any urban-scale assessment and generally sub-optimal for any sub-national assessment.</p></li>
 </ul>
-<figure class="align-center" id="id6">
+<figure class="align-center" id="id5">
 <img alt="../_images/hzd_hs.jpg" src="../_images/hzd_hs.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 15 </span><span class="caption-text">Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the global WBGT map based on global models resolution cannot capture these details.</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 14 </span><span class="caption-text">Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the global WBGT map based on global models resolution cannot capture these details.</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <ul class="simple">
@@ -1269,13 +1265,6 @@ The two indices are similar and <a class="reference external" href="https://www.
   <a class="reference internal nav-link" href="#floods">
    Floods
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#sea-level-rise">
-     Sea level rise
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#landslides">
@@ -1325,7 +1314,7 @@ By M. Amadio (GFDRR)
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Apr 04, 2025.<br>
+Last updated on Jun 09, 2025.<br>
 </p>
   </div>
   
