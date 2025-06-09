@@ -1,6 +1,6 @@
 # The Philosophy of Mapping
 
-The practice of mapping the world is not simply a technical endeavor—it is a **philosophical act**, an attempt to render the vastness of reality into a symbolic, intelligible form. The roots of this practice trace back to the ancient Hellenic world, where geography, astronomy, and philosophy intertwined in early efforts to understand and represent the Earth.
+The practice of mapping the world is not simply a technical endeavor — it is a **philosophical act**, an attempt to render the vastness of reality into a symbolic, intelligible form. The roots of this practice trace back to the ancient Hellenic world, where geography, astronomy, and philosophy intertwined in early efforts to understand and represent the Earth.
 
 ## The Pioneers of Ancient Cartography
 
@@ -22,7 +22,7 @@ Eratosthenes' map was an extraordinary achievement: not just in terms of its sca
 ### Anaximander of Miletus: The First World Map
 
 Prior to Eratosthenes, **Anaximander of Miletus** (c. 610–546 BCE) is often cited as the first to draw a map of the world, though none of his works survive. According to later sources, his map represented the known world as a circular disk floating in space, surrounded by ocean. 
-This representation was not just geographical—it reflected a **metaphysical cosmology**. The Earth was conceived as a central, balanced entity, suggesting an underlying harmony and order to the universe, a theme common in pre-Socratic thought.
+This representation was not just geographical — it reflected a **metaphysical cosmology**. The Earth was conceived as a central, balanced entity, suggesting an underlying harmony and order to the universe, a theme common in pre-Socratic thought.
 
 ```{figure} images/map_anaxim.jpg
 :alt: Anaximander's Map
@@ -38,7 +38,7 @@ Later figures like **Ptolemy** (c. 100–170 CE) in the Roman period built on th
 
 ## The Philosophical Dimensions of Mapping
 
-In these early efforts, we see mapping not merely as the act of drawing boundaries or locations, but as a **philosophical gesture**: a desire to impose *logos* (reason, order) onto the *chaos* of space. Maps are epistemological tools—they reflect what a society knows, values, and seeks to control or understand.
+In these early efforts, we see mapping not merely as the act of drawing boundaries or locations, but as a **philosophical gesture**: a desire to impose *logos* (reason, order) onto the *chaos* of space. Maps are epistemological tools — they reflect what a society knows, values, and seeks to control or understand.
 Maps are also ontological artifacts: they shape how reality is conceived. The earliest Greek world maps, like that of Anaximander, were philosophical propositions as much as geographical representations: they offered a way of visualizing the cosmos and humanity's place within it.
 This reinforces the notion that ancient maps were not only geographical but cosmological, reflecting metaphysical worldviews.
 
