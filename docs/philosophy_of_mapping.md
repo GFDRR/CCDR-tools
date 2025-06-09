@@ -34,7 +34,7 @@ This representation was not just geographical — it reflected a **metaphysical 
 
 ### Ptolemy: Systematizing Cartographic Principles
 
-Later figures like **Ptolemy** (c. 100–170 CE) in the Roman period built on these foundations. His *Geographia* systematized cartographic principles and introduced projections to transform the spherical Earth onto a flat surface—a challenge that lies at the heart of the philosophy of mapping: how to translate reality from one dimension to another without distortion.
+Later figures like **Ptolemy** (c. 100–170 CE) in the Roman period built on these foundations. His *Geographia* systematized cartographic principles and introduced projections to transform the spherical Earth onto a flat surface — a challenge that lies at the heart of the philosophy of mapping: how to translate reality from one dimension to another without distortion.
 
 ## The Philosophical Dimensions of Mapping
 
