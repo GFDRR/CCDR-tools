@@ -9,7 +9,7 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 - **Pluvial (or surface water) floods** are a consequence of heavy rainfall, but unrelated to the presence of water bodies. Fast accumulation of rainfall is due to reduced soil absorbing capacity or due to the saturation of the drainage infrastructures; meaning that the same event intensity can trigger very different risk outcomes depending on those parameters. For this reason, static hazard maps based on rainfall and DEM alone should be used with extreme caution. This is especially true for densely-populated urban areas, where the hazardous water cumulation is often the results of undersized or undermaintained discharge infrastructures.
 - **Coastal floods (storm surge)** occur when the level in a water body (sea, estuary) rises to engulf otherwise dry land. This happens mainly due to storm surges, triggered by tropical cyclones and/or strong winds pushing surface water inland. Like for inland floods, hazard intensity is measured using the water extent and associated depth.
 
-The global **Fathom** model has consistently proven to be the best option for flood risk screening across WB projects. Recently (2023) Fathom v3 has been released, rising the quality standard: compared to v2, it uses a more advanced modelling approach based on a high-resolution DEM (30m), and includes additional output, such as coastal flooding and future climate projections. Like v2, for each flood type it offers both the _defended_ and the _undefended_ options. The _undefended_ model is typically the preferred product to use for risk screening; the defended model (FD) uses GDP as a proxy (FLOPROS database) to set defence standards, while it does not account for presence of physical defence measures. The difference between the two options is much more tangible in wealthier countries.
+The global **Fathom** model has consistently proven to be the best option for flood risk screening across WB projects. Fathom v3 is the latest release, improving the resolution to 30m and including additional features, such as coastal flooding and future climate projections.
 
 ```{table}
 :name: FL_data
@@ -30,22 +30,22 @@ The global **Fathom** model has consistently proven to be the best option for fl
 ```{seealso}
 The Fathom v3 global dataset can be requested for use in World Bank projects by filling the [**request form**](https://forms.office.com/r/sG0qWTnC0L).
 ```
-When an open dataset is preferred, there are a few alternatives that can be considered.
-- **JRC** hazard maps based on LISFLOOD model were recently updated. These can be used for risk screening that requires open data input.
-- **WRI** hazard maps are the preferred choice in cases when data needs to be open/public and explicit climate scenarios are required. However the low resolution of this dataset makes it far from optimal to measure exposure and risk.
-- **Deltares** updated the WRI coastal flood model at 90 m, representing the best option in terms of resolution and time coverage (baseline + scenarios), and water routing, including inundation attenuation to generate more realistic flood extent.
+When an open-access global dataset is preferred, there are a few alternatives that can be considered.
+- **JRC** flood hazard maps based on LISFLOOD model were recently updated. There are 7 probabilistic scenarios using 90 m resolution, those can be used for risk screening under current climate.
+- **WRI** "Aqueduct" flood hazard maps include both historical and future periods scenarios, using a resolution of 1 km.
+- **UNEP/CDRI** offers fluvial flood hazard maps as 9 return period scenarios under existing climate and long-term projected scenarios (SSP1 and SSP5) at 90 m resolution.
 
 ```{table}
 :name: FL_data2
-**Name** | [Global river flood hazard maps](https://data.jrc.ec.europa.eu/dataset/jrc-floods-floodmapgl_rp50y-tif) | [Aqueduct flood hazard maps](https://www.wri.org/data/aqueduct-floods-hazard-maps) | [Global Coastal Flood maps](https://planetarycomputer.microsoft.com/dataset/deltares-floods)
+**Name** | [Global river flood hazard maps](https://data.jrc.ec.europa.eu/dataset/jrc-floods-floodmapgl_rp50y-tif) | [Aqueduct flood hazard maps](https://www.wri.org/data/aqueduct-floods-hazard-maps) | [UNEP/CDRI](https://giri.unepgrid.ch/map)
 --: | :--: | :--: | :--:
-**Developer** | JRC | WRI | Deltares
-**Version/Release** | v2 (2024) | v2 (2020) | v3 (2022)
-**Hazard process** | Fluvial flood | Fluvial flood, Coastal flood | Coastal flood
-**Resolution** | 90 m | 900 m | 90 m, 1 km, 5 km
+**Developer** | JRC | WRI | UNEP/CDRI
+**Version/Release** | v2 (2024) | v2 (2020) | v1 (2023)
+**Hazard process** | Fluvial flood | Fluvial flood | Fluvial flood
+**Resolution** | 90 m | 900 m | 90 m
 **Analysis type** | Probabilistic | Probabilistic | Probabilistic
-**Frequency type** | Return Period (7 scenarios) | Return Period (10 scenarios) | Return Period (6 scenarios)
-**Time reference** | Baseline (1989-2020) | Baseline (1960-1999)<br>Projections  – CMIP5 (2030-2050-2080) | Baseline (2018)<br>Projections – SLR (2050)
+**Frequency type** | Return Period (7 scenarios) | Return Period (10 scenarios) | Return Period (9 scenarios)
+**Time reference** | Baseline (1989-2020) | Baseline (1960-1999)<br>Projections  – CMIP5 (2030-2050-2080) | Baseline (2018)<br>Projections (2100)
 **Intensity metric** | Water depth [m] | Water depth [m] | Water depth [m]
 **License** | Open data | Open data | Open data
 ```
@@ -57,58 +57,53 @@ align: center
 Comparing modelled flood extent under historical scenario RP 100 years for a random location (Philippines): Fathom v3 2023 (left); Fathom v3 2023 (mid-left); JRC 2024 (mid-right) RWI - Aqueduct 2020 (right). Note how the Fathom model is able to better capture smaller discharge basins thanks to a better DTM resolution (30 m). Fathom 2 and JRC are comparable. The RWI data show its limitation at 1 km resolution.
 ```
 (hzd_hm_ss)=
-Additional datasets that have been previously used in WB coastal flood analytics are those from **Muis et al (2016)** and **Climate central**. Both these models are not endorsed as they tend to project unrealistic flood extent  under baseline climate conditions, which might be due an oversimplified bathtub modelling approach, or due to the relatively low resolution and vertical accuracy of the Digital Terrain Model (DTM).
+Regarding specific coastal flood and storm surge datasets, all models listed below include flood hazard simulations that account for the effect of Sea Level Rise under climate change projections: RWI uses CMIP5 climate data, while Deltares and UNEP-CDRI dataset is based on CMIP6. In addition to increasing water volumes, sea level projections account for land movements (sinking or rising land) caused by tectonic activity, large-scale underground extraction, or glacial isostatic adjustment.
+
+- **WRI** "Aqueduct" storm surge hazard maps include both historical and future periods scenarios, using a resolution of 1 km.
+
+- **Deltares** updated the WRI coastal flood model at 90 m, representing the best option in terms of resolution and time coverage (baseline + scenarios), and water routing, including inundation attenuation to generate more realistic flood extent.
+
+- **UNEP/CDRI** offers coastal flood hazard maps as 7 return period scenarios (10 to 1000 years) under existing climate and long-term projected scenarios (SSP1 and SSP5) at 90 m resolution.
 
 ```{table}
 :name: CF_data_more
-| **Name** | [Coastal flood hazard maps](https://www.geonode-gfdrrlab.org/search/?hazard_type=coastal_flood&limit=5&offset=5&type__in=raster&title__icontains=muis) | [Coastal risk screening](https://coastal.climatecentral.org) |
-|---:|:---:|:---:|
-| **Developer** | Muis et al. (2016, 2020) | Climate Central |
-| **Hazard process** | Coastal flood | Mean sea level |
-| **Resolution** | 1 km | ? |
-| **Analysis type** | Probabilistic | |
-| **Frequency type** | Return Period (10 scenarios) | One layer per period |
-| **Time reference** | Baseline (1979–2014) | Baseline<br>Projections |
-| **Intensity metric** | Water depth [m] | Water extent |
-| **License** | Open data | Licensed |
-| **Notes** | Retired data | Simple bathtub distribution without flood attenuation |
+**Name** | [Aqueduct flood hazard maps](https://www.wri.org/data/aqueduct-floods-hazard-maps) | [Global Coastal Flood maps](https://planetarycomputer.microsoft.com/dataset/deltares-floods)| [Storm surge on coastaline](https://giri.unepgrid.ch/map) 
+--: | :--: | :--: | :--:
+**Developer** | WRI | Deltares | UNEP/CDRI 
+**Version/Release** | v2 (2020) | v3 (2022) | v1 (2023)
+**Hazard process** | Coastal flood | Coastal flood | Coastal flood
+**Resolution** | 900 m | 90 m | 90 m
+**Analysis type** | Probabilistic | Probabilistic | Probabilistic
+**Frequency type** | Return Period (6 scenarios) | Return Period (10 scenarios) | Return Period (7 scenarios)
+**Time reference** | Baseline (1960-1999)<br>Projections (CMIP5 2030-2050-2080) | Baseline (2018)<br>Projections – (CMIP6 2050) | Baseline (1989-2020)<br>Projections (2100)
+**Intensity metric** | Water depth [m] | Water depth [m] | Water depth [m]
+**License** | Open data | Open data | Open data
 ```
-As shown in figure below, considering the minimum baseline values (least impact criteria), the flood extent drawn by the Climate Central layer is similar to the baseline RP100 from Muis, in the middle - both generously overestimating water spreading inland even under less extreme scenarios [*the locaiton of comparison is chosen as both the Netherlands and N Italy are low-lying areas, which are typically the most difficult to model*].
-In comparison, the WRI is far from perfection (it is also a bathtub model), but it seems to apply a more realistic max flood extent, which ultimately makes it more realistic for application.
-
-```{figure} images/CF_data.jpg
----
-align: center
----
-Quick comparison of coastal flood layers over Northern Europe under baseline conditions, RP 100 years.
-```
-### Sea level rise
-Most of the listed models include flood hazard simulations that account for the effect of Sea Level Rise under climate change projections: RWI uses CMIP5 climate data, while Deltares and ClimateCentral dataset is based on CMIP6. In addition to increasing water volumes, sea level projections account for land movements (sinking or rising land) caused by tectonic activity, large-scale underground extraction, or glacial isostatic adjustment.
 
 In additon to coastal flood projections, the [NASA Sea Level Projection Tool](https://sealevel.nasa.gov/ipcc-ar6-sea-level-projection-tool) allows users to visualize and download the sea level projection data from the IPCC 6th Assessment Report (AR6). The tool shows both global and regional sea level projections from 2020 to 2150, along with how these projections differ depending on future scenario or warming level. Data can be downloaded in multiple formats.
+
 
 (hzd_hm_ls)=
 ## Landslides
 Landslides (mass movements) are affected by geological features (rock type and structure) and geomorphological setting (slope gradient). Landslides can be split into two categories depending on their trigger:
 - **Dry mass movement** (rockfalls, debris flows) is driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation. 
 - **Wet mass movement** can be triggered by heavy precipitation and flooding and are strongly affected by geological features (e.g. soil type and structure) and geomorphological settings (e.g., slope gradient). They do not typically include avalanches.
+Landslide hazard description comes in form of deterministic susceptibility indices such as the NASA Landslide Hazard Susceptibility map (LHASA), the ARUP layer producded by GFDRR in 2019, and the most recent UNEP/CDRI layer, which improves the resolution to 90 m and offers both historical and future scenarios for the precipitation trigger. In addition, the [**Cooperative Open Online Landslide Repository (COOLR)**](https://gpm.nasa.gov/landslides/data.html) reports on recorded landslide events, that can be used together with the susceptibility maps to validate their output.
 
 ```{table}
 :name: LS_data
-| **Name** | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) | [Global landslide susceptibility<br>(LHASA)](https://gpm.nasa.gov/landslides/projects.html) |
+| **Name** | [Global landslide susceptibility<br>(LHASA)](https://gpm.nasa.gov/landslides/projects.html) | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) |
 |---:|:---:|:---:|
-| **Developer** | ARUP | NASA |
-| **Hazard process** | Dry (seismic) mass movement<br>Wet (rainfall) mass movement | none |
-| **Resolution** | 1 km | 1 km |
-| **Analysis type** | Deterministic | Deterministic |
-| **Frequency type** | none | none |
-| **Time reference** | Baseline (rainfall trigger) (1980-2018) | |
-| **Intensity metric** | Mean and Median intensity/frequency [-] | Susceptibility index [-] |
-| **License** | Open | |
-| **Notes** | Based on NASA landslide susceptibility layer. Median and Mean layers provided. | Although not a hazard layer, it can be accounted for in addition to the ARUP layer. |
+| **Developer**| NASA | ARUP | UNEP/CDRI |
+| **Hazard process** | None | Dry (seismic) mass movement<br>Wet (rainfall) mass movement | Dry (seismic) mass movement<br>Wet (rainfall) mass movement |
+| **Resolution** | 1 km | 1 km | 100 m |
+| **Analysis type** | Deterministic | Deterministic | Deterministic |
+| **Frequency type** | none | none | none |
+| **Time reference** | none | Baseline (rainfall trigger) (1980-2018) | Baseline (rainfall trigger) (1980-2018) |
+| **Intensity metric** | Susceptibility index [-] | Mean and Median intensity/frequency [-] | Susceptibility index [-] |
+| **License** | Open | Open | Open |
+| **Notes** | Susceptibility obtained from land morphology variables | Based on NASA landslide susceptibility layer, adding the hazard triggers | Similar to ARUP, but improves on resolution and provides projections |
 ```
-
-Landslide hazard description can rely on either the NASA Landslide Hazard Susceptibility map (LHASA) or the derived ARUP layer funded by GFDRR in 2019. This dataset considers empirical events from the COOLR database and model both the earthquake and rainfall triggers over the existing LHASA map. The metric of choice is frequency of occurrence of a significant landslide per sq km, which is however provided as synthetic index (not directly translatable as time occurrence probability).
 
 ```{figure} images/landslide.png
 ---

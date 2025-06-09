@@ -733,7 +733,7 @@ map_widget = notebook_utils.map_widget
 chart_output = notebook_utils.chart_output
 
 # Combine map and chart output, get full ui and final layout
-map_and_chart, content_layout, final_layout = notebook_utils.get_ui_components(sidebar, header)
+map_and_chart, content_layout, final_layout = notebook_utils.get_ui_components(sidebar, header, map_widget)
 
 # JavaScript to handle hover events and update the info box
 js_code = notebook_utils.create_js_code(

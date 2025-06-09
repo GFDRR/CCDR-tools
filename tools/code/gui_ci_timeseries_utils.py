@@ -2,13 +2,10 @@ import os
 import xarray as xr
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
 import cartopy.crs as ccrs
 import geopandas as gpd
-from matplotlib.colors import TwoSlopeNorm
 from urllib.request import urlretrieve
 from shapely.geometry import shape
-import requests
 from IPython.display import display, clear_output, HTML
 import ipywidgets as widgets
 import pandas as pd
@@ -18,9 +15,7 @@ import folium
 import tkinter as tk
 from tkinter import filedialog
 from input_utils import get_adm_data
-import rasterstats
 from rasterstats import zonal_stats
-import rioxarray
 import warnings
 warnings.filterwarnings("ignore", message=".*crs.*", category=UserWarning)
 
@@ -75,6 +70,43 @@ climate_index_selector = widgets.Dropdown(
 )
 climate_index_selector_id = f'climate-index-selector-{id(climate_index_selector)}'
 climate_index_selector.add_class(climate_index_selector_id)
+
+# Create mode selector (Baseline or Projections)
+mode_selector = widgets.RadioButtons(
+    options=['Baseline', 'Projections'],
+    value='Baseline',
+    description='Data Mode:',
+    layout=widgets.Layout(width='250px')
+)
+mode_selector_id = f'mode-selector-{id(mode_selector)}'
+mode_selector.add_class(mode_selector_id)
+
+# Create SSP scenario selector (hidden by default)
+ssp_selector = widgets.Dropdown(
+    options=[
+        ('SSP1-1.9', 'ssp119'),
+        ('SSP1-2.6', 'ssp126'),
+        ('SSP2-4.5', 'ssp245'), 
+        ('SSP3-7.0', 'ssp370'),
+        ('SSP5-8.5', 'ssp585')
+    ],
+    value='ssp245',
+    description='SSP Scenario:',
+    disabled=False,
+    layout=widgets.Layout(width='250px', display='none')  # Hidden initially
+)
+ssp_selector_id = f'ssp-selector-{id(ssp_selector)}'
+ssp_selector.add_class(ssp_selector_id)
+
+# Create timescale selector (Annual or Seasonal)
+timescale_selector = widgets.RadioButtons(
+    options=['Annual', 'Seasonal'],
+    value='Annual',
+    description='Timescale:',
+    layout=widgets.Layout(width='250px')
+)
+timescale_selector_id = f'timescale-selector-{id(timescale_selector)}'
+timescale_selector.add_class(timescale_selector_id)
 
 # Create multi-select for year selection (1950-2023)
 year_options = list(range(1950, 2024))
@@ -218,34 +250,79 @@ def update_preview_map(*args):
         except Exception as e:
             print(f"Error loading boundaries: {str(e)}")
 
-# Function to build URL for timeseries data
-def build_timeseries_url(index):
+# Function to build URLs for timeseries data
+def build_timeseries_url(index, mode, timescale='Annual', ssp=None):
     """Build the URL for timeseries data for a given climate index."""
-    # Replace 'climatology' with 'timeseries' in the URL pattern
-    timeseries_url = f"https://wbg-cckp.s3.amazonaws.com/data/era5-x0.25/{index}/era5-x0.25-historical/timeseries-{index}-annual-mean_era5-x0.25_era5-x0.25-historical_timeseries_mean_1950-2023.nc"
+    freq = "annual" if timescale == 'Annual' else "seasonal"
+    
+    if mode == 'Baseline':
+        # Handle SPEI12 differently, using ensemble-all-historical instead of era5
+        if index == 'spei12':
+            timeseries_url = f"https://wbg-cckp.s3.amazonaws.com/data/cmip6-x0.25/{index}/ensemble-all-historical/timeseries-{index}-{freq}-mean_cmip6-x0.25_ensemble-all-historical_timeseries_median_1950-2014.nc"
+        else:
+            # Regular historical data URL for other indices
+            timeseries_url = f"https://wbg-cckp.s3.amazonaws.com/data/era5-x0.25/{index}/era5-x0.25-historical/timeseries-{index}-{freq}-mean_era5-x0.25_era5-x0.25-historical_timeseries_mean_1950-2023.nc"
+    else:
+        # Projection data URL - ensure ssp is properly included
+        if not ssp:
+            # Default to ssp245 if none provided
+            ssp = "ssp245"
+        timeseries_url = f"https://wbg-cckp.s3.amazonaws.com/data/cmip6-x0.25/{index}/ensemble-all-{ssp}/timeseries-{index}-{freq}-mean_cmip6-x0.25_ensemble-all-{ssp}_timeseries_median_2015-2100.nc"
+    
     return timeseries_url
 
+# Function to update year options based on the selected mode
+def update_year_options(mode):
+    if mode == 'Baseline':
+        # Historical range: 1950-2023
+        year_selector.options = list(range(1950, 2024))
+        year_selector.value = [2023]  # Default to most recent historical year
+        ssp_selector.layout.display = 'none'  # Hide SSP selector
+    else:  # Projections
+        # Projection range: 2015-2100
+        year_selector.options = list(range(2015, 2101))
+        year_selector.value = [2050]  # Default to mid-century
+        ssp_selector.layout.display = 'block'  # Show SSP selector
+
+# Add observer for mode selector
+def on_mode_change(change):
+    update_year_options(change['new'])
+
+mode_selector.observe(on_mode_change, names='value')
+
 # Function to download a file if it doesn't exist
-def download_file(url, local_path):
-    """Download a file if it doesn't exist."""
-    if not os.path.exists(local_path):
-        print(f"Downloading {url} to {local_path}")
+def download_file(url, local_path, mode='baseline', ssp=None):
+    """Download a file if it doesn't exist, with different paths for baseline and projections."""
+    # Modify the path based on mode and ssp
+    if mode == 'Projections' and ssp:
+        # Extract the base filename and add ssp
+        basename = os.path.basename(local_path)
+        dirname = os.path.dirname(local_path)
+        filename, ext = os.path.splitext(basename)
+        # Create a projection-specific filename
+        modified_path = os.path.join(dirname, f"{filename}_{ssp}{ext}")
+    else:
+        modified_path = local_path
+        
+    if not os.path.exists(modified_path):
+        print(f"Downloading {url} to {modified_path}")
         try:
-            urlretrieve(url, local_path)
-            print(f"Download complete: {local_path}")
-            return True
+            urlretrieve(url, modified_path)
+            print(f"Download complete: {modified_path}")
+            return modified_path, True
         except Exception as e:
             print(f"Download failed: {str(e)}")
-            return False
+            return modified_path, False
     else:
-        print(f"File already exists: {local_path}")
-        return True
+        print(f"File already exists: {modified_path}")
+        return modified_path, True
 
 # Define variable name in the NetCDF file for the index
-def get_variable_name(index):
+def get_variable_name(index, timescale='Annual'):
     """Get the variable name for a climate index."""
+    freq = "annual" if timescale == 'Annual' else "seasonal"
     # Replace 'climatology' with 'timeseries'
-    variable_name = f"timeseries-{index}-annual-mean"
+    variable_name = f"timeseries-{index}-{freq}-mean"
     return variable_name
 
 # Define titles, units, and colormaps for each index
@@ -315,7 +392,7 @@ def load_netcdf(file_path, variable_name):
 # Function to handle special time units in climate data
 def handle_time_units(data_var, index):
     """Handle special time units like timedeltas or large values representing nanoseconds."""
-    if index in ['cwd', 'cdd', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
+    if index in ['cwd', 'cdd', 'r20mm', 'r50mm', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
         # Check the data type
         original_dtype = data_var.dtype
         print(f"Original data type for {index}: {original_dtype}")
@@ -333,6 +410,81 @@ def handle_time_units(data_var, index):
     
     # Return original data for other indices or if conversion fails
     return data_var
+
+# Function to extract seasonal data from the timeseries
+def extract_seasonal_data(ds, variable_name, year):
+    """Extract seasonal data for a specific year from a timeseries dataset."""
+    try:
+        # Check if the dataset has time and season dimensions
+        if 'time' not in ds.dims and 'time' not in ds.coords:
+            print("No time dimension found in dataset")
+            return None
+            
+        # For seasonal data, we expect a 'season' dimension or coordinate
+        has_season_dim = 'season' in ds.dims or 'season' in ds.coords
+        
+        # Find the index for the specified year
+        times = ds.time.values
+        if not np.issubdtype(times.dtype, np.datetime64):
+            try:
+                times = np.array([np.datetime64(str(t)) for t in times])
+            except:
+                print(f"Unable to convert time values to datetime64: {times}")
+                return None
+        
+        # Extract the years
+        years = pd.DatetimeIndex(times).year
+        
+        # Find the indices for the specified year
+        year_indices = np.where(years == year)[0]
+        if len(year_indices) == 0:
+            print(f"Year {year} not found in dataset. Available years: {sorted(set(years))}")
+            return None
+            
+        # Extract the data for all seasons in the specified year
+        if has_season_dim:
+            # If there's a dedicated season dimension, extract all seasons
+            seasonal_data = ds[variable_name].isel(time=year_indices)
+            # Map season numbers/indices to names for better readability
+            season_names = {0: 'DJF', 1: 'MAM', 2: 'JJA', 3: 'SON'}
+            
+            # Create a dictionary with data for each season
+            seasons_data = {}
+            for s_idx, season in enumerate(seasonal_data.season.values):
+                season_name = season_names.get(s_idx, f"Season_{s_idx}")
+                seasons_data[season_name] = seasonal_data.isel(season=s_idx)
+            
+            print(f"Successfully extracted seasonal data for year {year}")
+            return seasons_data
+        else:
+            # If the dataset has multiple time indices for a year but no season dimension
+            # We'll try to infer seasons based on the month
+            seasons_data = {}
+            for idx in year_indices:
+                time = pd.Timestamp(times[idx])
+                month = time.month
+                
+                # Assign season based on month
+                if month in [12, 1, 2]:
+                    season = 'DJF'
+                elif month in [3, 4, 5]:
+                    season = 'MAM'
+                elif month in [6, 7, 8]:
+                    season = 'JJA'
+                else:  # [9, 10, 11]
+                    season = 'SON'
+                    
+                if season not in seasons_data:
+                    seasons_data[season] = ds[variable_name].isel(time=idx)
+            
+            print(f"Successfully extracted inferred seasonal data for year {year}")
+            return seasons_data
+        
+    except Exception as e:
+        print(f"Error extracting seasonal data: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
 
 # Function to extract data for a specific year from timeseries
 def extract_year_from_timeseries(ds, variable_name, year):
@@ -379,7 +531,7 @@ def extract_year_from_timeseries(ds, variable_name, year):
         return None
 
 # Function to prepare xarray for zonal statistics
-def prepare_xarray_for_zonal_stats(xds, var_name):
+def prepare_xarray_for_zonal_stats(xds):
     """Convert xarray DataArray to a format suitable for zonal statistics."""
     try:
         # Create a copy to avoid modifying the original
@@ -529,7 +681,7 @@ def calculate_zonal_stats(data_array, admin_boundaries, stat='mean'):
         temp_tif = os.path.join(temp_dir, f"temp_{data_array.name}_raster.tif")
         
         # Prepare the data array
-        data_array_rio = prepare_xarray_for_zonal_stats(data_array, data_array.name)
+        data_array_rio = prepare_xarray_for_zonal_stats(data_array)
         if data_array_rio is None:
             print("Failed to prepare xarray for zonal statistics")
             return use_fallback_values(admin_boundaries, data_array, column_name)
@@ -681,11 +833,7 @@ def create_choropleth_map(admin_boundaries_with_stats, data_col, title, unit, cm
     # Ensure admin_boundaries_with_stats has a proper CRS
     if admin_boundaries_with_stats.crs is None:
         admin_boundaries_with_stats = admin_boundaries_with_stats.set_crs("EPSG:4326")
-    
-    # Get value range for data
-    vmin = admin_boundaries_with_stats[data_col].min()
-    vmax = admin_boundaries_with_stats[data_col].max()
-    
+        
     # Plot the data
     admin_boundaries_with_stats.plot(
         column=data_col,
@@ -716,8 +864,7 @@ def create_choropleth_map(admin_boundaries_with_stats, data_col, title, unit, cm
     ax.set_extent(extent, crs=ccrs.PlateCarree())
     
     # Set title
-    country_name = admin_boundaries_with_stats['NAM_0'].iloc[0] if 'NAM_0' in admin_boundaries_with_stats.columns else "Selected Country"
-    plt.suptitle(f"{title} - {country_name} ({year})", fontsize=16)
+    plt.suptitle(title, fontsize=16)
     
     # Adjust layout
     plt.tight_layout(rect=[0, 0, 1, 0.95])
@@ -726,29 +873,78 @@ def create_choropleth_map(admin_boundaries_with_stats, data_col, title, unit, cm
     return fig
 
 # Function to create plots for a climate index year
-def create_climate_plots(timeseries_ds, admin_boundaries, index, selected_year):
-    """Create plots for a climate index showing data for the selected year."""
+def create_climate_plots(timeseries_ds, admin_boundaries, index, selected_year, mode='baseline', timescale='Annual', ssp=None):
+    """Create plots for a climate index showing data for the selected year/seasons."""
     # Get variable name
-    variable_name = get_variable_name(index)
+    variable_name = get_variable_name(index, timescale)
     
     # Get metadata
     title, unit, cmap = get_index_metadata(index)
     
     if timeseries_ds is None:
         print("Missing data, cannot create plots")
-        return None, None
+        return None, None, None
     
-    # Extract data for the selected year
-    year_data = extract_year_from_timeseries(timeseries_ds, variable_name, selected_year)
-    if year_data is None:
-        print(f"No data available for {index} in year {selected_year}")
-        return None, None
+    figures = []
+    zonal_figures = []
+    zonal_data_list = []
     
-    # Handle time units if needed
-    year_data = handle_time_units(year_data, index)
+    # Handle different timescales
+    if timescale == 'Annual':
+        # Extract data for the selected year (annual)
+        year_data = extract_year_from_timeseries(timeseries_ds, variable_name, selected_year)
+        if year_data is None:
+            print(f"No data available for {index} in year {selected_year}")
+            return None, None, None
+        
+        # Handle time units if needed
+        year_data = handle_time_units(year_data, index)
+        
+        # Create figure and zonal stats
+        fig, zonal_fig, zonal_data = create_single_climate_plot(
+            year_data, admin_boundaries, index, title, unit, cmap, selected_year, 
+            mode=mode, ssp=ssp, season=None
+        )
+        
+        if fig is not None:
+            figures.append(('Annual', fig))
+        if zonal_fig is not None:
+            zonal_figures.append(('Annual', zonal_fig))
+        if zonal_data is not None:
+            zonal_data_list.append(('Annual', zonal_data))
+            
+    else:  # Seasonal
+        # Extract seasonal data
+        seasons_data = extract_seasonal_data(timeseries_ds, variable_name, selected_year)
+        if seasons_data is None or len(seasons_data) == 0:
+            print(f"No seasonal data available for {index} in year {selected_year}")
+            return None, None, None
+            
+        # Process each season
+        for season_name, season_data in seasons_data.items():
+            # Handle time units if needed
+            season_data = handle_time_units(season_data, index)
+            
+            # Create figure and zonal stats for this season
+            fig, zonal_fig, zonal_data = create_single_climate_plot(
+                season_data, admin_boundaries, index, title, unit, cmap, selected_year, 
+                mode=mode, ssp=ssp, season=season_name
+            )
+            
+            if fig is not None:
+                figures.append((season_name, fig))
+            if zonal_fig is not None:
+                zonal_figures.append((season_name, zonal_fig))
+            if zonal_data is not None:
+                zonal_data_list.append((season_name, zonal_data))
     
+    return figures, zonal_figures, zonal_data_list
+
+# Helper function to create a single plot
+def create_single_climate_plot(data, admin_boundaries, index, title, unit, cmap, year, mode='baseline', ssp=None, season=None):
+    """Create a single climate plot for a given data slice."""
     # Print data range for reference
-    print(f"Data range for {index} in {selected_year}: {year_data.min().values} to {year_data.max().values}")
+    print(f"Data range for {index} in {year}{' '+season if season else ''}: {data.min().values} to {data.max().values}")
     
     # Set up the projection for plotting
     projection_crs = ccrs.PlateCarree()
@@ -757,24 +953,20 @@ def create_climate_plots(timeseries_ds, admin_boundaries, index, selected_year):
     fig, ax = plt.subplots(figsize=(10, 8), subplot_kw={'projection': projection_crs})
     
     # Get latitude and longitude values
-    lats = timeseries_ds.lat.values
-    lons = timeseries_ds.lon.values
+    lats = data.lat.values
+    lons = data.lon.values
     
     # Dynamically determine color ranges based on data within the country extent
     if admin_boundaries is not None:
         # Get bounds of the country
         bounds = admin_boundaries.total_bounds
-        
-        # Create a mask for the area within the country bounds
-        lon_mask = (lons >= bounds[0]) & (lons <= bounds[2])
-        lat_mask = (lats >= bounds[1]) & (lats <= bounds[3])
-        
+                
         # Apply the mask to extract data within the country extent
-        country_data = year_data.where(
-            (year_data.lon >= bounds[0]) & 
-            (year_data.lon <= bounds[2]) & 
-            (year_data.lat >= bounds[1]) & 
-            (year_data.lat <= bounds[3])
+        country_data = data.where(
+            (data.lon >= bounds[0]) & 
+            (data.lon <= bounds[2]) & 
+            (data.lat >= bounds[1]) & 
+            (data.lat <= bounds[3])
         )
         
         # Calculate min/max from the masked data
@@ -782,7 +974,7 @@ def create_climate_plots(timeseries_ds, admin_boundaries, index, selected_year):
         country_max = float(country_data.max().values)
         
         # Set vmin/vmax based on the masked data
-        if index in ['cwd', 'cdd']:
+        if index in ['cwd', 'cdd', 'r20mm', 'r50mm', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
             vmin = max(0, country_min)
             vmax = min(100, country_max * 1.1)
         else:
@@ -792,14 +984,14 @@ def create_climate_plots(timeseries_ds, admin_boundaries, index, selected_year):
         print(f"Using country extent min/max for colorbar: {vmin} to {vmax}")
     else:
         # Fallback to global extent if no boundaries available
-        if index in ['cwd', 'cdd']:
-            vmin = max(0, float(year_data.min().values))
-            vmax = min(100, float(year_data.max().values) * 1.1)
+        if index in ['cwd', 'cdd', 'r20mm', 'r50mm', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
+            vmin = max(0, float(data.min().values))
+            vmax = min(100, float(data.max().values) * 1.1)
         else:
-            vmin = float(year_data.min().values)
-            vmax = float(year_data.max().values)
+            vmin = float(data.min().values)
+            vmax = float(data.max().values)
     
-    plot = ax.pcolormesh(lons, lats, year_data.squeeze(), 
+    plot = ax.pcolormesh(lons, lats, data.squeeze(), 
                         cmap=cmap, 
                         vmin=vmin, vmax=vmax,
                         transform=ccrs.PlateCarree())
@@ -834,10 +1026,20 @@ def create_climate_plots(timeseries_ds, admin_boundaries, index, selected_year):
     ax.coastlines(resolution='10m')
     ax.gridlines(draw_labels=True, linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
     
-    # Set title
+    # Set title - modified to include mode, ssp and season
     country_name = admin_boundaries['NAM_0'].iloc[0] if (admin_boundaries is not None and 'NAM_0' in admin_boundaries.columns) else "Selected Country"
     
-    plt.suptitle(f"{title} - {country_name} ({selected_year})", fontsize=16)
+    # Create a title that includes mode, SSP and season
+    title_parts = [title, country_name, f"({year}"]
+    if season:
+        title_parts.append(f"{season}")
+    if mode.lower() == 'projections' and ssp:
+        title_parts.append(f"{ssp.upper()}")
+    title_parts.append(")")
+    
+    title_text = " - ".join([title_parts[0], title_parts[1]]) + " " + "".join(title_parts[2:])
+    
+    plt.suptitle(title_text, fontsize=16)
     
     # Adjust layout
     plt.tight_layout(rect=[0, 0, 1, 0.95])
@@ -854,42 +1056,32 @@ def create_climate_plots(timeseries_ds, admin_boundaries, index, selected_year):
                 print("Setting CRS for admin boundaries to EPSG:4326")
                 admin_boundaries = admin_boundaries.set_crs("EPSG:4326")
             
-            # Calculate zonal statistics for the year data
-            year_data.name = index
-            gdf_zonal = calculate_zonal_stats(year_data, admin_boundaries)
+            # Calculate zonal statistics for the data
+            # Add suffix for season if provided
+            data_name = f"{index}{'_'+season if season else ''}"
+            data.name = data_name
+            gdf_zonal = calculate_zonal_stats(data, admin_boundaries)
             
-            # Create choropleth map
-            zonal_col = f"{index}_mean"
+            # Determine column name for zonal statistics
+            zonal_col = f"{data_name}_mean"
             
             if zonal_col in gdf_zonal.columns:
+                # Update title for zonal map
+                title_text_zonal = title_text
+                
                 # Create choropleth map
                 zonal_fig = create_choropleth_map(
                     gdf_zonal, 
                     zonal_col, 
-                    title, unit, 
+                    title_text_zonal, 
+                    unit, 
                     cmap,
-                    selected_year
+                    year
                 )
                 zonal_data = gdf_zonal
             else:
-                # Check if we need to try different column names (may have been renamed)
-                potential_cols = [col for col in gdf_zonal.columns if index.lower() in col.lower() and 'mean' in col.lower()]
-                
-                if potential_cols:
-                    zonal_col = potential_cols[0]
-                    print(f"Using alternative column name: {zonal_col}")
-                    
-                    zonal_fig = create_choropleth_map(
-                        gdf_zonal, 
-                        zonal_col, 
-                        title, unit, 
-                        cmap,
-                        selected_year
-                    )
-                    zonal_data = gdf_zonal
-                else:
-                    print(f"Warning: Required columns for zonal statistics not found.")
-                    print(f"Available columns: {gdf_zonal.columns.tolist()}")
+                print(f"Warning: Required column {zonal_col} for zonal statistics not found.")
+                print(f"Available columns: {gdf_zonal.columns.tolist()}")
             
         except Exception as e:
             print(f"Error in zonal statistics calculation: {e}")
@@ -898,9 +1090,272 @@ def create_climate_plots(timeseries_ds, admin_boundaries, index, selected_year):
     
     return fig, zonal_fig, zonal_data
 
+# Function to generate summary statistics
+def generate_summary_statistics(zonal_data_list, index, timescale, output_dir):
+    """Generate summary statistics for the processed data."""
+    try:
+        # Create a dedicated statistics directory
+        stats_dir = os.path.join(output_dir, "statistics")
+        os.makedirs(stats_dir, exist_ok=True)
+        
+        # Organize data by time period (annual or season)
+        period_data = {}
+        
+        for year, period, gdf in zonal_data_list:
+            if period not in period_data:
+                period_data[period] = []
+            period_data[period].append((year, gdf))
+        
+        # Process each time period
+        for period, data_list in period_data.items():
+            print(f"\nSummary statistics for {period}:")
+            
+            # Find the zonal statistics column in the GeoDataFrame
+            # Try several possible column name patterns
+            column_patterns = [
+                f"{index}_{period.lower()}_mean",
+                f"{index}_mean",
+                f"{index.lower()}_{period.lower()}_mean",
+                f"{index.lower()}_mean"
+            ]
+            
+            # For the first GeoDataFrame, find the correct column
+            _, sample_gdf = data_list[0]
+            zonal_col = None
+            
+            for pattern in column_patterns:
+                matching_cols = [col for col in sample_gdf.columns if pattern in col.lower()]
+                if matching_cols:
+                    zonal_col = matching_cols[0]
+                    break
+            
+            if not zonal_col:
+                print(f"Could not identify zonal statistics column for {period}")
+                # Try to find any column that might contain the index name and 'mean'
+                potential_cols = [col for col in sample_gdf.columns 
+                                if index.lower() in col.lower() and 'mean' in col.lower()]
+                if potential_cols:
+                    zonal_col = potential_cols[0]
+                    print(f"Using column: {zonal_col}")
+                else:
+                    print("No suitable column found for statistics")
+                    continue
+            
+            # Calculate statistics for each year
+            stats_rows = []
+            
+            for year, gdf in data_list:
+                if zonal_col in gdf.columns:
+                    values = gdf[zonal_col].dropna().values
+                    if len(values) > 0:
+                        stats = {
+                            'Year': year,
+                            'Period': period,
+                            'Mean': np.mean(values),
+                            'Median': np.median(values),
+                            'Min': np.min(values),
+                            'Max': np.max(values),
+                            'StdDev': np.std(values),
+                            'Count': len(values)
+                        }
+                        stats_rows.append(stats)
+                        print(f"Year {year}: Mean={stats['Mean']:.2f}, Min={stats['Min']:.2f}, Max={stats['Max']:.2f}")
+            
+            # Create a DataFrame with the statistics
+            if stats_rows:
+                stats_df = pd.DataFrame(stats_rows)
+                
+                # Create filename for statistics
+                stats_file = os.path.join(stats_dir, f"{index}_{period.lower()}_statistics.csv")
+                stats_df.to_csv(stats_file, index=False)
+                print(f"Saved {period} statistics to {stats_file}")
+                
+                # If we have multiple years, create a trend visualization
+                if len(stats_rows) > 1:
+                    plt.figure(figsize=(10, 6))
+                    plt.plot(stats_df['Year'], stats_df['Mean'], 'o-', label='Mean')
+                    plt.fill_between(stats_df['Year'], 
+                                    stats_df['Mean'] - stats_df['StdDev'],
+                                    stats_df['Mean'] + stats_df['StdDev'],
+                                    alpha=0.2, label='±1 StdDev')
+                    plt.plot(stats_df['Year'], stats_df['Min'], 's--', label='Min', alpha=0.6)
+                    plt.plot(stats_df['Year'], stats_df['Max'], '^--', label='Max', alpha=0.6)
+                    
+                    plt.title(f"{index.upper()} - {period} Trend")
+                    plt.xlabel('Year')
+                    plt.ylabel('Value')
+                    plt.grid(True, alpha=0.3)
+                    plt.legend()
+                    
+                    # Save the trend plot
+                    trend_file = os.path.join(stats_dir, f"{index}_{period.lower()}_trend.png")
+                    plt.savefig(trend_file, dpi=300, bbox_inches='tight')
+                    plt.close()
+                    print(f"Saved {period} trend visualization to {trend_file}")
+        
+        # Create a combined statistics summary if we have seasonal data
+        if timescale == 'Seasonal' and len(period_data) > 1:
+            # Combine all seasonal statistics
+            all_stats = []
+            for period, data_list in period_data.items():
+                if period == 'Annual':
+                    continue  # Skip annual data if present
+                    
+                for year, gdf in data_list:
+                    # Find the appropriate column
+                    zonal_col = None
+                    for pattern in column_patterns:
+                        matching_cols = [col for col in gdf.columns if pattern in col.lower()]
+                        if matching_cols:
+                            zonal_col = matching_cols[0]
+                            break
+                    
+                    if not zonal_col:
+                        # Try to find any column that might contain the index name and 'mean'
+                        potential_cols = [col for col in gdf.columns 
+                                        if index.lower() in col.lower() and 'mean' in col.lower()]
+                        if potential_cols:
+                            zonal_col = potential_cols[0]
+                        else:
+                            continue
+                    
+                    if zonal_col in gdf.columns:
+                        values = gdf[zonal_col].dropna().values
+                        if len(values) > 0:
+                            all_stats.append({
+                                'Year': year,
+                                'Season': period,
+                                'Mean': np.mean(values),
+                                'Median': np.median(values),
+                                'Min': np.min(values),
+                                'Max': np.max(values),
+                                'StdDev': np.std(values)
+                            })
+            
+            if all_stats:
+                # Create a DataFrame with all seasons
+                all_seasons_df = pd.DataFrame(all_stats)
+                
+                # Save the combined statistics
+                combined_stats_file = os.path.join(stats_dir, f"{index}_all_seasons_statistics.csv")
+                all_seasons_df.to_csv(combined_stats_file, index=False)
+                print(f"Saved combined seasonal statistics to {combined_stats_file}")
+                
+                # Create a seasonal comparison visualization if we have enough data
+                seasons = sorted(all_seasons_df['Season'].unique())
+                years = sorted(all_seasons_df['Year'].unique())
+                
+                if len(years) > 0 and len(seasons) > 1:
+                    plt.figure(figsize=(12, 8))
+                    
+                    # Create subplots for different statistics
+                    _, axes = plt.subplots(2, 2, figsize=(14, 10))
+                    
+                    # Plot Mean values by season
+                    for season in seasons:
+                        season_data = all_seasons_df[all_seasons_df['Season'] == season]
+                        if len(season_data) > 0:
+                            axes[0, 0].plot(season_data['Year'], season_data['Mean'], 'o-', label=season)
+                    
+                    axes[0, 0].set_title(f"Mean {index.upper()} by Season")
+                    axes[0, 0].set_xlabel('Year')
+                    axes[0, 0].set_ylabel('Mean Value')
+                    axes[0, 0].legend()
+                    axes[0, 0].grid(True, alpha=0.3)
+                    
+                    # Plot Max values by season
+                    for season in seasons:
+                        season_data = all_seasons_df[all_seasons_df['Season'] == season]
+                        if len(season_data) > 0:
+                            axes[0, 1].plot(season_data['Year'], season_data['Max'], 's-', label=season)
+                    
+                    axes[0, 1].set_title(f"Maximum {index.upper()} by Season")
+                    axes[0, 1].set_xlabel('Year')
+                    axes[0, 1].set_ylabel('Max Value')
+                    axes[0, 1].legend()
+                    axes[0, 1].grid(True, alpha=0.3)
+                    
+                    # Plot Min values by season
+                    for season in seasons:
+                        season_data = all_seasons_df[all_seasons_df['Season'] == season]
+                        if len(season_data) > 0:
+                            axes[1, 0].plot(season_data['Year'], season_data['Min'], '^-', label=season)
+                    
+                    axes[1, 0].set_title(f"Minimum {index.upper()} by Season")
+                    axes[1, 0].set_xlabel('Year')
+                    axes[1, 0].set_ylabel('Min Value')
+                    axes[1, 0].legend()
+                    axes[1, 0].grid(True, alpha=0.3)
+                    
+                    # Plot StdDev values by season
+                    for season in seasons:
+                        season_data = all_seasons_df[all_seasons_df['Season'] == season]
+                        if len(season_data) > 0:
+                            axes[1, 1].plot(season_data['Year'], season_data['StdDev'], 'd-', label=season)
+                    
+                    axes[1, 1].set_title(f"Standard Deviation of {index.upper()} by Season")
+                    axes[1, 1].set_xlabel('Year')
+                    axes[1, 1].set_ylabel('StdDev')
+                    axes[1, 1].legend()
+                    axes[1, 1].grid(True, alpha=0.3)
+                    
+                    plt.tight_layout()
+                    
+                    # Save the seasonal comparison plot
+                    seasonal_comp_file = os.path.join(stats_dir, f"{index}_seasonal_comparison.png")
+                    plt.savefig(seasonal_comp_file, dpi=300, bbox_inches='tight')
+                    plt.close()
+                    print(f"Saved seasonal comparison visualization to {seasonal_comp_file}")
+                    
+                    # Create a box plot for each year showing seasonal distribution
+                    if len(years) > 0:
+                        plt.figure(figsize=(max(8, len(years) * 2), 8))
+                        
+                        # Prepare data for boxplot
+                        boxplot_data = []
+                        labels = []
+                        
+                        for year in years:
+                            for season in seasons:
+                                year_season_data = all_seasons_df[(all_seasons_df['Year'] == year) & 
+                                                                (all_seasons_df['Season'] == season)]
+                                if len(year_season_data) > 0:
+                                    # For a boxplot we need the actual distribution, not just summary stats
+                                    # We'll create a synthetic distribution based on min, mean, max, and stddev
+                                    mean = year_season_data['Mean'].values[0]
+                                    std = year_season_data['StdDev'].values[0]
+                                    min_val = year_season_data['Min'].values[0]
+                                    max_val = year_season_data['Max'].values[0]
+                                    
+                                    # Create a synthetic normal distribution
+                                    synthetic_data = np.random.normal(mean, std, 100)
+                                    # Clip to min and max
+                                    synthetic_data = np.clip(synthetic_data, min_val, max_val)
+                                    
+                                    boxplot_data.append(synthetic_data)
+                                    labels.append(f"{year}\n{season}")
+                        
+                        if boxplot_data:
+                            plt.boxplot(boxplot_data, labels=labels)
+                            plt.title(f"Distribution of {index.upper()} by Year and Season")
+                            plt.ylabel('Value')
+                            plt.xticks(rotation=45)
+                            plt.grid(True, alpha=0.3)
+                            
+                            # Save the boxplot
+                            boxplot_file = os.path.join(stats_dir, f"{index}_seasonal_boxplot.png")
+                            plt.savefig(boxplot_file, dpi=300, bbox_inches='tight')
+                            plt.close()
+                            print(f"Saved seasonal boxplot visualization to {boxplot_file}")
+                
+    except Exception as e:
+        print(f"Error generating summary statistics: {e}")
+        import traceback
+        traceback.print_exc()
+
 # Function to save a figure to a file
-def save_figure(fig, country, index, year, output_dir, suffix=""):
-    """Save a figure to a file."""
+def save_figure(fig, country, index, year, output_dir, mode='baseline', ssp=None, suffix=""):
+    """Save a figure to a file with mode, ssp, and season in the filename."""
     if fig is None:
         return None
     
@@ -909,23 +1364,30 @@ def save_figure(fig, country, index, year, output_dir, suffix=""):
     if not os.path.exists(index_dir):
         os.makedirs(index_dir)
     
-    # Create filename with requested structure
-    output_path = os.path.join(index_dir, f"{country.lower()}_{index}_{year}{suffix}.png")
+    # Create filename with mode, ssp (for projections), and season suffix
+    if mode.lower() == 'projections' and ssp:
+        output_path = os.path.join(index_dir, f"{country.lower()}_{index}_{mode.lower()}_{ssp}_{year}{suffix}.png")
+    else:
+        output_path = os.path.join(index_dir, f"{country.lower()}_{index}_{mode.lower()}_{year}{suffix}.png")
+        
     fig.savefig(output_path, dpi=300, bbox_inches='tight')
     print(f"Saved figure to {output_path}")
     return output_path
 
 # Function to export GeoDataFrame to GeoPackage
-def export_boundaries_to_gpkg(gdf, country, adm_level, index, year, output_dir, all_gdf=None, is_final=False):
+def export_boundaries_to_gpkg(gdf, country, adm_level, index, year, output_dir, mode='baseline', ssp=None, all_gdf=None, is_final=False):
     """
     Export administrative boundaries with statistics to a GeoPackage file.
     
     Args:
         gdf: GeoDataFrame with zonal statistics for the current year
         country: Country ISO code
-        index: Climate index
+        adm_level: Administrative level
+        index: Climate index (may include season suffix)
         year: Year of the data
         output_dir: Output directory
+        mode: Data mode ('baseline' or 'projections')
+        ssp: SSP scenario (only for projections mode)
         all_gdf: Combined GeoDataFrame with all years (if not None)
         is_final: Whether this is the final call (to save the combined GeoPackage)
     
@@ -939,8 +1401,11 @@ def export_boundaries_to_gpkg(gdf, country, adm_level, index, year, output_dir, 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
-    # Create filename - use a single file for all years
-    output_path = os.path.join(output_dir, f"{country.lower()}_{index}_timeseries_ADM{adm_level}.gpkg")
+    # Create filename that includes mode and ssp (if applicable)
+    if mode.lower() == 'projections' and ssp:
+        output_path = os.path.join(output_dir, f"{country.lower()}_{index}_{mode.lower()}_{ssp}_ADM{adm_level}.gpkg")
+    else:
+        output_path = os.path.join(output_dir, f"{country.lower()}_{index}_{mode.lower()}_ADM{adm_level}.gpkg")
     
     try:
         # Ensure the GeoDataFrame has a proper CRS
@@ -950,50 +1415,108 @@ def export_boundaries_to_gpkg(gdf, country, adm_level, index, year, output_dir, 
         # Rename the zonal statistic column to include the year
         zonal_col = None
         for col in gdf.columns:
-            if f"{index}_mean" in col:
+            if "_mean" in col:
                 zonal_col = col
                 break
         
         if zonal_col:
             # Copy the original GeoDataFrame
             gdf_copy = gdf.copy()
-            # Rename the column to include the year
-            year_col = f"Y{year}_mean"
+            # Rename the column to include the year and season info (if any)
+            # Extract possible season information from index
+            season_suffix = ""
+            if "_" in index and not index.endswith("_"):
+                # Check if index contains season info like "rx5day_djf"
+                parts = index.split("_")
+                if len(parts) > 1:
+                    season_suffix = f"_{parts[-1]}"
+            
+            year_col = f"Y{year}{season_suffix}_mean"
             gdf_copy = gdf_copy.rename(columns={zonal_col: year_col})
             
             # If all_gdf is None, initialize it with the first year's data
             if all_gdf is None:
                 all_gdf = gdf_copy
             else:
-                # Merge the new year's data with the existing data
-                # Keep only the geometry and ID columns from all_gdf and add the new year column
-                # Find ID columns (usually these are the administrative boundaries identifiers)
-                id_cols = [col for col in all_gdf.columns if 'ID' in col.upper() or 'CODE' in col.upper() or 'HASC' in col.upper()]
-                # Add essential columns
-                essential_cols = ['geometry', 'NAM_0']
-                if 'ADM0_PCODE' in all_gdf.columns:
-                    essential_cols.append('ADM0_PCODE')
-                
-                # Merge on geometry and ID columns
-                merge_cols = list(set(id_cols + essential_cols).intersection(set(all_gdf.columns)).intersection(set(gdf_copy.columns)))
-                if not merge_cols or 'geometry' not in merge_cols:
-                    # If no common ID columns or geometry not in merge_cols, use geometry and NAM_0 if available
-                    merge_cols = ['geometry']
-                    if 'NAM_0' in all_gdf.columns and 'NAM_0' in gdf_copy.columns:
-                        merge_cols.append('NAM_0')
-                
-                # Extract the year column from gdf_copy
-                year_data = gdf_copy[merge_cols + [year_col]]
-                
-                # Merge with all_gdf
-                all_gdf = all_gdf.merge(year_data[[col for col in year_data.columns if col not in merge_cols]], 
-                                       left_index=True, right_index=True, how='left')
+                # Check if the year column already exists in all_gdf
+                if year_col in all_gdf.columns:
+                    print(f"Warning: Column {year_col} already exists. Updating values.")
+                    # If already exists, we'll replace it rather than merge
+                    
+                    # Find ID columns for matching records
+                    id_cols = [col for col in all_gdf.columns if 'ID' in col.upper() or 'CODE' in col.upper() or 'HASC' in col.upper()]
+                    # Add essential columns
+                    essential_cols = ['geometry', 'NAM_0']
+                    if 'ADM0_PCODE' in all_gdf.columns:
+                        essential_cols.append('ADM0_PCODE')
+                    
+                    # Use geometry to match records if available, otherwise use id columns
+                    merge_cols = list(set(id_cols + essential_cols).intersection(set(all_gdf.columns)).intersection(set(gdf_copy.columns)))
+                    
+                    if not merge_cols:
+                        print("Warning: No common columns found for merging. Using index-based updates.")
+                        # If no common columns, try to use the index
+                        if len(all_gdf) == len(gdf_copy):
+                            # If same length, update by index position
+                            all_gdf[year_col] = gdf_copy[year_col].values
+                        else:
+                            print(f"Error: Cannot merge data with different lengths ({len(all_gdf)} vs {len(gdf_copy)}).")
+                    else:
+                        # Extract just the necessary columns from gdf_copy
+                        year_data = gdf_copy[merge_cols + [year_col]]
+                        
+                        # To avoid duplication, remove any existing year column from all_gdf
+                        if year_col in all_gdf.columns:
+                            all_gdf = all_gdf.drop(columns=[year_col])
+                        
+                        # Merge with suffixes to avoid collision
+                        all_gdf = all_gdf.merge(
+                            year_data[[col for col in year_data.columns if col not in merge_cols] + [merge_cols[0]]], 
+                            on=merge_cols[0],
+                            how='left',
+                            suffixes=('', '_new')  # Use empty string for existing columns
+                        )
+                else:
+                    # If the column doesn't exist yet, it's safe to merge
+                    id_cols = [col for col in all_gdf.columns if 'ID' in col.upper() or 'CODE' in col.upper() or 'HASC' in col.upper()]
+                    essential_cols = ['geometry', 'NAM_0']
+                    if 'ADM0_PCODE' in all_gdf.columns:
+                        essential_cols.append('ADM0_PCODE')
+                    
+                    merge_cols = list(set(id_cols + essential_cols).intersection(set(all_gdf.columns)).intersection(set(gdf_copy.columns)))
+                    
+                    if 'geometry' in merge_cols:
+                        # If geometry is available, use it as key
+                        key_col = 'geometry'
+                    elif merge_cols:
+                        # Use the first available ID column
+                        key_col = merge_cols[0]
+                    else:
+                        print("Warning: No common columns for merge, using index")
+                        # Fallback to index-based update if no common columns
+                        if len(all_gdf) == len(gdf_copy):
+                            all_gdf[year_col] = gdf_copy[year_col].values
+                            key_col = None
+                        else:
+                            print("Error: Cannot merge data with different lengths")
+                            key_col = None
+                    
+                    if key_col:
+                        # Extract just the year column and key column
+                        year_data = gdf_copy[[key_col, year_col]]
+                        
+                        # Merge only the new column
+                        all_gdf = all_gdf.merge(
+                            year_data, 
+                            on=key_col,
+                            how='left'
+                        )
         
         # If this is the final export, save the combined GeoPackage
         if is_final and all_gdf is not None:
             layer_name = f"{index}_timeseries"
             all_gdf.to_file(output_path, layer=layer_name, driver="GPKG")
-            print(f"Saved combined boundary data with {len([col for col in all_gdf.columns if '_mean' in col])} years to {output_path}")
+            print(f"Saved combined boundary data with {len([col for col in all_gdf.columns if '_mean' in col])} data columns to {output_path}")
             return output_path, all_gdf
         
         return None, all_gdf
@@ -1097,6 +1620,9 @@ def run_analysis(b):
             selected_country = country_selector.value
             selected_adm_level = adm_level_selector.value
             selected_index = climate_index_selector.value
+            selected_mode = mode_selector.value
+            selected_timescale = timescale_selector.value
+            selected_ssp = ssp_selector.value if selected_mode == 'Projections' else None
             selected_years = list(year_selector.value)
             
             if not selected_country:
@@ -1115,6 +1641,7 @@ def run_analysis(b):
                 
             print(f"Running analysis for {selected_country} ({iso_a3}) at ADM level {selected_adm_level}")
             print(f"Climate index: {selected_index}")
+            print(f"Timescale: {selected_timescale}")
             print(f"Years: {', '.join(map(str, selected_years))}")
             
             # Create temp directory
@@ -1127,35 +1654,48 @@ def run_analysis(b):
             os.makedirs(output_dir, exist_ok=True)
             print(f"Output directory: {output_dir}")
             
-            # Build URL
+            # Build URL based on timescale
             print("Building URL for data download...")
-            timeseries_url = build_timeseries_url(selected_index)
+            timeseries_url = build_timeseries_url(
+                selected_index, 
+                selected_mode,
+                selected_timescale,
+                selected_ssp
+            )
             
-            # Download file
-            timeseries_file = os.path.join(temp_dir, f"{selected_index}_timeseries_1950-2023.nc")
-            
+            # Download file with mode-specific path
+            timeseries_file = os.path.join(temp_dir, f"{selected_index}_{selected_timescale.lower()}_timeseries.nc")
+            timeseries_file, download_success = download_file(
+                timeseries_url, 
+                timeseries_file,
+                mode=selected_mode,
+                ssp=selected_ssp
+            )
+
             print("Downloading data file...")
             print(f"Timeseries data URL: {timeseries_url}")
-            timeseries_success = download_file(timeseries_url, timeseries_file)
             
-            if not timeseries_success:
+            if not download_success:
                 print("Error: Failed to download required data file")
                 return
                 
             # Load NetCDF data
-            variable_name = get_variable_name(selected_index)
+            variable_name = get_variable_name(selected_index, selected_timescale)
             print(f"Variable name: {variable_name}")
             
-            print("Loading NetCDF data file...")
-            timeseries_ds = load_netcdf(timeseries_file, variable_name)
-            
-            if timeseries_ds is None:
-                print("Error: Failed to load NetCDF data file")
+            if download_success:
+                print("Loading NetCDF data file...")
+                timeseries_ds = load_netcdf(timeseries_file, variable_name)
+                
+                if timeseries_ds is None:
+                    print("Error: Failed to load NetCDF data file")
+                    return
+            else:
+                print("Error: Failed to download required data file")
                 return
                 
             # Get administrative boundaries
             print(f"Loading administrative boundaries (ADM level {selected_adm_level})...")
-            print(f"Loading boundaries...")
             try:
                 if custom_boundaries_radio.value == 'Custom boundaries':
                     # Load custom boundaries
@@ -1170,7 +1710,7 @@ def run_analysis(b):
                     try:
                         admin_boundaries = gpd.read_file(custom_boundaries_file.value)
                         if admin_boundaries is None or admin_boundaries.empty:
-                            print(f"Error: No boundary data found in the specified file")
+                            print("Error: No boundary data found in the specified file")
                             return
                         print(f"Successfully loaded custom boundaries with {len(admin_boundaries)} features")
                     except Exception as e:
@@ -1195,85 +1735,112 @@ def run_analysis(b):
             all_grid_figs = []
             all_zonal_figs = []
             all_zonal_data = []
-            combined_gdf = None  # For storing combined GeoDataFrame with all years
+            combined_gdf = None  # For storing combined GeoDataFrame with all years and seasons
             
             # Process each selected year
             for year_idx, selected_year in enumerate(selected_years):
                 print(f"\nProcessing year {selected_year} ({year_idx+1}/{len(selected_years)})...")
                 
-                # Create plots for this year
-                fig, zonal_fig, zonal_data = create_climate_plots(
+                # Create plots for this year (handles both annual and seasonal based on timescale)
+                figures, zonal_figures, zonal_data_list = create_climate_plots(
                     timeseries_ds, admin_boundaries, 
-                    selected_index, selected_year
-                )
+                    selected_index, selected_year,
+                    mode=selected_mode,
+                    timescale=selected_timescale,
+                    ssp=selected_ssp if selected_mode == 'Projections' else None
+                )              
                 
-                if fig is None:
+                if figures is None or len(figures) == 0:
                     print(f"Warning: Failed to create plots for year {selected_year}, skipping...")
                     continue
                 
                 # Store figures and data
-                all_grid_figs.append((selected_year, fig))
-                if zonal_fig is not None:
-                    all_zonal_figs.append((selected_year, zonal_fig))
-                if zonal_data is not None:
-                    all_zonal_data.append((selected_year, zonal_data))
+                for time_period, fig in figures:
+                    all_grid_figs.append((selected_year, time_period, fig))
+                
+                for time_period, zonal_fig in zonal_figures:
+                    all_zonal_figs.append((selected_year, time_period, zonal_fig))
+                
+                for time_period, zonal_data in zonal_data_list:
+                    all_zonal_data.append((selected_year, time_period, zonal_data))
                 
                 # Save figures if export is enabled
                 if export_charts_chk.value:
-                    save_figure(
-                        fig, iso_a3, selected_index, selected_year, 
-                        output_dir, "_grid"
-                    )
-                    if zonal_fig is not None:
-                        save_figure(
-                            zonal_fig, iso_a3, selected_index, selected_year, 
-                            output_dir, "_zonal"
-                        )
+                    for time_period, fig in figures:
+                        if export_charts_chk.value:    
+                            save_figure(
+                                fig, iso_a3, selected_index, selected_year, 
+                                output_dir, 
+                                mode=selected_mode,
+                                ssp=selected_ssp if selected_mode == 'Projections' else None,
+                                suffix=f"_{time_period.lower()}"
+                            )
+                    
+                    for time_period, zonal_fig in zonal_figures:
+                        if export_charts_chk.value:   
+                            save_figure(
+                                zonal_fig, iso_a3, selected_index, selected_year, 
+                                output_dir, 
+                                mode=selected_mode,
+                                ssp=selected_ssp if selected_mode == 'Projections' else None,
+                                suffix=f"_{time_period.lower()}_zonal"
+                            )
 
                 # Add this year's data to the combined GeoDataFrame if needed
-                if export_boundaries_chk.value and zonal_data is not None:
-                    print(f"Adding {selected_year} data to combined GeoPackage...")
-                    # Only save on the last iteration
-                    is_final = (year_idx == len(selected_years) - 1)
-                    _, combined_gdf = export_boundaries_to_gpkg(
-                        zonal_data, 
-                        iso_a3,
-                        selected_adm_level,
-                        selected_index, 
-                        selected_year, 
-                        output_dir,
-                        all_gdf=combined_gdf,
-                        is_final=is_final
-                    )
+                if export_boundaries_chk.value:
+                    for time_period, zonal_data in zonal_data_list:
+                        print(f"Adding {selected_year} {time_period} data to combined GeoPackage...")
+                        # Only save on the last iteration of the last year
+                        is_final = (year_idx == len(selected_years) - 1 and 
+                                    time_period == zonal_data_list[-1][0])
+                        
+                        _, combined_gdf = export_boundaries_to_gpkg(
+                            zonal_data, 
+                            iso_a3,
+                            selected_adm_level,
+                            f"{selected_index}_{time_period.lower()}" if time_period != 'Annual' else selected_index, 
+                            selected_year, 
+                            output_dir,
+                            mode=selected_mode,
+                            ssp=selected_ssp if selected_mode == 'Projections' else None,
+                            all_gdf=combined_gdf,
+                            is_final=is_final
+                        )
                 
                 # Display figures for this year
-                with chart_output:
-                    display(fig)
-                    if zonal_fig is not None:
-                        display(zonal_fig)
+                if preview_chk.value:    
+                    with chart_output:
+                        for time_period, fig in figures:
+                            display(HTML(f"<h3>Year {selected_year} - {time_period}</h3>"))
+                            display(fig)
+                            plt.close(fig)
+                        
+                        for time_period, zonal_fig in zonal_figures:
+                            display(HTML(f"<h3>Year {selected_year} - {time_period} (Zonal Statistics)</h3>"))
+                            display(zonal_fig)
+                            plt.close(zonal_fig)
             
-            # Final export of combined GeoPackage if needed
-            if export_boundaries_chk.value and combined_gdf is not None:
-                export_path, _ = export_boundaries_to_gpkg(
-                    combined_gdf, 
-                    iso_a3, 
-                    selected_adm_level, 
-                    selected_index, 
-                    0,  # Dummy year value
-                    output_dir,
-                    all_gdf=combined_gdf,
-                    is_final=True
-                )
-                if export_path:
-                    print(f"All years' data exported to combined GeoPackage: {export_path}")
+            # Generate summary statistics if any data was processed
+            if all_zonal_data:
+                print("\nGenerating summary statistics...")
+                generate_summary_statistics(all_zonal_data, selected_index, selected_timescale, output_dir)
             
             # Summary
-            print(f"\nAnalysis summary:")
-            print(f"Successfully processed {len(all_grid_figs)} out of {len(selected_years)} selected years")
+            print("\nAnalysis summary:")
+            print(f"Successfully processed {len(set([y for y, _, _ in all_grid_figs]))} out of {len(selected_years)} selected years")
+            
+            if selected_timescale == 'Seasonal':
+                print(f"Processed {len(all_grid_figs)} seasonal plots")
+                seasons_count = {}
+                for _, season, _ in all_grid_figs:
+                    seasons_count[season] = seasons_count.get(season, 0) + 1
+                for season, count in seasons_count.items():
+                    print(f" - {season}: {count} plots")
+            
             if export_charts_chk.value:
                 print(f"Exported {len(all_grid_figs)} grid maps and {len(all_zonal_figs)} zonal maps")
             if export_boundaries_chk.value:
-                print(f"Exported data for {len(all_zonal_data)} years to a single combined GeoPackage")
+                print(f"Exported data for {len(all_zonal_data)} time periods to a combined GeoPackage")
             
             elapsed_time = time.time() - start_time
             print(f"Analysis completed in {elapsed_time:.2f} seconds")
@@ -1316,8 +1883,18 @@ def create_climate_indices_tab():
     ])
     
     return widgets.VBox([
-        country_section,
-        index_section
+        widgets.Label("Country and Boundaries:"),
+        country_selector,
+        adm_level_selector,
+        widgets.HTML("<hr style='margin: 10px 0;'>"),
+        widgets.Label("Climate Index Selection:"),
+        climate_index_selector,
+        timescale_selector,  # Add timescale selector here
+        widgets.HTML("<hr style='margin: 10px 0;'>"),
+        widgets.Label("Time Period Selection:"),
+        mode_selector,
+        ssp_selector,  # This will be shown/hidden based on mode
+        year_selector
     ], layout=widgets.Layout(padding='10px'))
 
 # Create the layout
@@ -1401,8 +1978,17 @@ def create_js_code():
     document.querySelector('.{climate_index_selector_id}').onmouseover = function() {{
         document.querySelector('.info-box textarea').value = 'Select the climate index to analyze. Different indices measure various aspects of climate like temperature, precipitation, or heat stress.';
     }};
+    document.querySelector('.{mode_selector_id}').onmouseover = function() {{
+        document.querySelector('.info-box textarea').value = 'Select the data source mode:\\n\\nBaseline: Historical data from 1950-2023\\nProjections: Future scenarios from 2015-2100';
+    }};
+        document.querySelector('.{ssp_selector_id}').onmouseover = function() {{
+        document.querySelector('.info-box textarea').value = 'Select the Shared Socioeconomic Pathway (SSP) scenario for climate projections:\\n- SSP1: Sustainability scenario\\n- SSP2: Middle of the road\\n- SSP3: Regional rivalry\\n- SSP5: Fossil-fueled development';
+    }};
     document.querySelector('.{year_selector_id}').onmouseover = function() {{
         document.querySelector('.info-box textarea').value = 'Select the years to analyze from the historical time series (1950-2023). Hold Ctrl/Cmd key to select multiple years or drag to select a range.';
+    }};
+    document.querySelector('.${timescale_selector_id}').onmouseover = function() {{
+        document.querySelector('.info-box textarea').value = 'Select the timescale for analysis:\\n\\nAnnual: Average for the whole year\\nSeasonal: Separate analysis for each season (DJF, MAM, JJA, SON)';
     }};
     </script>
     """
@@ -1420,13 +2006,13 @@ def initialize_tool():
     m = folium.Map(location=[0, 0], zoom_start=2)
     map_widget.value = m._repr_html_()
     
-    # Initialize custom boundaries if any   
-    update_custom_boundaries_visibility()
+    # Initialize year options based on default mode
+    update_year_options(mode_selector.value)
     
     # Print welcome message
     with output:
         print("Welcome to the Climate Indices Timeseries Visualization Tool")
         print("1. Select a country and administrative level")
-        print("2. Choose a climate index and select one or more years to analyze")
-        print("3. Click 'Run Analysis' to generate visualizations for all selected years")
+        print("2. Choose a climate index and select the data mode (Baseline or Projections)")
+        print("3. Select years to analyze and click 'Run Analysis'")
         print("4. View both raw grid data and zonal statistics for each selected year")

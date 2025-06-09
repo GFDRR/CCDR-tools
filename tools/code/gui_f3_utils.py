@@ -142,7 +142,8 @@ hazard_selector = widgets.Dropdown(options=[
     ('Fluvial Defended', 'FLUVIAL_DEFENDED'),
     ('Pluvial Defended', 'PLUVIAL_DEFENDED'), 
     ('Coastal Undefended', 'COASTAL_UNDEFENDED'), 
-    ('Coastal Defended', 'COASTAL_DEFENDED')
+    ('Coastal Defended', 'COASTAL_DEFENDED'),
+    ('Combined', 'COMBINED')    
 ], value='FLUVIAL_UNDEFENDED', layout=widgets.Layout(width='250px'), style={'description_width': '150px'})
 hazard_selector_id = f'hazard-selector-{id(hazard_selector)}'
 hazard_selector.add_class(hazard_selector_id)
@@ -617,7 +618,7 @@ map_widget = notebook_utils.map_widget
 chart_output = notebook_utils.chart_output
 
 # Combine map and chart output, get full ui and final layout
-map_and_chart, content_layout, final_layout = notebook_utils.get_ui_components(sidebar, header)
+map_and_chart, content_layout, final_layout = notebook_utils.get_ui_components(sidebar, header, map_widget)
 
 # JavaScript to handle hover events and update the info box
 js_code = notebook_utils.create_js_code(

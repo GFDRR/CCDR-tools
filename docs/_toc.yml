@@ -20,7 +20,7 @@ parts:
         - file: docs/global-vulnerability
         - file: docs/disaster-data
         - file: docs/rdl
-        - file: docs/external-data
+        - file: docs/external-tools
   - caption: Disaster Risk Analytics
     chapters:
       - file: docs/tool-setup
@@ -31,6 +31,8 @@ parts:
       - file: docs/validation
       - file: docs/risk-poverty
       - file: docs/presentation
+        sections:
+          - file: docs/philosophy_of_mapping
       - file: docs/utility
         sections:
         - file: tools/utility/merge_tiles/Merge_tiles.ipynb

@@ -125,7 +125,7 @@ def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_fol
             if exp_cat == 'BU':
                 damage_factor = TC_damage_factor_builtup
             else:
-                damage_factor = lambda x: x
+                damage_factor = lambda x, _: x
         else:
                 raise ValueError(f"Unknown hazard type: {haz_type}")
 
@@ -227,7 +227,7 @@ def run_analysis(
         # Open the raster dataset
         with rasterio.open(exp_ras) as src:
             original_nodata = src.nodata
-        exp_data = rxr.open_rasterio(exp_ras)[0]  # Open exposure dataset
+        exp_data = rxr.open_rasterio(exp_ras)[0].astype('float32')  # Open exposure dataset
         # Handle nodata values
         if original_nodata is not None:
             # Mask the original nodata values
