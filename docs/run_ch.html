@@ -566,7 +566,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Custom Hazard Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ci.html">Climate Indices Analytics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="run_bv.html">Bi-variate mapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_bv.html">Bivariate mapping of Risk and Poverty</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
@@ -774,7 +774,7 @@ title="Print to PDF"
 <h2>Input data management<a class="headerlink" href="#input-data-management" title="Permalink to this heading">#</a></h2>
 <p>This script is meant for custom input from the user on all three risk components. It can still fetch national and sub-national boundaries from the <a class="reference external" href="https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer">WB ArcGIS repository</a>.</p>
 <p>The <a class="reference internal" href="global-exposure.html"><span class="doc std std-doc"><strong>exposure data</strong></span></a> and the <a class="reference internal" href="global-hazard.html"><span class="doc std std-doc"><strong>hazard data</strong></span></a> selected by the user need to be manually downloaded and placed in the respecive folders; in case of tiled data, use the <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/tools/code/F3/">pre-processing script</a> to merge those into country-sized data. Each dataset is expected as a raster file (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>).<br></p>
-<p>Exampe:</p>
+<p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Work</span> <span class="nb">dir</span><span class="o">/</span>
  <span class="o">-</span> <span class="n">GUI</span><span class="o">.</span><span class="n">ipynb</span>		<span class="n">Place</span> <span class="n">the</span> <span class="n">notebooks</span> <span class="ow">and</span> <span class="n">related</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">main</span> <span class="n">work</span> <span class="n">directory</span>
  <span class="o">-</span> <span class="n">common</span><span class="o">.</span><span class="n">py</span>

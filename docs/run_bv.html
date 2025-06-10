@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Bi-variate mapping &#8212; Climate &amp; Disaster Risk Screening Tools</title>
+    <title>Bivariate mapping of Risk and Poverty &#8212; Climate &amp; Disaster Risk Screening Tools</title>
   
   
   
@@ -566,7 +566,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ci.html">Climate Indices Analytics</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Bi-variate mapping</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Bivariate mapping of Risk and Poverty</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
@@ -739,7 +739,7 @@ title="Print to PDF"
             
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Bi-variate mapping</h1>
+    <h1>Bivariate mapping of Risk and Poverty</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -768,62 +768,31 @@ title="Print to PDF"
 
             <article class="bd-article" role="main">
               
-  <section class="tex2jax_ignore mathjax_ignore" id="bi-variate-mapping">
-<h1>Bi-variate mapping<a class="headerlink" href="#bi-variate-mapping" title="Permalink to this heading">#</a></h1>
-<p>WIP</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="bivariate-mapping-of-risk-and-poverty">
+<h1>Bivariate mapping of Risk and Poverty<a class="headerlink" href="#bivariate-mapping-of-risk-and-poverty" title="Permalink to this heading">#</a></h1>
+<p>This tool calculates population-weighted wealth index scores and combines those with hazard index scores into a bivariate choropleth map. The scores are calculated by quantile ranking.</p>
 <section id="input-data-management">
 <h2>Input data management<a class="headerlink" href="#input-data-management" title="Permalink to this heading">#</a></h2>
-<p>This script is meant for custom input from the user on all three risk components. It can still fetch national and sub-national boundaries from the <a class="reference external" href="https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer">WB ArcGIS repository</a>.</p>
-<p>The <a class="reference internal" href="global-exposure.html"><span class="doc std std-doc"><strong>exposure data</strong></span></a> and the <a class="reference internal" href="global-hazard.html"><span class="doc std std-doc"><strong>hazard data</strong></span></a> selected by the user need to be manually downloaded and placed in the respecive folders; in case of tiled data, use the <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/tools/code/F3/">pre-processing script</a> to merge those into country-sized data. Each dataset is expected as a raster file (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>).<br></p>
-<p>Exampe:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Work</span> <span class="nb">dir</span><span class="o">/</span>
- <span class="o">-</span> <span class="n">GUI</span><span class="o">.</span><span class="n">ipynb</span>		<span class="n">Place</span> <span class="n">the</span> <span class="n">notebooks</span> <span class="ow">and</span> <span class="n">related</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">main</span> <span class="n">work</span> <span class="n">directory</span>
- <span class="o">-</span> <span class="n">common</span><span class="o">.</span><span class="n">py</span>
- <span class="o">-</span> <span class="o">...</span>
- <span class="o">-</span> <span class="n">Data</span><span class="o">/</span>
-   <span class="o">-</span> <span class="n">HZD</span><span class="o">/</span><span class="n">country_hazard</span><span class="o">.</span><span class="n">tif</span>				<span class="n">Hazard</span> <span class="n">layers</span>
-   <span class="o">-</span> <span class="n">EXP</span><span class="o">/</span><span class="n">country_exposure</span><span class="o">.</span><span class="n">tif</span>				<span class="n">Exposure</span> <span class="n">layers</span>
-   <span class="o">-</span> <span class="n">RSK</span><span class="o">/</span>						<span class="n">Output</span> <span class="n">directory</span>
-</pre></div>
-</div>
-<div class="admonition caution">
-<p class="admonition-title">Caution</p>
-<p>All spatial data must use the same CRS: <code class="docutils literal notranslate"><span class="pre">EPSG</span> <span class="pre">4326</span></code> (WGS 84)</p>
-</div>
-<hr>
+<p>Input data should consist of a GeoPackage file with administrative boundaries containing fields for: Unit ID, Unit NAME, Unit POP, wealth index (e.g. RWI), and hazard score (e.g., EAI).</p>
 </section>
 <section id="running-the-analysis">
 <h2>Running the analysis<a class="headerlink" href="#running-the-analysis" title="Permalink to this heading">#</a></h2>
 <ul>
-<li><p>Select the country first. Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).</p>
+<li><p>Data tab: select the vector file containing all the required input at boundary level. Select the appropriate field for each attribute - they should be found automatically, but check they are correct.</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_country.png"><img alt="../_images/GUI_F3_country.png" src="../_images/GUI_F3_country.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_BV.jpg"><img alt="../_images/GUI_BV.jpg" src="../_images/GUI_BV.jpg" style="width: 100%;" /></a>
 </figure>
 </li>
-<li><p>Move to Hazard tab: select the hazard process, the minimum hazard intensity threshold, the time period and climate scenario. Select one or more Return Periods (CTRL+Click / drag mouse).</p>
+<li><p>Bivatiate tab: select the number of classes to consider for each index, the bivariate color palette and the maximum exposure to hazard threshold (anything above this value will be considered on the top class). Use the <strong>normalisation</strong> checkbox to normalise the wealth index using population count from the input dataset. This is suggested when using unweighted indices.</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_hzd.png"><img alt="../_images/GUI_F3_hzd.png" src="../_images/GUI_F3_hzd.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_BV2.jpg"><img alt="../_images/GUI_BV2.jpg" src="../_images/GUI_BV2.jpg" style="width: 100%;" /></a>
 </figure>
 </li>
-<li><p>Select one or more Exposure categories (CTRL+Click / drag mouse). You can select a custom exposure layer for each selected category (.tif raster, WGS 84).</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_exp.png"><img alt="../_images/GUI_F3_exp.png" src="../_images/GUI_F3_exp.png" style="width: 100%;" /></a>
-</figure>
-</li>
-<li><p>Select the approach to use for the analysis:</p>
-<ul>
-<li><p>When using “function”, the best impact function is selected for the selected country and exposure categories.</p></li>
-<li><p>When using “classes”, hazard intensity thresholds must be specified by the user.</p>
-<figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_vln.png"><img alt="../_images/GUI_F3_vln.png" src="../_images/GUI_F3_vln.png" style="width: 100%;" /></a>
-</figure>
-</li>
-</ul>
-</li>
-<li><p>Check “Preview results” to generate map and charts output in the GUI.</p></li>
+<li><p>Check “Preview results” to generate map and charts output in the GUI, or “Export Maps as PNG” to have those saved in the output folder. “Export data” will create a copy of the input data with added bivariate combination scores.</p></li>
+<li><p>Click the red button to start the processing.</p></li>
 </ul>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_rsk.png"><img alt="../_images/GUI_F3_rsk.png" src="../_images/GUI_F3_rsk.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_BV3.jpg"><img alt="../_images/GUI_BV3.jpg" src="../_images/GUI_BV3.jpg" style="width: 100%;" /></a>
 </figure>
 </section>
 </section>
