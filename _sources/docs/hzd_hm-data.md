@@ -92,7 +92,7 @@ Landslide hazard description comes in form of deterministic susceptibility indic
 
 ```{table}
 :name: LS_data
-| **Name** | [Global landslide susceptibility<br>(LHASA)](https://gpm.nasa.gov/landslides/projects.html) | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) | Susceptibility class of Landslides |
+| **Name** | [Global landslide susceptibility<br>(LHASA)](https://gpm.nasa.gov/landslides/projects.html) | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) | [Susceptibility class of Landslides](https://giri.unepgrid.ch/map?view=MX-A9CT6-A1M7X-4VY3L&list=explore&view=MX-WX881-OHN7Y-Q3IMU&view=MX-N1X7T-5NS7B-B25JO&view=MX-WURQ2-1P4JU-5TXO2) |
 |---:|:---:|:---:|:---:|
 | **Developer**| NASA | ARUP | UNEP/CDRI |
 | **Hazard process** | None | Dry (seismic) mass movement<br>Wet (rainfall) mass movement | Dry (seismic) mass movement<br>Wet (rainfall) mass movement |
