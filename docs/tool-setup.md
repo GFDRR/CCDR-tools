@@ -34,7 +34,7 @@ DATA_DIR = C:/Workdir/RDL-tools
   ```
 The main interface should pop up in your browser.
 
-```{figure} images/GUI.png
+```{figure} images/GUI.jpg
 ---
 width: 100%
 align: center

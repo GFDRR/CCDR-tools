@@ -18,6 +18,7 @@ parts:
           - file: docs/hzd_env-data
         - file: docs/global-exposure
         - file: docs/global-vulnerability
+        - file: docs/risk-poverty
         - file: docs/disaster-data
         - file: docs/rdl
         - file: docs/external-tools
@@ -27,19 +28,16 @@ parts:
         sections:
           - file: docs/run_fl
           - file: docs/run_tc
-          - file: docs/run_ci
           - file: docs/run_ch
+          - file: docs/run_ci
+          - file: docs/run_bv
       - file: docs/validation
-      - file: docs/risk-poverty
-        sections:
-        - file: tools/code/merge_tiles/GUI_bivariate-maps.ipynb      
       - file: docs/presentation
       - file: docs/utility
         sections:
         - file: tools/utility/merge_tiles/Merge_tiles.ipynb
         - file: tools/utility/Fetch_data/Fetch_WSF19.ipynb
         - file: tools/utility/mapping.ipynb
-        - file: tools/utility/RWI/RWI-norm.ipynb
       - file: docs/philosophy_of_mapping
   - caption: Credits
     chapters:
