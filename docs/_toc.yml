@@ -30,6 +30,8 @@ parts:
           - file: docs/run_ci
       - file: docs/validation
       - file: docs/risk-poverty
+        sections:
+        - file: tools/code/merge_tiles/GUI_bivariate-maps.ipynb      
       - file: docs/presentation
       - file: docs/utility
         sections:
