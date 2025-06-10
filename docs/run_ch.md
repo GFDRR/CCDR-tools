@@ -6,7 +6,7 @@ This script is meant for custom input from the user on all three risk components
 
 The [**exposure data**](global-exposure.md) and the [**hazard data**](global-hazard.md) selected by the user need to be manually downloaded and placed in the respecive folders; in case of tiled data, use the [pre-processing script](https://github.com/GFDRR/CCDR-tools/blob/main/tools/code/F3/) to merge those into country-sized data. Each dataset is expected as a raster file (`.tif`).<br>
 
-Exampe:
+Example:
 
   ```
   Work dir/
