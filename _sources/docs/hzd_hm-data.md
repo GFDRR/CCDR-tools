@@ -92,14 +92,14 @@ Landslide hazard description comes in form of deterministic susceptibility indic
 
 ```{table}
 :name: LS_data
-| **Name** | [Global landslide susceptibility<br>(LHASA)](https://gpm.nasa.gov/landslides/projects.html) | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) |
+| **Name** | [Global landslide susceptibility<br>(LHASA)](https://gpm.nasa.gov/landslides/projects.html) | [Global landslide hazard layer](https://datacatalog.worldbank.org/search/dataset/0037584/Global-landslide-hazard-map) | Susceptibility class of Landslides |
 |---:|:---:|:---:|
 | **Developer**| NASA | ARUP | UNEP/CDRI |
 | **Hazard process** | None | Dry (seismic) mass movement<br>Wet (rainfall) mass movement | Dry (seismic) mass movement<br>Wet (rainfall) mass movement |
 | **Resolution** | 1 km | 1 km | 100 m |
 | **Analysis type** | Deterministic | Deterministic | Deterministic |
 | **Frequency type** | none | none | none |
-| **Time reference** | none | Baseline (rainfall trigger) (1980-2018) | Baseline (rainfall trigger) (1980-2018) |
+| **Time reference** | none | Extreme rainfall: Baseline (1980-2018) | Extreme rainfall: Baseline (1980-2018); Projections (2061-2100; SSP1, SSP5) |
 | **Intensity metric** | Susceptibility index [-] | Mean and Median intensity/frequency [-] | Susceptibility index [-] |
 | **License** | Open | Open | Open |
 | **Notes** | Susceptibility obtained from land morphology variables | Based on NASA landslide susceptibility layer, adding the hazard triggers | Similar to ARUP, but improves on resolution and provides projections |
