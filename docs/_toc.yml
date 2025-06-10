@@ -28,6 +28,7 @@ parts:
           - file: docs/run_fl
           - file: docs/run_tc
           - file: docs/run_ci
+          - file: docs/run_ch
       - file: docs/validation
       - file: docs/risk-poverty
         sections:
