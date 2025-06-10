@@ -794,35 +794,35 @@ title="Print to PDF"
 <section id="running-the-analysis">
 <h2>Running the analysis<a class="headerlink" href="#running-the-analysis" title="Permalink to this heading">#</a></h2>
 <ul>
-<li><p>Select the country first. Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).</p>
+<li><p>Boundaries tab: sub-national boundaries for level 0, 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_country.png"><img alt="../_images/GUI_F3_country.png" src="../_images/GUI_F3_country.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_CH.jpg"><img alt="../_images/GUI_CH.jpg" src="../_images/GUI_CH.jpg" style="width: 100%;" /></a>
 </figure>
 </li>
-<li><p>Move to Hazard tab: select the hazard process, the minimum hazard intensity threshold, the time period and climate scenario. Select one or more Return Periods (CTRL+Click / drag mouse).</p>
+<li><p>Hazard tab: select the hazard data (*.tif), the hazard name, the minimum hazard intensity threshold (all values below that will be ignored), and the associated frequency, if any. You can also select add more than one layer in case of muultiple return periods.</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_hzd.png"><img alt="../_images/GUI_F3_hzd.png" src="../_images/GUI_F3_hzd.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_CH2.jpg"><img alt="../_images/GUI_CH2.jpg" src="../_images/GUI_CH2.jpg" style="width: 100%;" /></a>
 </figure>
 </li>
-<li><p>Select one or more Exposure categories (CTRL+Click / drag mouse). You can select a custom exposure layer for each selected category (.tif raster, WGS 84).</p>
+<li><p>Exposure tab: select one or more categories (CTRL+Click / drag mouse). The default data will be added (if found), else you can select a custom exposure layer for each selected category (.tif raster, WGS 84).</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_exp.png"><img alt="../_images/GUI_F3_exp.png" src="../_images/GUI_F3_exp.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_CH3.jpg"><img alt="../_images/GUI_CH3.jpg" src="../_images/GUI_CH3.jpg" style="width: 100%;" /></a>
 </figure>
 </li>
-<li><p>Select the approach to use for the analysis:</p>
+<li><p>Vulnerability tab: first you need to select the approach.</p>
 <ul>
-<li><p>When using “function”, the best impact function is selected for the selected country and exposure categories.</p></li>
-<li><p>When using “classes”, hazard intensity thresholds must be specified by the user.</p>
+<li><p>When using “function”, you can enter a mathematical impact function for the selected country and exposure categories.</p></li>
+<li><p>When using “classes”, hazard intensity thresholds must be specified.</p>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_vln.png"><img alt="../_images/GUI_F3_vln.png" src="../_images/GUI_F3_vln.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_CH4.jpg"><img alt="../_images/GUI_CH4.jpg" src="../_images/GUI_CH4.jpg" style="width: 100%;" /></a>
 </figure>
 </li>
 </ul>
 </li>
-<li><p>Check “Preview results” to generate map and charts output in the GUI.</p></li>
+<li><p>Check “Preview results” to generate map and charts output in the GUI. Map data is saved in the output folder as .gpkg. You can load it in GIS software for more customised map visualisation.</p></li>
 </ul>
 <figure class="align-center">
-<a class="reference internal image-reference" href="../_images/GUI_F3_rsk.png"><img alt="../_images/GUI_F3_rsk.png" src="../_images/GUI_F3_rsk.png" style="width: 100%;" /></a>
+<a class="reference internal image-reference" href="../_images/GUI_CH5.jpg"><img alt="../_images/GUI_CH5.jpg" src="../_images/GUI_CH5.jpg" style="width: 100%;" /></a>
 </figure>
 </section>
 </section>

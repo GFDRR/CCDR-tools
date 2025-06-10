@@ -26,39 +26,39 @@ Example:
 
 ## Running the analysis
 
-- Select the country first. Sub-national boundaries for level 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).
-    ```{figure} images/GUI_F3_country.png
+- Boundaries tab: sub-national boundaries for level 0, 1 and 2 can be fetched automatically. Else, you can load custom boundaries as geopackage (WGS 84). You will need to specify the field to be used to run zonal statistics, and related label name (e.g. ADM3_PCODE and ADM3_EN).
+    ```{figure} images/GUI_CH.jpg
     ---
     width: 100%
     align: center
     ---
     ```
-- Move to Hazard tab: select the hazard process, the minimum hazard intensity threshold, the time period and climate scenario. Select one or more Return Periods (CTRL+Click / drag mouse).
-    ```{figure} images/GUI_F3_hzd.png
+- Hazard tab: select the hazard data (*.tif), the hazard name, the minimum hazard intensity threshold (all values below that will be ignored), and the associated frequency, if any. You can also select add more than one layer in case of muultiple return periods.
+    ```{figure} images/GUI_CH2.jpg
     ---
     width: 100%
     align: center
     ---
     ```
-- Select one or more Exposure categories (CTRL+Click / drag mouse). You can select a custom exposure layer for each selected category (.tif raster, WGS 84).
-    ```{figure} images/GUI_F3_exp.png
+- Exposure tab: select one or more categories (CTRL+Click / drag mouse). The default data will be added (if found), else you can select a custom exposure layer for each selected category (.tif raster, WGS 84).
+    ```{figure} images/GUI_CH3.jpg
     ---
     width: 100%
     align: center
     ---
     ```
-- Select the approach to use for the analysis:
-  - When using "function", the best impact function is selected for the selected country and exposure categories.
-  - When using "classes", hazard intensity thresholds must be specified by the user.
-    ```{figure} images/GUI_F3_vln.png
+- Vulnerability tab: first you need to select the approach.
+  - When using "function", you can enter a mathematical impact function for the selected country and exposure categories.
+  - When using "classes", hazard intensity thresholds must be specified.
+    ```{figure} images/GUI_CH4.jpg
     ---
     width: 100%
     align: center
     ---
     ```
-- Check "Preview results" to generate map and charts output in the GUI.
+- Check "Preview results" to generate map and charts output in the GUI. Map data is saved in the output folder as .gpkg. You can load it in GIS software for more customised map visualisation.
 
-```{figure} images/GUI_F3_rsk.png
+```{figure} images/GUI_CH5.jpg
 ---
 width: 100%
 align: center
