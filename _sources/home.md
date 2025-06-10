@@ -5,7 +5,6 @@
         <span class="news-item"><strong>UPDATE:</strong> Climate Indices Tool released for CMIP6 indicators! </span>
         <span class="news-item"><strong>UPDATE:</strong> STORM v4 tropical cyclone global model analysis notebook</span>
         <span class="news-item"><strong>ANNOUNCEMENT:</strong> New CCDR dashboard released for interactive exploration of risk </span>
-        <span class="news-item"><strong>WEBINAR:</strong> Join our upcoming training session on disaster risk screening tools - April 30, 2025 </span>
     </div>
 </div>
 
@@ -43,7 +42,7 @@
     }
 </style>
 
-This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards' risk screening at the national or sub-national level. The tools have originally being created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2024) and then furtherly developed within the [**Risk Data Library project**](docs/rdl.md).
+This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards' risk screening at the national or sub-national level. The tools have originally being created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2025) and then furtherly developed within the [**Risk Data Library project**](docs/rdl.md).
 
 The CCDR toolkit allow to perform spatial analytics of disaster risk based on global datasets.
 Additionally, it offers open-source approaches and methods to:
