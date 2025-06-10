@@ -64,8 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Risk and poverty" href="risk-poverty.html" />
-    <link rel="prev" title="Custom Hazard Analytics" href="run_ch.html" />
+    <link rel="next" title="Results presentation" href="presentation.html" />
+    <link rel="prev" title="Bi-variate mapping" href="run_bv.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -201,6 +201,13 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="risk-poverty.html">
+                        Risk and poverty
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="disaster-data.html">
                         Disaster records
                       </a>
@@ -231,13 +238,6 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
                         Validation and interpretation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="risk-poverty.html">
-                        Risk and poverty
                       </a>
                     </li>
                 
@@ -404,6 +404,13 @@ const thebe_selector_output = ".output, .cell_output"
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="risk-poverty.html">
+                        Risk and poverty
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="disaster-data.html">
                         Disaster records
                       </a>
@@ -434,13 +441,6 @@ const thebe_selector_output = ".output, .cell_output"
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
                         Validation and interpretation
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="risk-poverty.html">
-                        Risk and poverty
                       </a>
                     </li>
                 
@@ -554,6 +554,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="external-tools.html">Additional resources</a></li>
@@ -563,14 +564,12 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="run_ci.html">Climate Indices Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_ci.html">Climate Indices Analytics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_bv.html">Bi-variate mapping</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Validation and interpretation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="simple">
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
 
 
@@ -882,13 +881,13 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <figure class="margin-caption align-left" id="id3">
 <img alt="../_images/hzd_validate.jpg" src="../_images/hzd_validate.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 29 </span><span class="caption-text">Example of flood model extent validation between observed events (UNOSAT, Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 32 </span><span class="caption-text">Example of flood model extent validation between observed events (UNOSAT, Pakistan 2022) and probabilistic model (Fathom RP 1,000 years).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <figure class="margin-caption align-left" id="id4">
 <img alt="../_images/hzd_match_empirical.jpg" src="../_images/hzd_match_empirical.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 30 </span><span class="caption-text">Example of flood model extent validation between observed events (UNOSAT, Nigeria 2022) and probabilistic model (Fathom RP 100 years).</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 33 </span><span class="caption-text">Example of flood model extent validation between observed events (UNOSAT, Nigeria 2022) and probabilistic model (Fathom RP 100 years).</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -898,13 +897,13 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <figure class="margin-caption align-left" id="id5">
 <img alt="../_images/hzd_match_models.jpg" src="../_images/hzd_match_models.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 31 </span><span class="caption-text">Example of map showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years).</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 34 </span><span class="caption-text">Example of map showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years).</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <figure class="margin-caption align-left" id="id6">
 <img alt="../_images/hzd_match_stats.png" src="../_images/hzd_match_stats.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 32 </span><span class="caption-text">Example of chart showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years): share of affected sub-national area according to each model, and difference between the two models.</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 35 </span><span class="caption-text">Example of chart showing cross-comparison between two different models representing probabilistic flood hazard extent over Nigeria (RP 100 years): share of affected sub-national area according to each model, and difference between the two models.</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -939,7 +938,7 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <figure class="margin-caption align-left" id="id7">
 <img alt="../_images/exp_wpop_hst.jpg" src="../_images/exp_wpop_hst.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 33 </span><span class="caption-text">In this example, we are examining the <a class="reference external" href="https://hub.worldpop.org/geodata/summary?id=50027">WorldPop 2020 population layer</a> for Nepal (UN-adjusted, constrained to built-up). The resolution is 100 x 100 meters = 1 Ha; initially, we set the max legend to spectral (blue-yellow-red) and the threshold to 100, to better spot high-density areas (red). Then we take a look at the histogram, and we notice that the population values go up to 35,000, equal to 3.5 per square meter. That seems reasonable only for very-high density areas with tall buildings (meaning that the people can distribute vertically over the same cell). While those value seems unrealistic elsewhere.</span><a class="headerlink" href="#id7" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 36 </span><span class="caption-text">In this example, we are examining the <a class="reference external" href="https://hub.worldpop.org/geodata/summary?id=50027">WorldPop 2020 population layer</a> for Nepal (UN-adjusted, constrained to built-up). The resolution is 100 x 100 meters = 1 Ha; initially, we set the max legend to spectral (blue-yellow-red) and the threshold to 100, to better spot high-density areas (red). Then we take a look at the histogram, and we notice that the population values go up to 35,000, equal to 3.5 per square meter. That seems reasonable only for very-high density areas with tall buildings (meaning that the people can distribute vertically over the same cell). While those value seems unrealistic elsewhere.</span><a class="headerlink" href="#id7" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -949,7 +948,7 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <figure class="margin-caption align-left" id="id8">
 <img alt="../_images/exp_wpop_sample.jpg" src="../_images/exp_wpop_sample.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 34 </span><span class="caption-text">Following on the previous example over Nepal; let’s change the legend max to 1,000 and take a closer look to high-density pixel (&gt; 0.1 people per square meter). Let’s go sampling now, select any high density area located outside large city areas. Then zoom in, and compare the value of the pixel with the size and type of built-up according to recent google basemap. In the higlighted case, it seems very unlikely that &gt;1,800 people live in that hectar of rural built-up. We also notice how other built-up area are not captured by the data; we can conclude that the model <em>erroneously</em> project population from the whole census area into a small portion of the real built-up. This would not have an important effect on more uniformely-distributed hazards (e.g. heat, air pollution), but it can introduce huge errors in risk calculations for localised hazards such as floods and landslides.</span><a class="headerlink" href="#id8" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 37 </span><span class="caption-text">Following on the previous example over Nepal; let’s change the legend max to 1,000 and take a closer look to high-density pixel (&gt; 0.1 people per square meter). Let’s go sampling now, select any high density area located outside large city areas. Then zoom in, and compare the value of the pixel with the size and type of built-up according to recent google basemap. In the higlighted case, it seems very unlikely that &gt;1,800 people live in that hectar of rural built-up. We also notice how other built-up area are not captured by the data; we can conclude that the model <em>erroneously</em> project population from the whole census area into a small portion of the real built-up. This would not have an important effect on more uniformely-distributed hazards (e.g. heat, air pollution), but it can introduce huge errors in risk calculations for localised hazards such as floods and landslides.</span><a class="headerlink" href="#id8" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -959,7 +958,7 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <figure class="margin-caption align-left" id="id9">
 <img alt="../_images/exp_wpop_sample_compare.jpg" src="../_images/exp_wpop_sample_compare.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 35 </span><span class="caption-text">Following on the previous example over Nepal; we now load the <a class="reference external" href="https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_54009_100/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_54009_100_V1_0_R7_C26.zip">GHS-pop 2020 layer</a> and attribute the same projection and legend used for the WorldPop layer (and set the rendering to “overlay” for better visualization). We notice that the values are much more realistic in this case; on the counterside, low population values are distributed also in areas where no settlement is found. This can also introduce error in risk models, depending on the hazard. For this country, neither of the two population datasets examined is flawless and can’t be manually fixed. This must be accounted in the interpretation of results and discussion of uncertainty.</span><a class="headerlink" href="#id9" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 38 </span><span class="caption-text">Following on the previous example over Nepal; we now load the <a class="reference external" href="https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2020_GLOBE_R2023A_54009_100/V1-0/tiles/GHS_POP_E2020_GLOBE_R2023A_54009_100_V1_0_R7_C26.zip">GHS-pop 2020 layer</a> and attribute the same projection and legend used for the WorldPop layer (and set the rendering to “overlay” for better visualization). We notice that the values are much more realistic in this case; on the counterside, low population values are distributed also in areas where no settlement is found. This can also introduce error in risk models, depending on the hazard. For this country, neither of the two population datasets examined is flawless and can’t be manually fixed. This must be accounted in the interpretation of results and discussion of uncertainty.</span><a class="headerlink" href="#id9" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1020,17 +1019,17 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="run_ch.html" title="previous page">
+  <a class='left-prev' id="prev-link" href="run_bv.html" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Custom Hazard Analytics</p>
+          <p class="prev-next-title">Bi-variate mapping</p>
       </div>
   </a>
-  <a class='right-next' id="next-link" href="risk-poverty.html" title="next page">
+  <a class='right-next' id="next-link" href="presentation.html" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Risk and poverty</p>
+      <p class="prev-next-title">Results presentation</p>
   </div>
   <i class="fa-solid fa-angle-right"></i>
   </a>
