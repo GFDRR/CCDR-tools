@@ -46,16 +46,91 @@ This documentation offers guidance on risk screening and provides pythons tools 
 
 ## What you can do with these tools
 
-| ![Disaster Risk Analysis](docs/images/rdl-disaster-risk-logo.png) | **Analyze disaster risk**<br>Perform **spatial analytics of disaster risk** using globally available datasets. |
-| ![Risk and Poverty Mapping](docs/images/rdl-risk-poverty-logo.png) | **Map the interaction of risk and poverty**<br>Combine hazard exposure and socio-economic vulnerability to produce [**bi-variate maps**](docs/risk-poverty.md) highlighting risk-poverty hotspots. |
-| ![Future Climate Risk](docs/images/rdl-climate-risk-logo.png) | **Explore future climate risk**<br>Generate climate risk outlooks based on [**CMIP6 climate projections**](docs/climate-risk.md) and standardized risk indices. |
-| ![Interactive Dashboards](docs/images/rdl-dashboard-logo.png) | **Build interactive dashboards**<br>Present results in an [**interactive dashboard**](https://matamadio.github.io/CCDR-geoboard) format to support communication, exploration, and stakeholder engagement. |
+<style>
+.tools-grid {
+  margin: 2rem 0;
+}
+.tool-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+}
+.tool-image {
+  width: 250px;
+  height: 250px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.tool-content {
+  flex: 1;
+  padding-top: 0.5rem;
+}
+.tool-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+}
+.tool-content p {
+  margin: 0;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .tool-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  .tool-image {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+}
+</style>
+
+<div class="tools-grid">
+
+<div class="tool-item">
+<img src="docs/images/rdl-disaster-risk-logo.png" alt="Disaster Risk Analysis" class="tool-image" />
+<div class="tool-content">
+<h3><strong>Analyze disaster risk</strong></h3>
+<p>Perform <strong>spatial analytics of disaster risk</strong> using globally available datasets.</p>
+</div>
+</div>
+
+<div class="tool-item">
+<img src="docs/images/rdl-risk-poverty-logo.png" alt="Risk and Poverty Mapping" class="tool-image" />
+<div class="tool-content">
+<h3><strong>Map the interaction of risk and poverty</strong></h3>
+<p>Combine hazard exposure and socio-economic vulnerability to produce <strong>bi-variate maps</strong> highlighting risk-poverty hotspots.</p>
+</div>
+</div>
+
+<div class="tool-item">
+<img src="docs/images/rdl-climate-risk-logo.png" alt="Future Climate Risk" class="tool-image" />
+<div class="tool-content">
+<h3><strong>Explore future climate risk</strong></h3>
+<p>Generate climate risk outlooks based on <strong>CMIP6 climate projections</strong> and standardized risk indices.</p>
+</div>
+</div>
+
+<div class="tool-item">
+<img src="docs/images/rdl-dashboard-logo.png" alt="Interactive Dashboards" class="tool-image" />
+<div class="tool-content">
+<h3><strong>Build interactive dashboards</strong></h3>
+<p>Present results in an <strong>interactive dashboard</strong> format to support communication, exploration, and stakeholder engagement.</p>
+</div>
+</div>
+
+</div>
+
 
 ```{note}
 Are you a World Bank TTL? You can request for availability to produce a new country screening using [**this form**](https://forms.office.com/r/UU3LXBNz4T).
 ```
 
-## Tested and applied globally
+## Applied globally
 The map shows countries that have been already covered by the risk analytics. Click on the country name to download the risk screening report.
 
 <iframe src="docs/maps/CCDR_map.html" height="500" width="100%"></iframe>
