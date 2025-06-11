@@ -32,8 +32,9 @@ table img {
 .logo__image {
     margin: 0 auto;
     display: block;
-    width: 80%;
-    height: auto;
+    width: 80% !important;
+    height: auto !important;
+    max-width: 80% !important;
 }
 
 /* Additional centering for sidebar */
