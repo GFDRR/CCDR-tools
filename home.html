@@ -754,8 +754,8 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#tested-and-applied-globally">
-   Tested and applied globally
+  <a class="reference internal nav-link" href="#applied-globally">
+   Applied globally
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -817,17 +817,85 @@ title="Print to PDF"
 <p>This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards’ risk screening at the national or sub-national level. The tools have originally being created for the World Bank’s <a class="reference external" href="https://www.worldbank.org/en/publication/country-climate-development-reports"><strong>Country Climate and Development Report</strong></a> risk screening activities (2022/2025) and then furtherly developed within the <a class="reference internal" href="docs/rdl.html"><span class="doc std std-doc"><strong>Risk Data Library project</strong></span></a>.</p>
 <section id="what-you-can-do-with-these-tools">
 <h2>What you can do with these tools<a class="headerlink" href="#what-you-can-do-with-these-tools" title="Permalink to this heading">#</a></h2>
-<p>| <img alt="Disaster Risk Analysis" src="_images/rdl-disaster-risk-logo.png" /> | <strong>Analyze disaster risk</strong><br>Perform <strong>spatial analytics of disaster risk</strong> using globally available datasets. |
-| <img alt="Risk and Poverty Mapping" src="_images/rdl-risk-poverty-logo.png" /> | <strong>Map the interaction of risk and poverty</strong><br>Combine hazard exposure and socio-economic vulnerability to produce <a class="reference internal" href="docs/risk-poverty.html"><span class="doc std std-doc"><strong>bi-variate maps</strong></span></a> highlighting risk-poverty hotspots. |
-| <img alt="Future Climate Risk" src="_images/rdl-climate-risk-logo.png" /> | <strong>Explore future climate risk</strong><br>Generate climate risk outlooks based on <a class="reference internal" href="docs/climate-risk.html"><span class="doc std std-doc"><strong>CMIP6 climate projections</strong></span></a> and standardized risk indices. |
-| <img alt="Interactive Dashboards" src="_images/rdl-dashboard-logo.png" /> | <strong>Build interactive dashboards</strong><br>Present results in an <a class="reference external" href="https://matamadio.github.io/CCDR-geoboard"><strong>interactive dashboard</strong></a> format to support communication, exploration, and stakeholder engagement. |</p>
+<style>
+.tools-grid {
+  margin: 2rem 0;
+}
+.tool-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+}
+.tool-image {
+  width: 250px;
+  height: 250px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.tool-content {
+  flex: 1;
+  padding-top: 0.5rem;
+}
+.tool-content h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+}
+.tool-content p {
+  margin: 0;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .tool-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  .tool-image {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+}
+</style>
+<div class="tools-grid">
+<div class="tool-item">
+<img src="docs/images/rdl-disaster-risk-logo.png" alt="Disaster Risk Analysis" class="tool-image" />
+<div class="tool-content">
+<h3><strong>Analyze disaster risk</strong></h3>
+<p>Perform <strong>spatial analytics of disaster risk</strong> using globally available datasets.</p>
+</div>
+</div>
+<div class="tool-item">
+<img src="docs/images/rdl-risk-poverty-logo.png" alt="Risk and Poverty Mapping" class="tool-image" />
+<div class="tool-content">
+<h3><strong>Map the interaction of risk and poverty</strong></h3>
+<p>Combine hazard exposure and socio-economic vulnerability to produce <strong>bi-variate maps</strong> highlighting risk-poverty hotspots.</p>
+</div>
+</div>
+<div class="tool-item">
+<img src="docs/images/rdl-climate-risk-logo.png" alt="Future Climate Risk" class="tool-image" />
+<div class="tool-content">
+<h3><strong>Explore future climate risk</strong></h3>
+<p>Generate climate risk outlooks based on <strong>CMIP6 climate projections</strong> and standardized risk indices.</p>
+</div>
+</div>
+<div class="tool-item">
+<img src="docs/images/rdl-dashboard-logo.png" alt="Interactive Dashboards" class="tool-image" />
+<div class="tool-content">
+<h3><strong>Build interactive dashboards</strong></h3>
+<p>Present results in an <strong>interactive dashboard</strong> format to support communication, exploration, and stakeholder engagement.</p>
+</div>
+</div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Are you a World Bank TTL? You can request for availability to produce a new country screening using <a class="reference external" href="https://forms.office.com/r/UU3LXBNz4T"><strong>this form</strong></a>.</p>
 </div>
 </section>
-<section id="tested-and-applied-globally">
-<h2>Tested and applied globally<a class="headerlink" href="#tested-and-applied-globally" title="Permalink to this heading">#</a></h2>
+<section id="applied-globally">
+<h2>Applied globally<a class="headerlink" href="#applied-globally" title="Permalink to this heading">#</a></h2>
 <p>The map shows countries that have been already covered by the risk analytics. Click on the country name to download the risk screening report.</p>
 <iframe src="docs/maps/CCDR_map.html" height="500" width="100%"></iframe>
 <!-- Table of CCDR Countries -->
@@ -941,8 +1009,8 @@ Also note that our tools are not expected to reflect all existing risk perspecti
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#tested-and-applied-globally">
-   Tested and applied globally
+  <a class="reference internal nav-link" href="#applied-globally">
+   Applied globally
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
