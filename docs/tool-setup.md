@@ -1,10 +1,10 @@
 # Tool setup and run
 To run correctly, the script requires proper setup according to the instructions below.
 
-<div style="text-align: center; margin: 2rem 0;">
+<div style="text-align: center; margin: 2rem 0; width: 100%;">
   <iframe 
-    width="560" 
-    height="315" 
+    width="100%" 
+    height="500" 
     src="https://www.youtube.com/embed/fC8DOomy620" 
     title="Tool Setup Tutorial" 
     frameborder="0" 
