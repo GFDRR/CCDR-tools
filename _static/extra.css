@@ -22,3 +22,38 @@ table img {
   height: 100px;
   object-fit: contain;
 }
+
+/* Center the logo in Jupyter Book sidebar */
+.navbar-brand {
+    display: block !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+}
+
+/* Alternative approach - target the logo container directly */
+.navbar-brand img {
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* If using sphinx-book-theme, you might need this selector */
+.logo {
+    text-align: center !important;
+}
+
+.logo img {
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* For newer Jupyter Book versions that use different selectors */
+.bd-sidebar .navbar-brand {
+    text-align: center !important;
+    display: block !important;
+}
+
+.bd-sidebar .navbar-brand img {
+    margin: 0 auto !important;
+    display: block !important;
+}

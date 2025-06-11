@@ -57,6 +57,7 @@ align: center
 Comparing modelled flood extent under historical scenario RP 100 years for a random location (Philippines): Fathom v3 2023 (left); Fathom v3 2023 (mid-left); JRC 2024 (mid-right) RWI - Aqueduct 2020 (right). Note how the Fathom model is able to better capture smaller discharge basins thanks to a better DTM resolution (30 m). Fathom 2 and JRC are comparable. The RWI data show its limitation at 1 km resolution.
 ```
 (hzd_hm_ss)=
+### Coastal floods / Storm surge
 Regarding specific coastal flood and storm surge datasets, all models listed below include flood hazard simulations that account for the effect of Sea Level Rise under climate change projections: RWI uses CMIP5 climate data, while Deltares and UNEP-CDRI dataset is based on CMIP6. In addition to increasing water volumes, sea level projections account for land movements (sinking or rising land) caused by tectonic activity, large-scale underground extraction, or glacial isostatic adjustment.
 
 - **WRI** "Aqueduct" storm surge hazard maps include both historical and future periods scenarios, using a resolution of 1 km.
