@@ -64,7 +64,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
   vertical-align: middle;
   border: 1px solid #e8f4f8;
   background-color: #fafcfd;
-  height: 120px;
+  height: 160px;
 }
 
 .hazard-table tr:nth-child(even) td {
