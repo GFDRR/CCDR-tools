@@ -23,53 +23,18 @@ table img {
   object-fit: contain;
 }
 
-/* Fix for dual light/dark theme logos in Jupyter Book sidebar */
-
-/* Center both logo variants */
-.logo__image {
-    display: block !important;
-    margin: 0 auto !important;
-    text-align: center !important;
-}
-
-/* Ensure proper theme switching - only show light logo in light theme */
-html[data-theme="light"] .logo__image.only-dark {
-    display: none !important;
-}
-
-html[data-theme="light"] .logo__image.only-light {
-    display: block !important;
-    margin: 0 auto !important;
-}
-
-/* Only show dark logo in dark theme */
-html[data-theme="dark"] .logo__image.only-light {
-    display: none !important;
-}
-
-html[data-theme="dark"] .logo__image.only-dark {
-    display: block !important;
-    margin: 0 auto !important;
-}
-
-/* Default behavior if theme attribute is not set - show only light */
-.logo__image.only-dark {
-    display: none !important;
-}
-
-.logo__image.only-light {
-    display: block !important;
-    margin: 0 auto !important;
-}
-
-/* Center the logo container itself */
+/* Just center the logo container - don't force display properties */
 .navbar-brand {
-    text-align: center !important;
-    display: block !important;
-    width: 100% !important;
+    text-align: center;
 }
 
-/* Additional centering for the sidebar */
+/* Center the logo images within their container */
+.logo__image {
+    margin: 0 auto;
+    display: block;
+}
+
+/* Additional centering for sidebar */
 .bd-sidebar .navbar-brand {
-    text-align: center !important;
+    text-align: center;
 }
