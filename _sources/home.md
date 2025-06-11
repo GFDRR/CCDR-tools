@@ -54,6 +54,8 @@ This documentation offers guidance on risk screening and provides pythons tools 
 ```{note}
 Are you a World Bank TTL? You can request for availability to produce a new country screening using [**this form**](https://forms.office.com/r/UU3LXBNz4T).
 ```
+
+## Tested and applied globally
 The map shows countries that have been already covered by the risk analytics. Click on the country name to download the risk screening report.
 
 <iframe src="docs/maps/CCDR_map.html" height="500" width="100%"></iframe>
