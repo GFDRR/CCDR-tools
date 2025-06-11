@@ -97,8 +97,8 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 }
 
 .hazard-item img {
-  width: 48px;
-  height: 48px;
+  width: 96px;
+  height: 96px;
   object-fit: contain;
 }
 
@@ -120,8 +120,8 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
   }
   
   .hazard-item img {
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 80px;
   }
 }
 </style>
