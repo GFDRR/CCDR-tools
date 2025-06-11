@@ -831,8 +831,12 @@ title="Print to PDF"
   width: 250px;
   height: 250px;
   flex-shrink: 0;
-  border-radius: 8px;
+}
+.tool-image img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 .tool-content {
@@ -861,31 +865,39 @@ title="Print to PDF"
 </style>
 <div class="tools-grid">
 <div class="tool-item">
-<img src="docs/images/rdl-disaster-risk-logo.png" alt="Disaster Risk Analysis" class="tool-image" />
+<div class="tool-image">
+<p><img alt="Disaster Risk Analysis" src="_images/rdl-disaster-risk-logo.png" /></p>
+</div>
 <div class="tool-content">
 <h3><strong>Analyze disaster risk</strong></h3>
-<p>Perform <strong>spatial analytics of disaster risk</strong> using globally available datasets.</p>
+<p>Perform <strong><a href="https://gfdrr.github.io/CCDR-tools/docs/intro-risk.html">spatial analytics of disaster risk</a></strong> using globally available datasets.</p>
 </div>
 </div>
 <div class="tool-item">
-<img src="docs/images/rdl-risk-poverty-logo.png" alt="Risk and Poverty Mapping" class="tool-image" />
+<div class="tool-image">
+<p><img alt="Risk and Poverty Mapping" src="_images/rdl-risk-poverty-logo.png" /></p>
+</div>
 <div class="tool-content">
 <h3><strong>Map the interaction of risk and poverty</strong></h3>
-<p>Combine hazard exposure and socio-economic vulnerability to produce <strong>bi-variate maps</strong> highlighting risk-poverty hotspots.</p>
+<p>Combine hazard exposure and socio-economic vulnerability to produce <strong><a href="docs/risk-poverty.html">bi-variate maps</a></strong> highlighting risk-poverty hotspots.</p>
 </div>
 </div>
 <div class="tool-item">
-<img src="docs/images/rdl-climate-risk-logo.png" alt="Future Climate Risk" class="tool-image" />
+<div class="tool-image">
+<p><img alt="Future Climate Risk" src="_images/rdl-climate-risk-logo.png" /></p>
+</div>
 <div class="tool-content">
 <h3><strong>Explore future climate risk</strong></h3>
-<p>Generate climate risk outlooks based on <strong>CMIP6 climate projections</strong> and standardized risk indices.</p>
+<p>Generate climate risk outlooks based on <strong><a href="docs/climate-risk.html">CMIP6 climate projections</a></strong> and standardized risk indices.</p>
 </div>
 </div>
 <div class="tool-item">
-<img src="docs/images/rdl-dashboard-logo.png" alt="Interactive Dashboards" class="tool-image" />
+<div class="tool-image">
+<p><img alt="Interactive Dashboards" src="_images/rdl-dashboard-logo.png" /></p>
+</div>
 <div class="tool-content">
 <h3><strong>Build interactive dashboards</strong></h3>
-<p>Present results in an <strong>interactive dashboard</strong> format to support communication, exploration, and stakeholder engagement.</p>
+<p>Present results in an <strong><a href="docs/presentation.html#dashboard">interactive dashboard</a></strong> format to support communication, exploration, and stakeholder engagement.</p>
 </div>
 </div>
 </div>
