@@ -754,41 +754,226 @@ title="Print to PDF"
 <p>The most relevant datasets (updated, high resolution, scientific quality) representing extreme events and long-term hazards that were considered for inclusion in the CCDR and other risk-related activities across the Bank have been reviewed, explaining their pros and cons and providing suggestions for their use. Most datasets only cover the historical period (<em>baseline</em>); while a few of the hydro-met hazards also offer some <em>hazard projections</em>.</p>
 <p>Some hazards are modelled using a <strong>probabilistic approach</strong>, providing a set of scenarios linked to hazard frequency for the period of reference. For the current data availability, this is the case for floods, storm surges, cyclones, heatwaves, and wildfires.
 Others, such as landslides, use a <strong>deterministic approach</strong>, providing an individual map of hazard intensity or susceptibility.</p>
-<table class="table table-center" id="hzd-datasets" style="width: 75%">
+<style>
+.hazard-table {
+  width: 75%;
+  margin: 2rem auto;
+  border-collapse: collapse;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.hazard-table th {
+  color: white;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+}
+
+.hazard-table th:nth-child(1) {
+  background: linear-gradient(to bottom, #8B4513 0%, #A0522D 100%);
+}
+
+.hazard-table th:nth-child(2) {
+  background: linear-gradient(to bottom, #4682B4 0%, #5693C4 100%);
+}
+
+.hazard-table th:nth-child(3) {
+  background: linear-gradient(to bottom, #228B22 0%, #32CD32 100%);
+}
+
+.hazard-table th a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hazard-table th a:hover {
+  text-decoration: underline;
+}
+
+.hazard-table td {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #e8f4f8;
+  background-color: #fafcfd;
+  height: 120px;
+}
+
+.hazard-table tr:nth-child(even) td {
+  background-color: #f8fbfc;
+}
+
+.hazard-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
+  justify-content: center;
+}
+
+.hazard-item a {
+  color: #0b3860;
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.hazard-item a:hover {
+  color: #fe5f86;
+  transform: translateY(-2px);
+}
+
+.hazard-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.hazard-text {
+  font-size: 0.9rem;
+  line-height: 1.3;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .hazard-table {
+    width: 95%;
+    font-size: 0.8rem;
+  }
+  
+  .hazard-table th, 
+  .hazard-table td {
+    padding: 1rem 0.5rem;
+  }
+  
+  .hazard-item img {
+    width: 40px;
+    height: 40px;
+  }
+}
+</style>
+<table class="hazard-table">
 <thead>
-<tr class="row-odd"><th class="head text-center"><p><a class="reference internal" href="hzd_gp-data.html"><span class="doc std std-doc"><strong>GEOPHYSICAL</strong></span></a></p></th>
-<th class="head text-center"><p><a class="reference internal" href="hzd_hm-data.html"><span class="doc std std-doc"><strong>HYDRO-METEOROLOGICAL</strong></span></a></p></th>
-<th class="head text-center"><p><a class="reference internal" href="hzd_env-data.html"><span class="doc std std-doc"><strong>ENVIRONMENTAL</strong></span></a></p></th>
+<tr>
+<th><a href="hzd_gp-data.md"><strong>GEOPHYSICAL</strong></a></th>
+<th><a href="hzd_hm-data.md"><strong>HYDRO-METEOROLOGICAL</strong></a></th>
+<th><a href="hzd_env-data.md"><strong>ENVIRONMENTAL</strong></a></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-center"><p><a class="reference internal" href="hzd_gp-data.html#hzd-gp-eq"><span class="std std-ref">Earthquake<br><img alt="Earthquake" src="../_images/earthquake.png" /></span></a></p></td>
-<td class="text-center"><p><a class="reference internal" href="hzd_hm-data.html#hzd-hm-fl"><span class="std std-ref">River floods<br><img alt="River flood" src="../_images/flood.png" /></span></a></p></td>
-<td class="text-center"><p><a class="reference internal" href="hzd_env-data.html#hzd-env-ap"><span class="std std-ref">Air pollution<br><img alt="Air pollution" src="../_images/air-pollution.png" /></span></a></p></td>
+<tr>
+<td>
+<div class="hazard-item">
+<a href="hzd_gp_eq">
+<div class="hazard-text">Earthquake</div>
+<p><img alt="Earthquake" src="../_images/earthquake.png" /></p>
+</a>
+</div>
+</td>
+<td>
+<div class="hazard-item">
+<a href="hzd_hm_fl">
+<div class="hazard-text">River floods</div>
+<p><img alt="River flood" src="../_images/flood.png" /></p>
+</a>
+</div>
+</td>
+<td>
+<div class="hazard-item">
+<a href="hzd_env_ap">
+<div class="hazard-text">Air pollution</div>
+<p><img alt="Air pollution" src="../_images/air-pollution.png" /></p>
+</a>
+</div>
+</td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p><a class="reference internal" href="hzd_gp-data.html#hzd-gp-ts"><span class="std std-ref">Tsunami<br><img alt="Tsunami" src="../_images/tsunami.png" /></span></a></p></td>
-<td class="text-center"><p><a class="reference internal" href="hzd_hm-data.html#hzd-hm-ls"><span class="std std-ref">Landslide<br><img alt="Landslide" src="../_images/landslide.png" /></span></a></p></td>
-<td class="text-center"><p></p></td>
+<tr>
+<td>
+<div class="hazard-item">
+<a href="hzd_gp_ts">
+<div class="hazard-text">Tsunami</div>
+<p><img alt="Tsunami" src="../_images/tsunami.png" /></p>
+</a>
+</div>
+</td>
+<td>
+<div class="hazard-item">
+<a href="hzd_hm_ls">
+<div class="hazard-text">Landslide</div>
+<p><img alt="Landslide" src="../_images/landslide.png" /></p>
+</a>
+</div>
+</td>
+<td></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p><a class="reference internal" href="hzd_gp-data.html#hzd-gp-vo"><span class="std std-ref">Volcanic activity<br><img alt="Volcanic activity" src="../_images/volcano.png" /></span></a></p></td>
-<td class="text-center"><p><a class="reference internal" href="hzd_hm-data.html#hzd-hm-ss"><span class="std std-ref">Coastal flood<br><img alt="Coastal flood" src="../_images/storm-surge.png" /></span></a></p></td>
-<td class="text-center"><p></p></td>
+<tr>
+<td>
+<div class="hazard-item">
+<a href="hzd_gp_vo">
+<div class="hazard-text">Volcanic activity</div>
+<p><img alt="Volcanic activity" src="../_images/volcano.png" /></p>
+</a>
+</div>
+</td>
+<td>
+<div class="hazard-item">
+<a href="hzd_hm_ss">
+<div class="hazard-text">Coastal flood</div>
+<p><img alt="Coastal flood" src="../_images/storm-surge.png" /></p>
+</a>
+</div>
+</td>
+<td></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p></p></td>
-<td class="text-center"><p><a class="reference internal" href="hzd_hm-data.html#hzd-hm-tc"><span class="std std-ref">Tropical cyclones<br><img alt="Tropical cyclones" src="../_images/wind.png" /></span></a></p></td>
-<td class="text-center"><p></p></td>
+<tr>
+<td></td>
+<td>
+<div class="hazard-item">
+<a href="hzd_hm_tc">
+<div class="hazard-text">Tropical cyclones</div>
+<p><img alt="Tropical cyclones" src="../_images/wind.png" /></p>
+</a>
+</div>
+</td>
+<td></td>
 </tr>
-<tr class="row-even"><td class="text-center"><p></p></td>
-<td class="text-center"><p><a class="reference internal" href="hzd_hm-data.html#hzd-hm-dr"><span class="std std-ref">Drought<br><img alt="Drought" src="../_images/drought.png" /></span></a></p></td>
-<td class="text-center"><p></p></td>
+<tr>
+<td></td>
+<td>
+<div class="hazard-item">
+<a href="hzd_hm_dr">
+<div class="hazard-text">Drought</div>
+<p><img alt="Drought" src="../_images/drought.png" /></p>
+</a>
+</div>
+</td>
+<td></td>
 </tr>
-<tr class="row-odd"><td class="text-center"><p></p></td>
-<td class="text-center"><p><a class="reference internal" href="hzd_hm-data.html#hzd-hm-hs"><span class="std std-ref">Heat stress<br><img alt="Heat stress" src="../_images/heat-wave.png" /></span></a></p></td>
-<td class="text-center"><p></p></td>
+<tr>
+<td></td>
+<td>
+<div class="hazard-item">
+<a href="hzd_hm_hs">
+<div class="hazard-text">Heat stress</div>
+<p><img alt="Heat stress" src="../_images/heat-wave.png" /></p>
+</a>
+</div>
+</td>
+<td></td>
 </tr>
 </tbody>
-</table>
-<div class="toctree-wrapper compound">
+</table><div class="toctree-wrapper compound">
 </div>
 </section>
 
