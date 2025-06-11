@@ -60,7 +60,7 @@ This documentation offers guidance on risk screening and provides pythons tools 
   width: 250px;
   height: 250px;
   flex-shrink: 0;
-  background-color: #8DD2DB;
+  background-color: #064660;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: background-color 0.3s ease;
