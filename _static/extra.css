@@ -23,37 +23,53 @@ table img {
   object-fit: contain;
 }
 
-/* Center the logo in Jupyter Book sidebar */
-.navbar-brand {
+/* Fix for dual light/dark theme logos in Jupyter Book sidebar */
+
+/* Center both logo variants */
+.logo__image {
     display: block !important;
-    text-align: center !important;
     margin: 0 auto !important;
+    text-align: center !important;
+}
+
+/* Ensure proper theme switching - only show light logo in light theme */
+html[data-theme="light"] .logo__image.only-dark {
+    display: none !important;
+}
+
+html[data-theme="light"] .logo__image.only-light {
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Only show dark logo in dark theme */
+html[data-theme="dark"] .logo__image.only-light {
+    display: none !important;
+}
+
+html[data-theme="dark"] .logo__image.only-dark {
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Default behavior if theme attribute is not set - show only light */
+.logo__image.only-dark {
+    display: none !important;
+}
+
+.logo__image.only-light {
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Center the logo container itself */
+.navbar-brand {
+    text-align: center !important;
+    display: block !important;
     width: 100% !important;
 }
 
-/* Alternative approach - target the logo container directly */
-.navbar-brand img {
-    display: block !important;
-    margin: 0 auto !important;
-}
-
-/* If using sphinx-book-theme, you might need this selector */
-.logo {
-    text-align: center !important;
-}
-
-.logo img {
-    display: block !important;
-    margin: 0 auto !important;
-}
-
-/* For newer Jupyter Book versions that use different selectors */
+/* Additional centering for the sidebar */
 .bd-sidebar .navbar-brand {
     text-align: center !important;
-    display: block !important;
-}
-
-.bd-sidebar .navbar-brand img {
-    margin: 0 auto !important;
-    display: block !important;
 }
