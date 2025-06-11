@@ -208,6 +208,7 @@ The map shows countries that have been already covered by the risk analytics. Cl
   border: none;
   border-right: 1px solid #e8f4f8;
   background-color: #fafcfd;
+  width: 25%;
 }
 
 .ccdr-countries-table td:last-child {
