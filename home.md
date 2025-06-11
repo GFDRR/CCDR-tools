@@ -44,11 +44,14 @@
 
 This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards' risk screening at the national or sub-national level. The tools have originally being created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2025) and then furtherly developed within the [**Risk Data Library project**](docs/rdl.md).
 
-The CCDR toolkit allow to perform spatial analytics of disaster risk based on global datasets.
-Additionally, it offers open-source approaches and methods to:
-- Combine risk and poverty information into [**bi-variate maps**](docs/risk-poverty.md)
-- Produce [**climate risk outlook**](docs/climate-risk.md) based on CMIP6 indices
-- Present results into an interactive [**dashboard**](https://matamadio.github.io/CCDR-geoboard)
+## What you can do with these tools
+
+| ![Disaster Risk Analysis](_images/rdl-disaster-risk-logo.png) | **Analyze disaster risk**<br>Perform **spatial analytics of disaster risk** using globally available datasets. |
+|---|---|
+| ![Risk and Poverty Mapping](_images/rdl-risk-poverty-logo.png) | **Map the interaction of risk and poverty**<br>Combine hazard exposure and socio-economic vulnerability to produce [**bi-variate maps**](docs/risk-poverty.md) highlighting risk-poverty hotspots. |
+| ![Future Climate Risk](_images/rdl-climate-risk-logo.png) | **Explore future climate risk**<br>Generate climate risk outlooks based on [**CMIP6 climate projections**](docs/climate-risk.md) and standardized risk indices. |
+|---|---|
+| ![Interactive Dashboards](_images/rdl-dashboard-logo.png) | **Build interactive dashboards**<br>Present results in an [**interactive dashboard**](https://matamadio.github.io/CCDR-geoboard) format to support communication, exploration, and stakeholder engagement. |
 
 ```{note}
 Are you a World Bank TTL? You can request for availability to produce a new country screening using [**this form**](https://forms.office.com/r/UU3LXBNz4T).
