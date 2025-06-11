@@ -775,13 +775,24 @@ title="Print to PDF"
               
   <section class="tex2jax_ignore mathjax_ignore" id="tool-setup-and-run">
 <h1>Tool setup and run<a class="headerlink" href="#tool-setup-and-run" title="Permalink to this heading">#</a></h1>
-<p>To run correctly, the script requires proper setup according to the instructions below. It can be executed on any windows or linux machine.</p>
+<p>To run correctly, the script requires proper setup according to the instructions below.</p>
+<div style="text-align: center; margin: 2rem 0;">
+  <iframe 
+    width="560" 
+    height="315" 
+    src="https://www.youtube.com/embed/fC8DOomy620" 
+    title="Tool Setup Tutorial" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowfullscreen>
+  </iframe>
+</div>
 <p>Download the latest stable version of the code as zip from <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/tree/main/tools/code"><strong>here</strong></a>. Unzip it in your work directory, e.g. wd/RDL-tools/.
-The script has been developed to run as <a class="reference external" href="https://jupyter.org/">jupyter notebook</a>, but also allows to run as pure python (<code class="docutils literal notranslate"><span class="pre">manual_run.py</span></code>).</p>
+The script has been developed to run as <a class="reference external" href="https://jupyter.org/">jupyter notebook</a>. It has been tested on Windows10/11 but it can work on Linux and MacOS as well.</p>
 <section id="python-environment">
 <h2>Python environment<a class="headerlink" href="#python-environment" title="Permalink to this heading">#</a></h2>
 <ul>
-<li><p>Python 3 needs to be installed on your system. We suggest the latest <a class="reference external" href="https://www.anaconda.com/download">Anaconda</a> distribution. Mamba is also encouraged.</p></li>
+<li><p>Python 3 needs to be installed on your system. We suggest the latest <a class="reference external" href="https://www.anaconda.com/download">Anaconda</a> distribution. Mamba is also supported.</p></li>
 <li><p>Create new <code class="docutils literal notranslate"><span class="pre">RDL-tools</span></code> environment from the provided rdl-tools.yml file. It can be done via Anaconda navigator interface (environments &gt; Import ) or from the Anaconda cmd prompt:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>RDL-tools<span class="w"> </span>--file<span class="w"> </span>&lt;dir/rdl-tools.yml&gt;<span class="sb">`</span>
 activate<span class="w"> </span>RDL-tools
