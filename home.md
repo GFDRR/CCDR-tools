@@ -166,10 +166,178 @@ The map shows countries that have been already covered by the risk analytics. Cl
 
 <iframe src="docs/maps/CCDR_map.html" height="500" width="100%"></iframe>
 
+<style>
+.ccdr-countries-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.ccdr-countries-table th {
+  color: white;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+}
+
+.ccdr-countries-table th:nth-child(1) {
+  background: linear-gradient(to bottom, #0b3860 0%, #1e4a6b 100%);
+}
+
+.ccdr-countries-table th:nth-child(2) {
+  background: linear-gradient(to bottom, #1e5a8a 0%, #2d6b99 100%);
+}
+
+.ccdr-countries-table th:nth-child(3) {
+  background: linear-gradient(to bottom, #2a6ba3 0%, #3a7bb5 100%);
+}
+
+.ccdr-countries-table th:nth-child(4) {
+  background: linear-gradient(to bottom, #4682b4 0%, #5693c4 100%);
+}
+
+.ccdr-countries-table td {
+  padding: 1.5rem 1rem;
+  vertical-align: top;
+  border: none;
+  border-right: 1px solid #e8f4f8;
+  background-color: #fafcfd;
+}
+
+.ccdr-countries-table td:last-child {
+  border-right: none;
+}
+
+.ccdr-countries-table tr:nth-child(even) td {
+  background-color: #f8fbfc;
+}
+
+.country-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.country-list li {
+  padding: 0.4rem 0;
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.country-list li:before {
+  content: "▸";
+  color: #fe5f86;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.country-list li.sub-country {
+  padding-left: 2.4rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.country-list li.sub-country:before {
+  content: "▪";
+  color: #999;
+  left: 1.2rem;
+}
+
+.country-list a {
+  color: #0b3860;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.country-list a:hover {
+  color: #fe5f86;
+  border-bottom-color: #fe5f86;
+}
+
+@media (max-width: 768px) {
+  .ccdr-countries-table {
+    font-size: 0.9rem;
+  }
+  
+  .ccdr-countries-table th, 
+  .ccdr-countries-table td {
+    padding: 1rem 0.5rem;
+  }
+  
+  .ccdr-countries-table th {
+    font-size: 1rem;
+  }
+}
+</style>
+
 <!-- Table of CCDR Countries -->
-| South & South-East Asia | Africa | Latin America & Caribbean | East Asia and Pacific |
-|-------------------------|--------------------------------|------------------------|----------------------------|
-| - Pakistan<br>- Nepal<br>- Bangladesh<br>- [**Cambodia**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/KHM_RSK.pdf)<br>- India<br>- Thailand<br>- Malaysia<br>- Philippines<br>- Mongolia | - Ghana<br>- Burkina Faso<br>- Mali<br>- Niger<br>- Chad<br>- Mauritania<br>- Guinea-Bissau<br>- Nigeria<br>- [**Senegal**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/SEN_RSK.pdf)<br>- Ethiopia | - Dominican Republic<br>- [**OECS countries**](https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/OECS_RSK.pdf)<br>&nbsp;&nbsp;- Antigua & Barbuda<br>&nbsp;&nbsp;- Dominica<br>&nbsp;&nbsp;- Saint Kitts & Nevis<br>&nbsp;&nbsp;- Saint Lucia<br>&nbsp;&nbsp;- Grenada<br>&nbsp;&nbsp;- Saint Vincent & Grenadines | - Fiji |
+<table class="ccdr-countries-table">
+<thead>
+<tr>
+<th>South & South-East Asia</th>
+<th>Africa</th>
+<th>Latin America & Caribbean</th>
+<th>East Asia and Pacific</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<ul class="country-list">
+<li>Pakistan</li>
+<li>Nepal</li>
+<li>Bangladesh</li>
+<li><a href="https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/KHM_RSK.pdf"><strong>Cambodia</strong></a></li>
+<li>India</li>
+<li>Thailand</li>
+<li>Malaysia</li>
+<li>Philippines</li>
+<li>Mongolia</li>
+</ul>
+</td>
+<td>
+<ul class="country-list">
+<li>Ghana</li>
+<li>Burkina Faso</li>
+<li>Mali</li>
+<li>Niger</li>
+<li>Chad</li>
+<li>Mauritania</li>
+<li>Guinea-Bissau</li>
+<li>Nigeria</li>
+<li><a href="https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/SEN_RSK.pdf"><strong>Senegal</strong></a></li>
+<li>Ethiopia</li>
+</ul>
+</td>
+<td>
+<ul class="country-list">
+<li>Dominican Republic</li>
+<li><a href="https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/OECS_RSK.pdf"><strong>OECS countries</strong></a></li>
+<li class="sub-country">Antigua & Barbuda</li>
+<li class="sub-country">Dominica</li>
+<li class="sub-country">Saint Kitts & Nevis</li>
+<li class="sub-country">Saint Lucia</li>
+<li class="sub-country">Grenada</li>
+<li class="sub-country">Saint Vincent & Grenadines</li>
+</ul>
+</td>
+<td>
+<ul class="country-list">
+<li>Fiji</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 
 ```{note}
 This documentation reflects the approches and methods adopted for the CCDR disaster risk screening following the [**CCDR guidance note**](https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Tools%20and%20Approaches.pdf). They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
