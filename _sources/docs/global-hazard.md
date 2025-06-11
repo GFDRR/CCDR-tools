@@ -139,7 +139,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 <tr>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_gp-data.html#earthquake">
+<a href="hzd_gp-data.html#earthquake">
 <div class="hazard-text">Earthquake</div>
 
 ![Earthquake](images/hzd_icons/earthquake.png)
@@ -149,7 +149,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </td>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_hm-data.html#floods">
+<a href="hzd_hm-data.html#floods">
 <div class="hazard-text">River floods</div>
 
 ![River flood](images/hzd_icons/flood.png)
@@ -159,7 +159,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </td>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_env-data.html#air-pollution">
+<a href="hzd_env-data.html#air-pollution">
 <div class="hazard-text">Air pollution</div>
 
 ![Air pollution](images/hzd_icons/air-pollution.png)
@@ -171,7 +171,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 <tr>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_gp-data.html#tsunami">
+<a href="hzd_gp-data.html#tsunami">
 <div class="hazard-text">Tsunami</div>
 
 ![Tsunami](images/hzd_icons/tsunami.png)
@@ -181,7 +181,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </td>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_hm-data.html#landslides">
+<a href="hzd_hm-data.html#landslides">
 <div class="hazard-text">Landslide</div>
 
 ![Landslide](images/hzd_icons/landslide.png)
@@ -194,7 +194,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 <tr>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_gp-data.html#volcanic-activity">
+<a href="hzd_gp-data.html#volcanic-activity">
 <div class="hazard-text">Volcanic activity</div>
 
 ![Volcanic activity](images/hzd_icons/volcano.png)
@@ -204,7 +204,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </td>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_hm-data.html#floods">
+<a href="hzd_hm-data.html#floods">
 <div class="hazard-text">Coastal flood</div>
 
 ![Coastal flood](images/hzd_icons/storm-surge.png)
@@ -218,7 +218,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 <td></td>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_hm-data.html#tropical-cyclones">
+<a href="hzd_hm-data.html#tropical-cyclones">
 <div class="hazard-text">Tropical cyclones</div>
 
 ![Tropical cyclones](images/hzd_icons/wind.png)
@@ -232,7 +232,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 <td></td>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_hm-data.html#drought-water-scarcity">
+<a href="hzd_hm-data.html#drought-water-scarcity">
 <div class="hazard-text">Drought</div>
 
 ![Drought](images/hzd_icons/drought.png)
@@ -246,7 +246,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 <td></td>
 <td>
 <div class="hazard-item">
-<a href="docs/hzd_hm-data.html#heat-stress">
+<a href="hzd_hm-data.html#heat-stress">
 <div class="hazard-text">Heat stress</div>
 
 ![Heat stress](images/hzd_icons/heat-wave.png)
