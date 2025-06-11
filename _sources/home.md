@@ -46,12 +46,10 @@ This documentation offers guidance on risk screening and provides pythons tools 
 
 ## What you can do with these tools
 
-| ![Disaster Risk Analysis](_images/rdl-disaster-risk-logo.png) | **Analyze disaster risk**<br>Perform **spatial analytics of disaster risk** using globally available datasets. |
-|---|---|
-| ![Risk and Poverty Mapping](_images/rdl-risk-poverty-logo.png) | **Map the interaction of risk and poverty**<br>Combine hazard exposure and socio-economic vulnerability to produce [**bi-variate maps**](docs/risk-poverty.md) highlighting risk-poverty hotspots. |
-| ![Future Climate Risk](_images/rdl-climate-risk-logo.png) | **Explore future climate risk**<br>Generate climate risk outlooks based on [**CMIP6 climate projections**](docs/climate-risk.md) and standardized risk indices. |
-|---|---|
-| ![Interactive Dashboards](_images/rdl-dashboard-logo.png) | **Build interactive dashboards**<br>Present results in an [**interactive dashboard**](https://matamadio.github.io/CCDR-geoboard) format to support communication, exploration, and stakeholder engagement. |
+| ![Disaster Risk Analysis](docs/images/rdl-disaster-risk-logo.png) | **Analyze disaster risk**<br>Perform **spatial analytics of disaster risk** using globally available datasets. |
+| ![Risk and Poverty Mapping](docs/images/rdl-risk-poverty-logo.png) | **Map the interaction of risk and poverty**<br>Combine hazard exposure and socio-economic vulnerability to produce [**bi-variate maps**](docs/risk-poverty.md) highlighting risk-poverty hotspots. |
+| ![Future Climate Risk](docs/images/rdl-climate-risk-logo.png) | **Explore future climate risk**<br>Generate climate risk outlooks based on [**CMIP6 climate projections**](docs/climate-risk.md) and standardized risk indices. |
+| ![Interactive Dashboards](docs/images/rdl-dashboard-logo.png) | **Build interactive dashboards**<br>Present results in an [**interactive dashboard**](https://matamadio.github.io/CCDR-geoboard) format to support communication, exploration, and stakeholder engagement. |
 
 ```{note}
 Are you a World Bank TTL? You can request for availability to produce a new country screening using [**this form**](https://forms.office.com/r/UU3LXBNz4T).
