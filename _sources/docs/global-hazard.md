@@ -204,7 +204,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </td>
 <td>
 <div class="hazard-item">
-<a href="hzd_hm-data.html#floods">
+<a href="hzd_hm-data.html#coastal-floods-storm-surge">
 <div class="hazard-text">Coastal flood</div>
 
 ![Coastal flood](images/hzd_icons/storm-surge.png)
