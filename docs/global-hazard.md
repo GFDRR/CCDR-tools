@@ -22,6 +22,11 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
   background: white;
 }
 
+.hazard-table th,
+.hazard-table td {
+  width: 33.33%;
+}
+
 .hazard-table th {
   color: white;
   padding: 1.5rem 1rem;
@@ -32,15 +37,15 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 }
 
 .hazard-table th:nth-child(1) {
-  background: linear-gradient(to bottom, #8B4513 0%, #A0522D 100%);
+  background: linear-gradient(to bottom, #5d4037 0%, #8d6e63 100%);
 }
 
 .hazard-table th:nth-child(2) {
-  background: linear-gradient(to bottom, #4682B4 0%, #5693C4 100%);
+  background: linear-gradient(to bottom, #37474f 0%, #607d8b 100%);
 }
 
 .hazard-table th:nth-child(3) {
-  background: linear-gradient(to bottom, #228B22 0%, #32CD32 100%);
+  background: linear-gradient(to bottom, #388e3c 0%, #66bb6a 100%);
 }
 
 .hazard-table th a {
