@@ -103,7 +103,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 }
 
 .hazard-text {
-  font-size: 0.9rem;
+  font-size: 1.8rem;
   line-height: 1.3;
   text-align: center;
 }
