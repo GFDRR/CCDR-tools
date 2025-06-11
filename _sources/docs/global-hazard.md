@@ -94,6 +94,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 .hazard-item a:hover {
   color: #fe5f86;
   transform: translateY(-2px);
+  transform: scale(1.1);
 }
 
 .hazard-item img {
