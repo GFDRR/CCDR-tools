@@ -43,6 +43,67 @@ When probabilistic hazard scenarios (multiple layers by Return Period) are avail
 The calculation of EAI is performed using the customary approach, as exemplified [here](https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac) and [here](https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets).
 ```
 
+### Spatial Combination of Hazard, Exposure and Vulnerability
+
+The spatial analysis of disaster risk requires the systematic combination of three fundamental components: hazard, exposure, and vulnerability. This process enables quantitative assessment of potential impacts by identifying where hazardous events intersect with vulnerable assets and populations.
+
+#### Methodology Overview
+
+To demonstrate this spatial combination approach, consider the analysis of flood risk using three 90-meter resolution raster datasets:
+- **Hazard layer**: Flood extent and intensity data
+- **Exposure layers**: Built-up assets and population distribution
+- **Vulnerability model**: Damage functions specific to the hazard-exposure combination
+
+#### Step 1: Hazard-Exposure Intersection
+
+The first step involves overlaying the hazard layer with exposure data to identify areas at risk. The spatial intersection of these layers defines the **exposure zone** – areas where assets and populations could potentially be affected by the hazard event.
+
+```{figure} images/spatial_risk1.png
+---
+align: center
+---
+The spatial intersection of a hazard layer (blue) with an exposure layer (orange) defines the amount of assets (pink) exposed to potential impact from the hazard.
+```
+
+This intersection provides crucial information about:
+- **Geographic extent** of potential impacts
+- **Quantity of exposed assets** within the hazard zone
+- **Distribution patterns** of exposure across the study area
+
+#### Step 2: Incorporating Vulnerability
+
+While the hazard-exposure intersection identifies *what* could be affected, it doesn't quantify *how much* damage might occur. This requires integrating vulnerability information through damage functions or impact models.
+
+When vulnerability models are available for the specific hazard-exposure combination, impact factors can be applied to transform exposure data into quantitative damage estimates. These models typically express vulnerability as a function that relates hazard intensity to the expected fraction of asset value that could be lost.
+
+```{figure} images/spatial_risk2.png
+---
+align: center
+---
+When a vulnerability model is available for the specific combination of hazard type and exposure category, an impact factor can be applied to obtain a quantitative estimate of impact as a share of total asset value.
+```
+
+#### Spatial Risk Calculation
+
+The complete spatial risk assessment follows the established framework:
+
+**Risk = Hazard × Exposure × Vulnerability**
+
+In practice, this translates to:
+1. **Hazard intensity** at each location (e.g., flood depth, wind speed)
+2. **Exposed asset value** or population count at that location  
+3. **Vulnerability coefficient** representing the expected damage ratio for the given hazard intensity and asset type
+
+#### Applications and Benefits
+
+This spatial approach enables:
+- **Hotspot identification**: Pinpointing areas of highest risk concentration
+- **Scenario analysis**: Comparing impacts across different hazard scenarios
+- **Resource prioritization**: Informing where risk reduction measures would be most effective
+- **Economic assessment**: Quantifying potential losses for insurance and planning purposes
+
+The resulting risk maps provide decision-makers with spatially explicit information essential for disaster risk management, land use planning, and emergency preparedness strategies.
+
 ### Lower and Upper bounds
 Due to requests from regional teams, a refined calculation of the integral for probabilistic EAI and EAE includes:
 
