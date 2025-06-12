@@ -13,15 +13,15 @@ To run correctly, the script requires proper setup according to the instructions
   </iframe>
 </div>
 
-Download the latest stable version of the code as zip from [**here**](https://github.com/GFDRR/CCDR-tools/tree/main/tools/code). Unzip it in your work directory, e.g. wd/RDL-tools/.
+Download the latest stable version of the code as zip from [**here**](https://github.com/GFDRR/CCDR-tools/tree/main/tools/code). Unzip it in your work directory, e.g. wd/rdl-tools/.
 The script has been developed to run as [jupyter notebook](https://jupyter.org/). It has been tested on Windows10/11 but it can work on Linux and MacOS as well.
 
 ## Python environment
 - Python 3 needs to be installed on your system. We suggest the latest [Anaconda](https://www.anaconda.com/download) distribution. Mamba is also supported.
-- Create new `RDL-tools` environment from the provided rdl-tools.yml file. It can be done via Anaconda navigator interface (environments > Import ) or from the Anaconda cmd prompt:
+- Create new `rdl-tools` environment from the provided rdl-tools.yml file. It can be done via Anaconda navigator interface (environments > Import ) or from the Anaconda cmd prompt:
   ```bash
-  conda create --name RDL-tools --file <dir/rdl-tools.yml>`
-  activate RDL-tools
+  conda create --name rdl-tools --file <dir/rdl-tools.yml>`
+  activate rdl-tools
   ```
 
 ## Settings
@@ -32,13 +32,13 @@ Edit the `.env` file inside the notebook directories to specify your working dir
 
 # Fill the below with the location of data files
 # Use absolute paths with forward slashes ("/"), and keep the trailing slash
-DATA_DIR = C:/Workdir/RDL-tools
+DATA_DIR = C:/Workdir/rdl-tools
 ```
 
 ## Run Jupyter notebooks
 - Navigate to your working directory: `cd <Your work directory>`
   ```bash
-  cd C:/Workdir/RDL-tools
+  cd C:/Workdir/rdl-tools
   ```
 - Run the jupyter notebook.
   ```bash
