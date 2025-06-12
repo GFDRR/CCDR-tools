@@ -9,17 +9,24 @@ More information are available in the [**RDL documentation**](https://rdl-standa
 
 The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/collections/rdl) is a catalogue where **Risk Datasets** produced or used by World Bank analytics are stored and organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
 
-
-<!--
+```markdown
+```{raw} html
+<div style="text-align: center; margin: 20px 0;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Risk Diagram</title>
   <style>
     body {
-      background: #111;
-      color: white;
-      font-family: sans-serif;
+      background: transparent;
+      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      min-height: 400px;
       margin: 0;
       padding: 20px;
       box-sizing: border-box;
@@ -27,10 +34,9 @@ The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/
 
     .container {
       position: relative;
-      width: 90vw;
-      max-width: 600px;
-      height: 90vh;
-      max-height: 600px;
+      width: 100%;
+      max-width: 500px;
+      height: 400px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -44,31 +50,31 @@ The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/
     }
 
     .section {
-      transition: transform 0.4s ease, filter 0.3s ease, z-index 0.1s ease;
+      transition: transform 0.3s ease, filter 0.3s ease, z-index 0.1s ease;
       cursor: pointer;
       transform-origin: center;
       z-index: 1;
     }
 
     .section:hover {
-      transform: scale(1.08);
-      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+      transform: scale(1.06);
+      filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.3));
       z-index: 10;
     }
 
     .section-text {
       pointer-events: none;
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-weight: bold;
-      font-size: 110px;
+      font-size: 90px;
       text-anchor: middle;
       dominant-baseline: central;
-      transition: font-size 0.4s ease;
+      transition: font-size 0.3s ease;
     }
 
     .tooltip {
       position: fixed;
-      background: rgba(0,0,0,0.9);
+      background: rgba(0, 0, 0, 0.9);
       color: white;
       padding: 8px 12px;
       border-radius: 6px;
@@ -77,11 +83,24 @@ The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/
       transition: opacity 0.2s;
       white-space: nowrap;
       z-index: 1000;
-      font-size: 14px;
-      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .section-text {
+        font-size: 70px;
+      }
+      .container {
+        height: 300px;
+        max-width: 400px;
+      }
     }
   </style>
-
+</head>
+<body>
 <div class="container">
   <div class="tooltip" id="tooltip"></div>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" preserveAspectRatio="xMidYMid meet">
@@ -152,5 +171,6 @@ The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/
     });
   });
 </script>
-
--->
+</body>
+</html>
+</div>
