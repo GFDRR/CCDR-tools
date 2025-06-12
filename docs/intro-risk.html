@@ -750,50 +750,50 @@ title="Print to PDF"
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#direct-and-indirect-losses">
+   Direct and indirect losses
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#impact-as-spatial-combination-of-hazard-exposure-and-vulnerability">
+   Impact as spatial Combination of Hazard, Exposure and Vulnerability
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#methodology-overview">
+     Methodology Overview
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-1-hazard-exposure-intersection">
+     Step 1: Hazard-Exposure Intersection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-2-incorporating-vulnerability">
+     Step 2: Incorporating Vulnerability
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spatial-risk-calculation">
+     Spatial Risk Calculation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#applications-and-benefits">
+     Applications and Benefits
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#an-indicator-of-mean-annual-risk-expected-annual-impact">
    An indicator of mean annual risk: Expected Annual Impact
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#spatial-combination-of-hazard-exposure-and-vulnerability">
-     Spatial Combination of Hazard, Exposure and Vulnerability
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#methodology-overview">
-       Methodology Overview
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#step-1-hazard-exposure-intersection">
-       Step 1: Hazard-Exposure Intersection
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#step-2-incorporating-vulnerability">
-       Step 2: Incorporating Vulnerability
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#spatial-risk-calculation">
-       Spatial Risk Calculation
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#applications-and-benefits">
-       Applications and Benefits
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#lower-and-upper-bounds">
      Lower and Upper bounds
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#direct-and-indirect-losses">
-     Direct and indirect losses
     </a>
    </li>
   </ul>
@@ -839,22 +839,20 @@ title="Print to PDF"
 </div>
 <p id="probabilistic-risk"><strong>Probabilistic risk</strong> is the chance of something adverse (impact) occurring. This method assesses the likelihood of an event(s) and it contains the idea of uncertainty because it incorporates the variability between frequent, low impact events and rare, high impact events.</p>
 <p>In contrast, a <strong>deterministic risk</strong> model typically models one scenario representing a real event or an individual, finite risk scenario (e.g. mean, median, worst case), but cannot properly represent the full range of variability around it.</p>
-<section id="an-indicator-of-mean-annual-risk-expected-annual-impact">
-<h2>An indicator of mean annual risk: Expected Annual Impact<a class="headerlink" href="#an-indicator-of-mean-annual-risk-expected-annual-impact" title="Permalink to this heading">#</a></h2>
-<p>When probabilistic hazard scenarios (multiple layers by Return Period) are available to calculate impacts in relation to occurrence frequency, an estimate of the <strong>Expected Annual Impact (EAI)</strong> over exposed categories can be calculated. This can be done for both the <em>Baseline</em>, refering to the historical period, and for future <a class="reference internal" href="climate-risk.html#climate-change-and-disaster-risk"><span class="std std-ref"><em>climate projections</em></span></a>.</p>
-<ul class="simple">
-<li><p>The <strong>EAI</strong> is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.</p></li>
-<li><p>In lack of a proper vulnerability function, the <strong>EAE</strong> is calculated in a similar fashon considering  exposure to specific hazard thresholds instead of impacts. (<strong>EAE</strong>) is then expressed as <em>annual exposure to hazard over a certain threshold</em>.</p></li>
-</ul>
+<section id="direct-and-indirect-losses">
+<h2>Direct and indirect losses<a class="headerlink" href="#direct-and-indirect-losses" title="Permalink to this heading">#</a></h2>
+<p><strong>Direct disaster losses</strong> refer to directly quantifiable losses such as the number of people killed and the damage to buildings, infrastructure and natural resources.<br><strong>Indirect disaster losses</strong> include declines in output or revenue, and impact on wellbeing of people, and generally arise from disruptions to the flow of goods and services as a result of a disaster [<a class="reference external" href="https://pure.iiasa.ac.at/id/eprint/11138/">GFDRR 2014</a>; <a class="reference external" href="https://www.undrr.org/global-assessment-report-disaster-risk-reduction-gar">UNDRR</a>].</p>
+<p>In this specific framework, we are only estimating <strong>DIRECT disaster losses</strong> in terms of impacts on mortality and built-up damage.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>The calculation of EAI is performed using the customary approach, as exemplified <a class="reference external" href="https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac">here</a> and <a class="reference external" href="https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets">here</a>.</p>
+<p><a class="reference external" href="https://www.preventionweb.net/understanding-disaster-risk/key-concepts/direct-indirect-losses"><strong>UNDRR - Direct and indirect losses overview</strong></a></p>
 </div>
-<section id="spatial-combination-of-hazard-exposure-and-vulnerability">
-<h3>Spatial Combination of Hazard, Exposure and Vulnerability<a class="headerlink" href="#spatial-combination-of-hazard-exposure-and-vulnerability" title="Permalink to this heading">#</a></h3>
+</section>
+<section id="impact-as-spatial-combination-of-hazard-exposure-and-vulnerability">
+<h2>Impact as spatial Combination of Hazard, Exposure and Vulnerability<a class="headerlink" href="#impact-as-spatial-combination-of-hazard-exposure-and-vulnerability" title="Permalink to this heading">#</a></h2>
 <p>The spatial analysis of disaster risk requires the systematic combination of three fundamental components: hazard, exposure, and vulnerability. This process enables quantitative assessment of potential impacts by identifying where hazardous events intersect with vulnerable assets and populations.</p>
 <section id="methodology-overview">
-<h4>Methodology Overview<a class="headerlink" href="#methodology-overview" title="Permalink to this heading">#</a></h4>
+<h3>Methodology Overview<a class="headerlink" href="#methodology-overview" title="Permalink to this heading">#</a></h3>
 <p>To demonstrate this spatial combination approach, consider the analysis of flood risk using three 90-meter resolution raster datasets:</p>
 <ul class="simple">
 <li><p><strong>Hazard layer</strong>: Flood extent and intensity data</p></li>
@@ -863,7 +861,7 @@ title="Print to PDF"
 </ul>
 </section>
 <section id="step-1-hazard-exposure-intersection">
-<h4>Step 1: Hazard-Exposure Intersection<a class="headerlink" href="#step-1-hazard-exposure-intersection" title="Permalink to this heading">#</a></h4>
+<h3>Step 1: Hazard-Exposure Intersection<a class="headerlink" href="#step-1-hazard-exposure-intersection" title="Permalink to this heading">#</a></h3>
 <p>The first step involves overlaying the hazard layer with exposure data to identify areas at risk. The spatial intersection of these layers defines the <strong>exposure zone</strong> – areas where assets and populations could potentially be affected by the hazard event.</p>
 <figure class="align-center" id="id2">
 <img alt="../_images/spatial_risk1.png" src="../_images/spatial_risk1.png" />
@@ -879,7 +877,7 @@ title="Print to PDF"
 </ul>
 </section>
 <section id="step-2-incorporating-vulnerability">
-<h4>Step 2: Incorporating Vulnerability<a class="headerlink" href="#step-2-incorporating-vulnerability" title="Permalink to this heading">#</a></h4>
+<h3>Step 2: Incorporating Vulnerability<a class="headerlink" href="#step-2-incorporating-vulnerability" title="Permalink to this heading">#</a></h3>
 <p>While the hazard-exposure intersection identifies <em>what</em> could be affected, it doesn’t quantify <em>how much</em> damage might occur. This requires integrating vulnerability information through damage functions or impact models.</p>
 <p>When vulnerability models are available for the specific hazard-exposure combination, impact factors can be applied to transform exposure data into quantitative damage estimates. These models typically express vulnerability as a function that relates hazard intensity to the expected fraction of asset value that could be lost.</p>
 <figure class="align-center" id="id3">
@@ -890,7 +888,7 @@ title="Print to PDF"
 </figure>
 </section>
 <section id="spatial-risk-calculation">
-<h4>Spatial Risk Calculation<a class="headerlink" href="#spatial-risk-calculation" title="Permalink to this heading">#</a></h4>
+<h3>Spatial Risk Calculation<a class="headerlink" href="#spatial-risk-calculation" title="Permalink to this heading">#</a></h3>
 <p>The complete spatial risk assessment follows the established framework:</p>
 <p><strong>Risk = Hazard × Exposure × Vulnerability</strong></p>
 <p>In practice, this translates to:</p>
@@ -901,7 +899,7 @@ title="Print to PDF"
 </ol>
 </section>
 <section id="applications-and-benefits">
-<h4>Applications and Benefits<a class="headerlink" href="#applications-and-benefits" title="Permalink to this heading">#</a></h4>
+<h3>Applications and Benefits<a class="headerlink" href="#applications-and-benefits" title="Permalink to this heading">#</a></h3>
 <p>This spatial approach enables:</p>
 <ul class="simple">
 <li><p><strong>Hotspot identification</strong>: Pinpointing areas of highest risk concentration</p></li>
@@ -912,6 +910,17 @@ title="Print to PDF"
 <p>The resulting risk maps provide decision-makers with spatially explicit information essential for disaster risk management, land use planning, and emergency preparedness strategies.</p>
 </section>
 </section>
+<section id="an-indicator-of-mean-annual-risk-expected-annual-impact">
+<h2>An indicator of mean annual risk: Expected Annual Impact<a class="headerlink" href="#an-indicator-of-mean-annual-risk-expected-annual-impact" title="Permalink to this heading">#</a></h2>
+<p>When probabilistic hazard scenarios (multiple layers by Return Period) are available to calculate impacts in relation to occurrence frequency, an estimate of the <strong>Expected Annual Impact (EAI)</strong> over exposed categories can be calculated. This can be done for both the <em>Baseline</em>, refering to the historical period, and for future <a class="reference internal" href="climate-risk.html#climate-change-and-disaster-risk"><span class="std std-ref"><em>climate projections</em></span></a>.</p>
+<ul class="simple">
+<li><p>The <strong>EAI</strong> is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.</p></li>
+<li><p>In lack of a proper vulnerability function, the <strong>EAE</strong> is calculated in a similar fashon considering  exposure to specific hazard thresholds instead of impacts. (<strong>EAE</strong>) is then expressed as <em>annual exposure to hazard over a certain threshold</em>.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The calculation of EAI is performed using the customary approach, as exemplified <a class="reference external" href="https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac">here</a> and <a class="reference external" href="https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets">here</a>.</p>
+</div>
 <section id="lower-and-upper-bounds">
 <h3>Lower and Upper bounds<a class="headerlink" href="#lower-and-upper-bounds" title="Permalink to this heading">#</a></h3>
 <p>Due to requests from regional teams, a refined calculation of the integral for probabilistic EAI and EAE includes:</p>
@@ -926,15 +935,6 @@ title="Print to PDF"
 <p><span class="caption-number">Fig. 8 </span><span class="caption-text">The integral below the curve is calculated as the mean of lower and upper bound rectangles areas (<a class="reference external" href="https://www.math.net/riemann-sum">Riemann sum</a>).</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-</section>
-<section id="direct-and-indirect-losses">
-<h3>Direct and indirect losses<a class="headerlink" href="#direct-and-indirect-losses" title="Permalink to this heading">#</a></h3>
-<p><strong>Direct disaster losses</strong> refer to directly quantifiable losses such as the number of people killed and the damage to buildings, infrastructure and natural resources.<br><strong>Indirect disaster losses</strong> include declines in output or revenue, and impact on wellbeing of people, and generally arise from disruptions to the flow of goods and services as a result of a disaster [<a class="reference external" href="https://pure.iiasa.ac.at/id/eprint/11138/">GFDRR 2014</a>; <a class="reference external" href="https://www.undrr.org/global-assessment-report-disaster-risk-reduction-gar">UNDRR</a>].</p>
-<p>In this specific framework, we are only estimating <strong>DIRECT disaster losses</strong> in terms of impacts on mortality and built-up damage.</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><a class="reference external" href="https://www.preventionweb.net/understanding-disaster-risk/key-concepts/direct-indirect-losses"><strong>UNDRR - Direct and indirect losses overview</strong></a></p>
-</div>
 </section>
 </section>
 <section id="supported-combinations-of-hazard-and-exposure">
@@ -1046,50 +1046,50 @@ title="Print to PDF"
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#direct-and-indirect-losses">
+   Direct and indirect losses
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#impact-as-spatial-combination-of-hazard-exposure-and-vulnerability">
+   Impact as spatial Combination of Hazard, Exposure and Vulnerability
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#methodology-overview">
+     Methodology Overview
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-1-hazard-exposure-intersection">
+     Step 1: Hazard-Exposure Intersection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#step-2-incorporating-vulnerability">
+     Step 2: Incorporating Vulnerability
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spatial-risk-calculation">
+     Spatial Risk Calculation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#applications-and-benefits">
+     Applications and Benefits
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#an-indicator-of-mean-annual-risk-expected-annual-impact">
    An indicator of mean annual risk: Expected Annual Impact
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#spatial-combination-of-hazard-exposure-and-vulnerability">
-     Spatial Combination of Hazard, Exposure and Vulnerability
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#methodology-overview">
-       Methodology Overview
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#step-1-hazard-exposure-intersection">
-       Step 1: Hazard-Exposure Intersection
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#step-2-incorporating-vulnerability">
-       Step 2: Incorporating Vulnerability
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#spatial-risk-calculation">
-       Spatial Risk Calculation
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#applications-and-benefits">
-       Applications and Benefits
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#lower-and-upper-bounds">
      Lower and Upper bounds
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#direct-and-indirect-losses">
-     Direct and indirect losses
     </a>
    </li>
   </ul>
