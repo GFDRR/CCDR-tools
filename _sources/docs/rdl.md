@@ -9,6 +9,8 @@ More information are available in the [**RDL documentation**](https://rdl-standa
 
 The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/collections/rdl) is a catalogue where **Risk Datasets** produced or used by World Bank analytics are stored and organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
 
+
+<!--
   <style>
     body {
       background: #111;
@@ -150,3 +152,5 @@ The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/
     });
   });
 </script>
+
+-->
