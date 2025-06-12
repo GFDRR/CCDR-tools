@@ -93,8 +93,6 @@ In practice, this translates to:
 2. **Exposed asset value** or population count at that location  
 3. **Vulnerability coefficient** representing the expected damage ratio for the given hazard intensity and asset type
 
-### Applications and Benefits
-
 This spatial approach enables:
 - **Hotspot identification**: Pinpointing areas of highest risk concentration
 - **Scenario analysis**: Comparing impacts across different hazard scenarios
