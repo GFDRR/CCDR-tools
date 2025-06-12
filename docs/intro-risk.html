@@ -755,6 +755,38 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spatial-combination-of-hazard-exposure-and-vulnerability">
+     Spatial Combination of Hazard, Exposure and Vulnerability
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#methodology-overview">
+       Methodology Overview
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#step-1-hazard-exposure-intersection">
+       Step 1: Hazard-Exposure Intersection
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#step-2-incorporating-vulnerability">
+       Step 2: Incorporating Vulnerability
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#spatial-risk-calculation">
+       Spatial Risk Calculation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#applications-and-benefits">
+       Applications and Benefits
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#lower-and-upper-bounds">
      Lower and Upper bounds
     </a>
@@ -818,6 +850,68 @@ title="Print to PDF"
 <p class="admonition-title">See also</p>
 <p>The calculation of EAI is performed using the customary approach, as exemplified <a class="reference external" href="https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac">here</a> and <a class="reference external" href="https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets">here</a>.</p>
 </div>
+<section id="spatial-combination-of-hazard-exposure-and-vulnerability">
+<h3>Spatial Combination of Hazard, Exposure and Vulnerability<a class="headerlink" href="#spatial-combination-of-hazard-exposure-and-vulnerability" title="Permalink to this heading">#</a></h3>
+<p>The spatial analysis of disaster risk requires the systematic combination of three fundamental components: hazard, exposure, and vulnerability. This process enables quantitative assessment of potential impacts by identifying where hazardous events intersect with vulnerable assets and populations.</p>
+<section id="methodology-overview">
+<h4>Methodology Overview<a class="headerlink" href="#methodology-overview" title="Permalink to this heading">#</a></h4>
+<p>To demonstrate this spatial combination approach, consider the analysis of flood risk using three 90-meter resolution raster datasets:</p>
+<ul class="simple">
+<li><p><strong>Hazard layer</strong>: Flood extent and intensity data</p></li>
+<li><p><strong>Exposure layers</strong>: Built-up assets and population distribution</p></li>
+<li><p><strong>Vulnerability model</strong>: Damage functions specific to the hazard-exposure combination</p></li>
+</ul>
+</section>
+<section id="step-1-hazard-exposure-intersection">
+<h4>Step 1: Hazard-Exposure Intersection<a class="headerlink" href="#step-1-hazard-exposure-intersection" title="Permalink to this heading">#</a></h4>
+<p>The first step involves overlaying the hazard layer with exposure data to identify areas at risk. The spatial intersection of these layers defines the <strong>exposure zone</strong> – areas where assets and populations could potentially be affected by the hazard event.</p>
+<figure class="align-center" id="id2">
+<img alt="../_images/spatial_risk1.png" src="../_images/spatial_risk1.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">The spatial intersection of a hazard layer (blue) with an exposure layer (orange) defines the amount of assets (pink) exposed to potential impact from the hazard.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>This intersection provides crucial information about:</p>
+<ul class="simple">
+<li><p><strong>Geographic extent</strong> of potential impacts</p></li>
+<li><p><strong>Quantity of exposed assets</strong> within the hazard zone</p></li>
+<li><p><strong>Distribution patterns</strong> of exposure across the study area</p></li>
+</ul>
+</section>
+<section id="step-2-incorporating-vulnerability">
+<h4>Step 2: Incorporating Vulnerability<a class="headerlink" href="#step-2-incorporating-vulnerability" title="Permalink to this heading">#</a></h4>
+<p>While the hazard-exposure intersection identifies <em>what</em> could be affected, it doesn’t quantify <em>how much</em> damage might occur. This requires integrating vulnerability information through damage functions or impact models.</p>
+<p>When vulnerability models are available for the specific hazard-exposure combination, impact factors can be applied to transform exposure data into quantitative damage estimates. These models typically express vulnerability as a function that relates hazard intensity to the expected fraction of asset value that could be lost.</p>
+<figure class="align-center" id="id3">
+<img alt="../_images/spatial_risk2.png" src="../_images/spatial_risk2.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">When a vulnerability model is available for the specific combination of hazard type and exposure category, an impact factor can be applied to obtain a quantitative estimate of impact as a share of total asset value.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="spatial-risk-calculation">
+<h4>Spatial Risk Calculation<a class="headerlink" href="#spatial-risk-calculation" title="Permalink to this heading">#</a></h4>
+<p>The complete spatial risk assessment follows the established framework:</p>
+<p><strong>Risk = Hazard × Exposure × Vulnerability</strong></p>
+<p>In practice, this translates to:</p>
+<ol class="arabic simple">
+<li><p><strong>Hazard intensity</strong> at each location (e.g., flood depth, wind speed)</p></li>
+<li><p><strong>Exposed asset value</strong> or population count at that location</p></li>
+<li><p><strong>Vulnerability coefficient</strong> representing the expected damage ratio for the given hazard intensity and asset type</p></li>
+</ol>
+</section>
+<section id="applications-and-benefits">
+<h4>Applications and Benefits<a class="headerlink" href="#applications-and-benefits" title="Permalink to this heading">#</a></h4>
+<p>This spatial approach enables:</p>
+<ul class="simple">
+<li><p><strong>Hotspot identification</strong>: Pinpointing areas of highest risk concentration</p></li>
+<li><p><strong>Scenario analysis</strong>: Comparing impacts across different hazard scenarios</p></li>
+<li><p><strong>Resource prioritization</strong>: Informing where risk reduction measures would be most effective</p></li>
+<li><p><strong>Economic assessment</strong>: Quantifying potential losses for insurance and planning purposes</p></li>
+</ul>
+<p>The resulting risk maps provide decision-makers with spatially explicit information essential for disaster risk management, land use planning, and emergency preparedness strategies.</p>
+</section>
+</section>
 <section id="lower-and-upper-bounds">
 <h3>Lower and Upper bounds<a class="headerlink" href="#lower-and-upper-bounds" title="Permalink to this heading">#</a></h3>
 <p>Due to requests from regional teams, a refined calculation of the integral for probabilistic EAI and EAE includes:</p>
@@ -826,10 +920,10 @@ title="Print to PDF"
 <li><p><strong>EAI Upper Bound (EAI_UB)</strong>: calculated as the sum of the area of recangles built above the exceedance probability curve</p></li>
 <li><p><strong>EAI</strong>: mean between lower and upper bound</p></li>
 </ul>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id4">
 <img alt="../_images/lowerupper.png" src="../_images/lowerupper.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 6 </span><span class="caption-text">The integral below the curve is calculated as the mean of lower and upper bound rectangles areas (<a class="reference external" href="https://www.math.net/riemann-sum">Riemann sum</a>).</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">The integral below the curve is calculated as the mean of lower and upper bound rectangles areas (<a class="reference external" href="https://www.math.net/riemann-sum">Riemann sum</a>).</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -956,6 +1050,38 @@ title="Print to PDF"
    An indicator of mean annual risk: Expected Annual Impact
   </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spatial-combination-of-hazard-exposure-and-vulnerability">
+     Spatial Combination of Hazard, Exposure and Vulnerability
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#methodology-overview">
+       Methodology Overview
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#step-1-hazard-exposure-intersection">
+       Step 1: Hazard-Exposure Intersection
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#step-2-incorporating-vulnerability">
+       Step 2: Incorporating Vulnerability
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#spatial-risk-calculation">
+       Spatial Risk Calculation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#applications-and-benefits">
+       Applications and Benefits
+      </a>
+     </li>
+    </ul>
+   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#lower-and-upper-bounds">
      Lower and Upper bounds
