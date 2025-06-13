@@ -5,7 +5,7 @@ To run correctly, the script requires proper setup according to the instructions
   <iframe 
     width="100%" 
     height="500" 
-    src="https://www.youtube.com/embed/fC8DOomy620" 
+    src="https://www.youtube.com/embed/BrmYQxAexng"
     title="Tool Setup Tutorial" 
     frameborder="0" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
