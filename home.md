@@ -297,7 +297,7 @@ The map shows countries that have been already covered by the risk analytics. Cl
 <li>Pakistan</li>
 <li>Nepal</li>
 <li>Bangladesh</li>
-<li><a href="https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/KHM_RSK.pdf"><strong>Cambodia</strong></a></li>
+<li><a href="https://github.com/GFDRR/CCDR-tools/blob/main/reports/KHM_RSK.pdf"><strong>Cambodia</strong></a></li>
 <li>India</li>
 <li>Thailand</li>
 <li>Malaysia</li>
@@ -315,14 +315,14 @@ The map shows countries that have been already covered by the risk analytics. Cl
 <li>Mauritania</li>
 <li>Guinea-Bissau</li>
 <li>Nigeria</li>
-<li><a href="https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/SEN_RSK.pdf"><strong>Senegal</strong></a></li>
+<li><a href="https://github.com/GFDRR/CCDR-tools/blob/main/reports/SEN_RSK.pdf"><strong>Senegal</strong></a></li>
 <li>Ethiopia</li>
 </ul>
 </td>
 <td>
 <ul class="country-list">
 <li>Dominican Republic</li>
-<li><a href="https://github.com/GFDRR/CCDR-tools/blob/dev_push/reports/OECS_RSK.pdf"><strong>OECS countries</strong></a></li>
+<li><a href="https://github.com/GFDRR/CCDR-tools/blob/main/reports/OECS_RSK.pdf"><strong>OECS countries</strong></a></li>
 <li class="sub-country">Antigua & Barbuda</li>
 <li class="sub-country">Dominica</li>
 <li class="sub-country">Saint Kitts & Nevis</li>
