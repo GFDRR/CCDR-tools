@@ -89,6 +89,7 @@ In additon to coastal flood projections, the [NASA Sea Level Projection Tool](ht
 Landslides (mass movements) are affected by geological features (rock type and structure) and geomorphological setting (slope gradient). Landslides can be split into two categories depending on their trigger:
 - **Dry mass movement** (rockfalls, debris flows) is driven by gravity and can be triggered by seismic events, but they can also be a consequence of soil erosion and environmental degradation. 
 - **Wet mass movement** can be triggered by heavy precipitation and flooding and are strongly affected by geological features (e.g. soil type and structure) and geomorphological settings (e.g., slope gradient). They do not typically include avalanches.
+
 Landslide hazard description comes in form of deterministic susceptibility indices such as the NASA Landslide Hazard Susceptibility map (LHASA), the ARUP layer producded by GFDRR in 2019, and the most recent UNEP/CDRI layer, which improves the resolution to 90 m and offers both historical and future scenarios for the precipitation trigger. In addition, the [**Cooperative Open Online Landslide Repository (COOLR)**](https://gpm.nasa.gov/landslides/data.html) reports on recorded landslide events, that can be used together with the susceptibility maps to validate their output.
 
 ```{table}
