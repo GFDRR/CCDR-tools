@@ -830,18 +830,13 @@ The data is available for different resolutions, from 10 meters to 1 km. In our 
 </section>
 <section id="dlr-world-settlment-footprint">
 <h2>DLR World Settlment Footprint<a class="headerlink" href="#dlr-world-settlment-footprint" title="Permalink to this heading">#</a></h2>
-<p>Built-up assets include houses, commercial and industrial buildings, infrastructures, facilities, and others. Data from 2019 World Settlement Footprint (WSF) is used for this current analysis. This is a high-resolution (10m) remotely sensed dataset which indicates whether each cell is primarily built up, excluding roads.</p>
+<p>Built-up assets include houses, commercial and industrial buildings, infrastructures, facilities, and others. Data from 2019 World Settlement Footprint (WSF) is used for this current analysis. This is a high-resolution (10m) remotely sensed dataset which indicates whether each cell is primarily built up, excluding roads. A script has been developed to automatically fetch WSF 2019 data and resample it at 100m resolution for a selected country. This is included in the toolkit codebase when no exposure dataset is found in the data folder; else you can use this <a class="reference internal" href="utility.html#fetch-wsf19"><span class="std std-ref">notebook</span></a> to run it separetely.</p>
 <figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="../_images/DLR_WSF.jpg"><img alt="../_images/DLR_WSF.jpg" src="../_images/DLR_WSF.jpg" style="width: 90%;" /></a>
 <figcaption>
 <p><span class="caption-number">Fig. 19 </span><span class="caption-text">Built-up land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019 and resampled into 100 m built-up density grid.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The script automatically fetch WSF 2019 data and resample them at 100 m for the selected country.
-To perform this operation outside the program run, you can use this <a class="reference internal" href="utility.html#fetch-wsf19"><span class="std std-ref">notebook</span></a>.</p>
-</div>
 </section>
 <section id="esa-world-cover">
 <h2>ESA World Cover<a class="headerlink" href="#esa-world-cover" title="Permalink to this heading">#</a></h2>

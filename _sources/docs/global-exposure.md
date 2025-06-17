@@ -34,7 +34,7 @@ Population count per 100 m grid over for New Dehli as obtained from EU-JRC GHSL 
 
 ## DLR World Settlment Footprint
 
-Built-up assets include houses, commercial and industrial buildings, infrastructures, facilities, and others. Data from 2019 World Settlement Footprint (WSF) is used for this current analysis. This is a high-resolution (10m) remotely sensed dataset which indicates whether each cell is primarily built up, excluding roads.
+Built-up assets include houses, commercial and industrial buildings, infrastructures, facilities, and others. Data from 2019 World Settlement Footprint (WSF) is used for this current analysis. This is a high-resolution (10m) remotely sensed dataset which indicates whether each cell is primarily built up, excluding roads. A script has been developed to automatically fetch WSF 2019 data and resample it at 100m resolution for a selected country. This is included in the toolkit codebase when no exposure dataset is found in the data folder; else you can use this [notebook](fetch_wsf19) to run it separetely.
 
 ```{figure} images/DLR_WSF.jpg
 ---
@@ -42,11 +42,6 @@ width: 90%
 align: center
 ---
 Built-up land cover information at 10 m resolution for Cambodia as obtained from DLR WSF 2019 and resampled into 100 m built-up density grid.
-```
-
-```{note}
-The script automatically fetch WSF 2019 data and resample them at 100 m for the selected country.
-To perform this operation outside the program run, you can use this [notebook](fetch_wsf19).
 ```
 
 ## ESA World Cover
