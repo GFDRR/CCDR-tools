@@ -106,6 +106,13 @@ When probabilistic hazard scenarios (multiple layers by Return Period) are avail
 
 - The **EAI** is calculated by multiplying the impact from each scenario with its exceedance probability, and then summing up to obtain the mean annual risk considering the whole range of hazard occurrence probabilities. The exceedance frequency curve highlights the relationship between the return period of each hazard and the estimated impact: the area below the curve represents the total annual damage considering all individual scenario probabilities.
 
+```{figure} images/EAI.png
+---
+align: center
+---
+The Exceedance probability curve integrates individual probability scenarios into one metric: mean Expected Annual Impact. 
+```
+
 - In lack of a proper vulnerability function, the **EAE** is calculated in a similar fashon considering  exposure to specific hazard thresholds instead of impacts. (**EAE**) is then expressed as *annual exposure to hazard over a certain threshold*.
 
 ```{seealso}
