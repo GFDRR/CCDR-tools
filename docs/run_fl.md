@@ -1,5 +1,19 @@
 # Flood Analytics
 
+The first notebook is dedicated to the screening of flood risk leveraging the Fathom v3 global model. Please refer to the instructions below to run the tool correctly.
+
+<div style="text-align: center; margin: 2rem 0; width: 100%;">
+  <iframe 
+    width="100%" 
+    height="500" 
+    src="https://www.youtube.com/embed/nLeMe5OphgA"
+    title="Flood Risk Screening Tutorial" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowfullscreen>
+  </iframe>
+</div>
+
 ## Input data management
 
 The script fetches default data automatically. This includes:
