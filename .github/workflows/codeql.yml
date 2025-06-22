@@ -13,7 +13,7 @@ name: "CodeQL Advanced"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "jasperschroeder-codeql-setup" ]
   pull_request:
     branches: [ "main" ]
 
