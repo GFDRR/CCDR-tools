@@ -14,9 +14,6 @@ Additional sources of risk data (hazard, exposure, disaster losses) and processi
 | [UNEP CDRI](https://handbook.climaax.eu) | GNU | Open-access global hazard maps and risk estimates | Geodata catalog |
 | [DECAT Space2Stats](https://worldbank.github.io/DECAT_Space2Stats) | GNU | Global boundaries at the ADM2 level | Geodata catalog |
 | [Geoboundaries](https://www.geoboundaries.org) | GNU | Global boundaries for different ADM levels | Geodata catalog |
-| [CLIMAAX](https://handbook.climaax.eu) | GNU | Methods and workflows as notebooks for Climate Risk Assessments (CRA) based on ECMWF data | Handbook |
-| [Critical Infrastructures Risk](https://vu-ivm.github.io/GlobalInfraRisk) | GNU | Methods and workflows as notebooks for assessing impacts over critical infrastructures | Handbook |
-| [PYTHIA](https://foundations.projectpythia.org) | GNU | Methods and workflows as notebooks for geo-mapping | Handbook |
 ```
 
 The [**Planetary Computer**](https://planetarycomputer.microsoft.com/) combines a multi-petabyte STAC catalog of global environmental data with intuitive APIs, a flexible scientific environment that allows users to answer global questions about that data, and applications that put those answers in the hands of researchers and stakeholders.
@@ -47,6 +44,16 @@ The [**DECAT Space2Stats program**](https://worldbank.github.io/DECAT_Space2Stat
 The [**Geoboundaries global database**](https://www.geoboundaries.org) is an open-access repository offering detailed, research-ready political administrative boundaries for every country in the world, up to five levels of administrative hierarchy.
 
 ## External analytical tools
+
+```{table}
+:name: external_links
+
+| **Name** | **License** | **Description** | **Purpose** |
+|---:|---:|---:|---:|
+| [CLIMAAX](https://handbook.climaax.eu) | GNU | Methods and workflows as notebooks for Climate Risk Assessments (CRA) based on ECMWF data | Handbook |
+| [Critical Infrastructures Risk](https://vu-ivm.github.io/GlobalInfraRisk) | GNU | Methods and workflows as notebooks for assessing impacts over critical infrastructures | Handbook |
+| [PYTHIA](https://foundations.projectpythia.org) | GNU | Methods and workflows as notebooks for geo-mapping | Handbook |
+```
 
 The [**CLIMAAX handbook**](https://handbook.climaax.eu) builds upon existing risk assessment frameworks, methods and tools, and promotes the use of datasets and service platforms for local and regional scale deployment. It develops a robust and coordinated framework of consistent, harmonised and comparable risk assessments via python notebooks.
 <br><br>
