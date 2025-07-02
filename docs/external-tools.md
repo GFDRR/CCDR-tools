@@ -15,6 +15,7 @@ Additional sources of risk data (hazard, exposure, disaster losses) and processi
 | [DECAT Space2Stats](https://worldbank.github.io/DECAT_Space2Stats) | GNU | Global boundaries at the ADM2 level | Geodata catalog |
 | [Geoboundaries](https://www.geoboundaries.org) | GNU | Global boundaries for different ADM levels | Geodata catalog |
 | [CLIMAAX](https://handbook.climaax.eu) | GNU | Methods and workflows as notebooks for Climate Risk Assessments (CRA) based on ECMWF data | Handbook |
+| [Critical Infrastructures Risk](https://vu-ivm.github.io/GlobalInfraRisk) | GNU | Methods and workflows as notebooks for assessing impacts over critical infrastructures | Handbook |
 | [PYTHIA](https://foundations.projectpythia.org) | GNU | Methods and workflows as notebooks for geo-mapping | Handbook |
 ```
 
@@ -48,6 +49,9 @@ The [**Geoboundaries global database**](https://www.geoboundaries.org) is an ope
 ## External analytical tools
 
 The [**CLIMAAX handbook**](https://handbook.climaax.eu) builds upon existing risk assessment frameworks, methods and tools, and promotes the use of datasets and service platforms for local and regional scale deployment. It develops a robust and coordinated framework of consistent, harmonised and comparable risk assessments via python notebooks.
+<br><br>
+
+The [**Critical Infrastructure handbook**](https://vu-ivm.github.io/GlobalInfraRisk) provides an open-source framework for assessing the risk of critical infrastructure worldwide. By leveraging publicly available datasets and analytical tools, it enables users to evaluate infrastructure exposure, vulnerability, and potential damage due to natural hazards.
 <br><br>
 
 The [**Pythia Foundations**](https://foundations.projectpythia.org) is an open-access educational resource developed by the Project Pythia community. It offers comprehensive tutorials and interactive content designed to teach foundational skills in scientific computing with Python, particularly tailored for the geosciences. In particular, it provides in-depth tutorials on key Python libraries like NumPy, Pandas, Matplotlib, Xarray, and Cartopy, which are vital for data analysis and visualization in scientific research.
