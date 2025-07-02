@@ -3,15 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metadata Editor</title>
+    <title>Enhanced RDLS Metadata Editor</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .schema-selector { margin-bottom: 2rem; }
-        .output-area { margin-top: 2rem; }
+        .section-checkbox {
+            margin-bottom: 0.5rem;
+        }
+        .tab-content {
+            min-height: 400px;
+        }
+        .nav-tabs .nav-link {
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        .nav-tabs .nav-link.hazard-tab {
+            background-color: #fff5f5;
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        .nav-tabs .nav-link.hazard-tab.active {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        .nav-tabs .nav-link.exposure-tab {
+            background-color: #f0f9ff;
+            border-color: #0ea5e9;
+            color: #0ea5e9;
+        }
+        .nav-tabs .nav-link.exposure-tab.active {
+            background-color: #0ea5e9;
+            border-color: #0ea5e9;
+            color: white;
+        }
+        .nav-tabs .nav-link.vulnerability-tab {
+            background-color: #fefce8;
+            border-color: #eab308;
+            color: #eab308;
+        }
+        .nav-tabs .nav-link.vulnerability-tab.active {
+            background-color: #eab308;
+            border-color: #eab308;
+            color: white;
+        }
+        .nav-tabs .nav-link.loss-tab {
+            background-color: #f3e8ff;
+            border-color: #a855f7;
+            color: #a855f7;
+        }
+        .nav-tabs .nav-link.loss-tab.active {
+            background-color: #a855f7;
+            border-color: #a855f7;
+            color: white;
+        }
+        .nav-tabs .nav-link.general-tab {
+            background-color: #f8f9fa;
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+        .nav-tabs .nav-link.general-tab.active {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+        .form-field { 
+            margin-bottom: 1rem; 
+            position: relative;
+        }
+        /* Enhanced features */
+        .validation-indicator {
+            position: absolute;
+            right: 10px;
+            top: 35px;
+            z-index: 10;
+            font-size: 1.2rem;
+        }
+        .validation-indicator.valid {
+            color: #28a745;
+        }
+        .validation-indicator.invalid {
+            color: #dc3545;
+        }
+        .field-with-validation {
+            padding-right: 35px;
+        }
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 0.375rem 0.375rem;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .autocomplete-suggestion {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        .autocomplete-suggestion:hover {
+            background-color: #f8f9fa;
+        }
+        .array-field { 
+            border: 1px solid #dee2e6; 
+            padding: 1rem; 
+            border-radius: 0.375rem; 
+            margin-bottom: 1rem; 
+            background-color: #fafafa;
+        }
+        .array-item { 
+            background-color: #f8f9fa; 
+            padding: 0.5rem; 
+            margin: 0.5rem 0; 
+            border-radius: 0.25rem; 
+            border: 1px solid #e9ecef;
+        }
+        .object-field { 
+            border: 1px solid #e9ecef; 
+            padding: 1rem; 
+            border-radius: 0.375rem; 
+            margin-bottom: 1rem; 
+            background-color: #fbfcfd; 
+        }
+        .required { 
+            border-left: 3px solid #dc3545; 
+            padding-left: 0.5rem;
+        }
+        .schema-status {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
         .file-drop-zone {
             border: 2px dashed #ccc;
             border-radius: 8px;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             margin: 1rem 0;
             cursor: pointer;
@@ -19,50 +148,115 @@
         }
         .file-drop-zone:hover { border-color: #007bff; }
         .file-drop-zone.dragover { border-color: #28a745; background-color: #f8f9fa; }
-        .form-field { margin-bottom: 1rem; }
-        .array-field { border: 1px solid #dee2e6; padding: 1rem; border-radius: 0.375rem; margin-bottom: 1rem; }
-        .array-item { background-color: #f8f9fa; padding: 0.5rem; margin: 0.5rem 0; border-radius: 0.25rem; }
-        .object-field { border: 1px solid #e9ecef; padding: 1rem; border-radius: 0.375rem; margin-bottom: 1rem; background-color: #fbfcfd; }
-        .required { border-left: 3px solid #dc3545; }
+        .validation-progress {
+            margin-bottom: 1rem;
+        }
+        .object-summary-card {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .object-summary-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        .object-summary-details {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .object-modal {
+            max-width: 800px;
+        }
+        .modal-form-field {
+            margin-bottom: 1rem;
+        }
+        .field-hint {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <header class="py-4 border-bottom">
-            <h1 class="h3">📋 Static Metadata Editor</h1>
-            <p class="text-muted">Generate metadata forms from JSON schemas - no server required!</p>
+            <div class="d-flex align-items-center gap-3">
+                <img src="https://gfdrr.github.io/CCDR-tools/_static/logo_flat.png" alt="GFDRR Logo" style="height: 50px;">
+                <div>
+                    <h1 class="h3 mb-1">🌍 Enhanced RDLS Metadata Editor</h1>
+                    <p class="text-muted mb-0">
+                        Generate RDLS-compliant metadata with real-time validation and auto-completion
+                        <span class="badge bg-success ms-2">Enhanced v2.1</span>
+                    </p>
+                </div>
+            </div>
         </header>
 
         <div class="row mt-4">
-            <!-- Schema Selection Panel -->
+            <!-- Configuration Panel -->
             <div class="col-md-3">
-                <div class="card">
+                <!-- Schema Version Selection -->
+                <div class="card mb-3">
                     <div class="card-header">
-                        <h5>📝 Schema Selection</h5>
+                        <h5>📋 Schema Configuration</h5>
                     </div>
                     <div class="card-body">
-                        <!-- Predefined Schemas -->
                         <div class="mb-3">
-                            <label class="form-label">Quick Start Templates:</label>
-                            <select id="schemaSelect" class="form-select">
-                                <option value="">Choose a template...</option>
-                                <option value="dataset">Dataset Metadata</option>
-                                <option value="publication">Publication Info</option>
-                                <option value="survey">Survey Metadata</option>
-                                <option value="custom">Custom Schema</option>
+                            <label class="form-label">Schema Version:</label>
+                            <select id="schemaVersionSelect" class="form-select">
+                                <option value="">Loading schema versions...</option>
                             </select>
+                            <div id="schemaStatus" class="schema-status text-muted"></div>
+                        </div>
+
+                        <!-- Section Selectors -->
+                        <div class="mb-3">
+                            <label class="form-label">Dataset Sections:</label>
+                            <div class="section-checkbox">
+                                <input type="checkbox" id="generalCheck" class="form-check-input" checked disabled>
+                                <label for="generalCheck" class="form-check-label ms-2">
+                                    <span class="badge bg-secondary">General Metadata</span> (Required)
+                                </label>
+                            </div>
+                            <div class="section-checkbox">
+                                <input type="checkbox" id="hazardCheck" class="form-check-input">
+                                <label for="hazardCheck" class="form-check-label ms-2">
+                                    <span class="badge bg-danger">Hazard Metadata</span>
+                                </label>
+                            </div>
+                            <div class="section-checkbox">
+                                <input type="checkbox" id="exposureCheck" class="form-check-input">
+                                <label for="exposureCheck" class="form-check-label ms-2">
+                                    <span class="badge bg-info">Exposure Metadata</span>
+                                </label>
+                            </div>
+                            <div class="section-checkbox">
+                                <input type="checkbox" id="vulnerabilityCheck" class="form-check-input">
+                                <label for="vulnerabilityCheck" class="form-check-label ms-2">
+                                    <span class="badge bg-warning">Vulnerability Metadata</span>
+                                </label>
+                            </div>
+                            <div class="section-checkbox">
+                                <input type="checkbox" id="lossCheck" class="form-check-input">
+                                <label for="lossCheck" class="form-check-label ms-2">
+                                    <span class="badge bg-purple" style="background-color: #a855f7 !important;">Loss Metadata</span>
+                                </label>
+                            </div>
                         </div>
 
                         <!-- Custom Schema Upload -->
-                        <div class="file-drop-zone" id="schemaDropZone">
-                            <p>📁 Drop JSON schema file here<br>or click to browse</p>
-                            <input type="file" id="schemaFile" accept=".json" style="display: none;">
-                        </div>
-
-                        <!-- Schema Editor -->
                         <div class="mb-3">
-                            <label class="form-label">Edit Schema:</label>
-                            <textarea id="schemaEditor" class="form-control" rows="8" placeholder="Paste or edit JSON schema here..."></textarea>
+                            <label class="form-label">Custom Schema:</label>
+                            <div class="file-drop-zone" id="schemaDropZone">
+                                <small>📁 Drop RDLS schema file here<br>or click to browse<br><em>Try uploading the RDLS v2.1 schema for enhanced features!</em></small>
+                                <input type="file" id="schemaFile" accept=".json" style="display: none;">
+                            </div>
                         </div>
 
                         <button id="generateForm" class="btn btn-primary w-100">Generate Form</button>
@@ -70,7 +264,7 @@
                 </div>
 
                 <!-- Actions Panel -->
-                <div class="card mt-3">
+                <div class="card">
                     <div class="card-header">
                         <h6>💾 Data Management</h6>
                     </div>
@@ -78,7 +272,8 @@
                         <button id="loadData" class="btn btn-outline-secondary btn-sm w-100 mb-2">Load Existing Metadata</button>
                         <button id="saveProgress" class="btn btn-outline-info btn-sm w-100 mb-2">Save Progress</button>
                         <button id="exportJson" class="btn btn-success btn-sm w-100 mb-2">Export JSON</button>
-                        <button id="exportXml" class="btn btn-success btn-sm w-100">Export XML</button>
+                        <button id="exportXml" class="btn btn-success btn-sm w-100 mb-2">Export XML</button>
+                        <button id="validateForm" class="btn btn-outline-primary btn-sm w-100 mt-2">🔍 Validate Metadata</button>
                     </div>
                 </div>
             </div>
@@ -87,14 +282,29 @@
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5>📋 Metadata Form</h5>
+                        <h5>📋 RDLS Metadata Form</h5>
                         <span id="formStatus" class="badge bg-secondary">No schema loaded</span>
                     </div>
                     <div class="card-body">
-                        <div id="metadataForm">
-                            <div class="text-center text-muted py-5">
-                                <div style="font-size: 4rem;">📝</div>
-                                <p>Select a schema template or upload your own to generate the metadata form</p>
+                        <!-- Tab Navigation -->
+                        <ul class="nav nav-tabs" id="metadataTabs" role="tablist" style="display: none;">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active general-tab" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
+                                    General
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content" id="metadataTabContent">
+                            <div class="tab-pane fade show active" id="general" role="tabpanel">
+                                <div id="metadataForm">
+                                    <div class="text-center text-muted py-5">
+                                        <div style="font-size: 4rem;">🌍</div>
+                                        <p>Select a schema version and configure sections to generate the RDLS metadata form</p>
+                                        <small class="text-muted">Enhanced with real-time validation, auto-completion, and RDLS compliance checking</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -105,23 +315,62 @@
             <div class="col-md-3">
                 <div class="card h-100">
                     <div class="card-header">
-                        <h6>👀 Live Preview</h6>
+                        <h6>👀 Live Preview & Validation</h6>
                     </div>
                     <div class="card-body">
-                        <pre id="outputPreview" class="bg-light p-3 rounded" style="font-size: 0.8rem; max-height: 400px; overflow-y: auto;">
+                        <!-- Validation Progress -->
+                        <div class="validation-progress">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted"><strong>Validation Status</strong></small>
+                                <span id="overallValidation" class="badge bg-secondary">Not validated</span>
+                            </div>
+                            <div class="progress mb-2" style="height: 8px;">
+                                <div id="validationProgress" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted">
+                                <span id="validFieldCount">0</span>/<span id="totalFieldCount">0</span> fields valid
+                            </small>
+                        </div>
+                        
+                        <pre id="outputPreview" class="bg-light p-3 rounded" style="font-size: 0.8rem; max-height: 300px; overflow-y: auto;">
 {
-  "message": "Form data will appear here as you fill it out..."
+  "message": "Enhanced RDLS metadata will appear here..."
 }
                         </pre>
                         
                         <div class="mt-3">
                             <small class="text-muted">
-                                <strong>Auto-save:</strong> Data is saved to browser localStorage
+                                <strong>Enhanced Features:</strong><br>
+                                ✅ Real-time validation<br>
+                                ✅ Auto-completion<br>
+                                ✅ Enhanced codelists<br>
+                                ✅ RDLS compliance
                             </small>
                         </div>
-                        
-                        <button id="validateForm" class="btn btn-outline-primary btn-sm w-100 mt-2">Validate Form</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Object Editor Modal -->
+    <div class="modal fade" id="objectEditorModal" tabindex="-1" aria-labelledby="objectEditorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg object-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="objectEditorModalLabel">Edit Object</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="objectEditorForm" class="needs-validation" novalidate>
+                        <div id="objectEditorFields">
+                            <!-- Dynamic form fields will be inserted here -->
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveObjectBtn">Save Object</button>
                 </div>
             </div>
         </div>
@@ -131,109 +380,78 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Predefined schema templates
-        const SCHEMA_TEMPLATES = {
-            dataset: {
-                "title": "Dataset Metadata",
-                "type": "object",
-                "properties": {
-                    "title": {
-                        "type": "string", 
-                        "title": "Dataset Title",
-                        "description": "The main title of your dataset"
-                    },
-                    "description": {
-                        "type": "string", 
-                        "title": "Description",
-                        "description": "A detailed description of the dataset"
-                    },
-                    "creator": {
-                        "type": "string", 
-                        "title": "Creator/Author",
-                        "description": "Person or organization who created the dataset"
-                    },
-                    "keywords": {
-                        "type": "array", 
-                        "title": "Keywords",
-                        "description": "Keywords that describe the dataset",
-                        "items": {"type": "string"}
-                    },
-                    "publicationDate": {
-                        "type": "string", 
-                        "title": "Publication Date",
-                        "format": "date"
-                    },
-                    "license": {
-                        "type": "string", 
-                        "title": "License",
-                        "enum": ["CC-BY", "CC-BY-SA", "CC0", "MIT", "Apache-2.0", "Other"]
-                    }
-                },
-                "required": ["title", "description", "creator"]
-            },
-            publication: {
-                "title": "Publication Metadata",
-                "type": "object", 
-                "properties": {
-                    "title": {"type": "string", "title": "Publication Title"},
-                    "authors": {
-                        "type": "array", 
-                        "title": "Authors", 
-                        "items": {"type": "string"}
-                    },
-                    "journal": {"type": "string", "title": "Journal/Conference"},
-                    "year": {
-                        "type": "integer", 
-                        "title": "Publication Year", 
-                        "minimum": 1900, 
-                        "maximum": 2025
-                    },
-                    "doi": {"type": "string", "title": "DOI"},
-                    "abstract": {"type": "string", "title": "Abstract"}
-                },
-                "required": ["title", "authors", "year"]
-            },
-            survey: {
-                "title": "Survey Metadata",
-                "type": "object",
-                "properties": {
-                    "surveyTitle": {"type": "string", "title": "Survey Title"},
-                    "methodology": {
-                        "type": "string",
-                        "title": "Methodology",
-                        "enum": ["online", "phone", "in-person", "mail", "mixed"]
-                    },
-                    "sampleSize": {
-                        "type": "integer", 
-                        "title": "Sample Size", 
-                        "minimum": 1
-                    },
-                    "targetPopulation": {
-                        "type": "string", 
-                        "title": "Target Population"
-                    }
-                },
-                "required": ["surveyTitle", "methodology", "sampleSize"]
-            }
+        // RDLS Schema Configuration
+        const RDLS_VERSIONS = {
+            '0.2': 'https://docs.riskdatalibrary.org/en/0__2__0/rdls_schema.json'
         };
 
-        let currentFormData = {};
+        const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
+        
         let currentSchema = null;
+        let currentFormData = {};
+        let activeSections = new Set(['general']);
+        let fieldValidationStatus = new Map();
+
+        // Object editor state
+        let currentObjectEditor = {
+            arrayName: null,
+            objectIndex: null,
+            objectSchema: null,
+            arrayData: null,
+            renderCallback: null
+        };
+
+        // Auto-completion suggestions for common fields
+        const AUTO_COMPLETE_SUGGESTIONS = {
+            'title': [
+                'Global Flood Risk Assessment',
+                'Earthquake Hazard Database',
+                'Climate Change Vulnerability Index',
+                'Urban Exposure Inventory',
+                'Disaster Loss Database'
+            ],
+            'publisher.name': [
+                'World Bank Group',
+                'United Nations Office for Disaster Risk Reduction',
+                'European Space Agency',
+                'National Weather Service'
+            ],
+            'creator.name': [
+                'International Research Institute',
+                'National Disaster Management Agency',
+                'Climate Change Research Center'
+            ],
+            'purpose': [
+                'Risk assessment for urban planning',
+                'Insurance portfolio analysis',
+                'Climate adaptation planning',
+                'Disaster risk reduction strategy development'
+            ]
+        };
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
+            loadSchemaVersions();
             loadFromStorage();
         });
 
         function setupEventListeners() {
-            // Schema selection
-            document.getElementById('schemaSelect').addEventListener('change', function() {
-                const template = this.value;
-                if (template && SCHEMA_TEMPLATES[template]) {
-                    document.getElementById('schemaEditor').value = JSON.stringify(SCHEMA_TEMPLATES[template], null, 2);
-                    generateForm();
-                }
+            // Schema version selection
+            document.getElementById('schemaVersionSelect').addEventListener('change', loadSelectedSchema);
+
+            // Section checkboxes
+            SECTIONS.forEach(section => {
+                document.getElementById(`${section}Check`).addEventListener('change', function() {
+                    if (this.checked) {
+                        activeSections.add(section);
+                        addSectionTab(section);
+                    } else {
+                        activeSections.delete(section);
+                        removeSectionTab(section);
+                    }
+                    updateFormData();
+                });
             });
 
             // File upload
@@ -243,15 +461,7 @@
             document.getElementById('schemaFile').addEventListener('change', handleSchemaFile);
             
             // Drag and drop
-            const dropZone = document.getElementById('schemaDropZone');
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('dragover');
-            });
-            dropZone.addEventListener('drop', handleSchemaDrop);
+            setupDragAndDrop();
 
             // Buttons
             document.getElementById('generateForm').addEventListener('click', generateForm);
@@ -260,6 +470,50 @@
             document.getElementById('saveProgress').addEventListener('click', saveProgress);
             document.getElementById('loadData').addEventListener('click', loadData);
             document.getElementById('validateForm').addEventListener('click', validateForm);
+            
+            // Object editor modal
+            document.getElementById('saveObjectBtn').addEventListener('click', saveCurrentObject);
+        }
+
+        function loadSchemaVersions() {
+            const select = document.getElementById('schemaVersionSelect');
+            select.innerHTML = '<option value="">Select RDLS version...</option>';
+            
+            Object.keys(RDLS_VERSIONS).forEach(version => {
+                const option = document.createElement('option');
+                option.value = version;
+                option.textContent = `RDLS ${version} (latest)`;
+                select.appendChild(option);
+            });
+            
+            // Auto-select the only available version
+            select.value = '0.2';
+            loadSelectedSchema();
+        }
+
+        async function loadSelectedSchema() {
+            const version = document.getElementById('schemaVersionSelect').value;
+            if (!version) return;
+
+            updateSchemaStatus('Loading schema...', 'text-info');
+            
+            try {
+                const response = await fetch(RDLS_VERSIONS[version]);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                currentSchema = await response.json();
+                updateSchemaStatus(`✓ RDLS ${version} loaded`, 'text-success');
+                generateForm();
+            } catch (error) {
+                updateSchemaStatus(`✗ Failed to load schema: ${error.message}`, 'text-danger');
+                console.error('Schema loading error:', error);
+            }
+        }
+
+        function updateSchemaStatus(message, className) {
+            const status = document.getElementById('schemaStatus');
+            status.textContent = message;
+            status.className = `schema-status ${className}`;
         }
 
         function handleSchemaFile(event) {
@@ -268,99 +522,182 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     try {
-                        const schema = JSON.parse(e.target.result);
-                        document.getElementById('schemaEditor').value = JSON.stringify(schema, null, 2);
+                        currentSchema = JSON.parse(e.target.result);
+                        const isV21 = currentSchema.title && currentSchema.title.includes('v2.1');
+                        updateSchemaStatus(
+                            isV21 ? '✓ RDLS v2.1 schema loaded (enhanced features)' : '✓ Custom schema loaded', 
+                            'text-success'
+                        );
                         generateForm();
                     } catch (error) {
-                        alert('Invalid JSON file: ' + error.message);
+                        updateSchemaStatus('✗ Invalid JSON file', 'text-danger');
                     }
                 };
                 reader.readAsText(file);
             }
         }
 
-        function handleSchemaDrop(e) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
+        function setupDragAndDrop() {
+            const dropZone = document.getElementById('schemaDropZone');
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    document.getElementById('schemaFile').files = files;
+                    handleSchemaFile({target: {files: files}});
+                }
+            });
+        }
+
+        function addSectionTab(section) {
+            const tabsContainer = document.getElementById('metadataTabs');
+            const contentContainer = document.getElementById('metadataTabContent');
             
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                document.getElementById('schemaFile').files = files;
-                handleSchemaFile({target: {files: files}});
+            // Show tabs if hidden
+            tabsContainer.style.display = 'flex';
+            
+            // Add tab button
+            const tabButton = document.createElement('li');
+            tabButton.className = 'nav-item';
+            tabButton.setAttribute('role', 'presentation');
+            tabButton.innerHTML = `
+                <button class="nav-link ${section}-tab" id="${section}-tab" data-bs-toggle="tab" 
+                        data-bs-target="#${section}" type="button" role="tab">
+                    ${section.charAt(0).toUpperCase() + section.slice(1)}
+                </button>
+            `;
+            tabsContainer.appendChild(tabButton);
+            
+            // Add tab content
+            const tabContent = document.createElement('div');
+            tabContent.className = 'tab-pane fade';
+            tabContent.id = section;
+            tabContent.setAttribute('role', 'tabpanel');
+            tabContent.innerHTML = `<div id="${section}Form"></div>`;
+            contentContainer.appendChild(tabContent);
+        }
+
+        function removeSectionTab(section) {
+            // Remove tab button
+            const tabButton = document.getElementById(`${section}-tab`);
+            if (tabButton) tabButton.parentElement.remove();
+            
+            // Remove tab content
+            const tabContent = document.getElementById(section);
+            if (tabContent) tabContent.remove();
+            
+            // Hide tabs if only general remains
+            if (activeSections.size === 1) {
+                document.getElementById('metadataTabs').style.display = 'none';
             }
         }
 
         function generateForm() {
-            try {
-                const schemaText = document.getElementById('schemaEditor').value.trim();
-                if (!schemaText) {
-                    updateFormStatus('warning', 'No schema provided');
-                    return;
-                }
+            if (!currentSchema) {
+                updateFormStatus('warning', 'No schema loaded');
+                return;
+            }
 
-                currentSchema = JSON.parse(schemaText);
+            try {
+                // Clear existing forms
+                document.getElementById('metadataForm').innerHTML = '';
+                SECTIONS.forEach(section => {
+                    const sectionForm = document.getElementById(`${section}Form`);
+                    if (sectionForm) sectionForm.innerHTML = '';
+                });
+
+                // Reset validation status
+                fieldValidationStatus.clear();
+
+                // Generate general metadata form
+                generateSectionForm('general', currentSchema.properties, 'metadataForm');
                 
-                // Clear previous form
-                const formContainer = document.getElementById('metadataForm');
-                formContainer.innerHTML = '';
-                
-                // Create form element
-                const form = document.createElement('form');
-                form.className = 'needs-validation';
-                form.noValidate = true;
-                
-                // Add form title
-                if (currentSchema.title) {
-                    const title = document.createElement('h5');
-                    title.textContent = currentSchema.title;
-                    title.className = 'mb-3';
-                    form.appendChild(title);
-                }
-                
-                // Generate form fields
-                if (currentSchema.properties) {
-                    Object.entries(currentSchema.properties).forEach(([key, property]) => {
-                        const fieldElement = createFormField(key, property, currentFormData[key]);
-                        form.appendChild(fieldElement);
-                    });
-                }
-                
-                // Add validate button
-                const validateButton = document.createElement('button');
-                validateButton.type = 'button';
-                validateButton.className = 'btn btn-primary mt-3';
-                validateButton.textContent = 'Validate & Update Preview';
-                validateButton.addEventListener('click', validateForm);
-                form.appendChild(validateButton);
-                
-                formContainer.appendChild(form);
-                
-                updateFormStatus('success', 'Form Generated');
+                // Generate section-specific forms
+                activeSections.forEach(section => {
+                    if (section !== 'general' && currentSchema.properties[section]) {
+                        generateSectionForm(section, currentSchema.properties[section].properties, `${section}Form`);
+                    }
+                });
+
+                updateFormStatus('success', 'Enhanced RDLS Form Generated');
                 updatePreview();
+                updateValidationDisplay();
 
             } catch (error) {
-                updateFormStatus('danger', 'Schema Error: ' + error.message);
-                console.error('Schema error:', error);
+                updateFormStatus('danger', 'Generation Error: ' + error.message);
+                console.error('Form generation error:', error);
             }
         }
 
-        function createFormField(name, property, value = null) {
+        function generateSectionForm(sectionName, properties, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container || !properties) return;
+
+            const form = document.createElement('form');
+            form.className = 'needs-validation';
+            form.noValidate = true;
+
+            // Add section title
+            const title = document.createElement('h5');
+            title.textContent = `${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)} Metadata`;
+            title.className = 'mb-3 mt-3';
+            form.appendChild(title);
+
+            // Generate fields based on section
+            if (sectionName === 'general') {
+                // For general section, exclude the specific metadata sections
+                Object.entries(properties).forEach(([key, property]) => {
+                    if (!SECTIONS.includes(key) && key !== 'links') {
+                        const fieldElement = createFormField(key, property, currentFormData[key], sectionName);
+                        form.appendChild(fieldElement);
+                    }
+                });
+            } else {
+                // For specific sections, generate their properties
+                Object.entries(properties).forEach(([key, property]) => {
+                    const fieldElement = createFormField(`${sectionName}.${key}`, property, 
+                        currentFormData[sectionName] && currentFormData[sectionName][key], sectionName);
+                    form.appendChild(fieldElement);
+                });
+            }
+
+            container.appendChild(form);
+        }
+
+        function createFormField(name, property, value = null, section = 'general') {
             const container = document.createElement('div');
             container.className = 'form-field';
             
-            // Add required indicator
-            if (currentSchema.required && currentSchema.required.includes(name)) {
-                container.classList.add('required');
+            // Handle $ref by resolving it
+            if (property.$ref) {
+                property = resolveReference(property.$ref);
             }
             
+            if (!property || !property.type) {
+                // Skip unknown property types
+                return container;
+            }
+
+            const nameParts = name.split('.');
+            const fieldName = nameParts[nameParts.length - 1];
+            
             const label = document.createElement('label');
-            label.textContent = property.title || name;
+            label.textContent = property.title || fieldName;
             label.className = 'form-label';
             label.htmlFor = name;
             
-            // Add required asterisk
+            // Add required indicator if applicable
             if (currentSchema.required && currentSchema.required.includes(name)) {
                 label.innerHTML += ' <span class="text-danger">*</span>';
+                container.classList.add('required');
             }
             
             container.appendChild(label);
@@ -369,7 +706,7 @@
             if (property.description) {
                 const description = document.createElement('small');
                 description.className = 'form-text text-muted d-block mb-2';
-                description.textContent = property.description;
+                description.innerHTML = parseMarkdownLinks(property.description);
                 container.appendChild(description);
             }
             
@@ -382,8 +719,10 @@
                         input = createSelectField(name, property, value);
                     } else if (property.format === 'date') {
                         input = createDateField(name, property, value);
-                    } else if (property.format === 'textarea') {
-                        input = createTextareaField(name, property, value);
+                    } else if (property.format === 'email') {
+                        input = createEmailField(name, property, value);
+                    } else if (property.format === 'iri') {
+                        input = createUrlField(name, property, value);
                     } else {
                         input = createTextField(name, property, value);
                     }
@@ -405,14 +744,38 @@
                     input = createTextField(name, property, value);
             }
             
+            // Add validation indicator
+            const validationIndicator = document.createElement('span');
+            validationIndicator.className = 'validation-indicator';
+            validationIndicator.id = `validation-${name}`;
+            container.appendChild(validationIndicator);
+            
             container.appendChild(input);
+            
+            // Add field hints if examples exist
+            if (property.examples && property.examples.length > 0) {
+                const hint = document.createElement('div');
+                hint.className = 'field-hint';
+                hint.innerHTML = `<strong>Examples:</strong> ${property.examples.slice(0, 3).join(', ')}`;
+                container.appendChild(hint);
+            }
+            
             return container;
         }
 
+        function resolveReference(ref) {
+            if (!ref.startsWith('#/$defs/')) return null;
+            const defName = ref.replace('#/$defs/', '');
+            return currentSchema.$defs && currentSchema.$defs[defName] ? currentSchema.$defs[defName] : null;
+        }
+
         function createTextField(name, property, value) {
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'relative';
+            
             const input = document.createElement('input');
             input.type = 'text';
-            input.className = 'form-control';
+            input.className = 'form-control field-with-validation';
             input.name = name;
             input.id = name;
             input.value = value || '';
@@ -421,38 +784,112 @@
             if (property.maxLength) input.maxLength = property.maxLength;
             if (property.pattern) input.pattern = property.pattern;
             
-            input.addEventListener('input', updateFormData);
+            input.addEventListener('input', function() {
+                updateFormData();
+                validateField(name, this.value, property);
+            });
+            
+            // Add input to wrapper first, then setup auto-completion
+            wrapper.appendChild(input);
+            setupAutoComplete(input, name, property);
+            
+            return wrapper;
+        }
+
+        function setupAutoComplete(input, fieldName, property) {
+            const suggestions = AUTO_COMPLETE_SUGGESTIONS[fieldName] || property.examples || [];
+            if (suggestions.length === 0) return;
+
+            const container = input.parentElement;
+            if (!container) {
+                console.warn('Cannot setup autocomplete: input has no parent element');
+                return;
+            }
+            
+            const suggestionsDiv = document.createElement('div');
+            suggestionsDiv.className = 'autocomplete-suggestions';
+            container.appendChild(suggestionsDiv);
+
+            input.addEventListener('input', function() {
+                const value = this.value.toLowerCase();
+                const matches = suggestions.filter(s => s.toLowerCase().includes(value));
+                
+                if (matches.length > 0 && value.length > 0) {
+                    suggestionsDiv.innerHTML = '';
+                    matches.slice(0, 5).forEach(match => {
+                        const div = document.createElement('div');
+                        div.className = 'autocomplete-suggestion';
+                        div.textContent = match;
+                        div.addEventListener('click', () => {
+                            input.value = match;
+                            suggestionsDiv.style.display = 'none';
+                            updateFormData();
+                            validateField(fieldName, match, property);
+                        });
+                        suggestionsDiv.appendChild(div);
+                    });
+                    suggestionsDiv.style.display = 'block';
+                } else {
+                    suggestionsDiv.style.display = 'none';
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                setTimeout(() => {
+                    suggestionsDiv.style.display = 'none';
+                }, 150);
+            });
+        }
+
+        function createEmailField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = 'email';
+            input.className = 'form-control field-with-validation';
+            input.name = name;
+            input.id = name;
+            input.value = value || '';
+            
+            input.addEventListener('input', function() {
+                updateFormData();
+                validateField(name, this.value, property);
+            });
             return input;
         }
 
-        function createTextareaField(name, property, value) {
-            const textarea = document.createElement('textarea');
-            textarea.className = 'form-control';
-            textarea.name = name;
-            textarea.id = name;
-            textarea.rows = 4;
-            textarea.value = value || '';
+        function createUrlField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = 'url';
+            input.className = 'form-control field-with-validation';
+            input.name = name;
+            input.id = name;
+            input.value = value || '';
             
-            textarea.addEventListener('input', updateFormData);
-            return textarea;
+            input.addEventListener('input', function() {
+                updateFormData();
+                validateField(name, this.value, property);
+            });
+            return input;
         }
 
         function createDateField(name, property, value) {
             const input = document.createElement('input');
             input.type = 'date';
-            input.className = 'form-control';
+            input.className = 'form-control field-with-validation';
             input.name = name;
             input.id = name;
             input.value = value || '';
             
-            input.addEventListener('change', updateFormData);
+            input.addEventListener('change', function() {
+                updateFormData();
+                validateField(name, this.value, property);
+            });
             return input;
         }
 
         function createNumberField(name, property, value) {
             const input = document.createElement('input');
             input.type = property.type === 'integer' ? 'number' : 'number';
-            input.className = 'form-control';
+            input.className = 'form-control field-with-validation';
             input.name = name;
             input.id = name;
             input.value = value || '';
@@ -461,13 +898,16 @@
             if (property.maximum !== undefined) input.max = property.maximum;
             if (property.type === 'integer') input.step = '1';
             
-            input.addEventListener('input', updateFormData);
+            input.addEventListener('input', function() {
+                updateFormData();
+                validateField(name, this.value, property);
+            });
             return input;
         }
 
         function createSelectField(name, property, value) {
             const select = document.createElement('select');
-            select.className = 'form-select';
+            select.className = 'form-select field-with-validation';
             select.name = name;
             select.id = name;
             
@@ -477,16 +917,20 @@
             emptyOption.textContent = 'Select an option...';
             select.appendChild(emptyOption);
             
-            // Add options
+            // Add options from enum with enhanced names if available
             property.enum.forEach((option, index) => {
                 const optionElement = document.createElement('option');
                 optionElement.value = option;
-                optionElement.textContent = property.enumNames ? property.enumNames[index] : option;
+                optionElement.textContent = property.enumNames ? property.enumNames[index] : 
+                    option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 if (value === option) optionElement.selected = true;
                 select.appendChild(optionElement);
             });
             
-            select.addEventListener('change', updateFormData);
+            select.addEventListener('change', function() {
+                updateFormData();
+                validateField(name, this.value, property);
+            });
             return select;
         }
 
@@ -509,7 +953,10 @@
             wrapper.appendChild(input);
             wrapper.appendChild(label);
             
-            input.addEventListener('change', updateFormData);
+            input.addEventListener('change', function() {
+                updateFormData();
+                validateField(name, this.checked, property);
+            });
             return wrapper;
         }
 
@@ -524,33 +971,68 @@
             
             function renderArrayItems() {
                 itemsContainer.innerHTML = '';
-                arrayData.forEach((item, index) => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'array-item d-flex gap-2 align-items-center';
-                    
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.className = 'form-control';
-                    input.value = item;
-                    input.addEventListener('input', (e) => {
-                        arrayData[index] = e.target.value;
-                        updateFormData();
+                
+                if (property.items.$ref || property.items.type === 'object') {
+                    // Handle complex objects with modal editor
+                    arrayData.forEach((item, index) => {
+                        const objectCard = createObjectSummaryCard(item, index, name, property);
+                        itemsContainer.appendChild(objectCard);
                     });
-                    
-                    const removeBtn = document.createElement('button');
-                    removeBtn.type = 'button';
-                    removeBtn.className = 'btn btn-outline-danger btn-sm';
-                    removeBtn.textContent = '×';
-                    removeBtn.addEventListener('click', () => {
-                        arrayData.splice(index, 1);
-                        renderArrayItems();
-                        updateFormData();
+                } else {
+                    // Handle simple items (strings, enums, etc.)
+                    arrayData.forEach((item, index) => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'array-item d-flex gap-2 align-items-center mb-2';
+                        
+                        let input;
+                        if (property.items.type === 'string') {
+                            if (property.items.enum) {
+                                input = document.createElement('select');
+                                input.className = 'form-select';
+                                
+                                const emptyOption = document.createElement('option');
+                                emptyOption.value = '';
+                                emptyOption.textContent = 'Select...';
+                                input.appendChild(emptyOption);
+                                
+                                property.items.enum.forEach((option, idx) => {
+                                    const optionElement = document.createElement('option');
+                                    optionElement.value = option;
+                                    optionElement.textContent = property.items.enumNames ? 
+                                        property.items.enumNames[idx] : option;
+                                    if (item === option) optionElement.selected = true;
+                                    input.appendChild(optionElement);
+                                });
+                            } else {
+                                input = document.createElement('input');
+                                input.type = 'text';
+                                input.className = 'form-control';
+                                input.value = item;
+                            }
+                            
+                            input.addEventListener('change', (e) => {
+                                arrayData[index] = e.target.value;
+                                updateFormData();
+                                validateField(name, arrayData, property);
+                            });
+                        }
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.className = 'btn btn-outline-danger btn-sm';
+                        removeBtn.textContent = '×';
+                        removeBtn.addEventListener('click', () => {
+                            arrayData.splice(index, 1);
+                            renderArrayItems();
+                            updateFormData();
+                            validateField(name, arrayData, property);
+                        });
+                        
+                        itemDiv.appendChild(input);
+                        itemDiv.appendChild(removeBtn);
+                        itemsContainer.appendChild(itemDiv);
                     });
-                    
-                    itemDiv.appendChild(input);
-                    itemDiv.appendChild(removeBtn);
-                    itemsContainer.appendChild(itemDiv);
-                });
+                }
             }
             
             const addBtn = document.createElement('button');
@@ -558,9 +1040,20 @@
             addBtn.className = 'btn btn-outline-primary btn-sm mb-2';
             addBtn.textContent = `+ Add ${property.title || name}`;
             addBtn.addEventListener('click', () => {
-                arrayData.push('');
-                renderArrayItems();
-                updateFormData();
+                if (property.items.$ref || property.items.type === 'object') {
+                    // Open modal for complex object
+                    openObjectEditor(name, arrayData.length, property.items, arrayData, renderArrayItems);
+                } else if (property.items.type === 'string') {
+                    arrayData.push('');
+                    renderArrayItems();
+                    updateFormData();
+                    validateField(name, arrayData, property);
+                } else {
+                    arrayData.push({});
+                    renderArrayItems();
+                    updateFormData();
+                    validateField(name, arrayData, property);
+                }
             });
             
             container.appendChild(addBtn);
@@ -590,45 +1083,491 @@
             return container;
         }
 
-        function updateFormData() {
-            const form = document.querySelector('#metadataForm form');
-            if (!form) return;
+        function createObjectSummaryCard(objectData, index, arrayName, arrayProperty) {
+            const card = document.createElement('div');
+            card.className = 'object-summary-card';
             
-            const formData = new FormData(form);
-            currentFormData = {};
+            // Resolve the object schema
+            let objectSchema = arrayProperty.items;
+            if (objectSchema.$ref) {
+                objectSchema = resolveReference(objectSchema.$ref);
+            }
             
-            // Handle regular form fields
-            for (let [key, value] of formData.entries()) {
-                if (key.includes('.')) {
-                    // Handle nested objects
-                    const parts = key.split('.');
-                    let current = currentFormData;
-                    for (let i = 0; i < parts.length - 1; i++) {
-                        if (!current[parts[i]]) current[parts[i]] = {};
-                        current = current[parts[i]];
-                    }
-                    current[parts[parts.length - 1]] = value;
+            // Create summary content
+            const title = document.createElement('div');
+            title.className = 'object-summary-title';
+            
+            // Try to create a meaningful title from the object data
+            let summaryText = `${arrayProperty.title || arrayName} ${index + 1}`;
+            if (objectData) {
+                if (objectData.title) {
+                    summaryText = objectData.title;
+                } else if (objectData.name) {
+                    summaryText = objectData.name;
+                } else if (objectData.id) {
+                    summaryText = objectData.id;
+                }
+            }
+            title.textContent = summaryText;
+            
+            const details = document.createElement('div');
+            details.className = 'object-summary-details';
+            
+            // Show key details
+            if (objectData) {
+                const keyFields = ['description', 'format', 'role', 'type', 'url'].filter(field => objectData[field]);
+                if (keyFields.length > 0) {
+                    details.textContent = keyFields.map(field => `${field}: ${objectData[field]}`).join(' • ');
                 } else {
-                    currentFormData[key] = value;
+                    details.textContent = 'Click Edit to add details';
+                }
+            } else {
+                details.textContent = 'New object - click Edit to configure';
+            }
+            
+            // Action buttons
+            const actions = document.createElement('div');
+            actions.className = 'd-flex gap-2 mt-2';
+            
+            const editBtn = document.createElement('button');
+            editBtn.type = 'button';
+            editBtn.className = 'btn btn-outline-primary btn-sm';
+            editBtn.textContent = '✏️ Edit';
+            editBtn.addEventListener('click', () => {
+                openObjectEditor(arrayName, index, arrayProperty.items, null, null);
+            });
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn btn-outline-danger btn-sm';
+            removeBtn.textContent = '🗑️ Remove';
+            removeBtn.addEventListener('click', () => {
+                if (confirm(`Remove this ${arrayProperty.title || arrayName}?`)) {
+                    // Find and update the array data
+                    const fullArrayData = getNestedValue(currentFormData, arrayName) || [];
+                    fullArrayData.splice(index, 1);
+                    setNestedValue(currentFormData, arrayName, fullArrayData);
+                    updateFormData();
+                    generateForm(); // Regenerate to reflect changes
+                }
+            });
+            
+            actions.appendChild(editBtn);
+            actions.appendChild(removeBtn);
+            
+            card.appendChild(title);
+            card.appendChild(details);
+            card.appendChild(actions);
+            
+            return card;
+        }
+
+        function openObjectEditor(arrayName, objectIndex, objectSchema, arrayData, renderCallback) {
+            // Resolve schema reference if needed
+            if (objectSchema.$ref) {
+                objectSchema = resolveReference(objectSchema.$ref);
+            }
+            
+            // Store current editing context
+            currentObjectEditor = {
+                arrayName: arrayName,
+                objectIndex: objectIndex,
+                objectSchema: objectSchema,
+                arrayData: arrayData,
+                renderCallback: renderCallback
+            };
+            
+            // Set modal title
+            const modalTitle = document.getElementById('objectEditorModalLabel');
+            modalTitle.textContent = `Edit ${objectSchema.title || arrayName}`;
+            
+            // Get current object data
+            const fullArrayData = getNestedValue(currentFormData, arrayName) || [];
+            const objectData = fullArrayData[objectIndex] || {};
+            
+            // Generate form fields in modal
+            const fieldsContainer = document.getElementById('objectEditorFields');
+            fieldsContainer.innerHTML = '';
+            
+            if (objectSchema.properties) {
+                Object.entries(objectSchema.properties).forEach(([key, property]) => {
+                    const fieldElement = createModalFormField(key, property, objectData[key]);
+                    fieldsContainer.appendChild(fieldElement);
+                });
+            }
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('objectEditorModal'));
+            modal.show();
+        }
+
+        function createModalFormField(name, property, value = null) {
+            const container = document.createElement('div');
+            container.className = 'modal-form-field';
+            
+            const label = document.createElement('label');
+            label.textContent = property.title || name;
+            label.className = 'form-label';
+            label.htmlFor = `modal_${name}`;
+            
+            // Add required indicator
+            if (currentObjectEditor.objectSchema.required && 
+                currentObjectEditor.objectSchema.required.includes(name)) {
+                label.innerHTML += ' <span class="text-danger">*</span>';
+                container.classList.add('required');
+            }
+            
+            container.appendChild(label);
+            
+            // Add description
+            if (property.description) {
+                const description = document.createElement('small');
+                description.className = 'form-text text-muted d-block mb-2';
+                description.innerHTML = parseMarkdownLinks(property.description);
+                container.appendChild(description);
+            }
+            
+            let input;
+            
+            // Create appropriate input based on type
+            switch (property.type) {
+                case 'string':
+                    if (property.enum) {
+                        input = createModalSelectField(name, property, value);
+                    } else if (property.format === 'date') {
+                        input = createModalDateField(name, property, value);
+                    } else if (property.format === 'email') {
+                        input = createModalEmailField(name, property, value);
+                    } else if (property.format === 'iri') {
+                        input = createModalUrlField(name, property, value);
+                    } else {
+                        input = createModalTextField(name, property, value);
+                    }
+                    break;
+                case 'integer':
+                case 'number':
+                    input = createModalNumberField(name, property, value);
+                    break;
+                case 'boolean':
+                    input = createModalCheckboxField(name, property, value);
+                    break;
+                default:
+                    input = createModalTextField(name, property, value);
+            }
+            
+            container.appendChild(input);
+            
+            // Add field hints if examples exist
+            if (property.examples && property.examples.length > 0) {
+                const hint = document.createElement('div');
+                hint.className = 'field-hint';
+                hint.innerHTML = `<strong>Examples:</strong> ${property.examples.slice(0, 3).join(', ')}`;
+                container.appendChild(hint);
+            }
+            
+            return container;
+        }
+
+        function createModalTextField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-control';
+            input.name = `modal_${name}`;
+            input.id = `modal_${name}`;
+            input.value = value || '';
+            
+            if (property.minLength) input.minLength = property.minLength;
+            if (property.maxLength) input.maxLength = property.maxLength;
+            if (property.pattern) input.pattern = property.pattern;
+            
+            return input;
+        }
+
+        function createModalEmailField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = 'email';
+            input.className = 'form-control';
+            input.name = `modal_${name}`;
+            input.id = `modal_${name}`;
+            input.value = value || '';
+            return input;
+        }
+
+        function createModalUrlField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = 'url';
+            input.className = 'form-control';
+            input.name = `modal_${name}`;
+            input.id = `modal_${name}`;
+            input.value = value || '';
+            return input;
+        }
+
+        function createModalDateField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = 'date';
+            input.className = 'form-control';
+            input.name = `modal_${name}`;
+            input.id = `modal_${name}`;
+            input.value = value || '';
+            return input;
+        }
+
+        function createModalNumberField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = property.type === 'integer' ? 'number' : 'number';
+            input.className = 'form-control';
+            input.name = `modal_${name}`;
+            input.id = `modal_${name}`;
+            input.value = value || '';
+            
+            if (property.minimum !== undefined) input.min = property.minimum;
+            if (property.maximum !== undefined) input.max = property.maximum;
+            if (property.type === 'integer') input.step = '1';
+            
+            return input;
+        }
+
+        function createModalSelectField(name, property, value) {
+            const select = document.createElement('select');
+            select.className = 'form-select';
+            select.name = `modal_${name}`;
+            select.id = `modal_${name}`;
+            
+            // Add empty option
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = 'Select an option...';
+            select.appendChild(emptyOption);
+            
+            // Add options from enum
+            property.enum.forEach((option, index) => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = property.enumNames ? property.enumNames[index] : 
+                    option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                if (value === option) optionElement.selected = true;
+                select.appendChild(optionElement);
+            });
+            
+            return select;
+        }
+
+        function createModalCheckboxField(name, property, value) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'form-check';
+            
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.className = 'form-check-input';
+            input.name = `modal_${name}`;
+            input.id = `modal_${name}`;
+            input.checked = value || false;
+            
+            const label = document.createElement('label');
+            label.className = 'form-check-label';
+            label.htmlFor = `modal_${name}`;
+            label.textContent = property.title || name;
+            
+            wrapper.appendChild(input);
+            wrapper.appendChild(label);
+            
+            return wrapper;
+        }
+
+        function parseMarkdownLinks(text) {
+            if (!text) return text;
+            
+            // Regular expression to match markdown links: [text](url)
+            const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+            
+            return text.replace(markdownLinkRegex, function(match, linkText, url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-primary text-decoration-none">${linkText} <small>↗</small></a>`;
+            });
+        }
+
+        function getNestedValue(obj, path) {
+            const keys = path.split('.');
+            let current = obj;
+            
+            for (const key of keys) {
+                if (current && current[key] !== undefined) {
+                    current = current[key];
+                } else {
+                    return null;
                 }
             }
             
-            // Handle checkboxes
+            return current;
+        }
+
+        function saveCurrentObject() {
+            const form = document.getElementById('objectEditorForm');
+            const formData = new FormData(form);
+            
+            // Build object from form data
+            const objectData = {};
+            for (let [key, value] of formData.entries()) {
+                // Remove modal_ prefix
+                const fieldName = key.replace('modal_', '');
+                objectData[fieldName] = value;
+            }
+            
+            // Handle checkboxes separately
             const checkboxes = form.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(cb => {
-                currentFormData[cb.name] = cb.checked;
+                const fieldName = cb.name.replace('modal_', '');
+                objectData[fieldName] = cb.checked;
             });
             
-            // Handle arrays (special handling needed)
-            const arrayContainers = form.querySelectorAll('.array-field');
-            arrayContainers.forEach(container => {
-                const inputs = container.querySelectorAll('.array-item input');
-                const arrayName = container.previousElementSibling.querySelector('label').textContent.split(' ')[0].toLowerCase();
-                currentFormData[arrayName] = Array.from(inputs).map(input => input.value).filter(v => v.trim());
+            // Get or create the array in the main form data
+            let fullArrayData = getNestedValue(currentFormData, currentObjectEditor.arrayName);
+            if (!fullArrayData) {
+                fullArrayData = [];
+                setNestedValue(currentFormData, currentObjectEditor.arrayName, fullArrayData);
+            }
+            
+            // Update the object at the specified index
+            if (currentObjectEditor.objectIndex >= fullArrayData.length) {
+                // Adding new object
+                fullArrayData.push(objectData);
+            } else {
+                // Updating existing object
+                fullArrayData[currentObjectEditor.objectIndex] = objectData;
+            }
+            
+            // Update the main form
+            updateFormData();
+            generateForm(); // Regenerate to show updated summary cards
+            
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('objectEditorModal'));
+            modal.hide();
+            
+            // Show success message
+            updateFormStatus('success', 'Object saved successfully');
+        }
+
+        function validateField(fieldName, value, property) {
+            let isValid = true;
+            let errorMessage = '';
+
+            // Check required
+            if (currentSchema.required && currentSchema.required.includes(fieldName) && 
+                (!value || (typeof value === 'string' && value.trim() === ''))) {
+                isValid = false;
+                errorMessage = 'Required field';
+            }
+            
+            // Check type-specific validation
+            if (value && typeof value === 'string') {
+                if (property.minLength && value.length < property.minLength) {
+                    isValid = false;
+                    errorMessage = `Minimum ${property.minLength} characters`;
+                }
+                if (property.format === 'email' && value && !isValidEmail(value)) {
+                    isValid = false;
+                    errorMessage = 'Invalid email format';
+                }
+                if (property.format === 'iri' && value && !isValidUrl(value)) {
+                    isValid = false;
+                    errorMessage = 'Invalid URL format';
+                }
+            }
+
+            // Update validation status
+            fieldValidationStatus.set(fieldName, { isValid, errorMessage });
+            
+            // Update visual indicator
+            const indicator = document.getElementById(`validation-${fieldName}`);
+            if (indicator) {
+                if (isValid) {
+                    indicator.className = 'validation-indicator valid';
+                    indicator.textContent = '✓';
+                    indicator.title = 'Valid';
+                } else {
+                    indicator.className = 'validation-indicator invalid';
+                    indicator.textContent = '✗';
+                    indicator.title = errorMessage;
+                }
+            }
+            
+            updateValidationDisplay();
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function isValidUrl(url) {
+            try {
+                new URL(url);
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
+        function updateValidationDisplay() {
+            const totalFields = fieldValidationStatus.size;
+            const validFields = Array.from(fieldValidationStatus.values()).filter(status => status.isValid).length;
+            
+            // Update progress bar
+            const progressBar = document.getElementById('validationProgress');
+            const progressPercent = totalFields > 0 ? (validFields / totalFields) * 100 : 0;
+            progressBar.style.width = `${progressPercent}%`;
+            
+            // Update counters
+            document.getElementById('validFieldCount').textContent = validFields;
+            document.getElementById('totalFieldCount').textContent = totalFields;
+            
+            // Update overall status
+            const overallStatus = document.getElementById('overallValidation');
+            if (totalFields === 0) {
+                overallStatus.className = 'badge bg-secondary';
+                overallStatus.textContent = 'Not validated';
+            } else if (validFields === totalFields) {
+                overallStatus.className = 'badge bg-success';
+                overallStatus.textContent = 'All valid';
+            } else {
+                overallStatus.className = 'badge bg-warning';
+                overallStatus.textContent = `${validFields}/${totalFields} valid`;
+            }
+        }
+
+        function updateFormData() {
+            const allForms = document.querySelectorAll('#metadataTabContent form');
+            currentFormData = {};
+            
+            allForms.forEach(form => {
+                const formData = new FormData(form);
+                
+                // Handle regular form fields
+                for (let [key, value] of formData.entries()) {
+                    setNestedValue(currentFormData, key, value);
+                }
+                
+                // Handle checkboxes
+                const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    setNestedValue(currentFormData, cb.name, cb.checked);
+                });
             });
             
             updatePreview();
             autoSave();
+        }
+
+        function setNestedValue(obj, path, value) {
+            const keys = path.split('.');
+            let current = obj;
+            
+            for (let i = 0; i < keys.length - 1; i++) {
+                if (!current[keys[i]]) current[keys[i]] = {};
+                current = current[keys[i]];
+            }
+            
+            current[keys[keys.length - 1]] = value;
         }
 
         function updatePreview() {
@@ -644,22 +1583,48 @@
         function validateForm() {
             updateFormData();
             
-            if (!currentSchema || !currentSchema.required) {
-                updateFormStatus('info', 'No validation rules');
-                return;
-            }
+            // Force validation of all visible fields
+            const allInputs = document.querySelectorAll('#metadataTabContent input, #metadataTabContent select, #metadataTabContent textarea');
+            allInputs.forEach(input => {
+                if (input.name) {
+                    const property = getPropertyFromSchema(input.name);
+                    if (property) {
+                        const value = input.type === 'checkbox' ? input.checked : input.value;
+                        validateField(input.name, value, property);
+                    }
+                }
+            });
             
-            const missing = currentSchema.required.filter(field => 
-                !currentFormData[field] || 
-                (typeof currentFormData[field] === 'string' && currentFormData[field].trim() === '')
-            );
+            const totalFields = fieldValidationStatus.size;
+            const validFields = Array.from(fieldValidationStatus.values()).filter(status => status.isValid).length;
             
-            if (missing.length > 0) {
-                updateFormStatus('warning', `Missing required: ${missing.join(', ')}`);
-                alert(`Please fill in required fields: ${missing.join(', ')}`);
+            if (validFields === totalFields && totalFields > 0) {
+                updateFormStatus('success', 'RDLS Compliant ✓');
+                alert('✅ All fields are valid! Your metadata is RDLS compliant.');
             } else {
-                updateFormStatus('success', 'Form Valid ✓');
+                const invalidFields = Array.from(fieldValidationStatus.entries())
+                    .filter(([name, status]) => !status.isValid)
+                    .map(([name, status]) => `${name}: ${status.errorMessage}`);
+                updateFormStatus('warning', `${validFields}/${totalFields} valid`);
+                alert(`⚠️ ${invalidFields.length} field(s) need attention:\n\n• ${invalidFields.join('\n• ')}`);
             }
+        }
+
+        function getPropertyFromSchema(fieldName) {
+            if (!currentSchema) return null;
+            
+            const parts = fieldName.split('.');
+            let current = currentSchema.properties;
+            
+            for (const part of parts) {
+                if (current[part]) {
+                    current = current[part];
+                } else {
+                    return null;
+                }
+            }
+            
+            return current;
         }
 
         function exportJson() {
@@ -672,7 +1637,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'metadata.json';
+            a.download = 'rdls_metadata.json';
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -683,12 +1648,12 @@
                 return;
             }
             
-            const xml = jsonToXml(currentFormData, 'metadata');
+            const xml = jsonToXml(currentFormData, 'rdls_dataset');
             const blob = new Blob([xml], {type: 'application/xml'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'metadata.xml';
+            a.download = 'rdls_metadata.xml';
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -727,13 +1692,13 @@
         }
 
         function autoSave() {
-            localStorage.setItem('metadataEditor_formData', JSON.stringify(currentFormData));
-            localStorage.setItem('metadataEditor_schema', document.getElementById('schemaEditor').value);
+            localStorage.setItem('rdlsEditor_formData', JSON.stringify(currentFormData));
+            localStorage.setItem('rdlsEditor_activeSections', JSON.stringify([...activeSections]));
         }
 
         function loadFromStorage() {
-            const savedData = localStorage.getItem('metadataEditor_formData');
-            const savedSchema = localStorage.getItem('metadataEditor_schema');
+            const savedData = localStorage.getItem('rdlsEditor_formData');
+            const savedSections = localStorage.getItem('rdlsEditor_activeSections');
             
             if (savedData) {
                 try {
@@ -744,8 +1709,19 @@
                 }
             }
             
-            if (savedSchema) {
-                document.getElementById('schemaEditor').value = savedSchema;
+            if (savedSections) {
+                try {
+                    const sections = JSON.parse(savedSections);
+                    sections.forEach(section => {
+                        if (section !== 'general') {
+                            activeSections.add(section);
+                            document.getElementById(`${section}Check`).checked = true;
+                            addSectionTab(section);
+                        }
+                    });
+                } catch (e) {
+                    console.warn('Could not load saved sections');
+                }
             }
         }
 
