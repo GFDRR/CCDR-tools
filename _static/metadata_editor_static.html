@@ -16,43 +16,43 @@
             border-radius: 0.5rem 0.5rem 0 0;
         }
         .nav-tabs .nav-link.hazard-tab {
-            background-color: #fff5f5;
-            border-color: #dc3545;
-            color: #dc3545;
+            background-color: #e6f3ff;
+            border-color: #007fc3;
+            color: #007fc3;
         }
         .nav-tabs .nav-link.hazard-tab.active {
-            background-color: #dc3545;
-            border-color: #dc3545;
+            background-color: #007fc3;
+            border-color: #007fc3;
             color: white;
         }
         .nav-tabs .nav-link.exposure-tab {
-            background-color: #f0f9ff;
-            border-color: #0ea5e9;
-            color: #0ea5e9;
+            background-color: #e6fffe;
+            border-color: #00cbab;
+            color: #00cbab;
         }
         .nav-tabs .nav-link.exposure-tab.active {
-            background-color: #0ea5e9;
-            border-color: #0ea5e9;
+            background-color: #00cbab;
+            border-color: #00cbab;
             color: white;
         }
         .nav-tabs .nav-link.vulnerability-tab {
-            background-color: #fefce8;
-            border-color: #eab308;
-            color: #eab308;
+            background-color: #fff9e6;
+            border-color: #ffc757;
+            color: #b8941f;
         }
         .nav-tabs .nav-link.vulnerability-tab.active {
-            background-color: #eab308;
-            border-color: #eab308;
+            background-color: #ffc757;
+            border-color: #ffc757;
             color: white;
         }
         .nav-tabs .nav-link.loss-tab {
-            background-color: #f3e8ff;
-            border-color: #a855f7;
-            color: #a855f7;
+            background-color: #ffe6ec;
+            border-color: #f3436a;
+            color: #f3436a;
         }
         .nav-tabs .nav-link.loss-tab.active {
-            background-color: #a855f7;
-            border-color: #a855f7;
+            background-color: #f3436a;
+            border-color: #f3436a;
             color: white;
         }
         .nav-tabs .nav-link.general-tab {
@@ -227,25 +227,25 @@
                             <div class="section-checkbox">
                                 <input type="checkbox" id="hazardCheck" class="form-check-input">
                                 <label for="hazardCheck" class="form-check-label ms-2">
-                                    <span class="badge bg-danger">Hazard Metadata</span>
+                                    <span class="badge" style="background-color: #007fc3;">Hazard Metadata</span>
                                 </label>
                             </div>
                             <div class="section-checkbox">
                                 <input type="checkbox" id="exposureCheck" class="form-check-input">
                                 <label for="exposureCheck" class="form-check-label ms-2">
-                                    <span class="badge bg-info">Exposure Metadata</span>
+                                    <span class="badge" style="background-color: #00cbab;">Exposure Metadata</span>
                                 </label>
                             </div>
                             <div class="section-checkbox">
                                 <input type="checkbox" id="vulnerabilityCheck" class="form-check-input">
                                 <label for="vulnerabilityCheck" class="form-check-label ms-2">
-                                    <span class="badge bg-warning">Vulnerability Metadata</span>
+                                    <span class="badge" style="background-color: #ffc757">Vulnerability Metadata</span>
                                 </label>
                             </div>
                             <div class="section-checkbox">
                                 <input type="checkbox" id="lossCheck" class="form-check-input">
                                 <label for="lossCheck" class="form-check-label ms-2">
-                                    <span class="badge bg-purple" style="background-color: #a855f7 !important;">Loss Metadata</span>
+                                    <span class="badge" style="background-color: #f3436a;">Loss Metadata</span>
                                 </label>
                             </div>
                         </div>
@@ -258,8 +258,6 @@
                                 <input type="file" id="schemaFile" accept=".json" style="display: none;">
                             </div>
                         </div>
-
-                        <button id="generateForm" class="btn btn-primary w-100">Generate Form</button>
                     </div>
                 </div>
 
@@ -301,7 +299,7 @@
                                 <div id="metadataForm">
                                     <div class="text-center text-muted py-5">
                                         <div style="font-size: 4rem;">🌍</div>
-                                        <p>Select a schema version and configure sections to generate the RDLS metadata form</p>
+                                        <p>Schema will load automatically and configure sections as needed</p>
                                         <small class="text-muted">Enhanced with real-time validation, auto-completion, and RDLS compliance checking</small>
                                     </div>
                                 </div>
@@ -451,6 +449,7 @@
                         removeSectionTab(section);
                     }
                     updateFormData();
+                    generateForm(); // Auto-generate form when sections change
                 });
             });
 
@@ -464,7 +463,6 @@
             setupDragAndDrop();
 
             // Buttons
-            document.getElementById('generateForm').addEventListener('click', generateForm);
             document.getElementById('exportJson').addEventListener('click', exportJson);
             document.getElementById('exportXml').addEventListener('click', exportXml);
             document.getElementById('saveProgress').addEventListener('click', saveProgress);
@@ -627,7 +625,7 @@
                     }
                 });
 
-                updateFormStatus('success', 'Enhanced RDLS Form Generated');
+                updateFormStatus('success', 'RDLS Form Ready');
                 updatePreview();
                 updateValidationDisplay();
 
@@ -1438,7 +1436,7 @@
             
             // Update the main form
             updateFormData();
-            generateForm(); // Regenerate to show updated summary cards
+            generateForm(); // Auto-regenerate to show updated summary cards
             
             // Close modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('objectEditorModal'));
@@ -1742,7 +1740,7 @@
                         try {
                             currentFormData = JSON.parse(event.target.result);
                             updatePreview();
-                            generateForm(); // Regenerate to populate form with loaded data
+                            generateForm(); // Auto-regenerate to populate form with loaded data
                         } catch (error) {
                             alert('Invalid JSON file: ' + error.message);
                         }
