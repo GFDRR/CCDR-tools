@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metadata Editor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .schema-selector { margin-bottom: 2rem; }
+        .output-area { margin-top: 2rem; }
+        .file-drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        .file-drop-zone:hover { border-color: #007bff; }
+        .file-drop-zone.dragover { border-color: #28a745; background-color: #f8f9fa; }
+        .form-field { margin-bottom: 1rem; }
+        .array-field { border: 1px solid #dee2e6; padding: 1rem; border-radius: 0.375rem; margin-bottom: 1rem; }
+        .array-item { background-color: #f8f9fa; padding: 0.5rem; margin: 0.5rem 0; border-radius: 0.25rem; }
+        .object-field { border: 1px solid #e9ecef; padding: 1rem; border-radius: 0.375rem; margin-bottom: 1rem; background-color: #fbfcfd; }
+        .required { border-left: 3px solid #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <header class="py-4 border-bottom">
+            <h1 class="h3">📋 Static Metadata Editor</h1>
+            <p class="text-muted">Generate metadata forms from JSON schemas - no server required!</p>
+        </header>
+
+        <div class="row mt-4">
+            <!-- Schema Selection Panel -->
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>📝 Schema Selection</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Predefined Schemas -->
+                        <div class="mb-3">
+                            <label class="form-label">Quick Start Templates:</label>
+                            <select id="schemaSelect" class="form-select">
+                                <option value="">Choose a template...</option>
+                                <option value="dataset">Dataset Metadata</option>
+                                <option value="publication">Publication Info</option>
+                                <option value="survey">Survey Metadata</option>
+                                <option value="custom">Custom Schema</option>
+                            </select>
+                        </div>
+
+                        <!-- Custom Schema Upload -->
+                        <div class="file-drop-zone" id="schemaDropZone">
+                            <p>📁 Drop JSON schema file here<br>or click to browse</p>
+                            <input type="file" id="schemaFile" accept=".json" style="display: none;">
+                        </div>
+
+                        <!-- Schema Editor -->
+                        <div class="mb-3">
+                            <label class="form-label">Edit Schema:</label>
+                            <textarea id="schemaEditor" class="form-control" rows="8" placeholder="Paste or edit JSON schema here..."></textarea>
+                        </div>
+
+                        <button id="generateForm" class="btn btn-primary w-100">Generate Form</button>
+                    </div>
+                </div>
+
+                <!-- Actions Panel -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6>💾 Data Management</h6>
+                    </div>
+                    <div class="card-body">
+                        <button id="loadData" class="btn btn-outline-secondary btn-sm w-100 mb-2">Load Existing Metadata</button>
+                        <button id="saveProgress" class="btn btn-outline-info btn-sm w-100 mb-2">Save Progress</button>
+                        <button id="exportJson" class="btn btn-success btn-sm w-100 mb-2">Export JSON</button>
+                        <button id="exportXml" class="btn btn-success btn-sm w-100">Export XML</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Generation Area -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>📋 Metadata Form</h5>
+                        <span id="formStatus" class="badge bg-secondary">No schema loaded</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="metadataForm">
+                            <div class="text-center text-muted py-5">
+                                <div style="font-size: 4rem;">📝</div>
+                                <p>Select a schema template or upload your own to generate the metadata form</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Output Preview -->
+            <div class="col-md-3">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h6>👀 Live Preview</h6>
+                    </div>
+                    <div class="card-body">
+                        <pre id="outputPreview" class="bg-light p-3 rounded" style="font-size: 0.8rem; max-height: 400px; overflow-y: auto;">
+{
+  "message": "Form data will appear here as you fill it out..."
+}
+                        </pre>
+                        
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <strong>Auto-save:</strong> Data is saved to browser localStorage
+                            </small>
+                        </div>
+                        
+                        <button id="validateForm" class="btn btn-outline-primary btn-sm w-100 mt-2">Validate Form</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Predefined schema templates
+        const SCHEMA_TEMPLATES = {
+            dataset: {
+                "title": "Dataset Metadata",
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string", 
+                        "title": "Dataset Title",
+                        "description": "The main title of your dataset"
+                    },
+                    "description": {
+                        "type": "string", 
+                        "title": "Description",
+                        "description": "A detailed description of the dataset"
+                    },
+                    "creator": {
+                        "type": "string", 
+                        "title": "Creator/Author",
+                        "description": "Person or organization who created the dataset"
+                    },
+                    "keywords": {
+                        "type": "array", 
+                        "title": "Keywords",
+                        "description": "Keywords that describe the dataset",
+                        "items": {"type": "string"}
+                    },
+                    "publicationDate": {
+                        "type": "string", 
+                        "title": "Publication Date",
+                        "format": "date"
+                    },
+                    "license": {
+                        "type": "string", 
+                        "title": "License",
+                        "enum": ["CC-BY", "CC-BY-SA", "CC0", "MIT", "Apache-2.0", "Other"]
+                    }
+                },
+                "required": ["title", "description", "creator"]
+            },
+            publication: {
+                "title": "Publication Metadata",
+                "type": "object", 
+                "properties": {
+                    "title": {"type": "string", "title": "Publication Title"},
+                    "authors": {
+                        "type": "array", 
+                        "title": "Authors", 
+                        "items": {"type": "string"}
+                    },
+                    "journal": {"type": "string", "title": "Journal/Conference"},
+                    "year": {
+                        "type": "integer", 
+                        "title": "Publication Year", 
+                        "minimum": 1900, 
+                        "maximum": 2025
+                    },
+                    "doi": {"type": "string", "title": "DOI"},
+                    "abstract": {"type": "string", "title": "Abstract"}
+                },
+                "required": ["title", "authors", "year"]
+            },
+            survey: {
+                "title": "Survey Metadata",
+                "type": "object",
+                "properties": {
+                    "surveyTitle": {"type": "string", "title": "Survey Title"},
+                    "methodology": {
+                        "type": "string",
+                        "title": "Methodology",
+                        "enum": ["online", "phone", "in-person", "mail", "mixed"]
+                    },
+                    "sampleSize": {
+                        "type": "integer", 
+                        "title": "Sample Size", 
+                        "minimum": 1
+                    },
+                    "targetPopulation": {
+                        "type": "string", 
+                        "title": "Target Population"
+                    }
+                },
+                "required": ["surveyTitle", "methodology", "sampleSize"]
+            }
+        };
+
+        let currentFormData = {};
+        let currentSchema = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadFromStorage();
+        });
+
+        function setupEventListeners() {
+            // Schema selection
+            document.getElementById('schemaSelect').addEventListener('change', function() {
+                const template = this.value;
+                if (template && SCHEMA_TEMPLATES[template]) {
+                    document.getElementById('schemaEditor').value = JSON.stringify(SCHEMA_TEMPLATES[template], null, 2);
+                    generateForm();
+                }
+            });
+
+            // File upload
+            document.getElementById('schemaDropZone').addEventListener('click', () => 
+                document.getElementById('schemaFile').click()
+            );
+            document.getElementById('schemaFile').addEventListener('change', handleSchemaFile);
+            
+            // Drag and drop
+            const dropZone = document.getElementById('schemaDropZone');
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            dropZone.addEventListener('drop', handleSchemaDrop);
+
+            // Buttons
+            document.getElementById('generateForm').addEventListener('click', generateForm);
+            document.getElementById('exportJson').addEventListener('click', exportJson);
+            document.getElementById('exportXml').addEventListener('click', exportXml);
+            document.getElementById('saveProgress').addEventListener('click', saveProgress);
+            document.getElementById('loadData').addEventListener('click', loadData);
+            document.getElementById('validateForm').addEventListener('click', validateForm);
+        }
+
+        function handleSchemaFile(event) {
+            const file = event.target.files[0];
+            if (file && file.type === 'application/json') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const schema = JSON.parse(e.target.result);
+                        document.getElementById('schemaEditor').value = JSON.stringify(schema, null, 2);
+                        generateForm();
+                    } catch (error) {
+                        alert('Invalid JSON file: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function handleSchemaDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('schemaFile').files = files;
+                handleSchemaFile({target: {files: files}});
+            }
+        }
+
+        function generateForm() {
+            try {
+                const schemaText = document.getElementById('schemaEditor').value.trim();
+                if (!schemaText) {
+                    updateFormStatus('warning', 'No schema provided');
+                    return;
+                }
+
+                currentSchema = JSON.parse(schemaText);
+                
+                // Clear previous form
+                const formContainer = document.getElementById('metadataForm');
+                formContainer.innerHTML = '';
+                
+                // Create form element
+                const form = document.createElement('form');
+                form.className = 'needs-validation';
+                form.noValidate = true;
+                
+                // Add form title
+                if (currentSchema.title) {
+                    const title = document.createElement('h5');
+                    title.textContent = currentSchema.title;
+                    title.className = 'mb-3';
+                    form.appendChild(title);
+                }
+                
+                // Generate form fields
+                if (currentSchema.properties) {
+                    Object.entries(currentSchema.properties).forEach(([key, property]) => {
+                        const fieldElement = createFormField(key, property, currentFormData[key]);
+                        form.appendChild(fieldElement);
+                    });
+                }
+                
+                // Add validate button
+                const validateButton = document.createElement('button');
+                validateButton.type = 'button';
+                validateButton.className = 'btn btn-primary mt-3';
+                validateButton.textContent = 'Validate & Update Preview';
+                validateButton.addEventListener('click', validateForm);
+                form.appendChild(validateButton);
+                
+                formContainer.appendChild(form);
+                
+                updateFormStatus('success', 'Form Generated');
+                updatePreview();
+
+            } catch (error) {
+                updateFormStatus('danger', 'Schema Error: ' + error.message);
+                console.error('Schema error:', error);
+            }
+        }
+
+        function createFormField(name, property, value = null) {
+            const container = document.createElement('div');
+            container.className = 'form-field';
+            
+            // Add required indicator
+            if (currentSchema.required && currentSchema.required.includes(name)) {
+                container.classList.add('required');
+            }
+            
+            const label = document.createElement('label');
+            label.textContent = property.title || name;
+            label.className = 'form-label';
+            label.htmlFor = name;
+            
+            // Add required asterisk
+            if (currentSchema.required && currentSchema.required.includes(name)) {
+                label.innerHTML += ' <span class="text-danger">*</span>';
+            }
+            
+            container.appendChild(label);
+            
+            // Add description
+            if (property.description) {
+                const description = document.createElement('small');
+                description.className = 'form-text text-muted d-block mb-2';
+                description.textContent = property.description;
+                container.appendChild(description);
+            }
+            
+            let input;
+            
+            // Create appropriate input based on type
+            switch (property.type) {
+                case 'string':
+                    if (property.enum) {
+                        input = createSelectField(name, property, value);
+                    } else if (property.format === 'date') {
+                        input = createDateField(name, property, value);
+                    } else if (property.format === 'textarea') {
+                        input = createTextareaField(name, property, value);
+                    } else {
+                        input = createTextField(name, property, value);
+                    }
+                    break;
+                case 'integer':
+                case 'number':
+                    input = createNumberField(name, property, value);
+                    break;
+                case 'boolean':
+                    input = createCheckboxField(name, property, value);
+                    break;
+                case 'array':
+                    input = createArrayField(name, property, value);
+                    break;
+                case 'object':
+                    input = createObjectField(name, property, value);
+                    break;
+                default:
+                    input = createTextField(name, property, value);
+            }
+            
+            container.appendChild(input);
+            return container;
+        }
+
+        function createTextField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'form-control';
+            input.name = name;
+            input.id = name;
+            input.value = value || '';
+            
+            if (property.minLength) input.minLength = property.minLength;
+            if (property.maxLength) input.maxLength = property.maxLength;
+            if (property.pattern) input.pattern = property.pattern;
+            
+            input.addEventListener('input', updateFormData);
+            return input;
+        }
+
+        function createTextareaField(name, property, value) {
+            const textarea = document.createElement('textarea');
+            textarea.className = 'form-control';
+            textarea.name = name;
+            textarea.id = name;
+            textarea.rows = 4;
+            textarea.value = value || '';
+            
+            textarea.addEventListener('input', updateFormData);
+            return textarea;
+        }
+
+        function createDateField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = 'date';
+            input.className = 'form-control';
+            input.name = name;
+            input.id = name;
+            input.value = value || '';
+            
+            input.addEventListener('change', updateFormData);
+            return input;
+        }
+
+        function createNumberField(name, property, value) {
+            const input = document.createElement('input');
+            input.type = property.type === 'integer' ? 'number' : 'number';
+            input.className = 'form-control';
+            input.name = name;
+            input.id = name;
+            input.value = value || '';
+            
+            if (property.minimum !== undefined) input.min = property.minimum;
+            if (property.maximum !== undefined) input.max = property.maximum;
+            if (property.type === 'integer') input.step = '1';
+            
+            input.addEventListener('input', updateFormData);
+            return input;
+        }
+
+        function createSelectField(name, property, value) {
+            const select = document.createElement('select');
+            select.className = 'form-select';
+            select.name = name;
+            select.id = name;
+            
+            // Add empty option
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = 'Select an option...';
+            select.appendChild(emptyOption);
+            
+            // Add options
+            property.enum.forEach((option, index) => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = property.enumNames ? property.enumNames[index] : option;
+                if (value === option) optionElement.selected = true;
+                select.appendChild(optionElement);
+            });
+            
+            select.addEventListener('change', updateFormData);
+            return select;
+        }
+
+        function createCheckboxField(name, property, value) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'form-check';
+            
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.className = 'form-check-input';
+            input.name = name;
+            input.id = name;
+            input.checked = value || false;
+            
+            const label = document.createElement('label');
+            label.className = 'form-check-label';
+            label.htmlFor = name;
+            label.textContent = property.title || name;
+            
+            wrapper.appendChild(input);
+            wrapper.appendChild(label);
+            
+            input.addEventListener('change', updateFormData);
+            return wrapper;
+        }
+
+        function createArrayField(name, property, value) {
+            const container = document.createElement('div');
+            container.className = 'array-field';
+            
+            const arrayData = value || [];
+            
+            const itemsContainer = document.createElement('div');
+            itemsContainer.id = `${name}_items`;
+            
+            function renderArrayItems() {
+                itemsContainer.innerHTML = '';
+                arrayData.forEach((item, index) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'array-item d-flex gap-2 align-items-center';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'form-control';
+                    input.value = item;
+                    input.addEventListener('input', (e) => {
+                        arrayData[index] = e.target.value;
+                        updateFormData();
+                    });
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'btn btn-outline-danger btn-sm';
+                    removeBtn.textContent = '×';
+                    removeBtn.addEventListener('click', () => {
+                        arrayData.splice(index, 1);
+                        renderArrayItems();
+                        updateFormData();
+                    });
+                    
+                    itemDiv.appendChild(input);
+                    itemDiv.appendChild(removeBtn);
+                    itemsContainer.appendChild(itemDiv);
+                });
+            }
+            
+            const addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.className = 'btn btn-outline-primary btn-sm mb-2';
+            addBtn.textContent = `+ Add ${property.title || name}`;
+            addBtn.addEventListener('click', () => {
+                arrayData.push('');
+                renderArrayItems();
+                updateFormData();
+            });
+            
+            container.appendChild(addBtn);
+            container.appendChild(itemsContainer);
+            
+            renderArrayItems();
+            return container;
+        }
+
+        function createObjectField(name, property, value) {
+            const container = document.createElement('div');
+            container.className = 'object-field';
+            
+            const title = document.createElement('h6');
+            title.textContent = property.title || name;
+            title.className = 'mb-3';
+            container.appendChild(title);
+            
+            if (property.properties) {
+                Object.entries(property.properties).forEach(([key, prop]) => {
+                    const fieldValue = value && value[key] ? value[key] : null;
+                    const field = createFormField(`${name}.${key}`, prop, fieldValue);
+                    container.appendChild(field);
+                });
+            }
+            
+            return container;
+        }
+
+        function updateFormData() {
+            const form = document.querySelector('#metadataForm form');
+            if (!form) return;
+            
+            const formData = new FormData(form);
+            currentFormData = {};
+            
+            // Handle regular form fields
+            for (let [key, value] of formData.entries()) {
+                if (key.includes('.')) {
+                    // Handle nested objects
+                    const parts = key.split('.');
+                    let current = currentFormData;
+                    for (let i = 0; i < parts.length - 1; i++) {
+                        if (!current[parts[i]]) current[parts[i]] = {};
+                        current = current[parts[i]];
+                    }
+                    current[parts[parts.length - 1]] = value;
+                } else {
+                    currentFormData[key] = value;
+                }
+            }
+            
+            // Handle checkboxes
+            const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                currentFormData[cb.name] = cb.checked;
+            });
+            
+            // Handle arrays (special handling needed)
+            const arrayContainers = form.querySelectorAll('.array-field');
+            arrayContainers.forEach(container => {
+                const inputs = container.querySelectorAll('.array-item input');
+                const arrayName = container.previousElementSibling.querySelector('label').textContent.split(' ')[0].toLowerCase();
+                currentFormData[arrayName] = Array.from(inputs).map(input => input.value).filter(v => v.trim());
+            });
+            
+            updatePreview();
+            autoSave();
+        }
+
+        function updatePreview() {
+            document.getElementById('outputPreview').textContent = JSON.stringify(currentFormData, null, 2);
+        }
+
+        function updateFormStatus(type, message) {
+            const status = document.getElementById('formStatus');
+            status.className = `badge bg-${type}`;
+            status.textContent = message;
+        }
+
+        function validateForm() {
+            updateFormData();
+            
+            if (!currentSchema || !currentSchema.required) {
+                updateFormStatus('info', 'No validation rules');
+                return;
+            }
+            
+            const missing = currentSchema.required.filter(field => 
+                !currentFormData[field] || 
+                (typeof currentFormData[field] === 'string' && currentFormData[field].trim() === '')
+            );
+            
+            if (missing.length > 0) {
+                updateFormStatus('warning', `Missing required: ${missing.join(', ')}`);
+                alert(`Please fill in required fields: ${missing.join(', ')}`);
+            } else {
+                updateFormStatus('success', 'Form Valid ✓');
+            }
+        }
+
+        function exportJson() {
+            if (Object.keys(currentFormData).length === 0) {
+                alert('No data to export. Please fill out the form first.');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(currentFormData, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'metadata.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportXml() {
+            if (Object.keys(currentFormData).length === 0) {
+                alert('No data to export. Please fill out the form first.');
+                return;
+            }
+            
+            const xml = jsonToXml(currentFormData, 'metadata');
+            const blob = new Blob([xml], {type: 'application/xml'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'metadata.xml';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function jsonToXml(obj, rootName = 'root') {
+            let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<${rootName}>\n`;
+            
+            function objectToXml(obj, indent = '  ') {
+                let result = '';
+                for (const [key, value] of Object.entries(obj)) {
+                    if (Array.isArray(value)) {
+                        value.forEach(item => {
+                            result += `${indent}<${key}>${escapeXml(item)}</${key}>\n`;
+                        });
+                    } else if (typeof value === 'object' && value !== null) {
+                        result += `${indent}<${key}>\n${objectToXml(value, indent + '  ')}${indent}</${key}>\n`;
+                    } else {
+                        result += `${indent}<${key}>${escapeXml(value)}</${key}>\n`;
+                    }
+                }
+                return result;
+            }
+            
+            xml += objectToXml(obj);
+            xml += `</${rootName}>`;
+            return xml;
+        }
+
+        function escapeXml(text) {
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;');
+        }
+
+        function autoSave() {
+            localStorage.setItem('metadataEditor_formData', JSON.stringify(currentFormData));
+            localStorage.setItem('metadataEditor_schema', document.getElementById('schemaEditor').value);
+        }
+
+        function loadFromStorage() {
+            const savedData = localStorage.getItem('metadataEditor_formData');
+            const savedSchema = localStorage.getItem('metadataEditor_schema');
+            
+            if (savedData) {
+                try {
+                    currentFormData = JSON.parse(savedData);
+                    updatePreview();
+                } catch (e) {
+                    console.warn('Could not load saved form data');
+                }
+            }
+            
+            if (savedSchema) {
+                document.getElementById('schemaEditor').value = savedSchema;
+            }
+        }
+
+        function saveProgress() {
+            autoSave();
+            alert('Progress saved to browser storage!');
+        }
+
+        function loadData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        try {
+                            currentFormData = JSON.parse(event.target.result);
+                            updatePreview();
+                            generateForm(); // Regenerate to populate form with loaded data
+                        } catch (error) {
+                            alert('Invalid JSON file: ' + error.message);
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+    </script>
+</body>
+</html>
