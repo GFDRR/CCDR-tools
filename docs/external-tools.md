@@ -40,6 +40,7 @@ The Map Viewer features over 100 hazard and risk layers, allowing users to explo
 <br><br>
 
 The [**DECAT Space2Stats program**](https://worldbank.github.io/DECAT_Space2Stats) program is designed to provide academics, statisticians, and data scientists with easier access to regularly requested geospatial aggregate data: Official World Bank boundaries at admin level 2 and a global database of hexagons (~36km2).
+<br><br>
 
 The [**Geoboundaries global database**](https://www.geoboundaries.org) is an open-access repository offering detailed, research-ready political administrative boundaries for every country in the world, up to five levels of administrative hierarchy.
 
