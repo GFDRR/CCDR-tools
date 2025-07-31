@@ -29,15 +29,20 @@ def FL_damage_factor_builtup(x: np.array, wb_region: str):
     Huizinga et al., 2017 - Global flood depth-damage functions: Methodology and the database. EU-JRC.
     (https://publications.jrc.ec.europa.eu/repository/handle/JRC105688)
     """
-    x = x/100  # convert cm to m
+    x = (x/100).astype(np.float32)    # convert cm to m
     function_mapping = {
-        'AFRICA': np.maximum(0.0, np.minimum(1.0, 1.246282 + (0.004404681 - 1.246282)/(1 + (x/1.888094)**1.245007))),
-        'ASIA': np.maximum(0.0, np.minimum(1.0, 1.267385 + (0.002553797 - 1.267385)/(1 + (x/1.511393)**1.011526))),
-        'LAC': np.maximum(0.0, np.minimum(1.0, 1.04578 + (0.001490579 - 1.04578)/(1 + (x/0.5619431)**1.509554))),
-        'GLOBAL': np.maximum(0.0, np.minimum(1.0, 2.100049 + (-0.00003530885 - 2.100049)/(1 + (x/6.632485)**0.559315))),
+        'AFRICA': lambda x: np.maximum(0.0, np.minimum(1.0, 1.246282 + (0.004404681 - 1.246282)/(1 + (x/1.888094)**1.245007))),
+        'ASIA': lambda x: np.maximum(0.0, np.minimum(1.0, 1.267385 + (0.002553797 - 1.267385)/(1 + (x/1.511393)**1.011526))),
+        'LAC': lambda x: np.maximum(0.0, np.minimum(1.0, 1.04578 + (0.001490579 - 1.04578)/(1 + (x/0.5619431)**1.509554))),
+        'GLOBAL': lambda x: np.maximum(0.0, np.minimum(1.0, 2.100049 + (-0.00003530885 - 2.100049)/(1 + (x/6.632485)**0.559315))),
     }
+    # CRITICAL: Map wb_region to the actual region key first
     region = wb_to_region.get(wb_region, 'GLOBAL')
-    return function_mapping.get(region)
+    damage_func = function_mapping.get(region)
+    
+    # FIXED: Actually call the function instead of returning the function object
+    result = damage_func(x)
+    return result.astype(np.float32)
 
 
 # Floods (river and coastal) impact function over Agricultural areas
