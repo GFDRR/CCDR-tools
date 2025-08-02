@@ -544,3 +544,20 @@ info_box = Textarea(
     disabled=True,
     layout=Layout(width='350px', height='100px')
 )
+
+
+def set_default_values(
+    gdf, custom_boundaries_id_field, custom_boundaries_name_field
+):    
+    columns_without_geometry = [col for col in gdf.columns if col != 'geometry']
+    
+    id_keywords = ['id', 'code', 'fid', 'hasc', 'key']
+    name_keywords = ['name', 'label', 'title', 'zone', 'area']
+    
+    id_fields = [f for f in columns_without_geometry if any(keyword in f.lower() for keyword in id_keywords)]
+    name_fields = [f for f in columns_without_geometry if any(keyword in f.lower() for keyword in name_keywords)]
+
+    if id_fields != []:
+        custom_boundaries_id_field.value = id_fields[0]
+    if name_fields != []:
+        custom_boundaries_name_field.value = name_fields[0]

@@ -19,6 +19,7 @@ from input_utils import get_adm_data
 from rasterstats import zonal_stats
 import rioxarray
 import warnings
+import notebook_utils
 warnings.filterwarnings("ignore", message=".*crs.*", category=UserWarning)
 
 # Load country data
@@ -220,6 +221,7 @@ def update_preview_map(*args):
         try:
             gdf = gpd.read_file(custom_boundaries_file.value)
             update_map(gdf)
+            notebook_utils.set_default_values(gdf, custom_boundaries_id_field, custom_boundaries_name_field )
         except Exception as e:
             print(f"Error loading custom boundaries: {str(e)}")
     elif country_selector.value:
