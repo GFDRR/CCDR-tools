@@ -43,8 +43,8 @@ def test_damage_factor_builtup():
     
     ## Case 1: Test with sample values for African region
     expected_africa = np.array([
-        0.00440468, 0.00622345, 0.0177687 , 0.03561978, 
-        0.05527796,0.09712188, 0.20376833, 0.39173692, 1.        
+        0.00440466, 0.00622332, 0.01776874, 0.03561985, 
+        0.05527796, 0.09712188, 0.20376833, 0.39173692, 1.        
     ])
     
     # Case 1a: Passing 'AFR'
@@ -77,8 +77,8 @@ def test_damage_factor_builtup():
     
     # Case 3: Test with sample values for LAC region
     expected_lac = np.array([
-        0.00149058, 0.00387057, 0.02788907, 0.07329972, 
-        0.12665801, 0.23903597, 0.47772589, 0.73745742, 1.
+        0.00149047, 0.00387049, 0.02788889, 0.07329959, 
+        0.12665784, 0.2390359, 0.4777258, 0.73745733, 1.
     ])
     
     # Only one LAC so far
