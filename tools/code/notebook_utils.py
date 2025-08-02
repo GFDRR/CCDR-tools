@@ -551,6 +551,9 @@ def set_default_values(
 ):    
     columns_without_geometry = [col for col in gdf.columns if col != 'geometry']
     
+    custom_boundaries_id_field.options = columns_without_geometry
+    custom_boundaries_name_field.options = columns_without_geometry
+    
     id_keywords = ['id', 'code', 'fid', 'hasc', 'key']
     name_keywords = ['name', 'label', 'title', 'zone', 'area']
     

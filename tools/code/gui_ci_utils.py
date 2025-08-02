@@ -77,9 +77,9 @@ custom_boundaries_file = widgets.Text(
 custom_boundaries_file_id = f'custom-boundaries-file-{id(custom_boundaries_file)}'
 custom_boundaries_file.add_class(custom_boundaries_file_id)
 
-custom_boundaries_id_field = widgets.Text(
-    value='',
-    placeholder='Enter field name for zonal ID',
+custom_boundaries_id_field = widgets.Dropdown(
+    options=[],
+    value=None,
     description='ID field:',
     disabled=True,
     layout=widgets.Layout(width='250px')
@@ -87,9 +87,9 @@ custom_boundaries_id_field = widgets.Text(
 custom_boundaries_id_field_id = f'custom-boundaries-id-field-{id(custom_boundaries_id_field)}'
 custom_boundaries_id_field.add_class(custom_boundaries_id_field_id)
 
-custom_boundaries_name_field = widgets.Text(
-    value='',
-    placeholder='Enter field name for zonal name',
+custom_boundaries_name_field = widgets.Dropdown(
+    options=[],
+    value=None,
     description='Name field:',
     disabled=True,
     layout=widgets.Layout(width='250px')
