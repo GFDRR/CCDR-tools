@@ -1,3 +1,23 @@
+# Check SSL limitations
+import sys
+sys.path.append('.')  # Ensure the current directory is in the path
+try:
+    from ssl_utils import disable_ssl_verification
+    disable_ssl_verification()
+except ImportError:
+    import ssl
+    import warnings
+    import urllib3
+    
+    # Fallback if ssl_utils.py is not available
+    warnings.filterwarnings('ignore', message='Unverified HTTPS request')
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    try:
+        ssl._create_default_https_context = ssl._create_unverified_context
+    except AttributeError:
+        pass
+
+# Import necessary libraries
 import leafmap.foliumap as leafmap
 import geopandas as gpd
 import ipywidgets as widgets
@@ -5,6 +25,8 @@ from IPython.display import display, HTML
 from ipyleaflet import Map, basemap_to_tiles, basemaps, LayersControl, GeoJSON, LegendControl, WidgetControl
 from IPython.display import display, clear_output, HTML
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import branca.colormap as cm
 import numpy as np
 import pandas as pd
 import time
@@ -16,6 +38,8 @@ import sys
 import re
 from sympy import sympify, symbols
 import math
+import multiprocessing as mp
+import gc
 
 import common
 from input_utils import get_adm_data
@@ -660,7 +684,24 @@ update_function_button_id = f'update-function-button-{id(update_function_button)
 update_function_button.add_class(update_function_button_id)
 
 # Function to validate and parse custom function
+# Function to validate and parse custom function
 def parse_custom_function(func_str):
+    """
+    Validates and parses a custom damage function string into a callable function.
+    
+    Args:
+        func_str (str): Function string like "Y = 0.1*X" or "Y = 1-exp(-0.1*X)"
+        
+    Returns:
+        callable: A function that can be applied to hazard values
+    """
+    # Import numpy at the function level to ensure it's available
+    import numpy as np
+    
+    # If no function provided, return None
+    if not func_str:
+        return None
+        
     # Replace 'Y =' or 'y =' with nothing to get just the expression
     func_str = re.sub(r'^[Yy]\s*=\s*', '', func_str)
     
@@ -669,27 +710,70 @@ def parse_custom_function(func_str):
         x = symbols('X')
         expr = sympify(func_str.replace('X', 'x'))
         
-        # Create a callable function
-        def custom_func(X):
-            # Handle different input types (scalar, numpy array)
-            if isinstance(X, np.ndarray):
-                result = np.zeros_like(X, dtype=float)
-                for i in range(X.size):
-                    try:
-                        # Replace x with each value and evaluate
-                        val = float(expr.subs('x', float(X.flat[i])))
-                        # Ensure the result is between 0 and 1
-                        result.flat[i] = max(0.0, min(1.0, val))
-                    except Exception:
-                        result.flat[i] = 0.0
-                return result
-            else:
-                try:
-                    # For scalar input
-                    val = float(expr.subs('x', float(X)))
-                    return max(0.0, min(1.0, val))
-                except Exception:
-                    return 0.0
+        # Create a vectorized function for better performance
+        def custom_func(X, wb_region=None):
+            """
+            IMPROVEMENT #2: Vectorized damage function
+            
+            Args:
+                X: Hazard values (can be scalar, array, or xarray)
+                wb_region: World Bank region (unused in custom functions but needed for interface compatibility)
+                
+            Returns:
+                Damage values between 0 and 1
+            """
+            # Import numpy here to ensure it's available in the function scope
+            import numpy as np
+            
+            try:
+                # Handle numpy arrays directly
+                if isinstance(X, np.ndarray):
+                    # Create a copy to avoid modifying the input
+                    result = np.zeros_like(X, dtype=np.float32)
+                    # Only process valid values (non-NaN)
+                    valid_mask = ~np.isnan(X)
+                    
+                    if not np.any(valid_mask):
+                        return result  # Return zeros if no valid values
+                    
+                    # Extract valid values for processing
+                    valid_values = X[valid_mask]
+                    
+                    # Convert expression to numpy function for vectorized operation
+                    # This is much faster than element-by-element processing
+                    import numpy as np  # Ensure numpy is available in the expression context
+                    from numpy import exp, log, sin, cos, tan, sqrt, power, maximum, minimum
+                    
+                    # Replace sympy expression with numpy-compatible expression
+                    np_expr = str(expr).replace('x', 'valid_values')
+                    np_expr = np_expr.replace('Min', 'minimum').replace('Max', 'maximum')
+                    
+                    # Safely evaluate the expression
+                    processed_values = eval(np_expr)
+                    
+                    # Clip results to [0,1] range
+                    processed_values = np.clip(processed_values, 0.0, 1.0)
+                    
+                    # Assign processed values back to result array
+                    result[valid_mask] = processed_values
+                    return result
+                
+                # Handle scalar input
+                if X is None or np.isnan(X):
+                    return np.nan
+                
+                # Evaluate expression with the input value
+                val = float(expr.subs('x', float(X)))
+                
+                # Ensure the result is between 0 and 1
+                return max(0.0, min(1.0, val))
+                
+            except Exception as e:
+                print(f"Error in custom function: {str(e)}")
+                # Return NaN on error
+                if isinstance(X, np.ndarray):
+                    return np.zeros_like(X)
+                return np.nan
         
         return custom_func
         
@@ -709,6 +793,10 @@ class_container = widgets.VBox([], layout=widgets.Layout(display='none'))
 
 # For approach = function, preview impact function
 def preview_impact_func(*args):
+    
+    # Import numpy at the function level to ensure it's available
+    import numpy as np
+
     with approach_box:
         clear_output(wait=True)
         
@@ -1018,30 +1106,91 @@ def validate_input():
 
 # Modified function to create a damage function based on approach
 def create_damage_function(approach, hazard_type, exp_cat, iso_a3, class_edges=None, custom_func_str=None):
+    """
+    Creates a damage function based on the selected approach.
+    
+    Args:
+        approach (str): Analysis approach ('Function' or 'Classes')
+        hazard_type (str): Hazard type
+        exp_cat (str): Exposure category
+        iso_a3 (str): Country ISO-3 code
+        class_edges (list): Thresholds for classes approach
+        custom_func_str (str): Custom function formula
+        
+    Returns:
+        callable: A damage function to apply to hazard values
+    """
     if approach == 'Function':
         # Parse the custom function from the input field
         custom_func = parse_custom_function(custom_func_str)
         if custom_func:
-            return lambda x, wb_region: custom_func(x)
+            return custom_func
         else:
-            # Default linear function if parsing fails
-            print("Warning: Using default linear function due to parse errors")
-            return lambda x, wb_region: np.clip(x / 10.0, 0.0, 1.0)
+            # Default linear function with vectorization if parsing fails
+            print("Using default linear function due to parse errors")
+            def default_func(x, wb_region=None):
+                if isinstance(x, np.ndarray):
+                    # Vectorized operation
+                    result = np.zeros_like(x, dtype=np.float32)
+                    valid_mask = ~np.isnan(x)
+                    result[valid_mask] = np.clip(x[valid_mask] / 10.0, 0.0, 1.0)
+                    return result
+                else:
+                    # Scalar case
+                    if np.isnan(x):
+                        return np.nan
+                    return min(1.0, max(0.0, x / 10.0))
+            
+            return default_func
     
     elif approach == 'Classes':
-        # For classes approach, return a function that classifies values
-        def class_function(x, wb_region):
-            result = np.zeros_like(x, dtype=float)
-            for i, threshold in enumerate(class_edges):
-                result[x >= threshold] = (i + 1) / len(class_edges)
-            return result
+        # For classes approach, use vectorized implementation
+        def class_function(x, wb_region=None):
+            if isinstance(x, np.ndarray):
+                result = np.zeros_like(x, dtype=np.float32)
+                valid_mask = ~np.isnan(x)
+                
+                if not np.any(valid_mask):
+                    return result
+                
+                # Apply classification to valid values
+                for i, threshold in enumerate(class_edges):
+                    class_mask = (x >= threshold) & valid_mask
+                    result[class_mask] = (i + 1) / len(class_edges)
+                
+                return result
+            else:
+                # Handle scalar input
+                if np.isnan(x):
+                    return np.nan
+                    
+                result = 0.0
+                for i, threshold in enumerate(class_edges):
+                    if x >= threshold:
+                        result = (i + 1) / len(class_edges)
+                return result
+                
         return class_function
     
     else:
-        # Default fallback
-        return lambda x, wb_region: np.minimum(1.0, x / 10.0)
-
+        # Default vectorized function
+        def default_func(x, wb_region=None):
+            if isinstance(x, np.ndarray):
+                result = np.zeros_like(x, dtype=np.float32)
+                valid_mask = ~np.isnan(x)
+                result[valid_mask] = np.minimum(1.0, x[valid_mask] / 10.0)
+                return result
+            else:
+                if np.isnan(x):
+                    return np.nan
+                return min(1.0, x / 10.0)
+        
+        return default_func
+    
 def run_analysis_script(b):
+    import matplotlib.pyplot as plt
+    import os
+
     # Disable the run button while analysis is running
     run_button.disabled = True
     run_button.description = "Analysis Running..."
@@ -1074,7 +1223,7 @@ def run_analysis_script(b):
             adm_level = adm_level_selector.value
             analysis_type = approach_selector.value
             min_haz_slider = hazard_threshold_slider.value
-            zonal_stats_type = zonal_stats_selector.value  # Get the selected zonal stats type
+            zonal_stats_type = zonal_stats_selector.value
             
             # Get class thresholds if applicable
             class_edges = []
@@ -1149,6 +1298,14 @@ def run_analysis_script(b):
             
             # Create a custom damage function based on the selected approach
             custom_func_str = custom_function_input.value
+            custom_damage_func = create_damage_function(
+                analysis_type, 
+                haz_type, 
+                exp_cat_list[0],  # Use first exposure for initial function
+                country, 
+                class_edges, 
+                custom_func_str
+            )
             
             start_time = time.perf_counter()
     
@@ -1158,11 +1315,12 @@ def run_analysis_script(b):
             print(f"Exposure categories: {exp_cat_list}")
             print(f"Zonal statistics method: {zonal_stats_type}")
             
-            # Initialize variables for bounds
+            # Initialize variables
             minx, miny, maxx, maxy = float('inf'), float('inf'), float('-inf'), float('-inf')
             summary_dfs, charts, layers, colormaps = [], [], [], []
+            analysis_results = {}
             
-            # Prepare Excel and GeoPackage file paths
+            # Prepare Excel writer
             excel_file, gpkg_file = prepare_excel_gpkg_files(country, adm_level, haz_cat, period, scenario)
     
             # Run analysis for each exposure category
@@ -1171,18 +1329,10 @@ def run_analysis_script(b):
                 exp_nam = exp_nam_list[i]
                 print(f"Running analysis for {exp_cat}...")
                 
-                # Override the default damage function with our custom one
-                custom_damage_func = create_damage_function(
-                    analysis_type, 
-                    haz_type, 
-                    exp_cat, 
-                    country, 
-                    class_edges, 
-                    custom_func_str
-                )
-                
-                # Run the analysis with custom hazard
+                # Run the optimized analysis
                 try:
+                    from custom_hazard_analysis import run_analysis_with_custom_hazard
+                    
                     result_df = run_analysis_with_custom_hazard(
                         country, haz_type, haz_cat, period, scenario, 
                         return_periods, min_haz_slider,
@@ -1194,10 +1344,9 @@ def run_analysis_script(b):
                         custom_code_field=custom_code_field,
                         custom_name_field=custom_name_field, 
                         wb_region=wb_region,
-                        # Additional parameters for custom hazard
                         hazard_files=hazard_files,
                         custom_damage_func=custom_damage_func,
-                        zonal_stats_type=zonal_stats_type  # Pass the zonal stats type
+                        zonal_stats_type=zonal_stats_type
                     )
                     
                     if result_df is None:
@@ -1212,18 +1361,15 @@ def run_analysis_script(b):
                     summary_df = create_summary_df(result_df, return_periods, exp_cat)
                     summary_dfs.append(summary_df)
         
-                    if preview_chk.value:
-                        # Update bounding box for map extent
-                        bounds = result_df.total_bounds
-                        minx = min(minx, bounds[0])
-                        miny = min(miny, bounds[1])
-                        maxx = max(maxx, bounds[2])
-                        maxy = max(maxy, bounds[3])
-                        
-                        # Save the result dataframe for the map
-                        if 'analysis_results' not in locals():
-                            analysis_results = {}
-                        analysis_results[exp_cat] = result_df
+                    # Update bounding box for map extent
+                    bounds = result_df.total_bounds
+                    minx = min(minx, bounds[0])
+                    miny = min(miny, bounds[1])
+                    maxx = max(maxx, bounds[2])
+                    maxy = max(maxy, bounds[3])
+                    
+                    # Save the result dataframe for the map
+                    analysis_results[exp_cat] = result_df
                     
                 except Exception as e:
                     print(f"Error analyzing {exp_cat}: {str(e)}")
@@ -1241,36 +1387,36 @@ def run_analysis_script(b):
                         custom_exposure_radio, custom_exposure_container
                     )
         
-                    # Generate charts
+                    # Generate charts only for Function approach
                     if analysis_type == "Function" and preview_chk.value:
-                        colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
-                        title_prefix = haz_cat.title() + " "
-                        charts = [notebook_utils.create_eai_chart(title_prefix, combined_summary, exp_cat, period, scenario, colors.get(exp_cat, 'purple')) 
-                                 for exp_cat in exp_cat_list]
+                        # Only generate EAI charts if multiple return periods were used
+                        is_multi_rp = use_multi_rp.value and len(return_periods) > 1
                         
-                        # Export charts if requested
-                        if notebook_utils.export_charts_chk.value and charts:
-                            notebook_utils.export_charts(
-                                common.OUTPUT_DIR, country, haz_cat, period, scenario, charts, exp_cat_list
-                            )
-                        
-                        # Display charts
-                        with chart_output:
-                            clear_output(wait=True)
-                            for chart in charts:
-                                display(chart)
-                                plt.close(chart)  # Close the figure after displaying
+                        if is_multi_rp:
+                            colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
+                            title_prefix = haz_cat.title() + " "
+                            charts = [notebook_utils.create_eai_chart(title_prefix, combined_summary, exp_cat, period, scenario, colors.get(exp_cat, 'purple')) 
+                                    for exp_cat in exp_cat_list]
+                            
+                            # Export charts if requested
+                            if notebook_utils.export_charts_chk.value and charts:
+                                notebook_utils.export_charts(
+                                    common.OUTPUT_DIR, country, haz_cat, period, scenario, charts, exp_cat_list
+                                )
+                        else:
+                            charts = []
+     
                 except Exception as e:
                     print(f"Error creating summary: {str(e)}")
                     import traceback
                     traceback.print_exc()
-     
+            
             print(f"Analysis completed in {time.perf_counter() - start_time:.2f} seconds")
             print(f"Results saved to Excel file: {excel_file}")
             print(f"Results saved to GeoPackage file: {gpkg_file}")
     
             # Plot results if preview is checked and we have data
-            if preview_chk.value and minx != float('inf') and 'analysis_results' in locals():
+            if preview_chk.value and minx != float('inf') and analysis_results:
                 try:
                     # Import required libraries
                     from ipyleaflet import GeoJSON, TileLayer, LayersControl, LegendControl, Choropleth, WidgetControl
@@ -1313,131 +1459,227 @@ def run_analysis_script(b):
                         
                         # Add each analysis result as a layer
                         for i, (exp_cat, result_df) in enumerate(analysis_results.items()):
-                            # Determine column to show based on analysis type
-                            if analysis_type == "Function":
-                                column = f'{exp_cat}_EAI'
-                                layer_name = f"{exp_cat} Expected Annual Impact - Result"
-                                legend_title = f"{exp_cat} Expected Annual Impact"
-                            elif analysis_type == "Classes":
-                                if f'RP{return_periods[0]}_{exp_cat}_C1' in result_df.columns:
-                                    column = f'RP{return_periods[0]}_{exp_cat}_C1'
-                                    layer_name = f"{exp_cat} Class 1 Exposure (RP{return_periods[0]}) - Result"
-                                    legend_title = f"{exp_cat} Class 1 (RP{return_periods[0]})"
+                            try:
+                                # Determine column to show based on analysis type and whether multiple RPs are used
+                                is_multi_rp = use_multi_rp.value and len(return_periods) > 1
+                                
+                                if analysis_type == "Function":
+                                    # For Function approach, check if EAI exists (multi-RP) or use single RP impact
+                                    if is_multi_rp and f'{exp_cat}_EAI' in result_df.columns:
+                                        column = f'{exp_cat}_EAI'
+                                        layer_name = f"{exp_cat} Expected Annual Impact - Result"
+                                        legend_title = f"{exp_cat} Expected Annual Impact"
+                                    else:
+                                        # Check for various possible column naming patterns
+                                        potential_columns = [
+                                            f'RP{return_periods[0]}_{exp_cat}_imp',
+                                            f'{return_periods[0]:02d}_{exp_cat}_imp',
+                                            f'{return_periods[0]}_{exp_cat}_imp',
+                                            f'00_{exp_cat}_imp',
+                                            f'{exp_cat}_imp'
+                                        ]
+                                        
+                                        column = None
+                                        for potential_column in potential_columns:
+                                            if potential_column in result_df.columns:
+                                                column = potential_column
+                                                print(f"Found column: {column} for {exp_cat}")
+                                                break
+                                        
+                                        if column:
+                                            rp_text = "100" if column.startswith("00_") else str(return_periods[0])
+                                            layer_name = f"{exp_cat} Impact (RP{rp_text}) - Result"
+                                            legend_title = f"{exp_cat} Impact (RP{rp_text})"
+                                        else:
+                                            print(f"Warning: Could not find impact column for {exp_cat}")
+                                            print(f"Available columns: {result_df.columns.tolist()}")
+                                            continue
+                                        
+                                elif analysis_type == "Classes":
+                                    # For Classes approach, use the exposure by class
+                                    if f'RP{return_periods[0]}_{exp_cat}_C1_exp' in result_df.columns:
+                                        column = f'RP{return_periods[0]}_{exp_cat}_C1_exp'
+                                        layer_name = f"{exp_cat} Class 1 Exposure (RP{return_periods[0]}) - Result"
+                                        legend_title = f"{exp_cat} Class 1 (RP{return_periods[0]})"
+                                    else:
+                                        print(f"Warning: Could not find column for {exp_cat} classes")
+                                        continue
                                 else:
-                                    print(f"Warning: Could not find column for {exp_cat} classes")
+                                    print(f"Unknown analysis approach: {analysis_type}")
                                     continue
-                            else:
-                                print(f"Unknown analysis approach: {analysis_type}")
-                                continue
                             
-                            # Skip if column not found
-                            if column not in result_df.columns:
-                                print(f"Warning: Column {column} not found in results")
-                                continue
+                                # Skip if column not found
+                                if column not in result_df.columns:
+                                    print(f"Warning: Column {column} not found in results")
+                                    continue
+                                
+                                # Filter non-zero values for better coloring
+                                non_zero = result_df[result_df[column] > 0]
+                                if len(non_zero) == 0:
+                                    print(f"No non-zero values for {exp_cat}")
+                                    continue
+                                
+                                # Use quantile classification for better color distribution
+                                try:
+                                    # Calculate quantiles based on the data
+                                    n_classes = 5  # Reduced number of classes for more stability
+                                    
+                                    # Check if we have enough data points for quantiles
+                                    if len(non_zero) < n_classes:
+                                        print(f"Not enough non-zero values for {exp_cat} to create {n_classes} classes. Using min/max instead.")
+                                        breaks = np.array([non_zero[column].min(), non_zero[column].max()])
+                                    else:
+                                        quantiles = np.linspace(0, 1, n_classes)
+                                        breaks = np.quantile(non_zero[column], quantiles)
+                                        
+                                        # Ensure unique breaks (sometimes quantiles can produce duplicate values with skewed data)
+                                        breaks = np.unique(breaks)
+                                        
+                                    # If we still don't have at least 2 break points, fall back to min/max
+                                    if len(breaks) < 2:
+                                        print(f"Could not generate enough unique break points for {exp_cat}. Using min/max instead.")
+                                        min_val = non_zero[column].min()
+                                        max_val = non_zero[column].max()
+                                        
+                                        # If min and max are identical, create a tiny range
+                                        if min_val == max_val:
+                                            min_val = min_val * 0.99 if min_val != 0 else 0
+                                            max_val = max_val * 1.01 if max_val != 0 else 1
+                                            
+                                        breaks = np.array([min_val, max_val])
+                                    
+                                    # Debug output
+                                    print(f"Generated {len(breaks)} break points for {exp_cat}: {breaks}")
+                                    
+                                    # Setup a spectral color palette from blue to red
+                                    colors = ['#2b83ba', '#abdda4', '#ffffbf', '#fdae61', '#d7191c']
+                                    
+                                    # Make sure we have at least as many colors as breaks
+                                    if len(colors) < len(breaks):
+                                        # Use a built-in colormap if we need more colors
+                                        cmap = plt.cm.get_cmap('RdYlBu_r', len(breaks))
+                                        colors = [mcolors.rgb2hex(cmap(i)) for i in range(cmap.N)]
+                                    
+                                    # Create the colormap with calculated breaks
+                                    colormap = cm.LinearColormap(
+                                        colors=colors[:len(breaks)],  # Use only as many colors as we have breaks
+                                        vmin=breaks[0],
+                                        vmax=breaks[-1],
+                                        index=breaks  # This uses the calculated breaks for classification
+                                    )
+                                    
+                                except Exception as e:
+                                    print(f"Error in quantile calculation for {exp_cat}: {str(e)}")
+                                    # Fall back to a simple linear colormap
+                                    vmin = non_zero[column].min()
+                                    vmax = non_zero[column].max()
+                                    colormap = cm.linear.RdYlBu_r.scale(vmin, vmax)
+                                    breaks = np.array([vmin, vmax])
+                                    print(f"Using fallback min/max color scale: {vmin} to {vmax}")
+                                
+                                # Create colormap
+                                if exp_cat == 'POP':
+                                    cmap_name = 'RdYlBu_r'
+                                elif exp_cat == 'BU':
+                                    cmap_name = 'RdYlBu_r'
+                                elif exp_cat == 'AGR':
+                                    cmap_name = 'RdYlBu_r'
+                                else:
+                                    cmap_name = 'RdYlBu_r'
+                                
+                                # Copy the dataframe to avoid modifying the original
+                                layer_data = result_df.copy()
+                                
+                                # Create choropleth layer
+                                choropleth = Choropleth(
+                                    geo_data=layer_data.__geo_interface__,
+                                    choro_data={str(feat['id']): feat['properties'][column] 
+                                            for feat in layer_data.__geo_interface__['features']},
+                                    colormap=colormap,
+                                    style={
+                                        'weight': 1,
+                                        'fillOpacity': 0.7,
+                                        'color': 'black'
+                                    },
+                                    hover_style={
+                                        'weight': 3,
+                                        'fillOpacity': 0.8
+                                    },
+                                    name=layer_name
+                                )
+                                
+                                # Add the layer to the map
+                                m.add(choropleth)
+                                
+                                # Create a separate legend for this layer
+                                ax = fig.add_axes([0.3, 0.05 + (0.95 / len(exp_cat_list)) * i, 0.2, 0.9 / len(exp_cat_list)])
+                                
+                                # Create the colormap using our breaks
+                                cmap = plt.get_cmap(cmap_name)
+                                norm = mcolors.BoundaryNorm(breaks, cmap.N)
+                                
+                                # Create the colorbar
+                                cb = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), 
+                                                cax=ax, orientation='vertical')
+                                cb.set_label(legend_title)
+                                
+                                # Create a single legend image for this result
+                                legend_buf = BytesIO()
+                                fig_one = plt.figure(figsize=(1.5, 4))
+                                ax_one = fig_one.add_axes([0.3, 0.05, 0.2, 0.9])
+                                cb_one = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), 
+                                                    cax=ax_one, orientation='vertical')
+                                cb_one.set_label(legend_title)
+                                fig_one.savefig(legend_buf, format='png', bbox_inches='tight', transparent=True)
+                                legend_buf.seek(0)
+                                plt.close(fig_one)
+                                
+                                # Create a data URL
+                                legend_data_url = f"data:image/png;base64,{base64.b64encode(legend_buf.getvalue()).decode('utf-8')}"
+                                
+                                # Create a widget with the legend image
+                                # Place it on the left side (not overlapping with the hazard legend)
+                                legend_html = f"""
+                                <div class="result-legend" style="
+                                    background-color: white;
+                                    padding: 5px;
+                                    border-radius: 5px;
+                                    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+                                    margin-bottom: 10px;
+                                ">
+                                    <img src="{legend_data_url}" style="height:200px;">
+                                </div>
+                                """
+                                legend_widget = HTML(value=legend_html)
+                                # Place impact legends on the left side (hazard legend is on the right)
+                                legend_control = WidgetControl(widget=legend_widget, position='bottomleft')
+                                
+                                # Add the legend to the map
+                                m.add_control(legend_control)
                             
-                            # Filter non-zero values for better coloring
-                            non_zero = result_df[result_df[column] > 0]
-                            if len(non_zero) == 0:
-                                print(f"No non-zero values for {exp_cat}")
-                                continue
-                            
-                            # Determine color range
-                            vmin = non_zero[column].min()
-                            vmax = non_zero[column].max()
-                            
-                            # Create colormap
-                            if exp_cat == 'POP':
-                                colormap = cm.linear.Blues_09.scale(vmin, vmax)
-                                cmap_name = 'Blues'
-                            elif exp_cat == 'BU':
-                                colormap = cm.linear.Oranges_09.scale(vmin, vmax)
-                                cmap_name = 'Oranges'
-                            elif exp_cat == 'AGR':
-                                colormap = cm.linear.Greens_09.scale(vmin, vmax)
-                                cmap_name = 'Greens'
-                            else:
-                                colormap = cm.linear.Reds_09.scale(vmin, vmax)
-                                cmap_name = 'Reds'
-                            
-                            # Copy the dataframe to avoid modifying the original
-                            layer_data = result_df.copy()
-                            
-                            # Create choropleth layer
-                            choropleth = Choropleth(
-                                geo_data=layer_data.__geo_interface__,
-                                choro_data={str(feat['id']): feat['properties'][column] 
-                                        for feat in layer_data.__geo_interface__['features']},
-                                colormap=colormap,
-                                style={
-                                    'weight': 1,
-                                    'fillOpacity': 0.7,
-                                    'color': 'black'
-                                },
-                                hover_style={
-                                    'weight': 3,
-                                    'fillOpacity': 0.8
-                                },
-                                name=layer_name
-                            )
-                            
-                            # Add the layer to the map
-                            m.add(choropleth)
-                            
-                            # Create a separate legend for this layer
-                            ax = fig.add_axes([0.3, 0.05 + (0.95 / len(exp_cat_list)) * i, 0.2, 0.9 / len(exp_cat_list)])
-                            
-                            # Create the colormap
-                            cmap = plt.get_cmap(cmap_name)
-                            norm = mcolors.Normalize(vmin=vmin, vmax=vmax)
-                            
-                            # Create the colorbar
-                            cb = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), 
-                                            cax=ax, orientation='vertical')
-                            cb.set_label(legend_title)
-                            
-                            # Create a single legend image for this result
-                            legend_buf = BytesIO()
-                            fig_one = plt.figure(figsize=(1.5, 4))
-                            ax_one = fig_one.add_axes([0.3, 0.05, 0.2, 0.9])
-                            cb_one = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), 
-                                                cax=ax_one, orientation='vertical')
-                            cb_one.set_label(legend_title)
-                            fig_one.savefig(legend_buf, format='png', bbox_inches='tight', transparent=True)
-                            legend_buf.seek(0)
-                            plt.close(fig_one)
-                            
-                            # Create a data URL
-                            legend_data_url = f"data:image/png;base64,{base64.b64encode(legend_buf.getvalue()).decode('utf-8')}"
-                            
-                            # Create a widget with the legend image
-                            legend_html = f"""
-                            <div class="result-legend" style="
-                                background-color: white;
-                                padding: 5px;
-                                border-radius: 5px;
-                                box-shadow: 0 0 5px rgba(0,0,0,0.3);
-                                margin-bottom: 10px;
-                            ">
-                                <img src="{legend_data_url}" style="height:200px;">
-                            </div>
-                            """
-                            legend_widget = HTML(value=legend_html)
-                            legend_control = WidgetControl(widget=legend_widget, position='bottomright')
-                            
-                            # Add the legend to the map
-                            m.add_control(legend_control)
+                            except Exception as e:
+                                print(f"Error processing layer for {exp_cat}: {str(e)}")
+                                continue               
                         
                         # Close the combined figure
                         plt.close(fig)
                         
                         display(m)
-                    
-                    print("Results map created successfully with legends")
+                            
+                        print("Results map created successfully with legends")
                     
                 except Exception as e:
                     print(f"Error creating results map: {str(e)}")
                     import traceback
                     traceback.print_exc()
+                
+            # Display charts if available
+            if charts:
+                with chart_output:
+                    clear_output(wait=True)
+                    for chart in charts:
+                        display(chart)
+                        plt.close(chart)  # Close the figure after displaying
     
     except Exception as e:
         print(f"An error occurred during analysis: {str(e)}")

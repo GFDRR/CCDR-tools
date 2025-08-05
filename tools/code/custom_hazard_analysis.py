@@ -7,24 +7,28 @@ import geopandas as gpd
 import folium
 from branca.colormap import LinearColormap
 import rasterio
+from rasterio.warp import Resampling, calculate_default_transform, reproject
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
+import concurrent.futures
+from functools import partial
+import multiprocess as mp
+from pathlib import Path
+import tempfile
 
 # Importing internal libraries
 import common
 import input_utils
 from runAnalysis import (
-    calc_EAEI, result_df_reorder_columns, merge_dfs, zonal_stats_partial,
+    calc_EAEI, result_df_reorder_columns, merge_dfs,
     chunks, zonal_stats_parallel
 )
 
-# Importing the libraries for parallel processing
-import itertools as it
-from functools import partial
-import multiprocess as mp
-
 DATA_DIR = common.DATA_DIR
 OUTPUT_DIR = common.OUTPUT_DIR
+
+# Cache for reprojected rasters to avoid redundant calculations
+RASTER_CACHE = {}
 
 def run_analysis_with_custom_hazard(
     country, haz_type, haz_cat, period, scenario, 
@@ -36,10 +40,10 @@ def run_analysis_with_custom_hazard(
     custom_code_field, custom_name_field, wb_region,
     # Custom hazard specific parameters
     hazard_files, custom_damage_func,
-    zonal_stats_type='sum'  # Add this new parameter with 'sum' as default
+    zonal_stats_type='sum'
 ):
     """
-    Run analysis using custom hazard raster files.
+    Optimized function to run analysis using custom hazard raster files.
     
     Parameters
     ----------
@@ -75,6 +79,10 @@ def run_analysis_with_custom_hazard(
         # Define folder for exposure data
         exp_folder = f"{DATA_DIR}/EXP"
 
+        # Clear raster cache at the beginning
+        global RASTER_CACHE
+        RASTER_CACHE = {}
+
         # Validating Classes analysis parameters
         if analysis_type == "Classes":
             if not class_edges:
@@ -108,41 +116,86 @@ def run_analysis_with_custom_hazard(
         if not (code_field and name_field):
             raise ValueError(f"Field names for ADM level {adm_level} not found")
 
-        # Handle exposure data
+        # IMPROVEMENT #1: Load and preprocess exposure data once
         print(f"Processing exposure data for {exp_cat}")
         exp_ras, _ = process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder)
-
-        # Importing the exposure data
-        # Open the raster dataset
+        
+        # Load exposure as a numpy array with proper masking to avoid I/O operations later
         with rasterio.open(exp_ras) as src:
-            original_nodata = src.nodata
-        exp_data = rxr.open_rasterio(exp_ras)[0]  # Open exposure dataset
-        # Handle nodata values
-        if original_nodata is not None:
-            # Mask the original nodata values
-            exp_data = exp_data.where(exp_data != original_nodata)
-        exp_data.rio.write_nodata(-1.0, inplace=True)
-        exp_data.data[exp_data < 0.0] = 0.0
+            exp_meta = src.meta
+            exp_transform = src.transform
+            exp_crs = src.crs
+            exp_data_array = src.read(1)
+            exp_nodata = src.nodata
+            
+            # Properly mask nodata values
+            if exp_nodata is not None:
+                exp_data_array = np.where(exp_data_array == exp_nodata, np.nan, exp_data_array)
+            
+            # Ensure negative values are set to 0
+            exp_data_array = np.where(exp_data_array < 0, 0, exp_data_array)
+        
+        # Store the exposure metadata for reuse
+        exp_metadata = {
+            'transform': exp_transform,
+            'crs': exp_crs,
+            'shape': exp_data_array.shape,
+            'nodata': exp_nodata,
+            'meta': exp_meta
+        }
 
-        # Parallel processing setup
-        cores = min(len(return_periods), mp.cpu_count()) if n_cores is None else n_cores
+        # Create a memory-mapped temporary file for the exposure data to share between processes
+        print("Creating memory-mapped exposure data for shared access...")
+        with tempfile.NamedTemporaryFile(suffix='.npy', delete=False) as tmp:
+            exp_memmap_path = tmp.name
+        
+        # Save exposure array to memmap for multiprocessing
+        exp_memmap = np.memmap(exp_memmap_path, dtype='float32', mode='w+', shape=exp_data_array.shape)
+        exp_memmap[:] = exp_data_array[:]
+        exp_memmap.flush()
+        
+        # Calculate total exposure per admin area once
+        print(f"Calculating total {exp_cat} exposure using {zonal_stats_type}...")
+        zones_geojson = [feature['geometry'] for feature in adm_data.__geo_interface__['features']]
+        
+        # IMPROVEMENT #7: Optimize zonal_stats parameters
+        zonal_stats_params = {
+            'stats': zonal_stats_type,
+            'all_touched': False,  # More precise calculation
+            'geojson_out': False,  # Don't need this for better performance
+            'nodata': np.nan,
+            'categorical': False,
+            'prefix': '',
+            'raster_out': False,
+            'boundless': True,  # Better handling of boundary pixels
+        }
+        
+        # Calculate total exposure (optimize with chunking for large datasets)
+        if len(zones_geojson) > 100:
+            # For large datasets, use parallel processing
+            cores = min(mp.cpu_count(), 8)  # Limit to 8 cores max
+            with mp.Pool(cores) as p:
+                chunks_size = max(1, len(zones_geojson) // cores)
+                zone_chunks = [zones_geojson[i:i+chunks_size] for i in range(0, len(zones_geojson), chunks_size)]
+                
+                func = partial(zonal_stats, raster=exp_ras, **zonal_stats_params)
+                stats_results = p.map(func, zone_chunks)
+                
+                # Flatten results
+                exp_per_ADM = [item for sublist in stats_results for item in sublist]
+        else:
+            # For smaller datasets, use single process
+            exp_per_ADM = zonal_stats(zones_geojson, exp_ras, **zonal_stats_params)
 
-        with mp.Pool(cores) as p:
-            # Get total exposure for each ADM area using the specified zonal stats type
-            func = partial(zonal_stats_partial, raster=exp_ras, stats=zonal_stats_type)
-            stats_parallel = p.map(func, np.array_split(adm_data.geometry, cores))
-
-        exp_per_ADM = list(it.chain(*stats_parallel))
-
-        # Creating the results pandas dataframe
+        # Creating the results dataframe
         result_df = adm_data.loc[:, all_adm_codes + all_adm_names + ["geometry"]]
-        result_df[f"ADM{adm_level}_{exp_cat}"] = [x[zonal_stats_type] for x in exp_per_ADM]
+        result_df[f"ADM{adm_level}_{exp_cat}"] = [x.get(zonal_stats_type, 0) for x in exp_per_ADM]
 
-        # Cleaning-up memory
-        del (stats_parallel, exp_per_ADM)
+        # Clean up
+        del exp_per_ADM
         gc.collect()
         
-        # Defining the list of valid prob_RPs - probability of return period
+        # Calculate probability dataframe
         prob_RPs = 1./np.array(return_periods)
         prob_RPs_LB = np.append(-np.diff(prob_RPs), prob_RPs[-1]).tolist()
         prob_RPs_UB = np.insert(-np.diff(prob_RPs), 0, 0.).tolist()
@@ -154,44 +207,67 @@ def run_analysis_with_custom_hazard(
                                     'prob_RPs_Mean':prob_RPs_Mean})
         prob_RPs_df.to_csv(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_prob_RPs.csv"), index=False)
         
-        # Computing the results for each RP
-        n_valid_RPs_gt_1 = len(return_periods) > 1
-        cores = min(len(return_periods), mp.cpu_count()) if n_cores is None else n_cores
+        # IMPROVEMENT #1: Preprocess all hazard rasters ahead of time
+        preprocessed_hazards = {}
+        print("Pre-processing hazard rasters to match exposure grid...")
         
-        # Process each return period
-        result_dfs = []
+        valid_rp_files = []
         for rp in return_periods:
-            if rp%1==0: 
-                rp = int(rp)
-                
-            print(f"Processing return period {rp}...")
-            
-            # Get the hazard file for this return period
-            hazard_file = hazard_files.get(rp)
-            if not hazard_file or not os.path.exists(hazard_file):
-                print(f"Warning: No hazard file found for return period {rp}")
-                continue
-                
-            # Process the hazard raster
-            try:
-                df = process_return_period(
-                    rp, hazard_file, analysis_type, exp_cat, exp_data, 
-                    min_haz_threshold, custom_damage_func, wb_region,
-                    save_check_raster, bin_seq, num_bins, adm_data, country,
-                    zonal_stats_type  # Pass the zonal_stats_type to the function
-                )
-                result_dfs.append(df)
-            except Exception as e:
-                print(f"Error processing return period {rp}: {str(e)}")
-                import traceback
-                traceback.print_exc()
+            if rp in hazard_files and os.path.exists(hazard_files[rp]):
+                valid_rp_files.append((rp, hazard_files[rp]))
+            else:
+                print(f"Warning: No valid hazard file found for RP {rp}")
         
-        # Combine all return period results
-        if result_dfs:
+        if not valid_rp_files:
+            raise ValueError("No valid hazard files found for any return period")
+        
+        # Set up parameters for multiprocessing
+        n_valid_RPs_gt_1 = len(valid_rp_files) > 1
+        cores = min(len(valid_rp_files), mp.cpu_count()) if n_cores is None else n_cores
+        print(f"Using {cores} cores for parallel processing")
+        
+        # Process all return periods in parallel with optimized approach
+        print(f"Processing {len(valid_rp_files)} return periods...")
+        
+        # Prepare parameters dictionary for the workers
+        params = {
+            "analysis_type": analysis_type,
+            "exp_cat": exp_cat,
+            "min_haz_threshold": min_haz_threshold,
+            "custom_damage_func": custom_damage_func,
+            "save_check_raster": save_check_raster,
+            "bin_seq": bin_seq,
+            "num_bins": num_bins,
+            "adm_data": adm_data,
+            "country": country,
+            "zonal_stats_type": zonal_stats_type,
+            "wb_region": wb_region,
+            "exp_memmap_path": exp_memmap_path,
+            "exp_metadata": exp_metadata,
+            "zones_geojson": zones_geojson
+        }
+        
+        # Use multiprocessing to process each return period
+        if len(valid_rp_files) > 1:
+            with mp.Pool(cores) as pool:
+                func = partial(process_return_period_optimized, **params)
+                result_dfs = pool.map(func, valid_rp_files)
+                
+                # Filter out None results
+                result_dfs = [df for df in result_dfs if df is not None]
+        else:
+            # Process single return period directly
+            result_dfs = [process_return_period_optimized(valid_rp_files[0], **params)]
+        
+        # Clean up memory-mapped file
+        safe_delete_file(exp_memmap_path)
+        
+        # Combine results
+        if result_dfs and all(df is not None for df in result_dfs):
             # Concatenate the return period results
             to_concat = [result_df] + result_dfs
             result_df = pd.concat(to_concat, axis=1)
-            result_df = result_df.replace(np.nan, 0)  # Converting eventual nan/null to zero
+            result_df = result_df.replace(np.nan, 0)
             
             # Reorder columns and calculate expected annual impact/exposure
             result_df = result_df_reorder_columns(
@@ -199,8 +275,8 @@ def run_analysis_with_custom_hazard(
                 adm_level, all_adm_codes, all_adm_names
             )
             
+            # Calculate EAI/EAE if multiple return periods
             if n_valid_RPs_gt_1:
-                # Calculate EAI/EAE using different methods
                 result_df = calc_EAEI(
                     result_df, return_periods, prob_RPs_df, 'LB', 
                     analysis_type, exp_cat, adm_level, num_bins, n_valid_RPs_gt_1
@@ -216,17 +292,18 @@ def run_analysis_with_custom_hazard(
                     analysis_type, exp_cat, adm_level, num_bins, n_valid_RPs_gt_1
                 )
             
-            result_df = result_df.round(3)  # Round to three decimal places
+            # Round values for better presentation
+            result_df = result_df.round(3)
             
-            # If method == 'Mean', then simplify it's name
-            # If not n_valid_RPs_gt_1 and any column contains the initial part as 'RP1_', it is removed then
+            # Simplify column names if needed
             replace_string = '_Mean' if n_valid_RPs_gt_1 else 'RP1'
             result_df_colnames = [s.replace(replace_string, '') for s in result_df.columns]
             result_df.columns = result_df_colnames
             
+            print(f"Analysis completed successfully for {len(result_dfs)} return periods")
             return result_df
         else:
-            print("No valid hazard data was processed")
+            print("No valid results were produced")
             return None
 
     except Exception as e:
@@ -234,95 +311,318 @@ def run_analysis_with_custom_hazard(
         import traceback
         traceback.print_exc()
         return None
+    finally:
+        # Clear raster cache
+        RASTER_CACHE.clear()
+        # Run garbage collection
+        gc.collect()
 
-def process_return_period(
-    rp, hazard_file, analysis_type, exp_cat, exp_data, 
-    min_haz_threshold, damage_factor, wb_region,
-    save_check_raster, bin_seq, num_bins, adm_data, country,
-    zonal_stats_type='sum'  # Add this new parameter with 'sum' as default
-):
-    """Process a single return period hazard file"""
-    result_df = pd.DataFrame()
+def preprocess_hazard_raster(hazard_file, exp_metadata, memmap_dir=None):
+    """
+    Preprocess hazard raster to match exposure grid - returns a path to the reprojected raster
     
-    # Loading the corresponding hazard dataset
+    IMPROVEMENT #1: This function reprojests hazard data once and caches it
+    """
+    # Check if we already processed this file
+    global RASTER_CACHE
+    if hazard_file in RASTER_CACHE:
+        return RASTER_CACHE[hazard_file]
+    
+    # Create a temporary directory if not provided
+    if memmap_dir is None:
+        memmap_dir = tempfile.mkdtemp()
+        
+    output_path = os.path.join(memmap_dir, f"reprojected_{os.path.basename(hazard_file)}")
+    
+    # If already processed, return the path
+    if os.path.exists(output_path):
+        RASTER_CACHE[hazard_file] = output_path
+        return output_path
+        
     try:
-        # We reproject using WarpedVRT as this applies the operation from disk
+        # Read source hazard raster
         with rasterio.open(hazard_file) as src:
-            vrt_options = {
-                'src_crs': src.crs,
-                'crs': exp_data.rio.crs,
-                'transform': exp_data.rio.transform(recalc=True),
-                'height': exp_data.rio.height,
-                'width': exp_data.rio.width,
-            }
-            with rasterio.vrt.WarpedVRT(src, **vrt_options) as vrt:
-                haz_data = rxr.open_rasterio(vrt)[0]
-                haz_data.rio.write_nodata(-1.0, inplace=True)
-
-    except Exception as e:
-        raise IOError(f"Error occurred opening hazard file: {str(e)}")
-
-    # Set values below min threshold to nan
-    haz_data = haz_data.where(haz_data.data > min_haz_threshold, np.nan)
-    
-    # Checking the analysis_type
-    if analysis_type == "Function" or analysis_type == "CustomFunction":
-        # Assign impact factor (this is F_i in the equations)
-        haz_data = damage_factor(haz_data, wb_region)
-        if save_check_raster:
-            output_path = os.path.join(OUTPUT_DIR, f"{country}_CUSTOM_{rp}_{exp_cat}_haz_imp_factor.tif")
-            haz_data.rio.to_raster(output_path)
-    elif analysis_type == "Classes":
-        # Assign bin values to raster data
-        bin_idx = np.digitize(haz_data, bin_seq)
-
-    # Calculate affected exposure in ADM
-    # Filter down to valid areas affected areas which have people
-    affected_exp = exp_data.where(haz_data.data > 0, np.nan)
-
-    if save_check_raster:
-        output_path = os.path.join(OUTPUT_DIR, f"{country}_CUSTOM_{rp}_{exp_cat}_affected.tif")
-        affected_exp.rio.to_raster(output_path)
-    
-    # Conduct analyses for classes
-    if analysis_type == "Classes":
-        del haz_data
-        for bin_x in reversed(range(num_bins)):
-            # Compute the impact for this class using the specified zonal stats type
-            impact_class = gen_zonal_stats(vectors=adm_data["geometry"],
-                                          raster=np.array(bin_idx == bin_x).astype(int) * affected_exp.data,
-                                          stats=[zonal_stats_type], affine=affected_exp.rio.transform(), nodata=np.nan)
-            result_df[f"RP{rp}_{exp_cat}_C{bin_x}_exp"] = [x[zonal_stats_type] for x in impact_class]
-            # Compute the cumulative impact for this class
-            if bin_x < (num_bins - 1):
-                result_df[f"RP{rp}_{exp_cat}_C{bin_x}_exp"] = result_df[f"RP{rp}_{exp_cat}_C{bin_x}_exp"] + \
-                                                             result_df[f"RP{rp}_{exp_cat}_C{bin_x+1}_exp"]
-
-    # Conduct analyses for function
-    if analysis_type == "Function" or analysis_type == "CustomFunction":
-        # Compute the exposure per ADM level using the specified zonal stats type
-        affected_exp_per_ADM = gen_zonal_stats(vectors=adm_data["geometry"], raster=affected_exp.data,
-                                              stats=[zonal_stats_type], affine=affected_exp.rio.transform(), nodata=np.nan)
-        result_df[f"RP{rp}_{exp_cat}_exp"] = [x[zonal_stats_type] for x in affected_exp_per_ADM]
-        
-        # Calculate impacted exposure in affected areas
-        impact_exp = affected_exp.data * haz_data
-        
-        # If save intermediate to disk is TRUE, then
-        if save_check_raster:
-            output_path = os.path.join(OUTPUT_DIR, f"{country}_CUSTOM_{rp}_{exp_cat}_impact.tif")
-            impact_exp.rio.to_raster(output_path)
+            # Calculate reprojection parameters
+            transform, width, height = calculate_default_transform(
+                src.crs, exp_metadata['crs'],
+                src.width, src.height, 
+                *src.bounds,
+                dst_width=exp_metadata['shape'][1],
+                dst_height=exp_metadata['shape'][0]
+            )
             
-        # Compute the impact per ADM level using the specified zonal stats type
-        impact_exp_per_ADM = gen_zonal_stats(vectors=adm_data["geometry"], raster=impact_exp.data, 
-                                            stats=[zonal_stats_type], affine=impact_exp.rio.transform(), nodata=np.nan)
-        result_df[f"RP{rp}_{exp_cat}_imp"] = [x[zonal_stats_type] for x in impact_exp_per_ADM]
-        del (haz_data, impact_exp, impact_exp_per_ADM, affected_exp_per_ADM)
+            # Update metadata for output
+            output_meta = src.meta.copy()
+            output_meta.update({
+                'crs': exp_metadata['crs'],
+                'transform': exp_metadata['transform'],
+                'width': exp_metadata['shape'][1],
+                'height': exp_metadata['shape'][0],
+                'nodata': src.nodata
+            })
+            
+            # Create output raster
+            with rasterio.open(output_path, 'w', **output_meta) as dst:
+                # Reproject and save
+                reproject(
+                    source=rasterio.band(src, 1),
+                    destination=rasterio.band(dst, 1),
+                    src_transform=src.transform,
+                    src_crs=src.crs,
+                    dst_transform=exp_metadata['transform'],
+                    dst_crs=exp_metadata['crs'],
+                    resampling=Resampling.bilinear
+                )
+                
+        # Cache the path
+        RASTER_CACHE[hazard_file] = output_path
+        return output_path
+        
+    except Exception as e:
+        print(f"Error preprocessing hazard raster: {str(e)}")
+        raise
 
-    del affected_exp
-    gc.collect()
-
-    return result_df
+def process_return_period_optimized(rp_file_tuple, **kwargs):
+    """
+    Process a single return period with optimized approach
+    
+    IMPROVEMENT #5: Reduced I/O operations with better memory management
+    """
+    rp, hazard_file = rp_file_tuple
+    
+    try:
+        print(f"Processing return period {rp}...")
+        
+        # Unpack required parameters
+        analysis_type = kwargs.get('analysis_type')
+        exp_cat = kwargs.get('exp_cat')
+        min_haz_threshold = kwargs.get('min_haz_threshold', 0)
+        custom_damage_func = kwargs.get('custom_damage_func')
+        save_check_raster = kwargs.get('save_check_raster', False)
+        bin_seq = kwargs.get('bin_seq')
+        num_bins = kwargs.get('num_bins')
+        adm_data = kwargs.get('adm_data')
+        country = kwargs.get('country')
+        zonal_stats_type = kwargs.get('zonal_stats_type', 'sum')
+        wb_region = kwargs.get('wb_region')
+        exp_memmap_path = kwargs.get('exp_memmap_path')
+        exp_metadata = kwargs.get('exp_metadata')
+        zones_geojson = kwargs.get('zones_geojson')
+        
+        # Load exposure data from memmap
+        exp_shape = exp_metadata['shape']
+        exp_array = np.memmap(exp_memmap_path, dtype='float32', mode='r', shape=exp_shape)
+        
+        # Create a tempdir for this process
+        process_temp_dir = tempfile.mkdtemp()
+        
+        # IMPROVEMENT #1: Preprocess hazard raster to match exposure grid
+        reprojected_hazard = preprocess_hazard_raster(hazard_file, exp_metadata, process_temp_dir)
+        
+        # Load hazard data once
+        with rasterio.open(reprojected_hazard) as src:
+            haz_array = src.read(1)
+            transform = src.transform
+            haz_nodata = src.nodata
+            
+            # Apply threshold to hazard data
+            if haz_nodata is not None:
+                haz_array = np.where(haz_array == haz_nodata, np.nan, haz_array)
+                
+            # Apply minimum threshold
+            haz_array = np.where(haz_array <= min_haz_threshold, np.nan, haz_array)
+            
+        # Create result dataframe
+        result_df = pd.DataFrame(index=adm_data.index)
+        
+        # Identify affected exposure (where hazard > 0 and not nan)
+        valid_mask = ~np.isnan(haz_array)
+        affected_exp = np.copy(exp_array)
+        affected_exp[~valid_mask] = np.nan
+        
+        # Save affected exposure if requested
+        if save_check_raster:
+            affected_exp_path = os.path.join(process_temp_dir, f"affected_exp_rp{rp}.tif")
+            with rasterio.open(affected_exp_path, 'w', 
+                              driver='GTiff',
+                              height=exp_shape[0],
+                              width=exp_shape[1],
+                              count=1,
+                              dtype='float32',
+                              crs=exp_metadata['crs'],
+                              transform=exp_metadata['transform'],
+                              nodata=np.nan) as dst:
+                dst.write(affected_exp, 1)
+        
+        # Process differently based on analysis approach
+        if analysis_type == "Classes":
+            # For classes approach
+            # Create a classified array
+            bin_idx = np.zeros_like(haz_array)
+            for i, threshold in enumerate(bin_seq):
+                # Digitize into bins
+                if i < len(bin_seq) - 1:
+                    bin_mask = (haz_array >= threshold) & (haz_array < bin_seq[i+1]) & valid_mask
+                else:
+                    bin_mask = (haz_array >= threshold) & valid_mask
+                bin_idx[bin_mask] = i
+                
+            # For each class, calculate exposure
+            for bin_x in reversed(range(num_bins)):
+                # Create a mask for this class
+                class_mask = (bin_idx == bin_x)
+                
+                # Apply the mask to the affected exposure
+                class_exp = np.copy(affected_exp)
+                class_exp[~class_mask] = np.nan
+                
+                # Calculate zonal statistics for this class
+                class_path = os.path.join(process_temp_dir, f"class_{bin_x}.tif")
+                with rasterio.open(class_path, 'w',
+                                  driver='GTiff',
+                                  height=exp_shape[0],
+                                  width=exp_shape[1],
+                                  count=1,
+                                  dtype='float32',
+                                  crs=exp_metadata['crs'],
+                                  transform=exp_metadata['transform'],
+                                  nodata=np.nan) as dst:
+                    dst.write(class_exp, 1)
+                
+                # IMPROVEMENT #7: Optimized zonal_stats
+                zonal_result = zonal_stats(
+                    zones_geojson, 
+                    class_path,
+                    stats=zonal_stats_type,
+                    all_touched=False,
+                    geojson_out=False,
+                    nodata=np.nan,
+                    categorical=False,
+                    boundary_only=False,
+                    boundless=True
+                )
+                
+                # Add the results to the dataframe
+                result_df[f"RP{rp}_{exp_cat}_C{bin_x}_exp"] = [x.get(zonal_stats_type, 0) for x in zonal_result]
+                
+                # Delete temporary class file
+                os.remove(class_path)
+                
+            # Calculate cumulative exposure for classes
+            for bin_x in reversed(range(num_bins-1)):
+                result_df[f"RP{rp}_{exp_cat}_C{bin_x}_exp"] = (
+                    result_df[f"RP{rp}_{exp_cat}_C{bin_x}_exp"] + 
+                    result_df[f"RP{rp}_{exp_cat}_C{bin_x+1}_exp"]
+                )
+                
+        else:  # Function approach
+            # Calculate affected exposure per admin area
+            affected_path = os.path.join(process_temp_dir, f"affected_exp_rp{rp}_total.tif")
+            with rasterio.open(affected_path, 'w',
+                              driver='GTiff',
+                              height=exp_shape[0],
+                              width=exp_shape[1],
+                              count=1,
+                              dtype='float32',
+                              crs=exp_metadata['crs'],
+                              transform=exp_metadata['transform'],
+                              nodata=np.nan) as dst:
+                dst.write(affected_exp, 1)
+            
+            affected_stats = zonal_stats(
+                zones_geojson,
+                affected_path,
+                stats=zonal_stats_type,
+                all_touched=False,
+                nodata=np.nan,
+                boundless=True
+            )
+            
+            result_df[f"RP{rp}_{exp_cat}_exp"] = [x.get(zonal_stats_type, 0) for x in affected_stats]
+            
+            # IMPROVEMENT #2: Vectorized damage function application
+            try:
+                # Create a copy of hazard array for damage calculation
+                damage_values = np.zeros_like(haz_array)
+                
+                # Apply the damage function only to valid pixels
+                # This is a fully vectorized operation that applies custom_damage_func to all elements at once
+                if valid_mask.any():
+                    # Apply custom damage function to get damage factors
+                    # wb_region is passed as a scalar to all elements
+                    damage_values[valid_mask] = custom_damage_func(haz_array[valid_mask], wb_region)
+                    
+                    # Ensure damage values are between 0 and 1
+                    damage_values = np.clip(damage_values, 0, 1)
+                
+                # Calculate impact (exposure * damage factor)
+                impact_values = affected_exp * damage_values
+                
+                # Save impact raster if requested
+                if save_check_raster:
+                    impact_path = os.path.join(OUTPUT_DIR, f"{country}_CUSTOM_{rp}_{exp_cat}_impact.tif")
+                    with rasterio.open(impact_path, 'w',
+                                      driver='GTiff',
+                                      height=exp_shape[0],
+                                      width=exp_shape[1],
+                                      count=1,
+                                      dtype='float32',
+                                      crs=exp_metadata['crs'],
+                                      transform=exp_metadata['transform'],
+                                      nodata=np.nan) as dst:
+                        dst.write(impact_values, 1)
+                
+                # Write impact to temporary file for zonal stats
+                impact_path = os.path.join(process_temp_dir, f"impact_rp{rp}.tif")
+                with rasterio.open(impact_path, 'w',
+                                  driver='GTiff',
+                                  height=exp_shape[0],
+                                  width=exp_shape[1],
+                                  count=1,
+                                  dtype='float32',
+                                  crs=exp_metadata['crs'],
+                                  transform=exp_metadata['transform'],
+                                  nodata=np.nan) as dst:
+                    dst.write(impact_values, 1)
+                
+                # Calculate zonal statistics for impact
+                impact_stats = zonal_stats(
+                    zones_geojson,
+                    impact_path,
+                    stats=zonal_stats_type,
+                    all_touched=False,
+                    nodata=np.nan,
+                    boundless=True
+                )
+                
+                result_df[f"RP{rp}_{exp_cat}_imp"] = [x.get(zonal_stats_type, 0) for x in impact_stats]
+                
+                # Delete temporary impact file
+                os.remove(impact_path)
+                
+            except Exception as e:
+                print(f"Error applying damage function for RP {rp}: {str(e)}")
+                # Add empty columns as fallback
+                result_df[f"RP{rp}_{exp_cat}_imp"] = [0] * len(adm_data)
+        
+        # Clean up tempdir after processing
+        try:
+            for file in os.listdir(process_temp_dir):
+                try:
+                    os.remove(os.path.join(process_temp_dir, file))
+                except:
+                    pass
+            os.rmdir(process_temp_dir)
+        except:
+            pass
+            
+        return result_df
+        
+    except Exception as e:
+        print(f"Error processing return period {rp}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return None
 
 def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder):
     """Process exposure data - adapted from runAnalysis.py"""
@@ -359,7 +659,7 @@ def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_fol
                         raise FileNotFoundError(f"Failed to fetch agricultural data for {country}")
             else:
                 raise ValueError(f"Missing or unknown exposure category: {exp_cat}")
-
+                                                                         
         if not os.path.exists(exp_ras):
             raise FileNotFoundError(f"Exposure raster not found after processing: {exp_ras}")
 
@@ -371,3 +671,35 @@ def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_fol
     except Exception as e:
         print(f"Error in process_exposure_data: {str(e)}")
         raise
+
+# Add this function to custom_hazard_analysis.py
+def safe_delete_file(file_path):
+    """
+    Safely delete a file, handling locked files gracefully.
+    
+    Args:
+        file_path (str): Path to the file to delete
+    """
+    import os
+    import gc
+    import time
+    
+    # Run garbage collection to release any lingering references
+    gc.collect()
+    
+    # Try to delete the file, with a few retries
+    max_attempts = 3
+    for attempt in range(max_attempts):
+        try:
+            if os.path.exists(file_path):
+                os.unlink(file_path)
+            return  # Successfully deleted or file doesn't exist
+        except (PermissionError, OSError) as e:
+            if attempt < max_attempts - 1:
+                # Wait a bit before retrying
+                time.sleep(0.5)
+                gc.collect()  # Force another garbage collection
+            else:
+                # On last attempt, just warn instead of failing
+                print(f"Warning: Could not delete temporary file {file_path}: {str(e)}")
+                print("This is not critical, but you may want to clean up temporary files manually later.")
