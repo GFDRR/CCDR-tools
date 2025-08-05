@@ -125,7 +125,7 @@ def process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_fol
             if exp_cat == 'BU':
                 damage_factor = TC_damage_factor_builtup
             else:
-                damage_factor = lambda x, _: x
+                damage_factor = lambda x: x
         else:
                 raise ValueError(f"Unknown hazard type: {haz_type}")
 
@@ -342,7 +342,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
                     'width': exp_data.rio.width,
                 }
                 with rasterio.vrt.WarpedVRT(src, **vrt_options) as vrt:
-                    haz_data = rxr.open_rasterio(vrt)[0]
+                    haz_data = rxr.open_rasterio(vrt, chunks=True)[0].astype('float32')
                     haz_data.rio.write_nodata(-1.0, inplace=True)
 
         except rasterio._err.CPLE_OpenFailedError:

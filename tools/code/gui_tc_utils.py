@@ -1,3 +1,23 @@
+# Check SSL limitations
+import sys
+sys.path.append('.')  # Ensure the current directory is in the path
+try:
+    from ssl_utils import disable_ssl_verification
+    disable_ssl_verification()
+except ImportError:
+    import ssl
+    import warnings
+    import urllib3
+    
+    # Fallback if ssl_utils.py is not available
+    warnings.filterwarnings('ignore', message='Unverified HTTPS request')
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    try:
+        ssl._create_default_https_context = ssl._create_unverified_context
+    except AttributeError:
+        pass
+    
+# Import necessary libraries
 import common
 import folium
 from folium.plugins import MiniMap, Fullscreen
