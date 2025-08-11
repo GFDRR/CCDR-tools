@@ -979,8 +979,20 @@
                 const container = document.createElement('div');
                 container.className = 'array-field';
                 
-                // Ensure arrayData is always an array
-                let arrayData = Array.isArray(value) ? value : [];
+                // Ensure arrayData is always an array and maintains reference to original data
+                let arrayData;
+                if (Array.isArray(value)) {
+                    arrayData = value;
+                } else {
+                    arrayData = [];
+                    // For modal context, update the original object data immediately
+                    if (this.context.type === 'modal') {
+                        // Set the empty array in the source data so it gets properly saved
+                        if (name && typeof name === 'string') {
+                            // This will be handled by the modal save function
+                        }
+                    }
+                }
                 
                 const itemsContainer = document.createElement('div');
                 itemsContainer.id = `${this.context.getFieldId(name)}_items`;
@@ -1804,7 +1816,7 @@
             
             try {
                 const response = await fetch(RDLS_VERSIONS[version]);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 currentSchema = await response.json();
                 
@@ -2095,50 +2107,70 @@
 
         function openObjectEditor(arrayName, objectIndex, objectSchema, arrayData, renderCallback) {
             if (objectSchema.$ref) {
-                objectSchema = resolveReference(objectSchema.$ref);
+            objectSchema = resolveReference(objectSchema.$ref);
             }
-            
+
             currentObjectEditor = {
-                arrayName: arrayName,
-                objectIndex: objectIndex,
-                objectSchema: objectSchema,
-                arrayData: arrayData,
-                renderCallback: renderCallback
+            arrayName: arrayName,
+            objectIndex: objectIndex,
+            objectSchema: objectSchema,
+            arrayData: arrayData,
+            renderCallback: renderCallback
             };
-            
+
             const modalTitle = document.getElementById('objectEditorModalLabel');
             modalTitle.textContent = `Edit ${objectSchema.title || arrayName}`;
-            
+
+            // Always use the latest array data from currentFormData if available
             const fullArrayData = getNestedValue(currentFormData, arrayName) || [];
-            const objectData = fullArrayData[objectIndex] || {};
-            
+            // Preload the object data from the array if it exists
+            // Only clone the object if editing, otherwise use empty object for new
+            let objectData = {};
+            if (typeof objectIndex === 'number' && fullArrayData[objectIndex]) {
+            objectData = { ...fullArrayData[objectIndex] };
+            }
+
             const fieldsContainer = document.getElementById('objectEditorFields');
             fieldsContainer.innerHTML = '';
-            
+
             // Create unified context for modal fields
             const modalContext = new FieldCreationContext('modal', fieldsContainer);
-            
+
             if (objectSchema.properties) {
-                Object.entries(objectSchema.properties).forEach(([key, property]) => {
-                    const fieldElement = modalContext.createField(key, property, objectData[key]);
-                    fieldsContainer.appendChild(fieldElement);
-                });
-            }
-            
-            const form = document.getElementById('objectEditorForm');
-            form.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    const inputs = form.querySelectorAll('input, select, textarea');
-                    const currentIndex = Array.from(inputs).indexOf(event.target);
-                    if (currentIndex < inputs.length - 1) {
-                        inputs[currentIndex + 1].focus();
-                    } else {
-                        document.getElementById('saveObjectBtn').click();
-                    }
+            Object.entries(objectSchema.properties).forEach(([key, property]) => {
+                // If this property is an array, allow editing its items inline
+                if (property.type === 'array') {
+                // Use the array from objectData if present, ensuring we maintain existing data
+                let arrayValue = objectData[key];
+                if (!Array.isArray(arrayValue)) {
+                    arrayValue = [];
+                    // Initialize the array in objectData so changes are tracked
+                    objectData[key] = arrayValue;
+                }
+                const arrayField = modalContext.createField(key, property, arrayValue);
+                fieldsContainer.appendChild(arrayField);
+                } else {
+                // For non-array properties, use the existing value from objectData
+                const fieldElement = modalContext.createField(key, property, objectData[key]);
+                fieldsContainer.appendChild(fieldElement);
                 }
             });
-            
+            }
+
+            const form = document.getElementById('objectEditorForm');
+                        form.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const inputs = form.querySelectorAll('input, select, textarea');
+                const currentIndex = Array.from(inputs).indexOf(event.target);
+                if (currentIndex < inputs.length - 1) {
+                inputs[currentIndex + 1].focus();
+                } else {
+                document.getElementById('saveObjectBtn').click();
+                }
+            }
+            });
+
             const modal = new bootstrap.Modal(document.getElementById('objectEditorModal'));
             modal.show();
         }
@@ -2282,16 +2314,94 @@
             const form = document.getElementById('objectEditorForm');
             const formData = new FormData(form);
             
-            const objectData = {};
+            // Start with the existing object data to preserve arrays that were modified
+            let objectData = {};
             
-            // Collect regular form data
+            // First, get any existing object data to preserve arrays
+            const fullArrayData = getNestedValue(currentFormData, currentObjectEditor.arrayName) || [];
+            if (typeof currentObjectEditor.objectIndex === 'number' && fullArrayData[currentObjectEditor.objectIndex]) {
+                // Copy existing object data, including any arrays that were modified in the modal
+                objectData = JSON.parse(JSON.stringify(fullArrayData[currentObjectEditor.objectIndex]));
+            }
+            
+            // Now we need to get the current state of any array fields that were edited in the modal
+            // Find all array containers in the modal and extract their current data
+            const arrayContainers = document.querySelectorAll('#objectEditorFields .array-field');
+            arrayContainers.forEach(container => {
+                const containerId = container.querySelector('[id$="_items"]')?.id;
+                if (containerId) {
+                    const fieldName = containerId.replace('modal_', '').replace('_items', '');
+                    const cards = container.querySelectorAll('.card[data-item-index]');
+                    const arrayData = [];
+                    
+                    cards.forEach((card, index) => {
+                        const item = {};
+                        const fieldDivs = card.querySelectorAll('[data-field-name]');
+                        
+                        fieldDivs.forEach(fieldDiv => {
+                            const fieldNameAttr = fieldDiv.getAttribute('data-field-name');
+                            if (fieldNameAttr && fieldNameAttr !== 'id') {
+                                const input = fieldDiv.querySelector('input, select, textarea');
+                                if (input) {
+                                    if (input.type === 'checkbox') {
+                                        item[fieldNameAttr] = input.checked;
+                                    } else {
+                                        item[fieldNameAttr] = input.value;
+                                    }
+                                }
+                            }
+                        });
+                        
+                        // Handle bbox fields specially - they have names like fieldName_0, fieldName_1, etc.
+                        const bboxInputs = card.querySelectorAll('input[name$="_0"], input[name$="_1"], input[name$="_2"], input[name$="_3"]');
+                        const bboxGroups = {};
+                        bboxInputs.forEach(input => {
+                            const match = input.name.match(/(.+)_(\d+)$/);
+                            if (match) {
+                                const fieldName = match[1].replace('modal_', '');
+                                const index = parseInt(match[2]);
+                                if (!bboxGroups[fieldName]) bboxGroups[fieldName] = [];
+                                bboxGroups[fieldName][index] = parseFloat(input.value) || 0;
+                            }
+                        });
+                        
+                        // Add bbox arrays to the item
+                        Object.entries(bboxGroups).forEach(([fieldName, values]) => {
+                            item[fieldName] = values;
+                        });
+                        
+                        // Preserve the ID if it exists
+                        if (objectData[fieldName] && objectData[fieldName][index] && objectData[fieldName][index].id) {
+                            item.id = objectData[fieldName][index].id;
+                        } else {
+                            // Generate a new ID if needed
+                            let idPrefix = 'item';
+                            if (fieldName === 'metrics') idPrefix = 'metric';
+                            else if (fieldName === 'cost') idPrefix = 'cost';
+                            else if (fieldName === 'hazards') idPrefix = 'hazard';
+                            item.id = generateUniqueId(idPrefix);
+                        }
+                        
+                        arrayData.push(item);
+                    });
+                    
+                    // Update the object data with the current array state
+                    objectData[fieldName] = arrayData;
+                }
+            });
+            
+            // Collect regular form data (this will override any simple field values)
             for (let [key, value] of formData.entries()) {
                 const fieldName = key.replace('modal_', '');
                 
                 if (fieldName.includes('.')) {
                     setNestedValue(objectData, fieldName, value);
                 } else {
-                    objectData[fieldName] = value;
+                    // Don't override array fields that we just processed above
+                    const isArrayField = document.querySelector(`#objectEditorFields .array-field [id="modal_${fieldName}_items"]`);
+                    if (!isArrayField) {
+                        objectData[fieldName] = value;
+                    }
                 }
             }
             
@@ -2302,19 +2412,49 @@
                 if (fieldName.includes('.')) {
                     setNestedValue(objectData, fieldName, cb.checked);
                 } else {
-                    objectData[fieldName] = cb.checked;
+                    // Don't override array fields that we just processed above
+                    const isArrayField = document.querySelector(`#objectEditorFields .array-field [id="modal_${fieldName}_items"]`);
+                    if (!isArrayField) {
+                        objectData[fieldName] = cb.checked;
+                    }
+                }
+            });
+            
+            // Handle bbox fields in the main form (not inside array containers)
+            const bboxInputs = form.querySelectorAll('input[name$="_0"], input[name$="_1"], input[name$="_2"], input[name$="_3"]');
+            const bboxGroups = {};
+            bboxInputs.forEach(input => {
+                // Skip if this bbox input is inside an array container (already handled above)
+                const isInArrayContainer = input.closest('.array-field');
+                if (!isInArrayContainer) {
+                    const match = input.name.match(/(.+)_(\d+)$/);
+                    if (match) {
+                        const fieldName = match[1].replace('modal_', '');
+                        const index = parseInt(match[2]);
+                        if (!bboxGroups[fieldName]) bboxGroups[fieldName] = [];
+                        bboxGroups[fieldName][index] = parseFloat(input.value) || 0;
+                    }
+                }
+            });
+            
+            // Add bbox arrays to the object data
+            Object.entries(bboxGroups).forEach(([fieldName, values]) => {
+                if (fieldName.includes('.')) {
+                    setNestedValue(objectData, fieldName, values);
+                } else {
+                    objectData[fieldName] = values;
                 }
             });
             
             // Get the full array data and update/add the object
-            let fullArrayData = getNestedValue(currentFormData, currentObjectEditor.arrayName);
-            if (!fullArrayData) {
-                fullArrayData = [];
-                setNestedValue(currentFormData, currentObjectEditor.arrayName, fullArrayData);
+            let fullArrayDataUpdated = getNestedValue(currentFormData, currentObjectEditor.arrayName);
+            if (!fullArrayDataUpdated) {
+                fullArrayDataUpdated = [];
+                setNestedValue(currentFormData, currentObjectEditor.arrayName, fullArrayDataUpdated);
             }
             
             // Ensure the object has an ID
-            if (currentObjectEditor.objectIndex >= fullArrayData.length) {
+            if (currentObjectEditor.objectIndex >= fullArrayDataUpdated.length) {
                 let idPrefix = 'item';
                 if (currentObjectEditor.arrayName === 'resources') idPrefix = 'resource';
                 else if (currentObjectEditor.arrayName === 'sources') idPrefix = 'source';
@@ -2325,7 +2465,7 @@
                 
                 objectData.id = generateUniqueId(idPrefix);
             } else {
-                const existingObject = fullArrayData[currentObjectEditor.objectIndex];
+                const existingObject = fullArrayDataUpdated[currentObjectEditor.objectIndex];
                 if (existingObject && existingObject.id) {
                     objectData.id = existingObject.id;
                 } else {
@@ -2342,13 +2482,13 @@
             }
             
             // Update the array
-            if (currentObjectEditor.objectIndex >= fullArrayData.length) {
-                fullArrayData.push(objectData);
+            if (currentObjectEditor.objectIndex >= fullArrayDataUpdated.length) {
+                fullArrayDataUpdated.push(objectData);
             } else {
-                fullArrayData[currentObjectEditor.objectIndex] = objectData;
+                fullArrayDataUpdated[currentObjectEditor.objectIndex] = objectData;
             }
             
-            setNestedValue(currentFormData, currentObjectEditor.arrayName, fullArrayData);
+            setNestedValue(currentFormData, currentObjectEditor.arrayName, fullArrayDataUpdated);
             updatePreview();
             generateForm();
             
