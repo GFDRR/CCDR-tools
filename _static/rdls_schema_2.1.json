@@ -313,6 +313,7 @@
           "type": "string",
           "codelist": "IMT.csv",
           "openCodelist": true,
+          "minLength": 1,
           "suggestions": [
             "PGA(g)",
             "PGV(m/s)",
@@ -321,8 +322,7 @@
             "flood_depth(m)",
             "wind_speed(m/s)",
             "temperature(°C)"
-          ],
-          "minLength": 1
+          ]
         },
         "category": {
           "title": "Exposure category",
@@ -1723,7 +1723,7 @@
           "codelist": "IMT.csv",
           "openCodelist": true,
           "minLength": 1,
-          "examples": [
+          "suggestions": [
             "PGA(g)",
             "PGV(m/s)",
             "SA(0.3)(g)",
