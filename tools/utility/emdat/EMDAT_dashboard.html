@@ -2594,7 +2594,7 @@ title="Print to PDF"
     <span class="c1"># Display instructions</span>
     <span class="n">instructions_html</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    &lt;div style=&#39;background-color: #f0f8ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #007acc;&#39;&gt;</span>
-<span class="s2">        &lt;h3 style=&#39;margin-top: 0; color: #007acc;&#39;&gt;🗺️ FIXED Multi-Layer Choropleth Instructions&lt;/h3&gt;</span>
+<span class="s2">        &lt;h3 style=&#39;margin-top: 0; color: #007acc;&#39;&gt;🗺️ Instructions&lt;/h3&gt;</span>
 <span class="s2">        &lt;p&gt;&lt;strong&gt;For enhanced mapping:&lt;/strong&gt;&lt;/p&gt;</span>
 <span class="s2">        &lt;ul&gt;</span>
 <span class="s2">            &lt;li&gt;Select a single country with subnational data&lt;/li&gt;</span>
@@ -2609,7 +2609,7 @@ title="Print to PDF"
     
     <span class="c1"># Display widgets</span>
     <span class="n">display</span><span class="p">(</span><span class="n">widgets</span><span class="o">.</span><span class="n">VBox</span><span class="p">([</span>
-        <span class="n">widgets</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&lt;h1&gt;EMDAT Disaster Data Dashboard - Fixed Choropleth&lt;/h1&gt;&quot;</span><span class="p">),</span>
+        <span class="n">widgets</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&lt;h1&gt;EMDAT Disaster Data Dashboard&lt;/h1&gt;&quot;</span><span class="p">),</span>
         <span class="n">widgets</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">instructions_html</span><span class="p">),</span>
         <span class="n">country_dropdown</span><span class="p">,</span>
         <span class="n">year_range</span><span class="p">,</span>
@@ -2729,9 +2729,9 @@ title="Print to PDF"
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✅ Multiple visualization tabs&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✅ Statistical analysis and charts&quot;</span><span class="p">)</span> 
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">GPKG_FILE_PATH</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✅ FIXED multi-layer choropleth maps with:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  ✅ Multi-layer choropleth maps with:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      • 6 independent layers (ADM1/ADM2 × 3 metrics)&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      • Proper quantile-based color scaling&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      • Quantile-based color scaling&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      • 250px left-side legends with visibility control&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      • Layer checkboxes for independent toggling&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      • Hover tooltips and administrative unit info&quot;</span><span class="p">)</span>
@@ -2796,7 +2796,7 @@ title="Print to PDF"
 
 📁 Checking file availability...
 ✅ EMDAT Excel file found: emdat_2025.xlsx
-✅ GPKG file found: X:/Work/Geodata/ADM/ADM_012.gpkg
+✅ GPKG file found: X:/Work/Geodata/ADM/ADM_GAUL.gpkg
 
 🏗️ Initializing EMDAT Dashboard...
 Loading data from emdat_2025.xlsx...
@@ -2835,7 +2835,7 @@ EMDAT DISASTER DATA DASHBOARD - FIXED CHOROPLETH
 ============================================================
 
 Initializing dashboard components...
-✅ GPKG boundaries available: X:/Work/Geodata/ADM/ADM_012.gpkg
+✅ GPKG boundaries available: X:/Work/Geodata/ADM/ADM_GAUL.gpkg
 🗺️ Enhanced choropleth mapping enabled!
 
 📊 Data Quality Report:
@@ -2883,7 +2883,7 @@ Initializing dashboard components...
 💡 Pro tip: Countries with higher subnational coverage will have better choropleth maps.
 </pre></div>
 </div>
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "dbb82fb4d1bb4d8fa75d59c1bca79d07", "version_major": 2, "version_minor": 0}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "c9f0bbd27579448a8468bb9b6cd49d43", "version_major": 2, "version_minor": 0}</script></div>
 </div>
 </section>
 </section>
