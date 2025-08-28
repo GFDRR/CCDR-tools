@@ -2,10 +2,8 @@
 
 <div class="news-container">
     <div class="news-ticker">
-        <span class="news-item"><strong>BIG UPDATE:</strong> New notebooks! New documentation! New video-tutorials! </span>
-        <span class="news-item"><strong>BIG UPDATE:</strong> New notebooks! New documentation! New video-tutorials! </span>
-        <span class="news-item"><strong>BIG UPDATE:</strong> New notebooks! New documentation! New video-tutorials! </span>
-        <span class="news-item"><strong>BIG UPDATE:</strong> New notebooks! New documentation! New video-tutorials! </span>
+        <span class="news-item"><strong>AUGUST UPDATE:</strong> New EMDAT dashboard notebook</span>
+        <span class="news-item"><strong>JUNE UPDATE:</strong> New notebooks! New documentation! New video-tutorials! </span>
     </div>
 </div>
 
