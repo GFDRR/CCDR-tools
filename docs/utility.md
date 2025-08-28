@@ -18,6 +18,10 @@ The function is also provided as [**jupyter notebook**](../tools/utility/Fetch_d
 Mapping geospatial data doesn't strictly require GIS programs. Some decent results can be achieved with Folium and similar libraries.
 An example is provided as [**jupyter notebook**](../tools/utility/mapping.ipynb) you can download and run on your python environment.
 
+(emdat)=
+## EMDAT dashboard
+Dashboard created from EMDAT dataset, summarising global and country statistics for natural hazards. See the [**jupyter notebook**](../tools/utility/emdat/EMDAT_dashboard.ipynb).
+
 (external-tools)=
 # External tools
 Additional tools to help collect, view and process risk data.

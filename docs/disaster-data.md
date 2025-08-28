@@ -30,6 +30,10 @@ align: center
 Example of subnational disaster frequency mapping in Cambodia for the last 40 years from EMDAT data elaboration.
 ```
 
+```{seealso}
+A python dashboard has been created to summarise and visualise EMDAT as map data and charts: [EMDAT dashboard](../tools/utility/emdat/EMDAT_dashboard.ipynb).
+```
+
 The UNOSAT page is the best global source of remote-sourced hazard data, in particular for flood hazard: recent flood events are often available for download as geospatial data representing the water extent as obtained from satellite images interpretation, together with a quick exposure analysis of affected population.
 
 ```{figure} images/unosat.jpg
