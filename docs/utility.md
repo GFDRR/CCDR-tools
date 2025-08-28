@@ -22,6 +22,21 @@ An example is provided as [**jupyter notebook**](../tools/utility/mapping.ipynb)
 ## EMDAT dashboard
 Dashboard created from EMDAT dataset, summarising global and country statistics for natural hazards. See the [**jupyter notebook**](../tools/utility/emdat/EMDAT_dashboard.ipynb).
 
+```{figure} images/emdat_dashboard1.jpg
+---
+width: 600
+align: center
+---
+EMDAT dashboard notebook
+```
+```{figure} images/emdat_dashboard4.jpg
+---
+width: 600
+align: center
+---
+EMDAT dashboard notebook
+```
+
 (external-tools)=
 # External tools
 Additional tools to help collect, view and process risk data.
