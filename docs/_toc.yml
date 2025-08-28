@@ -38,6 +38,7 @@ parts:
         - file: tools/utility/merge_tiles/Merge_tiles.ipynb
         - file: tools/utility/Fetch_data/Fetch_WSF19.ipynb
         - file: tools/utility/mapping.ipynb
+        - file: tools/utility/emdat/EMDAT_dashboard.ipynb
       - file: docs/philosophy_of_mapping
   - caption: Credits
     chapters:
