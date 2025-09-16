@@ -193,7 +193,7 @@ def run_analysis(
             is_seq = np.all(np.diff(class_edges) > 0)
             if not is_seq:
                 raise ValueError("Class thresholds are not sequential. Lower classes must be less than class thresholds above.")
-            bin_seq = class_edges + [np.inf]
+            bin_seq = np.array(class_edges + [np.inf], dtype='float32')
             num_bins = len(bin_seq)
         else:
             bin_seq = None
@@ -342,7 +342,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
                     'width': exp_data.rio.width,
                 }
                 with rasterio.vrt.WarpedVRT(src, **vrt_options) as vrt:
-                    haz_data = rxr.open_rasterio(vrt, chunks=True)[0].astype('float32')
+                    haz_data = rxr.open_rasterio(vrt)[0].astype('float32')
                     haz_data.rio.write_nodata(-1.0, inplace=True)
 
         except rasterio._err.CPLE_OpenFailedError:
@@ -359,7 +359,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
                 haz_data.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_haz_imp_factor.tif"))
         elif analysis_type == "Classes":
             # Assign bin values to raster data - Follows: x_{i-1} <= x_{i} < x_{i+1}
-            bin_idx = np.digitize(haz_data, bin_seq)
+            bin_idx = np.digitize(haz_data, bin_seq).astype('int32')
 
         # Calculate affected exposure in ADM
         # Filter down to valid areas affected areas which have people
@@ -374,7 +374,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
             for bin_x in reversed(range(num_bins)):
                 # Compute the impact for this class
                 impact_class = gen_zonal_stats(vectors=adm_data["geometry"],
-                                               raster=np.array(bin_idx == bin_x).astype(int) * affected_exp.data,
+                                               raster=np.array(bin_idx == bin_x).astype('int32') * affected_exp.data,
                                                stats=["sum"], affine=affected_exp.rio.transform(), nodata=np.nan)
                 result_df[f"RP{rp}_{exp_cat}_C{bin_x}_exp"] = [x['sum'] for x in impact_class]
                 # Compute the cumulative impact for this class
