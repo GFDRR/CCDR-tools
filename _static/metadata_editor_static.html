@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refactored RDLS Metadata Editor v2.1</title>
+    <title>RDLS Metadata Editor</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .section-checkbox {
@@ -219,7 +219,7 @@
             <div class="d-flex align-items-center gap-3">
                 <img src="https://gfdrr.github.io/CCDR-tools/_static/logo_flat.png" alt="GFDRR Logo" style="height: 100px;">
                 <div>
-                    <h1 class="h3 mb-1">Refactored RDLS Metadata Editor v2.1</h1>
+                    <h1 class="h3 mb-1">RDLS Metadata Editor</h1>
                     <p class="text-muted mb-0">
                         Unified field creation system with improved maintainability
                         <span class="badge bg-primary ms-2">Refactored</span>
@@ -284,7 +284,7 @@
                         <div class="mb-3">
                             <label class="form-label">Custom Schema:</label>
                             <div class="file-drop-zone" id="schemaDropZone">
-                                <small>📁 Drop RDLS schema file here<br>or click to browse<br><em>Try uploading the RDLS v2.1 schema for combobox features!</em></small>
+                                <small>📁 Drop RDLS schema file here<br>or click to browse</small>
                                 <input type="file" id="schemaFile" accept=".json" style="display: none;">
                             </div>
                         </div>
@@ -412,7 +412,7 @@
         // RDLS Schema Configuration
         const RDLS_VERSIONS = {
             '0.2': 'https://docs.riskdatalibrary.org/en/0__2__0/rdls_schema.json',
-            '0.2.1': 'https://docs.riskdatalibrary.org/en/0__2__1/rdls_schema.json'
+            '0.3': 'https://docs.riskdatalibrary.org/en/0__3__0/rdls_schema.json'
         };
 
         const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
@@ -1798,13 +1798,13 @@
             Object.keys(RDLS_VERSIONS).forEach(version => {
                 const option = document.createElement('option');
                 option.value = version;
-                const isLatest = version === '0.2.1';
+                const isLatest = version === '0.3.0';
                 option.textContent = `RDLS ${version}${isLatest ? ' (latest - enhanced with combobox)' : ''}`;
                 select.appendChild(option);
             });
             
             // Auto-select the latest version
-            select.value = '0.2.1';
+            select.value = '0.3.0';
             loadSelectedSchema();
         }
 
@@ -1871,12 +1871,12 @@
                 reader.onload = function(e) {
                     try {
                         currentSchema = JSON.parse(e.target.result);
-                        const isV21 = currentSchema.title && (currentSchema.title.includes('v2.1') || currentSchema.$id && currentSchema.$id.includes('0__2__1'));
+                        const isV21 = currentSchema.title && (currentSchema.title.includes('v3.0') || currentSchema.$id && currentSchema.$id.includes('0__2__1'));
                         const isV20 = currentSchema.title && (currentSchema.title.includes('v2.0') || currentSchema.$id && currentSchema.$id.includes('0__2__0'));
                         let statusMessage = '✓ Custom schema loaded';
                         
                         if (isV21) {
-                            statusMessage = '✓ RDLS v2.1 schema loaded (enhanced with combobox fields)';
+                            statusMessage = '✓ RDLS v3.0 schema loaded (enhanced with combobox fields)';
                         } else if (isV20) {
                             statusMessage = '✓ RDLS v2.0 schema loaded';
                         }
