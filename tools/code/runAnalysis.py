@@ -10,6 +10,7 @@ from openpyxl import load_workbook
 import rasterio
 import rioxarray as rxr
 from rasterstats import gen_zonal_stats, zonal_stats
+import xarray as xr
 
 # Importing internal libraries
 import common
@@ -20,6 +21,15 @@ from damageFunctions import FL_mortality_factor, FL_damage_factor_builtup, FL_da
 import itertools as it
 from functools import partial
 import multiprocess as mp
+import dask.array as da
+import dask
+
+# Configure dask for better memory management
+dask.config.set({
+    'array.chunk-size': '1GB',
+    'array.slicing.split_large_chunks': True,
+    'temporary-directory': None  # Use system temp directory
+})
 
 DATA_DIR = common.DATA_DIR
 OUTPUT_DIR = common.OUTPUT_DIR
@@ -193,7 +203,7 @@ def run_analysis(
             is_seq = np.all(np.diff(class_edges) > 0)
             if not is_seq:
                 raise ValueError("Class thresholds are not sequential. Lower classes must be less than class thresholds above.")
-            bin_seq = np.array(class_edges + [np.inf], dtype='float32')
+            bin_seq = class_edges + [np.inf]
             num_bins = len(bin_seq)
         else:
             bin_seq = None
@@ -223,11 +233,19 @@ def run_analysis(
         print(f"Processing exposure data for {exp_cat}")
         exp_ras, damage_factor = process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder)
 
-        # Importing the exposure data
-        # Open the raster dataset
+        # Importing the exposure data (original approach with chunking fallback)
         with rasterio.open(exp_ras) as src:
             original_nodata = src.nodata
-        exp_data = rxr.open_rasterio(exp_ras)[0].astype('float32')  # Open exposure dataset
+
+        try:
+            # Try original approach first (fastest)
+            exp_data = rxr.open_rasterio(exp_ras)[0].astype('float32')
+        except MemoryError:
+            print("Memory error detected, falling back to chunked loading...")
+            exp_data = rxr.open_rasterio(exp_ras, chunks=True)[0].astype('float32')
+            # Compute immediately to avoid alignment issues later
+            exp_data = exp_data.compute()
+
         # Handle nodata values
         if original_nodata is not None:
             # Mask the original nodata values
@@ -342,15 +360,22 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
                     'width': exp_data.rio.width,
                 }
                 with rasterio.vrt.WarpedVRT(src, **vrt_options) as vrt:
-                    haz_data = rxr.open_rasterio(vrt)[0].astype('float32')
+                    try:
+                        # Try original approach first (fastest)
+                        haz_data = rxr.open_rasterio(vrt)[0].astype('float32')
+                    except MemoryError:
+                        print(f"Memory error loading hazard RP{rp}, falling back to chunked loading...")
+                        haz_data = rxr.open_rasterio(vrt, chunks=True)[0].astype('float32')
+                        # For chunked data, compute immediately to avoid alignment issues
+                        haz_data = haz_data.compute()
                     haz_data.rio.write_nodata(-1.0, inplace=True)
 
         except rasterio._err.CPLE_OpenFailedError:
             raise IOError(f"Error occurred trying to open raster file: 1in{rp}.tif")
 
-        # Set values below min threshold to nan
+        # Set values below min threshold to nan (original approach)
         haz_data = haz_data.where(haz_data.data > min_haz_threshold, np.nan)
-        
+
         # Checking the analysis_type
         if analysis_type == "Function":
             # Assign impact factor (this is F_i in the equations)
@@ -367,7 +392,7 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
 
         if save_check_raster:
             affected_exp.rio.to_raster(os.path.join(OUTPUT_DIR, f"{country}_{haz_cat}_{period}_{scenario}_{rp}_{exp_cat}_affected.tif"))
-        
+
         # Conduct analyses for classes
         if analysis_type == "Classes":
             del haz_data
