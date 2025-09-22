@@ -432,7 +432,7 @@
         // RDLS Schema Configuration
         const RDLS_VERSIONS = {
             '0.2': 'https://docs.riskdatalibrary.org/en/0__2__0/rdls_schema.json',
-            '0.3': 'rdls_schema_v3.json'
+            '0.3': 'https://docs.riskdatalibrary.org/en/0__3__0/rdls_schema.json'
         };
 
         const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
@@ -466,9 +466,13 @@
             // Modal context dependencies
             'processes': 'type',
             'hazard_process': 'hazard_type',
-            'currency': 'impact_unit',
-            // Fix for quantity_kind → currency dependency
-            'currency': 'quantity_kind'
+            'currency': 'quantity_kind',
+            // Section-specific currency dependencies
+            'exposure.currency': 'exposure.quantity_kind',
+            'vulnerability.currency': 'vulnerability.quantity_kind',
+            'loss.currency': 'loss.quantity_kind',
+            // Impact and losses specific dependencies (for loss modals)
+            'impact_and_losses.currency': 'impact_and_losses.quantity_kind'
         };
 
         // Auto-completion suggestions for common fields
@@ -649,6 +653,15 @@
             }
 
             createStringInput(name, property, value, options) {
+                // Special handling for currency fields - ensure they have enum options
+                if (name.includes('currency') || name === 'currency') {
+                    if (!property.enum) {
+                        property = {...property, enum: ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD']};
+                    }
+                    // Don't auto-disable during creation - let dependency system handle it
+                    console.log(`💰 Creating currency field: ${name} with value: "${value}"`);
+                }
+
                 // Check for dependencies
                 const dependsOn = FIELD_DEPENDENCIES[name];
                 if (dependsOn) {
@@ -839,7 +852,12 @@
                         select.appendChild(optionElement);
                     });
                 }
-                
+
+                // Handle disabled option
+                if (options.disabled) {
+                    select.disabled = true;
+                }
+
                 this.context.setupEventListeners(select, name, property, options);
                 return select;
             }
@@ -920,6 +938,11 @@
                             input.value = suggestion;
                             updateFormData();
                             this.context.validateField(name, suggestion, property);
+
+                            // CRITICAL FIX: Trigger dependency handling when suggestion is clicked
+                            console.log(`🎯 Combobox suggestion clicked: ${name} = ${suggestion}`);
+                            const handler = new UnifiedEventHandler(this.context);
+                            handler.handleDependentFields(name, suggestion, input);
                         });
                         item.appendChild(link);
                         dropdownMenu.appendChild(item);
@@ -1241,6 +1264,7 @@
                         // Create a sub-context for inline editing
                         const inlineContext = new FieldCreationContext('inline', fieldDiv);
                         const fieldElement = inlineContext.createField(key, prop, item[key]);
+
                         
                         // Set up change listener to update the item data
                         const input = fieldElement.querySelector('input, select, textarea');
@@ -1261,10 +1285,14 @@
                                 
                                 // Handle currency field dependencies for exposure metrics
                                 if (key === 'quantity_kind' && newValue === 'monetary') {
-                                    // Find currency field in the same card and show it
+                                    // Find currency field in the same card and enable it
                                     const currencyField = card.querySelector('[data-field-name="currency"]');
                                     if (currencyField) {
-                                        currencyField.style.display = 'block';
+                                        const currencyInput = currencyField.querySelector('select, input');
+                                        if (currencyInput) {
+                                            currencyInput.disabled = false;
+                                            currencyInput.required = true;
+                                        }
                                         const label = currencyField.querySelector('label');
                                         if (label && !label.innerHTML.includes('*')) {
                                             label.innerHTML += ' <span class="text-danger">*</span>';
@@ -1273,9 +1301,10 @@
                                 } else if (key === 'quantity_kind' && newValue !== 'monetary') {
                                     const currencyField = card.querySelector('[data-field-name="currency"]');
                                     if (currencyField) {
-                                        currencyField.style.display = 'none';
                                         const currencyInput = currencyField.querySelector('select, input');
                                         if (currencyInput) {
+                                            currencyInput.disabled = true;
+                                            currencyInput.required = false;
                                             currencyInput.value = '';
                                             item.currency = '';
                                         }
@@ -1290,6 +1319,53 @@
                         
                         fieldDiv.appendChild(fieldElement);
                         cardBody.appendChild(fieldDiv);
+
+                        // DIRECT FIX: Add currency field immediately after quantity_kind in array cards
+                        if (key === 'quantity_kind') {
+                            console.log(`Adding currency field after quantity_kind in array card`);
+                            const currencyDiv = document.createElement('div');
+                            currencyDiv.className = 'mb-2';
+                            currencyDiv.setAttribute('data-field-name', 'currency');
+
+                            const currencyProperty = {
+                                "type": "string",
+                                "enum": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "CNY", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "RON", "BGN", "HRK"],
+                                "title": "Currency"
+                            };
+
+                            const currencyContext = new FieldCreationContext('inline', currencyDiv);
+                            const savedCurrencyValue = item['currency'];
+                            console.log(`💰 Creating currency field for array item with saved value: "${savedCurrencyValue}"`);
+                            const currencyElement = currencyContext.createField('currency', currencyProperty, savedCurrencyValue);
+                            currencyDiv.appendChild(currencyElement);
+
+                            // Verify and force-set the value after creation
+                            setTimeout(() => {
+                                const currencyInput = currencyElement.querySelector('select, input');
+                                if (currencyInput) {
+                                    console.log(`💰 Array currency field check - ID: ${currencyInput.id}, Value: "${currencyInput.value}", Expected: "${savedCurrencyValue}"`);
+
+                                    // Always force set the value to ensure it's correct
+                                    if (savedCurrencyValue) {
+                                        currencyInput.value = savedCurrencyValue;
+                                        console.log(`🔧 Set array currency value to "${savedCurrencyValue}"`);
+
+                                        // Double-check after setting
+                                        setTimeout(() => {
+                                            if (currencyInput.value !== savedCurrencyValue) {
+                                                console.log(`⚠️ Value lost after setting, trying again...`);
+                                                currencyInput.value = savedCurrencyValue;
+                                            }
+                                        }, 50);
+                                    }
+                                }
+                            }, 50);
+
+                            // Add currency field right after the quantity_kind field
+                            cardBody.appendChild(currencyDiv);
+
+                            // Currency field will be handled by the unified dependency system
+                        }
                     });
                 }
                 
@@ -1318,14 +1394,23 @@
                     
                     if (quantityKindField && currencyField) {
                         const currentValue = item.quantity_kind || quantityKindField.value;
+                        const currencyInput = currencyField.querySelector('select, input');
                         if (currentValue === 'monetary') {
-                            currencyField.style.display = 'block';
+                            if (currencyInput) {
+                                currencyInput.disabled = false;
+                                currencyInput.required = true;
+                            }
                             const label = currencyField.querySelector('label');
                             if (label && !label.innerHTML.includes('*')) {
                                 label.innerHTML += ' <span class="text-danger">*</span>';
                             }
                         } else {
-                            currencyField.style.display = 'none';
+                            if (currencyInput) {
+                                currencyInput.disabled = true;
+                                currencyInput.required = false;
+                                // Don't clear the value during initial setup - only when user changes quantity_kind
+                                // The value clearing will be handled by user interaction events
+                            }
                         }
                     }
                 }, 50);
@@ -1387,45 +1472,61 @@
             }
 
             handleDependencies(container, name, property, value) {
-                // Special handling for currency field - show only when quantity_kind is 'monetary'
+                // Special handling for currency field - always show but disable unless quantity_kind is 'monetary'
                 if (name.includes('currency') || name === 'currency') {
-                    container.style.display = 'none';
-                    // Find the related quantity_kind field name
-                    let quantityKindFieldName = null;
-                    if (name.includes('impact_and_losses')) {
-                        // e.g. loss.impact_and_losses.currency => loss.impact_and_losses.quantity_kind
-                        quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
-                    } else if (name.includes('metrics')) {
-                        // e.g. metrics.currency => metrics.quantity_kind
-                        quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
-                    } else if (name.includes('losses.impact_and_losses')) {
-                        quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
-                    } else {
-                        // fallback: try to find a sibling quantity_kind
-                        quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
-                    }
+                    const currencyInput = container.querySelector('select, input');
+                    if (currencyInput) {
+                        currencyInput.disabled = true; // Default to disabled
 
-                    // Helper to update visibility
-                    function updateCurrencyVisibility() {
-                        const qkValue = getNestedValue(currentFormData, quantityKindFieldName);
-                        if (qkValue === 'monetary') {
-                            container.style.display = '';
+                        // Find the related quantity_kind field name
+                        let quantityKindFieldName = null;
+                        if (name.includes('impact_and_losses')) {
+                            quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
+                        } else if (name.includes('metrics')) {
+                            quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
+                        } else if (name.includes('losses.impact_and_losses')) {
+                            quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
                         } else {
-                            container.style.display = 'none';
+                            quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
                         }
+
+                        // Helper to update currency field state
+                        function updateCurrencyState() {
+                            const qkValue = getNestedValue(currentFormData, quantityKindFieldName);
+                            if (qkValue === 'monetary') {
+                                currencyInput.disabled = false;
+                                currencyInput.required = true;
+                            } else {
+                                currencyInput.disabled = true;
+                                currencyInput.required = false;
+                                currencyInput.value = '';
+                            }
+                        }
+
+                        // Initial check - ensure currency starts disabled unless quantity_kind is monetary
+                        setTimeout(() => {
+                            const currentValue = getNestedValue(currentFormData, quantityKindFieldName) || '';
+                            currencyInput.disabled = currentValue !== 'monetary';
+                            currencyInput.required = currentValue === 'monetary';
+                            if (currentValue !== 'monetary') {
+                                currencyInput.value = '';
+                            }
+                            updateCurrencyState();
+                        }, 0);
+
+                        // Listen for changes on the related quantity_kind field
+                        setTimeout(() => {
+                            const qkInput = document.getElementById(this.context.getFieldId(quantityKindFieldName));
+                            if (qkInput) {
+                                // Listen to all relevant events for complete dropdown/typing support
+                                qkInput.addEventListener('change', updateCurrencyState);
+                                qkInput.addEventListener('input', updateCurrencyState);
+                                if (qkInput.tagName === 'SELECT') {
+                                    qkInput.addEventListener('click', updateCurrencyState);
+                                }
+                            }
+                        }, 100);
                     }
-
-                    // Initial check
-                    setTimeout(updateCurrencyVisibility, 0);
-
-                    // Listen for changes on the related quantity_kind field
-                    setTimeout(() => {
-                        // Try to find the input/select for quantity_kind
-                        const qkInput = document.getElementById(this.context.getFieldId(quantityKindFieldName));
-                        if (qkInput) {
-                            qkInput.addEventListener('change', updateCurrencyVisibility);
-                        }
-                    }, 100);
                 }
             }
 
@@ -1516,18 +1617,26 @@
             }
 
             setupListeners(element, name, property, options = {}) {
-                const eventType = this.getEventType(element);
-                
-                element.addEventListener(eventType, (e) => {
+                const eventHandler = (e) => {
+                    console.log(`🎯 Event fired: ${e.type} on ${name} (${element.tagName}) = ${e.target.value}`);
                     this.handleFieldChange(e, name, property, options);
-                });
+                };
+
+                if (element.tagName === 'SELECT') {
+                    // For SELECT elements, listen to both 'change' and 'input' for immediate dropdown response
+                    element.addEventListener('change', eventHandler);
+                    element.addEventListener('input', eventHandler);
+                    console.log(`🔧 Setup SELECT listeners for: ${name} (ID: ${element.id})`);
+                } else if (element.type === 'checkbox') {
+                    element.addEventListener('change', eventHandler);
+                    console.log(`🔧 Setup CHECKBOX listener for: ${name} (ID: ${element.id})`);
+                } else {
+                    element.addEventListener('input', eventHandler);
+                    console.log(`🔧 Setup INPUT listener for: ${name} (ID: ${element.id})`);
+                }
             }
 
-            getEventType(element) {
-                if (element.type === 'checkbox') return 'change';
-                if (element.tagName === 'SELECT') return 'change';
-                return 'input';
-            }
+            // getEventType method removed - event handling now done directly in setupListeners
 
             handleFieldChange(event, name, property, options) {
                 const value = this.getFieldValue(event.target);
@@ -1558,18 +1667,23 @@
             }
 
             handleDependentFields(changedFieldName, newValue, element) {
+                console.log(`🔄 handleDependentFields called: ${changedFieldName} = ${newValue}`);
+
                 // Handle field dependencies
                 const dependents = this.findDependentFields(changedFieldName);
-                
+                console.log(`📋 Found dependents for ${changedFieldName}:`, dependents);
+
                 dependents.forEach(dependentFieldName => {
-                    const dependentField = document.getElementById(
-                        this.context.getFieldId(dependentFieldName)
-                    );
-                    
+                    const dependentFieldId = this.context.getFieldId(dependentFieldName);
+                    const dependentField = document.getElementById(dependentFieldId);
+
+                    console.log(`🔍 Looking for dependent field: ${dependentFieldName} (ID: ${dependentFieldId}) - Found: ${!!dependentField}`);
+
                     if (dependentField) {
                         if (dependentFieldName.includes('hazard_process') || dependentFieldName.includes('processes')) {
                             this.rebuildDependentDropdown(dependentField, dependentFieldName, newValue);
                         } else if (dependentFieldName.includes('currency')) {
+                            console.log(`💰 Toggling currency field: ${dependentFieldName} based on ${changedFieldName} = ${newValue}`);
                             this.toggleCurrencyField(dependentField, newValue);
                         }
                     }
@@ -1599,19 +1713,46 @@
                 if (changedFieldName.includes('quantity_kind') || (this.context.type === 'modal' && changedFieldName === 'quantity_kind')) {
                     let currencyFieldName;
                     if (this.context.type === 'modal') {
-                        currencyFieldName = 'currency';
+                        // For modal context, try to preserve the full path structure
+                        if (changedFieldName.includes('.')) {
+                            currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
+                        } else {
+                            currencyFieldName = 'currency';
+                        }
                     } else {
                         currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
                     }
-                    
+
                     const currencyField = document.getElementById(this.context.getFieldId(currencyFieldName));
-                    
+
                     console.log(`Quantity kind changed: ${changedFieldName} = ${newValue}`);
                     console.log(`Looking for currency field: ${this.context.getFieldId(currencyFieldName)}`);
                     console.log(`Currency field found:`, !!currencyField);
-                    
+                    if (!currencyField) {
+                        console.log(`All elements on page:`, Array.from(document.querySelectorAll('*')).filter(el => el.id && el.id.includes('currency')).map(el => el.id));
+                    }
+
                     if (currencyField) {
-                        this.toggleCurrencyFieldContainer(currencyField.closest('.form-field, .modal-form-field'), newValue);
+                        const container = currencyField.closest('.form-field, .modal-form-field');
+                        if (container) {
+                            this.toggleCurrencyFieldContainer(container, newValue);
+                        } else {
+                            // Fallback: handle the field directly if no container found
+                            this.toggleCurrencyField(currencyField, newValue);
+                        }
+
+                        // Also ensure the field state is properly set regardless of container
+                        if (newValue === 'monetary') {
+                            currencyField.disabled = false;
+                            currencyField.required = true;
+                        } else {
+                            currencyField.disabled = true;
+                            currencyField.required = false;
+                            // Only clear value during user interactions, not initial setup
+                            if (newValue !== undefined && newValue !== null) {
+                                currencyField.value = '';
+                            }
+                        }
                     }
                 }
 
@@ -1695,37 +1836,39 @@
             }
 
             toggleCurrencyField(currencyField, impactUnitValue) {
-                // This method handles the field element directly
+                // This method handles the field element directly - use disabled instead of hiding
                 if (impactUnitValue === 'monetary') {
-                    currencyField.style.display = 'block';
+                    currencyField.disabled = false;
                     currencyField.required = true;
                 } else {
-                    currencyField.style.display = 'none';
+                    currencyField.disabled = true;
                     currencyField.required = false;
                     currencyField.value = '';
                 }
             }
 
-            toggleCurrencyFieldContainer(container, impactUnitValue) {
-                // This method handles the container (form-field div)
+            toggleCurrencyFieldContainer(container, quantityKindValue) {
+                // This method handles the container (form-field div) - use disabled instead of hiding
                 const label = container.querySelector('label');
                 const input = container.querySelector('select, input');
-                
-                if (impactUnitValue === 'monetary') {
-                    container.style.display = 'block';
-                    if (input) input.required = true;
-                    
+
+                if (quantityKindValue === 'monetary') {
+                    if (input) {
+                        input.disabled = false;
+                        input.required = true;
+                    }
+
                     if (label && !label.innerHTML.includes('*')) {
                         label.innerHTML += ' <span class="text-danger">*</span>';
                         container.classList.add('required');
                     }
                 } else {
-                    container.style.display = 'none';
                     if (input) {
+                        input.disabled = true;
                         input.required = false;
                         input.value = '';
                     }
-                    
+
                     if (label) {
                         label.innerHTML = label.innerHTML.replace(' <span class="text-danger">*</span>', '');
                         container.classList.remove('required');
@@ -1821,6 +1964,123 @@
             return `${prefix}_${result}`;
         }
 
+        // Direct currency field monitoring system - bypasses unified system issues
+        function setupDirectCurrencyMonitoring() {
+            console.log('🚀 Setting up direct currency monitoring...');
+
+            // Use MutationObserver to detect when new fields are added to the page
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            // Look for quantity_kind fields that were just added
+                            const quantityKindFields = node.querySelectorAll ?
+                                node.querySelectorAll('select[id*="quantity_kind"], input[id*="quantity_kind"]') : [];
+
+                            // Also check if the node itself is a quantity_kind field
+                            if (node.id && node.id.includes('quantity_kind')) {
+                                quantityKindFields.push(node);
+                            }
+
+                            quantityKindFields.forEach(qkField => {
+                                setupCurrencyDependency(qkField);
+                            });
+                        }
+                    });
+                });
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+
+            // Also setup for existing fields
+            setTimeout(() => {
+                const existingQKFields = document.querySelectorAll('select[id*="quantity_kind"], input[id*="quantity_kind"]');
+                existingQKFields.forEach(qkField => {
+                    setupCurrencyDependency(qkField);
+                });
+            }, 1000);
+        }
+
+        function setupCurrencyDependency(quantityKindField) {
+            if (quantityKindField.dataset.currencySetup) return; // Already setup
+            quantityKindField.dataset.currencySetup = 'true';
+
+            console.log(`🔗 Setting up currency dependency for: ${quantityKindField.id}`);
+
+            const updateCurrency = (isUserInteraction = false) => {
+                const isMonetary = quantityKindField.value === 'monetary';
+                console.log(`💰 Updating currency for ${quantityKindField.id}: monetary=${isMonetary}, userInteraction=${isUserInteraction}`);
+
+                // Find the corresponding currency field
+                let currencyField = null;
+                const qkId = quantityKindField.id;
+
+                // Try different currency field ID patterns
+                const possibleCurrencyIds = [
+                    qkId.replace('quantity_kind', 'currency'),
+                    qkId.replace('quantity_kind', '') + 'currency',
+                    'currency', // for simple modal contexts
+                    'modal_currency' // for modal contexts
+                ];
+
+                for (const id of possibleCurrencyIds) {
+                    currencyField = document.getElementById(id);
+                    if (currencyField) {
+                        console.log(`✅ Found currency field: ${id}`);
+                        break;
+                    }
+                }
+
+                // Also try to find currency field in the same container
+                if (!currencyField) {
+                    const container = quantityKindField.closest('.tab-pane, .modal-body, .card-body, form');
+                    if (container) {
+                        currencyField = container.querySelector('select[id*="currency"], input[id*="currency"]');
+                        if (currencyField) {
+                            console.log(`✅ Found currency field in container: ${currencyField.id}`);
+                        }
+                    }
+                }
+
+                if (currencyField) {
+                    const currentValue = currencyField.value;
+                    const hadValue = currentValue !== '' && currentValue !== undefined && currentValue !== null;
+
+                    console.log(`💰 Processing currency field ${currencyField.id} - current value: "${currentValue}", isMonetary: ${isMonetary}, isUserInteraction: ${isUserInteraction}`);
+
+                    currencyField.disabled = !isMonetary;
+                    currencyField.required = isMonetary;
+
+                    // Only clear the value if this is a user interaction AND the field becomes non-monetary
+                    // During initial setup, NEVER clear values
+                    if (!isMonetary && isUserInteraction) {
+                        console.log(`🔄 Clearing currency value due to user interaction`);
+                        currencyField.value = '';
+                    } else if (!isUserInteraction && hadValue) {
+                        console.log(`✅ Preserving existing currency value "${currentValue}" during setup`);
+                    }
+
+                    console.log(`💰 Currency field ${currencyField.id} - enabled: ${!currencyField.disabled}, required: ${currencyField.required}, final value: "${currencyField.value}"`);
+                } else {
+                    console.log(`❌ Could not find currency field for ${quantityKindField.id}`);
+                    console.log('Available fields:', Array.from(document.querySelectorAll('[id*="currency"]')).map(el => el.id));
+                }
+            };
+
+            // Add event listeners with user interaction flag
+            quantityKindField.addEventListener('change', () => updateCurrency(true));
+            quantityKindField.addEventListener('input', () => updateCurrency(true));
+            if (quantityKindField.tagName === 'SELECT') {
+                quantityKindField.addEventListener('click', () => updateCurrency(true));
+            }
+
+            // Initial check - preserve existing values, run after field creation completes
+            setTimeout(() => updateCurrency(false), 200);
+        }
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             setupEventListeners();
@@ -1828,6 +2088,7 @@
             loadFromStorage();
             loadCountryNames();
             updateRiskDataType();
+            setupDirectCurrencyMonitoring();
         });
 
         function setupEventListeners() {
@@ -1899,7 +2160,41 @@
                     if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 
                 currentSchema = await response.json();
-                
+
+                // Add currency field definitions where needed - comprehensive search
+                function addCurrencyFields(obj, path = '') {
+                    if (!obj || typeof obj !== 'object') return;
+
+                    for (const key in obj) {
+                        if (obj[key] && typeof obj[key] === 'object') {
+                            // Check if this is a properties object containing quantity_kind
+                            if (key === 'properties' && obj[key].quantity_kind) {
+                                console.log(`Adding currency field at: ${path}.${key}`);
+                                obj[key].currency = {
+                                    "type": "string",
+                                    "enum": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "CNY", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "RON", "BGN", "HRK"],
+                                    "title": "Currency"
+                                };
+                            }
+
+                            // Also check if this object directly contains quantity_kind (for different schema structures)
+                            if (obj[key].quantity_kind && !obj[key].currency) {
+                                console.log(`Adding currency field directly at: ${path}.${key}`);
+                                obj[key].currency = {
+                                    "type": "string",
+                                    "enum": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "CNY", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "RON", "BGN", "HRK"],
+                                    "title": "Currency"
+                                };
+                            }
+
+                            // Recurse into nested objects
+                            addCurrencyFields(obj[key], path ? `${path}.${key}` : key);
+                        }
+                    }
+                }
+
+                console.log('Using direct currency field insertion during form generation');
+
                 // Ensure mappings are available
                 if (!currentSchema.hazard_process_mappings) {
                     currentSchema.hazard_process_mappings = {
@@ -2268,6 +2563,29 @@
                         const existingValue = currentFormData[sectionName] && currentFormData[sectionName][key];
                         const fieldElement = context.createField(`${sectionName}.${key}`, property, existingValue);
                         form.appendChild(fieldElement);
+
+                        // DIRECT FIX: Add currency field immediately after quantity_kind
+                        if (key === 'quantity_kind') {
+                            console.log(`Adding currency field after quantity_kind in ${sectionName}`);
+                            const currencyProperty = {
+                                "type": "string",
+                                "enum": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "CNY", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "RON", "BGN", "HRK"],
+                                "title": "Currency"
+                            };
+                            const currencyValue = currentFormData[sectionName] && currentFormData[sectionName]['currency'];
+                            const currencyElement = context.createField(`${sectionName}.currency`, currencyProperty, currencyValue);
+
+                            // Disable currency field by default
+                            const currencyInput = currencyElement.querySelector('select, input');
+                            if (currencyInput) {
+                                currencyInput.disabled = true;
+                                console.log(`Currency field disabled by default in ${sectionName}`);
+                            }
+
+                            // Currency field will be handled by the unified dependency system
+
+                            form.appendChild(currencyElement);
+                        }
                     });
                 }
             }
@@ -2354,6 +2672,11 @@
             objectData = { ...fullArrayData[objectIndex] };
             }
 
+            console.log(`🎯 Opening modal for ${arrayName}[${objectIndex}] with data:`, objectData);
+            if (objectData.impact_and_losses) {
+                console.log(`💰 Loss modal - impact_and_losses data:`, objectData.impact_and_losses);
+            }
+
             const fieldsContainer = document.getElementById('objectEditorFields');
             fieldsContainer.innerHTML = '';
 
@@ -2362,6 +2685,7 @@
 
             if (objectSchema.properties) {
             Object.entries(objectSchema.properties).forEach(([key, property]) => {
+                console.log(`Modal processing field: ${key}, type: ${property.type || 'object'}`);
                 // If this property is an array, allow editing its items inline
                 if (property.type === 'array') {
                 // Use the array from objectData if present, ensuring we maintain existing data
@@ -2377,9 +2701,74 @@
                 // For non-array properties, use the existing value from objectData
                 const fieldElement = modalContext.createField(key, property, objectData[key]);
                 fieldsContainer.appendChild(fieldElement);
+
+                // DIRECT FIX: Add currency field immediately after quantity_kind in modals
+                if (key === 'quantity_kind') {
+                    console.log(`Adding currency field after quantity_kind in modal (context: ${modalContext.type})`);
+                    const currencyProperty = {
+                        "type": "string",
+                        "enum": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "CNY", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "RON", "BGN", "HRK"],
+                        "title": "Currency"
+                    };
+                    const savedCurrencyValue = objectData['currency'];
+                    console.log(`💰 Creating modal currency field with saved value: "${savedCurrencyValue}"`);
+                    const currencyElement = modalContext.createField('currency', currencyProperty, savedCurrencyValue);
+                    fieldsContainer.appendChild(currencyElement);
+
+                    // Verify and force-set the value after creation
+                    setTimeout(() => {
+                        const currencyInput = currencyElement.querySelector('select, input');
+                        if (currencyInput) {
+                            console.log(`💰 Modal currency field check - ID: ${currencyInput.id}, Value: "${currencyInput.value}", Expected: "${savedCurrencyValue}"`);
+
+                            // Always force set the value to ensure it's correct
+                            if (savedCurrencyValue) {
+                                currencyInput.value = savedCurrencyValue;
+                                console.log(`🔧 Set modal currency value to "${savedCurrencyValue}"`);
+
+                                // Double-check after setting
+                                setTimeout(() => {
+                                    if (currencyInput.value !== savedCurrencyValue) {
+                                        console.log(`⚠️ Modal value lost after setting, trying again...`);
+                                        currencyInput.value = savedCurrencyValue;
+                                    }
+                                }, 50);
+                            }
+                        }
+                    }, 50);
+
+                    // Currency field will be handled by the unified dependency system
+                }
                 }
             });
             }
+
+            // ADDITIONAL FIX: Handle all currency fields in modal after creation, regardless of structure
+            setTimeout(() => {
+                const allCurrencyFields = fieldsContainer.querySelectorAll('select[id*="currency"], input[id*="currency"]');
+                console.log(`🔍 Found ${allCurrencyFields.length} currency fields in modal:`, Array.from(allCurrencyFields).map(f => f.id));
+
+                allCurrencyFields.forEach(currencyField => {
+                    const fieldId = currencyField.id;
+                    const fieldName = fieldId.replace('modal_', '');
+                    const savedValue = getNestedValue(objectData, fieldName);
+
+                    console.log(`💰 Checking currency field ${fieldId} - fieldName: ${fieldName}, savedValue: "${savedValue}"`);
+
+                    if (savedValue && currencyField.value !== savedValue) {
+                        console.log(`🔧 Force-setting currency field ${fieldId} to "${savedValue}"`);
+                        currencyField.value = savedValue;
+
+                        // Final verification
+                        setTimeout(() => {
+                            if (currencyField.value !== savedValue) {
+                                console.log(`⚠️ Currency value lost again for ${fieldId}, final attempt...`);
+                                currencyField.value = savedValue;
+                            }
+                        }, 100);
+                    }
+                });
+            }, 150);
 
             const form = document.getElementById('objectEditorForm');
                         form.addEventListener('keydown', function(event) {
