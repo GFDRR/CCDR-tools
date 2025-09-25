@@ -651,7 +651,7 @@
             createFieldContainer(name, property, options) {
                 const container = document.createElement('div');
                 container.className = (this.context.type === 'modal' || this.context.type === 'inline') ? 'modal-form-field' : 'form-field';
-                
+
                 // Handle required fields
                 if (this.isRequiredField(name, property, options)) {
                     container.classList.add('required');
@@ -1569,18 +1569,151 @@
                 }
             }
 
+            resolveSchemaRef(ref) {
+                if (!ref || !ref.startsWith('#/$defs/')) return null;
+                if (!currentSchema || !currentSchema.$defs) {
+                    console.warn('Schema not loaded yet, cannot resolve ref:', ref);
+                    return null;
+                }
+                const defName = ref.replace('#/$defs/', '');
+                return currentSchema.$defs[defName] || null;
+            }
+
             isRequiredField(name, property, options) {
+                // For modal context (array item editors), we need to check the item schema
+                if (this.context.type === 'modal' && currentObjectEditor && currentObjectEditor.arrayName) {
+                    const arrayName = currentObjectEditor.arrayName;
+
+                    // Navigate to the array schema (handle nested paths like "loss.losses")
+                    const arrayParts = arrayName.split('.');
+                    let arraySchema = currentSchema.properties;
+
+                    // Navigate through the nested path
+                    for (const part of arrayParts) {
+                        if (arraySchema && arraySchema[part]) {
+                            arraySchema = arraySchema[part];
+                        } else if (arraySchema && arraySchema.properties && arraySchema.properties[part]) {
+                            // Check in properties for object schemas
+                            arraySchema = arraySchema.properties[part];
+                        } else {
+                            arraySchema = null;
+                            break;
+                        }
+                    }
+
+                    let itemSchema = null;
+
+                    // Handle direct items schema or $ref
+                    if (arraySchema && arraySchema.items) {
+                        if (arraySchema.items.$ref) {
+                            itemSchema = this.resolveSchemaRef(arraySchema.items.$ref);
+                        } else {
+                            itemSchema = arraySchema.items;
+                        }
+                    }
+
+                    // Check if this field is required in the item schema
+                    if (itemSchema && itemSchema.required && itemSchema.required.includes(name)) {
+                        return true;
+                    }
+
+                    // Handle nested required fields (like impact_and_losses fields in loss items)
+                    if (name.includes('.') && itemSchema && itemSchema.properties) {
+                        const parts = name.split('.');
+                        const fieldName = parts[parts.length - 1];
+
+                        let current = itemSchema;
+                        for (let i = 0; i < parts.length - 1; i++) {
+                            if (current.properties && current.properties[parts[i]]) {
+                                current = current.properties[parts[i]];
+                            }
+                        }
+
+                        if (current && current.required && current.required.includes(fieldName)) {
+                            return true;
+                        }
+                    }
+
+                    // Check if field is required in nested objects (for modal contexts where field names are flattened)
+                    if (itemSchema && itemSchema.properties) {
+                        for (const [propName, propSchema] of Object.entries(itemSchema.properties)) {
+                            if (propSchema.type === 'object' && propSchema.required && propSchema.required.includes(name)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                // Check top-level required fields (general section)
                 if (currentSchema.required && currentSchema.required.includes(name)) {
                     return true;
                 }
-                
+
+                // Check section-specific required fields
+                if (name.includes('.')) {
+                    const parts = name.split('.');
+                    const sectionName = parts[0];
+                    const fieldName = parts[parts.length - 1];
+
+                    // Check if this section has a schema with required fields
+                    if (currentSchema.properties && currentSchema.properties[sectionName]) {
+                        const sectionSchema = currentSchema.properties[sectionName];
+
+                        // Direct section required fields
+                        if (sectionSchema.required && sectionSchema.required.includes(fieldName)) {
+                            return true;
+                        }
+
+                        // For nested objects (like exposure items, loss items, etc.)
+                        if (sectionSchema.type === 'array' && sectionSchema.items) {
+                            let itemsSchema = sectionSchema.items;
+
+                            // Resolve $ref if present
+                            if (itemsSchema.$ref) {
+                                itemsSchema = this.resolveSchemaRef(itemsSchema.$ref);
+                            }
+
+                            if (itemsSchema && itemsSchema.required && itemsSchema.required.includes(fieldName)) {
+                                return true;
+                            }
+                        }
+
+                        // For complex nested paths (like loss.losses.*)
+                        if (parts.length > 2 && sectionSchema.properties) {
+                            let current = sectionSchema;
+                            for (let i = 1; i < parts.length - 1; i++) {
+                                if (current.properties && current.properties[parts[i]]) {
+                                    current = current.properties[parts[i]];
+                                    // Handle items with $ref (like loss.losses items)
+                                    if (current.items) {
+                                        if (current.items.$ref) {
+                                            current = this.resolveSchemaRef(current.items.$ref);
+                                        } else {
+                                            current = current.items;
+                                        }
+                                    }
+                                } else if (current.items) {
+                                    if (current.items.$ref) {
+                                        current = this.resolveSchemaRef(current.items.$ref);
+                                    } else {
+                                        current = current.items;
+                                    }
+                                }
+                            }
+                            if (current && current.required && current.required.includes(fieldName)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
                 // Currency field is required only when impact_unit is monetary
                 if (name.includes('currency') && name.includes('impact_and_losses')) {
                     const parentPath = name.replace('currency', 'impact_unit');
                     const parentValue = getNestedValue(currentFormData, parentPath);
                     return parentValue === 'monetary';
                 }
-                
+
                 return false;
             }
 
@@ -2506,10 +2639,14 @@
 
         function resolveReference(ref) {
             if (!ref.startsWith('#/$defs/')) return null;
-            
+            if (!currentSchema || !currentSchema.$defs) {
+                console.warn('Schema not loaded yet, cannot resolve ref:', ref);
+                return null;
+            }
+
             const path = ref.replace('#/$defs/', '').split('/');
             let current = currentSchema.$defs;
-            
+
             for (const segment of path) {
                 if (current && current[segment] !== undefined) {
                     current = current[segment];
@@ -2517,7 +2654,7 @@
                     return null;
                 }
             }
-            
+
             return current;
         }
 
@@ -2559,6 +2696,13 @@
         }
 
         function openObjectEditor(arrayName, objectIndex, objectSchema, arrayData, renderCallback) {
+            // Ensure schema is loaded before opening the modal
+            if (!currentSchema) {
+                console.warn('Schema not loaded yet, cannot open object editor for:', arrayName);
+                alert('Please wait for the schema to load before opening the editor.');
+                return;
+            }
+
             if (objectSchema.$ref) {
             objectSchema = resolveReference(objectSchema.$ref);
             }
@@ -3089,10 +3233,33 @@
             
             updatePreview();
             autoSave();
+
+            // Trigger dataset-level validation to keep publish button state updated
+            validateDatasetRequirements();
+            updateValidationDisplay();
+        }
+
+        function getFilteredFormData() {
+            // Create filtered data showing only active sections
+            const filteredData = {};
+
+            // Always include non-section fields (general metadata)
+            Object.entries(currentFormData).forEach(([key, value]) => {
+                if (!SECTIONS.includes(key)) {
+                    // Include general fields like title, description, resources, etc.
+                    filteredData[key] = value;
+                } else if (activeSections.has(key)) {
+                    // Only include section fields that are currently active
+                    filteredData[key] = value;
+                }
+            });
+
+            return filteredData;
         }
 
         function updatePreview() {
-            document.getElementById('outputPreview').textContent = JSON.stringify(currentFormData, null, 2);
+            const filteredData = getFilteredFormData();
+            document.getElementById('outputPreview').textContent = JSON.stringify(filteredData, null, 2);
         }
 
         function updateFormStatus(type, message) {
@@ -3118,7 +3285,8 @@
 
         function validateForm() {
             updateFormData();
-            
+
+            // First, validate individual field inputs
             const allInputs = document.querySelectorAll('#metadataTabContent input, #metadataTabContent select, #metadataTabContent textarea');
             allInputs.forEach(input => {
                 if (input.name) {
@@ -3130,10 +3298,13 @@
                     }
                 }
             });
-            
+
+            // Add complex dataset-level validations
+            validateDatasetRequirements();
+
             const totalFields = fieldValidationStatus.size;
             const validFields = Array.from(fieldValidationStatus.values()).filter(status => status.isValid).length;
-            
+
             if (validFields === totalFields && totalFields > 0) {
                 updateFormStatus('success', 'RDLS Compliant ✓');
                 alert('✅ All fields are valid! Your metadata is RDLS compliant.');
@@ -3144,6 +3315,277 @@
                 updateFormStatus('warning', `${validFields}/${totalFields} valid`);
                 alert(`⚠️ ${invalidFields.length} field(s) need attention:\n\n• ${invalidFields.join('\n• ')}`);
             }
+        }
+
+        function validateDatasetRequirements() {
+            // 1. Validate at least one risk_data_type
+            const riskDataTypes = currentFormData.risk_data_type || [];
+            const riskDataTypeValid = riskDataTypes.length > 0 && !riskDataTypes.every(type => !type || type.trim() === '');
+
+            if (!riskDataTypeValid) {
+                fieldValidationStatus.set('dataset_risk_data_type', {
+                    isValid: false,
+                    errorMessage: 'Dataset must have at least one risk data type'
+                });
+            } else {
+                fieldValidationStatus.set('dataset_risk_data_type', {
+                    isValid: true,
+                    errorMessage: ''
+                });
+            }
+
+
+            // 2. Validate at least one resource with required fields
+            const resources = currentFormData.resources || [];
+            let resourcesValid = true;
+            let resourceError = '';
+
+            if (!resources.length) {
+                resourcesValid = false;
+                resourceError = 'Dataset must have at least one resource';
+            } else {
+                // Check each resource for required fields
+                for (let i = 0; i < resources.length; i++) {
+                    const resource = resources[i];
+                    const resourceNum = i + 1;
+
+                    if (!resource.title || resource.title.trim() === '') {
+                        resourcesValid = false;
+                        resourceError = `Resource ${resourceNum} is missing required title`;
+                        break;
+                    }
+                    if (!resource.description || resource.description.trim() === '') {
+                        resourcesValid = false;
+                        resourceError = `Resource ${resourceNum} is missing required description`;
+                        break;
+                    }
+                    if ((!resource.download_url || resource.download_url.trim() === '') &&
+                        (!resource.access_url || resource.access_url.trim() === '')) {
+                        resourcesValid = false;
+                        resourceError = `Resource ${resourceNum} must have either download_url or access_url`;
+                        break;
+                    }
+                }
+            }
+
+            fieldValidationStatus.set('dataset_resources', {
+                isValid: resourcesValid,
+                errorMessage: resourceError
+            });
+
+
+            // 3. Validate attribution entities
+            const attributions = currentFormData.attributions || [];
+            let attributionsValid = true;
+            let attributionError = '';
+
+            for (let i = 0; i < attributions.length; i++) {
+                const attribution = attributions[i];
+                const attrNum = i + 1;
+
+                // Check if entity exists and has required fields
+                if (!attribution.entity) {
+                    attributionsValid = false;
+                    attributionError = `Attribution ${attrNum} is missing entity information`;
+                    break;
+                }
+                if (!attribution.entity.name || attribution.entity.name.trim() === '') {
+                    attributionsValid = false;
+                    attributionError = `Attribution ${attrNum} is missing required entity name`;
+                    break;
+                }
+                if (!attribution.entity.email || attribution.entity.email.trim() === '') {
+                    attributionsValid = false;
+                    attributionError = `Attribution ${attrNum} is missing required entity email`;
+                    break;
+                }
+            }
+
+            fieldValidationStatus.set('dataset_attributions', {
+                isValid: attributionsValid,
+                errorMessage: attributionError
+            });
+
+
+            // 4. Validate exposure data (if exposure is in risk_data_type AND exposure section is active)
+            const hasExposureType = riskDataTypes.some(type => type && type.toLowerCase().includes('exposure'));
+            const exposureSectionActive = activeSections.has('exposure');
+            let exposureValid = true;
+            let exposureError = '';
+
+            if (hasExposureType && exposureSectionActive) {
+                const exposures = currentFormData.exposure || [];
+
+                if (!exposures.length) {
+                    exposureValid = false;
+                    exposureError = 'Dataset with exposure risk_data_type must have at least one exposure item';
+                } else {
+                    // Check each exposure item
+                    for (let i = 0; i < exposures.length; i++) {
+                        const exposure = exposures[i];
+                        const expNum = i + 1;
+
+                        // Check for required category
+                        if (!exposure.category || exposure.category.trim() === '') {
+                            exposureValid = false;
+                            exposureError = `Exposure ${expNum} is missing required category`;
+                            break;
+                        }
+
+                        // Check for at least one metric
+                        const metrics = exposure.metrics || [];
+                        if (!metrics.length) {
+                            exposureValid = false;
+                            exposureError = `Exposure ${expNum} must have at least one metric`;
+                            break;
+                        }
+
+                        // Check each metric for required fields
+                        for (let j = 0; j < metrics.length; j++) {
+                            const metric = metrics[j];
+                            const metricNum = j + 1;
+
+                            if (!metric.dimension || metric.dimension.trim() === '') {
+                                exposureValid = false;
+                                exposureError = `Exposure ${expNum}, Metric ${metricNum} is missing required dimension`;
+                                break;
+                            }
+
+                            if (!metric.quantity_kind || metric.quantity_kind.trim() === '') {
+                                exposureValid = false;
+                                exposureError = `Exposure ${expNum}, Metric ${metricNum} is missing required quantity_kind`;
+                                break;
+                            }
+                        }
+
+                        if (!exposureValid) break;
+                    }
+                }
+            }
+
+            fieldValidationStatus.set('dataset_exposure', {
+                isValid: exposureValid,
+                errorMessage: exposureError
+            });
+
+
+            // 5. Validate loss data (if loss is in risk_data_type AND loss section is active)
+            const hasLossType = riskDataTypes.some(type => type && type.toLowerCase().includes('loss'));
+            const lossSectionActive = activeSections.has('loss');
+            let lossValid = true;
+            let lossError = '';
+
+            if (hasLossType && lossSectionActive) {
+                const losses = (currentFormData.loss && currentFormData.loss.losses) || [];
+
+
+                if (!losses.length) {
+                    lossValid = false;
+                    lossError = 'Dataset with loss risk_data_type must have at least one loss item';
+                } else {
+                    // Define required loss attributes with correct field paths
+                    const requiredLossAttributes = [
+                        { field: 'hazard_type', name: 'hazard type' },
+                        { field: 'asset_category', name: 'asset category' },
+                        { field: 'asset_dimension', name: 'asset dimension' },
+                        { field: 'impact_and_losses.impact_type', name: 'impact type' },
+                        { field: 'impact_and_losses.impact_modelling', name: 'impact modelling' },
+                        { field: 'impact_and_losses.impact_metric', name: 'impact metric' },
+                        { field: 'impact_and_losses.quantity_kind', name: 'quantity kind' },
+                        { field: 'impact_and_losses.loss_type', name: 'loss type' },
+                        { field: 'impact_and_losses.loss_approach', name: 'loss approach' },
+                        { field: 'impact_and_losses.loss_frequency_type', name: 'loss frequency type' }
+                    ];
+
+                    // Check each loss item
+                    for (let i = 0; i < losses.length; i++) {
+                        const loss = losses[i];
+                        const lossNum = i + 1;
+
+                        // Check each required attribute
+                        for (const attr of requiredLossAttributes) {
+                            // Handle nested field paths (e.g., 'impact_and_losses.impact_type')
+                            let fieldValue;
+                            if (attr.field.includes('.')) {
+                                const parts = attr.field.split('.');
+                                fieldValue = loss[parts[0]] && loss[parts[0]][parts[1]];
+                            } else {
+                                fieldValue = loss[attr.field];
+                            }
+
+                            if (!fieldValue || fieldValue.toString().trim() === '') {
+                                lossValid = false;
+                                lossError = `Loss ${lossNum} is missing required ${attr.name}`;
+                                break;
+                            }
+                        }
+
+                        if (!lossValid) break;
+                    }
+                }
+            }
+
+            fieldValidationStatus.set('dataset_loss', {
+                isValid: lossValid,
+                errorMessage: lossError
+            });
+
+            // 6. Validate vulnerability data (if vulnerability is in risk_data_type AND vulnerability section is active)
+            const hasVulnerabilityType = riskDataTypes.some(type => type && type.toLowerCase().includes('vulnerability'));
+            const vulnerabilitySectionActive = activeSections.has('vulnerability');
+            let vulnerabilityValid = true;
+            let vulnerabilityError = '';
+
+            if (hasVulnerabilityType && vulnerabilitySectionActive) {
+                const vulnerability = currentFormData.vulnerability;
+
+                if (!vulnerability) {
+                    vulnerabilityValid = false;
+                    vulnerabilityError = 'Dataset with vulnerability risk_data_type must have vulnerability metadata';
+                } else {
+                    // Define required vulnerability attributes
+                    const requiredVulnerabilityAttributes = [
+                        { field: 'hazard_primary', name: 'primary hazard type' },
+                        { field: 'hazard_analysis_type', name: 'hazard analysis type' },
+                        { field: 'intensity', name: 'hazard intensity measurement' },
+                        { field: 'category', name: 'exposure category' },
+                        { field: 'impact_type', name: 'impact type' },
+                        { field: 'impact_modelling', name: 'impact modelling' },
+                        { field: 'impact_metric', name: 'impact metric' },
+                        { field: 'quantity_kind', name: 'quantity kind' }
+                    ];
+
+                    // Check each required attribute
+                    for (const attr of requiredVulnerabilityAttributes) {
+                        if (!vulnerability[attr.field] || vulnerability[attr.field].toString().trim() === '') {
+                            vulnerabilityValid = false;
+                            vulnerabilityError = `Vulnerability is missing required ${attr.name}`;
+                            break;
+                        }
+                    }
+
+                    // Check that at least one vulnerability approach is present
+                    if (vulnerabilityValid) {
+                        const hasVulnerabilityApproach =
+                            (vulnerability.functions?.vulnerability) ||
+                            (vulnerability.functions?.fragility) ||
+                            (vulnerability.functions?.damage_to_loss) ||
+                            (vulnerability.functions?.engineering_demand) ||
+                            (vulnerability.se_category);
+
+                        if (!hasVulnerabilityApproach) {
+                            vulnerabilityValid = false;
+                            vulnerabilityError = 'Vulnerability must specify at least one approach: vulnerability function, fragility function, damage-to-loss function, engineering demand function, or socio-economic index category';
+                        }
+                    }
+                }
+            }
+
+            fieldValidationStatus.set('dataset_vulnerability', {
+                isValid: vulnerabilityValid,
+                errorMessage: vulnerabilityError
+            });
+
         }
 
         function getPropertyFromSchema(fieldName) {
@@ -3188,8 +3630,9 @@
                 alert('No data to export. Please fill out the form first.');
                 return;
             }
-            
-            const blob = new Blob([JSON.stringify(currentFormData, null, 2)], {type: 'application/json'});
+
+            const filteredData = getFilteredFormData();
+            const blob = new Blob([JSON.stringify(filteredData, null, 2)], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -3203,8 +3646,9 @@
                 alert('No data to export. Please fill out the form first.');
                 return;
             }
-            
-            const xml = jsonToXml(currentFormData, 'rdls_dataset');
+
+            const filteredData = getFilteredFormData();
+            const xml = jsonToXml(filteredData, 'rdls_dataset');
             const blob = new Blob([xml], {type: 'application/xml'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -3366,12 +3810,13 @@
 
                 // Step 3: Create/update file
                 showGithubStatus('info', '📄 Uploading dataset file...');
-                const content = btoa(JSON.stringify(currentFormData, null, 2));
+                const filteredData = getFilteredFormData();
+                const content = btoa(JSON.stringify(filteredData, null, 2));
                 const commitMessage = `Add RDLS dataset: ${datasetTitle}
 
 Dataset published via RDLS Metadata Editor
-- Title: ${currentFormData.title || 'Untitled'}
-- Description: ${currentFormData.description ? currentFormData.description.substring(0, 100) + '...' : 'No description'}
+- Title: ${filteredData.title || 'Untitled'}
+- Description: ${filteredData.description ? filteredData.description.substring(0, 100) + '...' : 'No description'}
 - Timestamp: ${new Date().toISOString()}`;
 
                 await githubRequest(token, `repos/${repo}/contents/_datasets/json/${filename}`, {
@@ -3393,10 +3838,10 @@ Dataset published via RDLS Metadata Editor
                         base: baseBranch,
                         body: `## New RDLS Dataset Submission
 
-**Dataset Title:** ${currentFormData.title || 'Untitled'}
+**Dataset Title:** ${filteredData.title || 'Untitled'}
 
 **Description:**
-${currentFormData.description || 'No description provided'}
+${filteredData.description || 'No description provided'}
 
 **File:** \`_datasets/json/${filename}\`
 
@@ -3643,6 +4088,7 @@ ${currentFormData.description || 'No description provided'}
                 // Reset GitHub publish button
                 document.getElementById('publishGitHub').disabled = true;
                 document.getElementById('publishGitHub').title = 'Run validation first to enable publishing';
+
                 
                 // Regenerate form
                 if (currentSchema) {
