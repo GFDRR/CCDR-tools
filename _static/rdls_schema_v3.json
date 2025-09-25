@@ -272,6 +272,7 @@
       "description": "Metadata that is specific to datasets that describe the physical fragility and vulnerability relationships in relation to specific hazards or combinations of individual hazards.",
       "required": [
         "hazard_primary",
+        "hazard_analysis_type",
         "intensity",
         "category",
         "impact_type",
@@ -776,6 +777,10 @@
         "description",
         "format"
       ],
+      "anyOf": [
+        { "required": ["download_url"] },
+        { "required": ["access_url"] }
+      ],
       "properties": {
         "id": {
           "title": "Resource identifier",
@@ -909,7 +914,8 @@
       "type": "object",
       "description": "A person, organization or group.",
       "required": [
-        "name"
+        "name",
+        "email"
       ],
       "properties": {
         "name": {
@@ -2337,7 +2343,8 @@
         "id",
         "hazard_type",
         "asset_category",
-        "asset_dimension"
+        "asset_dimension",
+        "impact_and_losses"
       ],
       "properties": {
         "id": {
@@ -2477,6 +2484,15 @@
               "openCodelist": false
             }
           },
+          "required": [
+            "impact_type",
+            "impact_modelling",
+            "impact_metric",
+            "quantity_kind",
+            "loss_type",
+            "loss_approach",
+            "loss_frequency_type"
+          ],
           "minProperties": 1
         },
         "lineage": {
