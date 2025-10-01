@@ -492,7 +492,271 @@
         };
 
         const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
-        
+
+        // Direct mapping from hazard types to IMT options (simplified from CSV data)
+        const HAZARD_IMT_MAPPING = {
+            'flood': [
+                {code: 'flow_depth_ground:m', title: 'Flow depth above ground in meters'},
+                {code: 'flow_depth_ground:cm', title: 'Flow depth above ground in centimeters'},
+                {code: 'flow_depth_ground:dm', title: 'Flow depth above ground in decimeters'},
+                {code: 'flow_depth_floor:m', title: 'Flow depth above floor level in meters'},
+                {code: 'flow_depth_floor:cm', title: 'Flow depth above floor level in centimeters'},
+                {code: 'flow_depth_floor:dm', title: 'Flow depth above floor level in decimeters'},
+                {code: 'fv:m/s', title: 'Flow velocity (m/s)'},
+                {code: 'fv:km/h', title: 'Flow velocity (km/h)'},
+                {code: 'slr:cm', title: 'Sea Level Rise'},
+                {code: 'pptn1:mm', title: '1-hour precipitation'},
+                {code: 'pptn24:mm', title: '24-hour precipitation'},
+                {code: 'pptn_tot:mm', title: 'Total event precipitation'}
+            ],
+            'tsunami': [
+                {code: 'flow_depth_ground:m', title: 'Flow depth above ground in meters'},
+                {code: 'flow_depth_ground:cm', title: 'Flow depth above ground in centimeters'},
+                {code: 'flow_depth_ground:dm', title: 'Flow depth above ground in decimeters'},
+                {code: 'flow_depth_floor:m', title: 'Flow depth above floor level in meters'},
+                {code: 'flow_depth_floor:cm', title: 'Flow depth above floor level in centimeters'},
+                {code: 'flow_depth_floor:dm', title: 'Flow depth above floor level in decimeters'},
+                {code: 'fv:m/s', title: 'Flow velocity (m/s)'},
+                {code: 'fv:km/h', title: 'Flow velocity (km/h)'},
+                {code: 'Rh_tsi:m', title: 'Tsunami wave runup height'},
+                {code: 'h_tsi:m', title: 'Tsunami inundation height'},
+                {code: 'F_drag:kN', title: 'Hydrodynamic drag force'},
+                {code: 'F_QS:kN', title: 'Quasi-static buoyant force'},
+                {code: 'MF:m3/s2', title: 'Momentum flux'},
+                {code: 'slr:cm', title: 'Sea Level Rise'}
+            ],
+            'coastal_flood': [
+                {code: 'flow_depth_ground:m', title: 'Flow depth above ground in meters'},
+                {code: 'flow_depth_ground:cm', title: 'Flow depth above ground in centimeters'},
+                {code: 'flow_depth_ground:dm', title: 'Flow depth above ground in decimeters'},
+                {code: 'flow_depth_floor:m', title: 'Flow depth above floor level in meters'},
+                {code: 'flow_depth_floor:cm', title: 'Flow depth above floor level in centimeters'},
+                {code: 'flow_depth_floor:dm', title: 'Flow depth above floor level in decimeters'},
+                {code: 'fv:m/s', title: 'Flow velocity (m/s)'},
+                {code: 'fv:km/h', title: 'Flow velocity (km/h)'},
+                {code: 'slr:cm', title: 'Sea Level Rise'}
+            ],
+            'earthquake': [
+                {code: 'PGA:g', title: 'Peak ground acceleration in g'},
+                {code: 'PGA:gal', title: 'Peak ground acceleration in gal'},
+                {code: 'PGA:m/s2', title: 'Peak ground acceleration in m/s^2'},
+                {code: 'PGV:m/s', title: 'Peak ground velocity in m/s'},
+                {code: 'PGV:cm/s', title: 'Peak ground velocity in cm/s'},
+                {code: 'AvgSa:m/s2', title: 'Average spectral acceleration in m/s^2'},
+                {code: 'Sa_1:m/s2', title: 'Spectral acceleration (period: 1 sec) in m/s^2'},
+                {code: 'Sd(T1):m', title: 'Spectral displacement'},
+                {code: 'Sv(T1):m/s', title: 'Spectral velocity'},
+                {code: 'PGDf:m', title: 'Permanent ground deformation'},
+                {code: 'D:s', title: 'Significant duration'},
+                {code: 'D_B:s', title: 'Bracketed duration'},
+                {code: 'IA:m/s', title: 'Arias intensity'},
+                {code: 'CAV:m/s', title: 'Cumulative absolute velocity'},
+                {code: 'MMI:-', title: 'Modified Mercalli Intensity'},
+                {code: 'EMS:-', title: 'European macroseismic scale'}
+            ],
+            'strong_wind': [
+                {code: 'sustained_wind_speed:m/s', title: 'Sustained wind speed in m/s'},
+                {code: 'sustained_wind_speed:km/h', title: 'Sustained wind speed in km/h'},
+                {code: 'sustained_wind_speed:mph', title: 'Sustained wind speed in mph'},
+                {code: 'peak_wind_gust:m/s', title: 'Peak wind gust in m/s'},
+                {code: 'peak_wind_gust:km/h', title: 'Peak wind gust in km/h'},
+                {code: 'peak_wind_gust:mph', title: 'Peak wind gust in mph'}
+            ],
+            'convective_storm': [
+                {code: 'sustained_wind_speed:m/s', title: 'Sustained wind speed in m/s'},
+                {code: 'sustained_wind_speed:km/h', title: 'Sustained wind speed in km/h'},
+                {code: 'sustained_wind_speed:mph', title: 'Sustained wind speed in mph'},
+                {code: 'peak_wind_gust:m/s', title: 'Peak wind gust in m/s'},
+                {code: 'peak_wind_gust:km/h', title: 'Peak wind gust in km/h'},
+                {code: 'peak_wind_gust:mph', title: 'Peak wind gust in mph'},
+                {code: 'ImpactE:J', title: 'Impact Energy (Joules)'},
+                {code: 'EF:-', title: 'Enhanced Fujita Scale'},
+                {code: 'TPL:m', title: 'Tornado Path Length'},
+                {code: 'TPW:m', title: 'Tornado Path Width'},
+                {code: 'HSI:-', title: 'Hail Size Index'},
+                {code: 'HlMaxSz:mm', title: 'Maximum hail size'},
+                {code: 'HlProb:%', title: 'Hail probability'},
+                {code: 'HlD:mm', title: 'Hail depth'}
+            ],
+            'drought': [
+                {code: 'SPI:-', title: 'Standard Precipitation Index'},
+                {code: 'SPEI:-', title: 'Standard Precipitation Evapotranspiration Index'},
+                {code: 'PDSI:-', title: 'Palmer Drought Severity Index'},
+                {code: 'CMI:-', title: 'Crop Moisture Index'},
+                {code: 'NDVI:-', title: 'Normalized Difference Vegetation Index'},
+                {code: 'VCI:-', title: 'Vegetation Condition Index'}
+            ],
+            'extreme_temperature': [
+                {code: 'AirTemp:C', title: 'Air Temperature (°C)'},
+                {code: 'AirTemp:F', title: 'Air Temperature (°F)'},
+                {code: 'WBGT:C', title: 'Wet Bulb Globe Temperature in Celsius'},
+                {code: 'HI:-', title: 'Heat Index'},
+                {code: 'EHF:-', title: 'Excess Heat Factor'},
+                {code: 'CDD:-', title: 'Cooling Degree Days'}
+            ],
+            'landslide': [
+                {code: 'flow_depth_ground:m', title: 'Flow depth above ground in meters'},
+                {code: 'flow_depth_ground:cm', title: 'Flow depth above ground in centimeters'},
+                {code: 'flow_depth_ground:dm', title: 'Flow depth above ground in decimeters'},
+                {code: 'fv:m/s', title: 'Flow velocity (m/s)'},
+                {code: 'fv:km/h', title: 'Flow velocity (km/h)'},
+                {code: 'ls_mfd:m', title: 'Maximum foundation displacement'},
+                {code: 'SD_lsl:m', title: 'Surface displacement from landslide'},
+                {code: 'I_DF:m3/s2', title: 'Debris flow intensity'},
+                {code: 'rf_KE:kJ', title: 'Rockfall kinetic energy'},
+                {code: 'LSI:-', title: 'Landslide Susceptibility Index'},
+                {code: 'DP:-', title: 'Destructive Potential'},
+                {code: 'AvSize:-', title: 'Avalanche Size'},
+                {code: 'Rdist:m', title: 'Runout Distance'},
+                {code: 'Vol:m3', title: 'Volume'}
+            ],
+            'volcanic': [
+                {code: 'flow_depth_ground:m', title: 'Flow depth above ground in meters'},
+                {code: 'flow_depth_ground:cm', title: 'Flow depth above ground in centimeters'},
+                {code: 'flow_depth_ground:dm', title: 'Flow depth above ground in decimeters'},
+                {code: 'fv:m/s', title: 'Flow velocity (m/s)'},
+                {code: 'fv:km/h', title: 'Flow velocity (km/h)'},
+                {code: 'Rdist:m', title: 'Runout Distance'},
+                {code: 'h_vaf:mm', title: 'Volcanic ash fall thickness'},
+                {code: 'vei:-', title: 'Volcanic Explosivity Index'},
+                {code: 'ImpactE:kJ', title: 'Impact Energy'},
+                {code: 'Vbal_size:m', title: 'Volcanic ballistic size'},
+                {code: 'Vbal_Lprob:%', title: 'Volcanic ballistic landing probability'},
+                {code: 'ImpactE:J', title: 'Impact Energy (Joules)'}
+            ],
+            'wildfire': [
+                {code: 'burned_area:ha', title: 'Burned area in hectares'},
+                {code: 'burned_area:km2', title: 'Burned area in square kilometers'},
+                {code: 'FWI:-', title: 'Fire Weather Index'}
+            ]
+        };
+
+        // Universal IMT options that apply to multiple hazards
+        const UNIVERSAL_IMTS = [
+            {code: 'affected_area:m2', title: 'Affected area in square meters'},
+            {code: 'affected_area:km2', title: 'Affected area in square kilometers'},
+            {code: 'affected_area:ha', title: 'Affected area in hectares'},
+            {code: 'riskidx:-', title: 'Risk Index'},
+            {code: 'MHI:-', title: 'Multi-hazard Index'}
+        ];
+
+        // Function to get filtered IMT options based on hazard type
+        function getFilteredIMTOptions(selectedHazardType) {
+            if (!selectedHazardType || !HAZARD_IMT_MAPPING[selectedHazardType]) {
+                // Return all IMT options if no hazard selected or unknown hazard
+                const allIMTs = [];
+                Object.values(HAZARD_IMT_MAPPING).forEach(imts => allIMTs.push(...imts));
+                allIMTs.push(...UNIVERSAL_IMTS);
+
+                // Remove duplicates
+                const uniqueIMTs = allIMTs.filter((imt, index, self) =>
+                    index === self.findIndex(i => i.code === imt.code)
+                );
+                return uniqueIMTs;
+            }
+
+            // Return hazard-specific IMTs plus universal ones
+            const hazardIMTs = [...HAZARD_IMT_MAPPING[selectedHazardType]];
+            hazardIMTs.push(...UNIVERSAL_IMTS);
+            return hazardIMTs;
+        }
+
+        // Function to update IMT dropdowns when hazard changes
+        function updateIMTOptionsForHazard(hazardType) {
+            const filteredOptions = getFilteredIMTOptions(hazardType);
+
+            // Find all intensity_measure fields and update them
+            // This includes both select elements and combobox inputs
+            document.querySelectorAll('select[id*="intensity_measure"], input[id*="intensity_measure"]').forEach(element => {
+                if (element.tagName === 'SELECT') {
+                    // Handle select dropdowns
+                    const currentValue = element.value;
+
+                    // Clear existing options except the first empty option
+                    const firstOption = element.firstElementChild;
+                    element.innerHTML = '';
+                    if (firstOption && firstOption.value === '') {
+                        element.appendChild(firstOption);
+                    } else {
+                        const emptyOption = document.createElement('option');
+                        emptyOption.value = '';
+                        emptyOption.textContent = 'Select intensity measure...';
+                        element.appendChild(emptyOption);
+                    }
+
+                    // Add filtered options
+                    filteredOptions.forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option.code;
+                        optionElement.textContent = option.title;
+                        element.appendChild(optionElement);
+                    });
+
+                    // Restore previous value if still valid
+                    if (filteredOptions.some(opt => opt.code === currentValue)) {
+                        element.value = currentValue;
+                    } else {
+                        element.value = '';
+                        // Update form data to reflect cleared value
+                        const fieldPath = element.getAttribute('data-field');
+                        if (fieldPath) {
+                            setNestedValue(currentFormData, fieldPath, '');
+                            autoSave();
+                        }
+                    }
+                } else if (element.tagName === 'INPUT') {
+                    // Handle combobox inputs - update their dropdown menu
+                    const wrapper = element.closest('.combobox-wrapper');
+                    if (wrapper) {
+                        const dropdownMenu = wrapper.querySelector('.dropdown-menu');
+                        if (dropdownMenu) {
+                            // Clear existing options
+                            dropdownMenu.innerHTML = '';
+
+                            // Add filtered options
+                            filteredOptions.forEach(option => {
+                                const item = document.createElement('li');
+                                const link = document.createElement('a');
+                                link.className = 'dropdown-item';
+                                link.href = '#';
+                                link.textContent = option.title;
+                                link.addEventListener('click', (e) => {
+                                    e.preventDefault();
+                                    element.value = option.code;
+                                    updateFormData();
+                                    // Validate the field
+                                    const fieldName = element.id.replace(/^modal_/, '');
+                                    const property = {}; // We'd need to get this from schema, but basic validation should work
+                                    // TODO: Add validation here if needed
+                                });
+                                item.appendChild(link);
+                                dropdownMenu.appendChild(item);
+                            });
+
+                            // Add separator and custom value option
+                            if (filteredOptions.length > 0) {
+                                const separator = document.createElement('li');
+                                separator.innerHTML = '<hr class="dropdown-divider">';
+                                dropdownMenu.appendChild(separator);
+
+                                const customItem = document.createElement('li');
+                                customItem.innerHTML = '<span class="dropdown-item-text text-muted"><em>💡 You can also type a custom value</em></span>';
+                                dropdownMenu.appendChild(customItem);
+                            }
+                        }
+                    }
+
+                    // Check if current value is still valid
+                    const currentValue = element.value;
+                    if (currentValue && !filteredOptions.some(opt => opt.code === currentValue)) {
+                        // Current value is no longer valid for this hazard type
+                        element.value = '';
+                        updateFormData();
+                    }
+                }
+            });
+        }
+
         let currentSchema = null;
         let currentFormData = {};
         let activeSections = new Set(['general']);
@@ -519,9 +783,11 @@
             'loss.losses.impact_and_losses.currency': 'loss.losses.impact_and_losses.impact_unit',
             'hazards.processes': 'hazards.type',
             'hazards.intensity_measure': 'hazards.type',
+            'vulnerability.intensity_measure': 'vulnerability.hazard_primary',
             // Modal context dependencies
             'processes': 'type',
             'hazard_process': 'hazard_type',
+            'intensity_measure': 'type', // For hazard context, could also be 'hazard_primary' for vulnerability context
             'currency': 'quantity_kind',
             // Section-specific currency dependencies
             'exposure.currency': 'exposure.quantity_kind',
@@ -980,8 +1246,41 @@
                 dropdownMenu.style.maxHeight = '200px';
                 dropdownMenu.style.overflowY = 'auto';
                 
-                if (property.suggestions && property.suggestions.length > 0) {
-                    property.suggestions.forEach(suggestion => {
+                // Get suggestions - use filtered IMT options for intensity_measure fields
+                let suggestions = property.suggestions || [];
+                if (name.includes('intensity_measure')) {
+                    // Get current hazard type to filter IMT options
+                    let hazardType = null;
+
+                    if (this.context.type === 'normal') {
+                        // Check different contexts for hazard type
+                        hazardType = getNestedValue(currentFormData, 'hazards.type') ||
+                                   getNestedValue(currentFormData, 'vulnerability.hazard_primary');
+                    } else if (this.context.type === 'modal') {
+                        // For modal context, try to find the hazard type field in the modal
+                        let modalTypeField = document.getElementById('modal_type') ||
+                                           document.getElementById('modal_hazard_primary');
+                        if (modalTypeField) {
+                            hazardType = modalTypeField.value;
+                        }
+                        if (!hazardType) {
+                            hazardType = getNestedValue(currentFormData, 'type') ||
+                                       getNestedValue(currentFormData, 'hazard_primary') ||
+                                       getNestedValue(currentFormData, 'vulnerability.hazard_primary');
+                        }
+                    }
+
+                    if (hazardType) {
+                        const filteredIMTs = getFilteredIMTOptions(hazardType);
+                        suggestions = filteredIMTs.map(item => item.code);
+                        console.log(`Creating ${name} combobox with ${suggestions.length} filtered options for hazard type: ${hazardType}`);
+                    } else {
+                        console.log(`No hazard type found for ${name} field, showing all IMT options`);
+                    }
+                }
+
+                if (suggestions && suggestions.length > 0) {
+                    suggestions.forEach(suggestion => {
                         const item = document.createElement('li');
                         const link = document.createElement('a');
                         link.className = 'dropdown-item';
@@ -1850,6 +2149,28 @@
                         }
                     }
                 });
+
+                // Special handling for hazard type changes to filter IMT options
+                const isHazardTypeField = (changedFieldName.includes('type') && !changedFieldName.includes('impact_unit') && !changedFieldName.includes('risk_data_type')) ||
+                                        changedFieldName.includes('hazard_primary') ||
+                                        changedFieldName.includes('hazard_secondary') ||
+                                        changedFieldName.includes('hazard_type');
+
+                if (isHazardTypeField) {
+                    // This is a hazard type field change that should trigger IMT filtering
+                    const isRelevantHazardField = changedFieldName === 'hazards.type' ||
+                                                changedFieldName === 'type' ||
+                                                changedFieldName === 'vulnerability.hazard_primary' ||
+                                                changedFieldName === 'vulnerability.hazard_secondary' ||
+                                                changedFieldName === 'hazard_primary' ||
+                                                changedFieldName === 'hazard_secondary' ||
+                                                changedFieldName.includes('hazard_type');
+
+                    if (isRelevantHazardField) {
+                        console.log(`Hazard type changed: ${changedFieldName} = ${newValue}`);
+                        updateIMTOptionsForHazard(newValue);
+                    }
+                }
 
                 // Special handling for impact_unit field to show/hide currency
                 if (changedFieldName.includes('impact_unit') || (this.context.type === 'modal' && changedFieldName === 'impact_unit')) {
@@ -3241,7 +3562,9 @@
 
         function getFilteredFormData() {
             // Create filtered data showing only active sections
-            const filteredData = {};
+            const filteredData = {
+                schema: "https://docs.riskdatalibrary.org/en/0__3__0/rdls_schema.json"
+            };
 
             // Always include non-section fields (general metadata)
             Object.entries(currentFormData).forEach(([key, value]) => {

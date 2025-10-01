@@ -273,7 +273,7 @@
       "required": [
         "hazard_primary",
         "hazard_analysis_type",
-        "intensity",
+        "intensity_measure",
         "category",
         "impact_type",
         "impact_modelling",
@@ -318,7 +318,7 @@
           "openCodelist": false,
           "$ref": "#/$defs/analysis_type"
         },
-        "intensity": {
+        "intensity_measure": {
           "title": "Hazard intensity measurement",
           "description": "The metric and units the hazard intensity measurement is given in, from the open [intensity measure codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists#IMT).",
           "type": "string",
