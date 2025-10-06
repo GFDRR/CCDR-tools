@@ -229,6 +229,55 @@ def run_analysis(
         if not (code_field and name_field):
             raise ValueError(f"Field names for ADM level {adm_level} not found")
 
+        # Fix problematic multipart geometries for rasterstats compatibility
+        # Only explode when multiparts have nested/overlapping parts within other units
+        from shapely.geometry import MultiPolygon
+
+        def has_nested_multiparts(gdf):
+            """
+            Check if any multipart geometry has parts that are spatially separated
+            in a way that might overlap with other administrative units.
+            This detects problematic cases like parts of one unit nested within another.
+            """
+            multipart_indices = gdf.geometry.apply(lambda geom: isinstance(geom, MultiPolygon))
+
+            if not multipart_indices.any():
+                return False
+
+            # For each multipart geometry, check if its parts are far apart
+            # (suggesting they might overlap with other units rather than just being islands)
+            for idx in gdf[multipart_indices].index:
+                geom = gdf.loc[idx, 'geometry']
+                if isinstance(geom, MultiPolygon) and len(geom.geoms) > 1:
+                    # Get bounding boxes of all parts
+                    parts_bounds = [part.bounds for part in geom.geoms]
+
+                    # Check if any parts are contained within bounding boxes of other units
+                    other_units = gdf[gdf.index != idx]
+                    for part in geom.geoms:
+                        part_centroid = part.centroid
+                        # Check if this part's centroid falls within another unit
+                        for other_idx, other_geom in other_units.geometry.items():
+                            if other_geom.contains(part_centroid):
+                                # Found a problematic case: part of one unit inside another
+                                return True
+
+            return False
+
+        has_multipart = has_nested_multiparts(adm_data)
+
+        if has_multipart:
+            print(f"Warning: Found problematic nested multipart geometries in ADM{adm_level} boundaries.")
+            print(f"Converting multipart geometries to single parts for rasterstats compatibility...")
+            n_original = len(adm_data)
+            adm_data = adm_data.explode(index_parts=False).reset_index(drop=True)
+            n_exploded = len(adm_data)
+            print(f"Converted {n_original} features to {n_exploded} single-part features")
+        else:
+            multipart_count = adm_data.geometry.apply(lambda geom: isinstance(geom, MultiPolygon)).sum()
+            if multipart_count > 0:
+                print(f"Note: Found {multipart_count} simple multipart geometries (e.g., islands) - no explosion needed.")
+
         # Handle exposure data
         print(f"Processing exposure data for {exp_cat}")
         exp_ras, damage_factor = process_exposure_data(country, haz_type, exp_cat, exp_nam, exp_year, exp_folder)
@@ -327,10 +376,26 @@ def run_analysis(
         replace_string = '_Mean' if n_valid_RPs_gt_1 else 'RP1'
         result_df_colnames = [s.replace(replace_string, '') for s in result_df.columns]
         result_df.columns = result_df_colnames
-        
+
+        # Aggregate results if multipart geometries were exploded
+        if has_multipart:
+            print(f"Aggregating results from exploded geometries back to original administrative units...")
+            # Group by the code field and aggregate
+            numeric_cols = result_df.select_dtypes(include=[np.number]).columns.tolist()
+
+            # Aggregate numeric columns by sum, keep first value for name fields
+            agg_dict = {col: 'sum' for col in numeric_cols}
+            for name_col in all_adm_names:
+                if name_col in result_df.columns:
+                    agg_dict[name_col] = 'first'
+
+            # Use dissolve to merge geometries back to multipart
+            result_df = result_df.dissolve(by=code_field, aggfunc=agg_dict).reset_index()
+            print(f"Aggregated to {len(result_df)} administrative units")
+
         # Write output csv table and geopackages
         save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, scenario, analysis_type, valid_RPs)
-        
+
         # Trying to fix output not being passed to plot_results
         return result_df
 
