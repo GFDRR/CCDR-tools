@@ -3948,6 +3948,28 @@
             return current;
         }
 
+        function packageDataset(datasetMetadata) {
+            // Get the current schema version
+            const version = document.getElementById('schemaVersionSelect').value;
+
+            // Map version to schema URL format (used in package schema reference)
+            const versionMap = {
+                '0.2': '0__2__0',
+                '0.3': '0__3__0',
+                '0.3.0': '0__3__0'
+            };
+
+            const schemaVersion = versionMap[version] || '0__3__0';
+            const schemaUrl = `https://docs.riskdatalibrary.org/en/${schemaVersion}/rdls_schema.json`;
+
+            // Create the package structure
+            const packagedData = {
+                datasets: [datasetMetadata]
+            };
+
+            return packagedData;
+        }
+
         function exportJson() {
             if (Object.keys(currentFormData).length === 0) {
                 alert('No data to export. Please fill out the form first.');
@@ -3955,7 +3977,8 @@
             }
 
             const filteredData = getFilteredFormData();
-            const blob = new Blob([JSON.stringify(filteredData, null, 2)], {type: 'application/json'});
+            const packagedData = packageDataset(filteredData);
+            const blob = new Blob([JSON.stringify(packagedData, null, 2)], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -4134,7 +4157,8 @@
                 // Step 3: Create/update file
                 showGithubStatus('info', '📄 Uploading dataset file...');
                 const filteredData = getFilteredFormData();
-                const content = btoa(JSON.stringify(filteredData, null, 2));
+                const packagedData = packageDataset(filteredData);
+                const content = btoa(JSON.stringify(packagedData, null, 2));
                 const commitMessage = `Add RDLS dataset: ${datasetTitle}
 
 Dataset published via RDLS Metadata Editor
