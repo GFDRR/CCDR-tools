@@ -1958,7 +1958,19 @@
                     if (currentSchema.properties && currentSchema.properties[sectionName]) {
                         const sectionSchema = currentSchema.properties[sectionName];
 
-                        // Direct section required fields
+                        // For nested object fields (e.g., project.name), only mark as required
+                        // if the parent object itself is required at the dataset level
+                        if (sectionSchema.type === 'object' && sectionSchema.required && sectionSchema.required.includes(fieldName)) {
+                            // Check if parent object is required at dataset level
+                            const isParentRequired = currentSchema.required && currentSchema.required.includes(sectionName);
+                            if (isParentRequired) {
+                                return true;
+                            }
+                            // If parent is not required at dataset level, nested field is also not required
+                            return false;
+                        }
+
+                        // Direct section required fields (for non-object types)
                         if (sectionSchema.required && sectionSchema.required.includes(fieldName)) {
                             return true;
                         }
@@ -2505,7 +2517,7 @@
                 const option = document.createElement('option');
                 option.value = version;
                 const isLatest = version === '0.3';
-                option.textContent = `RDLS ${version}${isLatest ? ' (latest - enhanced with combobox)' : ''}`;
+                option.textContent = `RDLS ${version}${isLatest ? ' (dev)' : ''}`;
                 select.appendChild(option);
             });
             
@@ -3561,6 +3573,18 @@
         }
 
         function getFilteredFormData() {
+            // Get the current schema version
+            const version = document.getElementById('schemaVersionSelect').value;
+
+            // Map version to schema URL format
+            const versionMap = {
+                '0.2': '0__2__0',
+                '0.3': '0__3__0'
+            };
+
+            const schemaVersion = versionMap[version] || '0__3__0';
+            const schemaUrl = `https://docs.riskdatalibrary.org/en/${schemaVersion}/rdls_schema.json`;
+
             // Define the correct order based on RDLS schema
             const schemaFieldOrder = [
                 'id', 'title', 'description', 'risk_data_type', 'version', 'purpose',
@@ -3599,7 +3623,23 @@
 
         function updatePreview() {
             const filteredData = getFilteredFormData();
-            document.getElementById('outputPreview').textContent = JSON.stringify(filteredData, null, 2);
+
+            // Get the current schema version for the package
+            const version = document.getElementById('schemaVersionSelect').value;
+            const versionMap = {
+                '0.2': '0__2__0',
+                '0.3': '0__3__0'
+            };
+            const schemaVersion = versionMap[version] || '0__3__0';
+            const schemaUrl = `https://docs.riskdatalibrary.org/en/${schemaVersion}/rdls_schema.json`;
+
+            // Show preview as a complete package (matching export format)
+            const previewData = {
+                schema: schemaUrl,
+                datasets: [filteredData]
+            };
+
+            document.getElementById('outputPreview').textContent = JSON.stringify(previewData, null, 2);
         }
 
         function updateFormStatus(type, message) {
