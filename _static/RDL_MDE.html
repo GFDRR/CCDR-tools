@@ -2504,13 +2504,13 @@
             Object.keys(RDLS_VERSIONS).forEach(version => {
                 const option = document.createElement('option');
                 option.value = version;
-                const isLatest = version === '0.3.0';
+                const isLatest = version === '0.3';
                 option.textContent = `RDLS ${version}${isLatest ? ' (latest - enhanced with combobox)' : ''}`;
                 select.appendChild(option);
             });
             
             // Auto-select the latest version
-            select.value = '0.3.0';
+            select.value = '0.3';
             loadSelectedSchema();
         }
 
@@ -3561,18 +3561,35 @@
         }
 
         function getFilteredFormData() {
-            // Create filtered data showing only active sections
-            const filteredData = {
-                schema: "https://docs.riskdatalibrary.org/en/0__3__0/rdls_schema.json"
-            };
+            // Define the correct order based on RDLS schema
+            const schemaFieldOrder = [
+                'id', 'title', 'description', 'risk_data_type', 'version', 'purpose',
+                'project', 'details', 'spatial', 'temporal_resolution', 'license',
+                'attributions', 'sources', 'referenced_by', 'resources',
+                'hazard', 'exposure', 'vulnerability', 'loss', 'links'
+            ];
 
-            // Always include non-section fields (general metadata)
+            // Create filtered data with ordered fields
+            const filteredData = {};
+
+            // Add fields in schema order
+            schemaFieldOrder.forEach(key => {
+                if (currentFormData[key] !== undefined) {
+                    // For section fields, only include if active
+                    if (SECTIONS.includes(key)) {
+                        if (activeSections.has(key)) {
+                            filteredData[key] = currentFormData[key];
+                        }
+                    } else {
+                        // Always include non-section fields
+                        filteredData[key] = currentFormData[key];
+                    }
+                }
+            });
+
+            // Add any remaining fields not in the schema order (for extensibility)
             Object.entries(currentFormData).forEach(([key, value]) => {
-                if (!SECTIONS.includes(key)) {
-                    // Include general fields like title, description, resources, etc.
-                    filteredData[key] = value;
-                } else if (activeSections.has(key)) {
-                    // Only include section fields that are currently active
+                if (!schemaFieldOrder.includes(key) && !SECTIONS.includes(key)) {
                     filteredData[key] = value;
                 }
             });
@@ -3948,6 +3965,25 @@
             return current;
         }
 
+        function generateDatasetId(title) {
+            // Generate ID from title (remove special chars, convert to uppercase, replace spaces with underscores)
+            const baseId = title
+                .toUpperCase()
+                .replace(/[^A-Z0-9\s-]/g, '') // Remove special chars except spaces and hyphens
+                .replace(/[\s-]+/g, '_')       // Replace spaces and hyphens with underscores
+                .replace(/^_+|_+$/g, '')       // Trim leading/trailing underscores
+                .substring(0, 20);             // Limit base length
+
+            // Generate random alphanumeric suffix (4 characters)
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let randomSuffix = '';
+            for (let i = 0; i < 4; i++) {
+                randomSuffix += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+
+            return `${baseId}_${randomSuffix}`;
+        }
+
         function packageDataset(datasetMetadata) {
             // Get the current schema version
             const version = document.getElementById('schemaVersionSelect').value;
@@ -3955,16 +3991,45 @@
             // Map version to schema URL format (used in package schema reference)
             const versionMap = {
                 '0.2': '0__2__0',
-                '0.3': '0__3__0',
-                '0.3.0': '0__3__0'
+                '0.3': '0__3__0'
             };
 
             const schemaVersion = versionMap[version] || '0__3__0';
             const schemaUrl = `https://docs.riskdatalibrary.org/en/${schemaVersion}/rdls_schema.json`;
 
-            // Create the package structure
+            // Generate unique dataset ID if not present
+            if (!datasetMetadata.id && datasetMetadata.title) {
+                datasetMetadata.id = generateDatasetId(datasetMetadata.title);
+            }
+
+            // Reorder fields according to schema
+            const schemaFieldOrder = [
+                'id', 'title', 'description', 'risk_data_type', 'version', 'purpose',
+                'project', 'details', 'spatial', 'temporal_resolution', 'license',
+                'attributions', 'sources', 'referenced_by', 'resources',
+                'hazard', 'exposure', 'vulnerability', 'loss', 'links'
+            ];
+
+            const orderedMetadata = {};
+
+            // Add fields in schema order
+            schemaFieldOrder.forEach(key => {
+                if (datasetMetadata[key] !== undefined) {
+                    orderedMetadata[key] = datasetMetadata[key];
+                }
+            });
+
+            // Add any remaining fields not in schema order
+            Object.keys(datasetMetadata).forEach(key => {
+                if (!schemaFieldOrder.includes(key)) {
+                    orderedMetadata[key] = datasetMetadata[key];
+                }
+            });
+
+            // Create the package structure with schema reference
             const packagedData = {
-                datasets: [datasetMetadata]
+                schema: schemaUrl,
+                datasets: [orderedMetadata]
             };
 
             return packagedData;
