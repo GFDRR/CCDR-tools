@@ -270,6 +270,8 @@ def run_analysis(
             print(f"Warning: Found problematic nested multipart geometries in ADM{adm_level} boundaries.")
             print(f"Converting multipart geometries to single parts for rasterstats compatibility...")
             n_original = len(adm_data)
+            # Store original index to preserve grouping information
+            adm_data['_original_idx'] = adm_data.index
             adm_data = adm_data.explode(index_parts=False).reset_index(drop=True)
             n_exploded = len(adm_data)
             print(f"Converted {n_original} features to {n_exploded} single-part features")
@@ -313,7 +315,11 @@ def run_analysis(
         exp_per_ADM = list(it.chain(*stats_parallel))
 
         # Creating the results pandas dataframe
-        result_df = adm_data.loc[:, all_adm_codes + all_adm_names + ["geometry"]]
+        columns_to_include = all_adm_codes + all_adm_names + ["geometry"]
+        # Include _original_idx if it exists (from exploded geometries)
+        if '_original_idx' in adm_data.columns:
+            columns_to_include.append('_original_idx')
+        result_df = adm_data.loc[:, columns_to_include]
         result_df[f"ADM{adm_level}_{exp_cat}"] = [x['sum'] for x in exp_per_ADM]
 
         # Cleaning-up memory
@@ -380,17 +386,35 @@ def run_analysis(
         # Aggregate results if multipart geometries were exploded
         if has_multipart:
             print(f"Aggregating results from exploded geometries back to original administrative units...")
-            # Group by the code field and aggregate
-            numeric_cols = result_df.select_dtypes(include=[np.number]).columns.tolist()
 
-            # Aggregate numeric columns by sum, keep first value for name fields
+            # Verify grouping column exists and has valid values
+            if '_original_idx' not in result_df.columns:
+                raise ValueError("Original index not found in result_df. Cannot aggregate exploded geometries.")
+
+            # Check for NaN values in grouping columns
+            grouping_col = '_original_idx'
+            if result_df[grouping_col].isna().any():
+                print(f"Warning: Found {result_df[grouping_col].isna().sum()} NaN values in grouping column")
+                result_df = result_df.dropna(subset=[grouping_col])
+
+            # Get numeric columns for aggregation
+            numeric_cols = result_df.select_dtypes(include=[np.number]).columns.tolist()
+            # Remove the grouping index from numeric columns if present
+            numeric_cols = [col for col in numeric_cols if col != '_original_idx']
+
+            # Aggregate numeric columns by sum, keep first value for name and code fields
             agg_dict = {col: 'sum' for col in numeric_cols}
-            for name_col in all_adm_names:
-                if name_col in result_df.columns:
+            for name_col in all_adm_names + all_adm_codes:
+                if name_col in result_df.columns and name_col not in numeric_cols:
                     agg_dict[name_col] = 'first'
 
-            # Use dissolve to merge geometries back to multipart
-            result_df = result_df.dissolve(by=code_field, aggfunc=agg_dict).reset_index()
+            # Use dissolve to merge geometries back to multipart based on original index
+            result_df = result_df.dissolve(by=grouping_col, aggfunc=agg_dict).reset_index(drop=True)
+
+            # Remove the temporary grouping column
+            if '_original_idx' in result_df.columns:
+                result_df = result_df.drop('_original_idx', axis=1)
+
             print(f"Aggregated to {len(result_df)} administrative units")
 
         # Write output csv table and geopackages
@@ -499,16 +523,21 @@ def result_df_reorder_columns(result_df, RPs, analysis_type, exp_cat, adm_level,
     Reorders the columns of result_df.
     """
     # Re-ordering and dropping selected columns for better presentation of the results
-    
+
     if analysis_type != "Function":
         return result_df
-    
+
     adm_column = f"ADM{adm_level}_{exp_cat}"
-    
+
     all_RPs = ["RP" + str(rp) for rp in RPs]
     all_exp = [x + f"_{exp_cat}_exp" for x in all_RPs]
     all_imp = [x + f"_{exp_cat}_imp" for x in all_RPs]
     col_order = all_adm_codes + all_adm_names + [adm_column] + all_exp + all_imp + ["geometry"]
+
+    # Preserve _original_idx if it exists (from exploded geometries)
+    if '_original_idx' in result_df.columns:
+        col_order.append('_original_idx')
+
     result_df = result_df.loc[:, col_order]
 
     return result_df
