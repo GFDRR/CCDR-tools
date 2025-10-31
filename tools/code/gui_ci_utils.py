@@ -188,6 +188,13 @@ export_boundaries_chk = widgets.Checkbox(
     indent=False
 )
 
+export_excel_chk = widgets.Checkbox(
+    value=False,
+    description='Export to Excel',
+    disabled=False,
+    indent=False
+)
+
 # Custom ADM Functions
 def select_file(b):
     root = tk.Tk()
@@ -1139,18 +1146,18 @@ def export_boundaries_to_gpkg(gdf, country, index, projection, time_period, outp
     if gdf is None:
         print("No boundary data to export")
         return None
-        
+
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    
+
     # Create filename
     output_path = os.path.join(output_dir, f"{country.lower()}_{index}_{projection}_{time_period}_boundaries.gpkg")
-    
+
     try:
         # Ensure the GeoDataFrame has a proper CRS
         if gdf.crs is None:
             gdf = gdf.set_crs("EPSG:4326")
-            
+
         # Export to GeoPackage
         layer_name = f"{index}_{projection}_{time_period}"
         gdf.to_file(output_path, layer=layer_name, driver="GPKG")
@@ -1158,6 +1165,40 @@ def export_boundaries_to_gpkg(gdf, country, index, projection, time_period, outp
         return output_path
     except Exception as e:
         print(f"Error exporting boundaries to GeoPackage: {e}")
+        return None
+
+# Add a function to export statistics to Excel
+def export_to_excel(gdf, country, index, projection, time_period, output_dir):
+    """Export zonal statistics to an Excel file."""
+    if gdf is None:
+        print("No data to export")
+        return None
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Create filename
+    output_path = os.path.join(output_dir, f"{country.lower()}_{index}_{projection}_{time_period}_statistics.xlsx")
+
+    try:
+        # Create a copy without geometry for Excel export
+        df_export = gdf.drop(columns=['geometry'], errors='ignore')
+
+        # Export to Excel
+        with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
+            df_export.to_excel(writer, sheet_name='Zonal Statistics', index=False)
+
+            # Create a summary sheet with metadata
+            metadata = pd.DataFrame({
+                'Parameter': ['Country', 'Climate Index', 'Projection', 'Time Period', 'Export Date'],
+                'Value': [country, index, projection, time_period, pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')]
+            })
+            metadata.to_excel(writer, sheet_name='Metadata', index=False)
+
+        print(f"Saved statistics to {output_path}")
+        return output_path
+    except Exception as e:
+        print(f"Error exporting to Excel: {e}")
         return None
     
 # Define a function to handle changes in the ADM level dropdown
@@ -1375,17 +1416,33 @@ def run_analysis(b):
             if export_boundaries_chk.value and gdf_change is not None:
                 print("Exporting boundary data to GeoPackage...")
                 export_path = export_boundaries_to_gpkg(
-                    gdf_change, 
-                    iso_a3, 
-                    selected_index, 
+                    gdf_change,
+                    iso_a3,
+                    selected_index,
                     selected_projection,
-                    selected_time_period, 
+                    selected_time_period,
                     output_dir
                 )
                 if export_path:
                     print(f"Boundary values exported to: {export_path}")
                 else:
                     print("Failed to export boundary values")
+
+            # Export to Excel if the checkbox is checked
+            if export_excel_chk.value and gdf_change is not None:
+                print("Exporting statistics to Excel...")
+                excel_path = export_to_excel(
+                    gdf_change,
+                    iso_a3,
+                    selected_index,
+                    selected_projection,
+                    selected_time_period,
+                    output_dir
+                )
+                if excel_path:
+                    print(f"Statistics exported to: {excel_path}")
+                else:
+                    print("Failed to export to Excel")
             
             # Display figures
             with chart_output:
@@ -1453,7 +1510,8 @@ def create_layout():
     preview_container = widgets.VBox([
         preview_chk,
         export_charts_chk,
-        export_boundaries_chk
+        export_boundaries_chk,
+        export_excel_chk
     ], layout=widgets.Layout(width='100%', margin='10px 0'))
     
     footer = widgets.VBox([

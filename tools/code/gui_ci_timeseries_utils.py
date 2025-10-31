@@ -204,6 +204,13 @@ export_boundaries_chk = widgets.Checkbox(
     indent=False
 )
 
+export_excel_chk = widgets.Checkbox(
+    value=False,
+    description='Export to Excel',
+    disabled=False,
+    indent=False
+)
+
 # Custom ADM
 def select_file(b):
     root = tk.Tk()
@@ -1526,7 +1533,92 @@ def export_boundaries_to_gpkg(gdf, country, adm_level, index, year, output_dir, 
         import traceback
         traceback.print_exc()
         return None, all_gdf
-        
+
+# Function to export statistics to Excel
+def export_to_excel(all_gdf, country, adm_level, index, output_dir, mode='baseline', ssp=None):
+    """
+    Export zonal statistics to an Excel file.
+
+    Args:
+        all_gdf: Combined GeoDataFrame with all years
+        country: Country ISO code
+        adm_level: Administrative level
+        index: Climate index (may include season suffix)
+        output_dir: Output directory
+        mode: Data mode ('baseline' or 'projections')
+        ssp: SSP scenario (only for projections mode)
+
+    Returns:
+        Path to the saved Excel file or None if failed
+    """
+    if all_gdf is None:
+        print("No data to export")
+        return None
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Create filename
+    if mode.lower() == 'projections' and ssp:
+        output_path = os.path.join(output_dir, f"{country.lower()}_{index}_{mode.lower()}_{ssp}_ADM{adm_level}_statistics.xlsx")
+    else:
+        output_path = os.path.join(output_dir, f"{country.lower()}_{index}_{mode.lower()}_ADM{adm_level}_statistics.xlsx")
+
+    try:
+        # Create a copy without geometry for Excel export
+        df_export = all_gdf.drop(columns=['geometry'], errors='ignore')
+
+        # Export to Excel with multiple sheets
+        with pd.ExcelWriter(output_path, engine='openpyxl') as writer:
+            # Write full data
+            df_export.to_excel(writer, sheet_name='Zonal Statistics', index=False)
+
+            # Extract year columns for timeseries
+            year_cols = [col for col in df_export.columns if col.startswith('Y') and '_mean' in col]
+
+            if year_cols:
+                # Create a transposed timeseries view
+                id_cols = [col for col in df_export.columns
+                          if any(x in col.upper() for x in ['NAME', 'ID', 'CODE'])
+                          and col not in year_cols]
+
+                # If we have identifier columns, create a more readable timeseries
+                if id_cols:
+                    # Select first name column for labeling
+                    name_col = next((col for col in id_cols if 'NAME' in col.upper()), id_cols[0])
+
+                    # Create timeseries data
+                    timeseries_data = []
+                    for idx, row in df_export.iterrows():
+                        location_name = row[name_col]
+                        for year_col in sorted(year_cols):
+                            # Extract year from column name (e.g., "Y2020_mean" -> 2020)
+                            year = year_col.split('_')[0][1:]  # Remove 'Y' prefix
+                            timeseries_data.append({
+                                'Location': location_name,
+                                'Year': year,
+                                'Value': row[year_col]
+                            })
+
+                    timeseries_df = pd.DataFrame(timeseries_data)
+                    timeseries_df.to_excel(writer, sheet_name='Timeseries', index=False)
+
+            # Create metadata sheet
+            metadata = pd.DataFrame({
+                'Parameter': ['Country', 'Climate Index', 'Administrative Level', 'Mode', 'SSP Scenario', 'Export Date'],
+                'Value': [country, index, f'ADM{adm_level}', mode, ssp if ssp else 'N/A',
+                         pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')]
+            })
+            metadata.to_excel(writer, sheet_name='Metadata', index=False)
+
+        print(f"Saved statistics to {output_path}")
+        return output_path
+    except Exception as e:
+        print(f"Error exporting to Excel: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
 # Define a function to handle changes in the country combobox
 def on_country_change(change):
     with output:
@@ -1841,7 +1933,24 @@ def run_analysis(b):
                 print(f"Exported {len(all_grid_figs)} grid maps and {len(all_zonal_figs)} zonal maps")
             if export_boundaries_chk.value:
                 print(f"Exported data for {len(all_zonal_data)} time periods to a combined GeoPackage")
-            
+
+            # Export to Excel if checkbox is checked
+            if export_excel_chk.value and combined_gdf is not None:
+                print("Exporting statistics to Excel...")
+                excel_path = export_to_excel(
+                    combined_gdf,
+                    iso_a3,
+                    selected_adm_level,
+                    selected_index,
+                    output_dir,
+                    mode=selected_mode,
+                    ssp=selected_ssp if selected_mode == 'Projections' else None
+                )
+                if excel_path:
+                    print(f"Statistics exported to: {excel_path}")
+                else:
+                    print("Failed to export to Excel")
+
             elapsed_time = time.time() - start_time
             print(f"Analysis completed in {elapsed_time:.2f} seconds")
             
@@ -1909,7 +2018,8 @@ def create_layout():
     preview_container = widgets.VBox([
         preview_chk,
         export_charts_chk,
-        export_boundaries_chk
+        export_boundaries_chk,
+        export_excel_chk
     ], layout=widgets.Layout(width='100%', margin='10px 0'))
     
     footer = widgets.VBox([
