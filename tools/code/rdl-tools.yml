@@ -25,6 +25,7 @@ dependencies:
   
   # Scientific computing and parallel processing
   - xarray
+  - netcdf4
   - dask
   - multiprocess
   
