@@ -268,7 +268,7 @@ def build_timeseries_url(index, mode, timescale='Annual', ssp=None):
             timeseries_url = f"https://wbg-cckp.s3.amazonaws.com/data/cmip6-x0.25/{index}/ensemble-all-historical/timeseries-{index}-{freq}-mean_cmip6-x0.25_ensemble-all-historical_timeseries_median_1950-2014.nc"
         else:
             # Regular historical data URL for other indices
-            timeseries_url = f"https://wbg-cckp.s3.amazonaws.com/data/era5-x0.25/{index}/era5-x0.25-historical/timeseries-{index}-{freq}-mean_era5-x0.25_era5-x0.25-historical_timeseries_mean_1950-2023.nc"
+            timeseries_url = f"https://wbg-cckp.s3.amazonaws.com/data/era5-x0.25/{index}/era5-x0.25-historical/timeseries-{index}-{freq}-mean_era5-x0.25_era5-x0.25-historical_timeseries_mean_1950-2024.nc"
     else:
         # Projection data URL - ensure ssp is properly included
         if not ssp:
