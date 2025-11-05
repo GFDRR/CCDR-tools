@@ -2578,7 +2578,11 @@
                         "convective_storm": ["tornado"]
                     };
                 }
-                
+
+                // Reset form data when switching schema versions
+                currentFormData = {};
+                fieldValidationStatus.clear();
+
                 updateSchemaStatus(`✓ RDLS ${version} loaded`, 'text-success');
                 generateForm();
             } catch (error) {
@@ -2622,7 +2626,11 @@
                         } else if (isV20) {
                             statusMessage = '✓ RDLS v2.0 schema loaded';
                         }
-                        
+
+                        // Reset form data when loading custom schema
+                        currentFormData = {};
+                        fieldValidationStatus.clear();
+
                         updateSchemaStatus(statusMessage, 'text-success');
                         generateForm();
                     } catch (error) {
@@ -3614,7 +3622,7 @@
         function updatePreview() {
             const filteredData = getFilteredFormData();
 
-            // Get the current schema version for the package
+            // Get the current schema version
             const version = document.getElementById('schemaVersionSelect').value;
             const versionMap = {
                 '0.2': '0__2__0',
@@ -3623,9 +3631,28 @@
             const schemaVersion = versionMap[version] || '0__3__0';
             const schemaUrl = `https://docs.riskdatalibrary.org/en/${schemaVersion}/rdls_schema.json`;
 
+            // Ensure links array exists and has the schema reference
+            if (!filteredData.links) {
+                filteredData.links = [];
+            }
+
+            // Check if describedby link already exists
+            const hasDescribedBy = filteredData.links.some(link => link.rel === 'describedby');
+
+            if (!hasDescribedBy) {
+                // Add schema reference as first link with rel="describedby"
+                filteredData.links.unshift({
+                    href: schemaUrl,
+                    rel: 'describedby'
+                });
+            } else {
+                // Update existing describedby link to current schema version
+                const describedByIndex = filteredData.links.findIndex(link => link.rel === 'describedby');
+                filteredData.links[describedByIndex].href = schemaUrl;
+            }
+
             // Show preview as a complete package (matching export format)
             const previewData = {
-                schema: schemaUrl,
                 datasets: [filteredData]
             };
 
@@ -4018,7 +4045,7 @@
             // Get the current schema version
             const version = document.getElementById('schemaVersionSelect').value;
 
-            // Map version to schema URL format (used in package schema reference)
+            // Map version to schema URL format
             const versionMap = {
                 '0.2': '0__2__0',
                 '0.3': '0__3__0'
@@ -4030,6 +4057,26 @@
             // Generate unique dataset ID if not present
             if (!datasetMetadata.id && datasetMetadata.title) {
                 datasetMetadata.id = generateDatasetId(datasetMetadata.title);
+            }
+
+            // Ensure links array exists and has the schema reference as first item
+            if (!datasetMetadata.links) {
+                datasetMetadata.links = [];
+            }
+
+            // Check if describedby link already exists
+            const hasDescribedBy = datasetMetadata.links.some(link => link.rel === 'describedby');
+
+            if (!hasDescribedBy) {
+                // Add schema reference as first link with rel="describedby"
+                datasetMetadata.links.unshift({
+                    href: schemaUrl,
+                    rel: 'describedby'
+                });
+            } else {
+                // Update existing describedby link to current schema version
+                const describedByIndex = datasetMetadata.links.findIndex(link => link.rel === 'describedby');
+                datasetMetadata.links[describedByIndex].href = schemaUrl;
             }
 
             // Reorder fields according to schema
@@ -4056,9 +4103,8 @@
                 }
             });
 
-            // Create the package structure with schema reference
+            // Create the package structure (datasets only, no top-level schema field)
             const packagedData = {
-                schema: schemaUrl,
                 datasets: [orderedMetadata]
             };
 
