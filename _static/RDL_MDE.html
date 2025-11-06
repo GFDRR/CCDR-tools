@@ -494,8 +494,12 @@
 
         const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
 
-        // Direct mapping from hazard types to IMT options (simplified from CSV data)
-        const HAZARD_IMT_MAPPING = {
+        // IMT mappings will be loaded from schema
+        let HAZARD_IMT_MAPPING = null;
+        let IMT_DEFINITIONS = {};
+
+        // Legacy hardcoded mapping (will be replaced by schema-based mapping)
+        const LEGACY_HAZARD_IMT_MAPPING = {
             'flood': [
                 {code: 'flow_depth_ground:m', title: 'Flow depth above ground in meters'},
                 {code: 'flow_depth_ground:cm', title: 'Flow depth above ground in centimeters'},
@@ -633,7 +637,7 @@
         };
 
         // Universal IMT options that apply to multiple hazards
-        const UNIVERSAL_IMTS = [
+        let UNIVERSAL_IMTS = [
             {code: 'affected_area:m2', title: 'Affected area in square meters'},
             {code: 'affected_area:km2', title: 'Affected area in square kilometers'},
             {code: 'affected_area:ha', title: 'Affected area in hectares'},
@@ -643,10 +647,15 @@
 
         // Function to get filtered IMT options based on hazard type
         function getFilteredIMTOptions(selectedHazardType) {
-            if (!selectedHazardType || !HAZARD_IMT_MAPPING[selectedHazardType]) {
+            // Use legacy mapping if schema-based mapping not loaded yet
+            const mapping = HAZARD_IMT_MAPPING || LEGACY_HAZARD_IMT_MAPPING;
+
+            if (!selectedHazardType || !mapping || !mapping[selectedHazardType]) {
                 // Return all IMT options if no hazard selected or unknown hazard
                 const allIMTs = [];
-                Object.values(HAZARD_IMT_MAPPING).forEach(imts => allIMTs.push(...imts));
+                if (mapping) {
+                    Object.values(mapping).forEach(imts => allIMTs.push(...imts));
+                }
                 allIMTs.push(...UNIVERSAL_IMTS);
 
                 // Remove duplicates
@@ -657,7 +666,7 @@
             }
 
             // Return hazard-specific IMTs plus universal ones
-            const hazardIMTs = [...HAZARD_IMT_MAPPING[selectedHazardType]];
+            const hazardIMTs = [...mapping[selectedHazardType]];
             hazardIMTs.push(...UNIVERSAL_IMTS);
             return hazardIMTs;
         }
@@ -689,7 +698,11 @@
                     filteredOptions.forEach(option => {
                         const optionElement = document.createElement('option');
                         optionElement.value = option.code;
-                        optionElement.textContent = option.title;
+                        // Display code + title (description available in option.description if needed)
+                        optionElement.textContent = `${option.code} - ${option.title}`;
+                        if (option.description) {
+                            optionElement.setAttribute('title', option.description);
+                        }
                         element.appendChild(optionElement);
                     });
 
@@ -720,7 +733,11 @@
                                 const link = document.createElement('a');
                                 link.className = 'dropdown-item';
                                 link.href = '#';
-                                link.textContent = option.title;
+                                // Display code + title
+                                link.textContent = `${option.code} - ${option.title}`;
+                                if (option.description) {
+                                    link.setAttribute('title', option.description);
+                                }
                                 link.addEventListener('click', (e) => {
                                     e.preventDefault();
                                     element.value = option.code;
@@ -1156,8 +1173,15 @@
                     property.enum.forEach((option, index) => {
                         const optionElement = document.createElement('option');
                         optionElement.value = option;
-                        optionElement.textContent = property.enumNames ? property.enumNames[index] : 
-                            option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        // Use enumNames if available, otherwise check if option contains parentheses (e.g., "CSV (csv)")
+                        // If it has parentheses, use as-is; otherwise apply capitalization transformation
+                        if (property.enumNames) {
+                            optionElement.textContent = property.enumNames[index];
+                        } else if (option.includes('(') && option.includes(')')) {
+                            optionElement.textContent = option;
+                        } else {
+                            optionElement.textContent = option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        }
                         if (value === option) optionElement.selected = true;
                         select.appendChild(optionElement);
                     });
@@ -1196,8 +1220,14 @@
                 availableOptions.forEach((option, index) => {
                     const optionElement = document.createElement('option');
                     optionElement.value = option;
-                    optionElement.textContent = property.enumNames ? property.enumNames[index] : 
-                        option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    // Use enumNames if available, otherwise check if option contains parentheses
+                    if (property.enumNames) {
+                        optionElement.textContent = property.enumNames[index];
+                    } else if (option.includes('(') && option.includes(')')) {
+                        optionElement.textContent = option;
+                    } else {
+                        optionElement.textContent = option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    }
                     if (value === option) optionElement.selected = true;
                     select.appendChild(optionElement);
                 });
@@ -1474,8 +1504,13 @@
                                         itemSchema.enum.forEach((option, idx) => {
                                             const optionElement = document.createElement('option');
                                             optionElement.value = option;
-                                            optionElement.textContent = itemSchema.enumNames ? 
-                                                itemSchema.enumNames[idx] : option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                            if (itemSchema.enumNames) {
+                                                optionElement.textContent = itemSchema.enumNames[idx];
+                                            } else if (option.includes('(') && option.includes(')')) {
+                                                optionElement.textContent = option;
+                                            } else {
+                                                optionElement.textContent = option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                            }
                                             if (item === option) optionElement.selected = true;
                                             input.appendChild(optionElement);
                                         });
@@ -2234,8 +2269,32 @@
                     }
                 }
 
+                // Special handling for license field to show/hide license_url
+                if (changedFieldName === 'license') {
+                    const licenseUrlField = document.getElementById(this.context.getFieldId('license_url'));
+
+                    if (licenseUrlField) {
+                        const container = licenseUrlField.closest('.form-field, .modal-form-field');
+                        if (container) {
+                            // Show license_url field only when license is "Custom"
+                            if (newValue === 'Custom') {
+                                container.style.display = 'block';
+                                licenseUrlField.disabled = false;
+                                licenseUrlField.required = true;
+                                licenseUrlField.classList.add('required');
+                            } else {
+                                container.style.display = 'none';
+                                licenseUrlField.disabled = true;
+                                licenseUrlField.required = false;
+                                licenseUrlField.classList.remove('required');
+                                licenseUrlField.value = '';
+                            }
+                        }
+                    }
+                }
+
                 // Special handling for hazard type changes to update processes
-                if (changedFieldName.includes('hazard_type') || changedFieldName.includes('type') || 
+                if (changedFieldName.includes('hazard_type') || changedFieldName.includes('type') ||
                     (this.context.type === 'modal' && changedFieldName === 'type')) {
                     
                     let processFieldName;
@@ -2297,8 +2356,13 @@
                 availableOptions.forEach(option => {
                     const optionElement = document.createElement('option');
                     optionElement.value = option;
-                    optionElement.textContent = option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    
+                    // Check if option contains parentheses (e.g., "CSV (csv)") and preserve as-is
+                    if (option.includes('(') && option.includes(')')) {
+                        optionElement.textContent = option;
+                    } else {
+                        optionElement.textContent = option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    }
+
                     if (currentValue === option) {
                         optionElement.selected = true;
                     }
@@ -2579,6 +2643,44 @@
                     };
                 }
 
+                // Load IMT definitions from schema
+                if (currentSchema.intensity_measure_definitions) {
+                    IMT_DEFINITIONS = currentSchema.intensity_measure_definitions;
+                    console.log('Loaded', Object.keys(IMT_DEFINITIONS).length, 'IMT definitions from schema');
+                }
+
+                // Load IMT mappings from schema (or use legacy if not available)
+                if (currentSchema.intensity_measure_mappings) {
+                    // Convert simple code arrays from schema to objects with titles and descriptions
+                    HAZARD_IMT_MAPPING = {};
+                    for (const [hazardType, imtCodes] of Object.entries(currentSchema.intensity_measure_mappings)) {
+                        // Handle universal metrics separately
+                        if (hazardType === 'universal') {
+                            UNIVERSAL_IMTS = imtCodes.map(code => {
+                                const def = IMT_DEFINITIONS[code];
+                                return {
+                                    code: code,
+                                    title: def ? def.title : code,
+                                    description: def ? def.description : ''
+                                };
+                            });
+                        } else {
+                            HAZARD_IMT_MAPPING[hazardType] = imtCodes.map(code => {
+                                const def = IMT_DEFINITIONS[code];
+                                return {
+                                    code: code,
+                                    title: def ? def.title : code,
+                                    description: def ? def.description : ''
+                                };
+                            });
+                        }
+                    }
+                    console.log('Loaded IMT mappings from schema');
+                } else {
+                    HAZARD_IMT_MAPPING = LEGACY_HAZARD_IMT_MAPPING;
+                    console.log('Using legacy IMT mappings');
+                }
+
                 // Reset form data when switching schema versions
                 currentFormData = {};
                 fieldValidationStatus.clear();
@@ -2627,6 +2729,40 @@
                             statusMessage = '✓ RDLS v2.0 schema loaded';
                         }
 
+                        // Load IMT definitions from custom schema
+                        if (currentSchema.intensity_measure_definitions) {
+                            IMT_DEFINITIONS = currentSchema.intensity_measure_definitions;
+                            console.log('Loaded', Object.keys(IMT_DEFINITIONS).length, 'IMT definitions from custom schema');
+                        }
+
+                        // Load IMT mappings from custom schema (or use legacy if not available)
+                        if (currentSchema.intensity_measure_mappings) {
+                            HAZARD_IMT_MAPPING = {};
+                            for (const [hazardType, imtCodes] of Object.entries(currentSchema.intensity_measure_mappings)) {
+                                // Handle universal metrics separately
+                                if (hazardType === 'universal') {
+                                    UNIVERSAL_IMTS = imtCodes.map(code => {
+                                        const def = IMT_DEFINITIONS[code];
+                                        return {
+                                            code: code,
+                                            title: def ? def.title : code,
+                                            description: def ? def.description : ''
+                                        };
+                                    });
+                                } else {
+                                    HAZARD_IMT_MAPPING[hazardType] = imtCodes.map(code => {
+                                        const def = IMT_DEFINITIONS[code];
+                                        return {
+                                            code: code,
+                                            title: def ? def.title : code,
+                                            description: def ? def.description : ''
+                                        };
+                                    });
+                                }
+                            }
+                            console.log('Loaded IMT mappings from custom schema');
+                        }
+
                         // Reset form data when loading custom schema
                         currentFormData = {};
                         fieldValidationStatus.clear();
@@ -2634,7 +2770,8 @@
                         updateSchemaStatus(statusMessage, 'text-success');
                         generateForm();
                     } catch (error) {
-                        updateSchemaStatus('✗ Invalid JSON file', 'text-danger');
+                        console.error('Schema loading error:', error);
+                        updateSchemaStatus('✗ Invalid JSON file: ' + error.message, 'text-danger');
                     }
                 };
                 reader.readAsText(file);
@@ -2736,12 +2873,37 @@
                 });
 
                 updateFormStatus('success', 'RDLS Form Ready');
+                initializeDependentFields();
                 updatePreview();
                 updateValidationDisplay();
 
             } catch (error) {
                 updateFormStatus('danger', 'Generation Error: ' + error.message);
                 console.error('Form generation error:', error);
+            }
+        }
+
+        function initializeDependentFields() {
+            // Initialize license_url field visibility based on license value
+            const licenseField = document.getElementById('license');
+            const licenseUrlField = document.getElementById('license_url');
+
+            if (licenseField && licenseUrlField) {
+                const container = licenseUrlField.closest('.form-field, .modal-form-field');
+                if (container) {
+                    // Hide license_url by default unless license is "Custom"
+                    if (licenseField.value !== 'Custom') {
+                        container.style.display = 'none';
+                        licenseUrlField.disabled = true;
+                        licenseUrlField.required = false;
+                        licenseUrlField.classList.remove('required');
+                    } else {
+                        container.style.display = 'block';
+                        licenseUrlField.disabled = false;
+                        licenseUrlField.required = true;
+                        licenseUrlField.classList.add('required');
+                    }
+                }
             }
         }
 
@@ -3586,7 +3748,7 @@
             // Define the correct order based on RDLS schema
             const schemaFieldOrder = [
                 'id', 'title', 'description', 'risk_data_type', 'version', 'purpose',
-                'project', 'details', 'spatial', 'temporal_resolution', 'license',
+                'project', 'details', 'spatial', 'license',
                 'attributions', 'sources', 'referenced_by', 'resources',
                 'hazard', 'exposure', 'vulnerability', 'loss', 'links'
             ];
@@ -3983,6 +4145,27 @@
                 errorMessage: vulnerabilityError
             });
 
+            // 7. Validate license_url when license is "Custom"
+            const license = currentFormData.license;
+            const licenseUrl = currentFormData.license_url;
+            let licenseUrlValid = true;
+            let licenseUrlError = '';
+
+            if (license === 'Custom') {
+                if (!licenseUrl || licenseUrl.trim() === '') {
+                    licenseUrlValid = false;
+                    licenseUrlError = 'License URL is required when license is "Custom"';
+                } else if (!licenseUrl.match(/^https?:\/\//)) {
+                    licenseUrlValid = false;
+                    licenseUrlError = 'License URL must start with http:// or https://';
+                }
+            }
+
+            fieldValidationStatus.set('dataset_license_url', {
+                isValid: licenseUrlValid,
+                errorMessage: licenseUrlError
+            });
+
         }
 
         function getPropertyFromSchema(fieldName) {
@@ -4082,7 +4265,7 @@
             // Reorder fields according to schema
             const schemaFieldOrder = [
                 'id', 'title', 'description', 'risk_data_type', 'version', 'purpose',
-                'project', 'details', 'spatial', 'temporal_resolution', 'license',
+                'project', 'details', 'spatial', 'license',
                 'attributions', 'sources', 'referenced_by', 'resources',
                 'hazard', 'exposure', 'vulnerability', 'loss', 'links'
             ];
@@ -4468,11 +4651,12 @@ ${filteredData.description || 'No description provided'}
             alert('Progress saved to browser storage!');
         }
 
-        // Migration function to convert old attribution format to new format
+        // Migration function to convert old field names to new format
         function migrateAttributionData(data) {
             const oldFields = ['publisher', 'creator', 'contact_point'];
             const migratedData = { ...data };
 
+            // Migrate old attribution fields
             // Initialize attributions array if it doesn't exist
             if (!migratedData.attributions) {
                 migratedData.attributions = [];
@@ -4497,6 +4681,59 @@ ${filteredData.description || 'No description provided'}
                     delete migratedData[fieldName];
                 }
             });
+
+            // Migrate old resource field names (format -> data_format, media_type removed)
+            if (migratedData.resources && Array.isArray(migratedData.resources)) {
+                migratedData.resources = migratedData.resources.map(resource => {
+                    const migratedResource = { ...resource };
+
+                    // Migrate format to data_format with full names
+                    if (migratedResource.format) {
+                        // Map old format values to new data_format values with full names
+                        const formatMapping = {
+                            'geotiff': 'GeoTIFF (tif)',
+                            'tif': 'GeoTIFF (tif)',
+                            'cog': 'Cloud Optimized GeoTIFF (cog)',
+                            'netcdf': 'NetCDF (nc)',
+                            'nc': 'NetCDF (nc)',
+                            'hdf5': 'HDF5 (hdf5)',
+                            'zarr': 'Zarr (zarr)',
+                            'geopackage': 'GeoPackage (gpkg)',
+                            'gpkg': 'GeoPackage (gpkg)',
+                            'geojson': 'GeoJSON (geojson)',
+                            'flatgeobuf': 'FlatGeobuf (fgb)',
+                            'fgb': 'FlatGeobuf (fgb)',
+                            'shapefile': 'Shapefile (shp)',
+                            'shp': 'Shapefile (shp)',
+                            'gdb': 'File Geodatabase (gdb)',
+                            'kml': 'KML (kml)',
+                            'csv': 'CSV (csv)',
+                            'parquet': 'Parquet (parquet)',
+                            'xlsx': 'Excel (xlsx)',
+                            'json': 'JSON (json)',
+                            'xml': 'XML (xml)',
+                            'pdf': 'PDF (pdf)',
+                            'las': 'LAS (las)',
+                            'copc': 'COPC (copc)'
+                        };
+                        migratedResource.data_format = formatMapping[migratedResource.format.toLowerCase()] || migratedResource.format;
+                        delete migratedResource.format;
+                    }
+
+                    // Remove media_type (no longer used)
+                    if (migratedResource.media_type !== undefined) {
+                        delete migratedResource.media_type;
+                    }
+
+                    // Set default access_modality if not present
+                    if (!migratedResource.access_modality) {
+                        // Default to 'download' if download_url exists, otherwise 'website'
+                        migratedResource.access_modality = migratedResource.download_url ? 'download' : 'website';
+                    }
+
+                    return migratedResource;
+                });
+            }
 
             return migratedData;
         }
