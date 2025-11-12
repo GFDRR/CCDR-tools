@@ -1357,9 +1357,7 @@
           "description": "Additional details about the analysis used to produce the vulnerability function used in the modelled scenario(s).",
           "minLength": 1,
           "examples": [
-            "Vulnerability functions were developed using non-linear time history analysis of representative building typologies under incremental dynamic analysis.",
-            "Empirical vulnerability curves derived from post-disaster damage surveys conducted after recent earthquake events in the region.",
-            "Analytical fragility functions developed using capacity spectrum method with updated seismic design parameters."
+            "Socio-economic vulnerability index derived from census data and household surveys conducted in 2023."
           ]
         }
       }
