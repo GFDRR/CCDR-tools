@@ -698,8 +698,8 @@
                     filteredOptions.forEach(option => {
                         const optionElement = document.createElement('option');
                         optionElement.value = option.code;
-                        // Display code + title (description available in option.description if needed)
-                        optionElement.textContent = `${option.code} - ${option.title}`;
+                        // Display only title (unit is already included in title)
+                        optionElement.textContent = option.title;
                         if (option.description) {
                             optionElement.setAttribute('title', option.description);
                         }
@@ -733,8 +733,8 @@
                                 const link = document.createElement('a');
                                 link.className = 'dropdown-item';
                                 link.href = '#';
-                                // Display code + title
-                                link.textContent = `${option.code} - ${option.title}`;
+                                // Display only title (unit is already included in title)
+                                link.textContent = option.title;
                                 if (option.description) {
                                     link.setAttribute('title', option.description);
                                 }
@@ -805,6 +805,8 @@
             // Modal context dependencies
             'processes': 'type',
             'hazard_process': 'hazard_type',
+            'hazard_process_primary': 'hazard_primary',
+            'hazard_process_secondary': 'hazard_secondary',
             'intensity_measure': 'type', // For hazard context, could also be 'hazard_primary' for vulnerability context
             'currency': 'quantity_kind',
             // Section-specific currency dependencies
@@ -911,6 +913,16 @@
                 }
 
                 container.appendChild(inputElement);
+
+                // Add help text for intensity_measure fields (for select dropdowns)
+                if (name.includes('intensity_measure') && inputElement.tagName === 'SELECT') {
+                    const helpText = document.createElement('small');
+                    helpText.className = 'form-text text-muted';
+                    helpText.style.display = 'block';
+                    helpText.style.marginTop = '0.25rem';
+                    helpText.innerHTML = 'An intensity measure is missing? Please <a href="https://github.com/GFDRR/rdl-standard/issues/new?template=change-proposal.md" target="_blank" rel="noopener noreferrer">submit a request</a> to add a new one.';
+                    container.appendChild(helpText);
+                }
 
                 // Add examples if available
                 this.addExamples(container, resolvedProperty);
@@ -1292,7 +1304,7 @@
 
                     if (hazardType) {
                         const filteredIMTs = getFilteredIMTOptions(hazardType);
-                        suggestions = filteredIMTs.map(item => item.code);
+                        suggestions = filteredIMTs; // Keep full objects with code and title
                         console.log(`Creating ${name} combobox with ${suggestions.length} filtered options for hazard type: ${hazardType}`);
                     } else {
                         console.log(`No hazard type found for ${name} field, showing all IMT options`);
@@ -1305,16 +1317,22 @@
                         const link = document.createElement('a');
                         link.className = 'dropdown-item';
                         link.href = '#';
-                        link.textContent = suggestion;
+                        // For IMT fields, display title; for other fields, display the string value
+                        link.textContent = typeof suggestion === 'object' ? suggestion.title : suggestion;
+                        if (typeof suggestion === 'object' && suggestion.description) {
+                            link.setAttribute('title', suggestion.description);
+                        }
                         link.addEventListener('click', (e) => {
                             e.preventDefault();
-                            input.value = suggestion;
+                            // For IMT fields, use code; for other fields, use the string value
+                            const valueToSet = typeof suggestion === 'object' ? suggestion.code : suggestion;
+                            input.value = valueToSet;
                             updateFormData();
-                            this.context.validateField(name, suggestion, property);
+                            this.context.validateField(name, valueToSet, property);
 
                             // CRITICAL FIX: Trigger dependency handling when suggestion is clicked
                             const handler = new UnifiedEventHandler(this.context);
-                            handler.handleDependentFields(name, suggestion, input);
+                            handler.handleDependentFields(name, valueToSet, input);
                         });
                         item.appendChild(link);
                         dropdownMenu.appendChild(item);
@@ -1335,11 +1353,21 @@
                 
                 this.context.setupEventListeners(input, name, property, options);
                 wrapper.appendChild(inputGroup);
-                
+
+                // Add help text for intensity_measure fields
+                if (name.includes('intensity_measure')) {
+                    const helpText = document.createElement('small');
+                    helpText.className = 'form-text text-muted';
+                    helpText.style.display = 'block';
+                    helpText.style.marginTop = '0.25rem';
+                    helpText.innerHTML = 'An intensity measure is missing? Please <a href="https://github.com/GFDRR/rdl-standard/issues/new?template=proposal" target="_blank" rel="noopener noreferrer">submit a request</a> to add a new one.';
+                    wrapper.appendChild(helpText);
+                }
+
                 if (this.context.type !== 'modal' && this.context.type !== 'inline') {
                     this.setupAutoComplete(input, name, property);
                 }
-                
+
                 return wrapper;
             }
 
@@ -4205,23 +4233,106 @@
             return current;
         }
 
-        function generateDatasetId(title) {
-            // Generate ID from title (remove special chars, convert to uppercase, replace spaces with underscores)
-            const baseId = title
-                .toUpperCase()
-                .replace(/[^A-Z0-9\s-]/g, '') // Remove special chars except spaces and hyphens
-                .replace(/[\s-]+/g, '_')       // Replace spaces and hyphens with underscores
-                .replace(/^_+|_+$/g, '')       // Trim leading/trailing underscores
-                .substring(0, 20);             // Limit base length
+        function generateDatasetId() {
+            // Format: rdls_{risk_data_type}-{country}_{shortname}_{item}
+            // Example: rdls_hzd-ury_ucra_fl or rdls_exp+lss-ury+ita_project_fl+pl
 
-            // Generate random alphanumeric suffix (4 characters)
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let randomSuffix = '';
-            for (let i = 0; i < 4; i++) {
-                randomSuffix += chars.charAt(Math.floor(Math.random() * chars.length));
+            const parts = ['rdls'];
+
+            // 1. Build risk_data_type part (required)
+            const riskDataTypes = currentFormData.risk_data_type || [];
+            let riskTypePart = riskDataTypes.length > 0 ? riskDataTypes.join('+') : 'data';
+
+            // 2. Get country codes (optional)
+            let countryCodes = [];
+            if (currentFormData.spatial?.countries) {
+                countryCodes = currentFormData.spatial.countries
+                    .map(c => c.toUpperCase())
+                    .sort();
             }
 
-            return `${baseId}_${randomSuffix}`;
+            // Combine risk_data_type with country using hyphen
+            if (countryCodes.length > 0) {
+                riskTypePart += '-' + countryCodes.join('+');
+            }
+            parts.push(riskTypePart);
+
+            // 3. Get shortname from project or publisher (required)
+            let shortname = 'dataset';
+            if (currentFormData.project?.name) {
+                shortname = currentFormData.project.name
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/[\s-]+/g, '_')
+                    .substring(0, 15);
+            } else if (currentFormData.attributions) {
+                // Find publisher attribution
+                const publisher = currentFormData.attributions.find(a => a.role === 'publisher');
+                if (publisher?.name) {
+                    shortname = publisher.name
+                        .toLowerCase()
+                        .replace(/[^a-z0-9\s-]/g, '')
+                        .replace(/[\s-]+/g, '_')
+                        .substring(0, 15);
+                }
+            }
+            parts.push(shortname);
+
+            // 4. Get item (hazard type or exposure category) (optional)
+            let items = [];
+
+            // Try to get hazard types
+            if (currentFormData.hazard) {
+                const hazards = Array.isArray(currentFormData.hazard) ? currentFormData.hazard : [currentFormData.hazard];
+                const hazardTypes = hazards
+                    .filter(h => h.type)
+                    .map(h => {
+                        // Convert hazard type to acronym (e.g., flood -> fl, earthquake -> eq)
+                        const typeMap = {
+                            'flood': 'fl',
+                            'coastal_flood': 'cf',
+                            'earthquake': 'eq',
+                            'tsunami': 'ts',
+                            'volcano': 'vo',
+                            'landslide': 'ls',
+                            'cyclone': 'cy',
+                            'tornado': 'to',
+                            'wildfire': 'wf',
+                            'drought': 'dr',
+                            'extreme_temperature': 'et'
+                        };
+                        return typeMap[h.type] || h.type.substring(0, 2);
+                    });
+                if (hazardTypes.length > 0) {
+                    items = [...new Set(hazardTypes)]; // Remove duplicates
+                }
+            }
+
+            // If no hazard types, try exposure categories
+            if (items.length === 0 && currentFormData.exposure) {
+                const exposures = Array.isArray(currentFormData.exposure) ? currentFormData.exposure : [currentFormData.exposure];
+                const expCategories = exposures
+                    .filter(e => e.category)
+                    .map(e => {
+                        // Convert category to short code (e.g., buildings -> bld, population -> pop)
+                        const catMap = {
+                            'buildings': 'bld',
+                            'population': 'pop',
+                            'infrastructure': 'inf',
+                            'agriculture': 'agr'
+                        };
+                        return catMap[e.category] || e.category.substring(0, 3);
+                    });
+                if (expCategories.length > 0) {
+                    items = [...new Set(expCategories)]; // Remove duplicates
+                }
+            }
+
+            if (items.length > 0) {
+                parts.push(items.join('+'));
+            }
+
+            return parts.join('_');
         }
 
         function packageDataset(datasetMetadata) {
@@ -4238,8 +4349,8 @@
             const schemaUrl = `https://docs.riskdatalibrary.org/en/${schemaVersion}/rdls_schema.json`;
 
             // Generate unique dataset ID if not present
-            if (!datasetMetadata.id && datasetMetadata.title) {
-                datasetMetadata.id = generateDatasetId(datasetMetadata.title);
+            if (!datasetMetadata.id) {
+                datasetMetadata.id = generateDatasetId();
             }
 
             // Ensure links array exists and has the schema reference as first item
@@ -4302,11 +4413,15 @@
 
             const filteredData = getFilteredFormData();
             const packagedData = packageDataset(filteredData);
+
+            // Generate filename from dataset ID
+            const filename = packagedData.datasets?.[0]?.id ? `${packagedData.datasets[0].id}.json` : 'rdls_metadata.json';
+
             const blob = new Blob([JSON.stringify(packagedData, null, 2)], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'rdls_metadata.json';
+            a.download = filename;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -4458,10 +4573,15 @@
             showGithubStatus('info', 'Publishing to GitHub...');
 
             try {
-                // Generate filename and branch name
+                // Package dataset first to get the ID
+                const filteredData = getFilteredFormData();
+                const packagedData = packageDataset(filteredData);
+
+                // Generate filename from dataset ID, fallback to title-based naming
+                const datasetId = packagedData.datasets?.[0]?.id;
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0];
-                const filename = `${sanitizeFilename(datasetTitle)}-${timestamp}.json`;
-                const branchName = `rdl-dataset-${sanitizeFilename(datasetTitle)}-${timestamp}`;
+                const filename = datasetId ? `${datasetId}.json` : `${sanitizeFilename(datasetTitle)}-${timestamp}.json`;
+                const branchName = datasetId ? `rdl-dataset-${datasetId}` : `rdl-dataset-${sanitizeFilename(datasetTitle)}-${timestamp}`;
 
                 // Step 1: Get base branch SHA
                 showGithubStatus('info', '📡 Getting base branch information...');
@@ -4480,8 +4600,6 @@
 
                 // Step 3: Create/update file
                 showGithubStatus('info', '📄 Uploading dataset file...');
-                const filteredData = getFilteredFormData();
-                const packagedData = packageDataset(filteredData);
                 const content = btoa(JSON.stringify(packagedData, null, 2));
                 const commitMessage = `Add RDLS dataset: ${datasetTitle}
 
