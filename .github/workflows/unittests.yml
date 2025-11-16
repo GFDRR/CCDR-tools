@@ -32,4 +32,4 @@ jobs:
         
       - name: Run unit tests
         run: | 
-            pytest
+            micromamba run -n rdl-tools pytest
