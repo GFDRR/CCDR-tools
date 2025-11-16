@@ -47,6 +47,9 @@ dependencies:
   # File formats and I/O
   - openpyxl
   - python-dotenv
+
+  # Testing
+  - pytest
   
   # Progress bars and utilities
   - tqdm
