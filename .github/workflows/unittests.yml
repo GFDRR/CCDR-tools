@@ -18,23 +18,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:   
-      # Check out repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Set up Python
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+      - name: Set up micromamba + environment
+        uses: mamba-org/setup-micromamba@v2
         with:
-          python-version: '3.10'
-
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          # $CONDA is an environment variable pointing to the root of the miniconda directory
-          $CONDA/bin/conda env update --file tools/code/rdl-tools.yml --name base
-
-      - name: Test with pytest
-        run: |
-          conda install pytest --solver=classic
-          $CONDA/bin/pytest
+          environment-file: tools/code/rdl-tools.yml
+          cache-environment: true
+          create-args: >-
+              python=3.10
+          init-shell: bash
+        
+      - name: Run unit tests
+        run: | 
+            pytest
