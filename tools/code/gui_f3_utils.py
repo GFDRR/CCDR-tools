@@ -8,8 +8,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import time
-import tkinter as tk
-from tkinter import filedialog
 
 import common
 from damageFunctions import FL_mortality_factor, FL_damage_factor_builtup, FL_damage_factor_agri

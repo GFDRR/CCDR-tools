@@ -4,6 +4,7 @@ from common import wb_to_region, tc_region_mapping
 
 # Defining the damage functions
 
+
 # Floods (river and coastal) over Population mortality
 def FL_mortality_factor(x: np.array, wb_region: str = None):
     """A polynomial fit to average population mortality due to nearby flooding.
@@ -16,14 +17,14 @@ def FL_mortality_factor(x: np.array, wb_region: str = None):
     x = x/100  # convert cm to m
     return np.maximum(0.0, np.minimum(1.0, 0.985 / (1 + np.exp(6.32 - 1.412 * x))))  # Floods - Global
 
-# Floods (river and coastal) over Built-Up areas
 
+# Floods (river and coastal) over Built-Up areas
 def FL_damage_factor_builtup(x: np.array, wb_region: str):
     """A polynomial fit to average damage across builtup land cover relative to water depth in meters.
 
     The sectors are commercial, industry, transport, infrastructure and residential.
     Values are capped between 0 and 1
-    
+
     References
     ----------
     Huizinga et al., 2017 - Global flood depth-damage functions: Methodology and the database. EU-JRC.
@@ -39,14 +40,13 @@ def FL_damage_factor_builtup(x: np.array, wb_region: str):
     # CRITICAL: Map wb_region to the actual region key first
     region = wb_to_region.get(wb_region, 'GLOBAL')
     damage_func = function_mapping.get(region)
-    
+
     # FIXED: Actually call the function instead of returning the function object
     result = damage_func(x)
     return result.astype(np.float32)
 
 
 # Floods (river and coastal) impact function over Agricultural areas
-
 def FL_damage_factor_agri(x: np.array, wb_region: str):
     """A polynomial fit to average damage across agricultural land cover relative to water depth in meters.
     Values are capped between 0 and 1.
@@ -66,8 +66,8 @@ def FL_damage_factor_agri(x: np.array, wb_region: str):
     region = wb_to_region.get(wb_region, 'GLOBAL')
     return function_mapping.get(region)
 
-# Tropical Cyclone - Regional equations
 
+# Tropical Cyclone - Regional equations
 def TC_damage_factor_builtup(x: np.array, country_iso3: str):
     """Calculate damage factor for tropical cyclone wind impact on built-up areas based on region-specific vulnerability curves.
 
@@ -77,13 +77,13 @@ def TC_damage_factor_builtup(x: np.array, country_iso3: str):
         Wind speed in meters per second
     country_iso3 : str
         ISO3 country code to determine regional vulnerability curve
-        
+
     Returns
     -------
     np.array
         Damage factor between 0 and 1
-    
-    Asigmoidal function is applied in the calibration process, based on the general impact function by Emanuel (2011).
+
+    Asigmoidal function is applied in the calibration process, based on the general impact function by Emanuel (2011).
     While Vhalf is fitted during the calibration process, the lower threshold Vthresh is kept constant throughout the study.
 
     References
@@ -94,7 +94,7 @@ def TC_damage_factor_builtup(x: np.array, country_iso3: str):
 
     # Get region from country code, default to GLOBAL if not found
     region = tc_region_mapping.get(country_iso3, 'GLOBAL')
-    
+
     # Regional v_half values (wind speed at which 50% damage occurs)
     v_half = {
         'NA1': 59.6,   # Caribbean and Mexico
@@ -108,13 +108,13 @@ def TC_damage_factor_builtup(x: np.array, country_iso3: str):
         'WP4': 183.7,  # North West Pacific
         'GLOBAL': 83.7  # Global average
     }
-    
+
     # Get Vhalf value for specified region
     Vhalf = v_half.get(region)
 
     # Global threshold value
     Vthres = 25.7  # m/s, below which no damage occurs
-        
+
     # Calculate damage factor
     v = np.maximum(0.0, (x - Vthres))/(Vhalf - Vthres)
     return (v**3)/(1 + (v**3))
