@@ -250,8 +250,8 @@
                 <div>
                     <h1 class="h3 mb-1">RDLS Metadata Editor</h1>
                     <p class="text-muted mb-0">
-                        Unified field creation system with improved maintainability
-                        <span class="badge bg-primary ms-2">Refactored</span>
+                        Unified field creation system with guided dependencies and validation
+                        <span class="badge bg-primary ms-2">Optimised for v0.3 and later</span>
                     </p>
                 </div>
             </div>
@@ -361,7 +361,7 @@
                                     <div class="text-center text-muted py-5">
                                         <div style="font-size: 4rem;">🌍</div>
                                         <p>Schema will load automatically and configure sections as needed</p>
-                                        <small class="text-muted">Refactored with unified field creation and improved dependency handling</small>
+                                        <small class="text-muted">Refactored with unified field creation and improved dependency handling - meant to work with RDLS v0.3 or later</small>
                                     </div>
                                 </div>
                             </div>
@@ -1466,8 +1466,10 @@
                     arrayData = value;
                 } else {
                     arrayData = [];
-                    // For modal context, update the original object data immediately
-                    if (this.context.type === 'modal') {
+                    // Initialize the array in currentFormData for normal context
+                    if (this.context.type === 'normal') {
+                        setNestedValue(currentFormData, name, arrayData);
+                    } else if (this.context.type === 'modal') {
                         // Set the empty array in the source data so it gets properly saved
                         if (name && typeof name === 'string') {
                             // This will be handled by the modal save function
@@ -1555,6 +1557,14 @@
                                         arrayData[index] = e.target.value;
                                         if (this.context.type === 'normal') {
                                             updateFormData();
+                                            // Trigger validation for spatial fields when countries array changes
+                                            if (name === 'spatial.countries') {
+                                                this.context.validateField(name, arrayData, property);
+                                                // Also validate scale field
+                                                if (currentSchema?.properties?.spatial?.properties?.scale) {
+                                                    this.context.validateField('spatial.scale', currentFormData.spatial?.scale, currentSchema.properties.spatial.properties.scale);
+                                                }
+                                            }
                                         }
                                     }
                                 });
@@ -1568,6 +1578,14 @@
                                     arrayData[index] = e.target.value;
                                     if (this.context.type === 'normal') {
                                         updateFormData();
+                                        // Trigger validation for spatial fields when countries array changes
+                                        if (name === 'spatial.countries') {
+                                            this.context.validateField(name, arrayData, property);
+                                            // Also validate scale field
+                                            if (currentSchema?.properties?.spatial?.properties?.scale) {
+                                                this.context.validateField('spatial.scale', currentFormData.spatial?.scale, currentSchema.properties.spatial.properties.scale);
+                                            }
+                                        }
                                     }
                                 });
                             }
@@ -1581,6 +1599,14 @@
                                 renderArrayItems();
                                 if (this.context.type === 'normal') {
                                     updateFormData();
+                                    // Trigger validation for spatial fields when countries array changes
+                                    if (name === 'spatial.countries') {
+                                        this.context.validateField(name, arrayData, property);
+                                        // Also validate scale field
+                                        if (currentSchema?.properties?.spatial?.properties?.scale) {
+                                            this.context.validateField('spatial.scale', currentFormData.spatial?.scale, currentSchema.properties.spatial.properties.scale);
+                                        }
+                                    }
                                 }
                             });
                             
@@ -1626,12 +1652,28 @@
                         renderArrayItems();
                         if (this.context.type === 'normal') {
                             updateFormData();
+                            // Trigger validation for spatial fields when countries array changes
+                            if (name === 'spatial.countries') {
+                                this.context.validateField(name, arrayData, property);
+                                // Also validate scale field
+                                if (currentSchema?.properties?.spatial?.properties?.scale) {
+                                    this.context.validateField('spatial.scale', currentFormData.spatial?.scale, currentSchema.properties.spatial.properties.scale);
+                                }
+                            }
                         }
                     } else {
                         arrayData.push({});
                         renderArrayItems();
                         if (this.context.type === 'normal') {
                             updateFormData();
+                            // Trigger validation for spatial fields when countries array changes
+                            if (name === 'spatial.countries') {
+                                this.context.validateField(name, arrayData, property);
+                                // Also validate scale field
+                                if (currentSchema?.properties?.spatial?.properties?.scale) {
+                                    this.context.validateField('spatial.scale', currentFormData.spatial?.scale, currentSchema.properties.spatial.properties.scale);
+                                }
+                            }
                         }
                     }
                 });
@@ -1932,6 +1974,27 @@
             }
 
             isRequiredField(name, property, options) {
+                // Spatial scale is always mandatory when spatial coverage is included
+                if (name === 'spatial.scale') {
+                    return true;
+                }
+
+                // The spatial section itself should NOT have red bar
+                if (name === 'spatial') {
+                    return false;
+                }
+
+                // Other spatial fields are NOT mandatory (except countries, which depends on scale)
+                // Only spatial.scale should show the red bar
+                if (name.startsWith('spatial.') && name !== 'spatial.scale' && name !== 'spatial.countries') {
+                    return false;
+                }
+
+                // spatial.countries is not directly required (its requirement depends on scale value)
+                if (name === 'spatial.countries') {
+                    return false;
+                }
+
                 // For modal context (array item editors), we need to check the item schema
                 if (this.context.type === 'modal' && currentObjectEditor && currentObjectEditor.arrayName) {
                     const arrayName = currentObjectEditor.arrayName;
@@ -2172,7 +2235,7 @@
 
             handleFieldChange(event, name, property, options) {
                 const value = this.getFieldValue(event.target);
-                
+
                 // Update form data
                 if (this.context.type === 'normal') {
                     updateFormData();
@@ -2183,7 +2246,24 @@
 
                 // Validate field
                 this.context.validateField(name, value, property);
-                
+
+                // Cross-validate spatial fields (scale and countries are interdependent)
+                if (name === 'spatial.scale' || name === 'spatial.countries') {
+                    const relatedField = name === 'spatial.scale' ? 'spatial.countries' : 'spatial.scale';
+                    const relatedValue = name === 'spatial.scale'
+                        ? currentFormData.spatial?.countries
+                        : currentFormData.spatial?.scale;
+
+                    // Find the related field's property definition
+                    if (currentSchema?.properties?.spatial?.properties) {
+                        const relatedFieldName = relatedField.split('.')[1];
+                        const relatedProperty = currentSchema.properties.spatial.properties[relatedFieldName];
+                        if (relatedProperty) {
+                            this.context.validateField(relatedField, relatedValue, relatedProperty);
+                        }
+                    }
+                }
+
                 // Handle dependencies
                 this.handleDependentFields(name, value, event.target);
             }
@@ -2460,12 +2540,25 @@
                 let isValid = true;
                 let errorMessage = '';
 
-                if (currentSchema.required && currentSchema.required.includes(fieldName) && 
-                    (!value || (typeof value === 'string' && value.trim() === ''))) {
-                    isValid = false;
-                    errorMessage = 'Required field';
+                // Check if this is a required field from schema
+                const isSchemaRequired = currentSchema.required && currentSchema.required.includes(fieldName);
+
+                // Special handling for spatial.scale which is always mandatory
+                if (fieldName === 'spatial.scale') {
+                    if (!value || (typeof value === 'string' && value.trim() === '')) {
+                        isValid = false;
+                        errorMessage = 'Required field';
+                    }
                 }
-                
+                // Check other schema-required fields - handle both strings and arrays
+                else if (isSchemaRequired) {
+                    if (!value || (typeof value === 'string' && value.trim() === '') || (Array.isArray(value) && value.length === 0)) {
+                        isValid = false;
+                        errorMessage = 'Required field';
+                    }
+                }
+
+                // Format and length validations
                 if (value && typeof value === 'string') {
                     if (property.minLength && value.length < property.minLength) {
                         isValid = false;
@@ -2481,13 +2574,83 @@
                     }
                 }
 
+                // Spatial scale and countries validation (only if no errors yet)
+                if (isValid) {
+                    const spatialValidation = this.validateSpatialRelationship(fieldName, value);
+                    if (!spatialValidation.isValid) {
+                        isValid = false;
+                        errorMessage = spatialValidation.errorMessage;
+                    }
+                }
+
                 // Only update validation indicators for normal context
                 if (this.context.type === 'normal') {
                     fieldValidationStatus.set(fieldName, { isValid, errorMessage });
                     this.updateValidationIndicator(fieldName, isValid, errorMessage);
                     updateValidationDisplay();
                 }
-                
+
+                return { isValid, errorMessage };
+            }
+
+            validateSpatialRelationship(fieldName, value) {
+                let isValid = true;
+                let errorMessage = '';
+
+                // Check if we're validating spatial.scale or spatial.countries
+                if (fieldName === 'spatial.scale' || fieldName === 'spatial.countries') {
+                    // Get scale - use passed value if validating scale, otherwise get from currentFormData
+                    let scale;
+                    if (fieldName === 'spatial.scale') {
+                        scale = value;
+                    } else {
+                        scale = currentFormData.spatial?.scale;
+                    }
+
+                    // Get countries - use passed value if validating countries, otherwise get from currentFormData
+                    let countries;
+                    if (fieldName === 'spatial.countries') {
+                        // When validating countries, the value passed is the array
+                        countries = value;
+                    } else {
+                        // When validating scale, get countries from currentFormData
+                        countries = currentFormData.spatial?.countries;
+                    }
+
+                    if (scale) {
+                        // Filter out empty strings and count only non-empty country codes
+                        const validCountries = Array.isArray(countries)
+                            ? countries.filter(c => c && typeof c === 'string' && c.trim() !== '')
+                            : [];
+                        const countriesCount = validCountries.length;
+
+                        switch (scale.toLowerCase()) {
+                            case 'global':
+                                // Global scale: no country specification needed
+                                break;
+                            case 'regional':
+                                // Regional scale: at least 2 countries expected
+                                if (countriesCount < 2) {
+                                    isValid = false;
+                                    errorMessage = fieldName === 'spatial.scale'
+                                        ? 'Regional scale requires at least 2 countries'
+                                        : 'At least 2 countries required for regional scale';
+                                }
+                                break;
+                            case 'national':
+                            case 'sub-national':
+                                // National or sub-national: at least 1 country expected
+                                if (countriesCount < 1) {
+                                    isValid = false;
+                                    errorMessage = fieldName === 'spatial.scale'
+                                        ? `${scale} scale requires at least 1 country`
+                                        : `At least 1 country required for ${scale} scale`;
+                                }
+                                break;
+                        }
+                    }
+                }
+
                 return { isValid, errorMessage };
             }
 
@@ -3733,6 +3896,12 @@
                     newFormData[fieldName] = currentFormData[fieldName];
                 }
             });
+
+            // Preserve spatial.countries array if it exists
+            if (currentFormData.spatial?.countries && Array.isArray(currentFormData.spatial.countries)) {
+                if (!newFormData.spatial) newFormData.spatial = {};
+                newFormData.spatial.countries = currentFormData.spatial.countries;
+            }
             
             // Merge form data, but preserve array structure for known array fields
             Object.keys(newFormData).forEach(key => {
@@ -3744,6 +3913,16 @@
                         } else if (!Array.isArray(newFormData[key]) && Array.isArray(currentFormData[key])) {
                             console.warn(`Ignoring non-array value for array field ${key}:`, typeof newFormData[key], newFormData[key]);
                         }
+                    } else if (fieldSchema.type === 'object' && key === 'spatial') {
+                        // Special handling for spatial object to preserve nested arrays
+                        if (!currentFormData[key]) currentFormData[key] = {};
+                        // Merge spatial properties but preserve the countries array
+                        Object.keys(newFormData[key] || {}).forEach(spatialKey => {
+                            if (spatialKey !== 'countries') {
+                                currentFormData[key][spatialKey] = newFormData[key][spatialKey];
+                            }
+                        });
+                        // Keep the countries array from preservation above
                     } else {
                         currentFormData[key] = newFormData[key];
                     }
@@ -3966,25 +4145,40 @@
             let attributionsValid = true;
             let attributionError = '';
 
-            for (let i = 0; i < attributions.length; i++) {
-                const attribution = attributions[i];
-                const attrNum = i + 1;
+            // First check if required roles are present
+            const requiredRoles = ['publisher', 'creator', 'contact_point'];
+            const presentRoles = attributions.map(a => a.role).filter(Boolean);
 
-                // Check if entity exists and has required fields
-                if (!attribution.entity) {
+            for (const role of requiredRoles) {
+                if (!presentRoles.includes(role)) {
                     attributionsValid = false;
-                    attributionError = `Attribution ${attrNum} is missing entity information`;
+                    attributionError = `Required attribution role missing: ${role.replace('_', ' ')}`;
                     break;
                 }
-                if (!attribution.entity.name || attribution.entity.name.trim() === '') {
-                    attributionsValid = false;
-                    attributionError = `Attribution ${attrNum} is missing required entity name`;
-                    break;
-                }
-                if (!attribution.entity.email || attribution.entity.email.trim() === '') {
-                    attributionsValid = false;
-                    attributionError = `Attribution ${attrNum} is missing required entity email`;
-                    break;
+            }
+
+            // Then validate each attribution has required fields
+            if (attributionsValid) {
+                for (let i = 0; i < attributions.length; i++) {
+                    const attribution = attributions[i];
+                    const attrNum = i + 1;
+
+                    // Check if entity exists and has required fields
+                    if (!attribution.entity) {
+                        attributionsValid = false;
+                        attributionError = `Attribution ${attrNum} is missing entity information`;
+                        break;
+                    }
+                    if (!attribution.entity.name || attribution.entity.name.trim() === '') {
+                        attributionsValid = false;
+                        attributionError = `Attribution ${attrNum} is missing required entity name`;
+                        break;
+                    }
+                    if (!attribution.entity.email || attribution.entity.email.trim() === '') {
+                        attributionsValid = false;
+                        attributionError = `Attribution ${attrNum} is missing required entity email`;
+                        break;
+                    }
                 }
             }
 
