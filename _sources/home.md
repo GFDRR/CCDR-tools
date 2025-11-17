@@ -157,7 +157,7 @@ This documentation offers guidance on risk screening and provides pythons tools 
 
 
 ```{note}
-Are you a World Bank TTL? You can request for availability to produce a new country screening using [**this form**](https://forms.office.com/r/UU3LXBNz4T).
+If you are a WB user planning to apply these tools for your project, please take a minute to fill in our [**survey**](https://forms.office.com/r/UU3LXBNz4T).
 ```
 
 ## Applied globally

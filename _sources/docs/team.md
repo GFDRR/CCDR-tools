@@ -19,3 +19,12 @@ align: center
 width: 50%
 ---
 ```
+
+# Citation
+
+The usage of CCDR tools should be acknowledged by citation:
+
+<i>"<b>Amadio M. (GFDRR)</b> - CCDR tools data and methodology, 2024. Available at https://gfdrr.github.io/CCDR-tools"</i>
+
+If you are a World Bank user planning to apply these tools for your project, please take a minute to fill in our [**survey**](https://forms.office.com/r/UU3LXBNz4T).
+
