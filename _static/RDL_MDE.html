@@ -1858,7 +1858,7 @@
                 const isDirectFormProperty = !name.includes('.') || name.split('.').length <= 2;
                 const isSpatialField = name === 'spatial';
                 const isGeometryField = name.endsWith('.geometry');
-                const isClassificationField = name.endsWith('.se_category') || name === 'se_category';
+                const isClassificationField = name.endsWith('.se_indicator') || name === 'se_indicator';
 
                 // Always show title for spatial field, geometry sub-field, classification fields, or for nested objects
                 if (!isDirectFormProperty || isSpatialField || isGeometryField || isClassificationField) {
@@ -4352,11 +4352,11 @@
                             (vulnerability.functions?.fragility) ||
                             (vulnerability.functions?.damage_to_loss) ||
                             (vulnerability.functions?.engineering_demand) ||
-                            (vulnerability.se_category);
+                            (vulnerability.se_indicator);
 
                         if (!hasVulnerabilityApproach) {
                             vulnerabilityValid = false;
-                            vulnerabilityError = 'Vulnerability must specify at least one approach: vulnerability function, fragility function, damage-to-loss function, engineering demand function, or socio-economic index category';
+                            vulnerabilityError = 'Vulnerability must specify at least one approach: vulnerability function, fragility function, damage-to-loss function, engineering demand function, or socio-economic vulnerability indicator';
                         }
                     }
                 }

@@ -1302,54 +1302,133 @@
       }
     },
     "SocioEconomicIndex": {
-      "title": "Socio-economic index",
+      "title": "Socio-economic Indicator",
       "type": "object",
-      "description": "The socio-economic category vulnerable to the hazard.",
-      "required": ["identifier"],
+      "description": "A socio-economic indicator or index used to characterize vulnerability.",
+      "required": [
+        "indicator_name",
+        "indicator_code",
+        "description",
+        "reference_year"
+      ],
+      "examples": [
+        {
+          "scheme": "GED4ALL-socio-economic",
+          "indicator_name": "Elderly population",
+          "indicator_code": "AGE_65_PLUS",
+          "description": "Population aged 65 years and older, which is more vulnerable to heat-related health impacts",
+          "reference_year": "2020"
+        },
+        {
+          "scheme": "CDC-SVI",
+          "indicator_name": "Overall Social Vulnerability Index",
+          "indicator_code": "SVI_OVERALL",
+          "description": "Overall social vulnerability score combining socioeconomic status, household composition, minority status, and housing/transportation factors",
+          "threshold": "High vulnerability (SVI > 0.75)",
+          "reference_year": "2020",
+          "uri": "https://www.atsdr.cdc.gov/placeandhealth/svi/index.html"
+        },
+        {
+          "scheme": "custom",
+          "indicator_name": "Poverty headcount ratio",
+          "indicator_code": "POV_HEADCOUNT_NATL",
+          "description": "Households living below the national poverty line with limited resources for disaster preparedness and recovery",
+          "threshold": "Below poverty line",
+          "reference_year": "2021",
+          "uri": "https://data.worldbank.org/indicator/SI.POV.DDAY"
+        }
+      ],
       "properties": {
         "scheme": {
-          "title": "Scheme",
-          "description": "The scheme or codelist from which the classification code is taken, using the open [classification_scheme](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme) codelist.",
+          "title": "Indicator scheme",
+          "description": "The classification scheme or framework from which the indicator is taken.",
           "type": "string",
-          "codelist": "classification_scheme.csv",
-          "openCodelist": false,
-          "enum": [
+          "codelist": "socioeconomic_scheme.csv",
+          "openCodelist": true,
+          "suggestions": [
             "GED4ALL-socio-economic",
             "MOVER-social-vulnerability-categories",
-            "GLIDE",
-            "EMDAT",
-            "USGS_EHP"
+            "CDC-SVI",
+            "INFORM-risk-index",
+            "custom"
+          ],
+          "examples": [
+            "GED4ALL-socio-economic",
+            "CDC-SVI",
+            "INFORM-risk-index"
           ]
         },
-        "identifier": {
-          "title": "Classification identifier",
-          "description": "The classification code taken from the scheme.",
+        "indicator_name": {
+          "title": "Indicator name",
+          "description": "The name of the specific indicator or index used to characterize vulnerability.",
           "type": "string",
           "minLength": 1,
           "examples": [
-            "2024-0123-PHL",
-            "FL-20240315-PHL",
-            "EQ-M7.2-2024-0401",
-            "TC-HAIYAN-2013"
+            "Poverty headcount ratio",
+            "Social Vulnerability Index",
+            "Population density",
+            "Access to healthcare facilities",
+            "Elderly population percentage",
+            "Educational attainment"
+          ]
+        },
+        "indicator_code": {
+          "title": "Indicator code",
+          "description": "The code or identifier for the indicator within the scheme.",
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "AGE_65_PLUS",
+            "POV_HEADCOUNT",
+            "SVI_OVERALL",
+            "POP_DENSITY",
+            "HEALTH_ACCESS"
           ]
         },
         "description": {
           "title": "Description",
-          "description": "A textual description or title for the classification code.",
+          "description": "Description of what this indicator measures and how it relates to vulnerability to the hazard.",
           "type": "string",
           "minLength": 1,
           "examples": [
-            "Severe flooding in Central Luzon, Philippines, March 2024",
-            "Magnitude 7.2 earthquake offshore Mindanao, April 2024",
-            "Super Typhoon Haiyan (Yolanda), November 2013",
-            "Extended drought affecting agricultural regions"
+            "Population aged 65 years and older, which is more vulnerable to heat-related health impacts",
+            "Households living below the poverty line with limited resources for disaster preparedness and recovery",
+            "Overall social vulnerability score combining socioeconomic status, household composition, minority status, and housing/transportation factors"
+          ]
+        },
+        "threshold": {
+          "title": "Threshold or value",
+          "description": "Specific threshold or value range used to define vulnerability level (if applicable).",
+          "type": "string",
+          "examples": [
+            "Below poverty line",
+            ">65 years old",
+            "High vulnerability (SVI > 0.75)",
+            "Population density > 1000 persons/km²"
+          ]
+        },
+        "reference_year": {
+          "title": "Reference year",
+          "description": "The year the indicator data applies to.",
+          "type": "integer",
+          "minimum": 1900,
+          "maximum": 2100,
+          "examples": [
+            2020,
+            2021,
+            2023
           ]
         },
         "uri": {
           "title": "URI",
-          "description": "A URI to uniquely identify the classification code.",
+          "description": "A URI to the indicator definition or data source.",
           "type": "string",
-          "format": "uri"
+          "format": "iri",
+          "examples": [
+            "https://www.atsdr.cdc.gov/placeandhealth/svi/index.html",
+            "https://data.worldbank.org/indicator/SI.POV.DDAY",
+            "https://drmkc.jrc.ec.europa.eu/inform-index"
+          ]
         },
         "analysis_details": {
           "title": "Analysis details",
@@ -1360,7 +1439,8 @@
             "Socio-economic vulnerability index derived from census data and household surveys conducted in 2023."
           ]
         }
-      }
+      },
+      "minProperties": 1
     },
     "exposure_category": {
       "type": "string",
