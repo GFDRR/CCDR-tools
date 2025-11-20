@@ -1374,6 +1374,8 @@
             createArrayInput(name, property, value, options) {
                 if (name.includes('bbox')) {
                     return this.createBboxInput(name, property, value, options);
+                } else if (name.includes('centroid')) {
+                    return this.createCentroidInput(name, property, value, options);
                 } else {
                     return this.createGenericArrayInput(name, property, value, options);
                 }
@@ -1452,6 +1454,82 @@
                 previewContainer.appendChild(previewInput);
                 container.appendChild(previewContainer);
                 
+                return container;
+            }
+
+            createCentroidInput(name, property, value, options) {
+                const container = document.createElement('div');
+                container.className = 'bbox-field border p-3 rounded bg-light';
+
+                const title = document.createElement('h6');
+                title.textContent = 'Centroid Coordinates (Longitude, Latitude)';
+                title.className = 'mb-3';
+                container.appendChild(title);
+
+                const centroidData = value || [0, 0];
+                const labels = ['Longitude', 'Latitude'];
+
+                const inputsContainer = document.createElement('div');
+                inputsContainer.className = 'row g-2';
+
+                function updateCentroidPreview() {
+                    const currentCentroid = getNestedValue(currentFormData, name) || [0, 0];
+                    const previewInput = container.querySelector('.centroid-preview');
+                    if (previewInput) {
+                        previewInput.value = `Centroid point [${currentCentroid.join(', ')}]`;
+                    }
+                }
+
+                for (let i = 0; i < 2; i++) {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-6';
+
+                    const label = document.createElement('label');
+                    label.textContent = labels[i];
+                    label.className = 'form-label';
+
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.step = 'any';
+                    input.className = 'form-control';
+                    input.name = `${this.context.getFieldId(name)}_${i}`;
+                    input.value = centroidData[i] || 0;
+                    input.placeholder = labels[i];
+
+                    input.addEventListener('input', function() {
+                        const currentCentroid = getNestedValue(currentFormData, name) || [0, 0];
+                        currentCentroid[i] = parseFloat(this.value) || 0;
+                        setNestedValue(currentFormData, name, currentCentroid);
+                        updateFormData();
+                        updateCentroidPreview();
+                    });
+
+                    col.appendChild(label);
+                    col.appendChild(input);
+                    inputsContainer.appendChild(col);
+                }
+
+                container.appendChild(inputsContainer);
+
+                const previewContainer = document.createElement('div');
+                previewContainer.className = 'mt-3';
+
+                const previewLabel = document.createElement('label');
+                previewLabel.textContent = 'Centroid Display:';
+                previewLabel.className = 'form-label';
+
+                const previewInput = document.createElement('input');
+                previewInput.type = 'text';
+                previewInput.className = 'form-control centroid-preview';
+                previewInput.readOnly = true;
+                previewInput.value = `Centroid point [${centroidData.join(', ')}]`;
+                previewInput.style.backgroundColor = '#f8f9fa';
+                previewInput.style.fontFamily = 'monospace';
+
+                previewContainer.appendChild(previewLabel);
+                previewContainer.appendChild(previewInput);
+                container.appendChild(previewContainer);
+
                 return container;
             }
 
@@ -3016,11 +3094,25 @@
 
         function removeSectionTab(section) {
             const tabButton = document.getElementById(`${section}-tab`);
-            if (tabButton) tabButton.parentElement.remove();
-            
             const tabContent = document.getElementById(section);
+
+            // Check if the tab being removed is currently active
+            const isActive = tabButton && tabButton.classList.contains('active');
+
+            if (tabButton) tabButton.parentElement.remove();
             if (tabContent) tabContent.remove();
-            
+
+            // If the removed tab was active, switch to the general tab
+            if (isActive) {
+                const generalTab = document.getElementById('general-tab');
+                const generalContent = document.getElementById('general');
+                if (generalTab && generalContent) {
+                    // Activate the general tab
+                    generalTab.classList.add('active');
+                    generalContent.classList.add('show', 'active');
+                }
+            }
+
             if (activeSections.size === 1) {
                 document.getElementById('metadataTabs').style.display = 'none';
             }
@@ -3673,21 +3765,21 @@
                             }
                         });
                         
-                        // Handle bbox fields specially - they have names like fieldName_0, fieldName_1, etc.
-                        const bboxInputs = card.querySelectorAll('input[name$="_0"], input[name$="_1"], input[name$="_2"], input[name$="_3"]');
-                        const bboxGroups = {};
-                        bboxInputs.forEach(input => {
+                        // Handle bbox and centroid fields specially - they have names like fieldName_0, fieldName_1, etc.
+                        const coordInputs = card.querySelectorAll('input[name$="_0"], input[name$="_1"], input[name$="_2"], input[name$="_3"]');
+                        const coordGroups = {};
+                        coordInputs.forEach(input => {
                             const match = input.name.match(/(.+)_(\d+)$/);
                             if (match) {
                                 const fieldName = match[1].replace('modal_', '');
                                 const index = parseInt(match[2]);
-                                if (!bboxGroups[fieldName]) bboxGroups[fieldName] = [];
-                                bboxGroups[fieldName][index] = parseFloat(input.value) || 0;
+                                if (!coordGroups[fieldName]) coordGroups[fieldName] = [];
+                                coordGroups[fieldName][index] = parseFloat(input.value) || 0;
                             }
                         });
-                        
-                        // Add bbox arrays to the item
-                        Object.entries(bboxGroups).forEach(([fieldName, values]) => {
+
+                        // Add bbox/centroid arrays to the item
+                        Object.entries(coordGroups).forEach(([fieldName, values]) => {
                             item[fieldName] = values;
                         });
                         
@@ -3741,25 +3833,25 @@
                 }
             });
             
-            // Handle bbox fields in the main form (not inside array containers)
-            const bboxInputs = form.querySelectorAll('input[name$="_0"], input[name$="_1"], input[name$="_2"], input[name$="_3"]');
-            const bboxGroups = {};
-            bboxInputs.forEach(input => {
-                // Skip if this bbox input is inside an array container (already handled above)
+            // Handle bbox and centroid fields in the main form (not inside array containers)
+            const coordInputs = form.querySelectorAll('input[name$="_0"], input[name$="_1"], input[name$="_2"], input[name$="_3"]');
+            const coordGroups = {};
+            coordInputs.forEach(input => {
+                // Skip if this coordinate input is inside an array container (already handled above)
                 const isInArrayContainer = input.closest('.array-field');
                 if (!isInArrayContainer) {
                     const match = input.name.match(/(.+)_(\d+)$/);
                     if (match) {
                         const fieldName = match[1].replace('modal_', '');
                         const index = parseInt(match[2]);
-                        if (!bboxGroups[fieldName]) bboxGroups[fieldName] = [];
-                        bboxGroups[fieldName][index] = parseFloat(input.value) || 0;
+                        if (!coordGroups[fieldName]) coordGroups[fieldName] = [];
+                        coordGroups[fieldName][index] = parseFloat(input.value) || 0;
                     }
                 }
             });
-            
-            // Add bbox arrays to the object data
-            Object.entries(bboxGroups).forEach(([fieldName, values]) => {
+
+            // Add bbox/centroid arrays to the object data
+            Object.entries(coordGroups).forEach(([fieldName, values]) => {
                 if (fieldName.includes('.')) {
                     setNestedValue(objectData, fieldName, values);
                 } else {
@@ -3872,19 +3964,19 @@
                     setNestedValue(newFormData, cb.name, cb.checked);
                 });
                 
-                const bboxFields = form.querySelectorAll('input[name*="_0"], input[name*="_1"], input[name*="_2"], input[name*="_3"]');
-                const bboxGroups = {};
-                bboxFields.forEach(input => {
+                const coordFields = form.querySelectorAll('input[name*="_0"], input[name*="_1"], input[name*="_2"], input[name*="_3"]');
+                const coordGroups = {};
+                coordFields.forEach(input => {
                     const match = input.name.match(/(.+)_(\d+)$/);
                     if (match) {
                         const fieldName = match[1];
                         const index = parseInt(match[2]);
-                        if (!bboxGroups[fieldName]) bboxGroups[fieldName] = [];
-                        bboxGroups[fieldName][index] = parseFloat(input.value) || 0;
+                        if (!coordGroups[fieldName]) coordGroups[fieldName] = [];
+                        coordGroups[fieldName][index] = parseFloat(input.value) || 0;
                     }
                 });
-                
-                Object.entries(bboxGroups).forEach(([fieldName, values]) => {
+
+                Object.entries(coordGroups).forEach(([fieldName, values]) => {
                     setNestedValue(newFormData, fieldName, values);
                 });
             });
