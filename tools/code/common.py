@@ -4,9 +4,9 @@ import os
 from dotenv import dotenv_values, find_dotenv
 
 config = dotenv_values(find_dotenv())
-DATA_DIR   = config["DATA_DIR"]
+DATA_DIR = config["DATA_DIR"]
 OUTPUT_DIR = config["OUTPUT_DIR"]
-CACHE_DIR  = config["CACHE_DIR"]
+CACHE_DIR = config["CACHE_DIR"]
 
 # Ensure output and cache dirs exist
 os.makedirs(OUTPUT_DIR, exist_ok=True)
