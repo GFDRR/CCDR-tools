@@ -3616,6 +3616,8 @@
                     summaryText = hazardDisplay;
                 } else if (arrayName.includes('losses') && objectData.hazard_type) {
                     summaryText = objectData.hazard_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Loss';
+                } else if (arrayName.includes('socio_economic') && objectData.indicator_name) {
+                    summaryText = objectData.indicator_name;
                 } else if (objectData.name) {
                     summaryText = objectData.name;
                 } else if (objectData.title) {
@@ -4416,39 +4418,57 @@
                     vulnerabilityValid = false;
                     vulnerabilityError = 'Dataset with vulnerability risk_data_type must have vulnerability metadata';
                 } else {
-                    // Define required vulnerability attributes
-                    const requiredVulnerabilityAttributes = [
-                        { field: 'hazard_primary', name: 'primary hazard type' },
-                        { field: 'hazard_analysis_type', name: 'hazard analysis type' },
-                        { field: 'intensity', name: 'hazard intensity measurement' },
-                        { field: 'category', name: 'exposure category' },
-                        { field: 'impact_type', name: 'impact type' },
-                        { field: 'impact_modelling', name: 'impact modelling' },
-                        { field: 'impact_metric', name: 'impact metric' },
-                        { field: 'quantity_kind', name: 'quantity kind' }
-                    ];
+                    // Check which approach is being used
+                    // hasFunctions should only be true if there are actual non-empty function arrays
+                    const hasFunctions = vulnerability.functions && Object.keys(vulnerability.functions).some(key => {
+                        const funcArray = vulnerability.functions[key];
+                        return Array.isArray(funcArray) && funcArray.length > 0;
+                    });
+                    const hasSocioEconomic = vulnerability.socio_economic && vulnerability.socio_economic.length > 0;
 
-                    // Check each required attribute
-                    for (const attr of requiredVulnerabilityAttributes) {
-                        if (!vulnerability[attr.field] || vulnerability[attr.field].toString().trim() === '') {
-                            vulnerabilityValid = false;
-                            vulnerabilityError = `Vulnerability is missing required ${attr.name}`;
-                            break;
+                    if (!hasFunctions && !hasSocioEconomic) {
+                        vulnerabilityValid = false;
+                        vulnerabilityError = 'Vulnerability must specify at least one approach: vulnerability functions, fragility functions, damage-to-loss functions, engineering demand functions, or socio-economic indicators';
+                    } else if (hasSocioEconomic && !hasFunctions) {
+                        // Socio-economic only: validate that each indicator has required fields
+                        for (let i = 0; i < vulnerability.socio_economic.length; i++) {
+                            const indicator = vulnerability.socio_economic[i];
+                            const requiredFields = [
+                                { field: 'indicator_name', name: 'indicator name' },
+                                { field: 'indicator_code', name: 'indicator code' },
+                                { field: 'description', name: 'description' },
+                                { field: 'reference_year', name: 'reference year' }
+                            ];
+
+                            for (const attr of requiredFields) {
+                                if (!indicator[attr.field] || indicator[attr.field].toString().trim() === '') {
+                                    vulnerabilityValid = false;
+                                    vulnerabilityError = `Socio-economic indicator ${i + 1} is missing required ${attr.name}`;
+                                    break;
+                                }
+                            }
+                            if (!vulnerabilityValid) break;
                         }
-                    }
+                    } else if (hasFunctions) {
+                        // Function-based approach: validate required vulnerability attributes
+                        const requiredVulnerabilityAttributes = [
+                            { field: 'hazard_primary', name: 'primary hazard type' },
+                            { field: 'hazard_analysis_type', name: 'hazard analysis type' },
+                            { field: 'intensity', name: 'hazard intensity measurement' },
+                            { field: 'category', name: 'exposure category' },
+                            { field: 'impact_type', name: 'impact type' },
+                            { field: 'impact_modelling', name: 'impact modelling' },
+                            { field: 'impact_metric', name: 'impact metric' },
+                            { field: 'quantity_kind', name: 'quantity kind' }
+                        ];
 
-                    // Check that at least one vulnerability approach is present
-                    if (vulnerabilityValid) {
-                        const hasVulnerabilityApproach =
-                            (vulnerability.functions?.vulnerability) ||
-                            (vulnerability.functions?.fragility) ||
-                            (vulnerability.functions?.damage_to_loss) ||
-                            (vulnerability.functions?.engineering_demand) ||
-                            (vulnerability.se_indicator);
-
-                        if (!hasVulnerabilityApproach) {
-                            vulnerabilityValid = false;
-                            vulnerabilityError = 'Vulnerability must specify at least one approach: vulnerability function, fragility function, damage-to-loss function, engineering demand function, or socio-economic vulnerability indicator';
+                        // Check each required attribute
+                        for (const attr of requiredVulnerabilityAttributes) {
+                            if (!vulnerability[attr.field] || vulnerability[attr.field].toString().trim() === '') {
+                                vulnerabilityValid = false;
+                                vulnerabilityError = `Vulnerability is missing required ${attr.name}`;
+                                break;
+                            }
                         }
                     }
                 }
@@ -5154,10 +5174,49 @@ ${filteredData.description || 'No description provided'}
                         try {
                             let loadedData = JSON.parse(event.target.result);
 
+                            // Check if this is a package with datasets array
+                            if (loadedData.datasets && Array.isArray(loadedData.datasets)) {
+                                if (loadedData.datasets.length === 0) {
+                                    alert('The package contains no datasets.');
+                                    return;
+                                }
+                                // Alert if multiple datasets
+                                if (loadedData.datasets.length > 1) {
+                                    alert('Package contains multiple datasets. Loading the first dataset only.');
+                                }
+                                // Load the first dataset
+                                loadedData = loadedData.datasets[0];
+                            }
+
                             // Migrate attribution data from old format to new format
                             loadedData = migrateAttributionData(loadedData);
 
                             currentFormData = loadedData;
+
+                            // Activate sections based on loaded data
+                            activeSections.clear();
+                            activeSections.add('general');
+
+                            SECTIONS.forEach(section => {
+                                const checkbox = document.getElementById(`${section}Check`);
+                                if (loadedData[section]) {
+                                    activeSections.add(section);
+                                    if (checkbox) {
+                                        checkbox.checked = true;
+                                    }
+                                    // Only add tab if it doesn't already exist
+                                    const existingTab = document.getElementById(`${section}-tab`);
+                                    if (!existingTab) {
+                                        addSectionTab(section);
+                                    }
+                                } else {
+                                    if (checkbox) {
+                                        checkbox.checked = false;
+                                    }
+                                    removeSectionTab(section);
+                                }
+                            });
+
                             updatePreview();
                             generateForm();
                         } catch (error) {
