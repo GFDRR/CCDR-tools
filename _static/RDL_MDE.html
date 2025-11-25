@@ -4540,14 +4540,21 @@
         }
 
         function generateDatasetId() {
-            // Format: rdls_{risk_data_type}-{country}_{shortname}_{item}
+            // Format: rdls_{short_types}-{countries}_{shortname}_{items}
             // Example: rdls_hzd-ury_ucra_fl or rdls_exp+lss-ury+ita_project_fl+pl
 
-            const parts = ['rdls'];
+            const parts = [];
 
-            // 1. Build risk_data_type part (required)
+            // 1. Build risk_data_type part (required) with short codes
             const riskDataTypes = currentFormData.risk_data_type || [];
-            let riskTypePart = riskDataTypes.length > 0 ? riskDataTypes.join('+') : 'data';
+            const typeMap = {
+                'hazard': 'hzd',
+                'exposure': 'exp',
+                'vulnerability': 'vln',
+                'loss': 'lss'
+            };
+            const shortTypes = riskDataTypes.map(type => typeMap[type] || type);
+            let riskTypePart = shortTypes.length > 0 ? shortTypes.join('+') : 'data';
 
             // 2. Get country codes (optional)
             let countryCodes = [];
@@ -4561,7 +4568,7 @@
             if (countryCodes.length > 0) {
                 riskTypePart += '-' + countryCodes.join('+');
             }
-            parts.push(riskTypePart);
+            parts.push('rdls_' + riskTypePart);
 
             // 3. Get shortname from project or publisher (required)
             let shortname = 'dataset';
