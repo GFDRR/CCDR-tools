@@ -106,11 +106,11 @@ This documentation offers guidance on risk screening and provides pythons tools 
 <div class="tools-grid">
 
 <div class="tool-item">
-<div class="tool-image">
+<a href="docs/intro-risk.html" class="tool-image">
 
 ![Disaster Risk Analysis](docs/images/rdl-disaster-risk-logo.png)
 
-</div>
+</a>
 <div class="tool-content">
 <h3><strong>Analyze disaster risk</strong></h3>
 <p>Perform <strong><a href="https://gfdrr.github.io/CCDR-tools/docs/intro-risk.html">spatial analytics of disaster risk</a></strong> using globally available datasets.</p>
@@ -118,11 +118,11 @@ This documentation offers guidance on risk screening and provides pythons tools 
 </div>
 
 <div class="tool-item">
-<div class="tool-image">
+<a href="docs/risk-poverty.html" class="tool-image">
 
 ![Risk and Poverty Mapping](docs/images/rdl-risk-poverty-logo.png)
 
-</div>
+</a>
 <div class="tool-content">
 <h3><strong>Map the interaction of risk and poverty</strong></h3>
 <p>Combine hazard exposure and socio-economic vulnerability to produce <strong><a href="docs/risk-poverty.html">bi-variate maps</a></strong> highlighting risk-poverty hotspots.</p>
@@ -130,11 +130,11 @@ This documentation offers guidance on risk screening and provides pythons tools 
 </div>
 
 <div class="tool-item">
-<div class="tool-image">
+<a href="docs/climate-risk.html" class="tool-image">
 
 ![Future Climate Risk](docs/images/rdl-climate-risk-logo.png)
 
-</div>
+</a>
 <div class="tool-content">
 <h3><strong>Explore future climate risk</strong></h3>
 <p>Generate climate risk outlooks based on <strong><a href="docs/climate-risk.html">CMIP6 climate projections</a></strong> and standardized risk indices.</p>
@@ -142,11 +142,11 @@ This documentation offers guidance on risk screening and provides pythons tools 
 </div>
 
 <div class="tool-item">
-<div class="tool-image">
+<a href="docs/presentation.html#dashboard" class="tool-image">
 
 ![Interactive Dashboards](docs/images/rdl-dashboard-logo.png)
 
-</div>
+</a>
 <div class="tool-content">
 <h3><strong>Build interactive dashboards</strong></h3>
 <p>Present results in an <strong><a href="docs/presentation.html#dashboard">interactive dashboard</a></strong> format to support communication, exploration, and stakeholder engagement.</p>
