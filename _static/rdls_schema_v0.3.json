@@ -384,7 +384,7 @@
           "$ref": "#/$defs/Link",
           "properties": {
             "href": {
-              "const": "https://docs.riskdatalibrary.org/en/0__2__1/rdls_schema.json"
+              "const": "https://docs.riskdatalibrary.org/en/0__3__0/rdls_schema.json"
             },
             "rel": {
               "const": "describedby"
@@ -2999,7 +2999,7 @@
           "format": "iri",
           "type": "string",
           "examples": [
-            "https://docs.riskdatalibrary.org/en/0__2__1/rdls_schema.json",
+            "https://docs.riskdatalibrary.org/en/0__3__0/rdls_schema.json",
             "https://example.org/dataset/related-data",
             "https://www.standards.org/related-standard"
           ]
