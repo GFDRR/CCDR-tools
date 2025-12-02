@@ -65,7 +65,9 @@
       "title": "Risk data type",
       "type": "array",
       "description": "The types of risk data included in the dataset, from the closed [risk_data_type codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#risk-data-type).",
-      "$ref": "#/$defs/risk_data_type",
+      "items": {
+        "$ref": "#/$defs/risk_data_type"
+      },
       "codelist": "risk_data_type.csv",
       "openCodelist": false,
       "minItems": 1,
@@ -133,7 +135,7 @@
     },
     "spatial": {
       "title": "Spatial coverage",
-      "description": "The geographical area covered by the dataset. If specified using coordinates, the use of `.bbox` is recommended over `.geometry` or `.centroid`.",
+      "description": "The geographical area covered by the dataset. If specified using coordinates, the use of `.bbox` is recommended over `.centroid`.",
       "$ref": "#/$defs/Location"
     },
     "license": {
@@ -1930,7 +1932,7 @@
           "title": "Start",
           "type": "string",
           "description": "The start of the period. A date (YYYY-MM-DD) is recommended. However, year-months (YYYY-MM) and years (YYYY) are supported.",
-          "oneOf": [
+          "anyOf": [
             {
               "format": "date"
             },
@@ -1954,7 +1956,7 @@
           "title": "End date",
           "type": "string",
           "description": "The end of the period. A date (YYYY-MM-DD) is recommended. However, year-months (YYYY-MM) and years (YYYY) are supported.",
-          "oneOf": [
+          "anyOf": [
             {
               "format": "date"
             },
@@ -2323,11 +2325,6 @@
             [-73.935242, 40.730610],
             [2.3522, 48.8566]
           ]
-        },
-        "geometry": {
-          "title": "Geometry",
-          "description": "A set of coordinates denoting the vertices of the geographical area. This field describes the extent of the geographical area. To avoid creating very large metadata, geometries should have fewer than 50 vertices.",
-          "$ref": "#/$defs/Geometry"
         }
       },
       "minProperties": 1
