@@ -489,7 +489,7 @@
         // RDLS Schema Configuration
         const RDLS_VERSIONS = {
             '0.2': 'https://docs.riskdatalibrary.org/en/0__2__0/rdls_schema.json',
-            '0.3': 'rdls_schema_v3.json'
+            '0.3': 'rdls_schema_v0.3.json'
         };
 
         const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
@@ -1384,76 +1384,84 @@
             createBboxInput(name, property, value, options) {
                 const container = document.createElement('div');
                 container.className = 'bbox-field border p-3 rounded bg-light';
-                
+
                 const title = document.createElement('h6');
                 title.textContent = 'Bounding Box Coordinates (SW Longitude, SW Latitude, NE Longitude, NE Latitude)';
                 title.className = 'mb-3';
                 container.appendChild(title);
-                
-                const bboxData = value || [0, 0, 0, 0];
+
+                const bboxData = value || ['', '', '', ''];
                 const labels = ['SW Longitude', 'SW Latitude', 'NE Longitude', 'NE Latitude'];
-                
+
                 const inputsContainer = document.createElement('div');
                 inputsContainer.className = 'row g-2';
-                
+
                 function updateBboxPreview() {
-                    const currentBbox = getNestedValue(currentFormData, name) || [0, 0, 0, 0];
+                    const currentBbox = getNestedValue(currentFormData, name);
                     const previewInput = container.querySelector('.bbox-preview');
                     if (previewInput) {
-                        previewInput.value = `[${currentBbox.join(', ')}]`;
+                        if (currentBbox && Array.isArray(currentBbox)) {
+                            previewInput.value = `[${currentBbox.join(', ')}]`;
+                        } else {
+                            previewInput.value = 'Not specified';
+                        }
                     }
                 }
-                
+
                 for (let i = 0; i < 4; i++) {
                     const col = document.createElement('div');
                     col.className = 'col-md-6';
-                    
+
                     const label = document.createElement('label');
                     label.textContent = labels[i];
                     label.className = 'form-label';
-                    
+
                     const input = document.createElement('input');
                     input.type = 'number';
                     input.step = 'any';
                     input.className = 'form-control';
                     input.name = `${this.context.getFieldId(name)}_${i}`;
-                    input.value = bboxData[i] || 0;
+                    input.value = (Array.isArray(value) && value[i] !== undefined) ? value[i] : '';
                     input.placeholder = i % 2 === 0 ? 'Longitude' : 'Latitude';
-                    
+
                     input.addEventListener('input', function() {
-                        const currentBbox = getNestedValue(currentFormData, name) || [0, 0, 0, 0];
-                        currentBbox[i] = parseFloat(this.value) || 0;
+                        const currentBbox = getNestedValue(currentFormData, name) || ['', '', '', ''];
+                        currentBbox[i] = this.value === '' ? '' : parseFloat(this.value);
                         setNestedValue(currentFormData, name, currentBbox);
                         updateFormData();
                         updateBboxPreview();
                     });
-                    
+
                     col.appendChild(label);
                     col.appendChild(input);
                     inputsContainer.appendChild(col);
                 }
-                
+
                 container.appendChild(inputsContainer);
-                
+
                 const previewContainer = document.createElement('div');
                 previewContainer.className = 'mt-3';
-                
+
                 const previewLabel = document.createElement('label');
                 previewLabel.textContent = 'Bounding Box Array Format:';
                 previewLabel.className = 'form-label';
-                
+
                 const previewInput = document.createElement('input');
                 previewInput.type = 'text';
                 previewInput.className = 'form-control bbox-preview';
                 previewInput.readOnly = true;
-                previewInput.value = `[${bboxData.join(', ')}]`;
+                if (Array.isArray(value) && value.length > 0) {
+                    previewInput.value = `[${value.join(', ')}]`;
+                } else {
+                    previewInput.value = 'Not specified';
+                }
                 previewInput.style.backgroundColor = '#f8f9fa';
                 previewInput.style.fontFamily = 'monospace';
-                
+
                 previewContainer.appendChild(previewLabel);
                 previewContainer.appendChild(previewInput);
                 container.appendChild(previewContainer);
-                
+
                 return container;
             }
 
@@ -1466,17 +1474,21 @@
                 title.className = 'mb-3';
                 container.appendChild(title);
 
-                const centroidData = value || [0, 0];
+                const centroidData = value || ['', ''];
                 const labels = ['Longitude', 'Latitude'];
 
                 const inputsContainer = document.createElement('div');
                 inputsContainer.className = 'row g-2';
 
                 function updateCentroidPreview() {
-                    const currentCentroid = getNestedValue(currentFormData, name) || [0, 0];
+                    const currentCentroid = getNestedValue(currentFormData, name);
                     const previewInput = container.querySelector('.centroid-preview');
                     if (previewInput) {
-                        previewInput.value = `Centroid point [${currentCentroid.join(', ')}]`;
+                        if (currentCentroid && Array.isArray(currentCentroid)) {
+                            previewInput.value = `Centroid point [${currentCentroid.join(', ')}]`;
+                        } else {
+                            previewInput.value = 'Not specified';
+                        }
                     }
                 }
 
@@ -1493,12 +1505,12 @@
                     input.step = 'any';
                     input.className = 'form-control';
                     input.name = `${this.context.getFieldId(name)}_${i}`;
-                    input.value = centroidData[i] || 0;
+                    input.value = (Array.isArray(value) && value[i] !== undefined) ? value[i] : '';
                     input.placeholder = labels[i];
 
                     input.addEventListener('input', function() {
-                        const currentCentroid = getNestedValue(currentFormData, name) || [0, 0];
-                        currentCentroid[i] = parseFloat(this.value) || 0;
+                        const currentCentroid = getNestedValue(currentFormData, name) || ['', ''];
+                        currentCentroid[i] = this.value === '' ? '' : parseFloat(this.value);
                         setNestedValue(currentFormData, name, currentCentroid);
                         updateFormData();
                         updateCentroidPreview();
@@ -1522,7 +1534,11 @@
                 previewInput.type = 'text';
                 previewInput.className = 'form-control centroid-preview';
                 previewInput.readOnly = true;
-                previewInput.value = `Centroid point [${centroidData.join(', ')}]`;
+                if (Array.isArray(value) && value.length > 0) {
+                    previewInput.value = `Centroid point [${value.join(', ')}]`;
+                } else {
+                    previewInput.value = 'Not specified';
+                }
                 previewInput.style.backgroundColor = '#f8f9fa';
                 previewInput.style.fontFamily = 'monospace';
 
@@ -2338,6 +2354,42 @@
                         const relatedProperty = currentSchema.properties.spatial.properties[relatedFieldName];
                         if (relatedProperty) {
                             this.context.validateField(relatedField, relatedValue, relatedProperty);
+                        }
+                    }
+
+                    // Disable/enable countries field based on scale value
+                    if (name === 'spatial.scale') {
+                        const countriesContainer = document.querySelector('[data-array-name="spatial.countries"]');
+                        if (countriesContainer) {
+                            const isGlobal = value && value.toLowerCase() === 'global';
+
+                            // Disable all inputs and buttons in the countries container
+                            const inputs = countriesContainer.querySelectorAll('input, select, button');
+                            inputs.forEach(input => {
+                                input.disabled = isGlobal;
+                            });
+
+                            // Add visual indication
+                            if (isGlobal) {
+                                countriesContainer.style.opacity = '0.5';
+                                countriesContainer.style.pointerEvents = 'none';
+                                // Add a note if not already present
+                                let note = countriesContainer.querySelector('.global-scale-note');
+                                if (!note) {
+                                    note = document.createElement('div');
+                                    note.className = 'global-scale-note alert alert-info mt-2';
+                                    note.innerHTML = '<small><strong>Note:</strong> Country selection is not required for global scale datasets.</small>';
+                                    countriesContainer.appendChild(note);
+                                }
+                            } else {
+                                countriesContainer.style.opacity = '1';
+                                countriesContainer.style.pointerEvents = 'auto';
+                                // Remove the note if present
+                                const note = countriesContainer.querySelector('.global-scale-note');
+                                if (note) {
+                                    note.remove();
+                                }
+                            }
                         }
                     }
                 }
@@ -3188,6 +3240,43 @@
                     }
                 }
             }
+
+            // Initialize countries field based on spatial scale value
+            const scaleField = document.getElementById('spatial.scale');
+            if (scaleField && scaleField.value) {
+                const countriesContainer = document.querySelector('[data-array-name="spatial.countries"]');
+                if (countriesContainer) {
+                    const isGlobal = scaleField.value.toLowerCase() === 'global';
+
+                    // Disable all inputs and buttons in the countries container
+                    const inputs = countriesContainer.querySelectorAll('input, select, button');
+                    inputs.forEach(input => {
+                        input.disabled = isGlobal;
+                    });
+
+                    // Add visual indication
+                    if (isGlobal) {
+                        countriesContainer.style.opacity = '0.5';
+                        countriesContainer.style.pointerEvents = 'none';
+                        // Add a note if not already present
+                        let note = countriesContainer.querySelector('.global-scale-note');
+                        if (!note) {
+                            note = document.createElement('div');
+                            note.className = 'global-scale-note alert alert-info mt-2';
+                            note.innerHTML = '<small><strong>Note:</strong> Country selection is not required for global scale datasets.</small>';
+                            countriesContainer.appendChild(note);
+                        }
+                    } else {
+                        countriesContainer.style.opacity = '1';
+                        countriesContainer.style.pointerEvents = 'auto';
+                        // Remove the note if present
+                        const note = countriesContainer.querySelector('.global-scale-note');
+                        if (note) {
+                            note.remove();
+                        }
+                    }
+                }
+            }
         }
 
         function generateSectionForm(sectionName, properties, containerId) {
@@ -3761,7 +3850,9 @@
                                     if (input.type === 'checkbox') {
                                         item[fieldNameAttr] = input.checked;
                                     } else {
-                                        item[fieldNameAttr] = input.value;
+                                        // Convert to proper type based on schema
+                                        const convertedValue = convertValueBySchema(fieldNameAttr, input.value);
+                                        item[fieldNameAttr] = convertedValue;
                                     }
                                 }
                             }
@@ -3808,14 +3899,17 @@
             // Collect regular form data (this will override any simple field values)
             for (let [key, value] of formData.entries()) {
                 const fieldName = key.replace('modal_', '');
-                
+
+                // Convert to proper type based on schema
+                const convertedValue = convertValueBySchema(fieldName, value);
+
                 if (fieldName.includes('.')) {
-                    setNestedValue(objectData, fieldName, value);
+                    setNestedValue(objectData, fieldName, convertedValue);
                 } else {
                     // Don't override array fields that we just processed above
                     const isArrayField = document.querySelector(`#objectEditorFields .array-field [id="modal_${fieldName}_items"]`);
                     if (!isArrayField) {
-                        objectData[fieldName] = value;
+                        objectData[fieldName] = convertedValue;
                     }
                 }
             }
@@ -3847,18 +3941,25 @@
                         const fieldName = match[1].replace('modal_', '');
                         const index = parseInt(match[2]);
                         if (!coordGroups[fieldName]) coordGroups[fieldName] = [];
-                        coordGroups[fieldName][index] = parseFloat(input.value) || 0;
+                        coordGroups[fieldName][index] = input.value === '' ? null : parseFloat(input.value);
                     }
                 }
             });
 
             // Add bbox/centroid arrays to the object data
             Object.entries(coordGroups).forEach(([fieldName, values]) => {
-                if (fieldName.includes('.')) {
-                    setNestedValue(objectData, fieldName, values);
-                } else {
-                    objectData[fieldName] = values;
+                // Only set the coordinate array if user has specified at least one non-empty value
+                const hasValue = values.some(v => v !== null && !isNaN(v));
+                if (hasValue) {
+                    // Replace nulls with 0 only if some values were specified
+                    const filledValues = values.map(v => v === null ? 0 : v);
+                    if (fieldName.includes('.')) {
+                        setNestedValue(objectData, fieldName, filledValues);
+                    } else {
+                        objectData[fieldName] = filledValues;
+                    }
                 }
+                // If no values specified, don't add to objectData (will be empty in output)
             });
             
             // Get the full array data and update/add the object
@@ -3948,16 +4049,82 @@
             }
         }
 
+        function convertValueBySchema(fieldName, value) {
+            // Empty strings should remain empty
+            if (value === '') {
+                return value;
+            }
+
+            // Get the property schema for this field
+            let property = getPropertyFromSchema(fieldName);
+
+            // If not found directly, try to find it within array item schemas
+            // This handles cases like resources, hazard event_sets, etc.
+            if (!property && currentSchema) {
+                // Check if this is a field within an array type
+                const arrayTypes = ['resources', 'sources', 'attributions', 'referenced_by', 'exposure', 'hazard', 'vulnerability', 'loss'];
+                for (const arrayType of arrayTypes) {
+                    if (currentSchema.properties && currentSchema.properties[arrayType]) {
+                        const arraySchema = currentSchema.properties[arrayType];
+                        // Check if it's an array with items
+                        if (arraySchema.type === 'array' && arraySchema.items) {
+                            const itemSchema = arraySchema.items.$ref
+                                ? resolveReference(arraySchema.items.$ref)
+                                : arraySchema.items;
+
+                            if (itemSchema && itemSchema.properties && itemSchema.properties[fieldName]) {
+                                property = itemSchema.properties[fieldName];
+                                break;
+                            }
+                        }
+                        // Check if it's an object (like hazard)
+                        else if (arraySchema.type === 'object' && arraySchema.properties) {
+                            // Check within nested properties (e.g., hazard.event_sets)
+                            for (const [key, prop] of Object.entries(arraySchema.properties)) {
+                                if (prop.type === 'array' && prop.items) {
+                                    const itemSchema = prop.items.$ref
+                                        ? resolveReference(prop.items.$ref)
+                                        : prop.items;
+
+                                    if (itemSchema && itemSchema.properties && itemSchema.properties[fieldName]) {
+                                        property = itemSchema.properties[fieldName];
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!property) {
+                return value;
+            }
+
+            // Convert based on type
+            if (property.type === 'number') {
+                const numValue = parseFloat(value);
+                return isNaN(numValue) ? value : numValue;
+            } else if (property.type === 'integer') {
+                const intValue = parseInt(value, 10);
+                return isNaN(intValue) ? value : intValue;
+            }
+
+            return value;
+        }
+
         function updateFormData() {
             const allForms = document.querySelectorAll('#metadataTabContent form');
             const newFormData = {};
-            
+
             allForms.forEach(form => {
                 const formData = new FormData(form);
-                
+
                 for (let [key, value] of formData.entries()) {
                     if (!key.includes('_0') && !key.includes('_1') && !key.includes('_2') && !key.includes('_3')) {
-                        setNestedValue(newFormData, key, value);
+                        // Convert to proper type based on schema
+                        const convertedValue = convertValueBySchema(key, value);
+                        setNestedValue(newFormData, key, convertedValue);
                     }
                 }
                 
@@ -3974,12 +4141,19 @@
                         const fieldName = match[1];
                         const index = parseInt(match[2]);
                         if (!coordGroups[fieldName]) coordGroups[fieldName] = [];
-                        coordGroups[fieldName][index] = parseFloat(input.value) || 0;
+                        coordGroups[fieldName][index] = input.value === '' ? null : parseFloat(input.value);
                     }
                 });
 
                 Object.entries(coordGroups).forEach(([fieldName, values]) => {
-                    setNestedValue(newFormData, fieldName, values);
+                    // Only set the coordinate array if user has specified at least one non-empty value
+                    const hasValue = values.some(v => v !== null && !isNaN(v));
+                    if (hasValue) {
+                        // Replace nulls with 0 only if some values were specified
+                        const filledValues = values.map(v => v === null ? 0 : v);
+                        setNestedValue(newFormData, fieldName, filledValues);
+                    }
+                    // If no values specified, don't add to newFormData (will be empty in output)
                 });
             });
             
