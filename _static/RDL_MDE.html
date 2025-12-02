@@ -1951,11 +1951,10 @@
 
                 const isDirectFormProperty = !name.includes('.') || name.split('.').length <= 2;
                 const isSpatialField = name === 'spatial';
-                const isGeometryField = name.endsWith('.geometry');
                 const isClassificationField = name.endsWith('.se_indicator') || name === 'se_indicator';
 
-                // Always show title for spatial field, geometry sub-field, classification fields, or for nested objects
-                if (!isDirectFormProperty || isSpatialField || isGeometryField || isClassificationField) {
+                // Always show title for spatial field, classification fields, or for nested objects
+                if (!isDirectFormProperty || isSpatialField || isClassificationField) {
                     const title = document.createElement('h6');
                     title.textContent = property.title || name;
                     title.className = 'mb-3';
@@ -4892,6 +4891,45 @@
             return packagedData;
         }
 
+        function cleanEmptyValues(obj) {
+            // Recursively remove empty strings, empty arrays, and null/undefined values
+            if (Array.isArray(obj)) {
+                // Filter out empty values from arrays
+                const filtered = obj
+                    .map(item => cleanEmptyValues(item))
+                    .filter(item => {
+                        if (item === null || item === undefined || item === '') return false;
+                        if (Array.isArray(item) && item.length === 0) return false;
+                        if (typeof item === 'object' && Object.keys(item).length === 0) return false;
+                        return true;
+                    });
+                return filtered.length > 0 ? filtered : undefined;
+            } else if (obj !== null && typeof obj === 'object') {
+                // Process objects
+                const cleaned = {};
+                for (const [key, value] of Object.entries(obj)) {
+                    const cleanedValue = cleanEmptyValues(value);
+
+                    // Only include the property if it has a meaningful value
+                    if (cleanedValue !== undefined && cleanedValue !== null && cleanedValue !== '') {
+                        // Skip empty arrays
+                        if (Array.isArray(cleanedValue) && cleanedValue.length === 0) {
+                            continue;
+                        }
+                        // Skip empty objects
+                        if (typeof cleanedValue === 'object' && !Array.isArray(cleanedValue) && Object.keys(cleanedValue).length === 0) {
+                            continue;
+                        }
+                        cleaned[key] = cleanedValue;
+                    }
+                }
+                return Object.keys(cleaned).length > 0 ? cleaned : undefined;
+            } else if (obj === '' || obj === null || obj === undefined) {
+                return undefined;
+            }
+            return obj;
+        }
+
         function exportJson() {
             if (Object.keys(currentFormData).length === 0) {
                 alert('No data to export. Please fill out the form first.');
@@ -4901,10 +4939,13 @@
             const filteredData = getFilteredFormData();
             const packagedData = packageDataset(filteredData);
 
-            // Generate filename from dataset ID
-            const filename = packagedData.datasets?.[0]?.id ? `${packagedData.datasets[0].id}.json` : 'rdls_metadata.json';
+            // Clean empty values before export
+            const cleanedData = cleanEmptyValues(packagedData);
 
-            const blob = new Blob([JSON.stringify(packagedData, null, 2)], {type: 'application/json'});
+            // Generate filename from dataset ID
+            const filename = cleanedData.datasets?.[0]?.id ? `${cleanedData.datasets[0].id}.json` : 'rdls_metadata.json';
+
+            const blob = new Blob([JSON.stringify(cleanedData, null, 2)], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -4920,7 +4961,9 @@
             }
 
             const filteredData = getFilteredFormData();
-            const xml = jsonToXml(filteredData, 'rdls_dataset');
+            // Clean empty values before export
+            const cleanedData = cleanEmptyValues(filteredData);
+            const xml = jsonToXml(cleanedData, 'rdls_dataset');
             const blob = new Blob([xml], {type: 'application/xml'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -5064,8 +5107,11 @@
                 const filteredData = getFilteredFormData();
                 const packagedData = packageDataset(filteredData);
 
+                // Clean empty values before publishing
+                const cleanedData = cleanEmptyValues(packagedData);
+
                 // Generate filename from dataset ID, fallback to title-based naming
-                const datasetId = packagedData.datasets?.[0]?.id;
+                const datasetId = cleanedData.datasets?.[0]?.id;
                 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0];
                 const filename = datasetId ? `${datasetId}.json` : `${sanitizeFilename(datasetTitle)}-${timestamp}.json`;
                 const branchName = datasetId ? `rdl-dataset-${datasetId}` : `rdl-dataset-${sanitizeFilename(datasetTitle)}-${timestamp}`;
@@ -5087,12 +5133,12 @@
 
                 // Step 3: Create/update file
                 showGithubStatus('info', '📄 Uploading dataset file...');
-                const content = btoa(JSON.stringify(packagedData, null, 2));
+                const content = btoa(JSON.stringify(cleanedData, null, 2));
                 const commitMessage = `Add RDLS dataset: ${datasetTitle}
 
 Dataset published via RDLS Metadata Editor
-- Title: ${filteredData.title || 'Untitled'}
-- Description: ${filteredData.description ? filteredData.description.substring(0, 100) + '...' : 'No description'}
+- Title: ${cleanedData.datasets?.[0]?.title || 'Untitled'}
+- Description: ${cleanedData.datasets?.[0]?.description ? cleanedData.datasets[0].description.substring(0, 100) + '...' : 'No description'}
 - Timestamp: ${new Date().toISOString()}`;
 
                 await githubRequest(token, `repos/${repo}/contents/_datasets/json/${filename}`, {
@@ -5114,10 +5160,10 @@ Dataset published via RDLS Metadata Editor
                         base: baseBranch,
                         body: `## New RDLS Dataset Submission
 
-**Dataset Title:** ${filteredData.title || 'Untitled'}
+**Dataset Title:** ${cleanedData.datasets?.[0]?.title || 'Untitled'}
 
 **Description:**
-${filteredData.description || 'No description provided'}
+${cleanedData.datasets?.[0]?.description || 'No description provided'}
 
 **File:** \`_datasets/json/${filename}\`
 
