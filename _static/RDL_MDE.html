@@ -1028,12 +1028,15 @@
             createTextInput(name, property, value, options) {
                 const wrapper = document.createElement('div');
                 wrapper.style.position = 'relative';
-                
+
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.className = 'form-control field-with-validation';
-                input.name = this.context.getFieldId(name);
-                input.id = this.context.getFieldId(name);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    input.name = this.context.getFieldId(name);
+                    input.id = this.context.getFieldId(name);
+                }
                 input.value = value || '';
                 
                 if (property.minLength) input.minLength = property.minLength;
@@ -1057,8 +1060,11 @@
 
                 const textarea = document.createElement('textarea');
                 textarea.className = 'form-control field-with-validation';
-                textarea.name = this.context.getFieldId(name);
-                textarea.id = this.context.getFieldId(name);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    textarea.name = this.context.getFieldId(name);
+                    textarea.id = this.context.getFieldId(name);
+                }
                 textarea.value = value || '';
                 textarea.rows = 3;
                 textarea.style.resize = 'vertical';
@@ -1089,8 +1095,11 @@
                 const input = document.createElement('input');
                 input.type = 'email';
                 input.className = 'form-control field-with-validation';
-                input.name = this.context.getFieldId(name);
-                input.id = this.context.getFieldId(name);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    input.name = this.context.getFieldId(name);
+                    input.id = this.context.getFieldId(name);
+                }
                 input.value = value || '';
                 
                 this.context.setupEventListeners(input, name, property, options);
@@ -1101,8 +1110,11 @@
                 const input = document.createElement('input');
                 input.type = 'url';
                 input.className = 'form-control field-with-validation';
-                input.name = this.context.getFieldId(name);
-                input.id = this.context.getFieldId(name);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    input.name = this.context.getFieldId(name);
+                    input.id = this.context.getFieldId(name);
+                }
                 input.value = value || '';
                 
                 this.context.setupEventListeners(input, name, property, options);
@@ -1113,8 +1125,11 @@
                 const input = document.createElement('input');
                 input.type = 'date';
                 input.className = 'form-control field-with-validation';
-                input.name = this.context.getFieldId(name);
-                input.id = this.context.getFieldId(name);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    input.name = this.context.getFieldId(name);
+                    input.id = this.context.getFieldId(name);
+                }
                 input.value = value || '';
                 
                 this.context.setupEventListeners(input, name, property, options);
@@ -1125,8 +1140,11 @@
                 const input = document.createElement('input');
                 input.type = property.type === 'integer' ? 'number' : 'number';
                 input.className = 'form-control field-with-validation';
-                input.name = this.context.getFieldId(name);
-                input.id = this.context.getFieldId(name);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    input.name = this.context.getFieldId(name);
+                    input.id = this.context.getFieldId(name);
+                }
                 input.value = value || '';
                 
                 if (property.minimum !== undefined) input.min = property.minimum;
@@ -1140,12 +1158,15 @@
             createBooleanInput(name, property, value, options) {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'form-check';
-                
+
                 const input = document.createElement('input');
                 input.type = 'checkbox';
                 input.className = 'form-check-input';
-                input.name = this.context.getFieldId(name);
-                input.id = this.context.getFieldId(name);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    input.name = this.context.getFieldId(name);
+                    input.id = this.context.getFieldId(name);
+                }
                 input.checked = value || false;
                 
                 const label = document.createElement('label');
@@ -1163,8 +1184,15 @@
             createSelect(name, property, value, options) {
                 const select = document.createElement('select');
                 select.className = 'form-select field-with-validation';
-                select.name = this.context.getFieldId(name);
-                select.id = this.context.getFieldId(name);
+                console.log(`[CREATE SELECT] Creating select for "${name}", context type: "${this.context.type}"`);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    console.log(`[CREATE SELECT] Context is NOT inline, setting id/name`);
+                    select.name = this.context.getFieldId(name);
+                    select.id = this.context.getFieldId(name);
+                } else {
+                    console.log(`[CREATE SELECT] Context IS inline, skipping id/name`);
+                }
                 
                 const emptyOption = document.createElement('option');
                 emptyOption.value = '';
@@ -1211,23 +1239,30 @@
             createDependentSelect(name, property, value, dependsOn, parentValue, options) {
                 const select = document.createElement('select');
                 select.className = 'form-select field-with-validation';
-                select.name = this.context.getFieldId(name);
-                select.id = this.context.getFieldId(name);
+                console.log(`[CREATE DEPENDENT SELECT] Creating dependent select for "${name}", context type: "${this.context.type}", value: "${value}"`);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    console.log(`[CREATE DEPENDENT SELECT] Context is NOT inline, setting id/name`);
+                    select.name = this.context.getFieldId(name);
+                    select.id = this.context.getFieldId(name);
+                } else {
+                    console.log(`[CREATE DEPENDENT SELECT] Context IS inline, skipping id/name`);
+                }
                 select.setAttribute('data-depends-on', dependsOn);
-                
+
                 const emptyOption = document.createElement('option');
                 emptyOption.value = '';
                 emptyOption.textContent = 'Select an option...';
                 select.appendChild(emptyOption);
-                
+
                 // Start with all available options
                 let availableOptions = property.enum || [];
-                
+
                 // Filter options if we have a parent value
                 if (parentValue && currentSchema.hazard_process_mappings && name.includes('process')) {
                     availableOptions = currentSchema.hazard_process_mappings[parentValue] || property.enum || [];
                 }
-                
+
                 // Populate options
                 availableOptions.forEach((option, index) => {
                     const optionElement = document.createElement('option');
@@ -1240,11 +1275,19 @@
                     } else {
                         optionElement.textContent = option.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                     }
-                    if (value === option) optionElement.selected = true;
+                    const isSelected = value === option;
+                    if (isSelected) {
+                        console.log(`[CREATE DEPENDENT SELECT] Setting option "${option}" as selected (value="${value}")`);
+                        optionElement.selected = true;
+                    }
                     select.appendChild(optionElement);
                 });
-                
+
+                console.log(`[CREATE DEPENDENT SELECT] Finished creating select, selected value: "${select.value}"`);
+
                 this.context.setupEventListeners(select, name, property, options);
+
+                console.log(`[CREATE DEPENDENT SELECT] After setupEventListeners, selected value: "${select.value}"`);
                 return select;
             }
 
@@ -1259,8 +1302,11 @@
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.className = 'form-control field-with-validation';
-                input.name = this.context.getFieldId(name);
-                input.id = this.context.getFieldId(name);
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    input.name = this.context.getFieldId(name);
+                    input.id = this.context.getFieldId(name);
+                }
                 input.value = value || '';
                 input.placeholder = 'Type or select from suggestions...';
                 
@@ -1327,12 +1373,10 @@
                             // For IMT fields, use code; for other fields, use the string value
                             const valueToSet = typeof suggestion === 'object' ? suggestion.code : suggestion;
                             input.value = valueToSet;
-                            updateFormData();
-                            this.context.validateField(name, valueToSet, property);
 
-                            // CRITICAL FIX: Trigger dependency handling when suggestion is clicked
-                            const handler = new UnifiedEventHandler(this.context);
-                            handler.handleDependentFields(name, valueToSet, input);
+                            // Dispatch input event to trigger the framework's event handlers
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                            input.dispatchEvent(new Event('change', { bubbles: true }));
                         });
                         item.appendChild(link);
                         dropdownMenu.appendChild(item);
@@ -1575,8 +1619,10 @@
                 itemsContainer.id = `${this.context.getFieldId(name)}_items`;
                 
                 const renderArrayItems = () => {
+                    console.log(`[RENDER] renderArrayItems called for ${name}, arrayData length: ${arrayData.length}`);
+                    console.log(`[RENDER] arrayData contents:`, JSON.parse(JSON.stringify(arrayData)));
                     itemsContainer.innerHTML = '';
-                    
+
                     if (property.items && (property.items.$ref || property.items.type === 'object')) {
                         // Check if this is a problematic nested array that should be inline
                         const isProblematicArray = name.endsWith('.disaster_identifiers') ||
@@ -1780,13 +1826,20 @@
             }
 
             createInlineObjectEditor(item, index, arrayName, arrayProperty, arrayData, renderCallback) {
+                console.log(`[CREATE CARD] Creating card for ${arrayName}[${index}], item data:`, JSON.parse(JSON.stringify(item)));
+                console.log(`[CREATE CARD] arrayData for ${arrayName} has ${arrayData.length} items`);
+
                 const card = document.createElement('div');
                 card.className = 'card mb-2';
                 card.setAttribute('data-item-index', index);
-                
+                card.setAttribute('data-array-name', arrayName); // Store array name to distinguish nested arrays
+                card._arrayDataRef = arrayData; // Store reference for handleFieldChange
+                card._arrayName = arrayName; // Store array name for debugging
+                console.log(`[CREATE CARD] Stored _arrayDataRef for ${arrayName}[${index}], ref length: ${card._arrayDataRef?.length}`);
+
                 const cardBody = document.createElement('div');
                 cardBody.className = 'card-body p-3';
-                
+
                 // Get the resolved schema for the object
                 let itemSchema = arrayProperty.items;
                 if (itemSchema && itemSchema.$ref) {
@@ -1803,6 +1856,7 @@
                         fieldDiv.setAttribute('data-field-name', key);
                         
                         // Create a sub-context for inline editing
+                        // Don't use ID/name attributes to avoid polluting FormData
                         const inlineContext = new FieldCreationContext('inline', fieldDiv);
                         const fieldElement = inlineContext.createField(key, prop, item[key]);
 
@@ -1821,40 +1875,22 @@
                             
                             input.addEventListener('change', (e) => {
                                 const newValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+                                console.log(`[INLINE HANDLER] Field changed: ${key} in ${arrayName}[${index}], new value: ${newValue}`);
+                                console.log(`[INLINE HANDLER] Captured arrayData length: ${arrayData.length}, for array: ${arrayName}, updating index: ${index}`);
+                                console.log(`[INLINE HANDLER] arrayData full contents:`, JSON.parse(JSON.stringify(arrayData)));
+
                                 item[key] = newValue;
-                                console.log(`Updated ${arrayName}[${index}].${key} = ${newValue}`);
-                                
-                                // Handle currency field dependencies for exposure metrics
-                                if (key === 'quantity_kind' && newValue === 'monetary') {
-                                    // Find currency field in the same card and enable it
-                                    const currencyField = card.querySelector('[data-field-name="currency"]');
-                                    if (currencyField) {
-                                        const currencyInput = currencyField.querySelector('select, input');
-                                        if (currencyInput) {
-                                            currencyInput.disabled = false;
-                                            currencyInput.required = true;
-                                        }
-                                        const label = currencyField.querySelector('label');
-                                        if (label && !label.innerHTML.includes('*')) {
-                                            label.innerHTML += ' <span class="text-danger">*</span>';
-                                        }
-                                    }
-                                } else if (key === 'quantity_kind' && newValue !== 'monetary') {
-                                    const currencyField = card.querySelector('[data-field-name="currency"]');
-                                    if (currencyField) {
-                                        const currencyInput = currencyField.querySelector('select, input');
-                                        if (currencyInput) {
-                                            currencyInput.disabled = true;
-                                            currencyInput.required = false;
-                                            currencyInput.value = '';
-                                            item.currency = '';
-                                        }
-                                        const label = currencyField.querySelector('label');
-                                        if (label) {
-                                            label.innerHTML = label.innerHTML.replace(' <span class="text-danger">*</span>', '');
-                                        }
-                                    }
-                                }
+
+                                // Also update arrayData to ensure persistence
+                                arrayData[index][key] = newValue;
+                                console.log(`[INLINE HANDLER] arrayData[${index}] after update:`, JSON.parse(JSON.stringify(arrayData[index])));
+                                console.log(`[INLINE HANDLER] Full arrayData after update:`, JSON.parse(JSON.stringify(arrayData)));
+
+                                // DON'T call updateFormData() for inline fields - they update the item object directly
+                                // which is already a reference in the arrayData
+
+                                // Note: Dependency handling (like currency toggle) is now handled by the framework's
+                                // UnifiedEventHandler.handleDependentFields, which is triggered via the 'input' event
                             });
                         }
                         
@@ -1873,23 +1909,64 @@
                                 "title": "Currency"
                             };
 
+                            // Create context - don't use ID/name to avoid polluting FormData
                             const currencyContext = new FieldCreationContext('inline', currencyDiv);
+                            console.log(`[CURRENCY FIELD] Created context with type: ${currencyContext.type}`);
                             const savedCurrencyValue = item['currency'];
+                            console.log(`[CURRENCY FIELD] Creating currency field for ${arrayName}[${index}], savedValue: "${savedCurrencyValue}"`);
                             const currencyElement = currencyContext.createField('currency', currencyProperty, savedCurrencyValue);
+                            console.log(`[CURRENCY FIELD] Currency element created, checking for id attribute...`);
+
+                            // Check value before appending
+                            const selectBeforeAppend = currencyElement.querySelector('select, input');
+                            console.log(`[CURRENCY FIELD] Value BEFORE appending to currencyDiv: "${selectBeforeAppend?.value}"`);
+
                             currencyDiv.appendChild(currencyElement);
 
-                            // Ensure currency value is properly set after field creation
-                            if (savedCurrencyValue) {
-                                setTimeout(() => {
-                                    const currencyInput = currencyElement.querySelector('select, input');
-                                    if (currencyInput && currencyInput.value !== savedCurrencyValue) {
-                                        currencyInput.value = savedCurrencyValue;
-                                    }
-                                }, 100);
-                            }
+                            console.log(`[CURRENCY FIELD] Value AFTER appending to currencyDiv: "${selectBeforeAppend?.value}"`);
 
-                            // Add currency field right after the quantity_kind field
+                            // Add currency field right after the quantity_kind field FIRST
                             cardBody.appendChild(currencyDiv);
+
+                            console.log(`[CURRENCY FIELD] Value AFTER appending to cardBody: "${selectBeforeAppend?.value}"`);
+                            console.log(`[CURRENCY FIELD] Is disabled after appending: ${selectBeforeAppend?.disabled}`);
+
+                            // THEN set up value and listeners AFTER it's in the DOM
+                            const currencyInput = currencyElement.querySelector('select, input');
+                            if (currencyInput) {
+                                console.log(`[CURRENCY FIELD] Currency input ID: "${currencyInput.id}", name: "${currencyInput.name}"`);
+                                console.log(`[CURRENCY FIELD] Currency input disabled status: ${currencyInput.disabled}`);
+
+                                // Add change listener BEFORE setting value
+                                currencyInput.addEventListener('change', (e) => {
+                                    item['currency'] = e.target.value;
+                                    arrayData[index]['currency'] = e.target.value;
+                                    console.log(`Updated ${arrayName}[${index}].currency = ${e.target.value}`);
+                                });
+
+                                // Set initial value AFTER appending to DOM
+                                if (savedCurrencyValue) {
+                                    // Force the select to have the right value by finding and selecting the option
+                                    const optionToSelect = currencyInput.querySelector(`option[value="${savedCurrencyValue}"]`);
+                                    if (optionToSelect) {
+                                        optionToSelect.selected = true;
+                                        currencyInput.value = savedCurrencyValue;
+                                        console.log(`[CURRENCY FIELD] Set value for ${arrayName}[${index}] to: "${savedCurrencyValue}", actual value: "${currencyInput.value}", option.selected: ${optionToSelect.selected}`);
+                                    } else {
+                                        console.warn(`[CURRENCY FIELD] Could not find option with value "${savedCurrencyValue}"`);
+                                    }
+
+                                    // Check if value persists after a short delay
+                                    setTimeout(() => {
+                                        console.log(`[CURRENCY FIELD] Value check after 100ms for ${arrayName}[${index}]: "${currencyInput.value}" (expected "${savedCurrencyValue}")`);
+                                        if (currencyInput.value !== savedCurrencyValue) {
+                                            console.warn(`[CURRENCY FIELD] VALUE WAS CHANGED! Expected "${savedCurrencyValue}" but got "${currencyInput.value}"`);
+                                        }
+                                    }, 100);
+                                } else {
+                                    console.log(`[CURRENCY FIELD] No saved value for ${arrayName}[${index}], current value: "${currencyInput.value}"`);
+                                }
+                            }
 
                             // Currency field will be handled by the unified dependency system
                         }
@@ -1915,32 +1992,76 @@
                 card.appendChild(cardBody);
                 
                 // Handle currency field visibility after card is created
-                setTimeout(() => {
-                    const quantityKindField = card.querySelector('[data-field-name="quantity_kind"] select, [data-field-name="quantity_kind"] input');
-                    const currencyField = card.querySelector('[data-field-name="currency"]');
-                    
-                    if (quantityKindField && currencyField) {
-                        const currentValue = item.quantity_kind || quantityKindField.value;
-                        const currencyInput = currencyField.querySelector('select, input');
-                        if (currentValue === 'monetary') {
-                            if (currencyInput) {
-                                currencyInput.disabled = false;
-                                currencyInput.required = true;
-                            }
-                            const label = currencyField.querySelector('label');
-                            if (label && !label.innerHTML.includes('*')) {
-                                label.innerHTML += ' <span class="text-danger">*</span>';
+                // Use immediate execution to avoid closure issues with 'card' variable
+                (function(currentCard, currentItem, cardIndex, dataArray) {
+                    setTimeout(() => {
+                        const quantityKindField = currentCard.querySelector('[data-field-name="quantity_kind"] select, [data-field-name="quantity_kind"] input');
+                        const currencyField = currentCard.querySelector('[data-field-name="currency"]');
+
+                        if (quantityKindField && currencyField) {
+                            const currencyInput = currencyField.querySelector('select, input');
+
+                            // DEBUG: Log all relevant state
+                            console.log(`[INIT CURRENCY] Card ${cardIndex}: === DETAILED STATE ===`);
+                            console.log(`[INIT CURRENCY] Card ${cardIndex}: currentItem.quantity_kind="${currentItem.quantity_kind}"`);
+                            console.log(`[INIT CURRENCY] Card ${cardIndex}: quantityKindField.value="${quantityKindField?.value}"`);
+                            console.log(`[INIT CURRENCY] Card ${cardIndex}: currentItem.currency="${currentItem.currency}"`);
+                            console.log(`[INIT CURRENCY] Card ${cardIndex}: dataArray[${cardIndex}].quantity_kind="${dataArray[cardIndex]?.quantity_kind}"`);
+                            console.log(`[INIT CURRENCY] Card ${cardIndex}: dataArray[${cardIndex}].currency="${dataArray[cardIndex]?.currency}"`);
+                            console.log(`[INIT CURRENCY] Card ${cardIndex}: Currency value BEFORE any changes: "${currencyInput?.value}"`);
+
+                            const currentValue = currentItem.quantity_kind || quantityKindField.value;
+                            console.log(`[INIT CURRENCY] Card ${cardIndex}: Resolved quantity_kind="${currentValue}", will ${currentValue === 'monetary' ? 'ENABLE' : 'DISABLE'} currency`);
+
+                            if (currentValue === 'monetary') {
+                                if (currencyInput) {
+                                    // Save the current value before enabling (enabling can reset the value in some browsers)
+                                    const savedValue = currentItem.currency || dataArray[cardIndex]?.currency;
+                                    console.log(`[INIT CURRENCY] Card ${cardIndex}: About to enable, will restore value: "${savedValue}"`);
+
+                                    currencyInput.disabled = false;
+                                    currencyInput.required = true;
+
+                                    console.log(`[INIT CURRENCY] Card ${cardIndex}: Enabled currency field, value after enabling: "${currencyInput.value}"`);
+
+                                    // Restore the value if it was cleared by enabling
+                                    if (savedValue && currencyInput.value !== savedValue) {
+                                        console.log(`[INIT CURRENCY] Card ${cardIndex}: Value was cleared by enabling, restoring to "${savedValue}"`);
+                                        const optionToRestore = currencyInput.querySelector(`option[value="${savedValue}"]`);
+                                        if (optionToRestore) {
+                                            optionToRestore.selected = true;
+                                            currencyInput.value = savedValue;
+                                            console.log(`[INIT CURRENCY] Card ${cardIndex}: Restored value to "${currencyInput.value}"`);
+                                        }
+                                    }
+                                }
+                                const label = currencyField.querySelector('label');
+                                if (label && !label.innerHTML.includes('*')) {
+                                    label.innerHTML += ' <span class="text-danger">*</span>';
+                                }
+                            } else {
+                                if (currencyInput) {
+                                    currencyInput.disabled = true;
+                                    currencyInput.required = false;
+                                    // Clear the value if quantity_kind is not monetary AND there's a value
+                                    // This handles the case where a stale value persists
+                                    if (currencyInput.value && currencyInput.value !== '') {
+                                        console.warn(`[INIT CURRENCY] Card ${cardIndex}: ⚠️ CLEARING currency value "${currencyInput.value}" because quantity_kind="${currentValue}"`);
+                                        console.warn(`[INIT CURRENCY] Card ${cardIndex}: This might be the bug! Saved currency was "${currentItem.currency || dataArray[cardIndex]?.currency}"`);
+                                        currencyInput.value = '';
+                                        // Also update the item data
+                                        currentItem.currency = '';
+                                        if (dataArray && dataArray[cardIndex]) {
+                                            dataArray[cardIndex].currency = '';
+                                        }
+                                    }
+                                }
                             }
                         } else {
-                            if (currencyInput) {
-                                currencyInput.disabled = true;
-                                currencyInput.required = false;
-                                // Don't clear the value during initial setup - only when user changes quantity_kind
-                                // The value clearing will be handled by user interaction events
-                            }
+                            console.warn(`[INIT CURRENCY] Card ${cardIndex}: Missing fields - quantityKindField:${!!quantityKindField}, currencyField:${!!currencyField}`);
                         }
-                    }
-                }, 50);
+                    }, 50);
+                })(card, item, index, arrayData);
                 
                 return card;
             }
@@ -1998,6 +2119,12 @@
             }
 
             handleDependencies(container, name, property, value) {
+                // SKIP dependency handling for inline context - inline arrays have their own dependency handling
+                if (this.context.type === 'inline') {
+                    console.log(`[HANDLE DEPENDENCIES] Skipping for inline context field: ${name}`);
+                    return;
+                }
+
                 // Special handling for currency field - always show but disable unless quantity_kind is 'monetary'
                 if (name.includes('currency') || name === 'currency') {
                     const currencyInput = container.querySelector('select, input');
@@ -2328,6 +2455,7 @@
 
             handleFieldChange(event, name, property, options) {
                 const value = this.getFieldValue(event.target);
+                console.log(`[SETUP LISTENERS] handleFieldChange called for field: ${name}, context: ${this.context.type}, value: ${value}`);
 
                 // Update form data
                 if (this.context.type === 'normal') {
@@ -2335,6 +2463,23 @@
                 } else if (this.context.type === 'modal') {
                     // Handle modal-specific updates
                     this.handleModalFieldChange(name, value, property);
+                } else if (this.context.type === 'inline') {
+                    // For inline context, find the item object and update it directly
+                    const card = event.target.closest('.card[data-item-index]');
+                    if (card) {
+                        const index = parseInt(card.getAttribute('data-item-index'));
+                        const arrayName = card.getAttribute('data-array-name') || card._arrayName || 'unknown';
+                        // Find the arrayData reference - it's passed when the field was created
+                        // We need to store it on the card element
+                        const arrayData = card._arrayDataRef;
+                        if (arrayData && arrayData[index]) {
+                            console.log(`[INLINE UPDATE] Updating ${name} in ${arrayName}[${index}] to: ${value}`);
+                            arrayData[index][name] = value;
+                            console.log(`[INLINE UPDATE] ${arrayName}[${index}] now:`, JSON.parse(JSON.stringify(arrayData[index])));
+                        } else {
+                            console.warn(`[INLINE UPDATE] Could not find arrayData reference for ${arrayName}[${index}]`);
+                        }
+                    }
                 }
 
                 // Validate field
@@ -2467,40 +2612,91 @@
                 }
 
                 // Special handling for quantity_kind field to show/hide currency
-                if (changedFieldName.includes('quantity_kind') || (this.context.type === 'modal' && changedFieldName === 'quantity_kind')) {
-                    let currencyFieldName;
-                    if (this.context.type === 'modal') {
-                        // For modal context, try to preserve the full path structure
-                        if (changedFieldName.includes('.')) {
-                            currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
+                if (changedFieldName.includes('quantity_kind') || (this.context.type === 'modal' && changedFieldName === 'quantity_kind') || (this.context.type === 'inline' && changedFieldName === 'quantity_kind')) {
+                    console.log(`[CURRENCY TOGGLE] quantity_kind changed to ${newValue}, context: ${this.context.type}`);
+
+                    if (this.context.type === 'inline') {
+                        // For inline context, use closest card approach
+                        const currentCard = event.target.closest('.card[data-item-index]');
+                        const cardIndex = currentCard?.getAttribute('data-item-index');
+                        console.log(`[CURRENCY TOGGLE] Event target:`, event.target);
+                        console.log(`[CURRENCY TOGGLE] Found card with index:`, cardIndex);
+
+                        if (currentCard) {
+                            // Find ONLY the direct child card-body of this specific card
+                            const cardBody = currentCard.querySelector(':scope > .card-body');
+                            const currencyFieldDiv = cardBody ? cardBody.querySelector(':scope > [data-field-name="currency"]') : null;
+
+                            console.log(`[CURRENCY TOGGLE] Card body found:`, !!cardBody);
+                            console.log(`[CURRENCY TOGGLE] Currency field div found:`, !!currencyFieldDiv);
+
+                            if (currencyFieldDiv) {
+                                const currencyInput = currencyFieldDiv.querySelector('input, select');
+                                const label = currencyFieldDiv.querySelector('label');
+
+                                console.log(`[CURRENCY TOGGLE] Currency input ID:`, currencyInput?.id);
+                                console.log(`[CURRENCY TOGGLE] Will ${newValue === 'monetary' ? 'ENABLE' : 'DISABLE'} currency in card index ${cardIndex}`);
+
+                                if (newValue === 'monetary') {
+                                    if (currencyInput) {
+                                        currencyInput.disabled = false;
+                                        currencyInput.required = true;
+                                    }
+                                    if (label && !label.innerHTML.includes('*')) {
+                                        label.innerHTML += ' <span class="text-danger">*</span>';
+                                    }
+                                } else {
+                                    if (currencyInput) {
+                                        currencyInput.disabled = true;
+                                        currencyInput.required = false;
+                                        currencyInput.value = '';
+                                    }
+                                    if (label) {
+                                        label.innerHTML = label.innerHTML.replace(' <span class="text-danger">*</span>', '');
+                                    }
+                                }
+                            } else {
+                                console.warn(`[CURRENCY TOGGLE] Currency field not found in card ${cardIndex}`);
+                            }
                         } else {
-                            currencyFieldName = 'currency';
+                            console.warn(`[CURRENCY TOGGLE] Parent card not found for event target:`, event.target);
                         }
                     } else {
-                        currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
-                    }
-
-                    const currencyField = document.getElementById(this.context.getFieldId(currencyFieldName));
-
-                    if (currencyField) {
-                        const container = currencyField.closest('.form-field, .modal-form-field');
-                        if (container) {
-                            this.toggleCurrencyFieldContainer(container, newValue);
+                        // For modal and normal context, use ID-based approach
+                        let currencyFieldName;
+                        if (this.context.type === 'modal') {
+                            // For modal context, try to preserve the full path structure
+                            if (changedFieldName.includes('.')) {
+                                currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
+                            } else {
+                                currencyFieldName = 'currency';
+                            }
                         } else {
-                            // Fallback: handle the field directly if no container found
-                            this.toggleCurrencyField(currencyField, newValue);
+                            currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
                         }
 
-                        // Also ensure the field state is properly set regardless of container
-                        if (newValue === 'monetary') {
-                            currencyField.disabled = false;
-                            currencyField.required = true;
-                        } else {
-                            currencyField.disabled = true;
-                            currencyField.required = false;
-                            // Only clear value during user interactions, not initial setup
-                            if (newValue !== undefined && newValue !== null) {
-                                currencyField.value = '';
+                        const currencyField = document.getElementById(this.context.getFieldId(currencyFieldName));
+
+                        if (currencyField) {
+                            const container = currencyField.closest('.form-field, .modal-form-field');
+                            if (container) {
+                                this.toggleCurrencyFieldContainer(container, newValue);
+                            } else {
+                                // Fallback: handle the field directly if no container found
+                                this.toggleCurrencyField(currencyField, newValue);
+                            }
+
+                            // Also ensure the field state is properly set regardless of container
+                            if (newValue === 'monetary') {
+                                currencyField.disabled = false;
+                                currencyField.required = true;
+                            } else {
+                                currencyField.disabled = true;
+                                currencyField.required = false;
+                                // Only clear value during user interactions, not initial setup
+                                if (newValue !== undefined && newValue !== null) {
+                                    currencyField.value = '';
+                                }
                             }
                         }
                     }
