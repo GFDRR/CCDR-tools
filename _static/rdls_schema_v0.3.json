@@ -2478,7 +2478,9 @@
           "title": "Hazard processes",
           "description": "The hazard process types for this hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists#process_type).",
           "type": "array",
-          "$ref": "#/$defs/process_type",
+          "items": {
+            "$ref": "#/$defs/process_type"
+          },
           "codelist": "process_type.csv",
           "openCodelist": false,
           "minItems": 1,
@@ -2511,7 +2513,9 @@
           "title": "Hazard processes",
           "description": "The hazard process types for this hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists#process_type).",
           "type": "array",
-          "$ref": "#/$defs/process_type",
+          "items": {
+            "$ref": "#/$defs/process_type"
+          },
           "codelist": "process_type.csv",
           "openCodelist": false,
           "minItems": 1,
