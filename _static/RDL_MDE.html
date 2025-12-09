@@ -799,15 +799,13 @@
             'loss.hazard_process': 'loss.hazard_type',
             'loss.impact_and_losses.currency': 'loss.impact_and_losses.impact_unit',
             'loss.losses.impact_and_losses.currency': 'loss.losses.impact_and_losses.impact_unit',
-            'hazards.processes': 'hazards.type',
+            'hazards.hazard_process': 'hazards.type',
             'hazards.intensity_measure': 'hazards.type',
             'vulnerability.intensity_measure': 'vulnerability.hazard_primary',
-            // Modal context dependencies
-            'processes': 'type',
-            'hazard_process': 'hazard_type',
+            // Modal and inline context dependencies (without path prefix)
+            'intensity_measure': 'type', // For hazards array items (inline context)
             'hazard_process_primary': 'hazard_primary',
             'hazard_process_secondary': 'hazard_secondary',
-            'intensity_measure': 'type', // For hazard context, could also be 'hazard_primary' for vulnerability context
             'currency': 'quantity_kind',
             // Section-specific currency dependencies
             'exposure.currency': 'exposure.quantity_kind',
@@ -1186,12 +1184,13 @@
                 select.className = 'form-select field-with-validation';
                 console.log(`[CREATE SELECT] Creating select for "${name}", context type: "${this.context.type}"`);
                 // Don't set name/id for inline context to avoid polluting FormData
+                // Always set ID (needed for dependency system), but only set name for non-inline context
+                select.id = this.context.getFieldId(name);
                 if (this.context.type !== 'inline') {
-                    console.log(`[CREATE SELECT] Context is NOT inline, setting id/name`);
+                    console.log(`[CREATE SELECT] Context is NOT inline, setting name attribute`);
                     select.name = this.context.getFieldId(name);
-                    select.id = this.context.getFieldId(name);
                 } else {
-                    console.log(`[CREATE SELECT] Context IS inline, skipping id/name`);
+                    console.log(`[CREATE SELECT] Context IS inline, skipping name attribute (but keeping ID)`);
                 }
                 
                 const emptyOption = document.createElement('option');
@@ -1240,13 +1239,14 @@
                 const select = document.createElement('select');
                 select.className = 'form-select field-with-validation';
                 console.log(`[CREATE DEPENDENT SELECT] Creating dependent select for "${name}", context type: "${this.context.type}", value: "${value}"`);
-                // Don't set name/id for inline context to avoid polluting FormData
+                // Always set ID (needed for dependency system), but only set name for non-inline context
+                // (name attribute causes FormData collection, which we want to avoid for inline fields)
+                select.id = this.context.getFieldId(name);
                 if (this.context.type !== 'inline') {
-                    console.log(`[CREATE DEPENDENT SELECT] Context is NOT inline, setting id/name`);
+                    console.log(`[CREATE DEPENDENT SELECT] Context is NOT inline, setting name attribute`);
                     select.name = this.context.getFieldId(name);
-                    select.id = this.context.getFieldId(name);
                 } else {
-                    console.log(`[CREATE DEPENDENT SELECT] Context IS inline, skipping id/name`);
+                    console.log(`[CREATE DEPENDENT SELECT] Context IS inline, skipping name attribute (but keeping ID)`);
                 }
                 select.setAttribute('data-depends-on', dependsOn);
 
@@ -2119,14 +2119,14 @@
             }
 
             handleDependencies(container, name, property, value) {
-                // SKIP dependency handling for inline context - inline arrays have their own dependency handling
-                if (this.context.type === 'inline') {
-                    console.log(`[HANDLE DEPENDENCIES] Skipping for inline context field: ${name}`);
-                    return;
-                }
-
                 // Special handling for currency field - always show but disable unless quantity_kind is 'monetary'
+                // SKIP for inline context to avoid clearing values (inline arrays handle currency separately)
                 if (name.includes('currency') || name === 'currency') {
+                    // Skip currency handling for inline context - it's handled separately
+                    if (this.context.type === 'inline') {
+                        console.log(`[HANDLE DEPENDENCIES] Skipping currency handling for inline context field: ${name}`);
+                        return;
+                    }
                     const currencyInput = container.querySelector('select, input');
                     if (currencyInput) {
                         currencyInput.disabled = true; // Default to disabled
@@ -2157,28 +2157,34 @@
                         }
 
                         // Initial check - ensure currency starts disabled unless quantity_kind is monetary
-                        setTimeout(() => {
-                            const currentValue = getNestedValue(currentFormData, quantityKindFieldName) || '';
-                            currencyInput.disabled = currentValue !== 'monetary';
-                            currencyInput.required = currentValue === 'monetary';
-                            if (currentValue !== 'monetary') {
-                                currencyInput.value = '';
-                            }
-                            updateCurrencyState();
-                        }, 0);
+                        // Skip this for modal context as modal data isn't in currentFormData yet
+                        if (this.context.type !== 'modal') {
+                            setTimeout(() => {
+                                const currentValue = getNestedValue(currentFormData, quantityKindFieldName) || '';
+                                currencyInput.disabled = currentValue !== 'monetary';
+                                currencyInput.required = currentValue === 'monetary';
+                                if (currentValue !== 'monetary') {
+                                    currencyInput.value = '';
+                                }
+                                updateCurrencyState();
+                            }, 0);
+                        }
 
                         // Listen for changes on the related quantity_kind field
-                        setTimeout(() => {
-                            const qkInput = document.getElementById(this.context.getFieldId(quantityKindFieldName));
-                            if (qkInput) {
-                                // Listen to all relevant events for complete dropdown/typing support
-                                qkInput.addEventListener('change', updateCurrencyState);
-                                qkInput.addEventListener('input', updateCurrencyState);
-                                if (qkInput.tagName === 'SELECT') {
-                                    qkInput.addEventListener('click', updateCurrencyState);
+                        // Skip this for modal context as it uses dependency handlers instead
+                        if (this.context.type !== 'modal') {
+                            setTimeout(() => {
+                                const qkInput = document.getElementById(this.context.getFieldId(quantityKindFieldName));
+                                if (qkInput) {
+                                    // Listen to all relevant events for complete dropdown/typing support
+                                    qkInput.addEventListener('change', updateCurrencyState);
+                                    qkInput.addEventListener('input', updateCurrencyState);
+                                    if (qkInput.tagName === 'SELECT') {
+                                        qkInput.addEventListener('click', updateCurrencyState);
+                                    }
                                 }
-                            }
-                        }, 100);
+                            }, 100);
+                        }
                     }
                 }
             }
@@ -2556,15 +2562,138 @@
                 // Handle field dependencies
                 const dependents = this.findDependentFields(changedFieldName);
 
-                dependents.forEach(dependentFieldName => {
-                    const dependentFieldId = this.context.getFieldId(dependentFieldName);
-                    const dependentField = document.getElementById(dependentFieldId);
+                console.log(`[DEPENDENCY] Field "${changedFieldName}" changed to "${newValue}", context: ${this.context.type}`);
+                console.log(`[DEPENDENCY] Found ${dependents.length} dependents:`, dependents);
 
-                    if (dependentField) {
-                        if (dependentFieldName.includes('hazard_process') || dependentFieldName.includes('processes')) {
-                            this.rebuildDependentDropdown(dependentField, dependentFieldName, newValue);
-                        } else if (dependentFieldName.includes('currency')) {
-                            this.toggleCurrencyField(dependentField, newValue);
+                dependents.forEach(dependentFieldName => {
+                    // For inline context, find dependent fields within the same card
+                    if (this.context.type === 'inline') {
+                        const currentCard = element.closest('.card[data-item-index]');
+                        console.log(`[DEPENDENCY] Looking for dependent "${dependentFieldName}" in inline context`);
+                        console.log(`[DEPENDENCY] Found card:`, !!currentCard);
+
+                        if (currentCard) {
+                            const cardBody = currentCard.querySelector(':scope > .card-body');
+                            console.log(`[DEPENDENCY] Card body found:`, !!cardBody);
+
+                            // Try to find the dependent field by data-field-name
+                            // For nested objects (like trigger.hazard_process), we need to search more flexibly
+                            let dependentFieldDiv = null;
+                            let fullDependentFieldName = dependentFieldName;
+
+                            if (cardBody) {
+                                // For nested fields (e.g., changedFieldName is "trigger.type"),
+                                // we need to construct the full dependent field name (e.g., "trigger.hazard_process")
+                                if (changedFieldName.includes('.')) {
+                                    const pathParts = changedFieldName.split('.');
+                                    pathParts.pop(); // Remove the last part (e.g., "type")
+                                    const pathPrefix = pathParts.join('.'); // Get prefix (e.g., "trigger")
+
+                                    // Only apply prefix if the dependent field doesn't already start with it
+                                    // This prevents double-prefixing like "impact_and_losses.impact_and_losses.currency"
+                                    if (!dependentFieldName.startsWith(pathPrefix + '.')) {
+                                        fullDependentFieldName = `${pathPrefix}.${dependentFieldName}`;
+                                        console.log(`[DEPENDENCY] Constructed full dependent name: "${fullDependentFieldName}" from prefix "${pathPrefix}"`);
+                                    } else {
+                                        console.log(`[DEPENDENCY] Dependent "${dependentFieldName}" already has prefix "${pathPrefix}", not adding it again`);
+                                    }
+                                }
+
+                                // First try exact match with the full constructed name (for nested fields like trigger.hazard_process)
+                                dependentFieldDiv = cardBody.querySelector(`[data-field-name="${fullDependentFieldName}"]`);
+                                console.log(`[DEPENDENCY] Exact match for full name "${fullDependentFieldName}":`, !!dependentFieldDiv);
+
+                                // If not found and we constructed a full name, it might be because the field doesn't have data-field-name
+                                // In that case, skip to the fallback ID-based lookup
+                                if (!dependentFieldDiv && fullDependentFieldName === dependentFieldName) {
+                                    // Only try base name if we didn't construct a full name
+                                    dependentFieldDiv = cardBody.querySelector(`[data-field-name="${dependentFieldName}"]`);
+                                    console.log(`[DEPENDENCY] Exact match for base name "${dependentFieldName}":`, !!dependentFieldDiv);
+                                }
+                            }
+
+                            if (dependentFieldDiv) {
+                                const dependentField = dependentFieldDiv.querySelector('select, input');
+                                console.log(`[DEPENDENCY] Found dependent field element:`, !!dependentField);
+                                if (dependentField) {
+                                    if (dependentFieldName.includes('hazard_process') || dependentFieldName.includes('process')) {
+                                        console.log(`[DEPENDENCY] Rebuilding process dropdown with value "${newValue}"`);
+                                        this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
+                                    } else if (dependentFieldName.includes('intensity_measure')) {
+                                        console.log(`[DEPENDENCY] Rebuilding IMT dropdown with value "${newValue}"`);
+                                        this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
+                                    } else if (dependentFieldName.includes('currency')) {
+                                        this.toggleCurrencyField(dependentField, newValue);
+                                    }
+                                }
+                            } else {
+                                console.warn(`[DEPENDENCY] Could not find dependent field "${fullDependentFieldName}" in card using data-field-name`);
+
+                                // FALLBACK: Try ID-based lookup for nested objects (like trigger fields)
+                                // which don't have data-field-name attributes
+                                // IMPORTANT: Search within the current card, not globally, to avoid ID collisions
+                                // Note: fullDependentFieldName is already constructed above
+                                console.log(`[DEPENDENCY] Trying ID-based fallback for: "${fullDependentFieldName}"`);
+
+                                const dependentFieldId = this.context.getFieldId(fullDependentFieldName);
+                                console.log(`[DEPENDENCY] Fallback: Constructed field ID: "${dependentFieldId}"`);
+
+                                // List all elements with IDs in the card for debugging
+                                const allElementsWithIds = currentCard.querySelectorAll('[id]');
+                                console.log(`[DEPENDENCY] Fallback: Found ${allElementsWithIds.length} elements with IDs in card:`);
+                                allElementsWithIds.forEach(el => {
+                                    console.log(`[DEPENDENCY] Fallback:   - ID: "${el.id}", tag: ${el.tagName}`);
+                                });
+
+                                // Search for the field within the current card to avoid ID collisions across multiple cards
+                                const dependentField = currentCard.querySelector(`#${CSS.escape(dependentFieldId)}`);
+                                console.log(`[DEPENDENCY] Fallback: Looking for ID "${dependentFieldId}" within card, found: ${!!dependentField}`);
+
+                                if (dependentField) {
+                                    if (dependentFieldName.includes('hazard_process') || dependentFieldName.includes('process')) {
+                                        console.log(`[DEPENDENCY] Fallback: Rebuilding process dropdown`);
+                                        this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
+                                    } else if (dependentFieldName.includes('intensity_measure')) {
+                                        console.log(`[DEPENDENCY] Fallback: Rebuilding IMT dropdown`);
+                                        this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
+                                    }
+                                } else {
+                                    console.error(`[DEPENDENCY] Fallback: Failed to find dependent field with ID "${dependentFieldId}"`);
+                                }
+                            }
+                        }
+                    } else {
+                        // For normal and modal context, use ID-based lookup
+                        // If the changed field has a path prefix (e.g., "trigger.type"),
+                        // we need to apply the same prefix to the dependent field
+                        let fullDependentFieldName = dependentFieldName;
+                        if (changedFieldName.includes('.')) {
+                            const pathParts = changedFieldName.split('.');
+                            const baseChangedField = pathParts.pop(); // Remove the last part (e.g., "type")
+                            const pathPrefix = pathParts.join('.'); // Get the prefix (e.g., "trigger")
+
+                            // Only apply prefix if the dependent field doesn't already start with it
+                            // This prevents double-prefixing like "impact_and_losses.impact_and_losses.currency"
+                            if (!dependentFieldName.startsWith(pathPrefix + '.')) {
+                                fullDependentFieldName = `${pathPrefix}.${dependentFieldName}`;
+                                console.log(`[DEPENDENCY] Changed field has path: "${changedFieldName}", applying prefix "${pathPrefix}" to dependent "${dependentFieldName}" → "${fullDependentFieldName}"`);
+                            } else {
+                                console.log(`[DEPENDENCY] Changed field has path: "${changedFieldName}", dependent "${dependentFieldName}" already has the prefix, not adding it again`);
+                            }
+                        }
+
+                        const dependentFieldId = this.context.getFieldId(fullDependentFieldName);
+                        const dependentField = document.getElementById(dependentFieldId);
+                        console.log(`[DEPENDENCY] Looking for dependent field with ID: "${dependentFieldId}", found: ${!!dependentField}`);
+
+                        if (dependentField) {
+                            if (dependentFieldName.includes('hazard_process') || dependentFieldName.includes('process')) {
+                                this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
+                            } else if (dependentFieldName.includes('intensity_measure')) {
+                                this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
+                            } else if (dependentFieldName.includes('currency')) {
+                                this.toggleCurrencyField(dependentField, newValue);
+                            }
                         }
                     }
                 });
@@ -2625,7 +2754,32 @@
                         if (currentCard) {
                             // Find ONLY the direct child card-body of this specific card
                             const cardBody = currentCard.querySelector(':scope > .card-body');
-                            const currencyFieldDiv = cardBody ? cardBody.querySelector(':scope > [data-field-name="currency"]') : null;
+
+                            // Try to find currency field - it might be at the top level OR nested
+                            // For nested fields (like impact_and_losses.currency), construct the full path
+                            let currencyFieldDiv = null;
+                            if (cardBody) {
+                                // First try direct child with data-field-name="currency"
+                                currencyFieldDiv = cardBody.querySelector(':scope > [data-field-name="currency"]');
+
+                                // If not found, construct the full currency field name from the quantity_kind field name
+                                if (!currencyFieldDiv && changedFieldName.includes('.')) {
+                                    const currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
+                                    console.log(`[CURRENCY TOGGLE] Trying nested currency field: "${currencyFieldName}"`);
+                                    // Search anywhere in cardBody (not just direct children) for nested fields
+                                    currencyFieldDiv = cardBody.querySelector(`[data-field-name="${currencyFieldName}"]`);
+
+                                    // Also try searching by ID if data-field-name doesn't exist
+                                    if (!currencyFieldDiv) {
+                                        const currencyFieldId = this.context.getFieldId(currencyFieldName);
+                                        const currencyInputById = currentCard.querySelector(`#${CSS.escape(currencyFieldId)}`);
+                                        if (currencyInputById) {
+                                            console.log(`[CURRENCY TOGGLE] Found currency field by ID: "${currencyFieldId}"`);
+                                            currencyFieldDiv = currencyInputById.closest('[data-field-name], .form-field, .mb-2');
+                                        }
+                                    }
+                                }
+                            }
 
                             console.log(`[CURRENCY TOGGLE] Card body found:`, !!cardBody);
                             console.log(`[CURRENCY TOGGLE] Currency field div found:`, !!currencyFieldDiv);
@@ -2675,18 +2829,26 @@
                             currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
                         }
 
-                        const currencyField = document.getElementById(this.context.getFieldId(currencyFieldName));
+                        console.log(`[CURRENCY TOGGLE] Constructed currency field name: "${currencyFieldName}"`);
+                        const currencyFieldId = this.context.getFieldId(currencyFieldName);
+                        console.log(`[CURRENCY TOGGLE] Looking for currency field with ID: "${currencyFieldId}"`);
+                        const currencyField = document.getElementById(currencyFieldId);
+                        console.log(`[CURRENCY TOGGLE] Currency field found:`, !!currencyField);
 
                         if (currencyField) {
                             const container = currencyField.closest('.form-field, .modal-form-field');
+                            console.log(`[CURRENCY TOGGLE] Container found:`, !!container);
                             if (container) {
+                                console.log(`[CURRENCY TOGGLE] Calling toggleCurrencyFieldContainer with value: "${newValue}"`);
                                 this.toggleCurrencyFieldContainer(container, newValue);
                             } else {
                                 // Fallback: handle the field directly if no container found
+                                console.log(`[CURRENCY TOGGLE] Calling toggleCurrencyField directly with value: "${newValue}"`);
                                 this.toggleCurrencyField(currencyField, newValue);
                             }
 
                             // Also ensure the field state is properly set regardless of container
+                            console.log(`[CURRENCY TOGGLE] Setting field state directly, monetary=${newValue === 'monetary'}`);
                             if (newValue === 'monetary') {
                                 currencyField.disabled = false;
                                 currencyField.required = true;
@@ -2698,6 +2860,11 @@
                                     currencyField.value = '';
                                 }
                             }
+
+                            // Add a small delay to check final state after all event handlers
+                            setTimeout(() => {
+                                console.log(`[CURRENCY TOGGLE] FINAL STATE CHECK - disabled:`, currencyField.disabled, `value:`, currencyField.value);
+                            }, 100);
                         }
                     }
                 }
@@ -2726,39 +2893,40 @@
                     }
                 }
 
-                // Special handling for hazard type changes to update processes
-                if (changedFieldName.includes('hazard_type') || changedFieldName.includes('type') ||
-                    (this.context.type === 'modal' && changedFieldName === 'type')) {
-                    
-                    let processFieldName;
-                    if (this.context.type === 'modal') {
-                        processFieldName = 'processes';
-                    } else if (changedFieldName.includes('hazard_type')) {
-                        processFieldName = changedFieldName.replace('hazard_type', 'hazard_process');
-                    } else {
-                        // This covers hazards.type -> hazards.processes
-                        processFieldName = changedFieldName.replace('type', 'processes');
-                    }
-                    
-                    const processField = document.getElementById(this.context.getFieldId(processFieldName));
-                    
-                    console.log(`Hazard type changed: ${changedFieldName} = ${newValue}`);
-                    console.log(`Looking for process field: ${this.context.getFieldId(processFieldName)}`);
-                    console.log(`Process field found:`, !!processField);
-                    
-                    if (processField) {
-                        this.rebuildDependentDropdown(processField, processFieldName, newValue);
-                    }
-                }
+                // REMOVED: This special handling is now redundant - dependencies are handled by
+                // the main handleDependentFields logic above. This was looking for "processes" (old array field)
+                // instead of "hazard_process" (new singular field).
             }
 
             findDependentFields(parentFieldName) {
                 const dependents = [];
+
+                // Extract the base field name (e.g., "type" from "trigger.type")
+                const baseParentFieldName = parentFieldName.includes('.') ?
+                    parentFieldName.split('.').pop() : parentFieldName;
+
                 Object.entries(FIELD_DEPENDENCIES).forEach(([dependent, parent]) => {
-                    if (parent === parentFieldName) {
+                    // Check both full field name and base field name
+                    if (parent === parentFieldName || parent === baseParentFieldName) {
                         dependents.push(dependent);
                     }
                 });
+
+                // Special case: hazard_process can depend on either 'type' or 'hazard_type'
+                // depending on context (hazards vs losses)
+                if (baseParentFieldName === 'type' || baseParentFieldName === 'hazard_type') {
+                    if (!dependents.includes('hazard_process')) {
+                        dependents.push('hazard_process');
+                    }
+                }
+
+                // For IMT, add it if parent is 'type' or ends with 'type'
+                if (baseParentFieldName === 'type') {
+                    if (!dependents.includes('intensity_measure')) {
+                        dependents.push('intensity_measure');
+                    }
+                }
+
                 return dependents;
             }
 
@@ -2824,13 +2992,18 @@
 
             toggleCurrencyFieldContainer(container, quantityKindValue) {
                 // This method handles the container (form-field div) - use disabled instead of hiding
+                console.log(`[toggleCurrencyFieldContainer] Called with value: "${quantityKindValue}"`);
                 const label = container.querySelector('label');
                 const input = container.querySelector('select, input');
+                console.log(`[toggleCurrencyFieldContainer] Input found:`, !!input, `Input ID:`, input?.id);
+                console.log(`[toggleCurrencyFieldContainer] Input disabled before:`, input?.disabled);
 
                 if (quantityKindValue === 'monetary') {
+                    console.log(`[toggleCurrencyFieldContainer] Value is monetary, ENABLING field`);
                     if (input) {
                         input.disabled = false;
                         input.required = true;
+                        console.log(`[toggleCurrencyFieldContainer] Input disabled after setting to false:`, input.disabled);
                     }
 
                     if (label && !label.innerHTML.includes('*')) {
@@ -2838,10 +3011,12 @@
                         container.classList.add('required');
                     }
                 } else {
+                    console.log(`[toggleCurrencyFieldContainer] Value is NOT monetary, DISABLING field`);
                     if (input) {
                         input.disabled = true;
                         input.required = false;
                         input.value = '';
+                        console.log(`[toggleCurrencyFieldContainer] Input disabled after setting to true:`, input.disabled);
                     }
 
                     if (label) {
