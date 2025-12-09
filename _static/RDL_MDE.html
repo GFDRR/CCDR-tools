@@ -4812,9 +4812,12 @@
                         attributionError = `Attribution ${attrNum} is missing required entity name`;
                         break;
                     }
-                    if (!attribution.entity.email || attribution.entity.email.trim() === '') {
+                    // Check that at least one of email or url is provided
+                    const hasEmail = attribution.entity.email && attribution.entity.email.trim() !== '';
+                    const hasUrl = attribution.entity.url && attribution.entity.url.trim() !== '';
+                    if (!hasEmail && !hasUrl) {
                         attributionsValid = false;
-                        attributionError = `Attribution ${attrNum} is missing required entity email`;
+                        attributionError = `Attribution ${attrNum} entity must have either an email or URL`;
                         break;
                     }
                 }
