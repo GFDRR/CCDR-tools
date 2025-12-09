@@ -1534,6 +1534,7 @@
           "enum": [
             "GeoTIFF (tif)",
             "Cloud Optimized GeoTIFF (cog)",
+            "GRID (grd)",
             "NetCDF (nc)",
             "HDF5 (hdf5)",
             "Zarr (zarr)",
