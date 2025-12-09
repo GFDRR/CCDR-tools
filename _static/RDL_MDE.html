@@ -5504,7 +5504,9 @@
 
                 // Step 3: Create/update file
                 showGithubStatus('info', '📄 Uploading dataset file...');
-                const content = btoa(JSON.stringify(cleanedData, null, 2));
+                // Use UTF-8 safe base64 encoding to handle special characters
+                const jsonString = JSON.stringify(cleanedData, null, 2);
+                const content = btoa(unescape(encodeURIComponent(jsonString)));
                 const commitMessage = `Add RDLS dataset: ${datasetTitle}
 
 Dataset published via RDLS Metadata Editor

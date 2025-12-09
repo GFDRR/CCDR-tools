@@ -1634,8 +1634,15 @@
       "type": "object",
       "description": "A person, organization or group.",
       "required": [
-        "name",
-        "email"
+        "name"
+      ],
+      "anyOf": [
+        {
+          "required": ["email"]
+        },
+        {
+          "required": ["url"]
+        }
       ],
       "properties": {
         "name": {
