@@ -2020,7 +2020,8 @@
             "global",
             "regional",
             "national",
-            "sub-national"
+            "sub-national",
+            "urban"
           ]
         },
         "countries": {
