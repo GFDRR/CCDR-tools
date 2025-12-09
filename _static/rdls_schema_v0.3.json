@@ -2452,7 +2452,7 @@
       "required": [
         "id",
         "type",
-        "processes"
+        "hazard_process"
       ],
       "properties": {
         "id": {
@@ -2474,17 +2474,12 @@
           "openCodelist": false,
           "$ref": "#/$defs/hazard_type"
         },
-        "processes": {
-          "title": "Hazard processes",
-          "description": "The hazard process types for this hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists#process_type).",
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/process_type"
-          },
+        "hazard_process": {
+          "title": "Hazard process",
+          "description": "The hazard process type for this hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists#process_type).",
           "codelist": "process_type.csv",
           "openCodelist": false,
-          "minItems": 1,
-          "uniqueItems": true
+          "$ref": "#/$defs/process_type"
         },
         "intensity_measure": {
           "$ref": "#/$defs/intensity_measure"
@@ -2509,17 +2504,12 @@
           "openCodelist": false,
           "$ref": "#/$defs/hazard_type"
         },
-        "processes": {
-          "title": "Hazard processes",
-          "description": "The hazard process types for this hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists#process_type).",
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/process_type"
-          },
+        "hazard_process": {
+          "title": "Hazard process",
+          "description": "The hazard process type for this hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists#process_type).",
           "codelist": "process_type.csv",
           "openCodelist": false,
-          "minItems": 1,
-          "uniqueItems": true
+          "$ref": "#/$defs/process_type"
         }
       },
       "minProperties": 1
