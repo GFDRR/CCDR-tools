@@ -841,10 +841,11 @@
          * Handles all field creation needs across normal, modal, and array contexts
          */
         class FieldCreationContext {
-            constructor(type = 'normal', container = null) {
+            constructor(type = 'normal', container = null, itemData = null) {
                 this.type = type; // 'normal', 'modal', 'inline', 'array'
                 this.container = container;
                 this.idPrefix = type === 'modal' ? 'modal_' : '';
+                this.itemData = itemData; // For inline context, stores the item being edited
             }
 
             createField(name, property, value, options = {}) {
@@ -950,6 +951,17 @@
                         return { ...resolved, title: property.title || resolved.title, description: property.description || resolved.description };
                     }
                 }
+
+                // Handle anyOf - extract format if it exists in any of the options
+                if (property.anyOf && !property.format) {
+                    for (const option of property.anyOf) {
+                        if (option.format) {
+                            // Create a merged property with the format from anyOf
+                            return { ...property, format: option.format };
+                        }
+                    }
+                }
+
                 return property;
             }
 
@@ -1002,7 +1014,13 @@
                 // Check for dependencies
                 const dependsOn = FIELD_DEPENDENCIES[name];
                 if (dependsOn) {
-                    const parentValue = getNestedValue(currentFormData, dependsOn);
+                    // For inline context, get parent value from itemData; otherwise from currentFormData
+                    let parentValue;
+                    if (this.context.type === 'inline' && this.context.itemData) {
+                        parentValue = this.context.itemData[dependsOn];
+                    } else {
+                        parentValue = getNestedValue(currentFormData, dependsOn);
+                    }
                     return this.createDependentSelect(name, property, value, dependsOn, parentValue, options);
                 }
 
@@ -1238,7 +1256,7 @@
             createDependentSelect(name, property, value, dependsOn, parentValue, options) {
                 const select = document.createElement('select');
                 select.className = 'form-select field-with-validation';
-                console.log(`[CREATE DEPENDENT SELECT] Creating dependent select for "${name}", context type: "${this.context.type}", value: "${value}"`);
+                console.log(`[CREATE DEPENDENT SELECT] Creating dependent select for "${name}", context type: "${this.context.type}", value: "${value}", parentValue: "${parentValue}"`);
                 // Always set ID (needed for dependency system), but only set name for non-inline context
                 // (name attribute causes FormData collection, which we want to avoid for inline fields)
                 select.id = this.context.getFieldId(name);
@@ -1258,9 +1276,17 @@
                 // Start with all available options
                 let availableOptions = property.enum || [];
 
-                // Filter options if we have a parent value
-                if (parentValue && currentSchema.hazard_process_mappings && name.includes('process')) {
-                    availableOptions = currentSchema.hazard_process_mappings[parentValue] || property.enum || [];
+                // Filter options based on parent value
+                if (parentValue) {
+                    if (currentSchema.hazard_process_mappings && name.includes('process')) {
+                        // Filter process options based on hazard type
+                        availableOptions = currentSchema.hazard_process_mappings[parentValue] || property.enum || [];
+                    } else if (name.includes('intensity_measure')) {
+                        // Filter IMT options based on hazard type
+                        const filteredIMTs = getFilteredIMTOptions(parentValue);
+                        availableOptions = filteredIMTs.map(opt => opt.code);
+                        console.log(`[CREATE DEPENDENT SELECT] Filtered ${availableOptions.length} IMT options for hazard type "${parentValue}"`);
+                    }
                 }
 
                 // Populate options
@@ -1283,7 +1309,7 @@
                     select.appendChild(optionElement);
                 });
 
-                console.log(`[CREATE DEPENDENT SELECT] Finished creating select, selected value: "${select.value}"`);
+                console.log(`[CREATE DEPENDENT SELECT] Finished creating select with ${availableOptions.length} options, selected value: "${select.value}"`);
 
                 this.context.setupEventListeners(select, name, property, options);
 
@@ -1636,7 +1662,7 @@
                             });
                         } else {
                             arrayData.forEach((item, index) => {
-                                const objectCard = createObjectSummaryCard(item, index, name, property);
+                                const objectCard = createObjectSummaryCard(item, index, name, property, arrayData, renderArrayItems);
                                 itemsContainer.appendChild(objectCard);
                             });
                         }
@@ -1850,14 +1876,15 @@
                 if (itemSchema && itemSchema.properties) {
                     Object.entries(itemSchema.properties).forEach(([key, prop]) => {
                         if (key === 'id') return; // Skip ID field
-                        
+
                         const fieldDiv = document.createElement('div');
                         fieldDiv.className = 'mb-2';
                         fieldDiv.setAttribute('data-field-name', key);
-                        
+
                         // Create a sub-context for inline editing
                         // Don't use ID/name attributes to avoid polluting FormData
-                        const inlineContext = new FieldCreationContext('inline', fieldDiv);
+                        // Pass item data so dependent fields can look up parent values
+                        const inlineContext = new FieldCreationContext('inline', fieldDiv, item);
                         const fieldElement = inlineContext.createField(key, prop, item[key]);
 
                         
@@ -1910,7 +1937,8 @@
                             };
 
                             // Create context - don't use ID/name to avoid polluting FormData
-                            const currencyContext = new FieldCreationContext('inline', currencyDiv);
+                            // Pass item data so dependent fields can look up parent values
+                            const currencyContext = new FieldCreationContext('inline', currencyDiv, item);
                             console.log(`[CURRENCY FIELD] Created context with type: ${currencyContext.type}`);
                             const savedCurrencyValue = item['currency'];
                             console.log(`[CURRENCY FIELD] Creating currency field for ${arrayName}[${index}], savedValue: "${savedCurrencyValue}"`);
@@ -2093,12 +2121,13 @@
                 if (property.properties) {
                     Object.entries(property.properties).forEach(([key, prop]) => {
                         const fieldValue = value && value[key] ? value[key] : null;
-                        const subContext = new FieldCreationContext(this.context.type, this.context.container);
+                        // Pass itemData to sub-context so nested fields can access parent item data for dependencies
+                        const subContext = new FieldCreationContext(this.context.type, this.context.container, this.context.itemData || value);
                         const field = subContext.createField(`${name}.${key}`, prop, fieldValue, options);
                         container.appendChild(field);
                     });
                 }
-                
+
                 return container;
             }
 
@@ -2932,27 +2961,27 @@
 
             rebuildDependentDropdown(selectElement, fieldName, parentValue) {
                 if (!parentValue) return;
-                
+
                 console.log(`Rebuilding dropdown: ${fieldName} based on parent value: ${parentValue}`);
-                
+
                 const currentValue = selectElement.value;
-                
+
                 // Clear existing options
                 selectElement.innerHTML = '';
-                
+
                 const emptyOption = document.createElement('option');
                 emptyOption.value = '';
                 emptyOption.textContent = 'Select an option...';
                 selectElement.appendChild(emptyOption);
-                
+
                 // Get available options based on parent value
                 let availableOptions = [];
-                
+
                 if ((fieldName.includes('process') || fieldName === 'processes') && currentSchema.hazard_process_mappings) {
                     availableOptions = currentSchema.hazard_process_mappings[parentValue] || [];
                     console.log(`Found ${availableOptions.length} process options for "${parentValue}":`, availableOptions);
                 }
-                
+
                 // Populate new options
                 availableOptions.forEach(option => {
                     const optionElement = document.createElement('option');
@@ -2967,10 +2996,10 @@
                     if (currentValue === option) {
                         optionElement.selected = true;
                     }
-                    
+
                     selectElement.appendChild(optionElement);
                 });
-                
+
                 // If previous selection is no longer valid, clear it
                 if (currentValue && !availableOptions.includes(currentValue)) {
                     selectElement.value = '';
@@ -3953,8 +3982,8 @@
             const modalTitle = document.getElementById('objectEditorModalLabel');
             modalTitle.textContent = `Edit ${objectSchema.title || arrayName}`;
 
-            // Always use the latest array data from currentFormData if available
-            const fullArrayData = getNestedValue(currentFormData, arrayName) || [];
+            // Use passed arrayData if available, otherwise get from currentFormData
+            const fullArrayData = arrayData || getNestedValue(currentFormData, arrayName) || [];
             // Preload the object data from the array if it exists
             // Only clone the object if editing, otherwise use empty object for new
             let objectData = {};
@@ -4047,7 +4076,7 @@
             modal.show();
         }
 
-        function createObjectSummaryCard(objectData, index, arrayName, arrayProperty) {
+        function createObjectSummaryCard(objectData, index, arrayName, arrayProperty, arrayData, renderCallback) {
             const card = document.createElement('div');
             card.className = 'object-summary-card';
             
@@ -4157,7 +4186,7 @@
             editBtn.className = 'btn btn-outline-primary btn-sm';
             editBtn.textContent = '✏️ Edit';
             editBtn.addEventListener('click', () => {
-                openObjectEditor(arrayName, index, arrayProperty.items, null, null);
+                openObjectEditor(arrayName, index, arrayProperty.items, arrayData, renderCallback);
             });
             
             const removeBtn = document.createElement('button');
@@ -4211,17 +4240,20 @@
                     cards.forEach((card, index) => {
                         const item = {};
                         const fieldDivs = card.querySelectorAll('[data-field-name]');
-                        
+
                         fieldDivs.forEach(fieldDiv => {
                             const fieldNameAttr = fieldDiv.getAttribute('data-field-name');
                             if (fieldNameAttr && fieldNameAttr !== 'id') {
                                 const input = fieldDiv.querySelector('input, select, textarea');
                                 if (input) {
-                                    if (input.type === 'checkbox') {
-                                        item[fieldNameAttr] = input.checked;
+                                    const rawValue = input.type === 'checkbox' ? input.checked : input.value;
+                                    // Convert to proper type based on schema (only for non-checkbox fields)
+                                    const convertedValue = input.type === 'checkbox' ? rawValue : convertValueBySchema(fieldNameAttr, rawValue);
+
+                                    // Use setNestedValue to handle nested properties like 'hazard.type' or 'occurrence.probabilistic.return_period'
+                                    if (fieldNameAttr.includes('.')) {
+                                        setNestedValue(item, fieldNameAttr, convertedValue);
                                     } else {
-                                        // Convert to proper type based on schema
-                                        const convertedValue = convertValueBySchema(fieldNameAttr, input.value);
                                         item[fieldNameAttr] = convertedValue;
                                     }
                                 }
