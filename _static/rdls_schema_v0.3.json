@@ -1536,6 +1536,7 @@
             "Cloud Optimized GeoTIFF (cog)",
             "GRID (grd)",
             "NetCDF (nc)",
+            "GRIB (grib)",
             "HDF5 (hdf5)",
             "Zarr (zarr)",
             "GeoPackage (gpkg)",
@@ -1561,17 +1562,17 @@
           "codelist": "access_modality.csv",
           "openCodelist": false,
           "enum": [
-            "download",
-            "api",
-            "ogc_api_features",
-            "ogc_api_coverages",
-            "ogc_api_tiles",
-            "wms",
-            "wfs",
-            "wcs",
-            "stac",
-            "rest",
-            "website"
+            "File download",
+            "Download page",
+            "API",
+            "OGC_API",
+            "GEE_collection",
+            "WMS",
+            "WFS",
+            "WCS",
+            "STAC",
+            "REST",
+            "Dashboard"
           ]
         },
         "spatial_resolution": {
