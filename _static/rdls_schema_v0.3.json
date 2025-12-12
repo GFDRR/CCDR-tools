@@ -576,32 +576,7 @@
           "$ref": "#/$defs/data_calculation_type"
         },
         "impact_metric": {
-          "title": "Impact metric",
-          "type": "string",
-          "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#impact-metric).",
-          "codelist": "impact_metric.csv",
-          "openCodelist": false,
-          "enum": [
-            "damage_ratio",
-            "mean_damage_ratio",
-            "probability",
-            "damage_index",
-            "loss_ratio",
-            "mean_loss_ratio",
-            "downtime_vulnerability",
-            "casualty_ratio_vulnerability",
-            "economic_loss_value",
-            "insured_loss_value",
-            "casualty_count",
-            "casualty_ratio_loss",
-            "loss_annual_average_value",
-            "loss_probable_maximum_value",
-            "at_risk_value",
-            "at_risk_tail_value",
-            "downtime_loss",
-            "asset_loss",
-            "displaced_count"
-          ]
+          "$ref": "#/$defs/impact_metric"
         },
         "quantity_kind": {
           "title": "Quantity kind",
@@ -718,32 +693,7 @@
           "$ref": "#/$defs/data_calculation_type"
         },
         "impact_metric": {
-          "title": "Impact metric",
-          "type": "string",
-          "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#impact-metric).",
-          "codelist": "impact_metric.csv",
-          "openCodelist": false,
-          "enum": [
-            "damage_ratio",
-            "mean_damage_ratio",
-            "probability",
-            "damage_index",
-            "loss_ratio",
-            "mean_loss_ratio",
-            "downtime_vulnerability",
-            "casualty_ratio_vulnerability",
-            "economic_loss_value",
-            "insured_loss_value",
-            "casualty_count",
-            "casualty_ratio_loss",
-            "loss_annual_average_value",
-            "loss_probable_maximum_value",
-            "at_risk_value",
-            "at_risk_tail_value",
-            "downtime_loss",
-            "asset_loss",
-            "displaced_count"
-          ]
+          "$ref": "#/$defs/impact_metric"
         },
         "quantity_kind": {
           "title": "Quantity kind",
@@ -889,32 +839,7 @@
           "$ref": "#/$defs/data_calculation_type"
         },
         "impact_metric": {
-          "title": "Impact metric",
-          "type": "string",
-          "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#impact-metric).",
-          "codelist": "impact_metric.csv",
-          "openCodelist": false,
-          "enum": [
-            "damage_ratio",
-            "mean_damage_ratio",
-            "probability",
-            "damage_index",
-            "loss_ratio",
-            "mean_loss_ratio",
-            "downtime_vulnerability",
-            "casualty_ratio_vulnerability",
-            "economic_loss_value",
-            "insured_loss_value",
-            "casualty_count",
-            "casualty_ratio_loss",
-            "loss_annual_average_value",
-            "loss_probable_maximum_value",
-            "at_risk_value",
-            "at_risk_tail_value",
-            "downtime_loss",
-            "asset_loss",
-            "displaced_count"
-          ]
+          "$ref": "#/$defs/impact_metric"
         },
         "quantity_kind": {
           "title": "Quantity kind",
@@ -1060,32 +985,7 @@
           "$ref": "#/$defs/data_calculation_type"
         },
         "impact_metric": {
-          "title": "Impact metric",
-          "type": "string",
-          "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#impact-metric).",
-          "codelist": "impact_metric.csv",
-          "openCodelist": false,
-          "enum": [
-            "damage_ratio",
-            "mean_damage_ratio",
-            "probability",
-            "damage_index",
-            "loss_ratio",
-            "mean_loss_ratio",
-            "downtime_vulnerability",
-            "casualty_ratio_vulnerability",
-            "economic_loss_value",
-            "insured_loss_value",
-            "casualty_count",
-            "casualty_ratio_loss",
-            "loss_annual_average_value",
-            "loss_probable_maximum_value",
-            "at_risk_value",
-            "at_risk_tail_value",
-            "downtime_loss",
-            "asset_loss",
-            "displaced_count"
-          ]
+          "$ref": "#/$defs/impact_metric"
         },
         "quantity_kind": {
           "title": "Quantity kind",
@@ -1245,32 +1145,7 @@
           "$ref": "#/$defs/data_calculation_type"
         },
         "impact_metric": {
-          "title": "Impact metric",
-          "type": "string",
-          "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#impact-metric).",
-          "codelist": "impact_metric.csv",
-          "openCodelist": false,
-          "enum": [
-            "damage_ratio",
-            "mean_damage_ratio",
-            "probability",
-            "damage_index",
-            "loss_ratio",
-            "mean_loss_ratio",
-            "downtime_vulnerability",
-            "casualty_ratio_vulnerability",
-            "economic_loss_value",
-            "insured_loss_value",
-            "casualty_count",
-            "casualty_ratio_loss",
-            "loss_annual_average_value",
-            "loss_probable_maximum_value",
-            "at_risk_value",
-            "at_risk_tail_value",
-            "downtime_loss",
-            "asset_loss",
-            "displaced_count"
-          ]
+          "$ref": "#/$defs/impact_metric"
         },
         "quantity_kind": {
           "title": "Quantity kind",
@@ -1473,6 +1348,35 @@
         "inferred",
         "observed",
         "simulated"
+      ]
+    },
+    "impact_metric": {
+      "title": "Impact metric",
+      "type": "string",
+      "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#impact-metric).",
+      "codelist": "impact_metric.csv",
+      "openCodelist": false,
+      "enum": [
+        "damage_ratio",
+        "mean_damage_ratio",
+        "probability",
+        "damage_index",
+        "loss_ratio",
+        "mean_loss_ratio",
+        "downtime_vulnerability",
+        "casualty_ratio_vulnerability",
+        "economic_loss_value",
+        "insured_loss_value",
+        "casualty_count",
+        "casualty_ratio_loss",
+        "loss_annual_average_value",
+        "loss_probable_maximum_value",
+        "at_risk_value",
+        "at_risk_tail_value",
+        "downtime_loss",
+        "asset_loss",
+        "displaced_count",
+        "exposure_to_hazard"
       ]
     },
     "Resource": {
@@ -3103,32 +3007,7 @@
               "$ref": "#/$defs/data_calculation_type"
             },
             "impact_metric": {
-              "title": "Impact metric",
-              "type": "string",
-              "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#impact-metric).",
-              "codelist": "impact_metric.csv",
-              "openCodelist": false,
-              "enum": [
-                "damage_ratio",
-                "mean_damage_ratio",
-                "probability",
-                "damage_index",
-                "loss_ratio",
-                "mean_loss_ratio",
-                "downtime_vulnerability",
-                "casualty_ratio_vulnerability",
-                "economic_loss_value",
-                "insured_loss_value",
-                "casualty_count",
-                "casualty_ratio_loss",
-                "loss_annual_average_value",
-                "loss_probable_maximum_value",
-                "at_risk_value",
-                "at_risk_tail_value", 
-                "downtime_loss",
-                "asset_loss",
-                "displaced_count"
-              ]
+              "$ref": "#/$defs/impact_metric"
             },
             "quantity_kind": {
               "title": "Quantity kind",
