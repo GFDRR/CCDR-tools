@@ -936,6 +936,11 @@
                 const container = document.createElement('div');
                 container.className = (this.context.type === 'modal' || this.context.type === 'inline') ? 'modal-form-field' : 'form-field';
 
+                // Set data-field-name for inline context to enable data collection
+                if (this.context.type === 'inline') {
+                    container.setAttribute('data-field-name', name);
+                }
+
                 // Handle required fields
                 if (this.isRequiredField(name, property, options)) {
                     container.classList.add('required');
@@ -1796,7 +1801,7 @@
                         // For modal context or problematic arrays, add inline object instead of opening new modal
                         if (this.context.type === 'modal' || isProblematicArray) {
                             const newItem = {};
-                            
+
                             // Initialize with appropriate ID based on object type
                             if (name === 'metrics') {
                                 newItem.id = generateUniqueId('metric');
@@ -1804,6 +1809,8 @@
                                 newItem.id = generateUniqueId('cost');
                             } else if (name === 'hazards') {
                                 newItem.id = generateUniqueId('hazard');
+                            } else if (name === 'events' || name.includes('.events')) {
+                                newItem.id = generateUniqueId('event');
                             } else {
                                 newItem.id = generateUniqueId('item');
                             }
@@ -2509,7 +2516,8 @@
                         const arrayData = card._arrayDataRef;
                         if (arrayData && arrayData[index]) {
                             console.log(`[INLINE UPDATE] Updating ${name} in ${arrayName}[${index}] to: ${value}`);
-                            arrayData[index][name] = value;
+                            // Use setNestedValue to properly handle dotted paths like "occurrence.empirical.temporal.start"
+                            setNestedValue(arrayData[index], name, value);
                             console.log(`[INLINE UPDATE] ${arrayName}[${index}] now:`, JSON.parse(JSON.stringify(arrayData[index])));
                         } else {
                             console.warn(`[INLINE UPDATE] Could not find arrayData reference for ${arrayName}[${index}]`);
@@ -3982,6 +3990,18 @@
             const modalTitle = document.getElementById('objectEditorModalLabel');
             modalTitle.textContent = `Edit ${objectSchema.title || arrayName}`;
 
+            // Update save button text based on what's being edited
+            const saveBtn = document.getElementById('saveObjectBtn');
+            if (arrayName.includes('events')) {
+                saveBtn.textContent = 'Save Event';
+            } else if (arrayName.includes('event_sets')) {
+                saveBtn.textContent = 'Save Event Set';
+            } else if (arrayName.includes('losses')) {
+                saveBtn.textContent = 'Save Loss';
+            } else {
+                saveBtn.textContent = 'Save Changes';
+            }
+
             // Use passed arrayData if available, otherwise get from currentFormData
             const fullArrayData = arrayData || getNestedValue(currentFormData, arrayName) || [];
             // Preload the object data from the array if it exists
@@ -4219,9 +4239,11 @@
             
             // Start with the existing object data to preserve arrays that were modified
             let objectData = {};
-            
-            // First, get any existing object data to preserve arrays
-            const fullArrayData = getNestedValue(currentFormData, currentObjectEditor.arrayName) || [];
+
+            // First, try to get data from the live arrayData reference used by inline editors
+            // This is more reliable than currentFormData for modal editing
+            const fullArrayData = currentObjectEditor.arrayData || getNestedValue(currentFormData, currentObjectEditor.arrayName) || [];
+
             if (typeof currentObjectEditor.objectIndex === 'number' && fullArrayData[currentObjectEditor.objectIndex]) {
                 // Copy existing object data, including any arrays that were modified in the modal
                 objectData = JSON.parse(JSON.stringify(fullArrayData[currentObjectEditor.objectIndex]));
@@ -4235,27 +4257,51 @@
                 if (containerId) {
                     const fieldName = containerId.replace('modal_', '').replace('_items', '');
                     const cards = container.querySelectorAll('.card[data-item-index]');
+
+                    // Get the existing array data from the first card's _arrayDataRef (live reference)
+                    // This is more reliable than objectData[fieldName] for unsaved objects
+                    const firstCard = cards[0];
+                    const liveArrayData = firstCard?._arrayDataRef;
+                    const existingArrayData = liveArrayData || objectData[fieldName] || [];
                     const arrayData = [];
-                    
+
                     cards.forEach((card, index) => {
-                        const item = {};
+                        // Start with existing item data to preserve inline editor updates
+                        const existingItem = existingArrayData[index];
+                        const item = existingItem ? JSON.parse(JSON.stringify(existingItem)) : {};
+
                         const fieldDivs = card.querySelectorAll('[data-field-name]');
 
                         fieldDivs.forEach(fieldDiv => {
                             const fieldNameAttr = fieldDiv.getAttribute('data-field-name');
                             if (fieldNameAttr && fieldNameAttr !== 'id') {
-                                const input = fieldDiv.querySelector('input, select, textarea');
-                                if (input) {
-                                    const rawValue = input.type === 'checkbox' ? input.checked : input.value;
-                                    // Convert to proper type based on schema (only for non-checkbox fields)
-                                    const convertedValue = input.type === 'checkbox' ? rawValue : convertValueBySchema(fieldNameAttr, rawValue);
+                                // Get all inputs in this field (handles nested objects with multiple inputs)
+                                const inputs = fieldDiv.querySelectorAll('input, select, textarea');
 
-                                    // Use setNestedValue to handle nested properties like 'hazard.type' or 'occurrence.probabilistic.return_period'
-                                    if (fieldNameAttr.includes('.')) {
-                                        setNestedValue(item, fieldNameAttr, convertedValue);
-                                    } else {
-                                        item[fieldNameAttr] = convertedValue;
-                                    }
+                                if (inputs.length > 0) {
+                                    // For each input, use its name/id to determine the exact field path
+                                    inputs.forEach(input => {
+                                        // Get the full field path from the input's name or id
+                                        const inputName = (input.name || input.id).replace('modal_', '');
+
+                                        if (inputName && inputName !== 'id') {
+                                            const rawValue = input.type === 'checkbox' ? input.checked : input.value;
+
+                                            // Only update if the value is not empty or if it's a checkbox
+                                            // This preserves inline editor data for fields not in the DOM or that are empty
+                                            if (input.type === 'checkbox' || rawValue !== '') {
+                                                // Convert to proper type based on schema (only for non-checkbox fields)
+                                                const convertedValue = input.type === 'checkbox' ? rawValue : convertValueBySchema(inputName, rawValue);
+
+                                                // Use setNestedValue to handle nested properties like 'hazard.type' or 'occurrence.empirical.temporal.start'
+                                                if (inputName.includes('.')) {
+                                                    setNestedValue(item, inputName, convertedValue);
+                                                } else {
+                                                    item[inputName] = convertedValue;
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
                             }
                         });
@@ -4281,15 +4327,19 @@
                         // Preserve the ID if it exists
                         if (objectData[fieldName] && objectData[fieldName][index] && objectData[fieldName][index].id) {
                             item.id = objectData[fieldName][index].id;
+                        } else if (existingArrayData[index] && existingArrayData[index].id) {
+                            // Use ID from existing array data (handles inline editor case)
+                            item.id = existingArrayData[index].id;
                         } else {
                             // Generate a new ID if needed
                             let idPrefix = 'item';
                             if (fieldName === 'metrics') idPrefix = 'metric';
                             else if (fieldName === 'cost') idPrefix = 'cost';
                             else if (fieldName === 'hazards') idPrefix = 'hazard';
+                            else if (fieldName === 'events') idPrefix = 'event';
                             item.id = generateUniqueId(idPrefix);
                         }
-                        
+
                         arrayData.push(item);
                     });
                     
@@ -4380,7 +4430,8 @@
                 else if (currentObjectEditor.arrayName === 'referenced_by') idPrefix = 'reference';
                 else if (currentObjectEditor.arrayName.includes('event_sets')) idPrefix = 'event_set';
                 else if (currentObjectEditor.arrayName.includes('losses')) idPrefix = 'loss';
-                
+                else if (currentObjectEditor.arrayName.includes('events')) idPrefix = 'event';
+
                 objectData.id = generateUniqueId(idPrefix);
             } else {
                 const existingObject = fullArrayDataUpdated[currentObjectEditor.objectIndex];
@@ -4394,7 +4445,8 @@
                     else if (currentObjectEditor.arrayName === 'referenced_by') idPrefix = 'reference';
                     else if (currentObjectEditor.arrayName.includes('event_sets')) idPrefix = 'event_set';
                     else if (currentObjectEditor.arrayName.includes('losses')) idPrefix = 'loss';
-                    
+                    else if (currentObjectEditor.arrayName.includes('events')) idPrefix = 'event';
+
                     objectData.id = generateUniqueId(idPrefix);
                 }
             }
