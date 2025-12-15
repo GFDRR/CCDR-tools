@@ -1167,7 +1167,7 @@
       ],
       "properties": {
         "scheme": {
-          "title": "Indicator scheme",
+          "title": "Classification scheme",
           "description": "The classification scheme or framework from which the indicator is taken, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme).",
           "$ref": "#/$defs/taxonomy"
         },
@@ -1421,8 +1421,8 @@
           "codelist": "access_modality.csv",
           "openCodelist": false,
           "enum": [
-            "File download",
-            "Download page",
+            "file_download",
+            "download_page",
             "API",
             "OGC_API",
             "GEE_collection",
@@ -1431,7 +1431,7 @@
             "WCS",
             "STAC",
             "REST",
-            "Dashboard"
+            "dashboard"
           ]
         },
         "spatial_resolution": {
