@@ -585,18 +585,8 @@
         },
         "taxonomy": {
           "title": "Exposure taxonomy scheme",
-          "type": "string",
-          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset. Use of GED4ALL is recommended.",
-          "minLength": 1,
-          "openCodelist": false,
-          "$ref": "#/$defs/taxonomy",
-          "examples": [
-            "GED4ALL",
-            "HAZUS",
-            "EMS-98",
-            "PAGER",
-            "Custom taxonomy v1.0"
-          ]
+          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme). Use of GED4ALL is recommended.",
+          "$ref": "#/$defs/taxonomy"
         },
         "analysis_details": {
           "title": "Analysis details",
@@ -702,18 +692,8 @@
         },
         "taxonomy": {
           "title": "Exposure taxonomy scheme",
-          "type": "string",
-          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset. Use of GED4ALL is recommended.",
-          "minLength": 1,
-          "openCodelist": false,
-          "$ref": "#/$defs/taxonomy",
-          "examples": [
-            "GED4ALL",
-            "HAZUS",
-            "EMS-98",
-            "PAGER",
-            "Custom taxonomy v1.0"
-          ]
+          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme). Use of GED4ALL is recommended.",
+          "$ref": "#/$defs/taxonomy"
         },
         "analysis_details": {
           "title": "Analysis details",
@@ -848,18 +828,8 @@
         },
         "taxonomy": {
           "title": "Exposure taxonomy scheme",
-          "type": "string",
-          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset. Use of GED4ALL is recommended.",
-          "minLength": 1,
-          "openCodelist": false,
-          "$ref": "#/$defs/taxonomy",
-          "examples": [
-            "GED4ALL",
-            "HAZUS",
-            "EMS-98",
-            "PAGER",
-            "Custom taxonomy v1.0"
-          ]
+          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme). Use of GED4ALL is recommended.",
+          "$ref": "#/$defs/taxonomy"
         },
         "analysis_details": {
           "title": "Analysis details",
@@ -994,18 +964,8 @@
         },
         "taxonomy": {
           "title": "Exposure taxonomy scheme",
-          "type": "string",
-          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset. Use of GED4ALL is recommended.",
-          "minLength": 1,
-          "openCodelist": false,
-          "$ref": "#/$defs/taxonomy",
-          "examples": [
-            "GED4ALL",
-            "HAZUS",
-            "EMS-98",
-            "PAGER",
-            "Custom taxonomy v1.0"
-          ]
+          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme). Use of GED4ALL is recommended.",
+          "$ref": "#/$defs/taxonomy"
         },
         "analysis_details": {
           "title": "Analysis details",
@@ -1154,18 +1114,8 @@
         },
         "taxonomy": {
           "title": "Exposure taxonomy scheme",
-          "type": "string",
-          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset. Use of GED4ALL is recommended.",
-          "minLength": 1,
-          "openCodelist": false,
-          "$ref": "#/$defs/taxonomy",
-          "examples": [
-            "GED4ALL",
-            "HAZUS",
-            "EMS-98",
-            "PAGER",
-            "Custom taxonomy v1.0"
-          ]
+          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme). Use of GED4ALL is recommended.",
+          "$ref": "#/$defs/taxonomy"
         },
         "analysis_details": {
           "title": "Analysis details",
@@ -1218,22 +1168,8 @@
       "properties": {
         "scheme": {
           "title": "Indicator scheme",
-          "description": "The classification scheme or framework from which the indicator is taken.",
-          "type": "string",
-          "codelist": "socioeconomic_scheme.csv",
-          "openCodelist": true,
-          "suggestions": [
-            "GED4ALL-socio-economic",
-            "MOVER-social-vulnerability-categories",
-            "CDC-SVI",
-            "INFORM-risk-index",
-            "custom"
-          ],
-          "examples": [
-            "GED4ALL-socio-economic",
-            "CDC-SVI",
-            "INFORM-risk-index"
-          ]
+          "description": "The classification scheme or framework from which the indicator is taken, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme).",
+          "$ref": "#/$defs/taxonomy"
         },
         "indicator_name": {
           "title": "Indicator name",
@@ -1329,6 +1265,25 @@
         "natural_environment",
         "economic_indicator",
         "development_index"
+      ]
+    },
+    "taxonomy": {
+      "type": "string",
+      "codelist": "classification_scheme.csv",
+      "openCodelist": false,
+      "enum": [
+        "GED4ALL",
+        "MOVER",
+        "GLIDE",
+        "EMDAT",
+        "USGS_EHP",
+        "OED",
+        "HAZUS",
+        "EMS-98",
+        "PAGER",
+        "CDC-SVI",
+        "INFORM",
+        "Custom"
       ]
     },
     "metric_dimension": {
@@ -2689,9 +2644,8 @@
         },
         "taxonomy": {
           "title": "Exposure taxonomy scheme",
-          "type": "string",
-          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset.",
-          "minLength": 1
+          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme).",
+          "$ref": "#/$defs/taxonomy"
         },
         "metrics": {
           "title": "Exposure metrics",
@@ -2843,17 +2797,8 @@
       "properties": {
         "scheme": {
           "title": "Scheme",
-          "description": "The scheme or codelist from which the classification code is taken, using the open [classification_scheme](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme) codelist.",
-          "type": "string",
-          "codelist": "classification_scheme.csv",
-          "openCodelist": false,
-          "enum": [
-            "GED4ALL-socio-economic",
-            "MOVER-social-vulnerability-categories",
-            "GLIDE",
-            "EMDAT",
-            "USGS_EHP"
-          ]
+          "description": "The scheme or codelist from which the classification code is taken, from the closed [classification_scheme codelist](https://docs.riskdatalibrary.org/en/latest/reference/codelists/#classification-scheme).",
+          "$ref": "#/$defs/taxonomy"
         },
         "id": {
           "title": "Classification identifier",
