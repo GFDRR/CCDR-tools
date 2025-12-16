@@ -15,7 +15,7 @@
   ],
   "hazard_process_mappings": {
     "drought": ["agricultural_drought", "hydrological_drought", "meteorological_drought", "socioeconomic_drought"],
-    "flood": ["fluvial_flood", "pluvial_flood", "groundwater_flood", "coastal_flood"],
+    "flood": ["fluvial_flood", "pluvial_flood", "groundwater_flood"],
     "earthquake": ["primary_rupture", "secondary_rupture", "ground_motion", "liquefaction"],
     "extreme_temperature": ["extreme_cold", "extreme_heat"],
     "strong_wind": ["extratropical_cyclone", "tropical_cyclone", "tornado"],
