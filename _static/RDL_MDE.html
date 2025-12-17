@@ -879,7 +879,8 @@
 
             createField(name, property, value, options = {}) {
                 // Skip ID fields in certain contexts
-                if (name === 'id' || (name.includes('.id') && this.context.type === 'array')) {
+                // ID fields are auto-generated and should not be editable
+                if (name === 'id' || (name.includes('.id') && (this.context.type === 'array' || this.context.type === 'inline'))) {
                     return document.createElement('div');
                 }
 
@@ -1033,6 +1034,9 @@
                     return this.createSelect(name, property, value, options);
                 } else if (property.suggestions && property.openCodelist) {
                     return this.createCombobox(name, property, value, options);
+                } else if (property.anyOf && this.isFlexibleDateField(property)) {
+                    // Handle flexible date fields (YYYY, YYYY-MM, or YYYY-MM-DD)
+                    return this.createFlexibleDateInput(name, property, value, options);
                 } else if (property.format === 'date') {
                     return this.createDateInput(name, property, value, options);
                 } else if (property.format === 'email') {
@@ -1152,9 +1156,56 @@
                     input.id = this.context.getFieldId(name);
                 }
                 input.value = value || '';
-                
+
                 this.context.setupEventListeners(input, name, property, options);
                 return input;
+            }
+
+            isFlexibleDateField(property) {
+                // Check if the anyOf array contains date format patterns
+                if (!property.anyOf || !Array.isArray(property.anyOf)) return false;
+
+                // Look for date format or year/year-month patterns
+                return property.anyOf.some(schema =>
+                    schema.format === 'date' ||
+                    (schema.pattern && (
+                        schema.pattern.includes('\\d{4}') ||
+                        schema.pattern.includes('\\\\d{4}')
+                    ))
+                );
+            }
+
+            createFlexibleDateInput(name, property, value, options) {
+                const wrapper = document.createElement('div');
+                wrapper.style.position = 'relative';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'form-control field-with-validation';
+                input.placeholder = 'YYYY, YYYY-MM, or YYYY-MM-DD';
+                // Don't set name/id for inline context to avoid polluting FormData
+                if (this.context.type !== 'inline') {
+                    input.name = this.context.getFieldId(name);
+                    input.id = this.context.getFieldId(name);
+                }
+                input.value = value || '';
+
+                // Add pattern for basic validation (year, year-month, or full date)
+                input.pattern = '^\\d{4}(-\\d{2}(-\\d{2})?)?$';
+                input.title = 'Enter a year (YYYY), year-month (YYYY-MM), or full date (YYYY-MM-DD)';
+
+                // Add helper text
+                const helpText = document.createElement('small');
+                helpText.className = 'form-text text-muted';
+                helpText.textContent = 'Format: YYYY (e.g., 2024), YYYY-MM (e.g., 2024-01), or YYYY-MM-DD (e.g., 2024-01-15)';
+                helpText.style.display = 'block';
+                helpText.style.marginTop = '0.25rem';
+
+                this.context.setupEventListeners(input, name, property, options);
+
+                wrapper.appendChild(input);
+                wrapper.appendChild(helpText);
+                return wrapper;
             }
 
             createNumberInput(name, property, value, options) {
@@ -1894,38 +1945,136 @@
                         const inlineContext = new FieldCreationContext('inline', fieldDiv, item);
                         const fieldElement = inlineContext.createField(key, prop, item[key]);
 
-                        
-                        // Set up change listener to update the item data
-                        const input = fieldElement.querySelector('input, select, textarea');
-                        if (input) {
-                            // Set initial value if item has data
-                            if (item[key] !== undefined) {
-                                if (input.type === 'checkbox') {
-                                    input.checked = item[key];
-                                } else {
-                                    input.value = item[key];
+                        // Resolve $ref if present to check actual property type
+                        let resolvedProp = prop;
+                        if (prop.$ref) {
+                            resolvedProp = resolveReference(prop.$ref);
+                        }
+
+                        // Only set up simple change listener for non-object fields
+                        // Object fields contain multiple nested inputs that need special handling
+                        if (resolvedProp.type !== 'object') {
+                            // Set up change listener to update the item data
+                            const input = fieldElement.querySelector('input, select, textarea');
+                            if (input) {
+                                // Set initial value if item has data
+                                if (item[key] !== undefined) {
+                                    if (input.type === 'checkbox') {
+                                        input.checked = item[key];
+                                    } else {
+                                        input.value = item[key];
+                                    }
+                                }
+
+                                input.addEventListener('change', (e) => {
+                                    const newValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+                                    console.log(`[INLINE HANDLER] Field changed: ${key} in ${arrayName}[${index}], new value: ${newValue}`);
+                                    console.log(`[INLINE HANDLER] Captured arrayData length: ${arrayData.length}, for array: ${arrayName}, updating index: ${index}`);
+                                    console.log(`[INLINE HANDLER] arrayData full contents:`, JSON.parse(JSON.stringify(arrayData)));
+
+                                    item[key] = newValue;
+
+                                    // Also update arrayData to ensure persistence
+                                    arrayData[index][key] = newValue;
+                                    console.log(`[INLINE HANDLER] arrayData[${index}] after update:`, JSON.parse(JSON.stringify(arrayData[index])));
+                                    console.log(`[INLINE HANDLER] Full arrayData after update:`, JSON.parse(JSON.stringify(arrayData)));
+
+                                    // DON'T call updateFormData() for inline fields - they update the item object directly
+                                    // which is already a reference in the arrayData
+
+                                    // Note: Dependency handling (like currency toggle) is now handled by the framework's
+                                    // UnifiedEventHandler.handleDependentFields, which is triggered via the 'input' event
+                                });
+                            }
+                        } else {
+                            // For object fields, set up change listeners on each nested input
+                            // Initialize the object structure if needed
+                            if (!item[key] || typeof item[key] !== 'object' || Array.isArray(item[key])) {
+                                item[key] = {};
+                            }
+                            if (!arrayData[index][key] || typeof arrayData[index][key] !== 'object' || Array.isArray(arrayData[index][key])) {
+                                arrayData[index][key] = {};
+                            }
+
+                            // Auto-generate ID for nested objects if they need one
+                            // Check if the nested object schema has an 'id' property in its required fields
+                            if (resolvedProp.required && resolvedProp.required.includes('id')) {
+                                // Only generate ID if the object has other meaningful data
+                                // For example, don't create an empty hazard object with just an ID
+                                const hasOtherData = Object.keys(item[key]).some(k => k !== 'id' && item[key][k] !== undefined && item[key][k] !== '');
+
+                                if (hasOtherData && !item[key].id) {
+                                    // Determine prefix based on the field name
+                                    let idPrefix = 'item';
+                                    if (key === 'hazard') idPrefix = 'hazard';
+                                    else if (key === 'trigger') idPrefix = 'trigger';
+                                    item[key].id = generateUniqueId(idPrefix);
+
+                                    if (!arrayData[index][key].id) {
+                                        arrayData[index][key].id = item[key].id; // Use the same ID
+                                    }
+                                    console.log(`[INLINE HANDLER] Auto-generated ID for nested object ${key}: ${item[key].id}`);
                                 }
                             }
-                            
-                            input.addEventListener('change', (e) => {
-                                const newValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-                                console.log(`[INLINE HANDLER] Field changed: ${key} in ${arrayName}[${index}], new value: ${newValue}`);
-                                console.log(`[INLINE HANDLER] Captured arrayData length: ${arrayData.length}, for array: ${arrayName}, updating index: ${index}`);
-                                console.log(`[INLINE HANDLER] arrayData full contents:`, JSON.parse(JSON.stringify(arrayData)));
 
-                                item[key] = newValue;
+                            // Find all inputs and match them to nested properties by label text
+                            const inputs = fieldElement.querySelectorAll('input, select, textarea');
+                            if (resolvedProp.properties) {
+                                inputs.forEach(input => {
+                                    // Find the label associated with this input
+                                    const fieldContainer = input.closest('.modal-form-field, .form-field');
+                                    const label = fieldContainer?.querySelector('label');
+                                    const labelText = label?.textContent?.trim()?.toLowerCase();
 
-                                // Also update arrayData to ensure persistence
-                                arrayData[index][key] = newValue;
-                                console.log(`[INLINE HANDLER] arrayData[${index}] after update:`, JSON.parse(JSON.stringify(arrayData[index])));
-                                console.log(`[INLINE HANDLER] Full arrayData after update:`, JSON.parse(JSON.stringify(arrayData)));
+                                    // Match label text to property schema
+                                    for (const [propKey, propSchema] of Object.entries(resolvedProp.properties)) {
+                                        const propTitle = propSchema.title?.toLowerCase() || propKey.toLowerCase().replace(/_/g, ' ');
 
-                                // DON'T call updateFormData() for inline fields - they update the item object directly
-                                // which is already a reference in the arrayData
+                                        if (labelText && (labelText === propTitle || labelText.includes(propTitle) || propTitle.includes(labelText))) {
+                                            console.log(`[INLINE HANDLER] Matched input with label "${labelText}" to nested property: ${key}.${propKey}`);
 
-                                // Note: Dependency handling (like currency toggle) is now handled by the framework's
-                                // UnifiedEventHandler.handleDependentFields, which is triggered via the 'input' event
-                            });
+                                            // Set initial value from nested object
+                                            if (item[key] && item[key][propKey] !== undefined) {
+                                                if (input.type === 'checkbox') {
+                                                    input.checked = item[key][propKey];
+                                                } else {
+                                                    input.value = item[key][propKey];
+                                                }
+                                            }
+
+                                            // Set up change listener for this nested property
+                                            input.addEventListener('change', (e) => {
+                                                const newValue = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+                                                console.log(`[INLINE HANDLER] Nested field changed: ${key}.${propKey} in ${arrayName}[${index}], new value: ${newValue}`);
+
+                                                // Update nested property in both references
+                                                if (!item[key]) item[key] = {};
+                                                item[key][propKey] = newValue;
+
+                                                if (!arrayData[index][key]) arrayData[index][key] = {};
+                                                arrayData[index][key][propKey] = newValue;
+
+                                                // Auto-generate ID if this nested object now has meaningful data and needs an ID
+                                                if (resolvedProp.required && resolvedProp.required.includes('id') && !item[key].id) {
+                                                    const hasOtherData = Object.keys(item[key]).some(k => k !== 'id' && item[key][k] !== undefined && item[key][k] !== '');
+                                                    if (hasOtherData) {
+                                                        let idPrefix = 'item';
+                                                        if (key === 'hazard') idPrefix = 'hazard';
+                                                        else if (key === 'trigger') idPrefix = 'trigger';
+                                                        item[key].id = generateUniqueId(idPrefix);
+                                                        arrayData[index][key].id = item[key].id;
+                                                        console.log(`[INLINE HANDLER] Auto-generated ID for nested object ${key}: ${item[key].id}`);
+                                                    }
+                                                }
+
+                                                console.log(`[INLINE HANDLER] Updated ${arrayName}[${index}].${key}:`, JSON.parse(JSON.stringify(arrayData[index][key])));
+                                            });
+
+                                            break; // Found the match, move to next input
+                                        }
+                                    }
+                                });
+                            }
                         }
                         
                         fieldDiv.appendChild(fieldElement);
@@ -4183,8 +4332,9 @@
                         keyFields.push(`type: ${objectData.type}`);
                     }
                 }
-                
-                const otherFields = ['description', 'format', 'role', 'url'].filter(field => 
+
+                // Display other simple string fields
+                const otherFields = ['description', 'format', 'role', 'url'].filter(field =>
                     objectData[field] && !keyFields.some(kf => kf.includes(field))
                 );
                 keyFields = keyFields.concat(otherFields.map(field => `${field}: ${objectData[field]}`));
@@ -4450,7 +4600,42 @@
                     objectData.id = generateUniqueId(idPrefix);
                 }
             }
-            
+
+            // Clean up empty nested objects (e.g., hazard objects with only an ID or no meaningful data)
+            // This prevents saving incomplete objects that would fail schema validation
+            function cleanupEmptyObjects(obj) {
+                if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) return obj;
+
+                const keys = Object.keys(obj);
+                // If object only has an 'id' key, or is empty, return undefined to remove it
+                if (keys.length === 0 || (keys.length === 1 && keys[0] === 'id')) {
+                    return undefined;
+                }
+
+                // Check if all non-id values are empty
+                const hasNonIdData = keys.some(k => {
+                    if (k === 'id') return false;
+                    const val = obj[k];
+                    return val !== undefined && val !== null && val !== '';
+                });
+
+                if (!hasNonIdData) {
+                    return undefined; // Remove this object
+                }
+
+                return obj;
+            }
+
+            // Apply cleanup to nested objects in objectData
+            for (const key in objectData) {
+                if (typeof objectData[key] === 'object' && !Array.isArray(objectData[key]) && objectData[key] !== null) {
+                    const cleaned = cleanupEmptyObjects(objectData[key]);
+                    if (cleaned === undefined) {
+                        delete objectData[key]; // Remove empty nested object
+                    }
+                }
+            }
+
             // Update the array
             if (currentObjectEditor.objectIndex >= fullArrayDataUpdated.length) {
                 fullArrayDataUpdated.push(objectData);
