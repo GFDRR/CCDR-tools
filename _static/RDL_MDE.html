@@ -5270,7 +5270,7 @@
                         const requiredVulnerabilityAttributes = [
                             { field: 'hazard_primary', name: 'primary hazard type' },
                             { field: 'hazard_analysis_type', name: 'hazard analysis type' },
-                            { field: 'intensity', name: 'hazard intensity measurement' },
+                            { field: 'intensity_measure', name: 'hazard intensity measurement' },
                             { field: 'category', name: 'exposure category' },
                             { field: 'impact_type', name: 'impact type' },
                             { field: 'impact_modelling', name: 'impact modelling' },
@@ -5278,13 +5278,29 @@
                             { field: 'quantity_kind', name: 'quantity kind' }
                         ];
 
-                        // Check each required attribute
-                        for (const attr of requiredVulnerabilityAttributes) {
-                            if (!vulnerability[attr.field] || vulnerability[attr.field].toString().trim() === '') {
-                                vulnerabilityValid = false;
-                                vulnerabilityError = `Vulnerability is missing required ${attr.name}`;
-                                break;
+                        // Check each function type (vulnerability, fragility, damage_to_loss, engineering_demand)
+                        for (const funcType of Object.keys(vulnerability.functions)) {
+                            const funcArray = vulnerability.functions[funcType];
+                            if (Array.isArray(funcArray) && funcArray.length > 0) {
+                                // Validate each function in the array
+                                for (let i = 0; i < funcArray.length; i++) {
+                                    const func = funcArray[i];
+                                    const funcNum = i + 1;
+
+                                    // Check each required attribute
+                                    for (const attr of requiredVulnerabilityAttributes) {
+                                        if (!func[attr.field] || func[attr.field].toString().trim() === '') {
+                                            vulnerabilityValid = false;
+                                            vulnerabilityError = `${funcType} function ${funcNum} is missing required ${attr.name}`;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!vulnerabilityValid) break;
+                                }
                             }
+
+                            if (!vulnerabilityValid) break;
                         }
                     }
                 }
