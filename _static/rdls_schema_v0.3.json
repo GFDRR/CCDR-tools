@@ -600,7 +600,7 @@
       "title": "Vulnerability function",
       "type": "object",
       "description": "The vulnerability function used to calculate the impact of the hazard.",
-      "required": ["approach", "relationship"],
+      "required": ["approach", "relationship", "hazard_primary", "hazard_analysis_type", "intensity_measure", "category", "impact_type", "impact_modelling", "impact_metric", "quantity_kind"],
       "properties": {
         "approach": {
           "title": "Vulnerability function approach",
@@ -710,7 +710,7 @@
       "title": "Fragility function",
       "type": "object",
       "description": "The fragility function used to calculate the impact of the hazard.",
-      "required": ["approach", "relationship"],
+      "required": ["approach", "relationship", "hazard_primary", "hazard_analysis_type", "intensity_measure", "category", "impact_type", "impact_modelling", "impact_metric", "quantity_kind"],
       "properties": {
         "approach": {
           "title": "Fragility function approach",
@@ -846,7 +846,7 @@
       "title": "Damage-to-loss function",
       "type": "object",
       "description": "The damage-to-loss function (or damage-to-loss model) used to calculate the impact of the hazard in conjunction with a fragility function.",
-      "required": ["approach", "relationship"],
+      "required": ["approach", "relationship", "hazard_primary", "hazard_analysis_type", "intensity_measure", "category", "impact_type", "impact_modelling", "impact_metric", "quantity_kind"],
       "properties": {
         "approach": {
           "title": "Damage-to-loss function approach",
@@ -982,7 +982,7 @@
       "title": "Engineering demand function",
       "type": "object",
       "description": "The engineering demand function used to calculate the impact of the hazard.",
-      "required": ["approach", "relationship"],
+      "required": ["approach", "relationship", "hazard_primary", "hazard_analysis_type", "intensity_measure", "category", "impact_type", "impact_modelling", "impact_metric", "quantity_kind"],
       "properties": {
         "parameter": {
           "title": "Engineering demand parameter",
