@@ -1043,7 +1043,7 @@
                     return this.createEmailInput(name, property, value, options);
                 } else if (property.format === 'iri') {
                     return this.createUrlInput(name, property, value, options);
-                } else if (name.includes('description') || name.includes('purpose') || name.includes('notes') || name.includes('details')) {
+                } else if (name.includes('description') || name.includes('purpose') || name.includes('notes') || name.includes('details') || name.includes('lineage')) {
                     return this.createTextareaInput(name, property, value, options);
                 } else {
                     return this.createTextInput(name, property, value, options);
