@@ -4406,14 +4406,19 @@
                 const containerId = container.querySelector('[id$="_items"]')?.id;
                 if (containerId) {
                     const fieldName = containerId.replace('modal_', '').replace('_items', '');
-                    const cards = container.querySelectorAll('.card[data-item-index]');
 
-                    // Get the existing array data from the first card's _arrayDataRef (live reference)
-                    // This is more reliable than objectData[fieldName] for unsaved objects
-                    const firstCard = cards[0];
-                    const liveArrayData = firstCard?._arrayDataRef;
-                    const existingArrayData = liveArrayData || objectData[fieldName] || [];
-                    const arrayData = [];
+                    // Check if this is a simple array (strings, numbers) or object array
+                    const cards = container.querySelectorAll('.card[data-item-index]');
+                    const simpleItems = container.querySelectorAll('.array-item');
+
+                    if (cards.length > 0) {
+                        // Object array - handle as before
+                        // Get the existing array data from the first card's _arrayDataRef (live reference)
+                        // This is more reliable than objectData[fieldName] for unsaved objects
+                        const firstCard = cards[0];
+                        const liveArrayData = firstCard?._arrayDataRef;
+                        const existingArrayData = liveArrayData || objectData[fieldName] || [];
+                        const arrayData = [];
 
                     cards.forEach((card, index) => {
                         // Start with existing item data to preserve inline editor updates
@@ -4492,9 +4497,23 @@
 
                         arrayData.push(item);
                     });
-                    
-                    // Update the object data with the current array state
-                    objectData[fieldName] = arrayData;
+
+                        // Update the object data with the current array state
+                        objectData[fieldName] = arrayData;
+                    } else if (simpleItems.length > 0) {
+                        // Simple array (strings, numbers, etc.)
+                        const arrayData = [];
+                        simpleItems.forEach(itemDiv => {
+                            const input = itemDiv.querySelector('input, select, textarea');
+                            if (input) {
+                                const value = input.type === 'checkbox' ? input.checked : input.value;
+                                if (value !== '' && value !== null && value !== undefined) {
+                                    arrayData.push(value);
+                                }
+                            }
+                        });
+                        objectData[fieldName] = arrayData;
+                    }
                 }
             });
             
