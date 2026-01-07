@@ -283,11 +283,7 @@
                 "$ref": "#/$defs/VulnerabilityFunction"
               },
               "minItems": 1,
-              "uniqueItems": true,
-              "options": {
-                "button_group": "functions",
-                "button_label": "Add Vulnerability Function"
-              }
+              "uniqueItems": true
             },
             "fragility": {
               "title": "Fragility functions",
@@ -297,11 +293,7 @@
                 "$ref": "#/$defs/FragilityFunction"
               },
               "minItems": 1,
-              "uniqueItems": true,
-              "options": {
-                "button_group": "functions",
-                "button_label": "Add Fragility Function"
-              }
+              "uniqueItems": true
             },
             "damage_to_loss": {
               "title": "Damage-to-loss functions",
@@ -311,11 +303,7 @@
                 "$ref": "#/$defs/DamageToLossFunction"
               },
               "minItems": 1,
-              "uniqueItems": true,
-              "options": {
-                "button_group": "functions",
-                "button_label": "Add Damage-to-Loss Function"
-              }
+              "uniqueItems": true
             },
             "engineering_demand": {
               "title": "Engineering demand functions",
@@ -325,11 +313,7 @@
                 "$ref": "#/$defs/EngineeringDemandFunction"
               },
               "minItems": 1,
-              "uniqueItems": true,
-              "options": {
-                "button_group": "functions",
-                "button_label": "Add Engineering Demand Function"
-              }
+              "uniqueItems": true
             }
           },
           "minProperties": 1
@@ -342,11 +326,7 @@
             "$ref": "#/$defs/SocioEconomicIndex"
           },
           "minItems": 1,
-          "uniqueItems": true,
-          "options": {
-            "button_group": "socio_economic",
-            "button_label": "Add Socio-Economic Index"
-          }
+          "uniqueItems": true
         }
       },
       "minProperties": 1,
