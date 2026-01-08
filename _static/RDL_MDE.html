@@ -2471,7 +2471,8 @@
                 }
 
                 // Check top-level required fields (general section)
-                if (currentSchema.required && currentSchema.required.includes(name)) {
+                // Only check for fields without dots (top-level fields only)
+                if (!name.includes('.') && currentSchema.required && currentSchema.required.includes(name)) {
                     return true;
                 }
 
