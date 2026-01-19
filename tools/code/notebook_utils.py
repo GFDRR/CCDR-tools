@@ -25,15 +25,16 @@ import pandas as pd
 import requests
 import seaborn as sns
 import tkinter as tk
+from tkinter import filedialog
 
 
 def create_js_code(
     country_selector_id, adm_level_selector_id, custom_boundaries_radio_id,
     custom_boundaries_file_id, custom_boundaries_id_field_id, custom_boundaries_name_field_id,
     hazard_selector_id, hazard_threshold_slider_id, period_selector_id, scenario_selector_id,
-    return_periods_selector_id, exposure_selector_id, custom_exposure_radio_id, 
+    return_periods_selector_id, exposure_selector_id, custom_exposure_radio_id,
     custom_exposure_textbox_id, approach_selector_id
-    ) -> str:
+) -> str:
     js_code = js_code = f"""
     <script>
     document.querySelector('.{country_selector_id}').onmouseover = function() {{
@@ -88,18 +89,18 @@ def create_js_code(
     return js_code
 
 
-def create_header_widget(hazard:str="FL", img_path:str=None):
-    
+def create_header_widget(hazard: str = "FL", img_path: str = None):
+
     if hazard == 'FL':
         hazard_text = "FLOOD HAZARD (FATHOM 3)"
     elif hazard == 'TC':
         hazard_text = "TROPICAL CYCLONE HAZARD (STORM v4)"
-    
+
     img_path = 'rdl_logo.png' if img_path is None else img_path
-       
+
     with open(img_path, "rb") as img_file:
         img_base64 = b64encode(img_file.read()).decode('utf-8')
-    
+
     header_html = f"""
     <div style='
         background: linear-gradient(to bottom, #003366, transparent);
@@ -120,25 +121,25 @@ def create_header_widget(hazard:str="FL", img_path:str=None):
         <img src="data:image/png;base64,{img_base64}" style="width: 200px; max-width: 200px; height: auto; margin-left: 20px;">
     </div>
     """
-    
+
     return HTML(value=header_html, layout=Layout(width='99%'))
 
 
 def create_footer():
-    
+
     preview_container = HBox([
         preview_chk,
         export_charts_chk
     ], layout=Layout(width='100%', justify_content='space-around'))
-    
+
     return VBox([
         preview_container, 
         HBox([run_button], layout=Layout(display='flex', justify_content='center', width='100%'))
     ], layout=Layout(width='100%', height='100px', padding='10px'))
-        
+
 
 def create_sidebar(info_box, tabs, output, footer):
-    
+
     sidebar_content = VBox([
         info_box,
         tabs,
@@ -152,17 +153,17 @@ def create_sidebar(info_box, tabs, output, footer):
 
 
 def get_ui_components(sidebar, header, map_widget):
-    
+
     map_and_chart = VBox(
         [map_widget, chart_output],
         layout=Layout(width='750px', height='100%')
     )
-        
+
     content_layout = HBox(
         [sidebar, map_and_chart],
         layout=Layout(width='100%', height='800px')
     )
-    
+
     final_layout = VBox(
         [header, content_layout],
         layout=Layout(width='100%')
@@ -172,29 +173,29 @@ def get_ui_components(sidebar, header, map_widget):
 
 
 def create_country_selector_widget(country_options: list[str]):
-    
+
     country_selector = Dropdown(
         options=country_options,
         value=None,
         placeholder='Select Country',
         layout=Layout(width='250px')
     )
-    
+
     return country_selector
 
 
-#TODO: Move this to a class and make it expandable for other notebooks
+# TODO: Move this to a class and make it expandable for other notebooks
 def run_input_checks(
     country_selector, country_dict, haz_type,
     return_periods_selector, preview_chk,
-    custom_boundaries_radio, 
+    custom_boundaries_radio,
     custom_boundaries_id_field,
     custom_boundaries_name_field,
     custom_boundaries_file,
     approach_selector,
     class_edges_table
 ):
-    
+
     # 1 Check ISO_A3 code
     print("Checking country boundaries...")
     selected_country = country_selector.value
@@ -203,19 +204,18 @@ def run_input_checks(
         print(f"Error: {selected_country} is not a valid country selection.")
         return False
 
-    if haz_type == "TC":
-        if iso_a3 not in common.tc_region_mapping.keys():
-            print(f"Error: {selected_country} is located outside the hazard extent for Tropical Cyclones.")
-            return False
+    if haz_type == "TC" and iso_a3 not in common.tc_region_mapping.keys():
+        print(f"Error: {selected_country} is located outside the hazard extent for Tropical Cyclones.")
+        return False
 
-    # 2 Validate country code 
+    # 2 Validate country code
     params = {
         'where': f"ISO_A3 = '{iso_a3}'",
         'outFields': 'ISO_A3',
         'returnDistinctValues': 'true',
         'f': 'json'
     }
-    
+
     url = f"{common.rest_api_url}/5/query"
     response = requests.get(url=url, params=params)
 
@@ -224,22 +224,22 @@ def run_input_checks(
         return False
 
     data = response.json()
-    if not 'features' in data.keys():
+    if 'features' not in data.keys():
         print(f"Error: {iso_a3} is not a valid ISO_A3 code.")
         return False
-    
-    
+
     # Preview only possible if several return periods are selected
     if len(return_periods_selector.value) == 1 and preview_chk.value:
         print("Cannot preview results if only one return period is selected.")
         return False
-    
+
     # Check use of custom boundaries    
     if custom_boundaries_radio.value == 'Custom boundaries':
         if not all([custom_boundaries_id_field.value, custom_boundaries_name_field.value]):
             print("Error: Custom boundaries ID and Name fields must be specified.")
-            return False          
-        if not custom_boundaries_file.value: 
+            return False
+
+        if not custom_boundaries_file.value:
             print("Error: Custom boundaries file not specified.")
             return False
 
@@ -250,13 +250,13 @@ def run_input_checks(
         if len(class_values) > 1:
             is_seq = np.all(np.diff(class_values) > 0)
             if not is_seq:
-                print(f"Error: Class thresholds must be in increasing  order.")
+                print("Error: Class thresholds must be in increasing  order.")
                 return False
-            
+
     if custom_boundaries_radio.value == 'Default boundaries' and adm_level_selector.value is None:
         print("Error: Please select an Administrative Level when working with default boundaries.")
         return False
-                
+
     print("User input accepted!")
     return True
 
@@ -269,7 +269,7 @@ def create_row_box(index, delete_button):
             delete_button
         ]
     )
-    
+
 
 def create_country_boundaries(
     country_selector, adm_level_selector, custom_boundaries_radio,
@@ -306,7 +306,7 @@ def create_hazard_info(
         Label("Return periods:"),
         return_periods_selector,
     ])
-    
+
 
 def create_exposure_category(custom_exposure_radio, custom_exposure_container):
     return VBox([
@@ -334,7 +334,7 @@ def export_charts(output_dir: str, country: str, haz_cat: str, period: str, scen
 
     if period != "2020":
         base_file_name += f"_{scenario}"
-        
+
     for i, (chart, exp_cat) in enumerate(zip(charts, exp_cat_list)):
         chart_filename = os.path.join(chart_dir, f"{base_file_name}_{exp_cat}.png")
         chart.savefig(chart_filename, dpi=300, bbox_inches='tight')
@@ -342,26 +342,24 @@ def export_charts(output_dir: str, country: str, haz_cat: str, period: str, scen
 
 
 def create_eai_chart(title_prefix, dfData, exp_cat, period, scenario, color):
-    
+
     title = f"{title_prefix} x {exp_cat} EAI - {period} {scenario}"
-    
+
     subtitle = "Exceedance frequency curve"
-    
+
     # Defining the x- and y-axis data and text
     x = dfData['Freq'].values
     y = dfData[f'{exp_cat}_impact'].values
     xlbl = 'Frequency'
     ylbl = f'Impact ({exp_cat.lower()})'
-    
+
     # Defining if plotting total EAI
-    txtTotal = True
     xpos = 0.70
     totEAI = dfData[f'{exp_cat}_EAI'].sum()
 
     # Defining the plot style and colours
     sns.set_style('whitegrid')
     plt_color = color
-    xFreqAsRP = True
 
     # Increase font sizes
     plt.rcParams.update({'font.size': 12})
@@ -379,19 +377,17 @@ def create_eai_chart(title_prefix, dfData, exp_cat, period, scenario, color):
     ax.set_ylabel(ylbl, fontsize=14)
     ax.set_title(f'{title}\n{subtitle}', fontsize=16, fontweight='bold')
 
-    if xFreqAsRP:
-        rp_lbl = dfData['RP'].values.tolist()
-        rp_lbl = ['RP '+str(item) for item in rp_lbl]
-        for i, rp in enumerate(rp_lbl):
-            ax.text(x[i]/max(x)+0.01, y[i]/(max(y)*1.05)+0.01, rp, color='#4D4D4D',
-                    ha='left', va='bottom', transform=ax.transAxes, fontsize=10,
-                    bbox=dict(facecolor='#FAFAFA', edgecolor='#4D4D4D', boxstyle='round,pad=0.1', alpha=0.4))
+    rp_lbl = dfData['RP'].values.tolist()
+    rp_lbl = ['RP '+str(item) for item in rp_lbl]
+    for i, rp in enumerate(rp_lbl):
+        ax.text(x[i]/max(x)+0.01, y[i]/(max(y)*1.05)+0.01, rp, color='#4D4D4D',
+                ha='left', va='bottom', transform=ax.transAxes, fontsize=10,
+                bbox={'facecolor': '#FAFAFA', 'edgecolor': '#4D4D4D', 'boxstyle': 'round,pad=0.1', 'alpha': 0.4})
 
-    if txtTotal:
-        vtext = f'EAI = {totEAI:,.2f}'
-        ax.text(xpos, 0.8, vtext, fontsize=15, color='black', fontweight='bold',
-                ha='left', va='bottom', transform=ax.transAxes, 
-                bbox=dict(facecolor='#FAFAFA', edgecolor='#4D4D4D', boxstyle='square,pad=0.4', alpha=1))
+    vtext = f'EAI = {totEAI:,.2f}'
+    ax.text(xpos, 0.8, vtext, fontsize=15, color='black', fontweight='bold',
+            ha='left', va='bottom', transform=ax.transAxes, 
+            bbox={'facecolor': '#FAFAFA', 'edgecolor': '#4D4D4D', 'boxstyle': 'square,pad=0.4', 'alpha': 1})
 
     plt.tight_layout()
     return fig
@@ -409,8 +405,8 @@ def on_adm_level_change(
         plot_geospation_boundaries(gdf)
     except Exception as e:
         print(f"Error loading ADM {adm_level} boundaries: {e}")
-        
-        
+
+
 def on_country_change(
     change, country_dict: dict, get_adm_data,
     plot_geospation_boundaries
@@ -430,7 +426,7 @@ def select_file(b, update_preview_map):
     root.withdraw()  # Hide the main window
     root.attributes('-topmost', True)  # Make the dialog appear on top
     root.geometry(f'+{root.winfo_screenwidth()//2-300}+0')  # Position at the top center of the screen
-    file_path = tk.filedialog.askopenfilename(
+    file_path = filedialog.askopenfilename(
         filetypes=[("GeoPackage", "*.gpkg"), ("Shapefile", "*.shp")],
         parent=root
     )
@@ -452,7 +448,6 @@ def write_combined_summary_to_excel(
             if custom_name:
                 excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
                 row_offset += 1
-    
 
 
 preview_chk = Checkbox(
@@ -474,13 +469,13 @@ run_button = Button(
     layout=Layout(width='250px'),
     button_style='danger'
 )
- 
+
 output_widget = Output()
 chart_output = Output(layout={'width': '98%', 'height': 'auto'})
-  
+
 map_widget = HTML(
-    value=Map(location=[0,0], zoom_start=2)._repr_html_(),
-    layout=Layout(width='98%', height='600px')    
+    value=Map(location=[0, 0], zoom_start=2)._repr_html_(),
+    layout=Layout(width='98%', height='600px')
 )
 
 adm_level_selector = Dropdown(
@@ -548,15 +543,15 @@ info_box = Textarea(
 
 def set_default_values(
     gdf, custom_boundaries_id_field, custom_boundaries_name_field
-):    
+):
     columns_without_geometry = [col for col in gdf.columns if col != 'geometry']
-    
+
     custom_boundaries_id_field.options = columns_without_geometry
     custom_boundaries_name_field.options = columns_without_geometry
-    
+
     id_keywords = ['id', 'code', 'fid', 'hasc', 'key']
     name_keywords = ['name', 'label', 'title', 'zone', 'area']
-    
+
     id_fields = [f for f in columns_without_geometry if any(keyword in f.lower() for keyword in id_keywords)]
     name_fields = [f for f in columns_without_geometry if any(keyword in f.lower() for keyword in name_keywords)]
 
