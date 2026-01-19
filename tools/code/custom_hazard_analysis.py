@@ -25,16 +25,17 @@ RASTER_CACHE = {}
 
 
 def run_analysis_with_custom_hazard(
-    country, haz_type, haz_cat, period, scenario, 
+    country, haz_type, haz_cat, period, scenario,
     return_periods, min_haz_threshold,
-    exp_cat, exp_nam, exp_year, adm_level, 
-    analysis_type, class_edges, 
-    save_check_raster, n_cores, 
-    use_custom_boundaries, custom_boundaries_file_path, 
+    exp_cat, exp_nam, exp_year, adm_level,
+    analysis_type, class_edges,
+    save_check_raster, n_cores,
+    use_custom_boundaries, custom_boundaries_file_path,
     custom_code_field, custom_name_field, wb_region,
     # Custom hazard specific parameters
     hazard_files, custom_damage_func,
-    zonal_stats_type='sum'
+    zonal_stats_type='sum',
+    user_nodata=None
 ):
     """
     Optimized function to run analysis using custom hazard raster files.
@@ -235,7 +236,8 @@ def run_analysis_with_custom_hazard(
             "wb_region": wb_region,
             "exp_memmap_path": exp_memmap_path,
             "exp_metadata": exp_metadata,
-            "zones_geojson": zones_geojson
+            "zones_geojson": zones_geojson,
+            "user_nodata": user_nodata
         }
 
         # Use multiprocessing to process each return period
@@ -418,8 +420,21 @@ def process_return_period_optimized(rp_file_tuple, **kwargs):
             _ = src.transform
             haz_nodata = src.nodata
 
-            # Apply threshold to hazard data
-            if haz_nodata is not None:
+            # Use user-specified nodata if provided
+            user_nodata = kwargs.get('user_nodata')
+            if user_nodata is not None:
+                # Handle single value or list of values
+                if isinstance(user_nodata, list):
+                    print(f"Excluding nodata value(s) from calculations for RP {rp}: {user_nodata}")
+                    # Exclude all nodata values by converting them to NaN
+                    for nd_val in user_nodata:
+                        haz_array = np.where(haz_array == nd_val, np.nan, haz_array)
+                else:
+                    haz_nodata = user_nodata
+                    print(f"Excluding nodata value from calculations for RP {rp}: {haz_nodata}")
+                    haz_array = np.where(haz_array == haz_nodata, np.nan, haz_array)
+            elif haz_nodata is not None:
+                # Exclude metadata nodata by converting to NaN
                 haz_array = np.where(haz_array == haz_nodata, np.nan, haz_array)
 
             # Apply minimum threshold

@@ -243,7 +243,14 @@ def select_hazard_file(b):
     )
     if file_path:
         hazard_file_selector.value = file_path
-        # Update the preview or show hazard details
+
+        # Auto-populate hazard name from filename
+        base_name = os.path.basename(file_path)
+        name_no_ext = os.path.splitext(base_name)[0]
+        clean_name = re.sub(r'[^a-zA-Z0-9_]', '_', name_no_ext)
+        hazard_name_input.value = clean_name
+
+        # Auto-refresh to show the file
         preview_hazard_data()
     root.destroy()
 
@@ -259,6 +266,35 @@ hazard_name_input = widgets.Text(
 )
 hazard_name_input_id = f'hazard-name-input-{id(hazard_name_input)}'
 hazard_name_input.add_class(hazard_name_input_id)
+
+# NoData value input
+hazard_nodata_input = widgets.Text(
+    value='',
+    placeholder='Leave empty to use metadata (e.g., -32767; 0)',
+    description='NoData value:',
+    disabled=False,
+    layout=widgets.Layout(width='250px')
+)
+hazard_nodata_input_id = f'hazard-nodata-input-{id(hazard_nodata_input)}'
+hazard_nodata_input.add_class(hazard_nodata_input_id)
+
+# Refresh map button
+refresh_map_button = widgets.Button(
+    description='Refresh Map',
+    disabled=False,
+    button_style='info',
+    tooltip='Update the map preview with current nodata settings',
+    icon='refresh',
+    layout=widgets.Layout(width='120px')
+)
+
+def on_refresh_map_click(b):
+    if hazard_file_selector.value:
+        preview_hazard_data()
+    else:
+        print("Please select a hazard file first.")
+
+refresh_map_button.on_click(on_refresh_map_click)
 
 # Hazard threshold
 hazard_threshold_slider = widgets.FloatSlider(
@@ -403,19 +439,47 @@ def preview_hazard_data():
                 nodata = src.nodata
                 bounds = src.bounds
 
-                window_height = min(500, height)
-                window_width = min(500, width)
-                window = ((0, window_height), (0, window_width))
-                sample = src.read(1, window=window)
+                # Read the entire raster
+                data = src.read(1)
 
-                if nodata is not None:
-                    valid_mask = (sample != nodata) & ~np.isnan(sample)
+                # Check if user specified nodata value(s)
+                user_nodata_str = hazard_nodata_input.value.strip()
+                nodata_values = []
+
+                if user_nodata_str:
+                    # Parse multiple nodata values separated by semicolon
+                    for val_str in user_nodata_str.split(';'):
+                        val_str = val_str.strip()
+                        if val_str:
+                            try:
+                                nodata_values.append(float(val_str))
+                            except ValueError:
+                                print(f"WARNING: Invalid nodata value '{val_str}'. Skipping.")
+
+                    if nodata_values:
+                        print(f"Using user-specified nodata value(s): {nodata_values}")
+                        nodata = nodata_values[0]  # Store first value for metadata display
+                elif nodata is not None:
+                    nodata_values = [nodata]
+
+                # Apply nodata filtering
+                if nodata_values:
+                    # Create mask for all nodata values
+                    mask = np.ones(data.shape, dtype=bool)
+                    for nd_val in nodata_values:
+                        mask &= (data != nd_val)
+                    valid_data = data[mask & ~np.isnan(data)]
                 else:
-                    valid_mask = ~np.isnan(sample)
+                    # No nodata value set - use all non-NaN values
+                    valid_data = data[~np.isnan(data)]
+                    print("WARNING: No nodata value set. Specify one in the 'NoData value' field if needed.")
 
-                zero_mask = sample == 0
-                analysis_mask = valid_mask & ~zero_mask
-                valid_sample = sample[analysis_mask]
+                # Calculate statistics
+                zeros_count = np.sum(valid_data == 0)
+                total_pixels = width * height
+
+                # Exclude zeros for analysis
+                valid_sample = valid_data[valid_data != 0]
 
                 if len(valid_sample) > 0:
                     min_val = np.min(valid_sample)
@@ -426,8 +490,7 @@ def preview_hazard_data():
                     print(f"Number of bands: {count}")
                     print(f"Data type: {dtype}")
                     print(f"NoData value: {nodata}")
-                    zeros_count = np.sum(zero_mask & valid_mask)
-                    print(f"Zero values: {zeros_count} ({zeros_count/sample.size*100:.1f}% of total)")
+                    print(f"Zero values: {zeros_count} ({zeros_count/total_pixels*100:.1f}% of total)")
                     print(f"Value range (excluding zeros): {min_val:.4f} to {max_val:.4f}")
                     print(f"Mean value (excluding zeros): {mean_val:.4f}")
 
@@ -500,38 +563,111 @@ def preview_hazard_data():
                     except Exception as e:
                         print(f"Could not add boundaries to map: {str(e)}")
 
-                client = TileClient(file_path)
+                # Use the detected nodata value for color mapping
+                # nodata was already detected above, so just use valid_data
+                color_valid_data = valid_data
 
-                # Process a larger sample for color range determination
-                with rasterio.open(file_path) as src:
-                    read_window = ((0, min(1000, height)), (0, min(1000, width)))
-                    larger_sample = src.read(1, window=read_window)
+                if len(color_valid_data) > 0:
+                    # Use percentiles for better color range
+                    vmin, vmax = np.percentile(color_valid_data, [2, 98])
+                else:
+                    vmin, vmax = 0, 1
 
-                    if nodata is not None:
-                        valid_data = larger_sample[(larger_sample != nodata) & ~np.isnan(larger_sample)]
-                    else:
-                        valid_data = larger_sample[~np.isnan(larger_sample)]
-
-                    if len(valid_data) > 0:
-                        # Use percentiles for better color range
-                        vmin, vmax = np.percentile(valid_data, [2, 98])
-                    else:
-                        vmin, vmax = 0, 1
-
-                    # Choose appropriate colormap
-                    cmap_name = 'coolwarm' if np.any(valid_data < 0) else 'plasma'
-                    print(f"Using {cmap_name} colormap with range: {vmin:.4f} to {vmax:.4f}")
+                # Choose appropriate colormap
+                base_cmap_name = 'coolwarm' if np.any(color_valid_data < 0) else 'plasma'
+                print(f"Using {base_cmap_name} colormap with range: {vmin:.4f} to {vmax:.4f}")
 
                 # Create the tile layer
-                tile_layer = get_leaflet_tile_layer(
-                    client,
-                    name="Hazard Raster",
-                    opacity=0.7,
-                    nodata=nodata,
-                    cmap=cmap_name,
-                    vmin=vmin, 
-                    vmax=vmax
-                )
+                # Handle multiple nodata values by creating a temporary raster with unified nodata
+                display_file = file_path
+                temp_display_file = None
+
+                if nodata_values and len(nodata_values) > 1:
+                    # Multiple nodata values - create temporary raster with all nodata unified
+                    print(f"Creating temporary display raster to exclude all nodata values: {nodata_values}")
+
+                    import tempfile
+                    temp_dir = tempfile.gettempdir()
+                    temp_display_file = os.path.join(temp_dir, f"display_temp_{os.path.basename(file_path)}")
+
+                    try:
+                        # Use windowed reading/writing for memory efficiency with large files
+                        with rasterio.open(file_path) as src:
+                            profile = src.profile.copy()
+                            profile.update(
+                                nodata=nodata_values[0],
+                                compress='lzw',  # Add compression to reduce temp file size
+                                tiled=True,  # Use tiled storage for better performance
+                                blockxsize=256,
+                                blockysize=256
+                            )
+
+                            # Process in chunks for memory efficiency
+                            with rasterio.open(temp_display_file, 'w', **profile) as dst:
+                                # Use 1024x1024 windows for processing
+                                window_size = 1024
+
+                                for row_start in range(0, src.height, window_size):
+                                    row_end = min(row_start + window_size, src.height)
+
+                                    for col_start in range(0, src.width, window_size):
+                                        col_end = min(col_start + window_size, src.width)
+
+                                        # Read window
+                                        window = rasterio.windows.Window(
+                                            col_start, row_start,
+                                            col_end - col_start, row_end - row_start
+                                        )
+                                        window_data = src.read(1, window=window)
+
+                                        # Replace all nodata values with first nodata value
+                                        for nd_val in nodata_values[1:]:
+                                            window_data = np.where(window_data == nd_val, nodata_values[0], window_data)
+
+                                        # Write window
+                                        dst.write(window_data, 1, window=window)
+
+                        display_file = temp_display_file
+                        print(f"Temporary display file created with unified nodata value: {nodata_values[0]}")
+                    except Exception as temp_error:
+                        print(f"Warning: Could not create temporary display file: {temp_error}")
+                        print(f"Falling back to original file with first nodata value only: {nodata_values[0]}")
+                        display_file = file_path
+                        temp_display_file = None
+
+                try:
+                    client = TileClient(display_file)
+                except Exception as tile_error:
+                    # If temporary file fails (e.g., all nodata in sampling area), fall back to original
+                    if temp_display_file and display_file == temp_display_file:
+                        print(f"Warning: Tile client failed with temporary file: {tile_error}")
+                        print(f"Falling back to original file. Additional nodata values {nodata_values[1:]} may appear in map.")
+                        display_file = file_path
+                        client = TileClient(display_file)
+                    else:
+                        raise
+
+                # Create tile layer
+                if nodata_values:
+                    tile_layer = get_leaflet_tile_layer(
+                        client,
+                        name="Hazard Raster",
+                        opacity=0.7,
+                        nodata=nodata_values[0],
+                        cmap=base_cmap_name,
+                        vmin=vmin,
+                        vmax=vmax
+                    )
+                else:
+                    # No nodata values
+                    tile_layer = get_leaflet_tile_layer(
+                        client,
+                        name="Hazard Raster",
+                        opacity=0.7,
+                        cmap=base_cmap_name,
+                        vmin=vmin,
+                        vmax=vmax
+                    )
                 
                 # Store the current layer for later removal
                 current_hazard_layer = tile_layer
@@ -540,13 +676,13 @@ def preview_hazard_data():
                 # Create a colorbar legend
                 fig = plt.figure(figsize=(1.5, 4))
                 ax = fig.add_axes([0.3, 0.05, 0.2, 0.9])
-                
-                # Create the colormap
-                cmap = plt.get_cmap(cmap_name)
+
+                # Create the colormap for legend (use base colormap, not custom one)
+                legend_cmap = plt.get_cmap(base_cmap_name)
                 norm = mcolors.Normalize(vmin=vmin, vmax=vmax)
-                
+
                 # Create the colorbar
-                cb = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=cmap), 
+                cb = plt.colorbar(plt.cm.ScalarMappable(norm=norm, cmap=legend_cmap),
                                  cax=ax, orientation='vertical')
                 
                 # Get the hazard name for the colorbar label
@@ -593,9 +729,8 @@ def preview_hazard_data():
             import traceback
             traceback.print_exc()
 
-        
-# Connect hazard file selector to preview function
-hazard_file_selector.observe(lambda change: preview_hazard_data() if change['name'] == 'value' else None, names='value')
+
+# File selector no longer auto-refreshes - user must click Refresh Map button
 
 # Exposure
 exposure_selector = notebook_utils.exposure_selector
@@ -970,6 +1105,7 @@ def create_custom_hazard_info():
         widgets.Label("Hazard Data:"),
         widgets.HBox([hazard_file_selector, select_hazard_button]),
         hazard_name_input,
+        widgets.HBox([hazard_nodata_input, refresh_map_button]),
         widgets.Label("Hazard Settings:"),
         hazard_threshold_slider,
         return_period_input,
@@ -1290,17 +1426,34 @@ def run_analysis_script(b):
                 run_button.description = "Run Analysis"
                 return
             
+            # Get user-specified nodata value(s)
+            user_nodata = None
+            user_nodata_str = hazard_nodata_input.value.strip()
+            if user_nodata_str:
+                nodata_list = []
+                for val_str in user_nodata_str.split(';'):
+                    val_str = val_str.strip()
+                    if val_str:
+                        try:
+                            nodata_list.append(float(val_str))
+                        except ValueError:
+                            print(f"Warning: Invalid nodata value '{val_str}'. Skipping.")
+
+                if nodata_list:
+                    user_nodata = nodata_list
+                    print(f"Using user-specified nodata value(s): {user_nodata}")
+
             # Create a custom damage function based on the selected approach
             custom_func_str = custom_function_input.value
             custom_damage_func = create_damage_function(
-                analysis_type, 
-                haz_type, 
+                analysis_type,
+                haz_type,
                 exp_cat_list[0],  # Use first exposure for initial function
-                country, 
-                class_edges, 
+                country,
+                class_edges,
                 custom_func_str
             )
-            
+
             start_time = time.perf_counter()
     
             print(f"Starting analysis for {iso_to_country[country]} ({country})...")
@@ -1328,19 +1481,20 @@ def run_analysis_script(b):
                     from custom_hazard_analysis import run_analysis_with_custom_hazard
                     
                     result_df = run_analysis_with_custom_hazard(
-                        country, haz_type, haz_cat, period, scenario, 
+                        country, haz_type, haz_cat, period, scenario,
                         return_periods, min_haz_slider,
-                        exp_cat, exp_nam, exp_year, adm_level, 
-                        analysis_type, class_edges, 
-                        save_check_raster, n_cores, 
+                        exp_cat, exp_nam, exp_year, adm_level,
+                        analysis_type, class_edges,
+                        save_check_raster, n_cores,
                         use_custom_boundaries=use_custom_boundaries,
-                        custom_boundaries_file_path=custom_boundaries_file_path, 
+                        custom_boundaries_file_path=custom_boundaries_file_path,
                         custom_code_field=custom_code_field,
-                        custom_name_field=custom_name_field, 
+                        custom_name_field=custom_name_field,
                         wb_region=wb_region,
                         hazard_files=hazard_files,
                         custom_damage_func=custom_damage_func,
-                        zonal_stats_type=zonal_stats_type
+                        zonal_stats_type=zonal_stats_type,
+                        user_nodata=user_nodata
                     )
                     
                     if result_df is None:
@@ -1767,6 +1921,9 @@ document.querySelector('.{hazard_file_selector_id}').onmouseover = function() {{
 }};
 document.querySelector('.{hazard_name_input_id}').onmouseover = function() {{
     document.querySelector('.info-box textarea').value = 'Enter a name for this hazard (e.g., flood_depth, landslide_risk, earthquake_intensity). This will be used in output filenames.';
+}};
+document.querySelector('.{hazard_nodata_input_id}').onmouseover = function() {{
+    document.querySelector('.info-box textarea').value = 'Specify the NoData value(s) for your raster if not set in the file metadata.\\nLeave empty to use the value from metadata.\\nFor multiple values, separate with semicolon (e.g., -32767; 0)\\nCommon values: -32767, -9999, 0, 255\\nClick "Refresh Map" button to update the preview after changing this value.';
 }};
 document.querySelector('.{hazard_threshold_slider_id}').onmouseover = function() {{
     document.querySelector('.info-box textarea').value = 'Set the minimum hazard threshold, in the unit of the hazard dataset.\\nValues below this threshold will be ignored.';
