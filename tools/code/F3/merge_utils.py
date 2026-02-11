@@ -34,9 +34,10 @@ def merge_tifs(subdir_path):
         bands = src_ds.RasterCount
         projection = src_ds.GetProjection()
         geotransform = src_ds.GetGeoTransform()
+        data_type = src_ds.GetRasterBand(1).DataType  # Get data type from source
 
         # Create output file with nodata=0
-        dst_ds = driver.Create(output_file, cols, rows, bands, gdal.GDT_Float32,
+        dst_ds = driver.Create(output_file, cols, rows, bands, data_type,
                               options=['COMPRESS=DEFLATE', 'PREDICTOR=2', 'ZLEVEL=9'])
         dst_ds.SetProjection(projection)
         dst_ds.SetGeoTransform(geotransform)

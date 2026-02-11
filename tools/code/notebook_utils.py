@@ -93,8 +93,12 @@ def create_header_widget(hazard: str = "FL", img_path: str = None):
 
     if hazard == 'FL':
         hazard_text = "FLOOD HAZARD (FATHOM 3)"
+    elif hazard == 'FL_THRESHOLD':
+        hazard_text = "FLOOD HAZARD THRESHOLD (FATHOM 3)"
     elif hazard == 'TC':
         hazard_text = "TROPICAL CYCLONE HAZARD (STORM v4)"
+    else:
+        hazard_text = f"{hazard.replace('_', ' ')} HAZARD"
 
     img_path = 'rdl_logo.png' if img_path is None else img_path
 
