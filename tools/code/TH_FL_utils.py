@@ -195,12 +195,20 @@ def process_flood_hazard(country, adm_level, flood_types, value_threshold, area_
 
             # Read nodata value from raster
             with rasterio.open(rp_path) as src:
-                nodata_value = src.nodata
-                if nodata_value is None:
+                raster_nodata = src.nodata
+                if raster_nodata is None:
                     # If not set in metadata, use Fathom default
                     nodata_value = -32767
                     print(f"  Warning: No nodata value in raster metadata, using Fathom default: {nodata_value}")
+                elif raster_nodata == 0:
+                    # CRITICAL: If raster nodata is 0, this is incorrect!
+                    # 0 should be valid value (dry land), not nodata
+                    # Use -32767 to preserve dry land pixels
+                    nodata_value = -32767
+                    print(f"  WARNING: Raster has nodata=0 (incorrect!). Using -32767 to preserve dry land pixels.")
+                    print(f"  → Please reprocess this raster with merge_utils.py to fix the nodata value.")
                 else:
+                    nodata_value = raster_nodata
                     print(f"  Using nodata value from raster: {nodata_value}")
 
             # Calculate zonal statistics using parallel processing
@@ -336,6 +344,7 @@ def save_results(results, country, adm_level, value_threshold, area_threshold_pc
 
     for flood_type, gdf in results.items():
         layer_name = flood_type
+        print(f"  Processing layer '{layer_name}': {len(gdf)} features, Score range: {gdf['Hazard_score'].min()}-{gdf['Hazard_score'].max()}")
         if layer_name in existing_layers:
             print(f"  Overwriting existing layer: {layer_name}")
             # Delete the existing layer first, then write
@@ -368,16 +377,24 @@ def save_results(results, country, adm_level, value_threshold, area_threshold_pc
     existing_sheet_names = set()
     if excel_path.exists():
         import openpyxl
-        existing_wb = pd.ExcelFile(excel_path, engine='openpyxl')
-        existing_sheet_names = set(existing_wb.sheet_names)
-        for sheet_name in existing_wb.sheet_names:
-            # Only keep sheets that are NOT being updated
-            if sheet_name not in [ft[:31] for ft in results.keys()]:
-                existing_data[sheet_name] = pd.read_excel(excel_path, sheet_name=sheet_name)
-                print(f"  Preserving existing sheet: {sheet_name}")
+        try:
+            existing_wb = pd.ExcelFile(excel_path, engine='openpyxl')
+            existing_sheet_names = set(existing_wb.sheet_names)
+            for sheet_name in existing_wb.sheet_names:
+                # Only keep sheets that are NOT being updated
+                if sheet_name not in [ft[:31] for ft in results.keys()]:
+                    existing_data[sheet_name] = pd.read_excel(excel_path, sheet_name=sheet_name)
+                    print(f"  Preserving existing sheet: {sheet_name}")
+                else:
+                    print(f"  Will overwrite sheet: {sheet_name}")
+            existing_wb.close()
+        except Exception as e:
+            print(f"  Warning: Could not read existing Excel file: {e}")
+            print(f"  Creating new Excel file...")
 
     # Write all data (existing + new)
-    with pd.ExcelWriter(excel_path, engine='openpyxl') as writer:
+    # Use mode='w' to ensure clean write
+    with pd.ExcelWriter(excel_path, engine='openpyxl', mode='w') as writer:
         # Write preserved existing sheets first
         for sheet_name, df in existing_data.items():
             df.to_excel(writer, sheet_name=sheet_name, index=False)
@@ -387,11 +404,34 @@ def save_results(results, country, adm_level, value_threshold, area_threshold_pc
             # Drop geometry for Excel
             df = pd.DataFrame(gdf.drop(columns='geometry'))
             sheet_name = flood_type[:31]  # Excel sheet name limit
+            print(f"  Processing sheet '{sheet_name}': {len(df)} rows, Score range: {df['Hazard_score'].min()}-{df['Hazard_score'].max()}")
             if sheet_name in existing_sheet_names:
                 print(f"  Overwriting existing sheet: {sheet_name}")
             else:
                 print(f"  Adding new sheet: {sheet_name}")
             df.to_excel(writer, sheet_name=sheet_name, index=False)
+
+    # Verify data integrity by comparing a sample
+    print("\nVerifying data integrity...")
+    for flood_type in results.keys():
+        layer_name = flood_type
+        sheet_name = flood_type[:31]
+
+        # Read back from GPKG
+        try:
+            gpkg_data = gpd.read_file(gpkg_path, layer=layer_name)
+            gpkg_score_sum = gpkg_data['Hazard_score'].sum()
+
+            # Read back from Excel
+            excel_data = pd.read_excel(excel_path, sheet_name=sheet_name)
+            excel_score_sum = excel_data['Hazard_score'].sum()
+
+            if abs(gpkg_score_sum - excel_score_sum) < 0.001:
+                print(f"  ✓ {flood_type}: Data verified (score sum: {gpkg_score_sum:.0f})")
+            else:
+                print(f"  ✗ {flood_type}: Data MISMATCH! GPKG sum: {gpkg_score_sum:.0f}, Excel sum: {excel_score_sum:.0f}")
+        except Exception as e:
+            print(f"  ? {flood_type}: Could not verify - {e}")
 
     return str(gpkg_path), str(excel_path)
 
@@ -1249,12 +1289,43 @@ def initialize_tool():
 
                 map_widget.value = m._repr_html_()
 
+                # Export map if checkbox is enabled
+                if notebook_utils.export_charts_chk.value:
+                    maps_dir = Path(common.OUTPUT_DIR) / 'maps'
+                    maps_dir.mkdir(exist_ok=True)
+
+                    # Create filename
+                    if period == '2020':
+                        map_filename = f"{country}_FL_threshold_{period}_vt{value_threshold}_at{area_threshold_pct}.html"
+                    else:
+                        map_filename = f"{country}_FL_threshold_{period}_{scenario}_vt{value_threshold}_at{area_threshold_pct}.html"
+
+                    map_path = maps_dir / map_filename
+                    m.save(str(map_path))
+                    print(f"Map exported to: {map_path}")
+
                 # Create summary chart
                 with chart_output:
                     clear_output(wait=True)
                     if len(results) > 0:
                         chart = create_summary_chart(results, period, scenario, num_rps)
                         display(chart)
+
+                        # Export chart if checkbox is enabled
+                        if notebook_utils.export_charts_chk.value:
+                            chart_dir = Path(common.OUTPUT_DIR) / 'charts'
+                            chart_dir.mkdir(exist_ok=True)
+
+                            # Create filename
+                            if period == '2020':
+                                chart_filename = f"{country}_FL_threshold_{period}_vt{value_threshold}_at{area_threshold_pct}.png"
+                            else:
+                                chart_filename = f"{country}_FL_threshold_{period}_{scenario}_vt{value_threshold}_at{area_threshold_pct}.png"
+
+                            chart_path = chart_dir / chart_filename
+                            chart.savefig(chart_path, dpi=300, bbox_inches='tight')
+                            print(f"Chart exported to: {chart_path}")
+
                         plt.close(chart)
 
         except Exception as e:

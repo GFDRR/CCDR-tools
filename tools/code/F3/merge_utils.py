@@ -18,8 +18,8 @@ def merge_tifs(subdir_path):
         gdal.Translate(temp_output, vrt, options='-co COMPRESS=DEFLATE -co PREDICTOR=2 -co ZLEVEL=9')
         vrt = None
 
-        # Step 2: Process the merged file to convert negatives to 0 and set nodata=0
-        print(f"Processing {os.path.basename(subdir_path)}: converting negative values to 0 and setting nodata=0")
+        # Step 2: Process the merged file to set consistent nodata=-32767
+        print(f"Processing {os.path.basename(subdir_path)}: setting nodata=-32767 (Fathom standard)")
 
         # Open the temporary file
         src_ds = gdal.Open(temp_output, gdal.GA_ReadOnly)
@@ -36,7 +36,7 @@ def merge_tifs(subdir_path):
         geotransform = src_ds.GetGeoTransform()
         data_type = src_ds.GetRasterBand(1).DataType  # Get data type from source
 
-        # Create output file with nodata=0
+        # Create output file with nodata=-32767
         dst_ds = driver.Create(output_file, cols, rows, bands, data_type,
                               options=['COMPRESS=DEFLATE', 'PREDICTOR=2', 'ZLEVEL=9'])
         dst_ds.SetProjection(projection)
@@ -47,13 +47,22 @@ def merge_tifs(subdir_path):
             src_band = src_ds.GetRasterBand(band_idx)
             data = src_band.ReadAsArray()
 
-            # Convert negative values to 0
-            data = np.where(data < 0, 0, data)
+            # Get the source nodata value
+            src_nodata = src_band.GetNoDataValue()
+
+            # Replace source nodata with -32767 (Fathom standard)
+            # This ensures consistent nodata across all tiles
+            if src_nodata is not None:
+                data = np.where(data == src_nodata, -32767, data)
+
+            # Also convert any other negative values to -32767 (treat as nodata)
+            # But preserve 0 as valid value (dry land)
+            data = np.where((data < 0) & (data != -32767), -32767, data)
 
             # Write processed data to output
             dst_band = dst_ds.GetRasterBand(band_idx)
             dst_band.WriteArray(data)
-            dst_band.SetNoDataValue(0)  # Set 0 as nodata
+            dst_band.SetNoDataValue(-32767)  # Set -32767 as nodata (Fathom standard)
             dst_band.FlushCache()
 
         # Close datasets
