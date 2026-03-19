@@ -482,6 +482,32 @@
         </div>
     </div>
 
+    <!-- Filename Export Modal -->
+    <div class="modal fade" id="filenameModal" tabindex="-1" aria-labelledby="filenameModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filenameModalLabel">Export File</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exportFilename" class="form-label">Filename</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="exportFilename" placeholder="Enter filename">
+                            <span class="input-group-text" id="exportExtension">.json</span>
+                        </div>
+                        <small class="form-text text-muted">Enter the filename without extension</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirmExport">Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Include Dependencies -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
@@ -900,7 +926,8 @@
                 // Create label and description if not an object property
                 const forceLabel = false;
                 const isObjectProperty = resolvedProperty.type === 'object' && this.context.type !== 'modal' && this.context.type !== 'inline' && !name.includes('trigger') && !forceLabel;
-                if (!isObjectProperty) {
+                const shouldShowLabel = !isObjectProperty && !(options && options.hideLabel);
+                if (shouldShowLabel) {
                     this.addLabelAndDescription(container, name, resolvedProperty, options);
                 }
 
@@ -3855,15 +3882,14 @@
                 }
             });
 
-            const title = document.createElement('h5');
-            title.textContent = `${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)} Metadata`;
-            title.className = 'mb-3 mt-3';
-            form.appendChild(title);
-
             // Create unified context for normal form fields
             const context = new FieldCreationContext('normal', form);
 
             if (sectionName === 'general') {
+                const title = document.createElement('h5');
+                title.textContent = `${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)} Metadata`;
+                title.className = 'mb-3 mt-3';
+                form.appendChild(title);
                 const requiredRoles = ['publisher', 'creator', 'contact_point'];
 
                 // First, add all non-attribution fields
@@ -4018,10 +4044,59 @@
             } else {
                 // Check if this section is an array type (like the new exposure structure)
                 const sectionSchema = currentSchema.properties[sectionName];
+
+                // Add section title for all non-general sections
+                const titleContainer = document.createElement('div');
+                titleContainer.className = 'd-flex align-items-center mb-2 mt-3';
+
+                const title = document.createElement('h5');
+                title.textContent = `${sectionName.charAt(0).toUpperCase() + sectionName.slice(1)} Metadata`;
+                title.className = 'mb-0';
+                titleContainer.appendChild(title);
+
+                // Add section description if it exists
+                if (sectionSchema && sectionSchema.description) {
+                    // Add info icon button to toggle description
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.type = 'button';
+                    toggleBtn.className = 'btn btn-link btn-sm text-decoration-none ms-2 p-0';
+                    toggleBtn.style.fontSize = '1.2rem';
+                    toggleBtn.innerHTML = '<span class="toggle-icon">ℹ️</span>';
+                    toggleBtn.title = 'Toggle description';
+
+                    const descriptionId = `${sectionName}-description`;
+
+                    // Create collapsible description
+                    const description = document.createElement('div');
+                    description.id = descriptionId;
+                    description.className = 'form-text text-muted mb-3 collapse';
+                    description.style.fontSize = '0.95rem';
+                    description.innerHTML = parseMarkdownLinks(sectionSchema.description);
+
+                    // Toggle functionality
+                    toggleBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const isHidden = description.classList.contains('collapse');
+                        if (isHidden) {
+                            description.classList.remove('collapse');
+                            toggleBtn.innerHTML = '<span class="toggle-icon">▼</span>';
+                        } else {
+                            description.classList.add('collapse');
+                            toggleBtn.innerHTML = '<span class="toggle-icon">ℹ️</span>';
+                        }
+                    });
+
+                    titleContainer.appendChild(toggleBtn);
+                    form.appendChild(titleContainer);
+                    form.appendChild(description);
+                } else {
+                    form.appendChild(titleContainer);
+                }
+
                 if (sectionSchema && sectionSchema.type === 'array') {
                     // Handle array-type sections (like exposure)
                     const existingValue = currentFormData[sectionName];
-                    const fieldElement = context.createField(sectionName, sectionSchema, existingValue);
+                    const fieldElement = context.createField(sectionName, sectionSchema, existingValue, { hideLabel: true });
                     form.appendChild(fieldElement);
                 } else if (properties) {
                     // Handle object-type sections (like vulnerability, loss, hazard)
@@ -4082,12 +4157,40 @@
 
         function parseMarkdownLinks(text) {
             if (!text) return text;
-            
-            const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-            
-            return text.replace(markdownLinkRegex, function(match, linkText, url) {
+
+            // Convert markdown links
+            text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(match, linkText, url) {
                 return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-primary text-decoration-none">${linkText} <small>↗</small></a>`;
             });
+
+            // Convert **bold** text
+            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+            // Convert `inline code` to styled code tags (GitHub-style)
+            text = text.replace(/`([^`]+)`/g, '<code class="px-1 py-0" style="background-color: #f6f8fa; border: 1px solid #d0d7de; border-radius: 3px; font-size: 0.9em; color: #24292f;">$1</code>');
+
+            // Convert bullet points (lines starting with -)
+            text = text.replace(/^- (.+)$/gm, '<li>$1</li>');
+
+            // Wrap consecutive <li> items in <ul>
+            text = text.replace(/(<li>.*<\/li>\n?)+/g, function(match) {
+                return '<ul class="mb-2 ms-3">' + match + '</ul>';
+            });
+
+            // Convert double line breaks to paragraphs
+            text = text.replace(/\n\n+/g, '</p><p class="mb-2">');
+
+            // Wrap in paragraph if not already wrapped
+            if (!text.startsWith('<p') && !text.startsWith('<ul')) {
+                text = '<p class="mb-2">' + text + '</p>';
+            } else if (text.includes('</p><p')) {
+                text = '<p class="mb-2">' + text + '</p>';
+            }
+
+            // Convert single line breaks to <br>
+            text = text.replace(/\n/g, '<br>');
+
+            return text;
         }
 
         function getNestedValue(obj, path) {
@@ -5687,16 +5790,19 @@
             // Clean empty values before export
             const cleanedData = cleanEmptyValues(packagedData);
 
-            // Generate filename from dataset ID
-            const filename = cleanedData.datasets?.[0]?.id ? `${cleanedData.datasets[0].id}.json` : 'rdls_metadata.json';
+            // Generate default filename from dataset ID
+            const defaultFilename = cleanedData.datasets?.[0]?.id ? cleanedData.datasets[0].id : 'rdls_metadata';
 
-            const blob = new Blob([JSON.stringify(cleanedData, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
+            // Show modal to get filename
+            showFilenameModal(defaultFilename, 'json', function(filename) {
+                const blob = new Blob([JSON.stringify(cleanedData, null, 2)], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename + '.json';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
         }
 
         function exportXml() {
@@ -5708,14 +5814,67 @@
             const filteredData = getFilteredFormData();
             // Clean empty values before export
             const cleanedData = cleanEmptyValues(filteredData);
-            const xml = jsonToXml(cleanedData, 'rdls_dataset');
-            const blob = new Blob([xml], {type: 'application/xml'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'rdls_metadata.xml';
-            a.click();
-            URL.revokeObjectURL(url);
+
+            // Generate default filename from dataset ID
+            const defaultFilename = cleanedData.id ? cleanedData.id : 'rdls_metadata';
+
+            // Show modal to get filename
+            showFilenameModal(defaultFilename, 'xml', function(filename) {
+                const xml = jsonToXml(cleanedData, 'rdls_dataset');
+                const blob = new Blob([xml], {type: 'application/xml'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename + '.xml';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        function showFilenameModal(defaultFilename, extension, callback) {
+            const modal = new bootstrap.Modal(document.getElementById('filenameModal'));
+            const input = document.getElementById('exportFilename');
+            const extensionLabel = document.getElementById('exportExtension');
+            const confirmBtn = document.getElementById('confirmExport');
+
+            // Set default filename and extension
+            input.value = defaultFilename;
+            extensionLabel.textContent = '.' + extension;
+
+            // Remove old event listeners by cloning the button
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+            // Add new event listener
+            newConfirmBtn.addEventListener('click', function() {
+                let filename = input.value.trim();
+                if (!filename) {
+                    filename = defaultFilename;
+                }
+
+                // Remove extension if user included it
+                if (filename.endsWith('.' + extension)) {
+                    filename = filename.slice(0, -(extension.length + 1));
+                }
+
+                modal.hide();
+                callback(filename);
+            });
+
+            // Focus input when modal is shown
+            document.getElementById('filenameModal').addEventListener('shown.bs.modal', function() {
+                input.focus();
+                input.select();
+            });
+
+            // Allow Enter key to confirm
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    newConfirmBtn.click();
+                }
+            });
+
+            modal.show();
         }
 
         function jsonToXml(obj, rootName = 'root') {
