@@ -3,6 +3,13 @@ TIFF Resampling Module with Parallel Processing
 
 This module provides functions to resample TIFF files from one resolution to another
 using parallel processing to improve performance.
+
+Properly handles Fathom 3 data encoding:
+- Values 0-1,000: Valid flood depths in centimetres
+- Value -32,767: Permanent water bodies
+- Value -32,768: NoData sentinel
+- Uses nearest-neighbor resampling to preserve exact values
+- Preserves negative values (nodata and permanent water)
 """
 
 import os
@@ -19,12 +26,15 @@ from typing import List, Dict, Tuple, Union, Any
 def resample_tiff(input_path: str, output_path: str, target_resolution: float) -> Tuple[Tuple[float, float], Tuple[float, float]]:
     """
     Resample a TIFF file to a new resolution while preserving CRS and data format.
-    
+
+    Uses nearest-neighbor resampling to preserve exact values and properly handle
+    Fathom 3 data encoding (including negative values for nodata and permanent water).
+
     Args:
         input_path: Path to the input TIFF file
         output_path: Path where the resampled TIFF will be saved
         target_resolution: Target resolution in the units of the file's CRS
-        
+
     Returns:
         Tuple containing (original_resolution, new_resolution)
     """
@@ -33,22 +43,22 @@ def resample_tiff(input_path: str, output_path: str, target_resolution: float) -
         src_crs = src.crs
         src_bounds = src.bounds
         src_dtype = src.dtypes[0]  # Get the data type of the first band
-        src_nodata = src.nodata
-        
+        src_nodata = src.nodata if src.nodata is not None else -32768
+
         # Force the target resolution to exactly 0.0008333333
         exact_target_resolution = 0.0008333333
-        
+
         # Calculate new dimensions based on the geographic bounds and target resolution
         new_width = max(1, int(round((src_bounds.right - src_bounds.left) / exact_target_resolution)))
         new_height = max(1, int(round((src_bounds.top - src_bounds.bottom) / exact_target_resolution)))
-        
+
         # Create new transform
         dst_transform = rasterio.transform.from_bounds(
-            src_bounds.left, src_bounds.bottom, 
-            src_bounds.right, src_bounds.top, 
+            src_bounds.left, src_bounds.bottom,
+            src_bounds.right, src_bounds.top,
             new_width, new_height
         )
-        
+
         # Create metadata for output file
         dst_kwargs = src.meta.copy()
         dst_kwargs.update({
@@ -56,22 +66,25 @@ def resample_tiff(input_path: str, output_path: str, target_resolution: float) -
             'transform': dst_transform,
             'width': new_width,
             'height': new_height,
+            'nodata': src_nodata,  # Ensure nodata is set
             'compress': 'deflate',  # Add deflate compression
             'predictor': 2,  # Horizontal differencing predictor (optimizes compression)
             'zlevel': 9     # Maximum compression level (1-9)
         })
-        
+
         # Create output file
         with rasterio.open(output_path, 'w', **dst_kwargs) as dst:
             # Process each band
             for i in range(1, src.count + 1):
                 # Read the source band
                 src_band = src.read(i)
-                
+
                 # Create empty array for destination
                 dst_band = np.empty((new_height, new_width), dtype=src_dtype)
-                
-                # Perform the resampling
+
+                # Perform the resampling using nearest-neighbor
+                # This preserves exact values including negative values
+                # (nodata=-32768, permanent water=-32767)
                 reproject(
                     source=src_band,
                     destination=dst_band,
@@ -79,18 +92,18 @@ def resample_tiff(input_path: str, output_path: str, target_resolution: float) -
                     src_crs=src_crs,
                     dst_transform=dst_transform,
                     dst_crs=src_crs,
-                    resampling=Resampling.nearest,  # Using nearest neighbor resampling
+                    resampling=Resampling.nearest,  # Nearest neighbor preserves exact values
                     src_nodata=src_nodata,
                     dst_nodata=src_nodata
                 )
-                
+
                 # Write the resampled band to the destination
                 dst.write(dst_band, i)
-        
+
         # Return the original and new resolution for verification
         with rasterio.open(output_path) as dst_check:
             actual_res = dst_check.res
-        
+
         return (src.res, actual_res)
 
 

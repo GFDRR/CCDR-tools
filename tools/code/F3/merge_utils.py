@@ -3,6 +3,15 @@ import numpy as np
 from osgeo import gdal
 
 def merge_tifs(subdir_path):
+    """
+    Merge Fathom 3 tiles into a single raster.
+
+    Properly handles Fathom 3 data encoding:
+    - Values 0-1,000: Valid flood depths in centimetres
+    - Value -32,767: Permanent water bodies
+    - Value -32,768: NoData sentinel
+    - Preserves all negative values as-is (no conversion)
+    """
     # Get a list of all .tif files in the subdirectory
     tif_files = [os.path.join(subdir_path, file) for file in os.listdir(subdir_path) if file.endswith('.tif')]
 
@@ -18,8 +27,8 @@ def merge_tifs(subdir_path):
         gdal.Translate(temp_output, vrt, options='-co COMPRESS=DEFLATE -co PREDICTOR=2 -co ZLEVEL=9')
         vrt = None
 
-        # Step 2: Process the merged file to set consistent nodata=-32767
-        print(f"Processing {os.path.basename(subdir_path)}: setting nodata=-32767 (Fathom standard)")
+        # Step 2: Process the merged file to set consistent nodata=-32768
+        print(f"Processing {os.path.basename(subdir_path)}: setting nodata=-32768 (Fathom standard)")
 
         # Open the temporary file
         src_ds = gdal.Open(temp_output, gdal.GA_ReadOnly)
@@ -36,7 +45,7 @@ def merge_tifs(subdir_path):
         geotransform = src_ds.GetGeoTransform()
         data_type = src_ds.GetRasterBand(1).DataType  # Get data type from source
 
-        # Create output file with nodata=-32767
+        # Create output file with nodata=-32768
         dst_ds = driver.Create(output_file, cols, rows, bands, data_type,
                               options=['COMPRESS=DEFLATE', 'PREDICTOR=2', 'ZLEVEL=9'])
         dst_ds.SetProjection(projection)
@@ -50,19 +59,20 @@ def merge_tifs(subdir_path):
             # Get the source nodata value
             src_nodata = src_band.GetNoDataValue()
 
-            # Replace source nodata with -32767 (Fathom standard)
+            # Replace source nodata with -32768 (Fathom standard NoData sentinel)
             # This ensures consistent nodata across all tiles
-            if src_nodata is not None:
-                data = np.where(data == src_nodata, -32767, data)
+            if src_nodata is not None and src_nodata != -32768:
+                data = np.where(data == src_nodata, -32768, data)
 
-            # Also convert any other negative values to -32767 (treat as nodata)
-            # But preserve 0 as valid value (dry land)
-            data = np.where((data < 0) & (data != -32767), -32767, data)
+            # IMPORTANT: Do NOT modify other negative values
+            # -32767 is permanent water (valid data)
+            # All negative values except nodata are meaningful in Fathom data
+            # Zero is valid (dry land), not nodata
 
             # Write processed data to output
             dst_band = dst_ds.GetRasterBand(band_idx)
             dst_band.WriteArray(data)
-            dst_band.SetNoDataValue(-32767)  # Set -32767 as nodata (Fathom standard)
+            dst_band.SetNoDataValue(-32768)  # Set -32768 as nodata (Fathom standard)
             dst_band.FlushCache()
 
         # Close datasets
