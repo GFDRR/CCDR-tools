@@ -4764,7 +4764,7 @@
                 console.log('\n=== Testing Conditional Validation Engine ===');
                 testConditionalValidation();
 
-                updateSchemaStatus(`✓ RDLS v1.0 loaded (transitional - codelist loading pending)`, 'text-warning');
+                updateSchemaStatus(`✓ RDLS v1.0 loaded successfully`, 'text-success');
                 generateForm();
             } catch (error) {
                 updateSchemaStatus(`✗ Failed to load schema: ${error.message}`, 'text-danger');
