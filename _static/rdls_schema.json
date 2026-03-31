@@ -1,0 +1,3306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://docs.riskdatalibrary.org/en/1__0__0/rdls_schema.json",
+  "title": "Risk dataset (Risk Data Library Schema)",
+  "description": "A collection of risk data, published or curated by a single entity, consisting of one or more resources and described using metadata structured according to the [Risk Data Library Standard](https://docs.riskdatalibrary.org/).",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "risk_data_type",
+    "publisher",
+    "contact_point",
+    "creator",
+    "spatial",
+    "license",
+    "resources"
+  ],
+  "properties": {
+    "id": {
+      "title": "Dataset identifier",
+      "type": "string",
+      "description": "A unique identifier for the dataset. Use of an HTTP URI is recommended. For more information, see [how to assign a dataset identifier](https://rdl-standard.readthedocs.io/en/{{version}}/reference/codelists/#assign-a-dataset-identifier).",
+      "minLength": 1
+    },
+    "title": {
+      "title": "Title",
+      "type": "string",
+      "description": "The title of the dataset.",
+      "minLength": 1
+    },
+    "description": {
+      "title": "Description",
+      "type": "string",
+      "description": "A short description of the dataset.",
+      "minLength": 1
+    },
+    "risk_data_type": {
+      "title": "Risk data type",
+      "type": "array",
+      "description": "The types of risk data included in the dataset, from the closed [risk_data_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#risk-data-type).",
+      "items": {
+        "type": "string",
+        "enum": [
+          "hazard",
+          "exposure",
+          "vulnerability",
+          "loss"
+        ]
+      },
+      "codelist": "risk_data_type.csv",
+      "openCodelist": false,
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "publisher": {
+      "title": "Publisher",
+      "description": "The entity responsible for making the dataset available.",
+      "$ref": "#/$defs/Entity"
+    },
+    "version": {
+      "title": "Dataset version",
+      "type": "string",
+      "description": "The version indicator (name or identifier) of the dataset.",
+      "minLength": 1
+    },
+    "purpose": {
+      "title": "Dataset purpose",
+      "type": "string",
+      "description": "The purpose for which the dataset was created.",
+      "minLength": 1
+    },
+    "project": {
+      "title": "Project title",
+      "type": "string",
+      "description": "The name of the project that produced the dataset.",
+      "minLength": 1
+    },
+    "details": {
+      "title": "Additional details",
+      "type": "string",
+      "description": "Additional details about the dataset.",
+      "minLength": 1
+    },
+    "spatial": {
+      "title": "Spatial coverage",
+      "description": "The geographical area covered by the dataset. If specified using coordinates, the use of `.bbox` is recommended over `.geometry` or `.centroid`. The spatial coverage of the resources belonging to a dataset may differ and may be non-contiguous. For more information, refer to [spatial and temporal properties](https://docs.riskdatalibrary.org/en/{{version}}/reference/schema/#spatial-and-temporal-properties).",
+      "$ref": "#/$defs/Location"
+    },
+    "spatial_resolution": {
+      "title": "Spatial resolution",
+      "type": "number",
+      "description": "The minimum spatial separation resolvable amongst this dataset's resources, measured in meters. The spatial coverage and resolution of the resources belonging to a dataset may differ, therefore the minimum spatial resolution of the dataset may not be resolvable for all resources. For more information, refer to [spatial and temporal properties](https://docs.riskdatalibrary.org/en/{{version}}/reference/schema/#spatial-and-temporal-properties).",
+      "exclusiveMinimum": 0
+    },
+    "temporal": {
+      "title": "Temporal coverage",
+      "description": "The period of time covered by the dataset. The temporal coverage of the resources belonging to a dataset may differ and may be non-contiguous. For more information, refer to [spatial and temporal properties](https://docs.riskdatalibrary.org/en/{{version}}/reference/schema/#spatial-and-temporal-properties).",
+      "$ref": "#/$defs/Period"
+    },
+    "temporal_resolution": {
+      "title": "Temporal resolution",
+      "type": "string",
+      "description": "The minimum period of time resolvable amongst this dataset's resources, in ISO8601 duration format. The temporal coverage and resolution of the resources belonging to a dataset may differ, therefore the minimum temporal resolution of the dataset may not be resolvable for all resources. For more information, refer to [spatial and temporal properties](https://docs.riskdatalibrary.org/en/{{version}}/reference/schema/#spatial-and-temporal-properties).",
+      "format": "duration"
+    },
+    "license": {
+      "title": "License",
+      "description": "The URL of the legal document under which this dataset is made available, from the open [license codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#license). If the license under which the dataset is made available is not included in the codelist, you may specify a custom license URL. When licensing a dataset, a Public Domain Dedication or [Open Definition Conformant](https://opendefinition.org/licenses/) license is recommended. Documents linked from this dataset can be made available under other license conditions.",
+      "$ref": "#/$defs/License"
+    },
+    "contact_point": {
+      "title": "Contact point",
+      "description": "Contact information for the maintainer of the dataset.",
+      "$ref": "#/$defs/Entity"
+    },
+    "creator": {
+      "title": "Creator",
+      "description": "The entity responsible for producing the dataset.",
+      "$ref": "#/$defs/Entity"
+    },
+    "attributions": {
+      "title": "Attributions",
+      "type": "array",
+      "description": "Information about entities and their roles in relation to the dataset.",
+      "items": {
+        "$ref": "#/$defs/Attribution"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "lineage": {
+      "title": "Lineage",
+      "description": "Information about the provenance of the dataset, including the inputs used and the transformation processes applied to create the dataset.",
+      "type": "object",
+      "properties": {
+        "description": {
+          "title": "Description",
+          "description": "A free-text description of the provenance of the dataset. Provenance includes processing steps (e.g., corrections, transformations, algorithms), the tools or software used, and the personnel involved. For example, clipping a source dataset or model to a specific geographic region, resampling to a different resolution, or reprojecting to a different CRS.",
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "title": "Sources",
+          "type": "array",
+          "description": "The data sources and other inputs used to create the dataset.",
+          "items": {
+            "$ref": "#/$defs/Source"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "referenced_by": {
+      "title": "Referenced by",
+      "type": "array",
+      "description": "Related resources, such as publications, that reference, cite, or otherwise point to the dataset.",
+      "items": {
+        "$ref": "#/$defs/Related_resource"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "resources": {
+      "title": "Resources",
+      "type": "array",
+      "description": "Information about the resources included in the dataset.",
+      "items": {
+        "$ref": "#/$defs/Resource"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "hazard": {
+      "title": "Hazard metadata",
+      "type": "object",
+      "description": "Metadata that is specific to datasets that describe processes or phenomena that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation.",
+      "required": [
+        "event_sets"
+      ],
+      "properties": {
+        "event_sets": {
+          "title": "Event sets",
+          "type": "array",
+          "description": "Information about sets of hazard events.",
+          "items": {
+            "$ref": "#/$defs/Event_set"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "minProperties": 1
+    },
+    "exposure": {
+      "title": "Exposure metadata",
+      "type": "array",
+      "description": "Metadata that is specific to datasets that describe the situation of people, infrastructure, housing, production capacities and other tangible human assets located in hazard-prone areas.",
+      "items": {
+        "$ref": "#/$defs/Exposure_item"
+      },
+      "minItems": 1
+    },
+    "vulnerability": {
+      "title": "Vulnerability metadata",
+      "type": "object",
+      "description": "Metadata that is specific to datasets that describe the physical fragility and vulnerability relationships in relation to specific hazards or combinations of individual hazards.",
+      "properties": {
+        "functions": {
+          "title": "Functions",
+          "type": "object",
+          "description": "Details of the functions used to calculate the vulnerability dataset.",
+          "properties": {
+            "vulnerability": {
+              "title": "Vulnerability functions",
+              "type": "array",
+              "description": "The vulnerability functions used to calculate the impact of the hazard.",
+              "items": {
+                "allOf": [
+                  {
+                    "title": "Vulnerability function",
+                    "description": "A vulnerability function used to calculate the impact of a hazard.",
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/$defs/Function"
+                  }
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "fragility": {
+              "title": "Fragility functions",
+              "type": "array",
+              "description": "The fragility functions used to calculate the impact of the hazard.",
+              "items": {
+                "allOf": [
+                  {
+                    "title": "Fragility function",
+                    "description": "A fragility function used to calculate the impact of a hazard.",
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/$defs/Function"
+                  },
+                  {
+                    "$ref": "#/$defs/Damage_scale_states_names"
+                  }
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "damage_to_loss": {
+              "title": "Damage-to-loss functions",
+              "type": "array",
+              "description": "The damage-to-loss functions used to calculate the impact of the hazard in conjunction with fragility functions.",
+              "items": {
+                "allOf": [
+                  {
+                    "title": "Damage-to-loss function",
+                    "description": "A damage-to-loss function used to calculate the impact of the hazard in conjunction with a fragility function.",
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/$defs/Function"
+                  },
+                  {
+                    "$ref": "#/$defs/Damage_scale_states_names"
+                  }
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "engineering_demand": {
+              "title": "Engineering demand functions",
+              "type": "array",
+              "description": "The engineering demand functions used to calculate the impact of the hazard.",
+              "items": {
+                "allOf": [
+                  {
+                    "title": "Engineering demand function",
+                    "description": "An engineering demand function used to calculate the impact of a hazard.",
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/$defs/Function"
+                  },
+                  {
+                    "$ref": "#/$defs/Damage_scale_states_names"
+                  },
+                  {
+                    "$ref": "#/$defs/Engineering_demand_parameter"
+                  }
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "minProperties": 1
+        },
+        "socio_economic": {
+          "title": "Socio-economic indices",
+          "type": "array",
+          "description": "Array of socio-economic indices vulnerable to the hazard.",
+          "items": {
+            "$ref": "#/$defs/SocioEconomicIndex"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "minProperties": 1,
+      "anyOf": [
+        {
+          "required": [
+            "functions"
+          ]
+        },
+        {
+          "required": [
+            "socio_economic"
+          ]
+        }
+      ]
+    },
+    "loss": {
+      "title": "Loss metadata",
+      "type": "object",
+      "description": "Metadata that is specific to datasets that describe measures of impact in the form of damage or destruction caused by a disaster.",
+      "properties": {
+        "losses": {
+          "title": "Losses",
+          "type": "array",
+          "description": "Information about the losses described in the dataset.",
+          "items": {
+            "$ref": "#/$defs/Losses"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "minProperties": 1
+    },
+    "links": {
+      "title": "Links",
+      "description": "Links to related resources. The purpose of this field is to declare the version of the RDLS schema that describes the metadata. The first item in the links array must be a link to the canonical URL of the RDLS JSON schema with relation type 'describedby'. Subsequent items must conform to an IANA link relation type other than 'describedby'. To link to  sources of information that contribute to the creation of the dataset or to related resources that point to the dataset, use `sources` and `referencedBy`, respectively.",
+      "type": "array",
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/Link",
+          "properties": {
+            "href": {
+              "const": "https://docs.riskdatalibrary.org/en/1__0__0/rdls_schema.json"
+            },
+            "rel": {
+              "const": "describedby"
+            }
+          }
+        }
+      ],
+      "items": {
+        "$ref": "#/$defs/Link",
+        "properties": {
+          "rel": {
+            "pattern": "^(?!(describedby))"
+          }
+        }
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "Resource": {
+      "title": "Resource",
+      "type": "object",
+      "description": "An individual file or other form of data. Resources can be fully informationally equivalent, such as CSV and JSON serializations of the same data. Resources can also have different levels of fidelity, such as a CSV file and a graphical representation of the data within the file. Resources can also differ in other aspects, such as the temporal coverage of each resource.",
+      "required": [
+        "id",
+        "title",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "title": "Resource identifier",
+          "type": "string",
+          "description": "A locally unique identifier for this resource.",
+          "minLength": 1
+        },
+        "title": {
+          "title": "Resource title",
+          "type": "string",
+          "description": "A title for this resource.",
+          "minLength": 1
+        },
+        "description": {
+          "title": "Resource description",
+          "type": "string",
+          "description": "A description for this resource.",
+          "minLength": 1
+        },
+        "media_type": {
+          "title": "Media type",
+          "type": "string",
+          "description": "The IANA media type that describes the format of the resource, from the open [media_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#media-type). The codelist provides human-readable titles for the media types. This field should be used when the IANA media type of the resource is known. If the media type of the resource is not known, an alternative label or description for the format may be provided in `.format`.",
+          "codelist": "media_type.csv",
+          "openCodelist": true,
+          "minLength": 1
+        },
+        "format": {
+          "title": "Format",
+          "type": "string",
+          "description": "The format of the resource, if the IANA media type of the resource is not known. Otherwise, `.media_type` should be used instead. If the resource represents an API via which the dataset is available, `.format` should be set to \"API\". For more information, see [how to describe an API](https://docs.riskdatalibrary.org/en/{{version}}/guidance/metadata/#describe-an-api).",
+          "minLength": 1
+        },
+        "conforms_to": {
+          "title": "Conforms to",
+          "description": "An established standard to which the described resource conforms, from the open [conforms_to codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#conforms-to). The codelist provides human-readable titles for the media types. If the standard is not covered by the codelist, use of an HTTP URI is recommended.",
+          "type": "string",
+          "codelist": "conforms_to.csv",
+          "openCodelist": true,
+          "minLength": 1
+        },
+        "spatial": {
+          "title": "Spatial coverage",
+          "description": "The geographical area covered by the resource. If specified using coordinates, the use of `.bbox` is recommended over `.geometry` or `.centroid`. For more information, refer to [spatial and temporal properties](https://docs.riskdatalibrary.org/en/{{version}}/reference/schema/#spatial-and-temporal-properties).",
+          "$ref": "#/$defs/Location"
+        },
+        "spatial_resolution": {
+          "title": "Spatial resolution",
+          "type": "number",
+          "description": "The minimum spatial separation resolvable in this resource, measured in meters. For more information, refer to [spatial and temporal properties](https://docs.riskdatalibrary.org/en/{{version}}/reference/schema/#spatial-and-temporal-properties).",
+          "exclusiveMinimum": 0
+        },
+        "spatial_aggregation": {
+          "title": "Spatial aggregation",
+          "type": "string",
+          "description": "The fundamental spatial unit or geometric container used to organise, summarise, or 'bin' the data within this resource. This describes whether the data is unaggregated (e.g., individual building footprints or asset points), or aggregated into standardised administrative divisions (e.g., municipalities), hydrological units (e.g., catchments), or calculated geometric grids (e.g., hexagons or square gridcells).",
+          "minLength": 1
+        },
+        "coordinate_system": {
+          "title": "Coordinate reference system",
+          "type": "string",
+          "description": "An identifier string for the coordinate reference system (CRS) used in this resource. The CRS must be identified by a code issued by either [EPSG](https://epsg.org/) or [ESRI](https://www.esri.com/). The identifier string format is {authority}:{code}, e.g. EPSG:4326. [https://epsg.io/](https://epsg.io/) provides a searchable database of EPSG and ESRI coordinate system codes.",
+          "pattern": "^(ESRI:|EPSG:)[0-9]+$",
+          "minLength": 1
+        },
+        "temporal": {
+          "title": "Temporal coverage",
+          "description": "The period of time covered by this resource.",
+          "$ref": "#/$defs/Period"
+        },
+        "temporal_resolution": {
+          "title": "Temporal resolution",
+          "type": "string",
+          "description": "The minimum period of time resolvable in this resource, in ISO8601 duration format.",
+          "format": "duration"
+        },
+        "access_url": {
+          "title": "Access Url",
+          "type": "string",
+          "description": "A web address that gives access to this resource, e.g. a webpage through which a user can request access by completing a form.",
+          "format": "iri"
+        },
+        "download_url": {
+          "title": "Download Url",
+          "type": "string",
+          "description": "The web address this resource can be downloaded from in the given `.media_type` or `.format`.",
+          "minLength": 1
+        },
+        "baseline_period": {
+          "title": "Baseline period",
+          "description": "The baseline or reference period on which a forecast or projection is based.",
+          "$ref": "#/$defs/Period"
+        },
+        "climate": {
+          "title": "Climate",
+          "description": "Information about climate scenarios and models used to create the dataset.",
+          "$ref": "#/$defs/Climate"
+        }
+      },
+      "minProperties": 1
+    },
+    "Entity": {
+      "title": "Entity",
+      "type": "object",
+      "description": "A person, organization or group.",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "A name for the entity.",
+          "minLength": 1
+        },
+        "email": {
+          "title": "Email address",
+          "type": "string",
+          "description": "An email address for the entity.",
+          "format": "email"
+        },
+        "url": {
+          "title": "URL",
+          "type": "string",
+          "description": "A URL associated with the entity.",
+          "format": "iri"
+        }
+      },
+      "minProperties": 1,
+      "anyOf": [
+        {
+          "required": [
+            "email"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        }
+      ]
+    },
+    "Attribution": {
+      "title": "Attribution",
+      "type": "object",
+      "description": "A qualified relation between an entity and a dataset.",
+      "required": [
+        "id",
+        "entity",
+        "role"
+      ],
+      "properties": {
+        "id": {
+          "title": "Attribution identifier",
+          "type": "string",
+          "description": "A locally unique identifier for the attribution.",
+          "minLength": 1
+        },
+        "entity": {
+          "title": "Entity",
+          "description": "An entity with a role in relation to the dataset.",
+          "$ref": "#/$defs/Entity"
+        },
+        "role": {
+          "title": "Role",
+          "type": "string",
+          "description": "The entity's role in relation to the dataset, using the open [roles codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#roles).",
+          "codelist": "roles.csv",
+          "openCodelist": true,
+          "minLength": 1
+        }
+      },
+      "minProperties": 1
+    },
+    "Related_resource": {
+      "title": "Related resource",
+      "type": "object",
+      "description": "A related resource, such as a publication, that references, cites, or otherwise points to a dataset.",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "title": "Related resource identifier",
+          "type": "string",
+          "description": "A locally unique identifier for the related resource.",
+          "minLength": 1
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "The name or title of the resource.",
+          "minLength": 1
+        },
+        "author_names": {
+          "title": "Author names",
+          "type": "array",
+          "description": "The names of the authors of the resource.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "date_published": {
+          "title": "Publication date",
+          "type": "string",
+          "description": "The date that the resource was first published.",
+          "format": "date"
+        },
+        "url": {
+          "title": "URL",
+          "type": "string",
+          "description": "The uniform resource locator for the resource, e.g. the web address at which the resource can be accessed.",
+          "format": "iri"
+        },
+        "doi": {
+          "title": "Digital object identifier",
+          "type": "string",
+          "description": "The digital object identifier for the resource.",
+          "minLength": 1
+        }
+      },
+      "minProperties": 1
+    },
+    "Source": {
+      "title": "Source",
+      "type": "object",
+      "description": "A data source or other input used to create a dataset.",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "title": "Source identifier",
+          "type": "string",
+          "description": "A locally unique identifier for the source.",
+          "minLength": 1
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "description": "The name or title of the source.",
+          "minLength": 1
+        },
+        "url": {
+          "title": "URL",
+          "type": "string",
+          "description": "The uniform resource locator for the source, e.g. the web address at which the source can be accessed.",
+          "format": "iri"
+        },
+        "type": {
+          "title": "type",
+          "type": "string",
+          "description": "The nature of the source, from the closed [source_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#source-type).",
+          "codelist": "source_type.csv",
+          "openCodelist": false,
+          "enum": [
+            "dataset",
+            "model"
+          ]
+        },
+        "risk_data_type": {
+          "title": "Risk data type",
+          "type": "array",
+          "description": "The types of risk data included in the source, from the closed [risk_data_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#risk-data-type).",
+          "items": {
+            "type": "string",
+            "enum": [
+              "hazard",
+              "exposure",
+              "vulnerability",
+              "loss"
+            ]
+          },
+          "codelist": "risk_data_type.csv",
+          "openCodelist": false,
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "used_in": {
+          "title": "Used in",
+          "type": "string",
+          "description": "The types of risk data produced using the source as an input, from the closed [risk_data_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#risk-data-type).",
+          "codelist": "risk_data_type.csv",
+          "openCodelist": false,
+          "enum": [
+            "hazard",
+            "exposure",
+            "vulnerability",
+            "loss"
+          ]
+        },
+        "license": {
+          "title": "License",
+          "description": "The URL of the legal document under which the source data is made available, from the open [license codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#license). If the license under which the source data is made available is not included in the codelist, you may specify a custom license URL.",
+          "$ref": "#/$defs/License"
+        }
+      },
+      "minProperties": 1
+    },
+    "Period": {
+      "title": "Period",
+      "type": "object",
+      "description": "A period of time.",
+      "properties": {
+        "start": {
+          "title": "Start",
+          "type": "string",
+          "description": "The start of the period. A date (YYYY-MM-DD) is recommended. However, year-months (YYYY-MM) and years (YYYY) are supported.",
+          "oneOf": [
+            {
+              "format": "date"
+            },
+            {
+              "pattern": "\\d{4}$"
+            },
+            {
+              "pattern": "\\d{4}-(0[1-9]|1[0-2])$"
+            }
+          ],
+          "minLength": 1
+        },
+        "end": {
+          "title": "End date",
+          "type": "string",
+          "description": "The end of the period. A date (YYYY-MM-DD) is recommended. However, year-months (YYYY-MM) and years (YYYY) are supported.",
+          "oneOf": [
+            {
+              "format": "date"
+            },
+            {
+              "pattern": "\\d{4}$"
+            },
+            {
+              "pattern": "\\d{4}-(0[1-9]|1[0-2])$"
+            }
+          ],
+          "minLength": 1
+        },
+        "duration": {
+          "title": "Duration",
+          "type": "string",
+          "description": "The duration of the period in ISO 8601 duration format, e.g. 'P50Y' for 50 years",
+          "format": "duration"
+        },
+        "central_year": {
+          "title": "Central year",
+          "type": "integer",
+          "description": "The central or representative year as a single point in time rather than a period (e.g., '2050' representing the period 2040-2060). Use this instead of start/end when data represents conditions centered on a specific year.",
+          "minimum": 1000,
+          "maximum": 9999
+        }
+      },
+      "minProperties": 1
+    },
+    "Climate": {
+      "title": "Climate",
+      "type": "object",
+      "description": "Information about climate scenarios and models used to create the resource.",
+      "properties": {
+        "model": {
+          "title": "Climate model",
+          "type": "string",
+          "description": "The name or identifier of the climate model used to produce this resource",
+          "minLength": 1
+        },
+        "scenario": {
+          "title": "Climate scenario",
+          "type": "string",
+          "description": "The climate scenario under which the data was produced, from the closed [climate_scenario codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#climate_scenario).",
+          "codelist": "climate_scenario.csv",
+          "openCodelist": false,
+          "enum": [
+            "SSP1-1.9",
+            "SSP1-2.6",
+            "SSP2-4.5",
+            "SSP3-7.0",
+            "SSP4-3.4",
+            "SSP4-6.0",
+            "SSP5-3.4",
+            "SSP5-8.5",
+            "RCP2.6",
+            "RCP4.5",
+            "RCP6.0",
+            "RCP8.5"
+          ]
+        },
+        "percentile": {
+          "title": "Percentile",
+          "type": "number",
+          "description": "The percentile of the climate model or model ensemble output represented in this resource, expressed as a number between 0 and 100. For example, 50 indicates the median (50th percentile) of the ensemble.",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "minProperties": 1
+    },
+    "Location": {
+      "title": "Location",
+      "type": "object",
+      "description": "A geographical area.",
+      "properties": {
+        "scale": {
+          "title": "Spatial scale",
+          "type": "string",
+          "description": "The spatial scale of the geographical area, from the closed [spatial scale codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#spatial_scale).",
+          "codelist": "spatial_scale.csv",
+          "openCodelist": false,
+          "enum": [
+            "global",
+            "regional",
+            "national",
+            "sub-national",
+            "urban"
+          ]
+        },        
+        "countries": {
+          "title": "Countries",
+          "type": "array",
+          "description": "The countries covered by the geographical area, from the closed [country codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#country).",
+          "items": {
+            "type": "string",
+            "enum": [
+              "AFG",
+              "ALB",
+              "DZA",
+              "ASM",
+              "AND",
+              "AGO",
+              "AIA",
+              "ATA",
+              "ATG",
+              "ARG",
+              "ARM",
+              "ABW",
+              "AUS",
+              "AUT",
+              "AZE",
+              "BHS",
+              "BHR",
+              "BGD",
+              "BRB",
+              "BLR",
+              "BEL",
+              "BLZ",
+              "BEN",
+              "BMU",
+              "BTN",
+              "BOL",
+              "BES",
+              "BIH",
+              "BWA",
+              "BVT",
+              "BRA",
+              "IOT",
+              "BRN",
+              "BGR",
+              "BFA",
+              "BDI",
+              "CPV",
+              "KHM",
+              "CMR",
+              "CAN",
+              "CYM",
+              "CAF",
+              "TCD",
+              "CHL",
+              "CHN",
+              "CXR",
+              "CCK",
+              "COL",
+              "COM",
+              "COD",
+              "COG",
+              "COK",
+              "CRI",
+              "HRV",
+              "CUB",
+              "CUW",
+              "CYP",
+              "CZE",
+              "CIV",
+              "DNK",
+              "DJI",
+              "DMA",
+              "DOM",
+              "ECU",
+              "EGY",
+              "SLV",
+              "GNQ",
+              "ERI",
+              "EST",
+              "SWZ",
+              "ETH",
+              "FLK",
+              "FRO",
+              "FJI",
+              "FIN",
+              "FRA",
+              "GUF",
+              "PYF",
+              "ATF",
+              "GAB",
+              "GMB",
+              "GEO",
+              "DEU",
+              "GHA",
+              "GIB",
+              "GRC",
+              "GRL",
+              "GRD",
+              "GLP",
+              "GUM",
+              "GTM",
+              "GGY",
+              "GIN",
+              "GNB",
+              "GUY",
+              "HTI",
+              "HMD",
+              "VAT",
+              "HND",
+              "HKG",
+              "HUN",
+              "ISL",
+              "IND",
+              "IDN",
+              "IRN",
+              "IRQ",
+              "IRL",
+              "IMN",
+              "ISR",
+              "ITA",
+              "JAM",
+              "JPN",
+              "JEY",
+              "JOR",
+              "KAZ",
+              "KEN",
+              "KIR",
+              "PRK",
+              "KOR",
+              "KWT",
+              "KGZ",
+              "LAO",
+              "LVA",
+              "LBN",
+              "LSO",
+              "LBR",
+              "LBY",
+              "LIE",
+              "LTU",
+              "LUX",
+              "MAC",
+              "MDG",
+              "MWI",
+              "MYS",
+              "MDV",
+              "MLI",
+              "MLT",
+              "MHL",
+              "MTQ",
+              "MRT",
+              "MUS",
+              "MYT",
+              "MEX",
+              "FSM",
+              "MDA",
+              "MCO",
+              "MNG",
+              "MNE",
+              "MSR",
+              "MAR",
+              "MOZ",
+              "MMR",
+              "NAM",
+              "NRU",
+              "NPL",
+              "NLD",
+              "NCL",
+              "NZL",
+              "NIC",
+              "NER",
+              "NGA",
+              "NIU",
+              "NFK",
+              "MNP",
+              "NOR",
+              "OMN",
+              "PAK",
+              "PLW",
+              "PSE",
+              "PAN",
+              "PNG",
+              "PRY",
+              "PER",
+              "PHL",
+              "PCN",
+              "POL",
+              "PRT",
+              "PRI",
+              "QAT",
+              "MKD",
+              "ROU",
+              "RUS",
+              "RWA",
+              "REU",
+              "BLM",
+              "SHN",
+              "KNA",
+              "LCA",
+              "MAF",
+              "SPM",
+              "VCT",
+              "WSM",
+              "SMR",
+              "STP",
+              "SAU",
+              "SEN",
+              "SRB",
+              "SYC",
+              "SLE",
+              "SGP",
+              "SXM",
+              "SVK",
+              "SVN",
+              "SLB",
+              "SOM",
+              "ZAF",
+              "SGS",
+              "SSD",
+              "ESP",
+              "LKA",
+              "SDN",
+              "SUR",
+              "SJM",
+              "SWE",
+              "CHE",
+              "SYR",
+              "TWN",
+              "TJK",
+              "TZA",
+              "THA",
+              "TLS",
+              "TGO",
+              "TKL",
+              "TON",
+              "TTO",
+              "TUN",
+              "TUR",
+              "TKM",
+              "TCA",
+              "TUV",
+              "UGA",
+              "UKR",
+              "ARE",
+              "GBR",
+              "UMI",
+              "USA",
+              "URY",
+              "UZB",
+              "VUT",
+              "VEN",
+              "VNM",
+              "VGB",
+              "VIR",
+              "WLF",
+              "ESH",
+              "YEM",
+              "ZMB",
+              "ZWE",
+              "ALA"
+            ]
+          },
+          "codelist": "country.csv",
+          "openCodelist": false,
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "gazetteer_entries": {
+          "title": "Gazetteer entries",
+          "type": "array",
+          "description": "Entries from geographical indices or directories describing the geographical area. This field should be used to describe sub-national coverage. Use of ISO 3166-2 is recommended.",
+          "items": {
+            "$ref": "#/$defs/Gazetteer_entry"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "bbox": {
+          "title": "Bounding box",
+          "type": "array",
+          "description": "A geographic bounding box delimiting the geographical area. This field is an array of numbers. It must contain exactly four numbers with the first two numbers being the longitude and latitude of the most southwesterly point and the second two numbers being the longitude and latitude of the most northeasterly point. Coordinates must be specified using the World Geodetic System 1984 (WGS 84) datum, with longitude and latitude units of decimal degrees. This is equivalent to the coordinate reference system identified by the Open Geospatial Consortium URN urn:ogc:def:crs:OGC::CRS84.",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "geometry": {
+          "title": "Geometry",
+          "description": "A set of coordinates denoting the vertices of the geographical area. This field describes the extent of the geographical area. To avoid creating very large metadata, geometries should have fewer than 50 vertices.",
+          "$ref": "#/$defs/Geometry"
+        },
+        "centroid": {
+          "title": "Centroid",
+          "type": "array",
+          "description": "The coordinates of the centre of the geographical area. This field is an array of numbers. It must contain exactly two numbers with longitude (easting) first and latitude (northing) second. Coordinates must be specified using the World Geodetic System 1984 (WGS 84) datum, with longitude and latitude units of decimal degrees. This is equivalent to the coordinate reference system identified by the Open Geospatial Consortium URN urn:ogc:def:crs:OGC::CRS84.",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scale": {
+                "const": "global"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "required": [
+                "countries"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scale": {
+                "const": "regional"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "countries"
+            ],
+            "properties": {
+              "countries": {
+                "minItems": 2
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scale": {
+                "const": "urban"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "countries"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scale": {
+                "const": "national"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "countries"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scale": {
+                "const": "sub-national"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "countries"
+            ]
+          }
+        }
+      ],
+      "minProperties": 1
+    },
+    "Gazetteer_entry": {
+      "title": "Gazetteer entry",
+      "type": "object",
+      "description": "An entry from a geographical index or directory describing a geographical area.",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "title": "Gazetteer entry identifier",
+          "type": "string",
+          "description": "An identifier drawn from the gazetteer identified in `.scheme`.",
+          "minLength": 1
+        },
+        "scheme": {
+          "title": "Scheme",
+          "type": "string",
+          "description": "The gazetteer from which the entry is drawn, from the open [location gazetteers codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#location_gazetteers).",
+          "codelist": "location_gazetteers.csv",
+          "openCodelist": true,
+          "minLength": 1
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "description": "A description for the gazetteer entry.",
+          "minLength": 1
+        },
+        "uri": {
+          "title": "Uniform resource locator",
+          "type": "string",
+          "description": "A URI for the gazetteer entry.",
+          "format": "iri"
+        }
+      },
+      "minProperties": 1
+    },
+    "Geometry": {
+      "title": "Geometry",
+      "type": "object",
+      "description": "A set of coordinates denoting the vertices of the geographical area.",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "type": "string",
+          "description": "The GeoJSON geometry type that is described by `.coordinates`, from the closed [geometry_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#geometry_type).",
+          "codelist": "geometry_type.csv",
+          "openCodelist": false,
+          "enum": [
+            "Point",
+            "MultiPoint",
+            "LineString",
+            "MultiLineString",
+            "Polygon",
+            "MultiPolygon"
+          ]
+        },
+        "coordinates": {
+          "title": "Coordinates",
+          "type": "array",
+          "description": "One or more GeoJSON positions according to the GeoJSON geometry type defined in `.type`. Each position is an array of numbers containing exactly two numbers with longitude (easting) first and latitude (northing) second. Coordinates must be specified using the World Geodetic System 1984 (WGS 84) datum, with longitude and latitude units of decimal degrees. This is equivalent to the coordinate reference system identified by the Open Geospatial Consortium URN urn:ogc:def:crs:OGC::CRS84.",
+          "items": {
+            "type": [
+              "number",
+              "array"
+            ],
+            "items": {
+              "type": [
+                "number",
+                "array"
+              ],
+              "items": {
+                "type": [
+                  "number",
+                  "array"
+                ],
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 1
+              },
+              "minItems": 1
+            },
+            "minItems": 1
+          },
+          "minItems": 1
+        }
+      },
+      "minProperties": 1
+    },
+    "Event_set": {
+      "title": "Event set",
+      "type": "object",
+      "description": "Information about a set of hazard events. ",
+      "required": [
+        "id",
+        "hazards",
+        "analysis_type"
+      ],
+      "properties": {
+        "id": {
+          "title": "Event set identifier",
+          "type": "string",
+          "description": "A locally unique identifier for this event set.",
+          "minLength": 1
+        },
+        "hazards": {
+          "title": "Hazards",
+          "description": "The hazards included in this event set.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HazardWithTrigger",
+            "properties": {
+              "id": {
+                "title": "Hazard identifier",
+                "description": "A local identifier for this hazard.",
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "analysis_type": {
+          "title": "Analysis type",
+          "type": "string",
+          "description": "The type of analysis used by the hazard model, from the closed [analysis type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#analysis_type).",
+          "codelist": "analysis_type.csv",
+          "openCodelist": false,
+          "enum": [
+            "deterministic",
+            "empirical",
+            "probabilistic"
+          ]
+        },
+        "frequency_distribution": {
+          "title": "Frequency distribution",
+          "type": "string",
+          "description": "The frequency distribution assumed for the occurrence of events over a multi-year timeline, from the [frequency_distribution codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#frequency-distribution).",
+          "codelist": "frequency_distribution.csv",
+          "openCodelist": false,
+          "enum": [
+            "poisson",
+            "negative_binomial",
+            "user_defined",
+            "generalized_extreme_value"
+          ]
+        },
+        "seasonality": {
+          "title": "Seasonality distribution",
+          "type": "string",
+          "description": "The seasonality distribution assumed for the occurrence of events across a calendar year, from the [seasonality_distribution codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#seasonality-distribution)",
+          "codelist": "seasonality.csv",
+          "openCodelist": false,
+          "enum": [
+            "uniform",
+            "user_defined"
+          ]
+        },
+        "calculation_method": {
+          "title": "Calculation Method",
+          "type": "string",
+          "description": "The methodology used for the calculation of the event set in the modelled scenario(s), taken from the closed [data_calculation_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#data-calculation-type).",
+          "enum": [
+            "inferred",
+            "observed",
+            "simulated"
+          ],
+          "codelist": "data_calculation_type.csv",
+          "openCodelist": false
+        },
+        "event_count": {
+          "title": "Event count",
+          "type": "number",
+          "description": "The number of events contained in the event set. You should only use this field when details of individual events are not included in the RDLS metadata."
+        },
+        "occurrence_range": {
+          "title": "Occurrence range",
+          "type": "string",
+          "description": "A summary of the probabilistic occurrence scenarios that are included in the event set. You should only use this field when `event_set.analysis_type` = 'probabilistic'",
+          "minLength": 1
+        },
+        "events": {
+          "title": "Events",
+          "description": "The events in this event set.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Event"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "minProperties": 1
+    },
+    "Event": {
+      "title": "Event",
+      "description": "A hazard event.",
+      "type": "object",
+      "required": [
+        "id",
+        "calculation_method",
+        "hazard",
+        "occurrence"
+      ],
+      "properties": {
+        "id": {
+          "title": "Event identifier",
+          "type": "string",
+          "description": "A locally unique identifier for this event.",
+          "minLength": 1
+        },
+        "disaster_identifiers": {
+          "title": "Disaster identifiers",
+          "type": "array",
+          "description": "Identifiers for the disaster to which this event relates.",
+          "items": {
+            "$ref": "#/$defs/Classification"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "calculation_method": {
+          "title": "Model calculation method",
+          "type": "string",
+          "description": "The methodology used for the calculation of the event in the modelled scenario(s), from the closed [data calculation type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#data_calculation_type).",
+          "codelist": "data_calculation_type.csv",
+          "openCodelist": false,
+          "enum": [
+            "inferred",
+            "observed",
+            "simulated"
+          ]
+        },
+        "hazard": {
+          "title": "Hazard",
+          "description": "The hazard to which this event relates.",
+          "$ref": "#/$defs/HazardWithTrigger"
+        },
+        "occurrence": {
+          "title": "Occurrence",
+          "type": "object",
+          "description": "The frequency or likelihood of the event happening within a given time frame.",
+          "properties": {
+            "probabilistic": {
+              "title": "Probabilistic frequency",
+              "description": "How often the event is expected to occur. Can be return period and/or probability. Both fields are provided to allow entry of return period (most common term used across all hazards) and/or probability, which is commonly used for seismic hazard. Probability commonly refers to a probability within 1 year or 50 years, but may be relative to any duration - when `probability` is used, `span` must be specified. You should only use this object when `event_set.analysis_type` = `event_set.analysis_type` = 'probabilistic'",
+              "$ref": "#/$defs/Probabilistic"
+            },
+            "empirical": {
+              "title": "Empirical",
+              "type": "object",
+              "description": "The period of time over which the event occurred and the associated return period (if any). You should only use this object when `event_set.analysis_type` = 'empirical'",
+              "properties": {
+                "temporal": {
+                  "title": "Temporal occurrence",
+                  "description": "The period of time over which the event occurred.",
+                  "$ref": "#/$defs/Period"
+                },
+                "return_period": {
+                  "title": "Associated return period",
+                  "type": "number",
+                  "description": "Probabilistic frequency estimate associated with the empirical events in terms of hazard intensity. Expressed as the denominator of '1/n', e.g. '10' for a 1-in-10 year return period etc.",
+                  "minimum": 0
+                }
+              },
+              "minProperties": 1
+            },
+            "deterministic": {
+              "title": "Deterministic frequency",
+              "type": "object",
+              "description": "The index criteria and thresholds classification used by the deterministic event set, index approaches and susceptibility data. You should only use this object when `event_set.analysis_type` = 'deterministic'.",
+              "properties": {
+                "index_criteria": {
+                  "title": "Index criteria",
+                  "type": "string",
+                  "description": "Full description of the approach and criteria used to produce the index value. A deterministic hazard intensity index (ranking, score, etc) is not tied to a specific occurrence probability, rather is produced using an aggregation criteria (e.g. max, mean, median of annual values over a period; multi-criteria combination; Principal Component Analysis; else).",
+                  "minLength": 1
+                },
+                "thresholds": {
+                  "title": "Index thresholds",
+                  "type": "array",
+                  "description": "The thresholds used to classify the index value. Each threshold should be a separate item. Where thresholds are identified by both a number and a descriptor, include the descriptor in brackets, e.g. 1 (low).",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                }
+              },
+              "minProperties": 1
+            }
+          },
+          "minProperties": 1,
+          "anyOf": [
+            {
+              "required": [
+                "probabilistic"
+              ]
+            },
+            {
+              "required": [
+                "empirical"
+              ]
+            },
+            {
+              "required": [
+                "deterministic"
+              ]
+            }
+          ]
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "description": "Provides additional information about this specific event",
+          "minLength": 1
+        }
+      },
+      "minProperties": 1
+    },
+    "Metric": {
+      "title": "Asset exposure metric",
+      "type": "object",
+      "description": "A measurement used to quantify the extent to which assets detailed in the dataset are exposed.",
+      "required": [
+        "id",
+        "dimension",
+        "measurement"
+      ],
+      "properties": {
+        "id": {
+          "title": "Identifier",
+          "type": "string",
+          "description": "A locally unique identifier for this metric.",
+          "minLength": 1
+        },
+        "dimension": {
+          "title": "Metric dimension",
+          "description": "The dimension on which the asset's exposure is measured, from the closed [metric_dimension codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#metric-dimension).",
+          "type": "string",
+          "codelist": "metric_dimension.csv",
+          "openCodelist": false,
+          "enum": [
+            "structure",
+            "content",
+            "product",
+            "disruption",
+            "population"
+          ]
+        },
+        "measurement": {
+          "title": "Metric measurement",
+          "description": "How the metric is measured.",
+          "$ref": "#/$defs/Measurement"
+        }
+      },
+      "minProperties": 1
+    },
+    "Probabilistic": {
+      "title": "Probabilistic frequency",
+      "type": "object",
+      "description": "How often the event is expected to occur. Can be return period and/or probability. Both fields are provided to allow entry of return period (most common term used across all hazards) and/or probability, which is commonly used for seismic hazard. Probability commonly refers to a probability within 1 year or 50 years, but may be relative to any duration - when `probability` is used, `span` must be specified. This object must only be used if `event_set.analysis_type` = 'probabilistic'",
+      "properties": {
+        "return_period": {
+          "title": "Return period",
+          "description": "The event return period (or recurrence interval); the estimated average time between events. Expressed as the denominator of '1/n', e.g. '10' for a 1-in-10 year return period etc.",
+          "type": "number",
+          "minimum": 0
+        },
+        "event_rate": {
+          "title": "Event rate",
+          "type": "number",
+          "description": "The average number of occurrences of the event within a given year. This is the reciprocal of the return period, related by event_set.frequency_distribution.",
+          "minimum": 0
+        },
+        "probability": {
+          "title": "Probability",
+          "type": "object",
+          "description": "The likelihood of the event occurring in a given time period.",
+          "required": [
+            "span"
+          ],
+          "properties": {
+            "value": {
+              "title": "Probability value",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "The probability of the event occurring during the time period specified in `.span`, expressed as a number between 0 and 1, e.g. 0.1 represents a 10% likelihood of the event occurring."
+            },
+            "span": {
+              "title": "Probability span",
+              "type": "number",
+              "minimum": 0,
+              "description": "The length in years of the period in which the event is likely to occur with the probability specified in `.value`."
+            }
+          },
+          "minProperties": 1
+        }
+      },
+      "minProperties": 1
+    },
+    "Classification": {
+      "title": "Classification",
+      "description": "A classification consists of at least two parts: an identifier for the list (scheme) from which the classification is taken, and an identifier for the category from that list being applied. It is useful to also publish a text label and/or URI that users can draw on to interpret the classification.",
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "scheme": {
+          "title": "Scheme",
+          "description": "The scheme or codelist from which the classification code is taken, using the open [classification_scheme](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#classification-scheme) codelist.",
+          "type": "string",
+          "codelist": "classification_scheme.csv",
+          "openCodelist": true,
+          "minLength": 1
+        },
+        "id": {
+          "title": "Classification identifier",
+          "description": "The classification code taken from the scheme.",
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "title": "Title",
+          "description": "A title for the classification code.",
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "title": "Description",
+          "description": "A description for the classification code.",
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "title": "URI",
+          "description": "A URI to uniquely identify the classification code.",
+          "type": "string",
+          "format": "iri"
+        }
+      },
+      "minProperties": 1
+    },
+    "License": {
+      "title": "License",
+      "type": "string",
+      "format": "iri",
+      "description": "The URL of the legal document under which data is made available.",
+      "codelist": "license.csv",
+      "openCodelist": true,
+      "minLength": 1
+    },
+    "Link": {
+      "title": "Link",
+      "description": "A link to a related resource.",
+      "type": "object",
+      "properties": {
+        "href": {
+          "title": "Link target",
+          "description": "The URL of this related resource.",
+          "format": "iri",
+          "type": "string"
+        },
+        "rel": {
+          "title": "Link relation type",
+          "description": "The relationship with this related resource, from the [IANA Link Relationship Types](https://www.iana.org/assignments/link-relations/link-relations.xhtml#link-relations-1).  The 'describedby' code must only be used in the first item in the `links` array to link to the schema that describes the structure of the data.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "href",
+        "rel"
+      ],
+      "minProperties": 1
+    },
+    "Losses": {
+      "title": "Losses",
+      "type": "object",
+      "description": "Losses resulting from the occurrence of a hazard.",
+      "required": [
+        "id",
+        "hazard",
+        "asset_category",
+        "asset_dimension",
+        "impact_and_losses"
+      ],
+      "properties": {
+        "id": {
+          "title": "Losses identifier",
+          "description": "A local identifier for the losses.",
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "losses_001",
+            "economic_losses_typhoon_2024",
+            "building_damage_earthquake_manila",
+            "agricultural_losses_drought_2023"
+          ]
+        },
+        "hazard": {
+          "title": "Hazard type",
+          "description": "The main type of hazard that resulted in the losses.",
+          "$ref": "#/$defs/HazardWithTrigger"
+        },
+        "asset_category": {
+          "title": "Asset category",
+          "description": "The category of the lost assets, from the closed [exposure_category codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#exposure-category).",
+          "type": "string",
+          "enum": [
+            "agriculture",
+            "buildings",
+            "infrastructure",
+            "population",
+            "natural_environment",
+            "economic_indicator",
+            "development_index"
+          ],
+          "codelist": "exposure_category.csv",
+          "openCodelist": false
+        },
+        "asset_dimension": {
+          "title": "Asset dimension",
+          "description": "The dimension of the assets that have incurred the cost, from the closed [metric_dimension codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#metric-dimension).",
+          "type": "string",
+          "enum": [
+            "structure",
+            "content",
+            "product",
+            "disruption",
+            "population",
+            "index"
+          ],
+          "codelist": "metric_dimension.csv",
+          "openCodelist": false
+        },
+        "impact_and_losses": {
+          "title": "Impact and losses",
+          "type": "object",
+          "description": "Details of the impact and loss calculations.",
+          "properties": {
+            "impact_type": {
+              "title": "Impact type",
+              "type": "string",
+              "description": "The type of impact calculated, taken from the closed [impact_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#impact-type).",
+              "codelist": "impact_type.csv",
+              "openCodelist": false,
+              "enum": [
+                "direct",
+                "indirect",
+                "total"
+              ]
+            },
+            "impact_modelling": {
+              "title": "Impact modelling",
+              "description": "The type of data used to calculate the impact values, taken from the closed [data_calculation_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#data-calculation-type).",
+              "type": "string",
+              "enum": [
+                "inferred",
+                "observed",
+                "simulated"
+              ],
+              "codelist": "data_calculation_type.csv",
+              "openCodelist": false
+            },
+            "impact_metric": {
+              "title": "Impact metric",
+              "type": "string",
+              "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#impact-metric).",
+              "codelist": "impact_metric.csv",
+              "openCodelist": false,
+              "enum": [
+                "damage_ratio",
+                "mean_damage_ratio",
+                "probability",
+                "damage_index",
+                "mean_loss_ratio",
+                "downtime_vulnerability",
+                "casualty_ratio_vulnerability",
+                "economic_loss_value",
+                "insured_loss_value",
+                "casualty_count",
+                "casualty_ratio_loss",
+                "loss_annual_average_value",
+                "loss_probable_maximum_value",
+                "at_risk_value",
+                "at_risk_tail_value",
+                "downtime_loss",
+                "asset_loss",
+                "displaced_count",
+                "exposure_to_hazard",
+                "risk_index",
+                "loss_ratio_loss",
+                "loss_ratio_vulnerability",
+                "production_loss"
+              ]
+            },
+            "measurement": {
+              "title": "Measurement",
+              "description": "The way in which the impact value is measured.",
+              "$ref": "#/$defs/Measurement"
+            },
+            "loss_type": {
+              "title": "Loss type",
+              "type": "string",
+              "description": "The type of losses, from the closed [loss_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#loss-type).",
+              "codelist": "loss_type.csv",
+              "openCodelist": false,
+              "enum": [
+                "ground_up",
+                "insured",
+                "gross",
+                "count",
+                "net_precat",
+                "net_postcat"
+              ]
+            },
+            "loss_approach": {
+              "title": "Loss approach",
+              "description": "The approach the loss calculation function is based upon, taken from the closed [function_approach codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#function-approach).",
+              "type": "string",
+              "enum": [
+                "analytical",
+                "empirical",
+                "hybrid",
+                "judgement"
+              ],
+              "codelist": "function_approach.csv",
+              "openCodelist": false
+            },
+            "loss_frequency_type": {
+              "title": "Loss frequency type",
+              "description": "The type of occurrence frequency represented in the losses, from the closed [analysis_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#analysis-type).",
+              "type": "string",
+              "enum": [
+                "probabilistic",
+                "deterministic",
+                "empirical"
+              ],
+              "codelist": "analysis_type.csv",
+              "openCodelist": false
+            }
+          },
+          "required": [
+            "impact_type",
+            "impact_modelling",
+            "impact_metric",
+            "measurement",
+            "loss_type",
+            "loss_approach",
+            "loss_frequency_type"
+          ],
+          "minProperties": 1
+        },
+        "description": {
+          "title": "Loss description",
+          "type": "string",
+          "description": "Additional details of the losses.",
+          "minLength": 1,
+          "examples": [
+            "Economic losses from Typhoon Odette affecting residential and commercial buildings in Visayas region",
+            "Structural damage to buildings caused by ground shaking during the M7.2 Bohol earthquake",
+            "Agricultural crop losses due to extended drought conditions in Central Luzon",
+            "Infrastructure damage from landslides triggered by intense rainfall"
+          ]
+        }
+      },
+      "minProperties": 1
+    },
+    "SimpleHazard": {
+      "title": "Hazard",
+      "description": "A phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "type": "string",
+          "description": "The type of the hazard, from the closed [hazard type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists.html#hazard_type).",
+          "codelist": "hazard_type.csv",
+          "openCodelist": false,
+          "enum": [
+            "coastal_flood",
+            "convective_storm",
+            "drought",
+            "extreme_temperature",
+            "flood",
+            "wildfire",
+            "strong_wind",
+            "earthquake",
+            "landslide",
+            "tsunami",
+            "volcanic",
+            "pest_infestation",
+            "sea_level_rise",
+            "erosion",
+            "dust_sand_storm"
+          ]
+        },
+        "process": {
+          "title": "Process",
+          "type": "string",
+          "description": "The process that resulted in the hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists.html#hazard_process_type).",
+          "codelist": "process_type.csv",
+          "openCodelist": false,
+          "enum": [
+            "coastal_flood",
+            "storm_surge",
+            "tornado",
+            "agricultural_drought",
+            "hydrological_drought",
+            "meteorological_drought",
+            "socioeconomic_drought",
+            "rupture",
+            "ground_motion",
+            "liquefaction",
+            "extreme_cold",
+            "extreme_heat",
+            "fluvial_flood",
+            "pluvial_flood",
+            "groundwater_flood",
+            "snow_avalanche",
+            "landslide_general",
+            "landslide_rockslide",
+            "landslide_mudflow",
+            "landslide_rockfall",
+            "tsunami",
+            "ashfall",
+            "volcano_ballistics",
+            "lahar",
+            "lava",
+            "pyroclastic_flow",
+            "volcano_gas_aerosols",
+            "wildfire",
+            "extratropical_cyclone",
+            "tropical_cyclone",
+            "wildfire_smoke",
+            "coastal_erosion",
+            "soil_erosion",
+            "subsidence_uplift",
+            "lightning",
+            "dust_sand_storm",
+            "thunderstorm",
+            "sea_level_rise",
+            "pest",
+            "glacial_lake_outburst",
+            "hail"
+          ]
+        }
+      },
+      "minProperties": 1,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "drought"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "agricultural_drought",
+                  "hydrological_drought",
+                  "meteorological_drought",
+                  "socioeconomic_drought"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "flood"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "fluvial_flood",
+                  "pluvial_flood",
+                  "groundwater_flood",
+                  "coastal_flood",
+                  "glacial_lake_outburst"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "earthquake"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "primary_rupture",
+                  "secondary_rupture",
+                  "ground_motion",
+                  "liquefaction",
+                  "subsidence_uplift"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "extreme_temperature"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "extreme_cold",
+                  "extreme_heat"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "strong_wind"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "extratropical_cyclone",
+                  "tropical_cyclone",
+                  "tornado"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "wildfire"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "wildfire",
+                  "wildfire_smoke"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "landslide"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "snow_avalanche",
+                  "landslide_general",
+                  "landslide_rockslide",
+                  "landslide_mudflow",
+                  "landslide_rockfall"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "tsunami"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "tsunami"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "volcanic"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "ashfall",
+                  "volcano_ballistics",
+                  "lahar",
+                  "lava",
+                  "pyroclastic_flow",
+                  "volcano_gas_aerosols"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "coastal_flood"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "coastal_flood",
+                  "storm_surge"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "convective_storm"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "tornado",
+                  "lightning",
+                  "thunderstorm",
+                  "hail"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dust_sand_storm"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "dust_sand_storm"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "erosion"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "coastal_erosion",
+                  "soil_erosion"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "sea_level_rise"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "sea_level_rise"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "pest_infestation"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "process": {
+                "enum": [
+                  "pest"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Hazard": {
+      "title": "Hazard",
+      "description": "A phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/SimpleHazard"
+        },
+        {
+          "properties": {
+            "intensity_measure": {
+              "title": "Intensity measure",
+              "description": "The metric and unit in which the intensity of this hazard is measured, from the open [intensity measure codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#IMT) for the hazard type.",
+              "type": "string",
+              "codelist": "IMT.csv",
+              "openCodelist": true,
+              "minLength": 1
+            },
+            "classification": {
+              "title": "Classification",
+              "description": "A classification of the hazard type against an external taxonomy such as the UNDRR Hazard Information Profiles.",
+              "$ref": "#/$defs/Classification"
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "earthquake"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_earthquake.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "flood"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_flood.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "tsunami"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_tsunami.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "coastal_flood"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_coastal_flood.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "landslide"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_landslide.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "volcanic"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_volcanic.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "convective_storm"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_convective_storm.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "wildfire"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_wildfire.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "strong_wind"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_strong_wind.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "drought"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_drought.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "extreme_temperature"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_extreme_temperature.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "erosion"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_erosion.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "pest_infestation"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_pest_infestation.csv"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "dust_sand_storm"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "intensity_measure": {
+                "codelist": "imt_dust_sand_storm.csv"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "HazardWithTrigger": {
+      "title": "Hazard",
+      "description": "A phenomenon that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/Hazard"
+        },
+        {
+          "properties": {
+            "trigger": {
+              "title": "Trigger",
+              "description": "The cause of this hazard.",
+              "$ref": "#/$defs/SimpleHazard"
+            }
+          }
+        }
+      ]
+    },
+    "Function": {
+      "title": "Function",
+      "type": "object",
+      "description": "A vulnerability, fragility, damage-to-loss, or engineering-demand function.",
+      "required": [
+        "id",
+        "approach",
+        "relationship"
+      ],
+      "properties": {
+        "id": {
+          "title": "Identifier",
+          "type": "string",
+          "description": "A unique identifier for the function. Use of an HTTP URI is recommended.",
+          "minLength": 1
+        },
+        "approach": {
+          "title": "Approach",
+          "description": "The approach the function is based upon, taken from the closed [function_approach codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#function-approach).",
+          "type": "string",
+          "enum": [
+            "analytical",
+            "empirical",
+            "hybrid",
+            "judgement"
+          ],
+          "codelist": "function_approach.csv",
+          "openCodelist": false
+        },
+        "relationship": {
+          "title": "Impact relationship type",
+          "description": "The type of function relationships used to calculate the impact values, taken from the closed [relationship_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#relationship-type).",
+          "type": "string",
+          "enum": [
+            "math_parametric",
+            "math_bespoke",
+            "discrete"
+          ],
+          "codelist": "relationship_type.csv",
+          "openCodelist": false
+        },
+        "hazard_primary": {
+          "title": "Primary hazard type",
+          "description": "The primary hazard involved in the modelled scenario(s).",
+          "$ref": "#/$defs/Hazard"
+        },
+        "hazard_secondary": {
+          "title": "Secondary hazard type",
+          "description": "The secondary hazard involved in the modelled scenario(s).",
+          "type": "string",
+          "$ref": "#/$defs/Hazard"
+        },
+        "hazard_analysis_type": {
+          "title": "Hazard analysis type",
+          "description": "The type of analysis applied to the hazard data used in the modelled scenario(s), from the closed [analysis type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#analysis_type).",
+          "type": "string",
+          "enum": [
+            "probabilistic",
+            "deterministic",
+            "empirical"
+          ],
+          "codelist": "analysis_type.csv",
+          "openCodelist": false
+        },
+        "category": {
+          "title": "Exposure category",
+          "description": "The category of the exposed assets, from the closed [exposure_category codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#exposure-category).",
+          "type": "string",
+          "enum": [
+            "agriculture",
+            "buildings",
+            "infrastructure",
+            "population",
+            "natural_environment",
+            "economic_indicator",
+            "development_index"
+          ],
+          "codelist": "exposure_category.csv",
+          "openCodelist": false
+        },
+        "impact_type": {
+          "title": "Impact type",
+          "type": "string",
+          "description": "The type of impact calculated, taken from the closed [impact_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#impact-type).",
+          "codelist": "impact_type.csv",
+          "openCodelist": false,
+          "enum": [
+            "direct",
+            "indirect",
+            "total"
+          ]
+        },
+        "impact_modelling": {
+          "title": "Impact modelling",
+          "description": "The type of data used to calculate the impact values, taken from the closed [data_calculation_type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#data-calculation-type).",
+          "type": "string",
+          "enum": [
+            "inferred",
+            "observed",
+            "simulated"
+          ],
+          "codelist": "data_calculation_type.csv",
+          "openCodelist": false
+        },
+        "impact_metric": {
+          "title": "Impact metric",
+          "type": "string",
+          "description": "The metric used to describe the impact, taken from the open [impact_metric codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#impact-metric).",
+          "codelist": "impact_metric.csv",
+          "openCodelist": true,
+          "minLength": 1
+        },
+        "impact_measurement": {
+          "title": "Impact measurement",
+          "description": "How the impact is measured.",
+          "$ref": "#/$defs/Measurement"
+        },
+        "taxonomy": {
+          "title": "Exposure taxonomy scheme",
+          "description": "The name of the taxonomy scheme used to create descriptive individual asset feature strings within the dataset, from the open [classification_scheme codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#classification-scheme). Use of GED4ALL is recommended.",
+          "type": "string",
+          "codelist": "classification_scheme.csv",
+          "openCodelist": true
+        },
+        "analysis_details": {
+          "title": "Analysis details",
+          "type": "string",
+          "description": "Additional details about the analysis used to produce the function used in the modelled scenario(s).",
+          "minLength": 1
+        }
+      }
+    },
+    "Damage_scale_states_names": {
+      "title": "Damage scale and states",
+      "type": "object",
+      "description": "The damage scale and states used in a fragility, damage-to-loss, or engineering-demand function.",
+      "properties": {
+        "damage_scale_name": {
+          "title": "Damage scale name",
+          "type": "string",
+          "description": "The name of the damage scale used in the function, taken from the open [damage_scale_name codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#damage-scale-name).",
+          "codelist": "damage_scale_name.csv",
+          "openCodelist": true,
+          "minLength": 1
+        },
+        "damage_states_names": {
+          "title": "Damage states names",
+          "type": "array",
+          "description": "The names of the damage states listed in the function.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    },
+    "Engineering_demand_parameter": {
+      "title": "Engineering demand parameter",
+      "type": "object",
+      "description": "The engineering demand parameter used in an engineering-demand function.",
+      "properties": {
+        "parameter": {
+          "title": "Engineering demand parameter",
+          "type": "string",
+          "description": "The name of the engineering demand parameter, taken from the open [engineering_demand_parameter codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#engineering-demand-parameter).",
+          "codelist": "engineering_demand_parameter.csv",
+          "openCodelist": true,
+          "minLength": 1
+        }
+      }
+    },
+    "SocioEconomicIndex": {
+      "title": "Socio-economic Indicator",
+      "type": "object",
+      "description": "A socio-economic indicator or index used to characterize vulnerability.",
+      "required": [
+        "id",
+        "indicator_name",
+        "indicator_code",
+        "description",
+        "reference_year"
+      ],
+      "properties": {
+        "id": {
+          "title": "Socio-economic indicator identifier",
+          "type": "string",
+          "description": "A locally unique identifier for this socio-economic indicator",
+          "minLength": 1
+        },
+        "scheme": {
+          "title": "Classification scheme",
+          "description": "The classification scheme or framework from which the indicator is taken, from the open [classification_scheme codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#classification-scheme).",
+          "type": "string",
+          "codelist": "classification_scheme.csv",
+          "openCodelist": true,
+          "minLength": 1
+        },
+        "indicator_name": {
+          "title": "Indicator name",
+          "description": "The name of the specific indicator or index used to characterize vulnerability.",
+          "type": "string",
+          "minLength": 1
+        },
+        "indicator_code": {
+          "title": "Indicator code",
+          "description": "The code or identifier for the indicator within the scheme.",
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "title": "Description",
+          "description": "Description of what this indicator measures and how it relates to vulnerability to the hazard.",
+          "type": "string",
+          "minLength": 1
+        },
+        "threshold": {
+          "title": "Threshold or value",
+          "description": "Specific threshold or value range used to define vulnerability level (if applicable).",
+          "type": "string"
+        },
+        "reference_year": {
+          "title": "Reference year",
+          "description": "The year the indicator data applies to.",
+          "type": "integer",
+          "minimum": 1900,
+          "maximum": 2100
+        },
+        "uri": {
+          "title": "URI",
+          "description": "A URI to the indicator definition or data source.",
+          "type": "string",
+          "format": "iri"
+        },
+        "analysis_details": {
+          "title": "Analysis details",
+          "type": "string",
+          "description": "Additional details about the analysis used to produce the vulnerability function used in the modelled scenario(s).",
+          "minLength": 1
+        }
+      },
+      "minProperties": 1
+    },
+    "Measurement": {
+      "title": "Measurement",
+      "description": "How something is measured.",
+      "type": "object",
+      "properties": {
+        "quantity_kind": {
+          "title": "Quantity kind",
+          "type": "string",
+          "description": "The kind of quantity by which it is quantified, from the open [quantity_kind codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#quantity-kind).",
+          "codelist": "quantity_kind.csv",
+          "openCodelist": true,
+          "minLength": 1
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string",
+          "description": "The unit by which it is measured, taken from the unit [codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists) for the quantity kind.",
+          "minLength": 1
+        }
+      },
+      "minProperties": 1,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "area"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_area.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "count"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_count.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "currency"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_currency.csv",
+                "openCodelist": false,
+                "enum": [
+                  "ADP",
+                  "AED",
+                  "AFA",
+                  "AFN",
+                  "ALK",
+                  "ALL",
+                  "AMD",
+                  "ANG",
+                  "AOA",
+                  "AOK",
+                  "AON",
+                  "AOR",
+                  "ARA",
+                  "ARP",
+                  "ARS",
+                  "ARY",
+                  "ATS",
+                  "AUD",
+                  "AWG",
+                  "AYM",
+                  "AZM",
+                  "AZN",
+                  "BAD",
+                  "BAM",
+                  "BBD",
+                  "BDT",
+                  "BEC",
+                  "BEF",
+                  "BEL",
+                  "BGJ",
+                  "BGK",
+                  "BGL",
+                  "BGN",
+                  "BHD",
+                  "BIF",
+                  "BMD",
+                  "BND",
+                  "BOB",
+                  "BOP",
+                  "BOV",
+                  "BRB",
+                  "BRC",
+                  "BRE",
+                  "BRL",
+                  "BRN",
+                  "BRR",
+                  "BSD",
+                  "BTN",
+                  "BUK",
+                  "BWP",
+                  "BYB",
+                  "BYN",
+                  "BYR",
+                  "BZD",
+                  "CAD",
+                  "CDF",
+                  "CHC",
+                  "CHE",
+                  "CHF",
+                  "CHW",
+                  "CLF",
+                  "CLP",
+                  "CNY",
+                  "COP",
+                  "COU",
+                  "CRC",
+                  "CSD",
+                  "CSJ",
+                  "CSK",
+                  "CUC",
+                  "CUP",
+                  "CVE",
+                  "CYP",
+                  "CZK",
+                  "DDM",
+                  "DEM",
+                  "DJF",
+                  "DKK",
+                  "DOP",
+                  "DZD",
+                  "ECS",
+                  "ECV",
+                  "EEK",
+                  "EGP",
+                  "ERN",
+                  "ESA",
+                  "ESB",
+                  "ESP",
+                  "ETB",
+                  "EUR",
+                  "FIM",
+                  "FJD",
+                  "FKP",
+                  "FRF",
+                  "GBP",
+                  "GEK",
+                  "GEL",
+                  "GHC",
+                  "GHP",
+                  "GHS",
+                  "GIP",
+                  "GMD",
+                  "GNE",
+                  "GNF",
+                  "GNS",
+                  "GQE",
+                  "GRD",
+                  "GTQ",
+                  "GWE",
+                  "GWP",
+                  "GYD",
+                  "HKD",
+                  "HNL",
+                  "HRD",
+                  "HRK",
+                  "HTG",
+                  "HUF",
+                  "IDR",
+                  "IEP",
+                  "ILP",
+                  "ILR",
+                  "ILS",
+                  "INR",
+                  "IQD",
+                  "IRR",
+                  "ISJ",
+                  "ISK",
+                  "ITL",
+                  "JMD",
+                  "JOD",
+                  "JPY",
+                  "KES",
+                  "KGS",
+                  "KHR",
+                  "KMF",
+                  "KPW",
+                  "KRW",
+                  "KWD",
+                  "KYD",
+                  "KZT",
+                  "LAJ",
+                  "LAK",
+                  "LBP",
+                  "LKR",
+                  "LRD",
+                  "LSL",
+                  "LSM",
+                  "LTL",
+                  "LTT",
+                  "LUC",
+                  "LUF",
+                  "LUL",
+                  "LVL",
+                  "LVR",
+                  "LYD",
+                  "MAD",
+                  "MDL",
+                  "MGA",
+                  "MGF",
+                  "MKD",
+                  "MLF",
+                  "MMK",
+                  "MNT",
+                  "MOP",
+                  "MRO",
+                  "MRU",
+                  "MTL",
+                  "MTP",
+                  "MUR",
+                  "MVQ",
+                  "MVR",
+                  "MWK",
+                  "MXN",
+                  "MXP",
+                  "MXV",
+                  "MYR",
+                  "MZE",
+                  "MZM",
+                  "MZN",
+                  "NAD",
+                  "NGN",
+                  "NIC",
+                  "NIO",
+                  "NLG",
+                  "NOK",
+                  "NPR",
+                  "NZD",
+                  "OMR",
+                  "PAB",
+                  "PEH",
+                  "PEI",
+                  "PEN",
+                  "PES",
+                  "PGK",
+                  "PHP",
+                  "PKR",
+                  "PLN",
+                  "PLZ",
+                  "PTE",
+                  "PYG",
+                  "QAR",
+                  "RHD",
+                  "ROK",
+                  "ROL",
+                  "RON",
+                  "RSD",
+                  "RUB",
+                  "RUR",
+                  "RWF",
+                  "SAR",
+                  "SBD",
+                  "SCR",
+                  "SDD",
+                  "SDG",
+                  "SDP",
+                  "SEK",
+                  "SGD",
+                  "SHP",
+                  "SIT",
+                  "SKK",
+                  "SLL",
+                  "SOS",
+                  "SRD",
+                  "SRG",
+                  "SSP",
+                  "STD",
+                  "STN",
+                  "SUR",
+                  "SVC",
+                  "SYP",
+                  "SZL",
+                  "THB",
+                  "TJR",
+                  "TJS",
+                  "TMM",
+                  "TMT",
+                  "TND",
+                  "TOP",
+                  "TPE",
+                  "TRL",
+                  "TRY",
+                  "TTD",
+                  "TWD",
+                  "TZS",
+                  "UAH",
+                  "UAK",
+                  "UGS",
+                  "UGW",
+                  "UGX",
+                  "USD",
+                  "USN",
+                  "USS",
+                  "UYI",
+                  "UYN",
+                  "UYP",
+                  "UYU",
+                  "UYW",
+                  "UZS",
+                  "VEB",
+                  "VEF",
+                  "VES",
+                  "VNC",
+                  "VND",
+                  "VUV",
+                  "WST",
+                  "XAF",
+                  "XAG",
+                  "XAU",
+                  "XBA",
+                  "XBB",
+                  "XBC",
+                  "XBD",
+                  "XCD",
+                  "XDR",
+                  "XEU",
+                  "XFO",
+                  "XFU",
+                  "XOF",
+                  "XPD",
+                  "XPF",
+                  "XPT",
+                  "XRE",
+                  "XSU",
+                  "XTS",
+                  "XUA",
+                  "XXX",
+                  "YDD",
+                  "YER",
+                  "YUD",
+                  "YUM",
+                  "YUN",
+                  "ZAL",
+                  "ZAR",
+                  "ZMK",
+                  "ZMW",
+                  "ZRN",
+                  "ZRZ",
+                  "ZWC",
+                  "ZWD",
+                  "ZWL",
+                  "ZWN",
+                  "ZWR"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "dimensionless_ratio"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_dimensionless_ratio.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "length"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_length.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "mass"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_mass.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "mass_per_area"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_mass_per_area.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "time"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_time.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "volume"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_volume.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "quantity_kind": {
+                "const": "energy"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": {
+                "codelist": "unit_energy.csv",
+                "openCodelist": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Exposure_item": {
+      "title": "Exposure item",
+      "type": "object",
+      "description": "Information about a specific category of exposed assets.",
+      "required": [
+        "id",
+        "category",
+        "metrics"
+      ],
+      "properties": {
+        "id": {
+          "title": "Exposure item identifier",
+          "type": "string",
+          "description": "A locally unique identifier for this exposure item.",
+          "minLength": 1
+        },
+        "category": {
+          "title": "Exposure category",
+          "description": "The category of the exposed assets, from the closed [exposure_category codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#exposure-category).",
+          "type": "string",
+          "codelist": "exposure_category.csv",
+          "openCodelist": false,
+          "enum": [
+            "agriculture",
+            "buildings",
+            "infrastructure",
+            "population",
+            "natural_environment",
+            "economic_indicator",
+            "development_index"
+          ]
+        },
+        "asset_type": {
+          "title": "Asset type",
+          "description": "The type of asset",
+          "$ref": "#/$defs/Classification"
+        },
+        "metrics": {
+          "title": "Exposure metrics",
+          "type": "array",
+          "description": "The measurements used to quantify the extent to which assets are exposed.",
+          "items": {
+            "$ref": "#/$defs/Metric"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "minProperties": 1
+    }
+  },
+  "minProperties": 1
+}
