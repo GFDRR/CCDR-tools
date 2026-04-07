@@ -641,7 +641,7 @@
     <script>
         // RDLS Schema Configuration
         const RDLS_VERSIONS = {
-            '1.0': 'rdls_schema.json'
+            '1.0': 'rdls_schema_v1.json'
         };
 
         const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
@@ -946,25 +946,31 @@
 
         // Dependency configuration - centralized
         const FIELD_DEPENDENCIES = {
-            'vulnerability.hazard_process_primary': 'vulnerability.hazard_primary',
-            'vulnerability.hazard_process_secondary': 'vulnerability.hazard_secondary',
-            // v1.0: loss.hazard is now a HazardWithTrigger object, not separate string fields
-            // Removed: 'loss.hazard_process': 'loss.hazard_type' (no longer exists)
+            // v1.0: hazard_primary/hazard_secondary are now Hazard objects (not strings)
+            // So process and intensity_measure are nested within these objects
+            'hazard_primary.process': 'hazard_primary.type',
+            'hazard_primary.intensity_measure': 'hazard_primary.type',
+            'hazard_secondary.process': 'hazard_secondary.type',
+            'hazard_secondary.intensity_measure': 'hazard_secondary.type',
+
+            // v1.0: loss.hazard is now a HazardWithTrigger object (which extends Hazard)
+            'hazard.process': 'hazard.type',
+            'hazard.intensity_measure': 'hazard.type',
+
+            // Currency dependencies
             'loss.impact_and_losses.currency': 'loss.impact_and_losses.impact_unit',
             'loss.losses.impact_and_losses.currency': 'loss.losses.impact_and_losses.impact_unit',
+
+            // Hazard section (hazards array)
             'hazards.hazard_process': 'hazards.type',
-            'hazards.process': 'hazards.type', // v1.0: process field (renamed from hazard_process)
+            'hazards.process': 'hazards.type',
             'hazards.intensity_measure': 'hazards.type',
-            'vulnerability.intensity_measure': 'vulnerability.hazard_primary',
-            // Modal and inline context dependencies (without path prefix)
-            'intensity_measure': 'type', // For hazards array items (inline context)
-            'hazard.intensity_measure': 'hazard.type', // For loss.losses array items - hazard object
-            'process': 'type', // v1.0: process depends on type (inline context)
-            'hazard_process_primary': 'hazard_primary',
-            'hazard_process_secondary': 'hazard_secondary',
-            // v1.0: Measurement object has NO currency field - when quantity_kind="currency", unit field shows currency codes
-            // Old v0.3 dependencies removed: 'currency': 'quantity_kind', 'exposure.currency', etc.
-            // v1.0: unit field depends on quantity_kind (in Measurement object)
+
+            // Modal and inline context dependencies (without full path prefix)
+            'intensity_measure': 'type', // For inline/modal hazard objects
+            'process': 'type', // For inline/modal hazard objects
+
+            // v1.0: Measurement object - unit field depends on quantity_kind
             'unit': 'quantity_kind',
             'measurement.unit': 'measurement.quantity_kind'
         };
@@ -987,6 +993,115 @@
         };
 
         // ================================
+        // SCHEMA REFERENCE RESOLUTION
+        // ================================
+
+        /**
+         * Resolve $ref pointers in schema
+         * @param {string} ref - Reference string like "#/$defs/codelist_country"
+         * @param {object} schema - Full schema object
+         * @returns {object} - Resolved schema fragment
+         */
+        function resolveSchemaRef(ref, schema) {
+            if (!ref || !ref.startsWith('#/')) {
+                return null;
+            }
+
+            const path = ref.substring(2).split('/'); // Remove '#/' and split
+            let current = schema;
+
+            for (const segment of path) {
+                if (!current || !current[segment]) {
+                    console.warn(`Cannot resolve $ref: ${ref}`);
+                    return null;
+                }
+                current = current[segment];
+            }
+
+            return current;
+        }
+
+        /**
+         * Get enum values from a property, resolving $ref if needed
+         * @param {object} property - Property schema
+         * @param {object} schema - Full schema object
+         * @returns {array} - Enum values or null
+         */
+        function getEnumValues(property, schema) {
+            if (!property || !schema) {
+                return null;
+            }
+
+            // Direct enum
+            if (property.enum) {
+                return property.enum;
+            }
+
+            // Enum in items (for arrays)
+            if (property.items && property.items.enum) {
+                return property.items.enum;
+            }
+
+            // Resolve $ref
+            if (property.$ref) {
+                const resolved = resolveSchemaRef(property.$ref, schema);
+                if (resolved && resolved.enum) {
+                    return resolved.enum;
+                }
+            }
+
+            // Resolve $ref in items
+            if (property.items && property.items.$ref) {
+                const resolved = resolveSchemaRef(property.items.$ref, schema);
+                if (resolved && resolved.enum) {
+                    return resolved.enum;
+                }
+            }
+
+            return null;
+        }
+
+        /**
+         * Get codelist metadata from a property
+         * @param {object} property - Property schema
+         * @param {object} schema - Full schema object
+         * @returns {object} - Object with enum, titles, and descriptions or null
+         */
+        function getCodelistMetadata(property, schema) {
+            if (!property || !schema) {
+                return null;
+            }
+
+            let codelistDef = null;
+
+            // Resolve $ref
+            if (property.$ref) {
+                codelistDef = resolveSchemaRef(property.$ref, schema);
+            } else if (property.items && property.items.$ref) {
+                codelistDef = resolveSchemaRef(property.items.$ref, schema);
+            }
+
+            if (codelistDef && codelistDef.enum) {
+                return {
+                    enum: codelistDef.enum,
+                    titles: codelistDef.enumTitles || codelistDef.enum,
+                    descriptions: codelistDef.enumDescriptions || []
+                };
+            }
+
+            // Fallback to direct enum
+            if (property.enum) {
+                return {
+                    enum: property.enum,
+                    titles: property.enumTitles || property.enum,
+                    descriptions: property.enumDescriptions || []
+                };
+            }
+
+            return null;
+        }
+
+        // ================================
         // UNIFIED FIELD CREATION SYSTEM
         // ================================
         
@@ -995,11 +1110,12 @@
          * Handles all field creation needs across normal, modal, and array contexts
          */
         class FieldCreationContext {
-            constructor(type = 'normal', container = null, itemData = null) {
+            constructor(type = 'normal', container = null, itemData = null, arrayName = null) {
                 this.type = type; // 'normal', 'modal', 'inline', 'array'
                 this.container = container;
                 this.idPrefix = type === 'modal' ? 'modal_' : '';
                 this.itemData = itemData; // For inline context, stores the item being edited
+                this.arrayName = arrayName; // For inline context, stores the array name (e.g., 'hazards', 'losses')
             }
 
             createField(name, property, value, options = {}) {
@@ -1038,9 +1154,22 @@
                     return document.createElement('div');
                 }
 
-                // Skip trigger fields in hazard modal context - they're not needed for basic hazard entry
-                if (this.context.type === 'modal' && name.includes('trigger')) {
-                    return document.createElement('div');
+                // Skip trigger fields in loss/event/vulnerability contexts to avoid confusing nested UI
+                // But ALLOW trigger in hazards array where it's meaningful for cascading hazards
+                if (name.includes('trigger')) {
+                    // For inline context, check the array name to determine if trigger should be shown
+                    if (this.context.type === 'inline' && this.context.arrayName) {
+                        // Only show trigger in hazards array (event_sets.hazards)
+                        // Hide in losses, vulnerability, events arrays where it causes nested duplication
+                        const isHazardsArray = this.context.arrayName === 'hazards' || this.context.arrayName === 'event_sets.hazards';
+                        if (!isHazardsArray) {
+                            return document.createElement('div');
+                        }
+                        // For hazards array, allow trigger field to be shown
+                    } else if (name.includes('losses.') || name.includes('hazard.')) {
+                        // For non-inline contexts (normal form), check field path
+                        return document.createElement('div');
+                    }
                 }
 
                 const container = this.createFieldContainer(name, property, options);
@@ -1053,8 +1182,11 @@
 
                 // Create label and description if not an object property
                 const forceLabel = false;
+                const isClassificationField = name.endsWith('.classification') || name === 'classification';
+                const isAssetTypeField = name.endsWith('.asset_type') || name === 'asset_type';
                 const isObjectProperty = resolvedProperty.type === 'object' && this.context.type !== 'modal' && this.context.type !== 'inline' && !name.includes('trigger') && !forceLabel;
-                const shouldShowLabel = !isObjectProperty && !(options && options.hideLabel);
+                // Skip label/description for classification and asset_type fields - they have their own collapsible header
+                const shouldShowLabel = !isObjectProperty && !isClassificationField && !isAssetTypeField && !(options && options.hideLabel);
                 if (shouldShowLabel) {
                     this.addLabelAndDescription(container, name, resolvedProperty, options);
                 }
@@ -1128,7 +1260,15 @@
 
             addLabelAndDescription(container, name, property, options) {
                 const label = document.createElement('label');
-                label.textContent = property.title || name.split('.').pop();
+                // Special handling for trigger field in hazards array - label as "Hazard trigger"
+                const fieldBaseName = name.split('.').pop();
+                // Convert snake_case to Title Case if no title provided
+                const fallbackTitle = fieldBaseName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                let labelText = property.title || fallbackTitle;
+                if (fieldBaseName === 'trigger' && this.context.type === 'inline' && this.context.arrayName === 'hazards') {
+                    labelText = 'Hazard trigger';
+                }
+                label.textContent = labelText;
                 label.className = 'form-label';
                 label.htmlFor = this.context.getFieldId(name);
                 
@@ -1165,6 +1305,9 @@
             }
 
             createStringInput(name, property, value, options) {
+                console.log(`[CREATE STRING] Creating string input for: ${name}, context: ${this.context.type}`);
+                console.log(`[CREATE STRING]   has enum:`, !!getEnumValues(property, currentSchema));
+
                 // Special handling for currency fields - ensure they have enum options
                 if (name.includes('currency') || name === 'currency') {
                     if (!property.enum) {
@@ -1174,14 +1317,29 @@
 
                 // v1.0: Check for conditional codelists FIRST (before dependency check)
                 // Fields like 'unit' have conditional codelists and should be comboboxes, not dependent selects
-                if (this.hasConditionalCodelist(name)) {
+                const hasConditionalCodelist = this.hasConditionalCodelist(name);
+                console.log(`[CREATE STRING]   hasConditionalCodelist(${name}):`, hasConditionalCodelist);
+                if (hasConditionalCodelist) {
+                    console.log(`[CREATE STRING]   has conditional codelist, creating combobox`);
                     const enhancedProperty = { ...property, codelist: 'placeholder', openCodelist: true };
                     return this.createCombobox(name, enhancedProperty, value, options);
                 }
 
-                // Check for dependencies (but only for fields that DON'T have conditional codelists)
+                // v1.0: Check for open codelists BEFORE checking dependencies
+                // Fields like 'intensity_measure' have open codelists AND dependencies
+                // They should be comboboxes (with filtered options), not dependent selects
+                if (property.codelist && property.openCodelist) {
+                    console.log(`[CREATE STRING]   has open codelist, creating combobox (will be filtered by dependency if needed)`);
+                    // Open codelist fields get combobox with async loading
+                    // The dependency filtering will happen via loadCodelistForField
+                    return this.createCombobox(name, property, value, options);
+                }
+
+                // Check for dependencies (but only for fields that DON'T have open codelists)
                 const dependsOn = FIELD_DEPENDENCIES[name];
+                console.log(`[CREATE STRING]   checking FIELD_DEPENDENCIES['${name}']:`, dependsOn);
                 if (dependsOn) {
+                    console.log(`[CREATE STRING]   has dependency on: ${dependsOn}, creating dependent select`);
                     // For inline context, get parent value from itemData; otherwise from currentFormData
                     let parentValue;
                     if (this.context.type === 'inline' && this.context.itemData) {
@@ -1192,11 +1350,11 @@
                     return this.createDependentSelect(name, property, value, dependsOn, parentValue, options);
                 }
 
-                if (property.enum) {
+                // Check for enum (handles both direct enum and $ref)
+                const enumValues = getEnumValues(property, currentSchema);
+                if (enumValues) {
+                    console.log(`[CREATE STRING]   creating select with ${enumValues.length} enum values`);
                     return this.createSelect(name, property, value, options);
-                } else if (property.codelist && property.openCodelist) {
-                    // Open codelist fields get combobox with async loading
-                    return this.createCombobox(name, property, value, options);
                 } else if (property.suggestions && property.openCodelist) {
                     // Legacy: suggestions-based combobox
                     return this.createCombobox(name, property, value, options);
@@ -1437,10 +1595,17 @@
                 emptyOption.value = '';
                 emptyOption.textContent = 'Select an option...';
                 select.appendChild(emptyOption);
-                
+
+                // Get enum values (handles both direct enum and $ref)
+                const enumValues = getEnumValues(property, currentSchema);
+                if (!enumValues) {
+                    console.warn(`No enum values found for field: ${name}`);
+                    return select;
+                }
+
                 // Handle country dropdowns
                 if (name.includes('countries') || (property.items && property.items.enum && property.items.enum.includes('USA'))) {
-                    property.enum.forEach((option) => {
+                    enumValues.forEach((option) => {
                         const optionElement = document.createElement('option');
                         optionElement.value = option;
                         const countryName = countryNames[option] || option;
@@ -1449,7 +1614,7 @@
                         select.appendChild(optionElement);
                     });
                 } else {
-                    property.enum.forEach((option, index) => {
+                    enumValues.forEach((option, index) => {
                         const optionElement = document.createElement('option');
                         optionElement.value = option;
                         // Use enumNames if available, otherwise check if option contains parentheses (e.g., "CSV (csv)")
@@ -1491,8 +1656,8 @@
                 emptyOption.textContent = 'Select an option...';
                 select.appendChild(emptyOption);
 
-                // Start with all available options
-                let availableOptions = property.enum || [];
+                // Start with all available options (handles $ref resolution)
+                let availableOptions = getEnumValues(property, currentSchema) || [];
 
                 // v1.0: Filter options based on parent value using conditional schema rules
                 if (parentValue) {
@@ -1518,8 +1683,9 @@
                         }
 
                         // If still no options found, use the default enum from property
-                        if (availableOptions.length === 0 || availableOptions === property.enum) {
-                            availableOptions = property.enum || [];
+                        const defaultEnum = getEnumValues(property, currentSchema) || [];
+                        if (availableOptions.length === 0 || JSON.stringify(availableOptions) === JSON.stringify(defaultEnum)) {
+                            availableOptions = defaultEnum;
                         }
                     } else if (name.includes('intensity_measure')) {
                         // intensity_measure uses open codelist, handled by combobox not dependent select
@@ -1937,10 +2103,15 @@
                     itemsContainer.innerHTML = '';
 
                     // Check if items are objects (handles $ref, type: 'object', or allOf with object schemas)
-                    const isObjectArray = property.items && (
-                        property.items.$ref ||
-                        property.items.type === 'object' ||
-                        (property.items.allOf && property.items.allOf.some(schema =>
+                    // Need to resolve $ref first to check the actual type
+                    let resolvedItems = property.items;
+                    if (resolvedItems && resolvedItems.$ref) {
+                        resolvedItems = resolveReference(resolvedItems.$ref);
+                    }
+
+                    const isObjectArray = resolvedItems && (
+                        resolvedItems.type === 'object' ||
+                        (resolvedItems.allOf && resolvedItems.allOf.some(schema =>
                             schema.type === 'object' || schema.$ref
                         ))
                     );
@@ -1972,7 +2143,11 @@
                             if (!itemSchema && property.$ref) {
                                 itemSchema = resolveReference(property.$ref);
                             }
-                            
+                            // If itemSchema has a $ref, resolve it (e.g., countries -> codelist_country)
+                            if (itemSchema && itemSchema.$ref) {
+                                itemSchema = resolveReference(itemSchema.$ref);
+                            }
+
                             if (itemSchema && itemSchema.type === 'string') {
                                 if (itemSchema.enum) {
                                     input = document.createElement('select');
@@ -2085,10 +2260,15 @@
                 addBtn.textContent = `+ Add ${property.title || name}`;
                 addBtn.addEventListener('click', () => {
                     // Check if items are objects (handles $ref, type: 'object', or allOf with object schemas)
-                    const isObjectArray = property.items && (
-                        property.items.$ref ||
-                        property.items.type === 'object' ||
-                        (property.items.allOf && property.items.allOf.some(schema =>
+                    // Need to resolve $ref first to check the actual type
+                    let resolvedItems = property.items;
+                    if (resolvedItems && resolvedItems.$ref) {
+                        resolvedItems = resolveReference(resolvedItems.$ref);
+                    }
+
+                    const isObjectArray = resolvedItems && (
+                        resolvedItems.type === 'object' ||
+                        (resolvedItems.allOf && resolvedItems.allOf.some(schema =>
                             schema.type === 'object' || schema.$ref
                         ))
                     );
@@ -2120,7 +2300,7 @@
                         } else {
                             openObjectEditor(name, arrayData.length, property.items, arrayData, renderArrayItems);
                         }
-                    } else if (property.items.type === 'string') {
+                    } else if (resolvedItems && resolvedItems.type === 'string') {
                         arrayData.push('');
                         renderArrayItems();
                         if (this.context.type === 'normal') {
@@ -2184,7 +2364,33 @@
 
                 // Create inline fields for properties
                 if (itemSchema && itemSchema.properties) {
-                    Object.entries(itemSchema.properties).forEach(([key, prop]) => {
+                    // Sort properties for better UI ordering
+                    const propertyEntries = Object.entries(itemSchema.properties);
+                    const requiredFields = itemSchema.required || [];
+
+                    // Define preferred ordering for hazard-type objects
+                    const hazardFieldOrder = ['id', 'type', 'process', 'intensity_measure', 'classification', 'trigger'];
+
+                    propertyEntries.sort(([keyA], [keyB]) => {
+                        // Check if this looks like a hazard object (has type, process, intensity_measure)
+                        const hasHazardFields = propertyEntries.some(([k]) => k === 'type') &&
+                                              propertyEntries.some(([k]) => k === 'intensity_measure');
+
+                        if (hasHazardFields && hazardFieldOrder.includes(keyA) && hazardFieldOrder.includes(keyB)) {
+                            return hazardFieldOrder.indexOf(keyA) - hazardFieldOrder.indexOf(keyB);
+                        }
+
+                        // Otherwise, required fields first
+                        const aRequired = requiredFields.includes(keyA);
+                        const bRequired = requiredFields.includes(keyB);
+                        if (aRequired && !bRequired) return -1;
+                        if (!aRequired && bRequired) return 1;
+
+                        // Keep original order for other fields
+                        return 0;
+                    });
+
+                    propertyEntries.forEach(([key, prop]) => {
                         if (key === 'id') return; // Skip ID field
 
                         const fieldDiv = document.createElement('div');
@@ -2192,15 +2398,20 @@
                         fieldDiv.setAttribute('data-field-name', key);
 
                         // Resolve $ref if present to get the full property schema
+                        // Preserve original title and description when resolving
                         let resolvedProp = prop;
                         if (prop.$ref) {
-                            resolvedProp = resolveReference(prop.$ref);
+                            const resolved = resolveReference(prop.$ref);
+                            if (resolved) {
+                                resolvedProp = { ...resolved, title: prop.title || resolved.title, description: prop.description || resolved.description };
+                            }
                         }
 
                         // Create a sub-context for inline editing
                         // Don't use ID/name attributes to avoid polluting FormData
                         // Pass item data so dependent fields can look up parent values
-                        const inlineContext = new FieldCreationContext('inline', fieldDiv, item);
+                        // Pass array name to help with context-specific field handling (e.g., trigger visibility)
+                        const inlineContext = new FieldCreationContext('inline', fieldDiv, item, arrayName);
                         // Use resolvedProp instead of prop to ensure nested object schemas are fully expanded
                         const fieldElement = inlineContext.createField(key, resolvedProp, item[key]);
 
@@ -2347,7 +2558,7 @@
 
                             // Create context - don't use ID/name to avoid polluting FormData
                             // Pass item data so dependent fields can look up parent values
-                            const currencyContext = new FieldCreationContext('inline', currencyDiv, item);
+                            const currencyContext = new FieldCreationContext('inline', currencyDiv, item, arrayName);
                             console.log(`[CURRENCY FIELD] Created context with type: ${currencyContext.type}`);
                             const savedCurrencyValue = item['currency'];
                             console.log(`[CURRENCY FIELD] Creating currency field for ${arrayName}[${index}], savedValue: "${savedCurrencyValue}"`);
@@ -2504,31 +2715,155 @@
             }
 
             createObjectInput(name, property, value, options) {
+                console.log(`[CREATE OBJECT] Creating object input for: ${name}`);
+                console.log(`[CREATE OBJECT]   property has $ref:`, !!property.$ref);
+                console.log(`[CREATE OBJECT]   property.properties:`, property.properties ? Object.keys(property.properties) : 'undefined');
+
                 const container = document.createElement('div');
                 container.className = 'object-field';
 
+                // Resolve $ref if the property itself is a reference (e.g., hazard_primary -> Hazard)
+                let resolvedProperty = property;
+                if (property.$ref) {
+                    console.log(`[CREATE OBJECT] Resolving $ref: ${property.$ref}`);
+                    resolvedProperty = resolveReference(property.$ref);
+                    if (!resolvedProperty) {
+                        console.warn(`Could not resolve $ref for ${name}:`, property.$ref);
+                        return container;
+                    }
+                    console.log(`[CREATE OBJECT]   resolved.properties:`, resolvedProperty.properties ? Object.keys(resolvedProperty.properties) : 'undefined');
+                    // Keep original title and description if present
+                    if (property.title) resolvedProperty.title = property.title;
+                    if (property.description) resolvedProperty.description = property.description;
+                } else {
+                    console.log(`[CREATE OBJECT] No $ref to resolve, using property directly`);
+                }
+
                 const isDirectFormProperty = !name.includes('.') || name.split('.').length <= 2;
                 const isSpatialField = name === 'spatial';
-                const isClassificationField = name.endsWith('.se_indicator') || name === 'se_indicator';
+                const isTemporalField = name === 'temporal';
+                const isLineageField = name === 'lineage';
+                const isClassificationField = name.endsWith('.classification') || name === 'classification';
+                const isAssetTypeField = name.endsWith('.asset_type') || name === 'asset_type';
+                const isCollapsibleField = isClassificationField || isAssetTypeField;
 
-                // Always show title for spatial field, classification fields, or for nested objects
-                if (!isDirectFormProperty || isSpatialField || isClassificationField) {
+                // Always show title for spatial field, temporal field, lineage field, classification fields, asset_type, or for nested objects
+                if (!isDirectFormProperty || isSpatialField || isTemporalField || isLineageField || isCollapsibleField) {
                     const title = document.createElement('h6');
-                    title.textContent = property.title || name;
+                    // Special handling for trigger field in hazards array - label as "Hazard trigger"
+                    const fieldBaseName = name.split('.').pop();
+                    // Convert snake_case to Title Case if no title provided
+                    const fallbackTitle = fieldBaseName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    let titleText = resolvedProperty.title || property.title || fallbackTitle;
+                    if (fieldBaseName === 'trigger' && this.context.type === 'inline' && this.context.arrayName === 'hazards') {
+                        titleText = 'Hazard trigger';
+                    }
+                    title.textContent = titleText;
                     title.className = 'mb-3';
 
-                    // Add some styling for main spatial section
-                    if (isSpatialField) {
+                    // Add some styling for main spatial, temporal, and lineage sections
+                    if (isSpatialField || isTemporalField || isLineageField) {
                         title.className = 'mb-3 mt-3';
                         title.style.borderBottom = '1px solid #dee2e6';
                         title.style.paddingBottom = '0.5rem';
                     }
 
+                    // Make classification and asset_type sections collapsible and closed by default
+                    if (isCollapsibleField) {
+                        title.style.cursor = 'pointer';
+                        title.style.userSelect = 'none';
+                        // Add collapse indicator
+                        const collapseIcon = document.createElement('span');
+                        collapseIcon.textContent = ' ▶';
+                        collapseIcon.style.fontSize = '0.8em';
+                        collapseIcon.style.marginLeft = '0.5rem';
+                        title.appendChild(collapseIcon);
+                    }
+
                     container.appendChild(title);
                 }
-                
-                if (property.properties) {
-                    Object.entries(property.properties).forEach(([key, prop]) => {
+
+                console.log(`[CREATE OBJECT] Final resolvedProperty.properties:`, resolvedProperty.properties ? Object.keys(resolvedProperty.properties) : 'undefined');
+
+                // Create collapsible wrapper for classification and asset_type sections
+                let contentContainer = container;
+                if (isCollapsibleField && resolvedProperty.properties) {
+                    const collapseWrapper = document.createElement('div');
+                    collapseWrapper.style.display = 'none'; // Closed by default
+                    collapseWrapper.className = 'classification-content';
+
+                    // Add description inside the collapsible wrapper if it exists
+                    if (resolvedProperty.description || property.description) {
+                        const description = document.createElement('small');
+                        description.className = 'form-text text-muted d-block mb-2';
+                        description.innerHTML = parseMarkdownLinks(resolvedProperty.description || property.description);
+                        collapseWrapper.appendChild(description);
+                    }
+
+                    container.appendChild(collapseWrapper);
+                    contentContainer = collapseWrapper;
+
+                    // Add click handler to title to toggle collapse
+                    const titleElement = container.querySelector('h6');
+                    if (titleElement) {
+                        titleElement.addEventListener('click', () => {
+                            const icon = titleElement.querySelector('span');
+                            if (collapseWrapper.style.display === 'none') {
+                                collapseWrapper.style.display = 'block';
+                                if (icon) icon.textContent = ' ▼';
+                            } else {
+                                collapseWrapper.style.display = 'none';
+                                if (icon) icon.textContent = ' ▶';
+                            }
+                        });
+                    }
+                }
+
+                if (resolvedProperty.properties) {
+                    console.log(`[CREATE OBJECT] Iterating through ${Object.keys(resolvedProperty.properties).length} properties for ${name}`);
+
+                    // Sort properties for better UI ordering
+                    // Priority: required fields first, then specific ordering for hazard objects
+                    const propertyEntries = Object.entries(resolvedProperty.properties);
+                    const requiredFields = resolvedProperty.required || [];
+
+                    // Define preferred ordering for hazard-type objects
+                    const hazardFieldOrder = ['type', 'process', 'intensity_measure', 'classification'];
+
+                    propertyEntries.sort(([keyA], [keyB]) => {
+                        // If this looks like a hazard object (has type, process, intensity_measure)
+                        const hasHazardFields = propertyEntries.some(([k]) => k === 'type') &&
+                                              propertyEntries.some(([k]) => k === 'intensity_measure');
+
+                        if (hasHazardFields) {
+                            const indexA = hazardFieldOrder.indexOf(keyA);
+                            const indexB = hazardFieldOrder.indexOf(keyB);
+
+                            // Both keys are in the hazard field order - sort by that order
+                            if (indexA !== -1 && indexB !== -1) {
+                                return indexA - indexB;
+                            }
+                            // Only A is in the order - A comes first
+                            if (indexA !== -1) return -1;
+                            // Only B is in the order - B comes first
+                            if (indexB !== -1) return 1;
+                            // Neither is in the order - fall through to required field logic
+                        }
+
+                        // Otherwise, required fields first
+                        const aRequired = requiredFields.includes(keyA);
+                        const bRequired = requiredFields.includes(keyB);
+                        if (aRequired && !bRequired) return -1;
+                        if (!aRequired && bRequired) return 1;
+
+                        // Keep original order for other fields
+                        return 0;
+                    });
+
+                    console.log(`[CREATE OBJECT] Property order after sorting:`, propertyEntries.map(([k]) => k));
+
+                    propertyEntries.forEach(([key, prop]) => {
+                        console.log(`[CREATE OBJECT]   Creating field: ${name}.${key}`);
                         const fieldValue = value && value[key] ? value[key] : null;
 
                         // Resolve $ref if present to ensure full schema with conditional properties
@@ -2541,10 +2876,12 @@
                         const subContext = new FieldCreationContext(this.context.type, this.context.container, this.context.itemData || value);
                         // Use resolvedProp to ensure nested properties get full schema with allOf expanded
                         const field = subContext.createField(`${name}.${key}`, resolvedProp || prop, fieldValue, options);
-                        container.appendChild(field);
+                        console.log(`[CREATE OBJECT]   Appending field to container, field tagName: ${field.tagName}, className: ${field.className}`);
+                        contentContainer.appendChild(field);
                     });
                 }
 
+                console.log(`[CREATE OBJECT] Returning container with ${container.children.length} children`);
                 return container;
             }
 
@@ -2649,13 +2986,16 @@
                 // Check if this field has conditional codelists defined via allOf rules
                 // For example, 'unit' field in Measurement has codelists added conditionally
                 const fieldBaseName = name.split('.').pop();
+                console.log(`[HAS CONDITIONAL] Checking: ${name}, baseName: ${fieldBaseName}`);
 
                 // Known fields that have conditional codelists
                 if (fieldBaseName === 'unit') {
                     const dependsOn = FIELD_DEPENDENCIES[name] || FIELD_DEPENDENCIES[fieldBaseName];
+                    console.log(`[HAS CONDITIONAL] Unit field detected, dependsOn:`, dependsOn);
 
                     if (dependsOn) {
                         const schemaPath = this.getSchemaPathForField(name);
+                        console.log(`[HAS CONDITIONAL] schemaPath:`, schemaPath);
 
                         if (schemaPath) {
                             // Direct access since SchemaNavigator.getDefinitionAtPath is failing
@@ -2665,14 +3005,37 @@
                             } else if (schemaPath === '$defs.Hazard' && currentSchema.$defs) {
                                 schema = currentSchema.$defs.Hazard;
                             }
+                            console.log(`[HAS CONDITIONAL] schema found:`, !!schema, 'has allOf:', !!(schema && schema.allOf));
 
                             if (schema && schema.allOf) {
                                 // Check if any allOf rule adds codelist to this field
-                                for (const rule of schema.allOf) {
-                                    if (rule.then && rule.then.properties && rule.then.properties[fieldBaseName]) {
-                                        const fieldSchema = rule.then.properties[fieldBaseName];
-                                        if (fieldSchema.codelist) {
-                                            return true;
+                                // Need to resolve $ref in allOf first
+                                for (const allOfItem of schema.allOf) {
+                                    let conditionalSchema = allOfItem;
+
+                                    // If allOf item is a $ref, resolve it
+                                    if (allOfItem.$ref) {
+                                        console.log(`[HAS CONDITIONAL] Resolving allOf $ref:`, allOfItem.$ref);
+                                        conditionalSchema = resolveReferenceSimple(allOfItem.$ref);
+                                        if (!conditionalSchema) {
+                                            console.log(`[HAS CONDITIONAL] Failed to resolve $ref`);
+                                            continue;
+                                        }
+                                        console.log(`[HAS CONDITIONAL] Resolved, has allOf:`, !!(conditionalSchema.allOf));
+                                    }
+
+                                    // Now check if this conditional schema has rules for our field
+                                    if (conditionalSchema.allOf) {
+                                        console.log(`[HAS CONDITIONAL] Checking ${conditionalSchema.allOf.length} conditional rules`);
+                                        for (const rule of conditionalSchema.allOf) {
+                                            if (rule.then && rule.then.properties && rule.then.properties[fieldBaseName]) {
+                                                const fieldSchema = rule.then.properties[fieldBaseName];
+                                                console.log(`[HAS CONDITIONAL] Found rule for ${fieldBaseName}, has codelist:`, !!(fieldSchema.codelist || fieldSchema.$ref));
+                                                if (fieldSchema.codelist || fieldSchema.$ref) {
+                                                    console.log(`[HAS CONDITIONAL] RETURNING TRUE`);
+                                                    return true;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -2681,6 +3044,7 @@
                     }
                 }
 
+                console.log(`[HAS CONDITIONAL] RETURNING FALSE`);
                 return false;
             }
 
@@ -3220,8 +3584,18 @@
                         const dependentField = document.getElementById(dependentFieldId);
                         console.log(`[DEPENDENCY] Looking for dependent field with ID: "${dependentFieldId}", found: ${!!dependentField}`);
 
+                        if (!dependentField) {
+                            // DEBUG: List all elements with IDs to help diagnose
+                            console.log(`[DEPENDENCY] Could not find dependent field. Listing all elements with IDs containing "process":`);
+                            document.querySelectorAll('[id*="process"]').forEach(el => {
+                                console.log(`[DEPENDENCY]   - ID: "${el.id}", tag: ${el.tagName}, type: ${el.type || 'N/A'}`);
+                            });
+                        }
+
                         if (dependentField) {
+                            console.log(`[DEPENDENCY] Found dependent field, tagName: ${dependentField.tagName}, type: ${dependentField.type || 'N/A'}`);
                             if (dependentFieldName.includes('hazard_process') || dependentFieldName.includes('process')) {
+                                console.log(`[DEPENDENCY] Calling rebuildDependentDropdown(element, "${fullDependentFieldName}", "${newValue}")`);
                                 this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
                             } else if (dependentFieldName.includes('intensity_measure')) {
                                 // Use specialized IMT filtering based on hazard type
@@ -3456,7 +3830,15 @@
             }
 
             rebuildDependentDropdown(selectElement, fieldName, parentValue) {
-                if (!parentValue) return;
+                console.log(`[REBUILD DROPDOWN] ===== START =====`);
+                console.log(`[REBUILD DROPDOWN] Called with: fieldName="${fieldName}", parentValue="${parentValue}"`);
+                console.log(`[REBUILD DROPDOWN] selectElement:`, selectElement);
+                console.log(`[REBUILD DROPDOWN] selectElement tagName: ${selectElement?.tagName}`);
+
+                if (!parentValue) {
+                    console.log(`[REBUILD DROPDOWN] No parent value provided, exiting`);
+                    return;
+                }
 
                 console.log(`[REBUILD DROPDOWN] Rebuilding dropdown: ${fieldName} based on parent value: ${parentValue}`);
 
@@ -3477,17 +3859,18 @@
                 if (fieldName.includes('process') || fieldName === 'processes') {
                     console.log(`[REBUILD DROPDOWN] Processing 'process' field rebuild`);
 
-                    // Get unexpanded schema to access allOf rules
-                    const hazardSchemaRaw = resolveReferenceSimple('#/$defs/SimpleHazard');
-                    console.log(`[REBUILD DROPDOWN] SimpleHazard schema:`, hazardSchemaRaw ? 'found' : 'NOT FOUND');
+                    // Get the conditional schema that contains the if/then rules
+                    const conditionalSchemaRaw = resolveReferenceSimple('#/$defs/conditional_hazard_type_to_process');
+                    console.log(`[REBUILD DROPDOWN] conditional_hazard_type_to_process schema:`, conditionalSchemaRaw ? 'found' : 'NOT FOUND');
 
-                    if (hazardSchemaRaw && hazardSchemaRaw.allOf) {
+                    if (conditionalSchemaRaw && conditionalSchemaRaw.allOf) {
                         // Build parent data context
                         const parentData = { type: parentValue };
                         console.log(`[REBUILD DROPDOWN] Evaluating conditionals with:`, parentData);
+                        console.log(`[REBUILD DROPDOWN] Number of conditional rules:`, conditionalSchemaRaw.allOf.length);
 
                         // Evaluate conditional rules
-                        const result = ConditionalValidator.evaluateConditionals(hazardSchemaRaw, parentData);
+                        const result = ConditionalValidator.evaluateConditionals(conditionalSchemaRaw, parentData);
                         console.log(`[REBUILD DROPDOWN] Evaluation result:`, result);
                         console.log(`[REBUILD DROPDOWN] Applicable rules:`, result.applicableRules?.length || 0);
 
@@ -3503,9 +3886,12 @@
                     }
 
                     // Fallback to default enum from schema if no conditional rules found
-                    if (availableOptions.length === 0 && hazardSchemaRaw && hazardSchemaRaw.properties && hazardSchemaRaw.properties.process) {
-                        availableOptions = hazardSchemaRaw.properties.process.enum || [];
-                        console.log(`[REBUILD DROPDOWN] No conditional rules found, using default enum with ${availableOptions.length} options`);
+                    if (availableOptions.length === 0) {
+                        const hazardSchemaRaw = resolveReferenceSimple('#/$defs/SimpleHazard');
+                        if (hazardSchemaRaw && hazardSchemaRaw.properties && hazardSchemaRaw.properties.process) {
+                            availableOptions = hazardSchemaRaw.properties.process.enum || [];
+                            console.log(`[REBUILD DROPDOWN] No conditional rules found, using default enum with ${availableOptions.length} options`);
+                        }
                     }
                 }
 
@@ -3611,7 +3997,14 @@
             }
 
             async reloadComboboxCodelist(inputElement, fieldName, parentValue) {
-                if (!parentValue || !inputElement) return;
+                console.log(`[RELOAD COMBOBOX] ===== START =====`);
+                console.log(`[RELOAD COMBOBOX] fieldName: ${fieldName}, parentValue: ${parentValue}`);
+                console.log(`[RELOAD COMBOBOX] inputElement:`, inputElement);
+
+                if (!parentValue || !inputElement) {
+                    console.log(`[RELOAD COMBOBOX] Missing parentValue or inputElement, exiting`);
+                    return;
+                }
 
                 // Find the dropdown menu associated with this combobox input
                 let dropdownMenu = null;
@@ -3669,10 +4062,13 @@
                     return;
                 }
 
+                console.log(`[RELOAD COMBOBOX] Found dropdown menu:`, dropdownMenu);
+
                 try {
                     // Get parent context data
                     const fieldBaseName = fieldName.split('.').pop();
                     const fieldParts = fieldName.split('.');
+                    console.log(`[RELOAD COMBOBOX] fieldBaseName: ${fieldBaseName}, fieldParts:`, fieldParts);
 
                     // For nested fields like "measurement.unit", we need the measurement object data
                     let parentData;
@@ -3714,6 +4110,9 @@
 
                     let suggestions = [];
 
+                    console.log(`[RELOAD COMBOBOX] schemaPath: ${schemaPath}`);
+                    console.log(`[RELOAD COMBOBOX] parentData:`, parentData);
+
                     if (schemaPath) {
                         // Direct access since SchemaNavigator.getDefinitionAtPath is failing
                         let schemaDefinition = null;
@@ -3723,17 +4122,22 @@
                             schemaDefinition = currentSchema.$defs.Hazard;
                         }
 
+                        console.log(`[RELOAD COMBOBOX] schemaDefinition found:`, !!schemaDefinition, 'has allOf:', !!(schemaDefinition && schemaDefinition.allOf));
+
                         if (schemaDefinition && schemaDefinition.allOf) {
+                            console.log(`[RELOAD COMBOBOX] Calling CodelistManager.getConditionalCodelist...`);
                             suggestions = await CodelistManager.getConditionalCodelist(
                                 schemaDefinition,
                                 fieldBaseName,
                                 parentData
                             );
+                            console.log(`[RELOAD COMBOBOX] Got ${suggestions.length} suggestions:`, suggestions);
                         }
                     }
 
                     // Clear and repopulate dropdown
                     dropdownMenu.innerHTML = '';
+                    console.log(`[RELOAD COMBOBOX] Cleared dropdown, populating with ${suggestions.length} suggestions`);
 
                     if (suggestions && suggestions.length > 0) {
                         suggestions.forEach(suggestion => {
@@ -4037,7 +4441,27 @@
                 }
 
                 // Process each allOf item looking for if-then patterns
-                schemaDefinition.allOf.forEach((rule, index) => {
+                schemaDefinition.allOf.forEach((allOfItem, allOfIndex) => {
+                    // If allOf item is a $ref, resolve it first
+                    let resolvedItem = allOfItem;
+                    if (allOfItem.$ref) {
+                        resolvedItem = resolveReferenceSimple(allOfItem.$ref);
+                        if (!resolvedItem) return; // Skip if can't resolve
+
+                        // If the resolved item also has allOf, recurse into it
+                        if (resolvedItem.allOf) {
+                            const nestedResult = this.evaluateConditionals(resolvedItem, data, basePath);
+                            result.applicableRules.push(...nestedResult.applicableRules);
+                            result.errors.push(...nestedResult.errors);
+                            result.additionalValidations.push(...nestedResult.additionalValidations);
+                            return;
+                        }
+                    }
+
+                    // Now check for if/then in the resolved item
+                    const rule = resolvedItem;
+                    const index = allOfIndex;
+
                     if (rule.if && rule.then) {
                         const conditionMet = this.evaluateCondition(rule.if, data, basePath);
 
@@ -4320,8 +4744,8 @@
                     }
                 }
 
-                // Spatial scale and countries validation (v0.3 compatibility - only if no errors yet)
-                if (isValid && currentSchema.$id && currentSchema.$id.includes('0__3__0')) {
+                // Spatial scale and countries validation (applies to all schema versions)
+                if (isValid) {
                     const spatialValidation = this.validateSpatialRelationship(fieldName, value);
                     if (!spatialValidation.isValid) {
                         isValid = false;
@@ -4412,8 +4836,10 @@
                                 }
                                 break;
                             case 'national':
+                            case 'subnational':
                             case 'sub-national':
-                                // National or sub-national: at least 1 country expected
+                            case 'urban':
+                                // National, subnational, or urban: at least 1 country expected
                                 if (countriesCount < 1) {
                                     isValid = false;
                                     errorMessage = fieldName === 'spatial.scale'
@@ -6654,9 +7080,19 @@
                                 break;
                             }
 
-                            if (!metric.quantity_kind || metric.quantity_kind.trim() === '') {
+                            // Check measurement object exists and has at least one property (minProperties: 1)
+                            if (!metric.measurement || typeof metric.measurement !== 'object') {
                                 exposureValid = false;
-                                exposureError = `Exposure ${expNum}, Metric ${metricNum} is missing required quantity_kind`;
+                                exposureError = `Exposure ${expNum}, Metric ${metricNum} is missing required measurement`;
+                                break;
+                            }
+
+                            // Measurement must have at least one property (quantity_kind or unit)
+                            const hasMeasurementProperty = (metric.measurement.quantity_kind && metric.measurement.quantity_kind.trim() !== '') ||
+                                                          (metric.measurement.unit && metric.measurement.unit.trim() !== '');
+                            if (!hasMeasurementProperty) {
+                                exposureValid = false;
+                                exposureError = `Exposure ${expNum}, Metric ${metricNum} measurement must have at least quantity_kind or unit`;
                                 break;
                             }
                         }
@@ -7638,34 +8074,21 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
         }
 
         function migrateAttributionData(data) {
-            const oldFields = ['publisher', 'creator', 'contact_point'];
             const migratedData = { ...data };
 
-            // Migrate old attribution fields
-            // Initialize attributions array if it doesn't exist
-            if (!migratedData.attributions) {
-                migratedData.attributions = [];
+            // v1.0: publisher, creator, and contact_point are root-level Entity objects
+            // They should NOT be migrated to attributions array
+            // Only migrate if we detect old v0.x structure (attributions array with these roles)
+
+            // No attribution migration needed for v1.0 - these fields stay at root level
+            // If there are duplicate entries in attributions array, remove them
+            if (migratedData.attributions && Array.isArray(migratedData.attributions)) {
+                const rootLevelRoles = ['publisher', 'creator', 'contact_point'];
+                migratedData.attributions = migratedData.attributions.filter(attr => {
+                    // Remove attributions that duplicate root-level fields
+                    return !rootLevelRoles.includes(attr.role);
+                });
             }
-
-            // Migrate old fields to attributions array
-            oldFields.forEach(fieldName => {
-                if (migratedData[fieldName] && typeof migratedData[fieldName] === 'object') {
-                    // Check if this attribution doesn't already exist
-                    const existingAttribution = migratedData.attributions.find(attr => attr.role === fieldName);
-
-                    if (!existingAttribution) {
-                        const newAttribution = {
-                            id: `attribution_${fieldName}_migrated_${Date.now()}`,
-                            role: fieldName,
-                            entity: migratedData[fieldName]
-                        };
-                        migratedData.attributions.push(newAttribution);
-                    }
-
-                    // Remove the old field
-                    delete migratedData[fieldName];
-                }
-            });
 
             // Migrate old resource field names (format -> data_format, media_type removed)
             if (migratedData.resources && Array.isArray(migratedData.resources)) {
