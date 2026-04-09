@@ -5659,7 +5659,23 @@
                     description.id = descriptionId;
                     description.className = 'form-text text-muted mb-3 collapse';
                     description.style.fontSize = '0.95rem';
-                    description.innerHTML = parseMarkdownLinks(sectionSchema.description);
+
+                    // Extended descriptions for main components
+                    const extendedDescriptions = {
+                        'hazard': 'This component covers different kinds of hazard descriptions, including observed hazard events, hazard maps and modelled scenarios used in probabilistic risk assessment.',
+                        'exposure': 'This component can represent assets location and size, in form of aggregated inventories or individual items.',
+                        'vulnerability': `Vulnerability metadata can describe two different kinds of datasets:<br>
+<strong>FUNCTIONS:</strong> the relationships between hazard intensity and expected impact for specific exposure categories. This covers damage functions, fragility curves, and other kinds of vulnerability models.<br>
+<strong>SOCIO-ECONOMIC INDICES:</strong> descriptors of the social and economic characteristics of vulnerable populations or assets.`,
+                        'loss': 'This component is meant to cover both empirical disaster events, as well as probabilistic risk modelling outputs.'
+                    };
+
+                    // Combine schema description with extended description
+                    let fullDescription = parseMarkdownLinks(sectionSchema.description);
+                    if (extendedDescriptions[sectionName]) {
+                        fullDescription += ' ' + extendedDescriptions[sectionName];
+                    }
+                    description.innerHTML = fullDescription;
 
                     // Toggle functionality
                     toggleBtn.addEventListener('click', function(e) {
