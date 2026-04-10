@@ -1420,7 +1420,43 @@
                 textarea.style.minHeight = '80px';
 
                 if (property.minLength) textarea.minLength = property.minLength;
-                if (property.maxLength) textarea.maxLength = property.maxLength;
+
+                // Set character limits for specific fields
+                const fieldBaseName = name.split('.').pop();
+                if (fieldBaseName === 'description') {
+                    textarea.maxLength = 2500;
+                } else if (fieldBaseName === 'details') {
+                    textarea.maxLength = 5000;
+                } else if (fieldBaseName === 'purpose') {
+                    textarea.maxLength = 1500;
+                } else if (property.maxLength) {
+                    textarea.maxLength = property.maxLength;
+                }
+
+                // Add character counter if maxLength is set
+                let charCounter = null;
+                if (textarea.maxLength && textarea.maxLength > 0) {
+                    charCounter = document.createElement('small');
+                    charCounter.className = 'form-text text-muted';
+                    charCounter.style.display = 'block';
+                    charCounter.style.textAlign = 'right';
+                    charCounter.style.marginTop = '0.25rem';
+
+                    const updateCounter = () => {
+                        const remaining = textarea.maxLength - textarea.value.length;
+                        charCounter.textContent = `${textarea.value.length} / ${textarea.maxLength} characters`;
+                        if (remaining < 100) {
+                            charCounter.style.setProperty('color', '#dc3545', 'important'); // Red when close to limit
+                        } else if (remaining < 500) {
+                            charCounter.style.setProperty('color', '#fd7e14', 'important'); // Orange
+                        } else {
+                            charCounter.style.setProperty('color', '#6c757d', 'important'); // Gray
+                        }
+                    };
+
+                    textarea.addEventListener('input', updateCounter);
+                    updateCounter(); // Initial counter
+                }
 
                 // Auto-resize functionality
                 const autoResize = () => {
@@ -1436,6 +1472,7 @@
 
                 this.context.setupEventListeners(textarea, name, property, options);
                 wrapper.appendChild(textarea);
+                if (charCounter) wrapper.appendChild(charCounter);
 
                 return wrapper;
             }
