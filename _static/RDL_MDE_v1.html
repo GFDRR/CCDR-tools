@@ -349,6 +349,27 @@
             }
         }
 
+        /* Header navigation links styling */
+        header nav .nav-link {
+            color: #495057;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        header nav .nav-link:hover {
+            background-color: #1a1f36;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(33, 37, 41, 0.3);
+        }
+
+        header nav .nav-link b {
+            font-weight: 600;
+        }
+
     </style>
 </head>
 <body>
@@ -371,10 +392,10 @@
                             <a class="nav-link" href="http://riskdatalibrary.org/" target="_blank"><b>RDL Project</b></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="https://docs.riskdatalibrary.org/" target="_blank"><b>Documentation</b></a>
-                        </li>
+                            <a class="nav-link" href="https://catalog.riskdatalibrary.org/" target="_blank"><b>Risk Data Catalog</b></a>
+                        </li>                        
                         <li class="nav-item">
-                            <a class="nav-link" href="https://gfdrr.github.io/CCDR-tools/_static/RDL_MDE.html" target="_blank"><b>Metadata Editor</b></a>
+                            <a class="nav-link" href="https://docs.riskdatalibrary.org/" target="_blank"><b>Documentation</b></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="https://gfdrr.github.io/CCDR-tools/home.html" target="_blank"><b>Tools</b></a>
@@ -459,7 +480,7 @@
                             <button id="validateForm" class="btn btn-outline-primary btn-sm w-100 mb-2">🔍 Validate Metadata</button>
                             <button id="exportJson" class="btn btn-success btn-sm w-100 mb-2">Export JSON</button>
                             <button id="exportXml" class="btn btn-success btn-sm w-100 mb-2">Export XML</button>
-                            <button id="publishGitHub" class="btn btn-warning btn-sm w-100 mb-2" disabled>📤 Publish to GitHub</button>
+                            <button id="publishGitHub" class="btn btn-warning btn-sm w-100 mb-2" disabled>📤 Publish to RDL catalog</button>
                         </div>
                 </div>
             </div>
@@ -931,6 +952,7 @@
         let currentFormData = {};
         let activeSections = new Set(['general']);
         let fieldValidationStatus = new Map();
+        let hasRunFullValidation = false;
 
         // Object editor state
         let currentObjectEditor = {
@@ -6643,7 +6665,7 @@
             const overallStatus = document.getElementById('overallValidation');
             const publishButton = document.getElementById('publishGitHub');
 
-            if (totalFields === 0) {
+            if (totalFields === 0 || !hasRunFullValidation) {
                 overallStatus.className = 'badge bg-secondary';
                 overallStatus.textContent = 'Not validated';
                 publishButton.disabled = true;
@@ -6654,7 +6676,7 @@
                 overallStatus.textContent = 'All valid';
                 publishButton.disabled = false;
                 publishButton.className = 'btn btn-success btn-sm w-100 mb-2';
-                publishButton.title = 'Publish validated dataset to GitHub';
+                publishButton.title = 'Publish validated dataset to RDL catalog';
             } else {
                 overallStatus.className = 'badge bg-warning';
                 overallStatus.textContent = `${validFields}/${totalFields} valid`;
@@ -6942,6 +6964,9 @@
 
             const totalFields = fieldValidationStatus.size;
             const validFields = Array.from(fieldValidationStatus.values()).filter(status => status.isValid).length;
+
+            // Mark that full validation has been run
+            hasRunFullValidation = true;
 
             if (validFields === totalFields && totalFields > 0) {
                 updateFormStatus('success', 'RDLS Compliant ✓');
@@ -8237,6 +8262,10 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
 
                             currentFormData = loadedData;
 
+                            // Reset validation flag when loading new data
+                            hasRunFullValidation = false;
+                            fieldValidationStatus.clear();
+
                             // Activate sections based on loaded data
                             activeSections.clear();
                             activeSections.add('general');
@@ -8280,7 +8309,8 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
                 
                 // Clear validation status
                 fieldValidationStatus.clear();
-                
+                hasRunFullValidation = false;
+
                 // Reset active sections to just general
                 activeSections.clear();
                 activeSections.add('general');
