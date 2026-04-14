@@ -370,6 +370,15 @@
             font-weight: 600;
         }
 
+        /* Component description example links styling */
+        .form-text a {
+            text-decoration: none;
+        }
+
+        .form-text a:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
@@ -5729,10 +5738,32 @@
                         'loss': 'This component is meant to cover both empirical disaster events, as well as probabilistic risk modelling outputs.'
                     };
 
-                    // Combine schema description with extended description
+                    // Example links for each component
+                    const exampleLinks = {
+                        'hazard': `<br><br><strong>Examples:</strong><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/hazard/flood_inundation/" target="_blank" rel="noopener noreferrer">• Flood hazard maps</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/hazard/tropical_cyclone/" target="_blank" rel="noopener noreferrer">• Probabilistic tropical cyclone model</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/hazard/earthquake_catalog/" target="_blank" rel="noopener noreferrer">• Historical earthquake catalog</a>`,
+                        'exposure': `<br><br><strong>Examples:</strong><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/exposure/building_inventory/" target="_blank" rel="noopener noreferrer">• Building inventory database</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/exposure/population_admin/" target="_blank" rel="noopener noreferrer">• Population dataset by administrative boundaries</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/exposure/service_accessibility/" target="_blank" rel="noopener noreferrer">• Service accessibility analysis over road networks</a>`,
+                        'vulnerability': `<br><br><strong>Examples:</strong><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/vulnerability/flood_damage_curves/" target="_blank" rel="noopener noreferrer">• Flood depth-damage functions</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/vulnerability/earthquake_fragility/" target="_blank" rel="noopener noreferrer">• Earthquake fragility curves for building structures</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/vulnerability/wealth_index/" target="_blank" rel="noopener noreferrer">• Relative wealth index</a>`,
+                        'loss': `<br><br><strong>Examples:</strong><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/loss/flood_risk/" target="_blank" rel="noopener noreferrer">• Flood risk model</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/loss/earthquake_loss/" target="_blank" rel="noopener noreferrer">• Earthquake loss database</a>`
+                    };
+
+                    // Combine schema description with extended description and examples
                     let fullDescription = parseMarkdownLinks(sectionSchema.description);
                     if (extendedDescriptions[sectionName]) {
                         fullDescription += ' ' + extendedDescriptions[sectionName];
+                    }
+                    if (exampleLinks[sectionName]) {
+                        fullDescription += exampleLinks[sectionName];
                     }
                     description.innerHTML = fullDescription;
 
