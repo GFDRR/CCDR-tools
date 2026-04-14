@@ -958,6 +958,7 @@
         }
 
         let currentSchema = null;
+        let currentSchemaVersion = '1.0'; // Track current schema version for URL substitutions
         let currentFormData = {};
         let activeSections = new Set(['general']);
         let fieldValidationStatus = new Map();
@@ -1141,12 +1142,13 @@
          * Handles all field creation needs across normal, modal, and array contexts
          */
         class FieldCreationContext {
-            constructor(type = 'normal', container = null, itemData = null, arrayName = null) {
+            constructor(type = 'normal', container = null, itemData = null, arrayName = null, componentType = null) {
                 this.type = type; // 'normal', 'modal', 'inline', 'array'
                 this.container = container;
                 this.idPrefix = type === 'modal' ? 'modal_' : '';
                 this.itemData = itemData; // For inline context, stores the item being edited
                 this.arrayName = arrayName; // For inline context, stores the array name (e.g., 'hazards', 'losses')
+                this.componentType = componentType; // Component type: 'hazard', 'exposure', 'vulnerability', 'loss'
             }
 
             createField(name, property, value, options = {}) {
@@ -1880,6 +1882,22 @@
                         if (suggestions.length === 0 && property.codelist) {
                             suggestions = await CodelistManager.loadCodelist(property.codelist);
                         }
+
+                        // Special handling for classification_scheme: filter by component context
+                        if (property.codelist === 'classification_scheme.csv' && suggestions.length > 0) {
+                            // Detect component type from field path
+                            console.log(`[CLASSIFICATION SCHEME] Field name: ${fieldName}, Codelist: ${property.codelist}`);
+                            const componentType = this.getComponentTypeFromFieldName(fieldName);
+                            console.log(`[CLASSIFICATION SCHEME] Detected component type: ${componentType}`);
+                            if (componentType) {
+                                console.log(`[CLASSIFICATION SCHEME] Filtering ${suggestions.length} schemes for component: ${componentType}`);
+                                const beforeCount = suggestions.length;
+                                suggestions = CodelistManager.filterClassificationSchemes(suggestions, componentType);
+                                console.log(`[CLASSIFICATION SCHEME] Filtered from ${beforeCount} to ${suggestions.length} schemes`);
+                            } else {
+                                console.log(`[CLASSIFICATION SCHEME] No component type detected, showing all ${suggestions.length} schemes`);
+                            }
+                        }
                     } else if (property.suggestions) {
                         // Use static suggestions if provided
                         suggestions = property.suggestions;
@@ -1960,6 +1978,64 @@
                     return '$defs.Measurement';
                 }
                 // Add more mappings as needed
+                return null;
+            }
+
+            getComponentTypeFromFieldName(fieldName) {
+                // First priority: use componentType from context if available
+                if (this.context.componentType) {
+                    console.log(`[COMPONENT DETECTION] Using componentType from context: ${this.context.componentType}`);
+                    return this.context.componentType;
+                }
+
+                // Extract component type from field path
+                // Field names like: "hazard.classification.scheme", "exposure.classification.scheme", etc.
+                const parts = fieldName.split('.');
+
+                // Check for main component types in field path
+                if (parts.includes('hazard') || parts.includes('hazards')) {
+                    return 'hazard';
+                }
+                if (parts.includes('exposure') || parts.includes('exposures')) {
+                    return 'exposure';
+                }
+                if (parts.includes('vulnerability') || parts.includes('vulnerabilities')) {
+                    return 'vulnerability';
+                }
+                if (parts.includes('loss') || parts.includes('losses')) {
+                    return 'loss';
+                }
+
+                // For inline context, check the array name from context
+                if (this.context.type === 'inline' && this.context.arrayName) {
+                    const arrayName = this.context.arrayName.toLowerCase();
+                    if (arrayName.includes('hazard')) return 'hazard';
+                    if (arrayName.includes('exposure')) return 'exposure';
+                    if (arrayName.includes('vulnerabilit')) return 'vulnerability';
+                    if (arrayName.includes('loss')) return 'loss';
+                }
+
+                // Fallback: use signature fields to detect component type
+                // These are unique fields that only appear in specific components
+                const signatureFields = {
+                    'asset_type': 'exposure',
+                    'taxonomy': 'exposure',
+                    'intensity_measure': 'hazard',
+                    'process': 'hazard',
+                    'trigger': 'hazard',
+                    'vulnerability_function': 'vulnerability',
+                    'impact_function': 'vulnerability',
+                    'loss_approach': 'loss',
+                    'loss_frequency_type': 'loss'
+                };
+
+                // Check if any part of the field path matches a signature field
+                for (const part of parts) {
+                    if (signatureFields[part]) {
+                        return signatureFields[part];
+                    }
+                }
+
                 return null;
             }
 
@@ -2479,7 +2555,13 @@
                         // Don't use ID/name attributes to avoid polluting FormData
                         // Pass item data so dependent fields can look up parent values
                         // Pass array name to help with context-specific field handling (e.g., trigger visibility)
-                        const inlineContext = new FieldCreationContext('inline', fieldDiv, item, arrayName);
+                        // Infer component type from array name for classification_scheme filtering
+                        const inferredComponentType = arrayName ?
+                            (arrayName.toLowerCase().includes('exposure') ? 'exposure' :
+                             arrayName.toLowerCase().includes('hazard') ? 'hazard' :
+                             arrayName.toLowerCase().includes('vulnerabilit') ? 'vulnerability' :
+                             arrayName.toLowerCase().includes('loss') ? 'loss' : null) : null;
+                        const inlineContext = new FieldCreationContext('inline', fieldDiv, item, arrayName, inferredComponentType);
                         // Use resolvedProp instead of prop to ensure nested object schemas are fully expanded
                         const fieldElement = inlineContext.createField(key, resolvedProp, item[key]);
 
@@ -2626,7 +2708,12 @@
 
                             // Create context - don't use ID/name to avoid polluting FormData
                             // Pass item data so dependent fields can look up parent values
-                            const currencyContext = new FieldCreationContext('inline', currencyDiv, item, arrayName);
+                            const inferredComponentType = arrayName ?
+                                (arrayName.toLowerCase().includes('exposure') ? 'exposure' :
+                                 arrayName.toLowerCase().includes('hazard') ? 'hazard' :
+                                 arrayName.toLowerCase().includes('vulnerabilit') ? 'vulnerability' :
+                                 arrayName.toLowerCase().includes('loss') ? 'loss' : null) : null;
+                            const currencyContext = new FieldCreationContext('inline', currencyDiv, item, arrayName, inferredComponentType);
                             console.log(`[CURRENCY FIELD] Created context with type: ${currencyContext.type}`);
                             const savedCurrencyValue = item['currency'];
                             console.log(`[CURRENCY FIELD] Creating currency field for ${arrayName}[${index}], savedValue: "${savedCurrencyValue}"`);
@@ -2941,7 +3028,8 @@
                         }
 
                         // Pass itemData to sub-context so nested fields can access parent item data for dependencies
-                        const subContext = new FieldCreationContext(this.context.type, this.context.container, this.context.itemData || value);
+                        // Also pass componentType so classification_scheme filtering works correctly
+                        const subContext = new FieldCreationContext(this.context.type, this.context.container, this.context.itemData || value, this.context.arrayName, this.context.componentType);
                         // Use resolvedProp to ensure nested properties get full schema with allOf expanded
                         const field = subContext.createField(`${name}.${key}`, resolvedProp || prop, fieldValue, options);
                         console.log(`[CREATE OBJECT]   Appending field to container, field tagName: ${field.tagName}, className: ${field.className}`);
@@ -4313,16 +4401,17 @@
             /**
              * Parse CSV text to array of objects with code and title
              * Expected format: CSV with 'Code' and 'Title' columns (minimum)
-             * Returns: [{code: 'value', title: 'Display Name'}, ...]
+             * Returns: [{code: 'value', title: 'Display Name', category: 'Category'}, ...]
              */
             static parseCSV(csvText) {
                 const lines = csvText.trim().split('\n');
                 if (lines.length === 0) return [];
 
-                // Parse header to find 'Code' and 'Title' columns (case-insensitive)
+                // Parse header to find 'Code', 'Title', and 'Category' columns (case-insensitive)
                 const header = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
                 const codeIndex = header.findIndex(h => h.toLowerCase() === 'code');
                 const titleIndex = header.findIndex(h => h.toLowerCase() === 'title');
+                const categoryIndex = header.findIndex(h => h.toLowerCase() === 'category');
 
                 if (codeIndex === -1) {
                     console.warn('CSV does not have a "Code" column, using first column');
@@ -4335,13 +4424,36 @@
                         .filter(item => item.code && item.code.length > 0);
                 }
 
-                // Extract code and title from CSV
+                // Extract code, title, and category from CSV
                 return lines.slice(1)
                     .map(line => {
-                        const cells = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                        // Use a more robust CSV parsing to handle commas in quoted fields
+                        const cells = [];
+                        let currentCell = '';
+                        let inQuotes = false;
+
+                        for (let i = 0; i < line.length; i++) {
+                            const char = line[i];
+                            if (char === '"') {
+                                inQuotes = !inQuotes;
+                            } else if (char === ',' && !inQuotes) {
+                                cells.push(currentCell.trim().replace(/^"|"$/g, ''));
+                                currentCell = '';
+                            } else {
+                                currentCell += char;
+                            }
+                        }
+                        cells.push(currentCell.trim().replace(/^"|"$/g, ''));
+
                         const code = cells[codeIndex] || null;
                         const title = titleIndex !== -1 ? cells[titleIndex] : code;
-                        return code ? { code, title: title || code } : null;
+                        const category = categoryIndex !== -1 ? cells[categoryIndex] : null;
+
+                        const item = { code, title: title || code };
+                        if (category) {
+                            item.category = category;
+                        }
+                        return code ? item : null;
                     })
                     .filter(item => item !== null);
             }
@@ -4410,6 +4522,43 @@
 
                 // Load the conditional codelist
                 return await this.loadCodelist(codelistName);
+            }
+
+            /**
+             * Filter classification schemes based on component context
+             * @param {Array} schemes - Array of scheme objects with category property
+             * @param {string} componentType - Component type (hazard, exposure, vulnerability, loss)
+             * @returns {Array} - Filtered array of schemes
+             */
+            static filterClassificationSchemes(schemes, componentType) {
+                if (!componentType || !schemes || schemes.length === 0) {
+                    return schemes;
+                }
+
+                // Category to component mapping based on user requirements
+                const categoryMapping = {
+                    'Socio-economic index': ['vulnerability'],
+                    'Disaster identifier': ['loss', 'hazard'],
+                    'Building taxonomy': ['exposure', 'vulnerability'],
+                    'Hazard classification': ['hazard', 'vulnerability', 'loss']
+                };
+
+                const componentLower = componentType.toLowerCase();
+
+                return schemes.filter(scheme => {
+                    if (!scheme.category) {
+                        // If no category specified, include it for all components
+                        return true;
+                    }
+
+                    const allowedComponents = categoryMapping[scheme.category];
+                    if (!allowedComponents) {
+                        // Unknown category, include it to be safe
+                        return true;
+                    }
+
+                    return allowedComponents.includes(componentLower);
+                });
             }
 
             /**
@@ -5150,12 +5299,15 @@
         async function loadSchema(version) {
             if (!version) version = '1.0';
 
+            // Store the version globally for URL substitutions
+            currentSchemaVersion = version;
+
             updateSchemaStatus('Loading RDLS v1.0 schema...', 'text-info');
-            
+
             try {
                 const response = await fetch(RDLS_VERSIONS[version]);
                     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
+
                 currentSchema = await response.json();
 
                 // Add currency field definitions where needed - comprehensive search
@@ -5535,7 +5687,9 @@
             });
 
             // Create unified context for normal form fields
-            const context = new FieldCreationContext('normal', form);
+            // Pass componentType for component sections (hazard, exposure, vulnerability, loss)
+            const componentType = SECTIONS.includes(sectionName) ? sectionName : null;
+            const context = new FieldCreationContext('normal', form, null, null, componentType);
 
             if (sectionName === 'general') {
                 const title = document.createElement('h5');
@@ -5979,6 +6133,9 @@
         function parseMarkdownLinks(text) {
             if (!text) return text;
 
+            // Replace {{version}} placeholder with current schema version
+            text = text.replace(/\{\{version\}\}/g, currentSchemaVersion);
+
             // Convert markdown links
             text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(match, linkText, url) {
                 return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-primary text-decoration-none">${linkText} <small>↗</small></a>`;
@@ -6139,7 +6296,15 @@
             fieldsContainer.innerHTML = '';
 
             // Create unified context for modal fields
-            const modalContext = new FieldCreationContext('modal', fieldsContainer);
+            // Infer component type from array name for classification_scheme filtering
+            console.log(`[MODAL CONTEXT] Opening modal for arrayName: ${arrayName}`);
+            const inferredComponentType = arrayName ?
+                (arrayName.toLowerCase().includes('exposure') ? 'exposure' :
+                 arrayName.toLowerCase().includes('hazard') ? 'hazard' :
+                 arrayName.toLowerCase().includes('vulnerabilit') ? 'vulnerability' :
+                 arrayName.toLowerCase().includes('loss') ? 'loss' : null) : null;
+            console.log(`[MODAL CONTEXT] Inferred component type: ${inferredComponentType}`);
+            const modalContext = new FieldCreationContext('modal', fieldsContainer, null, arrayName, inferredComponentType);
 
             if (objectSchema.properties) {
             Object.entries(objectSchema.properties).forEach(([key, property]) => {
