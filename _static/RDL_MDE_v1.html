@@ -7164,6 +7164,9 @@
             // Mark that full validation has been run
             hasRunFullValidation = true;
 
+            // Update the validation display (including publish button state)
+            updateValidationDisplay();
+
             if (validFields === totalFields && totalFields > 0) {
                 updateFormStatus('success', 'RDLS Compliant ✓');
                 alert('✅ All fields are valid! Your metadata is RDLS compliant.');
