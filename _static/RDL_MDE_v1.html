@@ -1391,7 +1391,7 @@
                 } else if (property.suggestions && property.openCodelist) {
                     // Legacy: suggestions-based combobox
                     return this.createCombobox(name, property, value, options);
-                } else if (property.anyOf && this.isFlexibleDateField(property)) {
+                } else if ((property.oneOf || property.anyOf) && this.isFlexibleDateField(property)) {
                     // Handle flexible date fields (YYYY, YYYY-MM, or YYYY-MM-DD)
                     return this.createFlexibleDateInput(name, property, value, options);
                 } else if (property.format === 'date') {
@@ -1556,11 +1556,12 @@
             }
 
             isFlexibleDateField(property) {
-                // Check if the anyOf array contains date format patterns
-                if (!property.anyOf || !Array.isArray(property.anyOf)) return false;
+                // Check if the oneOf or anyOf array contains date format patterns
+                const schemas = property.oneOf || property.anyOf;
+                if (!schemas || !Array.isArray(schemas)) return false;
 
                 // Look for date format or year/year-month patterns
-                return property.anyOf.some(schema =>
+                return schemas.some(schema =>
                     schema.format === 'date' ||
                     (schema.pattern && (
                         schema.pattern.includes('\\d{4}') ||
@@ -1570,6 +1571,7 @@
             }
 
             createFlexibleDateInput(name, property, value, options) {
+                console.log(`[CREATE FLEXIBLE DATE] Field: ${name}, value:`, value, `(type: ${typeof value})`);
                 const wrapper = document.createElement('div');
                 wrapper.style.position = 'relative';
 
@@ -1582,7 +1584,13 @@
                     input.name = this.context.getFieldId(name);
                     input.id = this.context.getFieldId(name);
                 }
-                input.value = value || '';
+                // Only set value if there is one - otherwise placeholder won't show
+                if (value) {
+                    input.value = value;
+                    console.log(`[CREATE FLEXIBLE DATE] Set value: "${input.value}"`);
+                } else {
+                    console.log(`[CREATE FLEXIBLE DATE] No value set, placeholder should be visible`);
+                }
 
                 // Add pattern for basic validation (year, year-month, or full date)
                 input.pattern = '^\\d{4}(-\\d{2}(-\\d{2})?)?$';
@@ -2243,7 +2251,7 @@
                 itemsContainer.id = `${this.context.getFieldId(name)}_items`;
                 
                 const renderArrayItems = () => {
-                    console.log(`[RENDER] renderArrayItems called for ${name}, arrayData length: ${arrayData.length}`);
+                    console.log(`[RENDER ${name}] length=${arrayData.length}, items:`, JSON.parse(JSON.stringify(arrayData)));
                     itemsContainer.innerHTML = '';
 
                     // Check if items are objects (handles $ref, type: 'object', or allOf with object schemas)
@@ -2439,7 +2447,9 @@
                                 newItem.id = generateUniqueId('item');
                             }
                             
+                            console.log(`[ADD ITEM] Adding to ${name}, arrayData was ${arrayData.length}, pushing:`, newItem);
                             arrayData.push(newItem);
+                            console.log(`[ADD ITEM] After push, arrayData is now ${arrayData.length}`);
                             renderArrayItems();
                         } else {
                             openObjectEditor(name, arrayData.length, property.items, arrayData, renderArrayItems);
@@ -2508,6 +2518,7 @@
 
                 // Create inline fields for properties
                 if (itemSchema && itemSchema.properties) {
+                    console.log(`[INLINE EDITOR ${arrayName}] Creating inline editor with properties:`, Object.keys(itemSchema.properties));
                     // Sort properties for better UI ordering
                     const propertyEntries = Object.entries(itemSchema.properties);
                     const requiredFields = itemSchema.required || [];
@@ -2565,18 +2576,30 @@
                         // Use resolvedProp instead of prop to ensure nested object schemas are fully expanded
                         const fieldElement = inlineContext.createField(key, resolvedProp, item[key]);
 
-                        // Only set up simple change listener for non-object fields
-                        // Object fields contain multiple nested inputs that need special handling
-                        if (resolvedProp.type !== 'object') {
+                        // Only set up simple change listener for non-object and non-array fields
+                        // Object fields and array fields contain multiple nested inputs that need special handling
+                        if (resolvedProp.type !== 'object' && resolvedProp.type !== 'array') {
                             // Set up change listener to update the item data
                             const input = fieldElement.querySelector('input, select, textarea');
                             if (input) {
                                 // Set initial value if item has data
-                                if (item[key] !== undefined) {
+                                if (item[key] !== undefined && item[key] !== null) {
                                     if (input.type === 'checkbox') {
                                         input.checked = item[key];
                                     } else {
-                                        input.value = item[key];
+                                        // Handle case where value might be an object (e.g., {code, title})
+                                        // Extract just the code string for display and update the item data
+                                        let displayValue = item[key];
+                                        console.log(`[INLINE LOAD ${arrayName}] Field ${key}[${index}] type: ${typeof displayValue}, value:`, displayValue);
+
+                                        if (typeof displayValue === 'object' && displayValue !== null && !Array.isArray(displayValue)) {
+                                            displayValue = displayValue.code || displayValue.title || '';
+                                            console.log(`[INLINE LOAD] Extracted from object: ${displayValue}`);
+                                            // Clean up the item data to store string instead of object
+                                            item[key] = displayValue;
+                                            arrayData[index][key] = displayValue;
+                                        }
+                                        input.value = displayValue || '';
                                     }
                                 }
 
@@ -6252,6 +6275,8 @@
                 return;
             }
 
+            console.log(`[OPEN MODAL ${arrayName}] index=${objectIndex}, array.length=${arrayData?.length}`);
+
             if (objectSchema.$ref) {
                 objectSchema = resolveReference(objectSchema.$ref);
             } else if (objectSchema.allOf) {
@@ -6266,6 +6291,7 @@
             arrayData: arrayData,
             renderCallback: renderCallback
             };
+
 
             const modalTitle = document.getElementById('objectEditorModalLabel');
             modalTitle.textContent = `Edit ${objectSchema.title || arrayName}`;
@@ -6307,7 +6333,21 @@
             const modalContext = new FieldCreationContext('modal', fieldsContainer, null, arrayName, inferredComponentType);
 
             if (objectSchema.properties) {
+            console.log(`[MODAL FIELDS] Rendering fields for ${arrayName}, schema properties:`, Object.keys(objectSchema.properties));
+
+            // Clean up misplaced disaster_identifiers from event_set level
+            if (arrayName && arrayName.includes('event_sets') && objectData.disaster_identifiers) {
+                console.log(`[MODAL FIELDS] Found misplaced disaster_identifiers at event_set level, removing...`);
+                delete objectData.disaster_identifiers;
+            }
+
             Object.entries(objectSchema.properties).forEach(([key, property]) => {
+                // Skip disaster_identifiers at event_set level - it belongs to individual events
+                if (arrayName && arrayName.includes('event_sets') && key === 'disaster_identifiers') {
+                    console.log(`[MODAL FIELDS] Skipping ${key} - belongs to Event, not EventSet`);
+                    return;
+                }
+
                 // If this property is an array, allow editing its items inline
                 if (property.type === 'array') {
                 // Use the array from objectData if present, ensuring we maintain existing data
@@ -6578,12 +6618,23 @@
             // Find all array containers in the modal and extract their current data
             const arrayContainers = document.querySelectorAll('#objectEditorFields .array-field');
             arrayContainers.forEach(container => {
+                // Skip array containers that are nested inside inline editor cards
+                // These will be handled when processing the parent card
+                const isNestedInCard = container.closest('.card[data-item-index]');
+                if (isNestedInCard) {
+                    console.log(`[SAVE ARRAY] Skipping nested array container inside card`);
+                    return;
+                }
+
                 const containerId = container.querySelector('[id$="_items"]')?.id;
                 if (containerId) {
                     const fieldName = containerId.replace('modal_', '').replace('_items', '');
 
                     // Check if this is a simple array (strings, numbers) or object array
-                    const cards = container.querySelectorAll('.card[data-item-index]');
+                    // IMPORTANT: Only select direct children to avoid selecting nested array cards
+                    const cards = Array.from(container.querySelectorAll('.card[data-item-index]')).filter(card =>
+                        card.parentElement === container || card.parentElement?.parentElement === container
+                    );
                     const simpleItems = container.querySelectorAll('.array-item');
 
                     if (cards.length > 0) {
@@ -6594,6 +6645,8 @@
                         const liveArrayData = firstCard?._arrayDataRef;
                         const existingArrayData = liveArrayData || objectData[fieldName] || [];
                         const arrayData = [];
+
+                        console.log(`[SAVE ARRAY ${fieldName}] cards=${cards.length}, existing=${existingArrayData.length}`);
 
                     cards.forEach((card, index) => {
                         // Start with existing item data to preserve inline editor updates
@@ -6653,7 +6706,69 @@
                         Object.entries(coordGroups).forEach(([fieldName, values]) => {
                             item[fieldName] = values;
                         });
-                        
+
+                        // Process nested array containers within this card (e.g., disaster_identifiers within an event)
+                        const nestedArrayContainers = card.querySelectorAll('.array-field');
+                        nestedArrayContainers.forEach(nestedContainer => {
+                            const nestedContainerId = nestedContainer.querySelector('[id$="_items"]')?.id;
+                            if (nestedContainerId) {
+                                const nestedFieldName = nestedContainerId.replace('modal_', '').replace('_items', '');
+                                console.log(`[SAVE NESTED ARRAY] Processing ${nestedFieldName} inside ${fieldName}[${index}]`);
+
+                                // Get the cards from this nested array
+                                const nestedCards = Array.from(nestedContainer.querySelectorAll('.card[data-item-index]')).filter(c =>
+                                    c.parentElement === nestedContainer || c.parentElement?.parentElement === nestedContainer
+                                );
+
+                                if (nestedCards.length > 0) {
+                                    const nestedArrayData = [];
+                                    const nestedLiveData = nestedCards[0]?._arrayDataRef;
+
+                                    nestedCards.forEach((nestedCard, nestedIndex) => {
+                                        const nestedItem = nestedLiveData && nestedLiveData[nestedIndex] ?
+                                            JSON.parse(JSON.stringify(nestedLiveData[nestedIndex])) : {};
+
+                                        // Capture all inputs in the nested card
+                                        const nestedInputs = nestedCard.querySelectorAll('input, select, textarea');
+                                        nestedInputs.forEach(input => {
+                                            const inputName = (input.name || input.id).replace('modal_', '');
+                                            if (inputName && inputName !== 'id') {
+                                                const rawValue = input.type === 'checkbox' ? input.checked : input.value;
+                                                if (input.type === 'checkbox' || rawValue !== '') {
+                                                    let convertedValue = input.type === 'checkbox' ? rawValue : convertValueBySchema(inputName, rawValue);
+
+                                                    // Ensure we're not saving objects for string fields (e.g., scheme)
+                                                    if (typeof convertedValue === 'object' && convertedValue !== null && !Array.isArray(convertedValue)) {
+                                                        convertedValue = convertedValue.code || convertedValue.title || String(convertedValue);
+                                                        console.log(`[SAVE NESTED] Field ${inputName} had object value, extracted string: ${convertedValue}`);
+                                                    }
+
+                                                    if (inputName.includes('.')) {
+                                                        setNestedValue(nestedItem, inputName, convertedValue);
+                                                    } else {
+                                                        nestedItem[inputName] = convertedValue;
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                        // Preserve ID
+                                        if (!nestedItem.id && nestedLiveData && nestedLiveData[nestedIndex]?.id) {
+                                            nestedItem.id = nestedLiveData[nestedIndex].id;
+                                        }
+                                        if (!nestedItem.id) {
+                                            nestedItem.id = generateUniqueId('item');
+                                        }
+
+                                        nestedArrayData.push(nestedItem);
+                                    });
+
+                                    item[nestedFieldName] = nestedArrayData;
+                                    console.log(`[SAVE NESTED ARRAY] Saved ${nestedArrayData.length} items to ${fieldName}[${index}].${nestedFieldName}`);
+                                }
+                            }
+                        });
+
                         // Preserve the ID if it exists
                         if (objectData[fieldName] && objectData[fieldName][index] && objectData[fieldName][index].id) {
                             item.id = objectData[fieldName][index].id;
@@ -6758,13 +6873,16 @@
                 // If no values specified, don't add to objectData (will be empty in output)
             });
             
-            // Get the full array data and update/add the object
-            let fullArrayDataUpdated = getNestedValue(currentFormData, currentObjectEditor.arrayName);
+            // Use the arrayData reference that was passed when opening the modal
+            let fullArrayDataUpdated = currentObjectEditor.arrayData;
+            console.log(`[SAVE MODAL ${currentObjectEditor.arrayName}] index=${currentObjectEditor.objectIndex}, array.length=${fullArrayDataUpdated?.length}`);
+
             if (!fullArrayDataUpdated) {
-                fullArrayDataUpdated = [];
+                fullArrayDataUpdated = getNestedValue(currentFormData, currentObjectEditor.arrayName) || [];
                 setNestedValue(currentFormData, currentObjectEditor.arrayName, fullArrayDataUpdated);
+                console.log(`[SAVE MODAL] Fallback: initialized empty array`);
             }
-            
+
             // Ensure the object has an ID
             if (currentObjectEditor.objectIndex >= fullArrayDataUpdated.length) {
                 let idPrefix = 'item';
@@ -6795,40 +6913,56 @@
                 }
             }
 
-            // Clean up empty nested objects (e.g., hazard objects with only an ID or no meaningful data)
-            // This prevents saving incomplete objects that would fail schema validation
-            function cleanupEmptyObjects(obj) {
-                if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) return obj;
+            // Clean up ONLY nested objects within events (hazard, occurrence)
+            // Don't remove events themselves or other important structures
+            function cleanupEmptyNestedObjects(obj, depth = 0) {
+                if (typeof obj !== 'object' || obj === null) return obj;
 
-                const keys = Object.keys(obj);
-                // If object only has an 'id' key, or is empty, return undefined to remove it
-                if (keys.length === 0 || (keys.length === 1 && keys[0] === 'id')) {
-                    return undefined;
+                // Don't process arrays at top level - we want to preserve events array
+                if (Array.isArray(obj)) {
+                    // Clean each item in the array but keep the array itself
+                    obj.forEach((item, index) => {
+                        if (typeof item === 'object' && item !== null) {
+                            cleanupEmptyNestedObjects(item, depth + 1);
+                        }
+                    });
+                    return obj;
                 }
 
-                // Check if all non-id values are empty
-                const hasNonIdData = keys.some(k => {
-                    if (k === 'id') return false;
-                    const val = obj[k];
-                    return val !== undefined && val !== null && val !== '';
-                });
+                // Clean nested objects and properties
+                for (const key in obj) {
+                    if (typeof obj[key] === 'object' && obj[key] !== null) {
+                        if (Array.isArray(obj[key])) {
+                            // Recursively process arrays
+                            cleanupEmptyNestedObjects(obj[key], depth + 1);
+                        } else {
+                            // Check if this nested object is empty (only has id or completely empty)
+                            const nestedKeys = Object.keys(obj[key]);
+                            const isEmpty = nestedKeys.length === 0 ||
+                                          (nestedKeys.length === 1 && nestedKeys[0] === 'id') ||
+                                          nestedKeys.every(k => {
+                                              if (k === 'id') return true;
+                                              const val = obj[key][k];
+                                              return val === undefined || val === null || val === '' ||
+                                                     (typeof val === 'object' && !Array.isArray(val) && Object.keys(val).length === 0);
+                                          });
 
-                if (!hasNonIdData) {
-                    return undefined; // Remove this object
+                            if (isEmpty) {
+                                // Remove this empty nested object
+                                delete obj[key];
+                            } else {
+                                // Recursively clean this nested object
+                                cleanupEmptyNestedObjects(obj[key], depth + 1);
+                            }
+                        }
+                    }
                 }
 
                 return obj;
             }
 
-            // Apply cleanup to nested objects in objectData
-            for (const key in objectData) {
-                if (typeof objectData[key] === 'object' && !Array.isArray(objectData[key]) && objectData[key] !== null) {
-                    const cleaned = cleanupEmptyObjects(objectData[key]);
-                    if (cleaned === undefined) {
-                        delete objectData[key]; // Remove empty nested object
-                    }
-                }
-            }
+            // Apply cleanup - this will remove empty hazard/occurrence objects but preserve events
+            cleanupEmptyNestedObjects(objectData);
 
             // Update the array
             if (currentObjectEditor.objectIndex >= fullArrayDataUpdated.length) {
@@ -6839,11 +6973,16 @@
             
             setNestedValue(currentFormData, currentObjectEditor.arrayName, fullArrayDataUpdated);
             updatePreview();
-            generateForm();
-            
+
+            // Call the render callback to update the array display
+            if (currentObjectEditor.renderCallback) {
+                console.log(`[SAVE MODAL] Calling renderCallback`);
+                currentObjectEditor.renderCallback();
+            }
+
             const modal = bootstrap.Modal.getInstance(document.getElementById('objectEditorModal'));
             modal.hide();
-            
+
             updateFormStatus('success', 'Object saved successfully');
         }
 
@@ -6928,6 +7067,15 @@
                         }
                     }
                 }
+            }
+
+            // Special handling for known integer fields when schema lookup fails
+            const integerFields = ['central_year', 'event_count'];
+            const baseName = fieldName.split('.').pop();
+
+            if (!property && integerFields.includes(baseName)) {
+                const intValue = parseInt(value, 10);
+                return isNaN(intValue) ? value : intValue;
             }
 
             if (!property) {
@@ -7319,13 +7467,18 @@
             let exposureValid = true;
             let exposureError = '';
 
-            if (hasExposureType && exposureSectionActive) {
-                const exposures = currentFormData.exposure || [];
-
-                if (!exposures.length) {
+            // Check if exposure section is active - if so, it must have data AND be in risk_data_type
+            if (exposureSectionActive) {
+                if (!hasExposureType) {
                     exposureValid = false;
-                    exposureError = 'Dataset with exposure risk_data_type must have at least one exposure item';
+                    exposureError = 'Exposure component is active but "exposure" is not selected in risk_data_type';
                 } else {
+                    const exposures = currentFormData.exposure || [];
+
+                    if (!exposures.length) {
+                        exposureValid = false;
+                        exposureError = 'Dataset with exposure risk_data_type must have at least one exposure item';
+                    } else {
                     // Check each exposure item
                     for (let i = 0; i < exposures.length; i++) {
                         const exposure = exposures[i];
@@ -7376,6 +7529,7 @@
 
                         if (!exposureValid) break;
                     }
+                    }
                 }
             }
 
@@ -7391,14 +7545,18 @@
             let lossValid = true;
             let lossError = '';
 
-            if (hasLossType && lossSectionActive) {
-                const losses = (currentFormData.loss && currentFormData.loss.losses) || [];
-
-
-                if (!losses.length) {
+            // Check if loss section is active - if so, it must have data AND be in risk_data_type
+            if (lossSectionActive) {
+                if (!hasLossType) {
                     lossValid = false;
-                    lossError = 'Dataset with loss risk_data_type must have at least one loss item';
+                    lossError = 'Loss component is active but "loss" is not selected in risk_data_type';
                 } else {
+                    const losses = (currentFormData.loss && currentFormData.loss.losses) || [];
+
+                    if (!losses.length) {
+                        lossValid = false;
+                        lossError = 'Dataset with loss risk_data_type must have at least one loss item';
+                    } else {
                     // Define required loss attributes with correct field paths
                     const requiredLossAttributes = [
                         { field: 'hazard_type', name: 'hazard type' },
@@ -7438,6 +7596,7 @@
 
                         if (!lossValid) break;
                     }
+                    }
                 }
             }
 
@@ -7452,13 +7611,18 @@
             let vulnerabilityValid = true;
             let vulnerabilityError = '';
 
-            if (hasVulnerabilityType && vulnerabilitySectionActive) {
-                const vulnerability = currentFormData.vulnerability;
-
-                if (!vulnerability) {
+            // Check if vulnerability section is active - if so, it must have data AND be in risk_data_type
+            if (vulnerabilitySectionActive) {
+                if (!hasVulnerabilityType) {
                     vulnerabilityValid = false;
-                    vulnerabilityError = 'Dataset with vulnerability risk_data_type must have vulnerability metadata';
+                    vulnerabilityError = 'Vulnerability component is active but "vulnerability" is not selected in risk_data_type';
                 } else {
+                    const vulnerability = currentFormData.vulnerability;
+
+                    if (!vulnerability) {
+                        vulnerabilityValid = false;
+                        vulnerabilityError = 'Dataset with vulnerability risk_data_type must have vulnerability metadata';
+                    } else {
                     // Check which approach is being used
                     // hasFunctions should only be true if there are actual non-empty function arrays
                     const hasFunctions = vulnerability.functions && Object.keys(vulnerability.functions).some(key => {
@@ -7528,6 +7692,7 @@
                             if (!vulnerabilityValid) break;
                         }
                     }
+                    }
                 }
             }
 
@@ -7542,58 +7707,70 @@
             let hazardValid = true;
             let hazardError = '';
 
-            if (hasHazardType && hazardSectionActive && currentFormData.hazard && currentFormData.hazard.event_sets) {
-                const eventSets = currentFormData.hazard.event_sets;
+            // Check if hazard section is active - if so, it must have data AND be in risk_data_type
+            if (hazardSectionActive) {
+                if (!hasHazardType) {
+                    hazardValid = false;
+                    hazardError = 'Hazard component is active but "hazard" is not selected in risk_data_type';
+                } else {
+                    // Check if hazard has event_sets with at least one event_set
+                    const eventSets = (currentFormData.hazard && currentFormData.hazard.event_sets) || [];
 
-                for (let i = 0; i < eventSets.length; i++) {
-                    const eventSet = eventSets[i];
-                    const eventSetNum = i + 1;
-                    const events = eventSet.events || [];
+                    if (!eventSets.length) {
+                        hazardValid = false;
+                        hazardError = 'Dataset with hazard risk_data_type must have at least one event_set';
+                    } else {
+                        for (let i = 0; i < eventSets.length; i++) {
+                        const eventSet = eventSets[i];
+                        const eventSetNum = i + 1;
+                        const events = eventSet.events || [];
 
-                    if (events.length === 0) continue; // Skip validation if no events
+                        if (events.length === 0) continue; // Skip validation if no events
 
-                    // Check if event_set has hazard information
-                    const hasEventSetHazards = eventSet.hazards && eventSet.hazards.length > 0;
-                    const hasEventSetCalculationMethod = eventSet.calculation_method && eventSet.calculation_method.trim() !== '';
+                        // Check if event_set has hazard information
+                        const hasEventSetHazards = eventSet.hazards && eventSet.hazards.length > 0;
+                        const hasEventSetCalculationMethod = eventSet.calculation_method && eventSet.calculation_method.trim() !== '';
 
-                    // Get first hazard from event_set (if exists)
-                    const eventSetHazard = hasEventSetHazards ? eventSet.hazards[0] : null;
-                    const hasEventSetType = eventSetHazard && eventSetHazard.type && eventSetHazard.type.trim() !== '';
-                    const hasEventSetProcess = eventSetHazard && eventSetHazard.hazard_process && eventSetHazard.hazard_process.trim() !== '';
+                        // Get first hazard from event_set (if exists)
+                        const eventSetHazard = hasEventSetHazards ? eventSet.hazards[0] : null;
+                        const hasEventSetType = eventSetHazard && eventSetHazard.type && eventSetHazard.type.trim() !== '';
+                        const hasEventSetProcess = eventSetHazard && eventSetHazard.process && eventSetHazard.process.trim() !== '';
 
-                    // Validate each event
-                    for (let j = 0; j < events.length; j++) {
-                        const event = events[j];
-                        const eventNum = j + 1;
+                        // Validate each event
+                        for (let j = 0; j < events.length; j++) {
+                            const event = events[j];
+                            const eventNum = j + 1;
 
-                        // Check if event has its own hazard and calculation_method
-                        const hasEventHazard = event.hazard && typeof event.hazard === 'object';
-                        const hasEventType = hasEventHazard && event.hazard.type && event.hazard.type.trim() !== '';
-                        const hasEventProcess = hasEventHazard && event.hazard.hazard_process && event.hazard.hazard_process.trim() !== '';
-                        const hasEventCalculationMethod = event.calculation_method && event.calculation_method.trim() !== '';
+                            // Check if event has its own hazard and calculation_method
+                            const hasEventHazard = event.hazard && typeof event.hazard === 'object';
+                            const hasEventType = hasEventHazard && event.hazard.type && event.hazard.type.trim() !== '';
+                            const hasEventProcess = hasEventHazard && event.hazard.process && event.hazard.process.trim() !== '';
+                            const hasEventCalculationMethod = event.calculation_method && event.calculation_method.trim() !== '';
 
-                        // Rule: If event_set doesn't have type, process, or calculation_method,
-                        // then events MUST have them
-                        if (!hasEventSetType && !hasEventType) {
-                            hazardValid = false;
-                            hazardError = `Event set ${eventSetNum}, Event ${eventNum}: hazard type must be specified either at event_set level or event level`;
-                            break;
+                            // Rule: If event_set doesn't have type, process, or calculation_method,
+                            // then events MUST have them
+                            if (!hasEventSetType && !hasEventType) {
+                                hazardValid = false;
+                                hazardError = `Event set ${eventSetNum}, Event ${eventNum}: hazard type must be specified either at event_set level or event level`;
+                                break;
+                            }
+
+                            if (!hasEventSetProcess && !hasEventProcess) {
+                                hazardValid = false;
+                                hazardError = `Event set ${eventSetNum}, Event ${eventNum}: hazard process must be specified either at event_set level or event level`;
+                                break;
+                            }
+
+                            if (!hasEventSetCalculationMethod && !hasEventCalculationMethod) {
+                                hazardValid = false;
+                                hazardError = `Event set ${eventSetNum}, Event ${eventNum}: calculation_method must be specified either at event_set level or event level`;
+                                break;
+                            }
                         }
 
-                        if (!hasEventSetProcess && !hasEventProcess) {
-                            hazardValid = false;
-                            hazardError = `Event set ${eventSetNum}, Event ${eventNum}: hazard process must be specified either at event_set level or event level`;
-                            break;
-                        }
-
-                        if (!hasEventSetCalculationMethod && !hasEventCalculationMethod) {
-                            hazardValid = false;
-                            hazardError = `Event set ${eventSetNum}, Event ${eventNum}: calculation_method must be specified either at event_set level or event level`;
-                            break;
+                        if (!hazardValid) break;
                         }
                     }
-
-                    if (!hazardValid) break;
                 }
             }
 
