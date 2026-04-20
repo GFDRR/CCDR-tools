@@ -6769,11 +6769,19 @@
                                         if (!nestedItem.id && nestedLiveData && nestedLiveData[nestedIndex]?.id) {
                                             nestedItem.id = nestedLiveData[nestedIndex].id;
                                         }
-                                        if (!nestedItem.id) {
+                                        // Only auto-generate ID for non-Classification objects
+                                        // Classification objects (like disaster_identifiers) require user-provided id
+                                        const isClassificationArray = nestedFieldName === 'disaster_identifiers' || nestedFieldName.endsWith('.disaster_identifiers');
+                                        if (!nestedItem.id && !isClassificationArray) {
                                             nestedItem.id = generateUniqueId('item');
                                         }
 
-                                        nestedArrayData.push(nestedItem);
+                                        // Skip empty Classification objects (no id means user didn't fill it in)
+                                        if (isClassificationArray && !nestedItem.id) {
+                                            console.log(`[SAVE NESTED ARRAY] Skipping empty Classification object (no id provided)`);
+                                        } else {
+                                            nestedArrayData.push(nestedItem);
+                                        }
                                     });
 
                                     item[nestedFieldName] = nestedArrayData;
