@@ -231,13 +231,13 @@
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
         }
 
-        /* Special styling for problematic nested arrays */
+        /* Special styling for nested classification arrays like disaster_identifiers */
         .array-field[data-array-name*="disaster_identifiers"] .card {
-            border-left-color: #dc3545;
+            border-left-color: #6f42c1; /* Purple to distinguish from regular arrays */
         }
 
         .array-field[data-array-name*="disaster_identifiers"] .card .card-body {
-            background-color: #fff5f5;
+            background-color: #f8f5ff; /* Light purple background */
         }
 
         /* Footer Styles */
@@ -1142,13 +1142,14 @@
          * Handles all field creation needs across normal, modal, and array contexts
          */
         class FieldCreationContext {
-            constructor(type = 'normal', container = null, itemData = null, arrayName = null, componentType = null) {
+            constructor(type = 'normal', container = null, itemData = null, arrayName = null, componentType = null, itemSchema = null) {
                 this.type = type; // 'normal', 'modal', 'inline', 'array'
                 this.container = container;
                 this.idPrefix = type === 'modal' ? 'modal_' : '';
                 this.itemData = itemData; // For inline context, stores the item being edited
                 this.arrayName = arrayName; // For inline context, stores the array name (e.g., 'hazards', 'losses')
                 this.componentType = componentType; // Component type: 'hazard', 'exposure', 'vulnerability', 'loss'
+                this.itemSchema = itemSchema; // For inline context, stores the item schema (for checking required fields)
             }
 
             createField(name, property, value, options = {}) {
@@ -1183,7 +1184,9 @@
             createField(name, property, value, options = {}) {
                 // Skip ID fields in certain contexts
                 // ID fields are auto-generated and should not be editable
-                if (name === 'id' || (name.includes('.id') && (this.context.type === 'array' || this.context.type === 'inline'))) {
+                // EXCEPT for Classification objects where 'id' is the user-provided classification code
+                const isClassificationId = property && property.title === 'Classification identifier';
+                if (!isClassificationId && (name === 'id' || (name.includes('.id') && (this.context.type === 'array' || this.context.type === 'inline')))) {
                     return document.createElement('div');
                 }
 
@@ -2435,17 +2438,23 @@
                             const newItem = {};
 
                             // Initialize with appropriate ID based on object type
-                            if (name === 'metrics') {
-                                newItem.id = generateUniqueId('metric');
-                            } else if (name === 'cost') {
-                                newItem.id = generateUniqueId('cost');
-                            } else if (name === 'hazards') {
-                                newItem.id = generateUniqueId('hazard');
-                            } else if (name === 'events' || name.includes('.events')) {
-                                newItem.id = generateUniqueId('event');
-                            } else {
-                                newItem.id = generateUniqueId('item');
+                            // EXCEPT for Classification objects (disaster_identifiers) where id is user-provided
+                            const isClassificationArray = name.endsWith('.disaster_identifiers') || name === 'disaster_identifiers';
+
+                            if (!isClassificationArray) {
+                                if (name === 'metrics') {
+                                    newItem.id = generateUniqueId('metric');
+                                } else if (name === 'cost') {
+                                    newItem.id = generateUniqueId('cost');
+                                } else if (name === 'hazards') {
+                                    newItem.id = generateUniqueId('hazard');
+                                } else if (name === 'events' || name.includes('.events')) {
+                                    newItem.id = generateUniqueId('event');
+                                } else {
+                                    newItem.id = generateUniqueId('item');
+                                }
                             }
+                            // For Classification objects, leave id empty for user input
                             
                             console.log(`[ADD ITEM] Adding to ${name}, arrayData was ${arrayData.length}, pushing:`, newItem);
                             arrayData.push(newItem);
@@ -2546,12 +2555,6 @@
                     });
 
                     propertyEntries.forEach(([key, prop]) => {
-                        if (key === 'id') return; // Skip ID field
-
-                        const fieldDiv = document.createElement('div');
-                        fieldDiv.className = 'mb-2';
-                        fieldDiv.setAttribute('data-field-name', key);
-
                         // Resolve $ref if present to get the full property schema
                         // Preserve original title and description when resolving
                         let resolvedProp = prop;
@@ -2561,6 +2564,14 @@
                                 resolvedProp = { ...resolved, title: prop.title || resolved.title, description: prop.description || resolved.description };
                             }
                         }
+
+                        // Skip ID field EXCEPT for Classification objects where id is user-provided
+                        const isClassificationId = resolvedProp && resolvedProp.title === 'Classification identifier';
+                        if (key === 'id' && !isClassificationId) return;
+
+                        const fieldDiv = document.createElement('div');
+                        fieldDiv.className = 'mb-2';
+                        fieldDiv.setAttribute('data-field-name', key);
 
                         // Create a sub-context for inline editing
                         // Don't use ID/name attributes to avoid polluting FormData
@@ -2572,7 +2583,7 @@
                              arrayName.toLowerCase().includes('hazard') ? 'hazard' :
                              arrayName.toLowerCase().includes('vulnerabilit') ? 'vulnerability' :
                              arrayName.toLowerCase().includes('loss') ? 'loss' : null) : null;
-                        const inlineContext = new FieldCreationContext('inline', fieldDiv, item, arrayName, inferredComponentType);
+                        const inlineContext = new FieldCreationContext('inline', fieldDiv, item, arrayName, inferredComponentType, itemSchema);
                         // Use resolvedProp instead of prop to ensure nested object schemas are fully expanded
                         const fieldElement = inlineContext.createField(key, resolvedProp, item[key]);
 
@@ -3239,6 +3250,12 @@
             }
 
             isRequiredField(name, property, options) {
+                // For inline context, check the itemSchema passed through context
+                if (this.context.type === 'inline' && this.context.itemSchema) {
+                    const requiredFields = this.context.itemSchema.required || [];
+                    return requiredFields.includes(name);
+                }
+
                 // Spatial scale is always mandatory when spatial coverage is included
                 if (name === 'spatial.scale') {
                     return true;
@@ -3314,14 +3331,10 @@
                         }
                     }
 
-                    // Check if field is required in nested objects (for modal contexts where field names are flattened)
-                    if (itemSchema && itemSchema.properties) {
-                        for (const [propName, propSchema] of Object.entries(itemSchema.properties)) {
-                            if (propSchema.type === 'object' && propSchema.required && propSchema.required.includes(name)) {
-                                return true;
-                            }
-                        }
-                    }
+                    // Don't check nested object required fields here - they are handled by nested field names (e.g., "hazard.process")
+                    // The buggy check below was incorrectly marking ALL fields named 'process' as required
+                    // just because 'hazard' object has 'process' in its required array
+                    // This has been removed to fix incorrect required field highlighting
                 }
 
                 // Check top-level required fields (general section)
