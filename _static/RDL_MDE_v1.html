@@ -594,20 +594,48 @@
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-info">
-                        <strong>Setup Instructions:</strong>
+                        <strong>GitHub Authentication:</strong>
+                        <p class="mb-2">To publish datasets to the RDLS catalogue, you'll need a GitHub Personal Access Token. The editor will automatically:</p>
                         <ol class="mb-0 mt-2">
-                            <li>Create a <a href="https://github.com/settings/tokens" target="_blank">Personal Access Token</a> with <code>repo</code> permissions</li>
-                            <li>Enter your token below (it will be stored securely in your session)</li>
-                            <li>Confirm the target repository and branch settings</li>
+                            <li>Create a fork of the catalogue repository in your account (if needed)</li>
+                            <li>Commit your dataset to your fork</li>
+                            <li>Open a pull request for review by repository admins</li>
                         </ol>
                     </div>
 
-                    <form id="githubConfigForm">
-                        <div class="mb-3">
-                            <label for="githubToken" class="form-label">GitHub Personal Access Token <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
-                            <div class="form-text">Your token is stored securely and only for this session</div>
+                    <div id="githubAuthSection">
+                        <div id="notAuthenticated">
+                            <div class="mb-3">
+                                <label for="githubToken" class="form-label">
+                                    <strong>GitHub Personal Access Token</strong>
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="password" class="form-control" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
+                                <div class="form-text">
+                                    <a href="https://github.com/settings/tokens/new?description=RDLS%20Metadata%20Editor&scopes=public_repo" target="_blank" class="text-decoration-none">
+                                        🔑 Create a new token
+                                    </a> with <code>public_repo</code> scope only. Your token is stored only in your browser session.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success w-100" onclick="authenticateWithToken()">
+                                <i class="bi bi-check-circle"></i> Verify Token
+                            </button>
                         </div>
+
+                        <div id="authenticated" style="display: none;">
+                            <div class="alert alert-success mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>✅ Authenticated as <span id="githubUsername"></span></strong>
+                                        <br><small class="text-muted">Token valid for this session</small>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="logoutGithub()">Sign Out</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="githubConfigForm" style="display: none;">
 
                         <div class="mb-3">
                             <label for="githubRepo" class="form-label">Target Repository</label>
@@ -632,8 +660,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="testGithubConnection">Test Connection</button>
-                    <button type="button" class="btn btn-primary" id="publishToGithub">Publish Dataset</button>
+                    <button type="button" class="btn btn-primary" id="publishToGithub" onclick="publishToGithub()">Publish to Catalogue</button>
                 </div>
             </div>
         </div>
@@ -8197,62 +8224,152 @@
             const datasetTitle = currentFormData.title || currentFormData.name || 'rdls-dataset';
             document.getElementById('datasetTitle').value = sanitizeFilename(datasetTitle);
 
-            // Load saved GitHub token if exists
-            const savedToken = sessionStorage.getItem('githubToken');
-            if (savedToken) {
-                document.getElementById('githubToken').value = savedToken;
-            }
+            // Check authentication state
+            checkGithubAuthState();
 
             const modal = new bootstrap.Modal(document.getElementById('githubConfigModal'));
             modal.show();
         }
 
-        async function testGithubConnection() {
-            const token = document.getElementById('githubToken').value;
-            const repo = document.getElementById('githubRepo').value;
-            const statusDiv = document.getElementById('githubConfigStatus');
+        // GitHub Configuration
+        const TARGET_REPO_OWNER = 'GFDRR';
+        const TARGET_REPO_NAME = 'rdl-jkan';
+        const TARGET_REPO = `${TARGET_REPO_OWNER}/${TARGET_REPO_NAME}`;
+
+        // Initialize GitHub auth state on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkGithubAuthState();
+        });
+
+        async function authenticateWithToken() {
+            const token = document.getElementById('githubToken').value.trim();
 
             if (!token) {
                 showGithubStatus('error', 'Please enter a GitHub token');
                 return;
             }
 
+            if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+                showGithubStatus('error', 'Invalid token format. Token should start with "ghp_" or "github_pat_"');
+                return;
+            }
+
+            showGithubStatus('info', '🔄 Verifying token...');
+
+            try {
+                // Verify token by getting user info
+                const userResponse = await githubRequest(token, 'user');
+
+                // Token is valid, store it
+                sessionStorage.setItem('github_access_token', token);
+                sessionStorage.setItem('github_username', userResponse.login);
+
+                checkGithubAuthState();
+                showGithubStatus('success', `✅ Successfully authenticated as ${userResponse.login}!`);
+
+            } catch (error) {
+                console.error('Token verification error:', error);
+                showGithubStatus('error', `❌ Authentication failed: ${error.message}`);
+            }
+        }
+
+        function checkGithubAuthState() {
+            const token = sessionStorage.getItem('github_access_token');
+            const username = sessionStorage.getItem('github_username');
+
+            if (token && username) {
+                document.getElementById('notAuthenticated').style.display = 'none';
+                document.getElementById('authenticated').style.display = 'block';
+                document.getElementById('githubUsername').textContent = username;
+
+                // Show publish button if authenticated
+                const publishBtn = document.getElementById('publishToGithub');
+                if (publishBtn) publishBtn.disabled = false;
+            } else {
+                document.getElementById('notAuthenticated').style.display = 'block';
+                document.getElementById('authenticated').style.display = 'none';
+
+                // Disable publish button if not authenticated
+                const publishBtn = document.getElementById('publishToGithub');
+                if (publishBtn) publishBtn.disabled = true;
+            }
+        }
+
+        function logoutGithub() {
+            sessionStorage.removeItem('github_access_token');
+            sessionStorage.removeItem('github_username');
+            checkGithubAuthState();
+            showGithubStatus('info', 'Signed out successfully');
+        }
+
+        async function testGithubConnection() {
+            const token = sessionStorage.getItem('github_access_token');
+            const statusDiv = document.getElementById('githubConfigStatus');
+
+            if (!token) {
+                showGithubStatus('error', 'Please sign in with GitHub first');
+                return;
+            }
+
             showGithubStatus('info', 'Testing connection...');
 
             try {
-                const response = await fetch(`https://api.github.com/repos/${repo}`, {
+                const userResponse = await githubRequest(token, 'user');
+                showGithubStatus('success', `✅ Connected as ${userResponse.login}`);
+            } catch (error) {
+                showGithubStatus('error', `❌ Connection failed: ${error.message}`);
+            }
+        }
+
+        async function ensureUserFork(token, username) {
+            showGithubStatus('info', '🔍 Checking for existing fork...');
+
+            try {
+                // Check if user already has a fork
+                const forkResponse = await fetch(`https://api.github.com/repos/${username}/${TARGET_REPO_NAME}`, {
                     headers: {
                         'Authorization': `token ${token}`,
                         'Accept': 'application/vnd.github.v3+json'
                     }
                 });
 
-                if (response.ok) {
-                    const repoData = await response.json();
-                    sessionStorage.setItem('githubToken', token);
-                    showGithubStatus('success', `✅ Connected to ${repoData.full_name}. You have ${repoData.permissions.push ? 'write' : 'read'} access.`);
-                } else if (response.status === 401) {
-                    showGithubStatus('error', '❌ Invalid token. Please check your Personal Access Token.');
-                } else if (response.status === 404) {
-                    showGithubStatus('error', '❌ Repository not found or no access.');
-                } else {
-                    showGithubStatus('error', `❌ Connection failed: ${response.statusText}`);
+                if (forkResponse.ok) {
+                    const forkData = await forkResponse.json();
+                    if (forkData.fork && forkData.parent.full_name === TARGET_REPO) {
+                        showGithubStatus('success', '✅ Fork already exists');
+                        return `${username}/${TARGET_REPO_NAME}`;
+                    }
                 }
+
+                // Fork doesn't exist, create it
+                showGithubStatus('info', '🍴 Creating fork in your account...');
+                const createForkResponse = await githubRequest(token, `repos/${TARGET_REPO}/forks`, {
+                    method: 'POST',
+                    body: JSON.stringify({})
+                });
+
+                // Wait a moment for fork to be ready
+                showGithubStatus('info', '⏳ Waiting for fork to be ready...');
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+                showGithubStatus('success', `✅ Fork created: ${createForkResponse.full_name}`);
+                return createForkResponse.full_name;
+
             } catch (error) {
-                showGithubStatus('error', `❌ Network error: ${error.message}`);
+                throw new Error(`Failed to create fork: ${error.message}`);
             }
         }
 
         async function publishToGithub() {
-            const token = document.getElementById('githubToken').value;
-            const repo = document.getElementById('githubRepo').value;
-            const baseBranch = document.getElementById('githubBranch').value;
+            const token = sessionStorage.getItem('github_access_token');
+            const username = sessionStorage.getItem('github_username');
+            const baseBranch = 'rdl-0.3'; // Target branch in main repo
             const datasetTitle = document.getElementById('datasetTitle').value;
             const statusDiv = document.getElementById('githubConfigStatus');
 
             // Input validation
-            if (!token) {
-                showGithubStatus('error', 'Please enter a GitHub token');
+            if (!token || !username) {
+                showGithubStatus('error', 'Please sign in with GitHub first');
                 return;
             }
 
@@ -8276,11 +8393,9 @@
 
             // Disable publish button during operation
             const publishBtn = document.getElementById('publishToGithub');
-            const testBtn = document.getElementById('testGithubConnection');
             publishBtn.disabled = true;
-            testBtn.disabled = true;
 
-            showGithubStatus('info', 'Publishing to GitHub...');
+            showGithubStatus('info', '🚀 Starting publication process...');
 
             try {
                 // Package dataset first to get the ID
@@ -8296,24 +8411,42 @@
                 const filename = datasetId ? `${datasetId}.json` : `${sanitizeFilename(datasetTitle)}-${timestamp}.json`;
                 const branchName = datasetId ? `rdl-dataset-${datasetId}` : `rdl-dataset-${sanitizeFilename(datasetTitle)}-${timestamp}`;
 
-                // Step 1: Get base branch SHA
+                // Step 1: Ensure user has a fork
+                const userForkRepo = await ensureUserFork(token, username);
+
+                // Step 2: Get base branch SHA from MAIN repo (not fork)
                 showGithubStatus('info', '📡 Getting base branch information...');
-                const baseResponse = await githubRequest(token, `repos/${repo}/git/ref/heads/${baseBranch}`);
+                const baseResponse = await githubRequest(token, `repos/${TARGET_REPO}/git/ref/heads/${baseBranch}`);
                 const baseSha = baseResponse.object.sha;
 
-                // Step 2: Create new branch
-                showGithubStatus('info', '🌿 Creating new branch...');
-                await githubRequest(token, `repos/${repo}/git/refs`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        ref: `refs/heads/${branchName}`,
-                        sha: baseSha
-                    })
-                });
+                // Step 3: Create new branch in USER'S FORK
+                showGithubStatus('info', '🌿 Creating branch in your fork...');
+                try {
+                    await githubRequest(token, `repos/${userForkRepo}/git/refs`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            ref: `refs/heads/${branchName}`,
+                            sha: baseSha
+                        })
+                    });
+                } catch (error) {
+                    // If branch already exists, try to update it
+                    if (error.message.includes('422')) {
+                        showGithubStatus('info', '🔄 Branch exists, updating...');
+                        await githubRequest(token, `repos/${userForkRepo}/git/refs/heads/${branchName}`, {
+                            method: 'PATCH',
+                            body: JSON.stringify({
+                                sha: baseSha,
+                                force: true
+                            })
+                        });
+                    } else {
+                        throw error;
+                    }
+                }
 
-                // Step 3: Create/update file
-                showGithubStatus('info', '📄 Uploading dataset file...');
-                // Use UTF-8 safe base64 encoding to handle special characters
+                // Step 4: Create/update file in USER'S FORK
+                showGithubStatus('info', '📄 Uploading dataset file to your fork...');
                 const jsonString = JSON.stringify(cleanedData, null, 2);
                 const content = btoa(unescape(encodeURIComponent(jsonString)));
                 const commitMessage = `Add RDLS dataset: ${datasetTitle}
@@ -8323,7 +8456,7 @@ Dataset published via RDLS Metadata Editor
 - Description: ${cleanedData.datasets?.[0]?.description ? cleanedData.datasets[0].description.substring(0, 100) + '...' : 'No description'}
 - Timestamp: ${new Date().toISOString()}`;
 
-                await githubRequest(token, `repos/${repo}/contents/_datasets/json/${filename}`, {
+                await githubRequest(token, `repos/${userForkRepo}/contents/_datasets/json/${filename}`, {
                     method: 'PUT',
                     body: JSON.stringify({
                         message: commitMessage,
@@ -8332,13 +8465,13 @@ Dataset published via RDLS Metadata Editor
                     })
                 });
 
-                // Step 4: Create Pull Request
+                // Step 5: Create Pull Request from USER'S FORK to MAIN REPO
                 showGithubStatus('info', '🔄 Creating pull request...');
-                const prResponse = await githubRequest(token, `repos/${repo}/pulls`, {
+                const prResponse = await githubRequest(token, `repos/${TARGET_REPO}/pulls`, {
                     method: 'POST',
                     body: JSON.stringify({
                         title: `Add RDLS Dataset: ${datasetTitle}`,
-                        head: branchName,
+                        head: `${username}:${branchName}`, // Important: user:branch format
                         base: baseBranch,
                         body: `## New RDLS Dataset Submission
 
@@ -8353,6 +8486,7 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
 - Published via RDLS Metadata Editor
 - Timestamp: ${new Date().toISOString()}
 - Validation: ✅ Passed
+- Submitted by: @${username}
 
 ---
 🤖 This pull request was automatically generated by the RDLS Metadata Editor.`
@@ -8362,9 +8496,6 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
                 // Success!
                 const prUrl = prResponse.html_url;
                 showGithubStatus('success', `🎉 Successfully published! <a href="${prUrl}" target="_blank">View Pull Request #${prResponse.number}</a>`);
-
-                // Store token for future use
-                sessionStorage.setItem('githubToken', token);
 
                 // Show confirmation and offer to close modal
                 setTimeout(() => {
@@ -8382,14 +8513,16 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
                 console.error('GitHub publish error:', error);
                 let errorMessage = 'Publication failed: ';
 
-                if (error.message.includes('422')) {
-                    errorMessage += 'Branch might already exist. Try with a different dataset title.';
+                if (error.message.includes('fork')) {
+                    errorMessage += 'Could not create fork. Please try again or create a fork manually.';
+                } else if (error.message.includes('422')) {
+                    errorMessage += 'Branch or PR already exists. Try with a different dataset title.';
                 } else if (error.message.includes('403')) {
-                    errorMessage += 'Access denied. Please check your token permissions.';
+                    errorMessage += 'Access denied. Please check your GitHub permissions.';
                 } else if (error.message.includes('401')) {
-                    errorMessage += 'Authentication failed. Please check your token.';
+                    errorMessage += 'Authentication failed. Please sign in again.';
                 } else if (error.message.includes('404')) {
-                    errorMessage += 'Repository not found or no access.';
+                    errorMessage += 'Repository not found.';
                 } else if (error.message.toLowerCase().includes('network')) {
                     errorMessage += 'Network connection error. Please check your internet connection.';
                 } else {
@@ -8398,9 +8531,8 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
 
                 showGithubStatus('error', `❌ ${errorMessage}`);
             } finally {
-                // Re-enable buttons
+                // Re-enable button
                 publishBtn.disabled = false;
-                testBtn.disabled = false;
             }
         }
 
