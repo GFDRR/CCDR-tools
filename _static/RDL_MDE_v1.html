@@ -518,7 +518,7 @@
                                     <div class="text-center text-muted py-5">
                                         <div style="font-size: 4rem;">🌍</div>
                                         <p>Schema will load automatically and configure sections as needed</p>
-                                        <small class="text-muted">Refactored with unified field creation and improved dependency handling - meant to work with RDLS v0.3 or later</small>
+                                        <small class="text-muted">Unified field creation with improved dependency handling for RDLS v1.0</small>
                                     </div>
                                 </div>
                             </div>
@@ -645,7 +645,7 @@
 
                         <div class="mb-3">
                             <label for="githubBranch" class="form-label">Target Branch</label>
-                            <input type="text" class="form-control" id="githubBranch" value="rdl-0.3" readonly>
+                            <input type="text" class="form-control" id="githubBranch" value="rdl-1.0" readonly>
                             <div class="form-text">Base branch for the pull request</div>
                         </div>
 
@@ -4961,13 +4961,6 @@
                     );
                 }
 
-                // v0.3 compatibility: Special handling for spatial.scale (removed in v1.0)
-                if (fieldName === 'spatial.scale' && currentSchema.$id && currentSchema.$id.includes('0__3__0')) {
-                    if (!value || (typeof value === 'string' && value.trim() === '')) {
-                        isValid = false;
-                        errorMessage = 'Required field';
-                    }
-                }
                 // Check if field is conditionally forbidden
                 else if (isConditionallyForbidden) {
                     if (value && value !== '') {
@@ -5239,13 +5232,13 @@
             Object.keys(RDLS_VERSIONS).forEach(version => {
                 const option = document.createElement('option');
                 option.value = version;
-                const isLatest = version === '0.3';
-                option.textContent = `RDLS ${version}${isLatest ? ' (dev)' : ''}`;
+                const isLatest = version === '1.0';
+                option.textContent = `RDLS ${version}${isLatest ? ' (latest)' : ''}`;
                 select.appendChild(option);
             });
-            
+
             // Auto-select the latest version
-            select.value = '0.3';
+            select.value = '1.0';
             loadSelectedSchema();
         }
 
@@ -5260,24 +5253,8 @@
 
             console.log('Testing conditional validation with v1.0 schema...');
 
-            // Test 1: Hazard type conditional for Location (if scale="regional" then countries minItems=2)
-            // Note: In v1.0, scale is removed, so this test is for v0.3 compatibility
-            if (currentSchema.$id && currentSchema.$id.includes('0__3__0')) {
-                console.log('\nTest 1: Location scale conditions (v0.3)');
-                const locationDef = SchemaNavigator.getDefinitionAtPath(currentSchema, 'properties.spatial');
-                if (locationDef && locationDef.allOf) {
-                    const testData1 = { scale: 'regional', countries: ['USA'] };
-                    const result1 = ConditionalValidator.evaluateConditionals(locationDef, testData1);
-                    console.log('  Regional scale with 1 country:', result1);
-
-                    const testData2 = { scale: 'global' };
-                    const result2 = ConditionalValidator.evaluateConditionals(locationDef, testData2);
-                    console.log('  Global scale:', result2);
-                }
-            }
-
-            // Test 2: Hazard type → intensity_measure codelist (v1.0)
-            console.log('\nTest 2: Hazard type conditional codelists (v1.0)');
+            // Test 1: Hazard type → intensity_measure codelist
+            console.log('\nTest 1: Hazard type conditional codelists');
             const hazardDef = SchemaNavigator.getDefinitionAtPath(currentSchema, '$defs.Hazard');
             if (hazardDef && hazardDef.allOf) {
                 const testDataEarthquake = { type: 'earthquake' };
@@ -5292,8 +5269,8 @@
                 console.log('  Flood intensity_measure codelist:', codelistFlood);
             }
 
-            // Test 3: Schema navigator
-            console.log('\nTest 3: Schema Navigator');
+            // Test 2: Schema navigator
+            console.log('\nTest 2: Schema Navigator');
             const entityDef = SchemaNavigator.getDefinitionAtPath(currentSchema, '$defs.Entity');
             console.log('  Entity definition found:', entityDef ? 'Yes' : 'No');
             if (entityDef) {
@@ -5302,13 +5279,10 @@
 
             console.log('=== Conditional Validation Tests Complete ===\n');
 
-            // Test 4: Codelist loading (async, non-blocking)
-            // Only test if we're on v1.0 schema
-            if (currentSchema.$id && currentSchema.$id.includes('1__0__0')) {
-                testCodelistLoading().catch(err =>
-                    console.error('Codelist loading test failed:', err)
-                );
-            }
+            // Test 3: Codelist loading (async, non-blocking)
+            testCodelistLoading().catch(err =>
+                console.error('Codelist loading test failed:', err)
+            );
         }
 
         async function testCodelistLoading() {
@@ -5435,7 +5409,7 @@
                 }
 
                 if (currentSchema.intensity_measure_mappings) {
-                    // v0.3 schema compatibility
+                    // Schema contains IMT mappings - load from schema
                     HAZARD_IMT_MAPPING = {};
                     for (const [hazardType, imtCodes] of Object.entries(currentSchema.intensity_measure_mappings)) {
                         if (hazardType === 'universal') {
@@ -5460,9 +5434,9 @@
                     }
                     console.log('Loaded IMT mappings from schema');
                 } else {
-                    // v1.0: Use legacy mappings until codelist loading implemented
+                    // Schema doesn't contain IMT mappings - use legacy mappings
                     HAZARD_IMT_MAPPING = LEGACY_HAZARD_IMT_MAPPING;
-                    console.log('v1.0: Using legacy IMT mappings (TODO: load from codelists)');
+                    console.log('Using legacy IMT mappings');
                 }
 
                 // Reset form data when switching schema versions
@@ -8235,6 +8209,7 @@
         const TARGET_REPO_OWNER = 'GFDRR';
         const TARGET_REPO_NAME = 'rdl-jkan';
         const TARGET_REPO = `${TARGET_REPO_OWNER}/${TARGET_REPO_NAME}`;
+        const TARGET_BRANCH = 'rdl-1.0'; // Target branch for PRs
 
         // Initialize GitHub auth state on page load
         window.addEventListener('DOMContentLoaded', () => {
@@ -8363,7 +8338,7 @@
         async function publishToGithub() {
             const token = sessionStorage.getItem('github_access_token');
             const username = sessionStorage.getItem('github_username');
-            const baseBranch = 'rdl-0.3'; // Target branch in main repo
+            const baseBranch = TARGET_BRANCH;
             const datasetTitle = document.getElementById('datasetTitle').value;
             const statusDiv = document.getElementById('githubConfigStatus');
 
@@ -8630,7 +8605,7 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
                     compatible: false,
                     editorVersion: editorVersion,
                     dataVersion: null,
-                    message: 'The JSON file does not contain a schema version reference in the "links" field.\n\nThis file may have been created with an older version of the RDL schema (v0.3 or earlier).'
+                    message: 'The JSON file does not contain a schema version reference in the "links" field.\n\nThis file may have been created with an older version of the RDL schema.'
                 };
             }
 
