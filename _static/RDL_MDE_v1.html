@@ -854,35 +854,66 @@
             {code: 'MHI:-', title: 'Multi-hazard Index'}
         ];
 
-        // Function to get filtered IMT options based on hazard type
-        function getFilteredIMTOptions(selectedHazardType) {
-            // Use legacy mapping if schema-based mapping not loaded yet
-            const mapping = HAZARD_IMT_MAPPING || LEGACY_HAZARD_IMT_MAPPING;
-
-            if (!selectedHazardType || !mapping || !mapping[selectedHazardType]) {
-                // Return all IMT options if no hazard selected or unknown hazard
+        // Function to get filtered IMT options based on hazard type (using schema conditionals)
+        async function getFilteredIMTOptions(selectedHazardType) {
+            if (!currentSchema || !selectedHazardType) {
+                // Fallback to legacy mapping if no schema or hazard type
+                const mapping = HAZARD_IMT_MAPPING || LEGACY_HAZARD_IMT_MAPPING;
                 const allIMTs = [];
                 if (mapping) {
                     Object.values(mapping).forEach(imts => allIMTs.push(...imts));
                 }
                 allIMTs.push(...UNIVERSAL_IMTS);
 
-                // Remove duplicates
                 const uniqueIMTs = allIMTs.filter((imt, index, self) =>
                     index === self.findIndex(i => i.code === imt.code)
                 );
                 return uniqueIMTs;
             }
 
-            // Return hazard-specific IMTs plus universal ones
-            const hazardIMTs = [...mapping[selectedHazardType]];
-            hazardIMTs.push(...UNIVERSAL_IMTS);
-            return hazardIMTs;
+            // Get Hazard definition from schema
+            const hazardDef = SchemaNavigator.getDefinitionAtPath(currentSchema, '$defs.Hazard');
+
+            if (!hazardDef || !hazardDef.allOf) {
+                // Fallback to legacy if schema doesn't have conditional logic
+                const mapping = HAZARD_IMT_MAPPING || LEGACY_HAZARD_IMT_MAPPING;
+                if (mapping && mapping[selectedHazardType]) {
+                    return [...mapping[selectedHazardType], ...UNIVERSAL_IMTS];
+                }
+                return UNIVERSAL_IMTS;
+            }
+
+            // Use schema's conditional logic to get IMT codelist
+            try {
+                const imtOptions = await CodelistManager.getConditionalCodelist(
+                    hazardDef,
+                    'intensity_measure',
+                    { type: selectedHazardType }
+                );
+
+                // Convert to format expected by UI (array of {code, title} objects)
+                const formattedOptions = imtOptions.map(code => ({
+                    code: code,
+                    title: code // Could be enhanced with descriptions from codelist
+                }));
+
+                // Add universal IMTs
+                formattedOptions.push(...UNIVERSAL_IMTS);
+                return formattedOptions;
+            } catch (error) {
+                console.error('Error loading IMT options from schema:', error);
+                // Fallback to legacy mapping
+                const mapping = HAZARD_IMT_MAPPING || LEGACY_HAZARD_IMT_MAPPING;
+                if (mapping && mapping[selectedHazardType]) {
+                    return [...mapping[selectedHazardType], ...UNIVERSAL_IMTS];
+                }
+                return UNIVERSAL_IMTS;
+            }
         }
 
         // Function to update IMT dropdowns when hazard changes
-        function updateIMTOptionsForHazard(hazardType) {
-            const filteredOptions = getFilteredIMTOptions(hazardType);
+        async function updateIMTOptionsForHazard(hazardType) {
+            const filteredOptions = await getFilteredIMTOptions(hazardType);
 
             // Find all intensity_measure fields and update them
             // This includes both select elements and combobox inputs
@@ -1016,12 +1047,7 @@
             'hazard.process': 'hazard.type',
             'hazard.intensity_measure': 'hazard.type',
 
-            // Currency dependencies
-            'loss.impact_and_losses.currency': 'loss.impact_and_losses.impact_unit',
-            'loss.losses.impact_and_losses.currency': 'loss.losses.impact_and_losses.impact_unit',
-
             // Hazard section (hazards array)
-            'hazards.hazard_process': 'hazards.type',
             'hazards.process': 'hazards.type',
             'hazards.intensity_measure': 'hazards.type',
 
@@ -1921,19 +1947,19 @@
                             suggestions = await CodelistManager.loadCodelist(property.codelist);
                         }
 
-                        // Special handling for classification_scheme: filter by component context
+                        // Special handling for classification_scheme: filter by field purpose
                         if (property.codelist === 'classification_scheme.csv' && suggestions.length > 0) {
-                            // Detect component type from field path
+                            // Detect field purpose from field path
                             console.log(`[CLASSIFICATION SCHEME] Field name: ${fieldName}, Codelist: ${property.codelist}`);
-                            const componentType = this.getComponentTypeFromFieldName(fieldName);
-                            console.log(`[CLASSIFICATION SCHEME] Detected component type: ${componentType}`);
-                            if (componentType) {
-                                console.log(`[CLASSIFICATION SCHEME] Filtering ${suggestions.length} schemes for component: ${componentType}`);
+                            const fieldPurpose = this.getClassificationFieldPurpose(fieldName);
+                            console.log(`[CLASSIFICATION SCHEME] Detected field purpose: ${fieldPurpose}`);
+                            if (fieldPurpose) {
+                                console.log(`[CLASSIFICATION SCHEME] Filtering ${suggestions.length} schemes for purpose: ${fieldPurpose}`);
                                 const beforeCount = suggestions.length;
-                                suggestions = CodelistManager.filterClassificationSchemes(suggestions, componentType);
+                                suggestions = CodelistManager.filterClassificationSchemes(suggestions, fieldPurpose);
                                 console.log(`[CLASSIFICATION SCHEME] Filtered from ${beforeCount} to ${suggestions.length} schemes`);
                             } else {
-                                console.log(`[CLASSIFICATION SCHEME] No component type detected, showing all ${suggestions.length} schemes`);
+                                console.log(`[CLASSIFICATION SCHEME] No field purpose detected, showing all ${suggestions.length} schemes`);
                             }
                         }
                     } else if (property.suggestions) {
@@ -2074,6 +2100,97 @@
                     }
                 }
 
+                return null;
+            }
+
+            getClassificationFieldPurpose(fieldName) {
+                // Determine what TYPE of thing is being classified based on field path and context
+                // Returns: 'disaster_identifier', 'hazard_classification', 'building_taxonomy', or 'socioeconomic_index'
+
+                console.log(`[FIELD PURPOSE] Field name: ${fieldName}`);
+                console.log(`[FIELD PURPOSE] Context type: ${this.context?.type}, arrayName: ${this.context?.arrayName}`);
+
+                const parts = fieldName.split('.');
+
+                // For inline/modal contexts, the arrayName tells us what type of object is being edited
+                // arrayName can be a full path like "vulnerability.socio_economic" or just "disaster_identifiers"
+                if (this.context && this.context.arrayName) {
+                    const arrayName = this.context.arrayName.toLowerCase();
+                    console.log(`[FIELD PURPOSE] Checking arrayName: ${arrayName}`);
+
+                    // Disaster identifiers - used to identify disasters
+                    if (arrayName.includes('disaster_identifier')) {
+                        console.log(`[FIELD PURPOSE] Detected disaster_identifier from arrayName`);
+                        return 'disaster_identifier';
+                    }
+
+                    // Asset types - used to classify buildings/assets
+                    if (arrayName.includes('asset_type')) {
+                        console.log(`[FIELD PURPOSE] Detected building_taxonomy from arrayName (asset_type)`);
+                        return 'building_taxonomy';
+                    }
+
+                    // Socioeconomic indices - used for socioeconomic classification
+                    // Can be "indicators", "socio_economic", or similar
+                    if (arrayName.includes('indicator') || arrayName.includes('socio_economic') || arrayName.includes('socioeconomic')) {
+                        console.log(`[FIELD PURPOSE] Detected socioeconomic_index from arrayName`);
+                        return 'socioeconomic_index';
+                    }
+
+                    // Taxonomy - used for building classification (in vulnerability context)
+                    if (arrayName.includes('taxonomy')) {
+                        console.log(`[FIELD PURPOSE] Detected building_taxonomy from arrayName (taxonomy)`);
+                        return 'building_taxonomy';
+                    }
+
+                    // Note: If we reach here with an arrayName set but not matched above,
+                    // it might be a nested object edit (not an array item)
+                    console.log(`[FIELD PURPOSE] arrayName set but not matched: ${arrayName}`);
+                }
+
+                // Check field path patterns for each classification type
+                // Order matters: check more specific patterns first!
+
+                // 1. DISASTER IDENTIFIER - identifies a disaster event
+                // Pattern: *.disaster_identifiers[*].scheme
+                if (parts.includes('disaster_identifiers')) {
+                    console.log(`[FIELD PURPOSE] Detected disaster_identifier from field path (disaster_identifiers)`);
+                    return 'disaster_identifier';
+                }
+
+                // 2. SOCIOECONOMIC INDEX - classifies socioeconomic factors
+                // Pattern: vulnerability.*.indicators[*].scheme OR *.socio_economic.*
+                if (parts.includes('indicators') || parts.includes('socio_economic') || parts.includes('socioeconomic')) {
+                    console.log(`[FIELD PURPOSE] Detected socioeconomic_index from field path`);
+                    return 'socioeconomic_index';
+                }
+
+                // 3. BUILDING TAXONOMY - classifies buildings/assets
+                // Pattern: exposure.*.asset_type[*].scheme OR vulnerability.*.taxonomy
+                if (parts.includes('asset_type') || parts.includes('taxonomy')) {
+                    console.log(`[FIELD PURPOSE] Detected building_taxonomy from field path`);
+                    return 'building_taxonomy';
+                }
+
+                // 4. HAZARD CLASSIFICATION - classifies hazard types
+                // Pattern: *.classification.* (in hazard, vulnerability/hazard, loss/hazard contexts)
+                // This is found in: hazard.classification.scheme, vulnerability.hazard.classification.scheme, loss.hazard.classification.scheme
+                // Must check this AFTER checking for disaster_identifiers to avoid conflicts
+                if (parts.includes('classification')) {
+                    console.log(`[FIELD PURPOSE] Detected hazard_classification from field path (classification)`);
+                    return 'hazard_classification';
+                }
+
+                // If fieldName is just "scheme" and we haven't detected context yet,
+                // we need to check what object we're inside based on sibling fields or parent context
+                // For now, this shouldn't happen if arrayName is set correctly
+                if (fieldName === 'scheme') {
+                    console.log(`[FIELD PURPOSE] Field is just 'scheme' with no clear context - returning null`);
+                    console.log(`[FIELD PURPOSE] This suggests arrayName is not being set correctly in the context`);
+                    return null;
+                }
+
+                console.log(`[FIELD PURPOSE] Could not detect field purpose - returning null`);
                 return null;
             }
 
@@ -2852,81 +2969,9 @@
                 
                 actions.appendChild(removeBtn);
                 cardBody.appendChild(actions);
-                
+
                 card.appendChild(cardBody);
-                
-                // Handle currency field visibility after card is created
-                // Use immediate execution to avoid closure issues with 'card' variable
-                (function(currentCard, currentItem, cardIndex, dataArray) {
-                    setTimeout(() => {
-                        const quantityKindField = currentCard.querySelector('[data-field-name="quantity_kind"] select, [data-field-name="quantity_kind"] input');
-                        const currencyField = currentCard.querySelector('[data-field-name="currency"]');
 
-                        if (quantityKindField && currencyField) {
-                            const currencyInput = currencyField.querySelector('select, input');
-
-                            // DEBUG: Log all relevant state
-                            console.log(`[INIT CURRENCY] Card ${cardIndex}: === DETAILED STATE ===`);
-                            console.log(`[INIT CURRENCY] Card ${cardIndex}: currentItem.quantity_kind="${currentItem.quantity_kind}"`);
-                            console.log(`[INIT CURRENCY] Card ${cardIndex}: quantityKindField.value="${quantityKindField?.value}"`);
-                            console.log(`[INIT CURRENCY] Card ${cardIndex}: currentItem.currency="${currentItem.currency}"`);
-                            console.log(`[INIT CURRENCY] Card ${cardIndex}: dataArray[${cardIndex}].quantity_kind="${dataArray[cardIndex]?.quantity_kind}"`);
-                            console.log(`[INIT CURRENCY] Card ${cardIndex}: dataArray[${cardIndex}].currency="${dataArray[cardIndex]?.currency}"`);
-                            console.log(`[INIT CURRENCY] Card ${cardIndex}: Currency value BEFORE any changes: "${currencyInput?.value}"`);
-
-                            const currentValue = currentItem.quantity_kind || quantityKindField.value;
-                            console.log(`[INIT CURRENCY] Card ${cardIndex}: Resolved quantity_kind="${currentValue}", will ${currentValue === 'monetary' ? 'ENABLE' : 'DISABLE'} currency`);
-
-                            if (currentValue === 'monetary') {
-                                if (currencyInput) {
-                                    // Save the current value before enabling (enabling can reset the value in some browsers)
-                                    const savedValue = currentItem.currency || dataArray[cardIndex]?.currency;
-                                    console.log(`[INIT CURRENCY] Card ${cardIndex}: About to enable, will restore value: "${savedValue}"`);
-
-                                    currencyInput.disabled = false;
-                                    currencyInput.required = true;
-
-                                    console.log(`[INIT CURRENCY] Card ${cardIndex}: Enabled currency field, value after enabling: "${currencyInput.value}"`);
-
-                                    // Restore the value if it was cleared by enabling
-                                    if (savedValue && currencyInput.value !== savedValue) {
-                                        console.log(`[INIT CURRENCY] Card ${cardIndex}: Value was cleared by enabling, restoring to "${savedValue}"`);
-                                        const optionToRestore = currencyInput.querySelector(`option[value="${savedValue}"]`);
-                                        if (optionToRestore) {
-                                            optionToRestore.selected = true;
-                                            currencyInput.value = savedValue;
-                                            console.log(`[INIT CURRENCY] Card ${cardIndex}: Restored value to "${currencyInput.value}"`);
-                                        }
-                                    }
-                                }
-                                const label = currencyField.querySelector('label');
-                                if (label && !label.innerHTML.includes('*')) {
-                                    label.innerHTML += ' <span class="text-danger">*</span>';
-                                }
-                            } else {
-                                if (currencyInput) {
-                                    currencyInput.disabled = true;
-                                    currencyInput.required = false;
-                                    // Clear the value if quantity_kind is not monetary AND there's a value
-                                    // This handles the case where a stale value persists
-                                    if (currencyInput.value && currencyInput.value !== '') {
-                                        console.warn(`[INIT CURRENCY] Card ${cardIndex}: ⚠️ CLEARING currency value "${currencyInput.value}" because quantity_kind="${currentValue}"`);
-                                        console.warn(`[INIT CURRENCY] Card ${cardIndex}: This might be the bug! Saved currency was "${currentItem.currency || dataArray[cardIndex]?.currency}"`);
-                                        currencyInput.value = '';
-                                        // Also update the item data
-                                        currentItem.currency = '';
-                                        if (dataArray && dataArray[cardIndex]) {
-                                            dataArray[cardIndex].currency = '';
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            console.warn(`[INIT CURRENCY] Card ${cardIndex}: Missing fields - quantityKindField:${!!quantityKindField}, currencyField:${!!currencyField}`);
-                        }
-                    }, 50);
-                })(card, item, index, arrayData);
-                
                 return card;
             }
 
@@ -3522,8 +3567,8 @@
             }
 
             setupListeners(element, name, property, options = {}) {
-                const eventHandler = (e) => {
-                    this.handleFieldChange(e, name, property, options);
+                const eventHandler = async (e) => {
+                    await this.handleFieldChange(e, name, property, options);
                 };
 
                 if (element.tagName === 'SELECT') {
@@ -3539,7 +3584,8 @@
 
             // getEventType method removed - event handling now done directly in setupListeners
 
-            handleFieldChange(event, name, property, options) {
+            async handleFieldChange(event, name, property, options) {
+                // ASYNC VERSION - Updated for v1.0 IMT loading
                 const value = this.getFieldValue(event.target);
                 console.log(`[SETUP LISTENERS] handleFieldChange called for field: ${name}, context: ${this.context.type}, value: ${value}`);
 
@@ -3724,7 +3770,9 @@
                                         this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
                                     } else if (dependentFieldName.includes('intensity_measure')) {
                                         console.log(`[DEPENDENCY] Updating IMT field with hazard type "${newValue}"`);
-                                        this.updateIMTField(dependentField, newValue);
+                                        this.updateIMTField(dependentField, newValue).catch(err => {
+                                            console.error('[DEPENDENCY] Error updating IMT field:', err);
+                                        });
                                     } else if (dependentFieldName.includes('currency')) {
                                         this.toggleCurrencyField(dependentField, newValue);
                                     } else if (dependentFieldName.includes('unit')) {
@@ -3765,7 +3813,9 @@
                                         this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
                                     } else if (dependentFieldName.includes('intensity_measure')) {
                                         console.log(`[DEPENDENCY] Fallback: Updating IMT field`);
-                                        this.updateIMTField(dependentField, newValue);
+                                        this.updateIMTField(dependentField, newValue).catch(err => {
+                                            console.error('[DEPENDENCY] Fallback: Error updating IMT field:', err);
+                                        });
                                     } else if (dependentFieldName.includes('unit')) {
                                         console.log(`[DEPENDENCY] Fallback: Reloading unit codelist`);
                                         // Reset the unit field value when quantity_kind changes
@@ -3818,7 +3868,9 @@
                                 this.rebuildDependentDropdown(dependentField, fullDependentFieldName, newValue);
                             } else if (dependentFieldName.includes('intensity_measure')) {
                                 // Use specialized IMT filtering based on hazard type
-                                this.updateIMTField(dependentField, newValue);
+                                this.updateIMTField(dependentField, newValue).catch(err => {
+                                    console.error('[DEPENDENCY] Error updating IMT field:', err);
+                                });
                             } else if (dependentFieldName.includes('currency')) {
                                 this.toggleCurrencyField(dependentField, newValue);
                             } else if (dependentFieldName.includes('unit')) {
@@ -3855,8 +3907,11 @@
                                                 changedFieldName.includes('hazard_type');
 
                     if (isRelevantHazardField) {
-                        console.log(`Hazard type changed: ${changedFieldName} = ${newValue}`);
-                        updateIMTOptionsForHazard(newValue);
+                        console.log(`[ASYNC CHECK] Hazard type changed: ${changedFieldName} = ${newValue}`);
+                        // Call async function without await - allows it to run in background
+                        updateIMTOptionsForHazard(newValue).catch(err => {
+                            console.error('Error updating IMT options:', err);
+                        });
                     }
                 }
 
@@ -4030,14 +4085,6 @@
                     }
                 });
 
-                // Special case: hazard_process can depend on either 'type' or 'hazard_type'
-                // depending on context (hazards vs losses)
-                if (baseParentFieldName === 'type' || baseParentFieldName === 'hazard_type') {
-                    if (!dependents.includes('hazard_process')) {
-                        dependents.push('hazard_process');
-                    }
-                }
-
                 // For IMT, add it if parent is 'type' or ends with 'type'
                 if (baseParentFieldName === 'type') {
                     if (!dependents.includes('intensity_measure')) {
@@ -4141,9 +4188,11 @@
                 console.log(`[REBUILD DROPDOWN] Dropdown rebuilt with ${availableOptions.length} options`);
             }
 
-            updateIMTField(element, hazardType) {
+            async updateIMTField(element, hazardType) {
                 // Update a single intensity_measure field with filtered options based on hazard type
-                const filteredOptions = getFilteredIMTOptions(hazardType);
+                console.log(`[UPDATE IMT] Loading IMT options for hazard type: ${hazardType}`);
+                const filteredOptions = await getFilteredIMTOptions(hazardType);
+                console.log(`[UPDATE IMT] Loaded ${filteredOptions.length} IMT options`);
 
                 if (element.tagName === 'SELECT') {
                     // Handle select dropdowns
@@ -4588,39 +4637,39 @@
             }
 
             /**
-             * Filter classification schemes based on component context
+             * Filter classification schemes based on field purpose
              * @param {Array} schemes - Array of scheme objects with category property
-             * @param {string} componentType - Component type (hazard, exposure, vulnerability, loss)
+             * @param {string} fieldPurpose - Field purpose (disaster_identifier, hazard_classification, building_taxonomy, socioeconomic_index)
              * @returns {Array} - Filtered array of schemes
              */
-            static filterClassificationSchemes(schemes, componentType) {
-                if (!componentType || !schemes || schemes.length === 0) {
+            static filterClassificationSchemes(schemes, fieldPurpose) {
+                if (!fieldPurpose || !schemes || schemes.length === 0) {
                     return schemes;
                 }
 
-                // Category to component mapping based on user requirements
+                // Category to field purpose mapping based on user requirements
                 const categoryMapping = {
-                    'Socio-economic index': ['vulnerability'],
-                    'Disaster identifier': ['loss', 'hazard'],
-                    'Building taxonomy': ['exposure', 'vulnerability'],
-                    'Hazard classification': ['hazard', 'vulnerability', 'loss']
+                    'Disaster identifier': ['disaster_identifier'],
+                    'Hazard classification': ['hazard_classification'],
+                    'Building taxonomy': ['building_taxonomy'],
+                    'Socio-economic index': ['socioeconomic_index']
                 };
 
-                const componentLower = componentType.toLowerCase();
+                const purposeLower = fieldPurpose.toLowerCase();
 
                 return schemes.filter(scheme => {
                     if (!scheme.category) {
-                        // If no category specified, include it for all components
+                        // If no category specified, include it for all field purposes
                         return true;
                     }
 
-                    const allowedComponents = categoryMapping[scheme.category];
-                    if (!allowedComponents) {
+                    const allowedPurposes = categoryMapping[scheme.category];
+                    if (!allowedPurposes) {
                         // Unknown category, include it to be safe
                         return true;
                     }
 
-                    return allowedComponents.includes(componentLower);
+                    return allowedPurposes.includes(purposeLower);
                 });
             }
 
@@ -5174,7 +5223,9 @@
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('[INIT] DOMContentLoaded fired');
             setupEventListeners();
+            console.log('[INIT] After setupEventListeners');
             // Auto-load v1.0 schema
             loadSchema('1.0');
             loadFromStorage();
@@ -5183,6 +5234,7 @@
         });
 
         function setupEventListeners() {
+            console.log('[SETUP] Setting up event listeners...');
             // Section checkboxes
             SECTIONS.forEach(section => {
                 document.getElementById(`${section}Check`).addEventListener('change', function() {
@@ -5218,11 +5270,17 @@
             document.getElementById('publishGitHub').addEventListener('click', openGithubConfig);
 
             // GitHub modal event listeners
-            document.getElementById('testGithubConnection').addEventListener('click', testGithubConnection);
             document.getElementById('publishToGithub').addEventListener('click', publishToGithub);
 
             // Object editor modal
-            document.getElementById('saveObjectBtn').addEventListener('click', saveCurrentObject);
+            const saveObjBtn = document.getElementById('saveObjectBtn');
+            console.log('[SETUP] Save Object Button found:', !!saveObjBtn);
+            if (saveObjBtn) {
+                saveObjBtn.addEventListener('click', saveCurrentObject);
+                console.log('[SETUP] Save Object Button listener attached');
+            } else {
+                console.error('[SETUP] Save Object Button NOT FOUND!');
+            }
         }
 
         function loadSchemaVersions() {
@@ -5408,36 +5466,10 @@
                     console.log('v1.0: IMT definitions not in schema (will load from codelists)');
                 }
 
-                if (currentSchema.intensity_measure_mappings) {
-                    // Schema contains IMT mappings - load from schema
-                    HAZARD_IMT_MAPPING = {};
-                    for (const [hazardType, imtCodes] of Object.entries(currentSchema.intensity_measure_mappings)) {
-                        if (hazardType === 'universal') {
-                            UNIVERSAL_IMTS = imtCodes.map(code => {
-                                const def = IMT_DEFINITIONS[code];
-                                return {
-                                    code: code,
-                                    title: def ? def.title : code,
-                                    description: def ? def.description : ''
-                                };
-                            });
-                        } else {
-                            HAZARD_IMT_MAPPING[hazardType] = imtCodes.map(code => {
-                                const def = IMT_DEFINITIONS[code];
-                                return {
-                                    code: code,
-                                    title: def ? def.title : code,
-                                    description: def ? def.description : ''
-                                };
-                            });
-                        }
-                    }
-                    console.log('Loaded IMT mappings from schema');
-                } else {
-                    // Schema doesn't contain IMT mappings - use legacy mappings
-                    HAZARD_IMT_MAPPING = LEGACY_HAZARD_IMT_MAPPING;
-                    console.log('Using legacy IMT mappings');
-                }
+                // RDLS v1.0 uses conditional logic in $defs.Hazard.allOf for IMT mappings
+                // IMT options are loaded dynamically via CodelistManager.getConditionalCodelist()
+                // Legacy mappings kept as fallback only
+                console.log('IMT mappings will be loaded dynamically from schema conditional logic');
 
                 // Reset form data when switching schema versions
                 currentFormData = {};
@@ -5478,7 +5510,7 @@
             const file = event.target.files[0];
             if (file && file.type === 'application/json') {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
                     try {
                         currentSchema = JSON.parse(e.target.result);
                         const isV21 = currentSchema.title && (currentSchema.title.includes('v3.0') || currentSchema.$id && currentSchema.$id.includes('0__2__1'));
@@ -6585,8 +6617,10 @@
         }
 
         function saveCurrentObject() {
+            console.log('[SAVE OBJECT] Save button clicked');
             const form = document.getElementById('objectEditorForm');
             const formData = new FormData(form);
+            console.log('[SAVE OBJECT] Form data collected');
 
             // v1.0: Handle root-level Entity objects (publisher, creator, contact_point)
             if (currentObjectEditor.isRootEntity) {
