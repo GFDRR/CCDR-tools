@@ -1397,12 +1397,6 @@
                 console.log(`[CREATE STRING] Creating string input for: ${name}, context: ${this.context.type}`);
                 console.log(`[CREATE STRING]   has enum:`, !!getEnumValues(property, currentSchema));
 
-                // Special handling for currency fields - ensure they have enum options
-                if (name.includes('currency') || name === 'currency') {
-                    if (!property.enum) {
-                        property = {...property, enum: ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD']};
-                    }
-                }
 
                 // v1.0: Check for conditional codelists FIRST (before dependency check)
                 // Fields like 'unit' have conditional codelists and should be comboboxes, not dependent selects
@@ -1943,7 +1937,8 @@
                         }
 
                         // If no conditional codelist found, load the default codelist
-                        if (suggestions.length === 0 && property.codelist) {
+                        // Skip if codelist is 'placeholder' (used for conditional codelists)
+                        if (suggestions.length === 0 && property.codelist && property.codelist !== 'placeholder') {
                             suggestions = await CodelistManager.loadCodelist(property.codelist);
                         }
 
@@ -1971,6 +1966,11 @@
                     dropdownMenu.innerHTML = '';
 
                     if (suggestions && suggestions.length > 0) {
+                        // Check if this is a unit field with currency codelist
+                        const isUnitField = fieldName === 'unit' || fieldName.endsWith('.unit');
+                        const isCurrencyCodelist = property.codelist === 'unit_currency.csv';
+                        const showCodeInDropdown = isUnitField && isCurrencyCodelist;
+
                         suggestions.forEach(suggestion => {
                             const item = document.createElement('li');
                             const link = document.createElement('a');
@@ -1981,7 +1981,12 @@
                             const suggestionCode = typeof suggestion === 'object' ? suggestion.code : suggestion;
                             const suggestionTitle = typeof suggestion === 'object' ? suggestion.title : suggestion;
 
-                            link.textContent = suggestionTitle;
+                            // Display format: "[Code] Title" only for currency unit fields
+                            if (showCodeInDropdown && typeof suggestion === 'object' && suggestion.code && suggestion.title && suggestion.code !== suggestion.title) {
+                                link.textContent = `[${suggestionCode}] ${suggestionTitle}`;
+                            } else {
+                                link.textContent = suggestionTitle;
+                            }
                             link.addEventListener('click', (e) => {
                                 e.preventDefault();
                                 input.value = suggestionCode; // Save code value
@@ -2872,85 +2877,6 @@
                         fieldDiv.appendChild(fieldElement);
                         cardBody.appendChild(fieldDiv);
 
-                        // DIRECT FIX: Add currency field immediately after quantity_kind in array cards
-                        if (key === 'quantity_kind') {
-                            const currencyDiv = document.createElement('div');
-                            currencyDiv.className = 'mb-2';
-                            currencyDiv.setAttribute('data-field-name', 'currency');
-
-                            const currencyProperty = {
-                                "type": "string",
-                                "enum": ["USD", "EUR", "GBP", "JPY", "CHF", "CAD", "AUD", "CNY", "SEK", "NOK", "DKK", "PLN", "CZK", "HUF", "RON", "BGN", "HRK"],
-                                "title": "Currency"
-                            };
-
-                            // Create context - don't use ID/name to avoid polluting FormData
-                            // Pass item data so dependent fields can look up parent values
-                            const inferredComponentType = arrayName ?
-                                (arrayName.toLowerCase().includes('exposure') ? 'exposure' :
-                                 arrayName.toLowerCase().includes('hazard') ? 'hazard' :
-                                 arrayName.toLowerCase().includes('vulnerabilit') ? 'vulnerability' :
-                                 arrayName.toLowerCase().includes('loss') ? 'loss' : null) : null;
-                            const currencyContext = new FieldCreationContext('inline', currencyDiv, item, arrayName, inferredComponentType);
-                            console.log(`[CURRENCY FIELD] Created context with type: ${currencyContext.type}`);
-                            const savedCurrencyValue = item['currency'];
-                            console.log(`[CURRENCY FIELD] Creating currency field for ${arrayName}[${index}], savedValue: "${savedCurrencyValue}"`);
-                            const currencyElement = currencyContext.createField('currency', currencyProperty, savedCurrencyValue);
-                            console.log(`[CURRENCY FIELD] Currency element created, checking for id attribute...`);
-
-                            // Check value before appending
-                            const selectBeforeAppend = currencyElement.querySelector('select, input');
-                            console.log(`[CURRENCY FIELD] Value BEFORE appending to currencyDiv: "${selectBeforeAppend?.value}"`);
-
-                            currencyDiv.appendChild(currencyElement);
-
-                            console.log(`[CURRENCY FIELD] Value AFTER appending to currencyDiv: "${selectBeforeAppend?.value}"`);
-
-                            // Add currency field right after the quantity_kind field FIRST
-                            cardBody.appendChild(currencyDiv);
-
-                            console.log(`[CURRENCY FIELD] Value AFTER appending to cardBody: "${selectBeforeAppend?.value}"`);
-                            console.log(`[CURRENCY FIELD] Is disabled after appending: ${selectBeforeAppend?.disabled}`);
-
-                            // THEN set up value and listeners AFTER it's in the DOM
-                            const currencyInput = currencyElement.querySelector('select, input');
-                            if (currencyInput) {
-                                console.log(`[CURRENCY FIELD] Currency input ID: "${currencyInput.id}", name: "${currencyInput.name}"`);
-                                console.log(`[CURRENCY FIELD] Currency input disabled status: ${currencyInput.disabled}`);
-
-                                // Add change listener BEFORE setting value
-                                currencyInput.addEventListener('change', (e) => {
-                                    item['currency'] = e.target.value;
-                                    arrayData[index]['currency'] = e.target.value;
-                                    console.log(`Updated ${arrayName}[${index}].currency = ${e.target.value}`);
-                                });
-
-                                // Set initial value AFTER appending to DOM
-                                if (savedCurrencyValue) {
-                                    // Force the select to have the right value by finding and selecting the option
-                                    const optionToSelect = currencyInput.querySelector(`option[value="${savedCurrencyValue}"]`);
-                                    if (optionToSelect) {
-                                        optionToSelect.selected = true;
-                                        currencyInput.value = savedCurrencyValue;
-                                        console.log(`[CURRENCY FIELD] Set value for ${arrayName}[${index}] to: "${savedCurrencyValue}", actual value: "${currencyInput.value}", option.selected: ${optionToSelect.selected}`);
-                                    } else {
-                                        console.warn(`[CURRENCY FIELD] Could not find option with value "${savedCurrencyValue}"`);
-                                    }
-
-                                    // Check if value persists after a short delay
-                                    setTimeout(() => {
-                                        console.log(`[CURRENCY FIELD] Value check after 100ms for ${arrayName}[${index}]: "${currencyInput.value}" (expected "${savedCurrencyValue}")`);
-                                        if (currencyInput.value !== savedCurrencyValue) {
-                                            console.warn(`[CURRENCY FIELD] VALUE WAS CHANGED! Expected "${savedCurrencyValue}" but got "${currencyInput.value}"`);
-                                        }
-                                    }, 100);
-                                } else {
-                                    console.log(`[CURRENCY FIELD] No saved value for ${arrayName}[${index}], current value: "${currencyInput.value}"`);
-                                }
-                            }
-
-                            // Currency field will be handled by the unified dependency system
-                        }
                     });
                 }
                 
@@ -3164,74 +3090,8 @@
             }
 
             handleDependencies(container, name, property, value) {
-                // Special handling for currency field - always show but disable unless quantity_kind is 'monetary'
-                // SKIP for inline context to avoid clearing values (inline arrays handle currency separately)
-                if (name.includes('currency') || name === 'currency') {
-                    // Skip currency handling for inline context - it's handled separately
-                    if (this.context.type === 'inline') {
-                        console.log(`[HANDLE DEPENDENCIES] Skipping currency handling for inline context field: ${name}`);
-                        return;
-                    }
-                    const currencyInput = container.querySelector('select, input');
-                    if (currencyInput) {
-                        currencyInput.disabled = true; // Default to disabled
-
-                        // Find the related quantity_kind field name
-                        let quantityKindFieldName = null;
-                        if (name.includes('impact_and_losses')) {
-                            quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
-                        } else if (name.includes('metrics')) {
-                            quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
-                        } else if (name.includes('losses.impact_and_losses')) {
-                            quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
-                        } else {
-                            quantityKindFieldName = name.replace(/currency$/, 'quantity_kind');
-                        }
-
-                        // Helper to update currency field state
-                        function updateCurrencyState() {
-                            const qkValue = getNestedValue(currentFormData, quantityKindFieldName);
-                            if (qkValue === 'monetary') {
-                                currencyInput.disabled = false;
-                                currencyInput.required = true;
-                            } else {
-                                currencyInput.disabled = true;
-                                currencyInput.required = false;
-                                currencyInput.value = '';
-                            }
-                        }
-
-                        // Initial check - ensure currency starts disabled unless quantity_kind is monetary
-                        // Skip this for modal context as modal data isn't in currentFormData yet
-                        if (this.context.type !== 'modal') {
-                            setTimeout(() => {
-                                const currentValue = getNestedValue(currentFormData, quantityKindFieldName) || '';
-                                currencyInput.disabled = currentValue !== 'monetary';
-                                currencyInput.required = currentValue === 'monetary';
-                                if (currentValue !== 'monetary') {
-                                    currencyInput.value = '';
-                                }
-                                updateCurrencyState();
-                            }, 0);
-                        }
-
-                        // Listen for changes on the related quantity_kind field
-                        // Skip this for modal context as it uses dependency handlers instead
-                        if (this.context.type !== 'modal') {
-                            setTimeout(() => {
-                                const qkInput = document.getElementById(this.context.getFieldId(quantityKindFieldName));
-                                if (qkInput) {
-                                    // Listen to all relevant events for complete dropdown/typing support
-                                    qkInput.addEventListener('change', updateCurrencyState);
-                                    qkInput.addEventListener('input', updateCurrencyState);
-                                    if (qkInput.tagName === 'SELECT') {
-                                        qkInput.addEventListener('click', updateCurrencyState);
-                                    }
-                                }
-                            }, 100);
-                        }
-                    }
-                }
+                // Legacy currency field handling removed - currency is now part of the unit field
+                // with conditional codelist based on quantity_kind
             }
 
             resolveSchemaRef(ref) {
@@ -3485,12 +3345,6 @@
                     }
                 }
 
-                // Currency field is required only when impact_unit is monetary
-                if (name.includes('currency') && name.includes('impact_and_losses')) {
-                    const parentPath = name.replace('currency', 'impact_unit');
-                    const parentValue = getNestedValue(currentFormData, parentPath);
-                    return parentValue === 'monetary';
-                }
 
                 return false;
             }
@@ -3773,8 +3627,6 @@
                                         this.updateIMTField(dependentField, newValue).catch(err => {
                                             console.error('[DEPENDENCY] Error updating IMT field:', err);
                                         });
-                                    } else if (dependentFieldName.includes('currency')) {
-                                        this.toggleCurrencyField(dependentField, newValue);
                                     } else if (dependentFieldName.includes('unit')) {
                                         console.log(`[DEPENDENCY] Reloading unit codelist with quantity_kind "${newValue}"`);
                                         // Reset the unit field value when quantity_kind changes
@@ -3871,8 +3723,6 @@
                                 this.updateIMTField(dependentField, newValue).catch(err => {
                                     console.error('[DEPENDENCY] Error updating IMT field:', err);
                                 });
-                            } else if (dependentFieldName.includes('currency')) {
-                                this.toggleCurrencyField(dependentField, newValue);
                             } else if (dependentFieldName.includes('unit')) {
                                 // v1.0: unit is a combobox with conditional codelist based on quantity_kind
                                 // Only works if the combobox dropdown was properly created
@@ -3915,154 +3765,6 @@
                     }
                 }
 
-                // Special handling for impact_unit field to show/hide currency
-                if (changedFieldName.includes('impact_unit') || (this.context.type === 'modal' && changedFieldName === 'impact_unit')) {
-                    let currencyFieldName;
-                    if (this.context.type === 'modal') {
-                        currencyFieldName = 'currency';
-                    } else {
-                        currencyFieldName = changedFieldName.replace('impact_unit', 'currency');
-                    }
-                    
-                    const currencyField = document.getElementById(this.context.getFieldId(currencyFieldName));
-                    
-                    console.log(`Impact unit changed: ${changedFieldName} = ${newValue}`);
-                    console.log(`Looking for currency field: ${this.context.getFieldId(currencyFieldName)}`);
-                    console.log(`Currency field found:`, !!currencyField);
-                    
-                    if (currencyField) {
-                        this.toggleCurrencyFieldContainer(currencyField.closest('.form-field, .modal-form-field'), newValue);
-                    }
-                }
-
-                // Special handling for quantity_kind field to show/hide currency
-                if (changedFieldName.includes('quantity_kind') || (this.context.type === 'modal' && changedFieldName === 'quantity_kind') || (this.context.type === 'inline' && changedFieldName === 'quantity_kind')) {
-                    console.log(`[CURRENCY TOGGLE] quantity_kind changed to ${newValue}, context: ${this.context.type}`);
-
-                    if (this.context.type === 'inline') {
-                        // For inline context, use closest card approach
-                        const currentCard = event.target.closest('.card[data-item-index]');
-                        const cardIndex = currentCard?.getAttribute('data-item-index');
-                        console.log(`[CURRENCY TOGGLE] Event target:`, event.target);
-                        console.log(`[CURRENCY TOGGLE] Found card with index:`, cardIndex);
-
-                        if (currentCard) {
-                            // Find ONLY the direct child card-body of this specific card
-                            const cardBody = currentCard.querySelector(':scope > .card-body');
-
-                            // Try to find currency field - it might be at the top level OR nested
-                            // For nested fields (like impact_and_losses.currency), construct the full path
-                            let currencyFieldDiv = null;
-                            if (cardBody) {
-                                // First try direct child with data-field-name="currency"
-                                currencyFieldDiv = cardBody.querySelector(':scope > [data-field-name="currency"]');
-
-                                // If not found, construct the full currency field name from the quantity_kind field name
-                                if (!currencyFieldDiv && changedFieldName.includes('.')) {
-                                    const currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
-                                    console.log(`[CURRENCY TOGGLE] Trying nested currency field: "${currencyFieldName}"`);
-                                    // Search anywhere in cardBody (not just direct children) for nested fields
-                                    currencyFieldDiv = cardBody.querySelector(`[data-field-name="${currencyFieldName}"]`);
-
-                                    // Also try searching by ID if data-field-name doesn't exist
-                                    if (!currencyFieldDiv) {
-                                        const currencyFieldId = this.context.getFieldId(currencyFieldName);
-                                        const currencyInputById = currentCard.querySelector(`#${CSS.escape(currencyFieldId)}`);
-                                        if (currencyInputById) {
-                                            console.log(`[CURRENCY TOGGLE] Found currency field by ID: "${currencyFieldId}"`);
-                                            currencyFieldDiv = currencyInputById.closest('[data-field-name], .form-field, .mb-2');
-                                        }
-                                    }
-                                }
-                            }
-
-                            console.log(`[CURRENCY TOGGLE] Card body found:`, !!cardBody);
-                            console.log(`[CURRENCY TOGGLE] Currency field div found:`, !!currencyFieldDiv);
-
-                            if (currencyFieldDiv) {
-                                const currencyInput = currencyFieldDiv.querySelector('input, select');
-                                const label = currencyFieldDiv.querySelector('label');
-
-                                console.log(`[CURRENCY TOGGLE] Currency input ID:`, currencyInput?.id);
-                                console.log(`[CURRENCY TOGGLE] Will ${newValue === 'monetary' ? 'ENABLE' : 'DISABLE'} currency in card index ${cardIndex}`);
-
-                                if (newValue === 'monetary') {
-                                    if (currencyInput) {
-                                        currencyInput.disabled = false;
-                                        currencyInput.required = true;
-                                    }
-                                    if (label && !label.innerHTML.includes('*')) {
-                                        label.innerHTML += ' <span class="text-danger">*</span>';
-                                    }
-                                } else {
-                                    if (currencyInput) {
-                                        currencyInput.disabled = true;
-                                        currencyInput.required = false;
-                                        currencyInput.value = '';
-                                    }
-                                    if (label) {
-                                        label.innerHTML = label.innerHTML.replace(' <span class="text-danger">*</span>', '');
-                                    }
-                                }
-                            } else {
-                                console.warn(`[CURRENCY TOGGLE] Currency field not found in card ${cardIndex}`);
-                            }
-                        } else {
-                            console.warn(`[CURRENCY TOGGLE] Parent card not found for event target:`, event.target);
-                        }
-                    } else {
-                        // For modal and normal context, use ID-based approach
-                        let currencyFieldName;
-                        if (this.context.type === 'modal') {
-                            // For modal context, try to preserve the full path structure
-                            if (changedFieldName.includes('.')) {
-                                currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
-                            } else {
-                                currencyFieldName = 'currency';
-                            }
-                        } else {
-                            currencyFieldName = changedFieldName.replace('quantity_kind', 'currency');
-                        }
-
-                        console.log(`[CURRENCY TOGGLE] Constructed currency field name: "${currencyFieldName}"`);
-                        const currencyFieldId = this.context.getFieldId(currencyFieldName);
-                        console.log(`[CURRENCY TOGGLE] Looking for currency field with ID: "${currencyFieldId}"`);
-                        const currencyField = document.getElementById(currencyFieldId);
-                        console.log(`[CURRENCY TOGGLE] Currency field found:`, !!currencyField);
-
-                        if (currencyField) {
-                            const container = currencyField.closest('.form-field, .modal-form-field');
-                            console.log(`[CURRENCY TOGGLE] Container found:`, !!container);
-                            if (container) {
-                                console.log(`[CURRENCY TOGGLE] Calling toggleCurrencyFieldContainer with value: "${newValue}"`);
-                                this.toggleCurrencyFieldContainer(container, newValue);
-                            } else {
-                                // Fallback: handle the field directly if no container found
-                                console.log(`[CURRENCY TOGGLE] Calling toggleCurrencyField directly with value: "${newValue}"`);
-                                this.toggleCurrencyField(currencyField, newValue);
-                            }
-
-                            // Also ensure the field state is properly set regardless of container
-                            console.log(`[CURRENCY TOGGLE] Setting field state directly, monetary=${newValue === 'monetary'}`);
-                            if (newValue === 'monetary') {
-                                currencyField.disabled = false;
-                                currencyField.required = true;
-                            } else {
-                                currencyField.disabled = true;
-                                currencyField.required = false;
-                                // Only clear value during user interactions, not initial setup
-                                if (newValue !== undefined && newValue !== null) {
-                                    currencyField.value = '';
-                                }
-                            }
-
-                            // Add a small delay to check final state after all event handlers
-                            setTimeout(() => {
-                                console.log(`[CURRENCY TOGGLE] FINAL STATE CHECK - disabled:`, currencyField.disabled, `value:`, currencyField.value);
-                            }, 100);
-                        }
-                    }
-                }
 
                 // v1.0: No special handling for license field - it's now a simple IRI/URL field with codelist suggestions
 
@@ -4408,6 +4110,11 @@
                     console.log(`[RELOAD COMBOBOX] Cleared dropdown, populating with ${suggestions.length} suggestions`);
 
                     if (suggestions && suggestions.length > 0) {
+                        // Check if this is a currency unit field
+                        const isUnitField = fieldBaseName === 'unit';
+                        const isCurrency = parentValue === 'currency';
+                        const showCodeInDropdown = isUnitField && isCurrency;
+
                         suggestions.forEach(suggestion => {
                             const item = document.createElement('li');
                             const link = document.createElement('a');
@@ -4418,7 +4125,12 @@
                             const suggestionCode = typeof suggestion === 'object' ? suggestion.code : suggestion;
                             const suggestionTitle = typeof suggestion === 'object' ? suggestion.title : suggestion;
 
-                            link.textContent = suggestionTitle;
+                            // Display format: "[Code] Title" only for currency unit fields
+                            if (showCodeInDropdown && typeof suggestion === 'object' && suggestion.code && suggestion.title && suggestion.code !== suggestion.title) {
+                                link.textContent = `[${suggestionCode}] ${suggestionTitle}`;
+                            } else {
+                                link.textContent = suggestionTitle;
+                            }
                             link.addEventListener('click', (e) => {
                                 e.preventDefault();
                                 inputElement.value = suggestionCode;
@@ -4446,53 +4158,6 @@
                 }
             }
 
-            toggleCurrencyField(currencyField, impactUnitValue) {
-                // This method handles the field element directly - use disabled instead of hiding
-                if (impactUnitValue === 'monetary') {
-                    currencyField.disabled = false;
-                    currencyField.required = true;
-                } else {
-                    currencyField.disabled = true;
-                    currencyField.required = false;
-                    currencyField.value = '';
-                }
-            }
-
-            toggleCurrencyFieldContainer(container, quantityKindValue) {
-                // This method handles the container (form-field div) - use disabled instead of hiding
-                console.log(`[toggleCurrencyFieldContainer] Called with value: "${quantityKindValue}"`);
-                const label = container.querySelector('label');
-                const input = container.querySelector('select, input');
-                console.log(`[toggleCurrencyFieldContainer] Input found:`, !!input, `Input ID:`, input?.id);
-                console.log(`[toggleCurrencyFieldContainer] Input disabled before:`, input?.disabled);
-
-                if (quantityKindValue === 'monetary') {
-                    console.log(`[toggleCurrencyFieldContainer] Value is monetary, ENABLING field`);
-                    if (input) {
-                        input.disabled = false;
-                        input.required = true;
-                        console.log(`[toggleCurrencyFieldContainer] Input disabled after setting to false:`, input.disabled);
-                    }
-
-                    if (label && !label.innerHTML.includes('*')) {
-                        label.innerHTML += ' <span class="text-danger">*</span>';
-                        container.classList.add('required');
-                    }
-                } else {
-                    console.log(`[toggleCurrencyFieldContainer] Value is NOT monetary, DISABLING field`);
-                    if (input) {
-                        input.disabled = true;
-                        input.required = false;
-                        input.value = '';
-                        console.log(`[toggleCurrencyFieldContainer] Input disabled after setting to true:`, input.disabled);
-                    }
-
-                    if (label) {
-                        label.innerHTML = label.innerHTML.replace(' <span class="text-danger">*</span>', '');
-                        container.classList.remove('required');
-                    }
-                }
-            }
         }
 
         /**
@@ -4578,12 +4243,22 @@
             static async loadCodelist(codelistName) {
                 // Check cache first
                 if (this.cache.has(codelistName)) {
+                    console.log(`[LOAD CODELIST] Using cached ${codelistName} (${this.cache.get(codelistName).length} items)`);
                     return this.cache.get(codelistName);
                 }
 
                 try {
-                    const url = this.baseUrl + codelistName;
-                    console.log(`Loading codelist: ${url}`);
+                    // Determine if this is a closed codelist
+                    // Closed codelists: unit_currency.csv and others that should not be extended
+                    const closedCodelists = ['unit_currency.csv'];
+                    const isClosed = closedCodelists.includes(codelistName);
+
+                    // Build URL: use closed/ directory for closed codelists, open/ for others
+                    const baseUrlPath = 'https://docs.riskdatalibrary.org/en/1.0-dev/codelists/';
+                    const subdirectory = isClosed ? 'closed/' : 'open/';
+                    const url = baseUrlPath + subdirectory + codelistName;
+
+                    console.log(`[LOAD CODELIST] Loading ${codelistName} from: ${url} (${isClosed ? 'closed' : 'open'})`);
 
                     const response = await fetch(url);
                     if (!response.ok) {
@@ -4591,15 +4266,20 @@
                     }
 
                     const csvText = await response.text();
+                    console.log(`[LOAD CODELIST] Fetched ${csvText.length} characters of CSV data`);
+
                     const values = this.parseCSV(csvText);
 
                     // Cache the result
                     this.cache.set(codelistName, values);
 
-                    console.log(`Loaded ${values.length} values from ${codelistName}`);
+                    console.log(`[LOAD CODELIST] Loaded ${values.length} values from ${codelistName}`);
+                    if (values.length > 0) {
+                        console.log(`[LOAD CODELIST] First few values:`, values.slice(0, 3));
+                    }
                     return values;
                 } catch (error) {
-                    console.error(`Failed to load codelist ${codelistName}:`, error);
+                    console.error(`[LOAD CODELIST] Failed to load codelist ${codelistName}:`, error);
                     // Return empty array on error (graceful degradation)
                     this.cache.set(codelistName, []);
                     return [];
@@ -4614,12 +4294,24 @@
              * @returns {Promise<Array<string>>} - Array of codelist values
              */
             static async getConditionalCodelist(schemaDefinition, fieldName, parentData) {
+                console.log(`[GET CONDITIONAL CODELIST] Field: ${fieldName}, parentData:`, parentData);
+
                 // First, get the codelist name from conditional rules
-                const codelistName = ConditionalValidator.getConditionalCodelist(
-                    schemaDefinition,
-                    fieldName,
-                    parentData
-                );
+                let codelistName = null;
+                try {
+                    console.log(`[GET CONDITIONAL CODELIST] About to call ConditionalValidator.getConditionalCodelist`);
+                    codelistName = ConditionalValidator.getConditionalCodelist(
+                        schemaDefinition,
+                        fieldName,
+                        parentData
+                    );
+                    console.log(`[GET CONDITIONAL CODELIST] Call completed successfully`);
+                } catch (error) {
+                    console.error(`[GET CONDITIONAL CODELIST] Error calling ConditionalValidator:`, error);
+                    codelistName = null;
+                }
+
+                console.log(`[GET CONDITIONAL CODELIST] ConditionalValidator returned codelist: ${codelistName}`);
 
                 if (!codelistName) {
                     // No conditional codelist, check base definition
@@ -4627,12 +4319,15 @@
                         schemaDefinition.properties[fieldName] &&
                         schemaDefinition.properties[fieldName].codelist) {
                         const baseCodelist = schemaDefinition.properties[fieldName].codelist;
+                        console.log(`[GET CONDITIONAL CODELIST] Using base codelist: ${baseCodelist}`);
                         return await this.loadCodelist(baseCodelist);
                     }
+                    console.log(`[GET CONDITIONAL CODELIST] No codelist found, returning empty array`);
                     return [];
                 }
 
                 // Load the conditional codelist
+                console.log(`[GET CONDITIONAL CODELIST] Loading conditional codelist: ${codelistName}`);
                 return await this.loadCodelist(codelistName);
             }
 
@@ -4931,22 +4626,48 @@
              * Used for intensity_measure codelists that depend on hazard type
              */
             static getConditionalCodelist(schemaDefinition, fieldName, parentData) {
+                console.log(`[CONDITIONAL VALIDATOR] getConditionalCodelist called for field: ${fieldName}`);
+                console.log(`[CONDITIONAL VALIDATOR] parentData:`, parentData);
+                console.log(`[CONDITIONAL VALIDATOR] schemaDefinition has allOf:`, !!(schemaDefinition && schemaDefinition.allOf));
+
                 if (!schemaDefinition || !schemaDefinition.allOf) {
+                    console.log(`[CONDITIONAL VALIDATOR] No schema or allOf, returning null`);
                     return null;
                 }
 
                 // Find applicable if-then rule
                 const result = this.evaluateConditionals(schemaDefinition, parentData);
+                console.log(`[CONDITIONAL VALIDATOR] evaluateConditionals returned ${result.applicableRules.length} applicable rules`);
 
                 for (const rule of result.applicableRules) {
+                    console.log(`[CONDITIONAL VALIDATOR] Checking rule, has properties:`, !!(rule.schema && rule.schema.properties));
                     if (rule.schema.properties && rule.schema.properties[fieldName]) {
-                        const fieldSchema = rule.schema.properties[fieldName];
+                        let fieldSchema = rule.schema.properties[fieldName];
+                        console.log(`[CONDITIONAL VALIDATOR] Found rule for field ${fieldName}`);
+                        console.log(`[CONDITIONAL VALIDATOR] fieldSchema object:`, JSON.stringify(fieldSchema, null, 2));
+
+                        // If fieldSchema is a $ref, resolve it first
+                        if (fieldSchema.$ref) {
+                            console.log(`[CONDITIONAL VALIDATOR] fieldSchema has $ref: ${fieldSchema.$ref}, resolving...`);
+                            const resolved = resolveReferenceSimple(fieldSchema.$ref);
+                            if (resolved) {
+                                fieldSchema = resolved;
+                                console.log(`[CONDITIONAL VALIDATOR] Resolved $ref to:`, JSON.stringify(fieldSchema, null, 2));
+                            } else {
+                                console.log(`[CONDITIONAL VALIDATOR] Failed to resolve $ref`);
+                            }
+                        }
+
+                        console.log(`[CONDITIONAL VALIDATOR] has codelist:`, !!fieldSchema.codelist, `has enum:`, !!fieldSchema.enum);
+                        console.log(`[CONDITIONAL VALIDATOR] codelist value:`, fieldSchema.codelist);
                         if (fieldSchema.codelist) {
+                            console.log(`[CONDITIONAL VALIDATOR] Returning codelist: ${fieldSchema.codelist}`);
                             return fieldSchema.codelist;
                         }
                     }
                 }
 
+                console.log(`[CONDITIONAL VALIDATOR] No matching rule found, returning null`);
                 return null;
             }
 
