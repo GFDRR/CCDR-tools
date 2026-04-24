@@ -6220,8 +6220,8 @@
                         hazardDisplay += ` / ${process}`;
                     }
                     summaryText = hazardDisplay;
-                } else if (arrayName.includes('losses') && objectData.hazard_type) {
-                    summaryText = objectData.hazard_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Loss';
+                } else if (arrayName.includes('losses') && objectData.hazard && objectData.hazard.type) {
+                    summaryText = objectData.hazard.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Loss';
                 } else if (arrayName.includes('socio_economic') && objectData.indicator_name) {
                     summaryText = objectData.indicator_name;
                 } else if (objectData.name) {
@@ -6948,6 +6948,10 @@
                                 currentFormData[key][spatialKey] = newFormData[key][spatialKey];
                             }
                         });
+                        // Remove stale flat coord keys that should only exist as arrays
+                        ['bbox_0','bbox_1','bbox_2','bbox_3','centroid_0','centroid_1'].forEach(k => {
+                            delete currentFormData[key][k];
+                        });
                         // Keep the countries array from preservation above
                     } else {
                         currentFormData[key] = newFormData[key];
@@ -7004,6 +7008,29 @@
                     filteredData[key] = value;
                 }
             });
+
+            // Normalize spatial coord arrays: remove flat bbox_N/centroid_N keys that
+            // the form creates as _N-suffixed inputs, converting to proper arrays if needed.
+            if (filteredData.spatial) {
+                const spatial = filteredData.spatial = Object.assign({}, filteredData.spatial);
+                const bboxKeys = ['bbox_0', 'bbox_1', 'bbox_2', 'bbox_3'];
+                const centroidKeys = ['centroid_0', 'centroid_1'];
+
+                if (bboxKeys.some(k => k in spatial)) {
+                    if (!Array.isArray(spatial.bbox)) {
+                        const vals = bboxKeys.map(k => (spatial[k] !== '' && spatial[k] != null) ? parseFloat(spatial[k]) : null).filter(v => v !== null && !isNaN(v));
+                        if (vals.length) spatial.bbox = vals;
+                    }
+                    bboxKeys.forEach(k => delete spatial[k]);
+                }
+                if (centroidKeys.some(k => k in spatial)) {
+                    if (!Array.isArray(spatial.centroid)) {
+                        const vals = centroidKeys.map(k => (spatial[k] !== '' && spatial[k] != null) ? parseFloat(spatial[k]) : null).filter(v => v !== null && !isNaN(v));
+                        if (vals.length) spatial.centroid = vals;
+                    }
+                    centroidKeys.forEach(k => delete spatial[k]);
+                }
+            }
 
             return filteredData;
         }
@@ -7336,7 +7363,7 @@
                     } else {
                     // Define required loss attributes with correct field paths
                     const requiredLossAttributes = [
-                        { field: 'hazard_type', name: 'hazard type' },
+                        { field: 'hazard.type', name: 'hazard type' },
                         { field: 'asset_category', name: 'asset category' },
                         { field: 'asset_dimension', name: 'asset dimension' },
                         { field: 'impact_and_losses.impact_type', name: 'impact type' },
@@ -8666,7 +8693,7 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
             console.log('2. Hazard process dependency test:');
             const modalProcessDep = FIELD_DEPENDENCIES['processes'];
             console.log(`   Modal processes depends on: ${modalProcessDep}`);
-            const lossProcessDep = FIELD_DEPENDENCIES['loss.hazard_process'];
+            const lossProcessDep = FIELD_DEPENDENCIES['hazard.process'];
             console.log(`   Loss hazard_process depends on: ${lossProcessDep}`);
             
             // Test 3: Array context handling
@@ -8706,7 +8733,7 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
                 // Test hazard type -> process dependencies in all contexts
                 const hazardTypeFields = [
                     'vulnerability.hazard_primary',
-                    'loss.hazard_type',
+                    'loss.hazard.type',
                     'hazards.type'
                 ];
                 
@@ -8720,7 +8747,7 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
                         if (fieldName.includes('vulnerability')) {
                             processFieldName = fieldName.replace('hazard_primary', 'hazard_process_primary');
                         } else if (fieldName.includes('loss')) {
-                            processFieldName = fieldName.replace('hazard_type', 'hazard_process');
+                            processFieldName = fieldName.replace('hazard.type', 'hazard.process');
                         } else if (fieldName.includes('hazards')) {
                             processFieldName = fieldName.replace('type', 'processes');
                         }
