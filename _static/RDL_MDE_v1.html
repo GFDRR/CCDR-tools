@@ -6960,7 +6960,15 @@
                     currentFormData[key] = newFormData[key];
                 }
             });
-            
+
+            // Always purge flat coord keys from currentFormData (root and spatial),
+            // regardless of whether the spatial merge branch ran.
+            const _flatCoordKeys = ['bbox_0','bbox_1','bbox_2','bbox_3','centroid_0','centroid_1'];
+            _flatCoordKeys.forEach(k => delete currentFormData[k]);
+            if (currentFormData.spatial) {
+                _flatCoordKeys.forEach(k => delete currentFormData.spatial[k]);
+            }
+
             updatePreview();
             autoSave();
 
@@ -7009,27 +7017,30 @@
                 }
             });
 
-            // Normalize spatial coord arrays: remove flat bbox_N/centroid_N keys that
-            // the form creates as _N-suffixed inputs, converting to proper arrays if needed.
+            // Remove flat bbox_N / centroid_N keys from wherever they may have accumulated
+            // (root level or inside spatial) and ensure they appear only as proper arrays.
+            const coordFlatDefs = [
+                { arrayKey: 'bbox',     flatKeys: ['bbox_0', 'bbox_1', 'bbox_2', 'bbox_3'] },
+                { arrayKey: 'centroid', flatKeys: ['centroid_0', 'centroid_1'] }
+            ];
+            function stripFlatCoordKeys(obj) {
+                coordFlatDefs.forEach(({ arrayKey, flatKeys }) => {
+                    if (!flatKeys.some(k => k in obj)) return;
+                    if (!Array.isArray(obj[arrayKey])) {
+                        const vals = flatKeys
+                            .map(k => (obj[k] !== '' && obj[k] != null) ? parseFloat(obj[k]) : null)
+                            .filter(v => v !== null && !isNaN(v));
+                        if (vals.length) obj[arrayKey] = vals;
+                    }
+                    flatKeys.forEach(k => delete obj[k]);
+                });
+            }
+            // Root level (filteredData is a local object — safe to mutate directly)
+            stripFlatCoordKeys(filteredData);
+            // Inside spatial (filteredData.spatial refs currentFormData — shallow-copy first)
             if (filteredData.spatial) {
-                const spatial = filteredData.spatial = Object.assign({}, filteredData.spatial);
-                const bboxKeys = ['bbox_0', 'bbox_1', 'bbox_2', 'bbox_3'];
-                const centroidKeys = ['centroid_0', 'centroid_1'];
-
-                if (bboxKeys.some(k => k in spatial)) {
-                    if (!Array.isArray(spatial.bbox)) {
-                        const vals = bboxKeys.map(k => (spatial[k] !== '' && spatial[k] != null) ? parseFloat(spatial[k]) : null).filter(v => v !== null && !isNaN(v));
-                        if (vals.length) spatial.bbox = vals;
-                    }
-                    bboxKeys.forEach(k => delete spatial[k]);
-                }
-                if (centroidKeys.some(k => k in spatial)) {
-                    if (!Array.isArray(spatial.centroid)) {
-                        const vals = centroidKeys.map(k => (spatial[k] !== '' && spatial[k] != null) ? parseFloat(spatial[k]) : null).filter(v => v !== null && !isNaN(v));
-                        if (vals.length) spatial.centroid = vals;
-                    }
-                    centroidKeys.forEach(k => delete spatial[k]);
-                }
+                filteredData.spatial = Object.assign({}, filteredData.spatial);
+                stripFlatCoordKeys(filteredData.spatial);
             }
 
             return filteredData;
@@ -8437,78 +8448,6 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
             };
         }
 
-        function migrateAttributionData(data) {
-            const migratedData = { ...data };
-
-            // v1.0: publisher, creator, and contact_point are root-level Entity objects
-            // They should NOT be migrated to attributions array
-            // Only migrate if we detect old v0.x structure (attributions array with these roles)
-
-            // No attribution migration needed for v1.0 - these fields stay at root level
-            // If there are duplicate entries in attributions array, remove them
-            if (migratedData.attributions && Array.isArray(migratedData.attributions)) {
-                const rootLevelRoles = ['publisher', 'creator', 'contact_point'];
-                migratedData.attributions = migratedData.attributions.filter(attr => {
-                    // Remove attributions that duplicate root-level fields
-                    return !rootLevelRoles.includes(attr.role);
-                });
-            }
-
-            // Migrate old resource field names (format -> data_format, media_type removed)
-            if (migratedData.resources && Array.isArray(migratedData.resources)) {
-                migratedData.resources = migratedData.resources.map(resource => {
-                    const migratedResource = { ...resource };
-
-                    // Migrate format to data_format with full names
-                    if (migratedResource.format) {
-                        // Map old format values to new data_format values with full names
-                        const formatMapping = {
-                            'geotiff': 'GeoTIFF (tif)',
-                            'tif': 'GeoTIFF (tif)',
-                            'cog': 'Cloud Optimized GeoTIFF (cog)',
-                            'netcdf': 'NetCDF (nc)',
-                            'nc': 'NetCDF (nc)',
-                            'hdf5': 'HDF5 (hdf5)',
-                            'zarr': 'Zarr (zarr)',
-                            'geopackage': 'GeoPackage (gpkg)',
-                            'gpkg': 'GeoPackage (gpkg)',
-                            'geojson': 'GeoJSON (geojson)',
-                            'flatgeobuf': 'FlatGeobuf (fgb)',
-                            'fgb': 'FlatGeobuf (fgb)',
-                            'shapefile': 'Shapefile (shp)',
-                            'shp': 'Shapefile (shp)',
-                            'gdb': 'File Geodatabase (gdb)',
-                            'kml': 'KML (kml)',
-                            'csv': 'CSV (csv)',
-                            'parquet': 'Parquet (parquet)',
-                            'xlsx': 'Excel (xlsx)',
-                            'json': 'JSON (json)',
-                            'xml': 'XML (xml)',
-                            'pdf': 'PDF (pdf)',
-                            'las': 'LAS (las)',
-                            'copc': 'COPC (copc)'
-                        };
-                        migratedResource.data_format = formatMapping[migratedResource.format.toLowerCase()] || migratedResource.format;
-                        delete migratedResource.format;
-                    }
-
-                    // Remove media_type (no longer used)
-                    if (migratedResource.media_type !== undefined) {
-                        delete migratedResource.media_type;
-                    }
-
-                    // Set default access_modality if not present
-                    if (!migratedResource.access_modality) {
-                        // Default to 'download' if download_url exists, otherwise 'website'
-                        migratedResource.access_modality = migratedResource.download_url ? 'download' : 'website';
-                    }
-
-                    return migratedResource;
-                });
-            }
-
-            return migratedData;
-        }
 
         function loadData() {
             const input = document.createElement('input');
@@ -8542,9 +8481,6 @@ ${cleanedData.datasets?.[0]?.description || 'No description provided'}
                                 alert(`Schema Version Mismatch\n\n${versionCheck.message}\n\nCurrent editor version: ${versionCheck.editorVersion}\nJSON file version: ${versionCheck.dataVersion || 'Unknown'}\n\nPlease use the appropriate editor version for this file.`);
                                 return;
                             }
-
-                            // Migrate attribution data from old format to new format
-                            loadedData = migrateAttributionData(loadedData);
 
                             currentFormData = loadedData;
 
