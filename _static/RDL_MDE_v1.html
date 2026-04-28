@@ -7380,7 +7380,7 @@
                         { field: 'impact_and_losses.impact_type', name: 'impact type' },
                         { field: 'impact_and_losses.impact_modelling', name: 'impact modelling' },
                         { field: 'impact_and_losses.impact_metric', name: 'impact metric' },
-                        { field: 'impact_and_losses.quantity_kind', name: 'quantity kind' },
+                        { field: 'impact_and_losses.measurement.quantity_kind', name: 'quantity kind' },
                         { field: 'impact_and_losses.loss_type', name: 'loss type' },
                         { field: 'impact_and_losses.loss_approach', name: 'loss approach' },
                         { field: 'impact_and_losses.loss_frequency_type', name: 'loss frequency type' }
@@ -7393,11 +7393,16 @@
 
                         // Check each required attribute
                         for (const attr of requiredLossAttributes) {
-                            // Handle nested field paths (e.g., 'impact_and_losses.impact_type')
+                            // Handle nested field paths (e.g., 'impact_and_losses.impact_type', 'impact_and_losses.measurement.quantity_kind')
                             let fieldValue;
                             if (attr.field.includes('.')) {
                                 const parts = attr.field.split('.');
-                                fieldValue = loss[parts[0]] && loss[parts[0]][parts[1]];
+                                // Navigate through nested object properties
+                                fieldValue = loss;
+                                for (const part of parts) {
+                                    fieldValue = fieldValue && fieldValue[part];
+                                    if (!fieldValue) break;
+                                }
                             } else {
                                 fieldValue = loss[attr.field];
                             }
@@ -7474,12 +7479,12 @@
                         const requiredVulnerabilityAttributes = [
                             { field: 'hazard_primary', name: 'primary hazard type' },
                             { field: 'hazard_analysis_type', name: 'hazard analysis type' },
-                            { field: 'intensity_measure', name: 'hazard intensity measurement' },
+                            { field: 'hazard_primary.intensity_measure', name: 'hazard intensity measurement' },
                             { field: 'category', name: 'exposure category' },
-                            { field: 'impact_type', name: 'impact type' },
-                            { field: 'impact_modelling', name: 'impact modelling' },
-                            { field: 'impact_metric', name: 'impact metric' },
-                            { field: 'quantity_kind', name: 'quantity kind' }
+                            { field: 'impact.type', name: 'impact type' },
+                            { field: 'impact.modelling', name: 'impact modelling' },
+                            { field: 'impact.metric', name: 'impact metric' },
+                            { field: 'impact.measurement.quantity_kind', name: 'quantity kind' }
                         ];
 
                         // Check each function type (vulnerability, fragility, damage_to_loss, engineering_demand)
@@ -7493,7 +7498,21 @@
 
                                     // Check each required attribute
                                     for (const attr of requiredVulnerabilityAttributes) {
-                                        if (!func[attr.field] || func[attr.field].toString().trim() === '') {
+                                        // Handle nested field paths (e.g., 'impact.type', 'impact.measurement.quantity_kind')
+                                        let fieldValue;
+                                        if (attr.field.includes('.')) {
+                                            const parts = attr.field.split('.');
+                                            // Navigate through nested object properties
+                                            fieldValue = func;
+                                            for (const part of parts) {
+                                                fieldValue = fieldValue && fieldValue[part];
+                                                if (!fieldValue) break;
+                                            }
+                                        } else {
+                                            fieldValue = func[attr.field];
+                                        }
+
+                                        if (!fieldValue || fieldValue.toString().trim() === '') {
                                             vulnerabilityValid = false;
                                             vulnerabilityError = `${funcType} function ${funcNum} is missing required ${attr.name}`;
                                             break;
