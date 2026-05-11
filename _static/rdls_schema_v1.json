@@ -971,7 +971,7 @@
         },
         "events": {
           "title": "Events",
-          "description": "The events in this event set.",
+          "description": "The events in this event set. Use this section to specify individual events features that differ from the main event set.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/Event"
@@ -1281,6 +1281,16 @@
           "description": "The main type of hazard that resulted in the losses.",
           "$ref": "#/$defs/HazardWithTrigger"
         },
+        "disaster_identifiers": {
+          "title": "Disaster identifiers",
+          "type": "array",
+          "description": "Identifiers for the disaster to which this event relates.",
+          "items": {
+            "$ref": "#/$defs/Classification"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
         "asset_category": {
           "title": "Asset category",
           "description": "The category of the lost assets, from the closed [exposure_category codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#exposure-category).",
@@ -1297,7 +1307,13 @@
           "description": "Details of the impact and loss calculations.",
           "properties": {
             "impact": {
-              "$ref": "#/$defs/Impact"
+              "$ref": "#/$defs/Impact",
+              "required": [
+                "type",
+                "modelling",
+                "metric",
+                "measurement"
+              ]
             },
             "loss_type": {
               "title": "Loss type",
@@ -1326,10 +1342,6 @@
             }
           },
           "required": [
-            "impact_type",
-            "impact_modelling",
-            "impact_metric",
-            "measurement",
             "loss_type",
             "loss_approach",
             "loss_frequency_type"
@@ -1362,7 +1374,7 @@
         "type": {
           "title": "Type",
           "type": "string",
-          "description": "The type of the hazard, from the closed [hazard type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists.html#hazard_type).",
+          "description": "The type of the hazard, from the closed [hazard type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#hazard_type).",
           "codelist": "hazard_type.csv",
           "openCodelist": false,
           "enum": [
@@ -1386,7 +1398,7 @@
         "process": {
           "title": "Process",
           "type": "string",
-          "description": "The process that resulted in the hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists.html#hazard_process_type).",
+          "description": "The process that resulted in the hazard, from the closed [hazard process type codelist](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists#hazard_process_type).",
           "codelist": "process_type.csv",
           "openCodelist": false,
           "enum": [
@@ -1718,7 +1730,12 @@
         "asset_type": {
           "title": "Asset type",
           "description": "The type of asset",
-          "$ref": "#/$defs/Classification"
+          "$ref": "#/$defs/Classification",
+          "properties": {
+            "scheme": {
+              "description": "The scheme or codelist from which the classification code is taken, using the open [classification_scheme](https://docs.riskdatalibrary.org/en/{{version}}/reference/codelists/#classification-scheme) codelist. Use of GED4ALL is recommended."
+            }
+          }
         },
         "metrics": {
           "title": "Exposure metrics",
@@ -2015,536 +2032,11 @@
       ]
     },
     "conditional_hazard_type_to_process": {
-      "allOf": [
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "drought"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "agricultural_drought",
-                  "hydrological_drought",
-                  "meteorological_drought",
-                  "socioeconomic_drought"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "flood"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "fluvial_flood",
-                  "pluvial_flood",
-                  "groundwater_flood",
-                  "coastal_flood",
-                  "glacial_lake_outburst"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "earthquake"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "primary_rupture",
-                  "secondary_rupture",
-                  "ground_motion",
-                  "liquefaction",
-                  "subsidence_uplift"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "extreme_temperature"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "extreme_cold",
-                  "extreme_heat"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "strong_wind"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "extratropical_cyclone",
-                  "tropical_cyclone",
-                  "tornado"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "wildfire"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "wildfire",
-                  "wildfire_smoke"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "landslide"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "snow_avalanche",
-                  "landslide_general",
-                  "landslide_rockslide",
-                  "landslide_mudflow",
-                  "landslide_rockfall"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "tsunami"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "tsunami"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "volcanic"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "ashfall",
-                  "volcano_ballistics",
-                  "lahar",
-                  "lava",
-                  "pyroclastic_flow",
-                  "volcano_gas_aerosols"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "coastal_flood"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "coastal_flood",
-                  "storm_surge"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "convective_storm"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "tornado",
-                  "lightning",
-                  "thunderstorm",
-                  "hail"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "dust_sand_storm"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "dust_sand_storm"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "erosion"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "coastal_erosion",
-                  "soil_erosion"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "sea_level_rise"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "sea_level_rise"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "pest_infestation"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "process": {
-                "enum": [
-                  "pest"
-                ]
-              }
-            }
-          }
-        }
-      ]
+      "$comment": "This definition is populated dynamically by config_inited in docs/conf.py based on the mapping in process_type.csv"
     },
     "conditional_hazard_type_to_intensity_measure": {
-      "allOf": [
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "earthquake"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_earthquake.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "flood"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_flood.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "tsunami"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_tsunami.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "coastal_flood"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_coastal_flood.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "landslide"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_landslide.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "volcanic"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_volcanic.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "convective_storm"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_convective_storm.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "wildfire"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_wildfire.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "strong_wind"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_strong_wind.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "drought"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_drought.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "extreme_temperature"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_extreme_temperature.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "erosion"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_erosion.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "pest_infestation"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_pest_infestation.csv"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "type": {
-                "const": "dust_sand_storm"
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "intensity_measure": {
-                "codelist": "imt_dust_sand_storm.csv"
-              }
-            }
-          }
-        }
-      ],
-      "minProperties": 1
+      "minProperties": 1,
+      "$comment": "This definition is populated dynamically by config_inited in docs/conf.py based on the mapping in imt.csv"
     },
     "codelist_risk_data_type": {
       "type": "string",
@@ -3111,6 +2603,7 @@
         "SHP",
         "SIT",
         "SKK",
+        "SLE",
         "SLL",
         "SOS",
         "SRD",
@@ -3150,12 +2643,14 @@
         "UYW",
         "UZS",
         "VEB",
+        "VED",
         "VEF",
         "VES",
         "VNC",
         "VND",
         "VUV",
         "WST",
+        "XAD",
         "XAF",
         "XAG",
         "XAU",
@@ -3164,6 +2659,7 @@
         "XBC",
         "XBD",
         "XCD",
+        "XCG",
         "XDR",
         "XEU",
         "XFO",
@@ -3190,6 +2686,7 @@
         "ZRZ",
         "ZWC",
         "ZWD",
+        "ZWG",
         "ZWL",
         "ZWN",
         "ZWR"
