@@ -14,6 +14,18 @@ Please refer to the online [**DOCUMENTATION**](https://gfdrr.github.io/CCDR-tool
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+This project is available under a dual licensing model:
+
+### Open Source License (GPL-3.0)
+
+This project is licensed under the GNU General Public License v3.0 for non-commercial and open source use - see the [LICENSE](LICENSE) file for details.
+
+Under GPL-3.0, you are free to use, modify, and distribute this software, provided that any derivative works are also licensed under GPL-3.0 and made publicly available.
 
 For more information about GPL-3.0, visit: https://www.gnu.org/licenses/gpl-3.0.html
+
+### Commercial License
+
+If you wish to use this software for commercial purposes without the GPL-3.0 restrictions (e.g., in proprietary software without open-sourcing your code), please contact us for commercial licensing options.
+
+For commercial licensing inquiries, please reach out via the repository's contact information.
