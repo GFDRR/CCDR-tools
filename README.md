@@ -11,3 +11,9 @@ The tool allows to:
 - Present results into a dashboard
 
 Please refer to the online [**DOCUMENTATION**](https://gfdrr.github.io/CCDR-tools/).
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+For more information about GPL-3.0, visit: https://www.gnu.org/licenses/gpl-3.0.html
