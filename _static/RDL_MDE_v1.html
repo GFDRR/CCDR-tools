@@ -4172,7 +4172,7 @@
             }
 
             static get baseUrl() {
-                return 'https://docs.riskdatalibrary.org/en/1.0-dev/codelists/open/';
+                return 'https://docs.riskdatalibrary.org/en/latest/codelists/open/';
             }
 
             /**
@@ -4254,7 +4254,7 @@
                     const isClosed = closedCodelists.includes(codelistName);
 
                     // Build URL: use closed/ directory for closed codelists, open/ for others
-                    const baseUrlPath = 'https://docs.riskdatalibrary.org/en/1.0-dev/codelists/';
+                    const baseUrlPath = 'https://docs.riskdatalibrary.org/en/latest/codelists/';
                     const subdirectory = isClosed ? 'closed/' : 'open/';
                     const url = baseUrlPath + subdirectory + codelistName;
 
@@ -5924,7 +5924,7 @@
             if (!text) return text;
 
             // Replace {{version}} placeholder with current schema version
-            text = text.replace(/\{\{version\}\}/g, currentSchemaVersion);
+            text = text.replace(/\{\{version\}\}/g, 'latest');
 
             // Convert markdown links
             text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(match, linkText, url) {
