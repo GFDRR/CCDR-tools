@@ -1055,9 +1055,11 @@
             'intensity_measure': 'type', // For inline/modal hazard objects
             'process': 'type', // For inline/modal hazard objects
 
-            // v1.0: Measurement object - unit field depends on quantity_kind
+            // v1.0: Measurement object - unit and valuation_year fields depend on quantity_kind
             'unit': 'quantity_kind',
-            'measurement.unit': 'measurement.quantity_kind'
+            'measurement.unit': 'measurement.quantity_kind',
+            'valuation_year': 'quantity_kind',
+            'measurement.valuation_year': 'measurement.quantity_kind'
         };
 
         // Auto-completion suggestions for common fields
@@ -3104,6 +3106,15 @@
                         // Use resolvedProp to ensure nested properties get full schema with allOf expanded
                         const field = subContext.createField(`${name}.${key}`, resolvedProp || prop, fieldValue, options);
                         console.log(`[CREATE OBJECT]   Appending field to container, field tagName: ${field.tagName}, className: ${field.className}`);
+
+                        // valuation_year is only applicable when quantity_kind = 'currency'
+                        if (key === 'valuation_year') {
+                            const currentQuantityKind = value && value['quantity_kind'];
+                            if (currentQuantityKind !== 'currency') {
+                                field.style.display = 'none';
+                            }
+                        }
+
                         contentContainer.appendChild(field);
                     });
                 }
@@ -3673,6 +3684,17 @@
                                         dependentField.dispatchEvent(new Event('input', { bubbles: true }));
                                         dependentField.dispatchEvent(new Event('change', { bubbles: true }));
                                         this.reloadComboboxCodelist(dependentField, fullDependentFieldName, newValue);
+                                    } else if (dependentFieldName.includes('valuation_year')) {
+                                        const fieldWrapper = dependentField.closest('.form-field, .modal-form-field');
+                                        if (fieldWrapper) {
+                                            if (newValue === 'currency') {
+                                                fieldWrapper.style.display = '';
+                                            } else {
+                                                fieldWrapper.style.display = 'none';
+                                                dependentField.value = '';
+                                                dependentField.dispatchEvent(new Event('input', { bubbles: true }));
+                                            }
+                                        }
                                     }
                                 }
                             } else {
@@ -3714,6 +3736,17 @@
                                         dependentField.dispatchEvent(new Event('input', { bubbles: true }));
                                         dependentField.dispatchEvent(new Event('change', { bubbles: true }));
                                         this.reloadComboboxCodelist(dependentField, fullDependentFieldName, newValue);
+                                    } else if (dependentFieldName.includes('valuation_year')) {
+                                        const fieldWrapper = dependentField.closest('.form-field, .modal-form-field');
+                                        if (fieldWrapper) {
+                                            if (newValue === 'currency') {
+                                                fieldWrapper.style.display = '';
+                                            } else {
+                                                fieldWrapper.style.display = 'none';
+                                                dependentField.value = '';
+                                                dependentField.dispatchEvent(new Event('input', { bubbles: true }));
+                                            }
+                                        }
                                     }
                                 } else {
                                     console.error(`[DEPENDENCY] Fallback: Failed to find dependent field with ID "${dependentFieldId}"`);
@@ -3773,6 +3806,17 @@
                                     this.reloadComboboxCodelist(dependentField, fullDependentFieldName, newValue);
                                 } else {
                                     console.log(`[DEPENDENCY] Unit field doesn't have combobox structure, skipping reload`);
+                                }
+                            } else if (dependentFieldName.includes('valuation_year')) {
+                                const fieldWrapper = dependentField.closest('.form-field, .modal-form-field');
+                                if (fieldWrapper) {
+                                    if (newValue === 'currency') {
+                                        fieldWrapper.style.display = '';
+                                    } else {
+                                        fieldWrapper.style.display = 'none';
+                                        dependentField.value = '';
+                                        dependentField.dispatchEvent(new Event('input', { bubbles: true }));
+                                    }
                                 }
                             }
                         }
@@ -6202,6 +6246,21 @@
                             }
                         }, 100);
                     }
+
+                    // Add valuation_year field after currency unit
+                    const valuationYearProperty = {
+                        "title": "Valuation year",
+                        "type": "string",
+                        "description": "The year of the monetary valuation (YYYY).",
+                        "pattern": "^[0-9]{4}$"
+                    };
+                    const savedValuationYear = objectData['valuation_year'];
+                    const valuationYearElement = modalContext.createField('valuation_year', valuationYearProperty, savedValuationYear);
+                    // Hide unless quantity_kind is already 'currency'
+                    if (objectData['quantity_kind'] !== 'currency') {
+                        valuationYearElement.style.display = 'none';
+                    }
+                    fieldsContainer.appendChild(valuationYearElement);
 
                     // Currency field will be handled by the unified dependency system
                 }
