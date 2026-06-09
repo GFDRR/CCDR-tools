@@ -420,7 +420,7 @@
                 <!-- Schema Version Selection -->
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h5>⚙️ Schema Configuration</h5>
+                        <h5>📋 Schema Configuration</h5>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
@@ -698,7 +698,7 @@
     <script>
         // RDLS Schema Configuration
         const RDLS_VERSIONS = {
-            '1.0': 'rdls_schema.json'
+            '1.0': 'rdls_schema_v1.json'
         };
 
         const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
@@ -1450,7 +1450,7 @@
                     return this.createEmailInput(name, property, value, options);
                 } else if (property.format === 'iri') {
                     return this.createUrlInput(name, property, value, options);
-                } else if (name.includes('description') || name.includes('purpose') || name.includes('notes') || name.includes('details') || name.includes('lineage') || name.includes('citation')) {
+                } else if (name.includes('description') || name.includes('purpose') || name.includes('notes') || name.includes('details') || name.includes('lineage')) {
                     return this.createTextareaInput(name, property, value, options);
                 } else {
                     return this.createTextInput(name, property, value, options);
@@ -1511,8 +1511,6 @@
                 } else if (fieldBaseName === 'details') {
                     textarea.maxLength = 5000;
                 } else if (fieldBaseName === 'purpose') {
-                    textarea.maxLength = 1500;
-                } else if (fieldBaseName === 'citation') {
                     textarea.maxLength = 1500;
                 } else if (property.maxLength) {
                     textarea.maxLength = property.maxLength;
@@ -1983,12 +1981,11 @@
                             const suggestionCode = typeof suggestion === 'object' ? suggestion.code : suggestion;
                             const suggestionTitle = typeof suggestion === 'object' ? suggestion.title : suggestion;
 
-                            // Display format: "[Code] Title (valid until YYYY-MM)" for currency unit fields
-                            const validUntilSuffix = (typeof suggestion === 'object' && suggestion.validUntil) ? ` (valid until ${suggestion.validUntil})` : '';
+                            // Display format: "[Code] Title" only for currency unit fields
                             if (showCodeInDropdown && typeof suggestion === 'object' && suggestion.code && suggestion.title && suggestion.code !== suggestion.title) {
-                                link.textContent = `[${suggestionCode}] ${suggestionTitle}${validUntilSuffix}`;
+                                link.textContent = `[${suggestionCode}] ${suggestionTitle}`;
                             } else {
-                                link.textContent = suggestionTitle + validUntilSuffix;
+                                link.textContent = suggestionTitle;
                             }
                             link.addEventListener('click', (e) => {
                                 e.preventDefault();
@@ -2609,42 +2606,15 @@
                             // For Classification objects, leave id empty for user input
                             
                             console.log(`[ADD ITEM] Adding to ${name}, arrayData was ${arrayData.length}, pushing:`, newItem);
-                            const newIndex = arrayData.length;
                             arrayData.push(newItem);
                             console.log(`[ADD ITEM] After push, arrayData is now ${arrayData.length}`);
                             renderArrayItems();
-                            // Auto-scroll to the newly added item
-                            setTimeout(() => {
-                                const items = itemsContainer.querySelectorAll('.card, .array-item');
-                                const newItem = items[newIndex];
-                                if (newItem) {
-                                    newItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                                    // Add a subtle highlight effect
-                                    newItem.style.transition = 'background-color 0.5s';
-                                    const originalBg = newItem.style.backgroundColor;
-                                    newItem.style.backgroundColor = '#fff3cd';
-                                    setTimeout(() => {
-                                        newItem.style.backgroundColor = originalBg;
-                                    }, 1000);
-                                }
-                            }, 100);
                         } else {
                             openObjectEditor(name, arrayData.length, property.items, arrayData, renderArrayItems);
                         }
                     } else if (resolvedItems && resolvedItems.type === 'string') {
-                        const newIndex = arrayData.length;
                         arrayData.push('');
                         renderArrayItems();
-                        // Auto-scroll to the newly added item
-                        setTimeout(() => {
-                            const items = itemsContainer.querySelectorAll('.array-item');
-                            const newItem = items[newIndex];
-                            if (newItem) {
-                                newItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                                const input = newItem.querySelector('input, select');
-                                if (input) input.focus();
-                            }
-                        }, 100);
                         if (this.context.type === 'normal') {
                             updateFormData();
                             // Trigger validation for spatial fields when countries array changes
@@ -2657,17 +2627,8 @@
                             }
                         }
                     } else {
-                        const newIndex = arrayData.length;
                         arrayData.push({});
                         renderArrayItems();
-                        // Auto-scroll to the newly added item
-                        setTimeout(() => {
-                            const items = itemsContainer.querySelectorAll('.card, .array-item');
-                            const newItem = items[newIndex];
-                            if (newItem) {
-                                newItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                            }
-                        }, 100);
                         if (this.context.type === 'normal') {
                             updateFormData();
                             // Trigger validation for spatial fields when countries array changes
@@ -4164,12 +4125,11 @@
                             const suggestionCode = typeof suggestion === 'object' ? suggestion.code : suggestion;
                             const suggestionTitle = typeof suggestion === 'object' ? suggestion.title : suggestion;
 
-                            // Display format: "[Code] Title (valid until YYYY-MM)" for currency unit fields
-                            const validUntilSuffix = (typeof suggestion === 'object' && suggestion.validUntil) ? ` (valid until ${suggestion.validUntil})` : '';
+                            // Display format: "[Code] Title" only for currency unit fields
                             if (showCodeInDropdown && typeof suggestion === 'object' && suggestion.code && suggestion.title && suggestion.code !== suggestion.title) {
-                                link.textContent = `[${suggestionCode}] ${suggestionTitle}${validUntilSuffix}`;
+                                link.textContent = `[${suggestionCode}] ${suggestionTitle}`;
                             } else {
-                                link.textContent = suggestionTitle + validUntilSuffix;
+                                link.textContent = suggestionTitle;
                             }
                             link.addEventListener('click', (e) => {
                                 e.preventDefault();
@@ -4212,7 +4172,7 @@
             }
 
             static get baseUrl() {
-                return 'https://docs.riskdatalibrary.org/en/1.0-dev/codelists/open/';
+                return 'https://docs.riskdatalibrary.org/en/latest/codelists/open/';
             }
 
             /**
@@ -4224,12 +4184,11 @@
                 const lines = csvText.trim().split('\n');
                 if (lines.length === 0) return [];
 
-                // Parse header to find 'Code', 'Title', 'Category', and 'Valid Until' columns (case-insensitive)
+                // Parse header to find 'Code', 'Title', and 'Category' columns (case-insensitive)
                 const header = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
                 const codeIndex = header.findIndex(h => h.toLowerCase() === 'code');
                 const titleIndex = header.findIndex(h => h.toLowerCase() === 'title');
                 const categoryIndex = header.findIndex(h => h.toLowerCase() === 'category');
-                const validUntilIndex = header.findIndex(h => h.toLowerCase() === 'valid until');
 
                 if (codeIndex === -1) {
                     console.warn('CSV does not have a "Code" column, using first column');
@@ -4266,14 +4225,10 @@
                         const code = cells[codeIndex] || null;
                         const title = titleIndex !== -1 ? cells[titleIndex] : code;
                         const category = categoryIndex !== -1 ? cells[categoryIndex] : null;
-                        const validUntil = validUntilIndex !== -1 ? cells[validUntilIndex] : null;
 
                         const item = { code, title: title || code };
                         if (category) {
                             item.category = category;
-                        }
-                        if (validUntil) {
-                            item.validUntil = validUntil;
                         }
                         return code ? item : null;
                     })
@@ -4299,7 +4254,7 @@
                     const isClosed = closedCodelists.includes(codelistName);
 
                     // Build URL: use closed/ directory for closed codelists, open/ for others
-                    const baseUrlPath = 'https://docs.riskdatalibrary.org/en/1.0-dev/codelists/';
+                    const baseUrlPath = 'https://docs.riskdatalibrary.org/en/latest/codelists/';
                     const subdirectory = isClosed ? 'closed/' : 'open/';
                     const url = baseUrlPath + subdirectory + codelistName;
 
@@ -5588,7 +5543,6 @@
                                     <strong>${label}</strong> <span class="badge bg-danger">Required</span><br>
                                     <small class="text-muted">${entity.name}</small>
                                     ${entity.email ? `<br><small class="text-muted">${entity.email}</small>` : ''}
-                                    ${entity.affiliation?.name ? `<br><small class="text-muted">Affiliation: ${entity.affiliation.name}</small>` : ''}
                                 </div>
                                 <button type="button" class="btn btn-sm btn-outline-primary"
                                         onclick="editRootEntity('${role}')">Edit</button>
@@ -5622,7 +5576,6 @@
                             <div>
                                 <strong>${attr.role ? attr.role.replace(/_/g, ' ').toUpperCase() : 'No role specified'}</strong><br>
                                 <small class="text-muted">${attr.entity?.name || 'Unnamed entity'}</small>
-                                ${attr.entity?.affiliation?.name ? `<br><small class="text-muted">Affiliation: ${attr.entity.affiliation.name}</small>` : ''}
                             </div>
                             <div>
                                 <button type="button" class="btn btn-sm btn-outline-primary me-1"
@@ -5706,12 +5659,10 @@
                     // Add info icon button to toggle description
                     const toggleBtn = document.createElement('button');
                     toggleBtn.type = 'button';
-                    toggleBtn.className = 'btn btn-outline-info btn-sm ms-2';
-                    toggleBtn.style.fontSize = '0.9rem';
-                    toggleBtn.style.padding = '0.25rem 0.5rem';
-                    toggleBtn.style.borderRadius = '0.25rem';
-                    toggleBtn.innerHTML = '<span class="toggle-icon">ℹ️ Instructions & Examples</span>';
-                    toggleBtn.title = 'Click to view instructions and examples for this component';
+                    toggleBtn.className = 'btn btn-link btn-sm text-decoration-none ms-2 p-0';
+                    toggleBtn.style.fontSize = '1.2rem';
+                    toggleBtn.innerHTML = '<span class="toggle-icon">ℹ️</span>';
+                    toggleBtn.title = 'Toggle description';
 
                     const descriptionId = `${sectionName}-description`;
 
@@ -5734,20 +5685,20 @@
                     // Example links for each component
                     const exampleLinks = {
                         'hazard': `<br><br><strong>Examples:</strong><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/hazard/flood_inundation/" target="_blank" rel="noopener noreferrer">• Flood hazard maps</a><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/hazard/tropical_cyclone/" target="_blank" rel="noopener noreferrer">• Probabilistic tropical cyclone model</a><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/hazard/earthquake_catalog/" target="_blank" rel="noopener noreferrer">• Historical earthquake catalog</a>`,
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/hazard/flood_inundation/" target="_blank" rel="noopener noreferrer">• Flood hazard maps</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/hazard/tropical_cyclone/" target="_blank" rel="noopener noreferrer">• Probabilistic tropical cyclone model</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/hazard/earthquake_catalog/" target="_blank" rel="noopener noreferrer">• Historical earthquake catalog</a>`,
                         'exposure': `<br><br><strong>Examples:</strong><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/exposure/building_inventory/" target="_blank" rel="noopener noreferrer">• Building inventory database</a><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/exposure/population_admin/" target="_blank" rel="noopener noreferrer">• Population dataset by administrative boundaries</a><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/exposure/service_accessibility/" target="_blank" rel="noopener noreferrer">• Service accessibility analysis over road networks</a>`,
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/exposure/building_inventory/" target="_blank" rel="noopener noreferrer">• Building inventory database</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/exposure/population_admin/" target="_blank" rel="noopener noreferrer">• Population dataset by administrative boundaries</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/exposure/service_accessibility/" target="_blank" rel="noopener noreferrer">• Service accessibility analysis over road networks</a>`,
                         'vulnerability': `<br><br><strong>Examples:</strong><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/vulnerability/flood_damage_curves/" target="_blank" rel="noopener noreferrer">• Flood depth-damage functions</a><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/vulnerability/earthquake_fragility/" target="_blank" rel="noopener noreferrer">• Earthquake fragility curves for building structures</a><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/vulnerability/wealth_index/" target="_blank" rel="noopener noreferrer">• Relative wealth index</a>`,
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/vulnerability/flood_damage_curves/" target="_blank" rel="noopener noreferrer">• Flood depth-damage functions</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/vulnerability/earthquake_fragility/" target="_blank" rel="noopener noreferrer">• Earthquake fragility curves for building structures</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/vulnerability/wealth_index/" target="_blank" rel="noopener noreferrer">• Relative wealth index</a>`,
                         'loss': `<br><br><strong>Examples:</strong><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/loss/flood_risk/" target="_blank" rel="noopener noreferrer">• Flood risk model</a><br>
-                            <a href="https://docs.riskdatalibrary.org/en/mde_examples/guides/metadata/worked_examples/loss/earthquake_loss/" target="_blank" rel="noopener noreferrer">• Earthquake loss database</a>`
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/loss/flood_risk/" target="_blank" rel="noopener noreferrer">• Flood risk model</a><br>
+                            <a href="https://docs.riskdatalibrary.org/en/latest/guides/metadata/worked_examples/loss/earthquake_loss/" target="_blank" rel="noopener noreferrer">• Earthquake loss database</a>`
                     };
 
                     // Combine schema description with extended description and examples
@@ -5766,12 +5717,10 @@
                         const isHidden = description.classList.contains('collapse');
                         if (isHidden) {
                             description.classList.remove('collapse');
-                            toggleBtn.innerHTML = '<span class="toggle-icon">▲ Hide Instructions</span>';
-                            toggleBtn.className = 'btn btn-info btn-sm ms-2';
+                            toggleBtn.innerHTML = '<span class="toggle-icon">▼</span>';
                         } else {
                             description.classList.add('collapse');
-                            toggleBtn.innerHTML = '<span class="toggle-icon">ℹ️ Instructions & Examples</span>';
-                            toggleBtn.className = 'btn btn-outline-info btn-sm ms-2';
+                            toggleBtn.innerHTML = '<span class="toggle-icon">ℹ️</span>';
                         }
                     });
 
@@ -5975,7 +5924,7 @@
             if (!text) return text;
 
             // Replace {{version}} placeholder with current schema version
-            text = text.replace(/\{\{version\}\}/g, currentSchemaVersion);
+            text = text.replace(/\{\{version\}\}/g, 'latest');
 
             // Convert markdown links
             text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(match, linkText, url) {
@@ -6398,27 +6347,11 @@
             if (currentObjectEditor.isRootEntity) {
                 const entityData = {};
 
-                // Extract form data for Entity fields (name, email, url, affiliation)
+                // Extract form data for Entity fields (name, email, url)
                 for (const [key, value] of formData.entries()) {
                     const cleanKey = key.replace('modal_', '');
                     if (value && value !== '') {
-                        // Handle nested fields like affiliation.name, affiliation.url
-                        if (cleanKey.includes('.')) {
-                            const parts = cleanKey.split('.');
-                            const parentKey = parts[0];
-                            const childKey = parts[1];
-
-                            // Initialize nested object if it doesn't exist
-                            if (!entityData[parentKey]) {
-                                entityData[parentKey] = {};
-                            }
-
-                            // Set the nested property
-                            entityData[parentKey][childKey] = value;
-                        } else {
-                            // Simple property
-                            entityData[cleanKey] = value;
-                        }
+                        entityData[cleanKey] = value;
                     }
                 }
 
@@ -7054,7 +6987,7 @@
             const schemaFieldOrder = [
                 'id', 'title', 'description', 'risk_data_type', 'publisher', 'version', 'purpose',
                 'project', 'details', 'contact_point', 'creator', 'spatial', 'spatial_resolution',
-                'temporal', 'temporal_resolution', 'license', 'rights',
+                'temporal', 'temporal_resolution', 'license',
                 'attributions', 'lineage', 'referenced_by', 'resources',
                 'hazard', 'exposure', 'vulnerability', 'loss', 'links'
             ];
@@ -7255,12 +7188,6 @@
                         (!resource.access_url || resource.access_url.trim() === '')) {
                         resourcesValid = false;
                         resourceError = `Resource ${resourceNum} must have either download_url or access_url`;
-                        break;
-                    }
-                    if ((!resource.media_type || resource.media_type.trim() === '') &&
-                        (!resource.format || resource.format.trim() === '')) {
-                        resourcesValid = false;
-                        resourceError = `Resource ${resourceNum} must have either media_type or format`;
                         break;
                     }
                 }
@@ -7871,7 +7798,7 @@
             const schemaFieldOrder = [
                 'id', 'title', 'description', 'risk_data_type', 'publisher', 'version', 'purpose',
                 'project', 'details', 'contact_point', 'creator', 'spatial', 'spatial_resolution',
-                'temporal', 'temporal_resolution', 'license', 'rights',
+                'temporal', 'temporal_resolution', 'license',
                 'attributions', 'lineage', 'referenced_by', 'resources',
                 'hazard', 'exposure', 'vulnerability', 'loss', 'links'
             ];
