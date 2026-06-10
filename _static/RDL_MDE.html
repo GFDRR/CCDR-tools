@@ -698,7 +698,7 @@
     <script>
         // RDLS Schema Configuration
         const RDLS_VERSIONS = {
-            '1.0': 'rdls_schema.json'
+            '1.0': 'https://docs.riskdatalibrary.org/en/1__0__0/rdls_schema.json'
         };
 
         const SECTIONS = ['hazard', 'exposure', 'vulnerability', 'loss'];
@@ -5253,16 +5253,19 @@
                 if (!currentSchema.hazard_process_mappings) {
                     currentSchema.hazard_process_mappings = {
                         "drought": ["agricultural_drought", "hydrological_drought", "meteorological_drought", "socioeconomic_drought"],
-                        "flood": ["fluvial_flood", "pluvial_flood", "groundwater_flood", "coastal_flood"],
-                        "earthquake": ["primary_rupture", "secondary_rupture", "ground_motion", "liquefaction"],
+                        "flood": ["fluvial_flood", "pluvial_flood", "groundwater_flood", "coastal_flood", "glacial_lake_outburst"],
+                        "earthquake": ["rupture", "ground_motion", "liquefaction", "subsidence_uplift"],
                         "extreme_temperature": ["extreme_cold", "extreme_heat"],
-                        "strong_wind": ["extratropical_cyclone", "tropical_cyclone", "tornado"],
-                        "wildfire": ["wildfire"],
+                        "strong_wind": ["extratropical_cyclone", "tropical_cyclone", "tornado", "storm_surge"],
+                        "wildfire": ["wildfire", "wildfire_smoke"],
                         "landslide": ["snow_avalanche", "landslide_general", "landslide_rockslide", "landslide_mudflow", "landslide_rockfall"],
                         "tsunami": ["tsunami"],
-                        "volcanic": ["ashfall", "volcano_ballistics", "lahar", "lava", "pyroclastic_flow"],
-                        "coastal_flood": ["coastal_flood", "storm_surge"],
-                        "convective_storm": ["tornado"]
+                        "volcanic": ["ashfall", "volcano_ballistics", "lahar", "lava", "pyroclastic_flow", "volcano_gas_aerosols"],
+                        "convective_storm": ["tornado", "lightning", "thunderstorm", "hail"],
+                        "dust_sand_storm": ["dust_sand_storm"],
+                        "erosion": ["coastal_erosion", "soil_erosion"],
+                        "sea_level_rise": ["sea_level_rise"],
+                        "pest_infestation": ["pest"],
                     };
                 }
 
