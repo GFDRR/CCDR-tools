@@ -9,6 +9,6 @@ More information are available in the [**RDL documentation**](https://docs.riskd
 
 ## Risk data
 
-The [**Risk Data Library Catalogue**](https://catalog.riskdatalibrary.org) is a metadata catalogue where **Risk Datasets** are organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
+The [**Risk Data Library Catalogue**](https://catalog.riskdatalibrary.org) is a catalogue where metadata describing risk datasets are organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
 
-The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/collections/RDL) is a catalogue within the [World Bank Data Hub](https://datacatalog.worldbank.org/) where **Risk Datasets** produced by or used in World Bank projects are stored and organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
+The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/collections/RDL) is a catalogue within the [World Bank Data Hub](https://datacatalog.worldbank.org/) where risk datasets produced by or used in World Bank projects can be physically stored.
