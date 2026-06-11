@@ -315,6 +315,10 @@ const thebe_selector_output = ".output, .cell_output"
   
 
   
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
 
 </div>
   </nav>
@@ -726,7 +730,9 @@ title="Print to PDF"
       
   </ul>
 </div>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
     </div>
 </div>
             </div>
@@ -739,6 +745,19 @@ title="Print to PDF"
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#risk-data">
+   Risk data
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -751,8 +770,12 @@ title="Print to PDF"
 Its overarching purpose is to support disaster resilience work by making risk data easier and more effective to work with.</p>
 <p>Building on GFDRR experience, extensive &amp; intensive review of risk literature and case studies, and partnership with some of the main risk data actors (<a class="reference external" href="https://riskdatalibrary.org/project">GEM, UCL EPICentre, BGS, OasisHUB and more</a>), the RDL proposes a standard data and metadata schema to organise, format, describe, store and share risk data.
 <br><br>
-More information are available in the <a class="reference external" href="https://rdl-standard.readthedocs.io"><strong>RDL documentation</strong></a>.</p>
-<p>The <a class="reference external" href="https://datacatalog.worldbank.org/search/collections/rdl"><strong>Risk Data Library Collection</strong></a> is a catalogue where <strong>Risk Datasets</strong> produced or used by World Bank analytics are stored and organised by the <a class="reference external" href="https://docs.riskdatalibrary.org/en/latest/reference/browser/"><strong>RDL standard metadata schema</strong></a>.</p>
+More information are available in the <a class="reference external" href="https://docs.riskdatalibrary.org"><strong>RDL documentation</strong></a>.</p>
+<section id="risk-data">
+<h2>Risk data<a class="headerlink" href="#risk-data" title="Permalink to this heading">#</a></h2>
+<p>The <a class="reference external" href="https://catalog.riskdatalibrary.org"><strong>Risk Data Library Catalogue</strong></a> is a metadata catalogue where <strong>Risk Datasets</strong> are organised by the <a class="reference external" href="https://docs.riskdatalibrary.org/en/latest/reference/browser/"><strong>RDL standard metadata schema</strong></a>.</p>
+<p>The <a class="reference external" href="https://datacatalog.worldbank.org/search/collections/RDL"><strong>Risk Data Library Collection</strong></a> is a catalogue within the <a class="reference external" href="https://datacatalog.worldbank.org/">World Bank Data Hub</a> where <strong>Risk Datasets</strong> produced by or used in World Bank projects are stored and organised by the <a class="reference external" href="https://docs.riskdatalibrary.org/en/latest/reference/browser/"><strong>RDL standard metadata schema</strong></a>.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -804,6 +827,27 @@ More information are available in the <a class="reference external" href="https:
           
           
           
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#risk-data">
+   Risk data
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
           
         </div>
         <footer class="bd-footer-content">
@@ -825,7 +869,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 10, 2026.<br>
+Last updated on Jun 11, 2026.<br>
 </p>
   </div>
   

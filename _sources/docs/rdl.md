@@ -5,6 +5,10 @@ Its overarching purpose is to support disaster resilience work by making risk da
 
 Building on GFDRR experience, extensive & intensive review of risk literature and case studies, and partnership with some of the main risk data actors ([GEM, UCL EPICentre, BGS, OasisHUB and more](https://riskdatalibrary.org/project)), the RDL proposes a standard data and metadata schema to organise, format, describe, store and share risk data.
 <br><br>
-More information are available in the [**RDL documentation**](https://rdl-standard.readthedocs.io).
+More information are available in the [**RDL documentation**](https://docs.riskdatalibrary.org).
 
-The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/collections/rdl) is a catalogue where **Risk Datasets** produced or used by World Bank analytics are stored and organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
+## Risk data
+
+The [**Risk Data Library Catalogue**](https://catalog.riskdatalibrary.org) is a metadata catalogue where **Risk Datasets** are organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
+
+The [**Risk Data Library Collection**](https://datacatalog.worldbank.org/search/collections/RDL) is a catalogue within the [World Bank Data Hub](https://datacatalog.worldbank.org/) where **Risk Datasets** produced by or used in World Bank projects are stored and organised by the [**RDL standard metadata schema**](https://docs.riskdatalibrary.org/en/latest/reference/browser/).
