@@ -26,7 +26,6 @@ parts:
     chapters:
       - file: docs/tool-setup
         sections:
-          - file: docs/run-baseline
           - file: docs/run_fl
           - file: docs/run_tc
           - file: docs/run_ch
