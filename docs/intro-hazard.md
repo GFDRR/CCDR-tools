@@ -46,7 +46,7 @@ align: center
 ---
 ```
 
-See the picture below as example: the landslide hazard (_left_) is represented by one aggregated mean index value; while the flood hazard is shows as a series of events (scenarios) of increasing magnitude and decreasing probability. A probabilistic hazard representation is required in order to produce [probabilistic risk](probabilistic-risk) mapping.
+See the picture below as example: the landslide hazard (_left_) is represented by one aggregated mean index value; while the flood hazard is shown as a series of events (scenarios) of increasing magnitude and decreasing probability. A probabilistic hazard representation is required in order to produce [probabilistic risk](probabilistic-risk) mapping.
 
 ```{figure} images/hzd_models.jpg
 ---

@@ -9,7 +9,7 @@ The core team behind the CCDR tools:
 | [Takuya Iwanaga](mailto:iwanaga.takuya@anu.edu.au) | Programmer - Development of original python code for spatial analysis and EAI calculation | WB GFDRR |
 | [Jasper Schröder](mailto:jasper_schroeder@swissre.com) | Programmer - Code fixes and optimisation | SwissRE |
 
-Important contribution and feedback in the development process came from [Lander Bosh](mailto:lbosh@worldbank.org), WB Geographer, and the whole SEA poverty team.
+Important contributions and feedback in the development process came from [Lander Bosh](mailto:lbosh@worldbank.org), WB Geographer, and the whole SEA poverty team.
 
 The CCDR tools have been developed alongside CCDR project activities in partnership with [**GFDRR**](https://www.gfdrr.org).
 
@@ -20,7 +20,7 @@ width: 50%
 ---
 ```
 
-# Citation
+## Citation
 
 The usage of CCDR tools should be acknowledged by citation:
 

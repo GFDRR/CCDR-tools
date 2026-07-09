@@ -94,7 +94,7 @@ Edit the `manual_run.py` file to specify:
 - **climate scenario (`scenario`)**: when future period, the associated climate scenario: 'SSP1_2.6', 'SSP2_4.5', 'SSP3_7.0', 'SSP5_8.5'.
 - **return periods (`return_periods`)**: list of return period scenarios as in the data, e.g. `[5, 10, 20, 50, 75, 100, 200, 250, 500, 1000]`
 - **exposure categories (`exp_cat_list`)**: list of exposure categories: `['POP', 'BU', 'AGR']`
-  - exposure categories file name (`exp_cat_list`): list  of same length of `exp_cat_list` with file names for exposure categories, e.g.: `['GHS', 'WSF19', 'ESA20']`
+  - exposure categories file name (`exp_nam_list`): list of same length as `exp_cat_list` with file names for exposure categories, e.g.: `['GHS', 'WSF19', 'ESA20']`
     If 'None', the default `['POP', 'BU', 'AGR']` applies
 - **analysis approach (`analysis_app`)**: `['Classes', 'Function']`
   - If `'Function'`, you can set minimum hazard threshold value (`min_haz_slider`). Hazard value below this threshold will be ignored
