@@ -52,7 +52,7 @@ width: 100%
 align: center
 ---
 ```
-Select the hazard of interest to open the analytical notebook. E.g. for floods:
+Select the hazard of interest to open the analytical notebook, then run all cells. E.g. for floods:
 
 ```{figure} images/GUI_F3.png
 ---
