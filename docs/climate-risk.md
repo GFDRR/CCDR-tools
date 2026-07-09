@@ -42,8 +42,7 @@ The table below summarises the relationship between a few climate indices and as
 Given that specific unit of measurement varies across climate indices, these could be hard to compare and combine. In some cases, it's useful to express the projected anomalies in terms of % change in relation to historical variability.
 Data from climate models released under the [IPCC Sixth Assessment Report (AR) framework](https://www.ipcc.ch/assessment-report/ar6/) are used to establish estimates of baseline and future projected climate anomalies.
 
-ARs are supported by coordinated climate modeling efforts referred to as Coupled Model Intercomparison Projects (**CMIP**). The most recent is version is **v6**, and it includes 
-modeling of future climate scenarios referred to as Shared Socioeconomic Pathways (SSPs). These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b).
+ARs are supported by coordinated climate modeling efforts referred to as Coupled Model Intercomparison Projects (**CMIP**). Version 6 (**CMIP6**) underpins the IPCC AR6 (2021–2022) and models future climate through Shared Socioeconomic Pathways (SSPs) — storylines combining greenhouse gas emission trajectories with broader socioeconomic development assumptions. Version 7 (**CMIP7**), currently being rolled out (2024–), will provide updated Earth System Model projections and is expected to underpin the next IPCC assessment cycle (AR7).
 
 ## Dimensions of climate indices:
    - **SSPs:** scenarios SSP1/RCP2.6, SSP2/RCP4.5, SSP3/RCP7.0, SSP5/RCP8.5
@@ -63,6 +62,17 @@ Recommended CCDR Global Scenarios and characteristics for adaptation and develop
 - **SSP1-2.6 (low emissions):** strong mitigation scenario where emissions peak before 2030 and decline rapidly. Projected global mean warming of **~1.8 °C** above pre-industrial levels by 2100 (likely range 1.3–2.4 °C, IPCC AR6).
 - **SSP2-4.5 (intermediate):** moderate mitigation with emissions stabilizing around current levels then declining after mid-century. Projected warming of **~2.7 °C** by 2100 (likely range 2.1–3.5 °C, IPCC AR6).
 - **SSP5-8.5 (high emissions):** fossil fuel-intensive development with no significant mitigation; emissions continue rising through 2050. Projected warming of **~4.4 °C** by 2100 (likely range 3.3–5.7 °C, IPCC AR6).
+
+```{note}
+**On scenario plausibility (CMIP7 update)**
+
+Recent emission trend analysis and the emerging [CMIP7 ScenarioMIP protocol](https://gmd.copernicus.org/articles/17/4321/2024/) indicate that the two extreme bookends are no longer considered plausible central planning scenarios:
+
+- **SSP1-1.9**: Requires global net-negative CO₂ emissions well before 2050 at a pace inconsistent with current national policy commitments. While useful as a theoretical 1.5 °C benchmark, it is not a realistic projection.
+- **SSP5-8.5**: Assumes a massive, sustained expansion of coal use through 2100 that is inconsistent with current energy transition trends. It is useful as a stress-test upper bound but should not be treated as "business as usual" ([Hausfather & Peters, 2020](https://www.nature.com/articles/d41586-020-00177-3)).
+
+Current observed emission trajectories fall within the **SSP2-4.5 to SSP3-7.0** range. For risk planning purposes, these two scenarios are the recommended primary reference, with SSP1-2.6 retained as an optimistic lower bound.
+```
 
 ## Data sources
 The climate indices are primarily sourced from the [**Climate Change Knowledge Portal**](https://climateknowledgeportal.worldbank.org) by the World Bank, which provides a large selection of climate indices for both trends and extremes, accessible via raster download or API.
