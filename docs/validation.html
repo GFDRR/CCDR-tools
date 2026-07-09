@@ -805,6 +805,23 @@ title="Print to PDF"
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vulnerability">
+     Vulnerability
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#impact-function-applicability">
+       Impact function applicability
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#class-based-approaches-eae">
+       Class-based approaches (EAE)
+      </a>
+     </li>
+    </ul>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -813,8 +830,28 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sanity-checks">
+     Sanity checks
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spatial-pattern-review">
+     Spatial pattern review
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sensitivity-analysis">
+     Sensitivity analysis
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#validation-against-empirical-disaster-data">
      Validation against empirical disaster data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-against-published-benchmarks">
+     Comparison against published benchmarks
     </a>
    </li>
   </ul>
@@ -823,6 +860,13 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#uncertainty">
    Uncertainty
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#communicating-uncertainty-to-stakeholders">
+     Communicating uncertainty to stakeholders
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -835,10 +879,17 @@ title="Print to PDF"
               
   <section class="tex2jax_ignore mathjax_ignore" id="validation-and-interpretation">
 <h1>Validation and interpretation<a class="headerlink" href="#validation-and-interpretation" title="Permalink to this heading">#</a></h1>
+<p>Validation in risk screening follows three complementary steps:</p>
+<ul class="simple">
+<li><p><strong>Input validation</strong>: checking that raw data — hazard, exposure, and vulnerability — are correctly formatted, geographically coherent, and appropriate for the analytical context.</p></li>
+<li><p><strong>Output interpretation</strong>: verifying that model results are physically plausible, spatially coherent, and consistent with observed disaster records.</p></li>
+<li><p><strong>Uncertainty quantification</strong>: characterising and communicating the confidence associated with the estimates, so results are not mistaken for precise predictions.</p></li>
+</ul>
+<p>These are not sequential one-off checks but an iterative cycle: findings at each step should feed back into the others.</p>
 <section id="validate-input">
 <h2>Validate input<a class="headerlink" href="#validate-input" title="Permalink to this heading">#</a></h2>
 <p>It is always a good practice to spend some time to evaluate the quality and representativeness of input data before diving into the analytics.
-Input data can contain errors and artefacts; sometimes they are large and evident, sometimes they are small and hard to catch - but that doesn’t mean they don’t have an impact over the quality of results!</p>
+Input data can contain errors and artefacts; sometimes they are large and evident, sometimes they are small and hard to catch — but that doesn’t mean they don’t have an impact on the quality of results!</p>
 <section id="hazard">
 <h3>Hazard<a class="headerlink" href="#hazard" title="Permalink to this heading">#</a></h3>
 <section id="correct-values-interpretation-and-outliers">
@@ -965,24 +1016,96 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 </figure>
 </section>
 </section>
+<section id="vulnerability">
+<h3>Vulnerability<a class="headerlink" href="#vulnerability" title="Permalink to this heading">#</a></h3>
+<section id="impact-function-applicability">
+<h4>Impact function applicability<a class="headerlink" href="#impact-function-applicability" title="Permalink to this heading">#</a></h4>
+<p>The vulnerability component is often the least scrutinised at input stage, yet it can be the largest source of structural uncertainty in the final results.</p>
+<ul class="simple">
+<li><p>Confirm that an impact or fragility function exists for the specific combination of hazard type and exposure category being analysed (see the <span class="xref myst">supported combinations</span>).</p></li>
+<li><p>Review the source and geographic context of the function. Functions calibrated on European or North American building stock may not transfer well to informal settlements in low- and middle-income countries. Where possible, prefer functions derived from similar climate and construction contexts.</p></li>
+<li><p>Where multiple functions are available for the same hazard-exposure pair, run the analysis with each and compare EAI/EAE results. Large divergence between functions indicates high structural uncertainty that should be reported alongside the results.</p></li>
+</ul>
+</section>
+<section id="class-based-approaches-eae">
+<h4>Class-based approaches (EAE)<a class="headerlink" href="#class-based-approaches-eae" title="Permalink to this heading">#</a></h4>
+<p>When using hazard exposure classes rather than a damage function, verify that the intensity thresholds defining the classes are physically meaningful for the local context. For example:</p>
+<ul class="simple">
+<li><p>Flood depth thresholds appropriate for reinforced concrete structures (e.g. 50 / 100 / 150 cm) may be too coarse for earthen or bamboo construction where damage starts at much lower depths.</p></li>
+<li><p>Heat index classes should be calibrated to local acclimatisation baselines, not temperate-region norms.</p></li>
+</ul>
+<p>Sensitivity of EAE results to threshold choice should be tested and documented.</p>
+</section>
+</section>
 </section>
 <section id="output-interpretation">
 <h2>Output interpretation<a class="headerlink" href="#output-interpretation" title="Permalink to this heading">#</a></h2>
-<p>The analytical model produces numbers; it then falls to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestable for a non-expert audience.</p>
+<p>The analytical model produces numbers; it then falls to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestible for a non-expert audience.</p>
+<section id="sanity-checks">
+<h3>Sanity checks<a class="headerlink" href="#sanity-checks" title="Permalink to this heading">#</a></h3>
+<p>Before any deeper validation, run basic checks on the raw output values:</p>
+<ul class="simple">
+<li><p><strong>Units and magnitude</strong>: EAI values expressed as mortality counts or built-up area damaged should be plausible relative to the total exposed population or asset stock. Relative impacts (EAI as a share of total exposure) above 10–15% for a single return period warrant investigation.</p></li>
+<li><p><strong>Physical bounds</strong>: relative impact values above 100% always indicate a technical error — typically a unit-of-measure mismatch or CRS inconsistency.</p></li>
+<li><p><strong>Monotonicity</strong>: impact should increase with return period severity. If RP100 impact exceeds RP1000 impact for the same hazard type, check the input hazard layers for that scenario pair.</p></li>
+<li><p><strong>Zero or near-zero results</strong>: a result of exactly zero EAI where hazard and exposure both exist is a red flag — check that the hazard and exposure layers spatially overlap in the same CRS.</p></li>
+</ul>
+</section>
+<section id="spatial-pattern-review">
+<h3>Spatial pattern review<a class="headerlink" href="#spatial-pattern-review" title="Permalink to this heading">#</a></h3>
+<p>Check that the geographic distribution of risk results is physically coherent before comparing against any external benchmark:</p>
+<ul class="simple">
+<li><p>High-risk administrative units should correspond to areas with <strong>both</strong> high hazard intensity and significant exposure density. Units that are high-risk despite low hazard (or vice versa) should be investigated.</p></li>
+<li><p>Risk should concentrate in expected locations: floodplains for river floods, low-lying coasts for coastal flood, steep terrain for landslides, cyclone tracks for wind. Anomalies relative to these expectations may indicate model artefacts or data errors.</p></li>
+<li><p>Implausibly uniform EAI distributions across large administrative units often reflect aggregation errors or mismatch between the hazard resolution and the administrative boundary level used for zonal statistics.</p></li>
+</ul>
+</section>
+<section id="sensitivity-analysis">
+<h3>Sensitivity analysis<a class="headerlink" href="#sensitivity-analysis" title="Permalink to this heading">#</a></h3>
+<p>Risk results can be sensitive to key modelling choices. A structured sensitivity check should cover:</p>
+<ul class="simple">
+<li><p><strong>Hazard dataset choice</strong>: if an alternative global or local hazard layer is available, re-run the analysis and compare EAI/EAE at the sub-national level. The CCDR tools support custom hazard inputs for this purpose.</p></li>
+<li><p><strong>Vulnerability function choice</strong>: where multiple fragility or impact functions exist for the same hazard-exposure pair, compare results across functions.</p></li>
+<li><p><strong>Hazard threshold (EAE)</strong>: for class-based approaches, vary the intensity thresholds and record how much the EAE changes.</p></li>
+</ul>
+<p>Large sensitivity to any of these choices constitutes structural uncertainty and must be flagged in the results narrative. It also indicates where investment in better local data or function calibration would most improve confidence.</p>
+</section>
 <section id="validation-against-empirical-disaster-data">
 <h3>Validation against empirical disaster data<a class="headerlink" href="#validation-against-empirical-disaster-data" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li><p>First, check that results make sense in terms of metrics and units of measures.</p>
+<li><p>Does the calculated distribution of risk reflect the historical distribution of disaster events as <a class="reference internal" href="disaster-data.html"><span class="doc std std-doc"><strong>recorded by catalogues</strong></span></a> (e.g. EM-DAT) and agencies (e.g. ReliefWeb)?</p>
 <ul>
-<li><p>Relative impacts over 100% are always a good indicator that something went wrong.</p></li>
+<li><p>If not, can you explain the reason? Common explanations include: incomplete disaster records, a historically unprecedented exposure growth in recent decades, or a hazard model calibrated on a longer return period range than what historical records can document.</p></li>
 </ul>
 </li>
-<li><p>Does the calculated distribution of risk reflect the historical distribution of disaster events as <a class="reference internal" href="disaster-data.html"><span class="doc std std-doc"><strong>recorded by catalogues</strong></span></a> (e.g. EM-DAT) and agencies (e.g. reliefweb)?</p>
-<ul>
-<li><p>If not, can you explain the reason?</p></li>
+<li><p>The EAI mortality estimate for a country can be compared against the EM-DAT long-term annual average deaths as a rough order-of-magnitude check. Expect the model estimate to be higher than historical averages, as EM-DAT captures only recorded events within a finite observation window.</p></li>
 </ul>
-</li>
-</ul>
+</section>
+<section id="comparison-against-published-benchmarks">
+<h3>Comparison against published benchmarks<a class="headerlink" href="#comparison-against-published-benchmarks" title="Permalink to this heading">#</a></h3>
+<p>Several global risk platforms provide independent estimates useful as a cross-check:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>What it provides</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://thinkhazard.org">ThinkHazard</a></p></td>
+<td><p>Qualitative hazard level by administrative unit</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://giri.unepgrid.ch/map">GIRI Map Viewer</a></p></td>
+<td><p>Probabilistic hazard and infrastructure risk layers</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://risk.preventionweb.net/">UNDRR GAR Atlas</a></p></td>
+<td><p>Global risk estimates by hazard and country</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://public.emdat.be">EM-DAT</a></p></td>
+<td><p>Historical annual average deaths and economic losses</p></td>
+</tr>
+</tbody>
+</table>
+<p>A significant discrepancy with any benchmark does not necessarily indicate an error — different models, hazard datasets, and exposure definitions will produce different numbers. But discrepancies should prompt investigation and be explained in the analysis narrative.</p>
 </section>
 </section>
 <section id="uncertainty">
@@ -990,6 +1113,21 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 <p>In the development of risk models, many different data sets are used as input components. The level of uncertainty is directly linked to the quality of the input data. In addition, there is also random uncertainty that cannot be reduced. On many occasions during model development, expert judgment and proxies are used in the absence of historical data, and the results are very sensitive to most of these assumptions and variations in input data. As such, outputs of these models should be considered indicators of the order of magnitude of the risks, not as exact values. Better data quality and advances in science and modelling methodologies reduce the level of uncertainty, but it is crucial to interpret the results of any risk assessment against the backdrop of unavoidable uncertainty.</p>
 <p>A risk model can produce a very precise result—it may show, for example, that a 1-in-100-year flood will affect 388,123 people—but in reality the accuracy of the model and input data may provide only an order of magnitude estimate. Similarly, sharply delineated flood zones on a hazard map do not adequately reflect the uncertainty associated with the estimate and could lead to decisions such as locating critical facilities just outside the flood line, where the actual risk is the same as if the facility was located inside the flood zone.</p>
 <p>We should not be apprehensive of using information that is uncertain so long as any decisions and actions based upon the information are made with a full understanding of the associated uncertainty and its implications. It should be remembered that uncertainty will usually promote an analytical debate that should lead to robust decisions, which is a positive manifestation of uncertainty. Credible scientific results should always be presented together with their associated uncertainty.</p>
+<section id="communicating-uncertainty-to-stakeholders">
+<h3>Communicating uncertainty to stakeholders<a class="headerlink" href="#communicating-uncertainty-to-stakeholders" title="Permalink to this heading">#</a></h3>
+<p>When presenting results to decision-makers and non-expert audiences, the way uncertainty is framed matters as much as the estimates themselves:</p>
+<ul class="simple">
+<li><p><strong>Avoid false precision.</strong> An EAI of 1,247 people per year implies a level of accuracy the model does not have. Express results at a meaningful level of precision (e.g. “approximately 1,000–1,500 people per year”) or focus on relative comparisons between administrative units rather than absolute values.</p></li>
+<li><p><strong>Use directional language.</strong> <em>“Area X faces significantly higher risk than area Y”</em> is a more defensible statement than quoting a specific number when model confidence is limited.</p></li>
+<li><p><strong>Calibrate confidence language to the evidence.</strong> Use “high confidence” when multiple independent datasets agree; “indicative estimate” or “order-of-magnitude” when relying on a single global model without local validation data.</p></li>
+<li><p><strong>Be explicit about what is not included.</strong> CCDR tools estimate direct impacts from a defined set of hazards. Indirect losses, cascading effects, and hazards not covered by the current dataset are outside the scope. Stating this clearly prevents results from being over-interpreted.</p></li>
+<li><p><strong>Flag where better data would help.</strong> Identifying the specific data gaps that limit confidence (e.g. absence of a locally calibrated fragility function, or lack of high-resolution hazard data) helps stakeholders understand the value of investing in improved data and more detailed assessments.</p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference external" href="https://www.ipcc.ch/site/assets/uploads/2018/05/uncertainty-guidance-note.pdf">IPCC AR6 guidance on communicating uncertainty</a> provides a structured vocabulary (likelihood, confidence level, agreement) that can be adapted for risk screening results.</p>
+</div>
+</section>
 </section>
 </section>
 
@@ -1105,6 +1243,23 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
      </li>
     </ul>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#vulnerability">
+     Vulnerability
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#impact-function-applicability">
+       Impact function applicability
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#class-based-approaches-eae">
+       Class-based approaches (EAE)
+      </a>
+     </li>
+    </ul>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -1113,8 +1268,28 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sanity-checks">
+     Sanity checks
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spatial-pattern-review">
+     Spatial pattern review
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sensitivity-analysis">
+     Sensitivity analysis
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#validation-against-empirical-disaster-data">
      Validation against empirical disaster data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparison-against-published-benchmarks">
+     Comparison against published benchmarks
     </a>
    </li>
   </ul>
@@ -1123,6 +1298,13 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
   <a class="reference internal nav-link" href="#uncertainty">
    Uncertainty
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#communicating-uncertainty-to-stakeholders">
+     Communicating uncertainty to stakeholders
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
