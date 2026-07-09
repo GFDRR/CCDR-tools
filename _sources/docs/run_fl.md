@@ -27,7 +27,7 @@ Default exposure datasets can be overridden by placing custom datasets in the EX
 
 The [**hazard data**](global-hazard.md), when not automatically fetched, need to be downloaded and placed in the HZD folder; in case of tiled data, use pre-processing scripts to merge those into country-sized data. Each RP scenario is expected as a raster file (`.tif`) named as 1in`years`.tif.<br>
 
-Exampe for Nepal, running analysis on undefended flood, 2020, RP100:
+Example for Nepal, running analysis on undefended flood, 2020, RP100:
 
   ```
   Work dir/
@@ -147,7 +147,7 @@ After saving the file, to run the analysis:
 $ python manual_run.py
 ```
 
-The analysis runs on all selected exposed categories, in sequence. It will print a separate message for each iteration. In case of 3 exposure caterories, it will take three iterations to get all results.
+The analysis runs on all selected exposure categories, in sequence. It will print a separate message for each iteration. In case of 3 exposure categories, it will take three iterations to get all results.
 The output is created as multi-tab .xlsx and multi-layer .gpkg.
 Depending on the power and number of cores on your CPU and the size and resolution of the data, the analysis can take from less than a minute to few minutes.
 E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.

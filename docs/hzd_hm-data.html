@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -782,6 +785,11 @@ title="Print to PDF"
    Heat stress
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#wildfire">
+   Wildfire
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -924,10 +932,10 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 </tr>
 </tbody>
 </table>
-<figure class="align-center" id="id1">
+<figure class="align-center" id="id2">
 <img alt="../_images/hzd_fl_models.jpg" src="../_images/hzd_fl_models.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Comparing modelled flood extent under historical scenario RP 100 years for a random location (Philippines): Fathom v3 2023 (left); Fathom v3 2023 (mid-left); JRC 2024 (mid-right) RWI - Aqueduct 2020 (right). Note how the Fathom model is able to better capture smaller discharge basins thanks to a better DTM resolution (30 m). Fathom 2 and JRC are comparable. The RWI data show its limitation at 1 km resolution.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Comparing modelled flood extent under historical scenario RP 100 years for a random location (Philippines): Fathom v3 2023 (left); Fathom v3 2023 (mid-left); JRC 2024 (mid-right) RWI - Aqueduct 2020 (right). Note how the Fathom model is able to better capture smaller discharge basins thanks to a better DTM resolution (30 m). Fathom 2 and JRC are comparable. The RWI data show its limitation at 1 km resolution.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <section id="coastal-floods-storm-surge">
@@ -994,7 +1002,7 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 </tr>
 </tbody>
 </table>
-<p>In additon to coastal flood projections, the <a class="reference external" href="https://sealevel.nasa.gov/ipcc-ar6-sea-level-projection-tool">NASA Sea Level Projection Tool</a> allows users to visualize and download the sea level projection data from the IPCC 6th Assessment Report (AR6). The tool shows both global and regional sea level projections from 2020 to 2150, along with how these projections differ depending on future scenario or warming level. Data can be downloaded in multiple formats.</p>
+<p>In addition to coastal flood projections, the <a class="reference external" href="https://sealevel.nasa.gov/ipcc-ar6-sea-level-projection-tool">NASA Sea Level Projection Tool</a> allows users to visualize and download the sea level projection data from the IPCC 6th Assessment Report (AR6). The tool shows both global and regional sea level projections from 2020 to 2150, along with how these projections differ depending on future scenario or warming level. Data can be downloaded in multiple formats.</p>
 </section>
 </section>
 <section id="landslides">
@@ -1061,10 +1069,10 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 </tr>
 </tbody>
 </table>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id3">
 <img alt="../_images/landslide1.png" src="../_images/landslide1.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 14 </span><span class="caption-text">ARUP landslide hazard layer. The qualitative index is displayed into 3 discrete classes (Low, Medium, High) according to thresholds set by ARUP (Low: &lt;0.01; Moderate: 0.01-0.1; High: &gt;0.1).</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 14 </span><span class="caption-text">ARUP landslide hazard layer. The qualitative index is displayed into 3 discrete classes (Low, Medium, High) according to thresholds set by ARUP (Low: &lt;0.01; Moderate: 0.01-0.1; High: &gt;0.1).</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1128,16 +1136,16 @@ Flooding hazard can be triggered in different contexts. We can identify three ma
 </tbody>
 </table>
 <ul class="simple">
-<li><p>The Global Assessment Report (2015) offered return period layers of max wind speed based on the first version of IBTrACS. These data have been superseeded.</p></li>
-<li><p>The latest version of <a class="reference external" href="https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access">IBTrACS</a> has been released in 2018 and could be leveraged to generate an updated wind-hazard layer, with better resolution and possibly the inclusion of orography effect. There are several attributes tied to each event; the map in figure below shows the USA_WIND variable (Maximum sustained wind speed in knots: 0 - 300 kts) as general intensity measure.</p></li>
+<li><p>The Global Assessment Report (2015) offered return period layers of max wind speed based on the first version of IBTrACS. These data have been superseded.</p></li>
+<li><p>The latest version of <a class="reference external" href="https://www.ncei.noaa.gov/products/international-best-track-archive?name=ib-v4-access">IBTrACS</a> (v4, 2024) can be leveraged to generate an updated wind-hazard layer, with better resolution and possibly the inclusion of orography effect. There are several attributes tied to each event; the map in figure below shows the USA_WIND variable (Maximum sustained wind speed in knots: 0 - 300 kts) as general intensity measure.</p></li>
 <li><p>The <a class="reference external" href="https://data.4tu.nl/datasets/0ea98bdd-5772-4da8-ae97-99735e891aff/4">STORM</a> database has recently released their new version, which includes synthetic global maps of 1. maximum wind speeds for a fixed set of return periods; and 2. return periods for a fixed set of maximum wind speeds, at 10 km resolution over all ocean basins. In addition, it contains the same set for events occurring within 100 km from a selection of 18 coastal cities and another for events occurring within 100 km from the capital city of an island.
 The STORM dataset comes with <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1">projections</a> as described in <a class="reference external" href="https://www.science.org/doi/10.1126/sciadv.abm8438">Bloemendaal, et al., 2022</a>: those are generated by extracting the climate change signal from each of the four general circulation models listed below, and adding this signal to the historical data from IBTrACS. This new dataset is then used as input for STORM, and resembles future-climate (2015-2050; RCP8.5/SSP5) conditions. Both <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_Climate_Change_synthetic_tropical_cyclone_tracks/14237678/1">synthetic tracks</a> and <a class="reference external" href="https://data.4tu.nl/articles/dataset/STORM_climate_change_tropical_cyclone_wind_speed_return_periods/14510817">wind speed maps</a> are available.
 These data can be used to calculate tropical cyclone risk in all (coastal) regions prone to tropical cyclones.</p></li>
 </ul>
-<figure class="align-center" id="id3">
+<figure class="align-center" id="id4">
 <img alt="../_images/SW_data.jpg" src="../_images/SW_data.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 15 </span><span class="caption-text">Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv3 synthetic cyclone tracks into max wind speed, RP 100 years.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 15 </span><span class="caption-text">Top: GAR 2015 cyclone max wind speed; Mid: IBTrACS v4 cyclone tracks; Bottom: STORMv4 synthetic cyclone tracks into max wind speed, RP 100 years.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1155,10 +1163,10 @@ FAO provides decadal, monthly and annual drought frequency over the period 1984-
 </ul>
 </li>
 </ul>
-<figure class="align-center" id="id4">
+<figure class="align-center" id="id5">
 <img alt="../_images/fao_asi.jpg" src="../_images/fao_asi.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 16 </span><span class="caption-text">FAO ASI global dataset showing historical drought frequency for &gt;30% cropland area affected along the period 1984-2021.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 16 </span><span class="caption-text">FAO ASI global dataset showing historical drought frequency for &gt;30% cropland area affected along the period 1984-2021.</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -1226,18 +1234,58 @@ The two indices are similar and <a class="reference external" href="https://www.
 </tbody>
 </table>
 <ul class="simple">
-<li><p><strong>Wet-Bulb Globe Temperature</strong> (WBGT °C): the WBGT combines temperature and humidity, both critical components in determining heat stress. A probabilistic dataset (3 return periods: 5, 20 and 100 years) based on 1980-2009 data has been developed for the GFDRR by VITO and has since been used to measure heat stress in risk screenings and assessment. This layer is generally sufficient for country-level hazard screening, but it has several limitations for any hazard and risk assessment. Although downscaled to consider gepmorphology and orography, the low grid resolution and relatively simple modelling makes it unfit to capture the heat island effect occurring in cities (Urban Heat Island) – nor the cooling effect of water bodies. That makes it unfit for any urban-scale assessment and generally sub-optimal for any sub-national assessment.</p></li>
+<li><p><strong>Wet-Bulb Globe Temperature</strong> (WBGT °C): the WBGT combines temperature and humidity, both critical components in determining heat stress. A probabilistic dataset (3 return periods: 5, 20 and 100 years) based on 1980-2009 data has been developed for the GFDRR by VITO and has since been used to measure heat stress in risk screenings and assessment. This layer is generally sufficient for country-level hazard screening, but it has several limitations for any hazard and risk assessment. Although downscaled to consider geomorphology and orography, the low grid resolution and relatively simple modelling makes it unfit to capture the heat island effect occurring in cities (Urban Heat Island) – nor the cooling effect of water bodies. That makes it unfit for any urban-scale assessment and generally sub-optimal for any sub-national assessment.</p></li>
 </ul>
-<figure class="align-center" id="id5">
+<figure class="align-center" id="id6">
 <img alt="../_images/hzd_hs.jpg" src="../_images/hzd_hs.jpg" />
 <figcaption>
-<p><span class="caption-number">Fig. 17 </span><span class="caption-text">Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the global WBGT map based on global models resolution cannot capture these details.</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 17 </span><span class="caption-text">Comparing recent high-resolution temperature maps showing the heat island effect in Las Vegas, and the presence of the lake; the global WBGT map based on global models resolution cannot capture these details.</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <ul class="simple">
 <li><p><strong>Universal Thermal Climate Index</strong> (UTCI °C): the UTCI is defined as the air temperature of a reference outdoor environment that would elicit in the human body the same physiological model’s response (sweat production, shivering, internal temperatures) as the actual environment. It is calculated based on near-surface air temperature, solar radiation, vapor pressure, and wind speed. For this specific dataset provided, the influence of solar radiation and wind speed is not considered and the UTCI is calculated from near-surface air temperature and vapor pressure solely, thus representing indoor or under-shade conditions.</p></li>
 </ul>
 <p>In terms of future projections, both UTCI and WBGT projections have been produced under CMIP6 scenarios and are available via <a class="reference external" href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-extreme-indices-cmip6?tab=overview">Copernicus CDS</a>. The indices are provided for historical and future climate projections (SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5) included in the Coupled Model Intercomparison Project Phase 6 (CMIP6) and used in the 6th Assessment Report of the Intergovernmental Panel on Climate Change (IPCC). These have daily resolution and would allow to derive downscaled extreme temperature projections. These projections have not yet been processed into a frequency analysis, but that can be produced using the same approach.</p>
+</section>
+<section id="wildfire">
+<span id="id1"></span><h2>Wildfire<a class="headerlink" href="#wildfire" title="Permalink to this heading">#</a></h2>
+<p>Wildfires are uncontrolled fires that spread through vegetation in rural and wildland-urban interface areas. Their frequency and severity are increasing due to climate change through higher temperatures, more frequent drought, and longer dry seasons. Wildfires can cause direct loss of life, destruction of infrastructure and vegetation, and severe air quality degradation.</p>
+<p>Global probabilistic wildfire hazard datasets are available from several sources:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-right"><p><strong>Name</strong></p></th>
+<th class="head text-center"><p><strong>Developer</strong></p></th>
+<th class="head text-center"><p><strong>Resolution</strong></p></th>
+<th class="head text-center"><p><strong>Analysis type</strong></p></th>
+<th class="head text-center"><p><strong>Time reference</strong></p></th>
+<th class="head text-center"><p><strong>License</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-right"><p><a class="reference external" href="https://gwis.jrc.ec.europa.eu/apps/gwis.statistics/seasonaltrend">Global Wildfire Information System (GWIS)</a></p></td>
+<td class="text-center"><p>EU-JRC</p></td>
+<td class="text-center"><p>0.1°</p></td>
+<td class="text-center"><p>Deterministic (fire weather index)</p></td>
+<td class="text-center"><p>Baseline + seasonal</p></td>
+<td class="text-center"><p>Open</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p><a class="reference external" href="https://catalogue.ceda.ac.uk/uuid/58f00d8814064b79a0c49662ad3af537">FireCCI51 / MODIS burned area</a></p></td>
+<td class="text-center"><p>ESA CCI</p></td>
+<td class="text-center"><p>250 m</p></td>
+<td class="text-center"><p>Historical observations</p></td>
+<td class="text-center"><p>2001–2019</p></td>
+<td class="text-center"><p>Open</p></td>
+</tr>
+<tr class="row-even"><td class="text-right"><p><a class="reference external" href="https://zenodo.org/record/6326500">Global Fire Risk under Climate Change</a></p></td>
+<td class="text-center"><p>Knorr et al.</p></td>
+<td class="text-center"><p>0.5°</p></td>
+<td class="text-center"><p>Probabilistic</p></td>
+<td class="text-center"><p>Baseline + SSP1-2.6, SSP5-8.5 (2071–2100)</p></td>
+<td class="text-center"><p>Open</p></td>
+</tr>
+</tbody>
+</table>
+<p>Fire weather conditions — the key driver of wildfire hazard — can be characterised using the <strong>Fire Weather Index (FWI)</strong>, which integrates temperature, humidity, wind speed, and precipitation into a single metric. CMIP6 projections of FWI are available through the Copernicus Climate Data Store and can be used to assess changes in wildfire hazard under future climate scenarios.</p>
 </section>
 </section>
 
@@ -1331,6 +1379,11 @@ The two indices are similar and <a class="reference external" href="https://www.
    Heat stress
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#wildfire">
+   Wildfire
+  </a>
+ </li>
 </ul>
 
 </nav>
@@ -1359,7 +1412,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

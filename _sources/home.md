@@ -1,47 +1,7 @@
 # Risk Data Library - Country Climate & Disaster Risk Screening Tools
 
-<div class="news-container">
-    <div class="news-ticker">
-        <span class="news-item"><strong>AUGUST UPDATE:</strong> New EMDAT dashboard notebook</span>
-        <span class="news-item"><strong>JUNE UPDATE:</strong> New notebooks! New documentation! New video-tutorials! </span>
-    </div>
-</div>
 
-<style>
-    .news-container {
-        width: 100%;
-        background-color: #f0f7fa;
-        overflow: hidden;
-        margin: 10px 0 20px 0;
-        border-radius: 4px;
-        border-left: 4px solid #118AB2;
-    }
-    .news-ticker {
-        white-space: nowrap;
-        padding: 10px 0;
-        animation: ticker 30s linear infinite;
-        color: #333;
-        font-size: 14px;
-    }
-    @keyframes ticker {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-    }
-    .news-item {
-        display: inline-block;
-        padding: 0 30px;
-    }
-    .news-item strong {
-        color: #118AB2;
-        font-weight: bold;
-    }
-    /* Pause animation on hover */
-    .news-container:hover .news-ticker {
-        animation-play-state: paused;
-    }
-</style>
-
-This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards' risk screening at the national or sub-national level. The tools have originally being created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2025) and then furtherly developed within the [**Risk Data Library project**](docs/rdl.md).
+This documentation offers guidance on risk screening and provides Python tools to quickly produce natural hazards risk screening at the national or sub-national level. The tools were originally created for the World Bank's [**Country Climate and Development Report**](https://www.worldbank.org/en/publication/country-climate-development-reports) risk screening activities (2022/2025) and further developed within the [**Risk Data Library project**](docs/rdl.md).
 
 ## What you can do with these tools
 
@@ -340,7 +300,7 @@ The map shows countries that have been already covered by the risk analytics. Cl
 </table>
 
 ```{note}
-This documentation reflects the approches and methods adopted for the CCDR disaster risk screening following the [**CCDR guidance note**](https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Tools%20and%20Approaches.pdf). They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
+This documentation reflects the approaches and methods adopted for the CCDR disaster risk screening following the [**CCDR guidance note**](https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Tools%20and%20Approaches.pdf). They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
 Also note that our tools are not expected to reflect all existing risk perspectives and dimensions, rather producing standardised risk indicators.
 ```
 The CCDR risk screening tools has been developed in agreement with regional geography and poverty teams, and with the support of the World Bank Global Facility for Disaster Risk and Recovery ([**GFDRR**](https://www.gfdrr.org)).

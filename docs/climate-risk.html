@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -854,7 +857,7 @@ modeling of future climate scenarios referred to as Shared Socioeconomic Pathway
 <section id="dimensions-of-climate-indices">
 <h2>Dimensions of climate indices:<a class="headerlink" href="#dimensions-of-climate-indices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>SSPs:</strong> scenarios SSP1/RCP2.6, SSP2/RCP4.5, SSP3/RCP7.0, SSP5/RCP8</p></li>
+<li><p><strong>SSPs:</strong> scenarios SSP1/RCP2.6, SSP2/RCP4.5, SSP3/RCP7.0, SSP5/RCP8.5</p></li>
 <li><p><strong>Models ensemble range:</strong> percentiles p10, p50, p90</p></li>
 <li><p><strong>Period:</strong> Historical (1981-2015), [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]</p></li>
 <li><p><strong>Time scale:</strong> Monthly, Seasonal, Annual</p></li>
@@ -867,14 +870,14 @@ modeling of future climate scenarios referred to as Shared Socioeconomic Pathway
 </figcaption>
 </figure>
 <ul class="simple">
-<li><p><strong>SSP1-1.9 / RCP2.6:</strong> emissions peak between 2040 and 2060, declining by 2100. This results in warming of 3-3.5 °C by 2100.</p></li>
-<li><p><strong>SSP2-4.5 / RCP4.5:</strong> emissions continue to increase through the end of the century, with resulting warming of 3.8-4.2 °C by 2100.</p></li>
-<li><p><strong>SSP3-7.0 / RCP8.5:</strong> models describe a large emission variability for this scenario. Warming is estimated at 3.9-4.6 °C by 2100.</p></li>
+<li><p><strong>SSP1-2.6 (low emissions):</strong> strong mitigation scenario where emissions peak before 2030 and decline rapidly. Projected global mean warming of <strong>~1.8 °C</strong> above pre-industrial levels by 2100 (likely range 1.3–2.4 °C, IPCC AR6).</p></li>
+<li><p><strong>SSP2-4.5 (intermediate):</strong> moderate mitigation with emissions stabilizing around current levels then declining after mid-century. Projected warming of <strong>~2.7 °C</strong> by 2100 (likely range 2.1–3.5 °C, IPCC AR6).</p></li>
+<li><p><strong>SSP5-8.5 (high emissions):</strong> fossil fuel-intensive development with no significant mitigation; emissions continue rising through 2050. Projected warming of <strong>~4.4 °C</strong> by 2100 (likely range 3.3–5.7 °C, IPCC AR6).</p></li>
 </ul>
 </section>
 <section id="data-sources">
 <h2>Data sources<a class="headerlink" href="#data-sources" title="Permalink to this heading">#</a></h2>
-<p>The climate indices are primarily sourced from the <a class="reference external" href="https://climateknowledgeportal.worldbank.org"><strong>Cimate Change Knowledge Portal</strong></a> by the World Bank, which provides a large selection of climate indices for both trends and extremes, accessible via raster download or API.
+<p>The climate indices are primarily sourced from the <a class="reference external" href="https://climateknowledgeportal.worldbank.org"><strong>Climate Change Knowledge Portal</strong></a> by the World Bank, which provides a large selection of climate indices for both trends and extremes, accessible via raster download or API.
 Additional indices could also be obtained from external sources.</p>
 <table class="table">
 <thead>
@@ -1012,7 +1015,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

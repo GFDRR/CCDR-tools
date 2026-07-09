@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -784,7 +787,7 @@ title="Print to PDF"
 <a class="reference internal image-reference" href="../_images/GUI_BV.jpg"><img alt="../_images/GUI_BV.jpg" src="../_images/GUI_BV.jpg" style="width: 100%;" /></a>
 </figure>
 </li>
-<li><p>Bivatiate tab: select the number of classes to consider for each index, the bivariate color palette and the maximum exposure to hazard threshold (anything above this value will be considered on the top class). Use the <strong>normalisation</strong> checkbox to normalise the wealth index using population count from the input dataset. This is suggested when using unweighted indices.</p>
+<li><p>Bivariate tab: select the number of classes to consider for each index, the bivariate color palette and the maximum exposure to hazard threshold (anything above this value will be considered on the top class). Use the <strong>normalisation</strong> checkbox to normalise the wealth index using population count from the input dataset. This is suggested when using unweighted indices.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/GUI_BV2.jpg"><img alt="../_images/GUI_BV2.jpg" src="../_images/GUI_BV2.jpg" style="width: 100%;" /></a>
 </figure>
@@ -792,6 +795,10 @@ title="Print to PDF"
 <li><p>Check “Preview results” to generate map and charts output in the GUI, or “Export Maps as PNG” to have those saved in the output folder. “Export data” will create a copy of the input data with added bivariate combination scores.</p></li>
 <li><p>Click the red button to start the processing.</p></li>
 </ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>See <a class="reference internal" href="risk-poverty.html"><span class="doc std std-doc"><strong>Risk and Poverty</strong></span></a> for an explanation of the bivariate classification matrix, wealth index options, and how to interpret the 3×3 output scores.</p>
+</div>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/GUI_BV3.jpg"><img alt="../_images/GUI_BV3.jpg" src="../_images/GUI_BV3.jpg" style="width: 100%;" /></a>
 </figure>
@@ -894,7 +901,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

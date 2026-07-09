@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -801,9 +804,9 @@ title="Print to PDF"
 <p>One of the earliest systematic attempts at mapping the known world came from the Greek scholar <strong>Eratosthenes of Cyrene</strong> (c. 276–194 BCE), a polymath who served as the chief librarian at the Library of Alexandria. He is often credited as the “father of geography.”
 His most notable contribution was the calculation of the Earth’s circumference with remarkable accuracy for his time, using simple geometry and observations of shadows in Syene and Alexandria during the summer solstice. Based on this, Eratosthenes devised one of the first known <em>gridded</em> maps of the inhabited world, laying out meridians and parallels in an early conceptualization of geographic coordinates.</p>
 <figure class="align-center" id="id1">
-<a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Mappa_di_Eratostene.jpg/960px-Mappa_di_Eratostene.jpg"><img alt="Eratosthenes' Map" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Mappa_di_Eratostene.jpg/960px-Mappa_di_Eratostene.jpg" style="width: 90%;" /></a>
+<a class="reference internal image-reference" href="../_images/map_eratosthenes.jpg"><img alt="Eratosthenes' Map" src="../_images/map_eratosthenes.jpg" style="width: 90%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 49 </span><span class="caption-text"><em>Reconstruction of Eratosthenes’ map of the known world</em></span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 54 </span><span class="caption-text"><em>Reconstruction of Eratosthenes’ map of the known world</em></span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <p>Eratosthenes’ map was an extraordinary achievement: not just in terms of its scale and detail, but in how it was underpinned by a clear theoretical understanding of the Earth as a sphere and of geography as a branch of mathematical science. This highlights how Eratosthenes’ work went beyond empirical observation into the realm of abstract reasoning—a hallmark of Greek philosophical inquiry.</p>
@@ -815,7 +818,7 @@ This representation was not just geographical — it reflected a <strong>metaphy
 <figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="../_images/map_anaxim.jpg"><img alt="Anaximander's Map" src="../_images/map_anaxim.jpg" style="width: 70%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 50 </span><span class="caption-text"><em>Reconstruction of Anaximander’s world map</em></span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 55 </span><span class="caption-text"><em>Reconstruction of Anaximander’s world map</em></span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
@@ -833,7 +836,7 @@ This reinforces the notion that ancient maps were not only geographical but cosm
 </section>
 <section id="suggested-reading">
 <h2>Suggested Reading<a class="headerlink" href="#suggested-reading" title="Permalink to this heading">#</a></h2>
-<p>📖 <a class="reference external" href="https://books.google.it/books/about/A_History_of_the_World_in_Twelve_Maps.html?id=Qsi_7_DQ3L4C&amp;redir_esc=y"><em>“A History of the World in Twelve Maps”</em></a> by Jerry Brotton</p>
+<p><a class="reference external" href="https://books.google.it/books/about/A_History_of_the_World_in_Twelve_Maps.html?id=Qsi_7_DQ3L4C&amp;redir_esc=y"><em>“A History of the World in Twelve Maps”</em></a> by Jerry Brotton</p>
 </section>
 </section>
 
@@ -955,7 +958,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

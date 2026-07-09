@@ -101,6 +101,7 @@ This spatial approach enables:
 
 The resulting risk maps provide decision-makers with spatially explicit information essential for disaster risk management, land use planning, and emergency preparedness strategies.
 
+(EAI)=
 ## An indicator of mean annual risk: Expected Annual Impact
 When probabilistic hazard scenarios (multiple layers by Return Period) are available to calculate impacts in relation to occurrence frequency, an estimate of the **Expected Annual Impact (EAI)** over exposed categories can be calculated. This can be done for both the *Baseline*, refering to the historical period, and for future [*climate projections*](climate-change-and-disaster-risk).
 
@@ -113,7 +114,7 @@ align: center
 The Exceedance probability curve integrates individual probability scenarios into one metric: mean Expected Annual Impact. 
 ```
 
-- In lack of a proper vulnerability function, the **EAE** is calculated in a similar fashon considering  exposure to specific hazard thresholds instead of impacts. (**EAE**) is then expressed as *annual exposure to hazard over a certain threshold*.
+- In lack of a proper vulnerability function, the **EAE** is calculated in a similar fashion considering exposure to specific hazard thresholds instead of impacts. (**EAE**) is then expressed as *annual exposure to hazard over a certain threshold*.
 
 ```{seealso}
 The calculation of EAI is performed using the customary approach, as exemplified [here](https://storymaps.arcgis.com/stories/7878c89c592e4a78b45f03b4b696ccac) and [here](https://www.researchgate.net/publication/334005888_A_global_multi-hazard_risk_analysis_of_road_and_railway_infrastructure_assets).
@@ -122,8 +123,8 @@ The calculation of EAI is performed using the customary approach, as exemplified
 ### Lower and Upper bounds
 Due to requests from regional teams, a refined calculation of the integral for probabilistic EAI and EAE includes:
 
-- **EAI Lower Bound (EAI_LB)**: calculated as the sum of the area of recangles built below the exceedance probability curve
-- **EAI Upper Bound (EAI_UB)**: calculated as the sum of the area of recangles built above the exceedance probability curve
+- **EAI Lower Bound (EAI_LB)**: calculated as the sum of the area of rectangles built below the exceedance probability curve
+- **EAI Upper Bound (EAI_UB)**: calculated as the sum of the area of rectangles built above the exceedance probability curve
 - **EAI**: mean between lower and upper bound
 
 ```{figure} images/lowerupper.png

@@ -4,16 +4,16 @@
 Additional sources of risk data (hazard, exposure, disaster losses) and processing workflows.
 
 ```{table}
-:name: external_links
+:name: external_data_links
 
 | **Name** | **License** | **Description** | **Purpose** |
 |---:|---:|---:|---:|
-| [Planetary Computer](https://planetarycomputer.microsoft.com/) | GNU | Global environmental geodata as STAC catalog | Geodata catalog |
-| [GEE data catalog](https://developers.google.com/earth-engine/datasets/catalog) | GNU | Global environmental geodata as API catalog | Geodata catalog |
-| [Awesome GEE community catalog](https://gee-community-catalog.org) | GNU | Community-sourced geodata as Earth Engine assets | Geodata catalog |
-| [UNEP CDRI](https://handbook.climaax.eu) | GNU | Open-access global hazard maps and risk estimates | Geodata catalog |
-| [DECAT Space2Stats](https://worldbank.github.io/DECAT_Space2Stats) | GNU | Global boundaries at the ADM2 level | Geodata catalog |
-| [Geoboundaries](https://www.geoboundaries.org) | GNU | Global boundaries for different ADM levels | Geodata catalog |
+| [Planetary Computer](https://planetarycomputer.microsoft.com/) | Open (MS) | Global environmental geodata as STAC catalog | Geodata catalog |
+| [GEE data catalog](https://developers.google.com/earth-engine/datasets/catalog) | Varies per dataset | Global environmental geodata as API catalog | Geodata catalog |
+| [Awesome GEE community catalog](https://gee-community-catalog.org) | CC-BY-4.0 | Community-sourced geodata as Earth Engine assets | Geodata catalog |
+| [GIRI Map Viewer](https://giri.unepgrid.ch/map) | Open (UNEP) | Global probabilistic hazard and infrastructure risk layers | Geodata catalog |
+| [DECAT Space2Stats](https://worldbank.github.io/DECAT_Space2Stats) | Open (WB) | Global boundaries at the ADM2 level | Geodata catalog |
+| [Geoboundaries](https://www.geoboundaries.org) | ODC-By | Global boundaries for different ADM levels | Geodata catalog |
 ```
 
 The [**Planetary Computer**](https://planetarycomputer.microsoft.com/) combines a multi-petabyte STAC catalog of global environmental data with intuitive APIs, a flexible scientific environment that allows users to answer global questions about that data, and applications that put those answers in the hands of researchers and stakeholders.
@@ -47,13 +47,13 @@ The [**Geoboundaries global database**](https://www.geoboundaries.org) is an ope
 ## External analytical tools
 
 ```{table}
-:name: external_links
+:name: external_tool_links
 
 | **Name** | **License** | **Description** | **Purpose** |
 |---:|---:|---:|---:|
-| [CLIMAAX](https://handbook.climaax.eu) | GNU | Methods and workflows as notebooks for Climate Risk Assessments (CRA) based on ECMWF data | Handbook |
-| [Critical Infrastructures Risk](https://vu-ivm.github.io/GlobalInfraRisk) | GNU | Methods and workflows as notebooks for assessing impacts over critical infrastructures | Handbook |
-| [PYTHIA](https://foundations.projectpythia.org) | GNU | Methods and workflows as notebooks for geo-mapping | Handbook |
+| [CLIMAAX](https://handbook.climaax.eu) | CC-BY-4.0 | Methods and workflows as notebooks for Climate Risk Assessments (CRA) based on ECMWF data | Handbook |
+| [Critical Infrastructures Risk](https://vu-ivm.github.io/GlobalInfraRisk) | Open (IVM-VU) | Methods and workflows as notebooks for assessing impacts over critical infrastructures | Handbook |
+| [PYTHIA](https://foundations.projectpythia.org) | Apache-2.0 | Methods and workflows as notebooks for geo-mapping | Handbook |
 ```
 
 The [**CLIMAAX handbook**](https://handbook.climaax.eu) builds upon existing risk assessment frameworks, methods and tools, and promotes the use of datasets and service platforms for local and regional scale deployment. It develops a robust and coordinated framework of consistent, harmonised and comparable risk assessments via python notebooks.

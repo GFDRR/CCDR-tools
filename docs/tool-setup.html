@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Flood Analytics" href="run_fl.html" />
+    <link rel="next" title="Baseline risk" href="run-baseline.html" />
     <link rel="prev" title="Additional resources" href="external-tools.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Tool setup and run</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -795,8 +798,8 @@ The script has been developed to run as <a class="reference external" href="http
 <ul>
 <li><p>Python 3 needs to be installed on your system. We suggest the latest <a class="reference external" href="https://www.anaconda.com/download">Anaconda</a> distribution. Mamba is also supported.</p></li>
 <li><p>Create new <code class="docutils literal notranslate"><span class="pre">rdl-tools</span></code> environment from the provided rdl-tools.yml file. It can be done via Anaconda navigator interface (environments &gt; Import ) or from the Anaconda cmd prompt:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>rdl-tools<span class="w"> </span>--file<span class="w"> </span>&lt;dir/rdl-tools.yml&gt;<span class="sb">`</span>
-activate<span class="w"> </span>rdl-tools
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>rdl-tools<span class="w"> </span>-f<span class="w"> </span>rdl-tools.yml
+conda<span class="w"> </span>activate<span class="w"> </span>rdl-tools
 </pre></div>
 </div>
 </li>
@@ -805,7 +808,7 @@ activate<span class="w"> </span>rdl-tools
 <section id="settings">
 <h2>Settings<a class="headerlink" href="#settings" title="Permalink to this heading">#</a></h2>
 <p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file inside the notebook directories to specify your working directory:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Environment variables for the CCDR Climate and Disasater Risk analysis notebooks</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Environment variables for the CCDR Climate and Disaster Risk analysis notebooks</span>
 
 <span class="c1"># Fill the below with the location of data files</span>
 <span class="c1"># Use absolute paths with forward slashes (&quot;/&quot;), and keep the trailing slash</span>
@@ -875,10 +878,10 @@ activate<span class="w"> </span>rdl-tools
           <p class="prev-next-title">Additional resources</p>
       </div>
   </a>
-  <a class='right-next' id="next-link" href="run_fl.html" title="next page">
+  <a class='right-next' id="next-link" href="run-baseline.html" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Flood Analytics</p>
+      <p class="prev-next-title">Baseline risk</p>
   </div>
   <i class="fa-solid fa-angle-right"></i>
   </a>
@@ -941,7 +944,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

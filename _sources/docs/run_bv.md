@@ -15,7 +15,7 @@ Input data should consist of a GeoPackage file with administrative boundaries co
     align: center
     ---
     ```
-- Bivatiate tab: select the number of classes to consider for each index, the bivariate color palette and the maximum exposure to hazard threshold (anything above this value will be considered on the top class). Use the **normalisation** checkbox to normalise the wealth index using population count from the input dataset. This is suggested when using unweighted indices.
+- Bivariate tab: select the number of classes to consider for each index, the bivariate color palette and the maximum exposure to hazard threshold (anything above this value will be considered on the top class). Use the **normalisation** checkbox to normalise the wealth index using population count from the input dataset. This is suggested when using unweighted indices.
     ```{figure} images/GUI_BV2.jpg
     ---
     width: 100%
@@ -26,6 +26,10 @@ Input data should consist of a GeoPackage file with administrative boundaries co
 - Check "Preview results" to generate map and charts output in the GUI, or "Export Maps as PNG" to have those saved in the output folder. "Export data" will create a copy of the input data with added bivariate combination scores.
 
 - Click the red button to start the processing.
+
+```{seealso}
+See [**Risk and Poverty**](risk-poverty.md) for an explanation of the bivariate classification matrix, wealth index options, and how to interpret the 3×3 output scores.
+```
 
 
 ```{figure} images/GUI_BV3.jpg

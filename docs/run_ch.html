@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -774,7 +777,7 @@ title="Print to PDF"
 <section id="input-data-management">
 <h2>Input data management<a class="headerlink" href="#input-data-management" title="Permalink to this heading">#</a></h2>
 <p>This script is meant for custom input from the user on all three risk components. It can still fetch national and sub-national boundaries from the <a class="reference external" href="https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer">WB ArcGIS repository</a>.</p>
-<p>The <a class="reference internal" href="global-exposure.html"><span class="doc std std-doc"><strong>exposure data</strong></span></a> and the <a class="reference internal" href="global-hazard.html"><span class="doc std std-doc"><strong>hazard data</strong></span></a> selected by the user need to be manually downloaded and placed in the respecive folders; in case of tiled data, use the <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/tools/code/F3/">pre-processing script</a> to merge those into country-sized data. Each dataset is expected as a raster file (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>).<br></p>
+<p>The <a class="reference internal" href="global-exposure.html"><span class="doc std std-doc"><strong>exposure data</strong></span></a> and the <a class="reference internal" href="global-hazard.html"><span class="doc std std-doc"><strong>hazard data</strong></span></a> selected by the user need to be manually downloaded and placed in the respective folders; in case of tiled data, use the <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/tools/code/F3/">pre-processing script</a> to merge those into country-sized data. Each dataset is expected as a raster file (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>).<br></p>
 <p>Example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Work</span> <span class="nb">dir</span><span class="o">/</span>
  <span class="o">-</span> <span class="n">GUI</span><span class="o">.</span><span class="n">ipynb</span>		<span class="n">Place</span> <span class="n">the</span> <span class="n">notebooks</span> <span class="ow">and</span> <span class="n">related</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">main</span> <span class="n">work</span> <span class="n">directory</span>
@@ -800,7 +803,7 @@ title="Print to PDF"
 <a class="reference internal image-reference" href="../_images/GUI_CH.jpg"><img alt="../_images/GUI_CH.jpg" src="../_images/GUI_CH.jpg" style="width: 100%;" /></a>
 </figure>
 </li>
-<li><p>Hazard tab: select the hazard data (*.tif), the hazard name, the minimum hazard intensity threshold (all values below that will be ignored), and the associated frequency, if any. You can also select add more than one layer in case of muultiple return periods.</p>
+<li><p>Hazard tab: select the hazard data (*.tif), the hazard name, the minimum hazard intensity threshold (all values below that will be ignored), and the associated frequency, if any. You can also select more than one layer in case of multiple return periods.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/GUI_CH2.jpg"><img alt="../_images/GUI_CH2.jpg" src="../_images/GUI_CH2.jpg" style="width: 100%;" /></a>
 </figure>
@@ -924,7 +927,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

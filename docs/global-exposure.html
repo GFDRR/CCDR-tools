@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -756,8 +759,8 @@ title="Print to PDF"
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dlr-world-settlment-footprint">
-   DLR World Settlment Footprint
+  <a class="reference internal nav-link" href="#dlr-world-settlement-footprint">
+   DLR World Settlement Footprint
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -802,7 +805,7 @@ This section presents some of the most common and recent type of data and indica
 <td class="text-center"><p>EU-JRC</p></td>
 <td class="text-center"><p>Population count</p></td>
 <td class="text-center"><p>100 m</p></td>
-<td class="text-center"><p>Annual</p></td>
+<td class="text-center"><p>Every 5 years (epochs: 2015, 2020)</p></td>
 </tr>
 <tr class="row-odd"><td class="text-right"><p><a class="reference external" href="https://download.geoservice.dlr.de/WSF2019">World Settlement Footprints</a></p></td>
 <td class="text-center"><p>DLR</p></td>
@@ -825,13 +828,13 @@ The data is available for different resolutions, from 10 meters to 1 km. In our 
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../_images/JRC_GHSL.png"><img alt="../_images/JRC_GHSL.png" src="../_images/JRC_GHSL.png" style="width: 90%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Population count per 100 m grid over for New Dehli as obtained from EU-JRC GHSL 2020.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 19 </span><span class="caption-text">Population count per 100 m grid for New Delhi as obtained from EU-JRC GHSL 2020.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </section>
-<section id="dlr-world-settlment-footprint">
-<h2>DLR World Settlment Footprint<a class="headerlink" href="#dlr-world-settlment-footprint" title="Permalink to this heading">#</a></h2>
-<p>Built-up assets include houses, commercial and industrial buildings, infrastructures, facilities, and others. Data from 2019 World Settlement Footprint (WSF) is used for this current analysis. This is a high-resolution (10m) remotely sensed dataset which indicates whether each cell is primarily built up, excluding roads. A script has been developed to automatically fetch WSF 2019 data and resample it at 100m resolution for a selected country. This is included in the toolkit codebase when no exposure dataset is found in the data folder; else you can use this <a class="reference internal" href="utility.html#fetch-wsf19"><span class="std std-ref">notebook</span></a> to run it separetely.</p>
+<section id="dlr-world-settlement-footprint">
+<h2>DLR World Settlement Footprint<a class="headerlink" href="#dlr-world-settlement-footprint" title="Permalink to this heading">#</a></h2>
+<p>Built-up assets include houses, commercial and industrial buildings, infrastructures, facilities, and others. Data from 2019 World Settlement Footprint (WSF) is used for this current analysis. This is a high-resolution (10m) remotely sensed dataset which indicates whether each cell is primarily built up, excluding roads. A script has been developed to automatically fetch WSF 2019 data and resample it at 100m resolution for a selected country. This is included in the toolkit codebase when no exposure dataset is found in the data folder; else you can use this <a class="reference internal" href="utility.html#fetch-wsf19"><span class="std std-ref">notebook</span></a> to run it separately.</p>
 <figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="../_images/DLR_WSF.jpg"><img alt="../_images/DLR_WSF.jpg" src="../_images/DLR_WSF.jpg" style="width: 90%;" /></a>
 <figcaption>
@@ -949,8 +952,8 @@ The data is available for different resolutions, from 10 meters to 1 km. In our 
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dlr-world-settlment-footprint">
-   DLR World Settlment Footprint
+  <a class="reference internal nav-link" href="#dlr-world-settlement-footprint">
+   DLR World Settlement Footprint
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -991,7 +994,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

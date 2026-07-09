@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -750,22 +753,17 @@ title="Print to PDF"
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   Results presentation
-  </a>
- </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#maps">
    Maps
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#figures">
    Figures
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#dashboard">
    Dashboard
   </a>
@@ -781,11 +779,9 @@ title="Print to PDF"
               
   <section class="tex2jax_ignore mathjax_ignore" id="results-presentation">
 <h1>Results presentation<a class="headerlink" href="#results-presentation" title="Permalink to this heading">#</a></h1>
-<p>This section is still work in progress.</p>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="maps">
-<h1>Maps<a class="headerlink" href="#maps" title="Permalink to this heading">#</a></h1>
-<p>The best way to depict spatial variability is through maps. For baseline risk mapping, there is no simple automation; <a class="reference internal" href="utility.html#external-tools"><span class="std std-ref">QGIS</span></a> is used to import the data and print into maps.</p>
+<section id="maps">
+<h2>Maps<a class="headerlink" href="#maps" title="Permalink to this heading">#</a></h2>
+<p>The best way to depict spatial variability is through maps. For baseline risk mapping, there is no simple automation; <a class="reference internal" href="external-tools.html"><span class="doc std std-doc">QGIS</span></a> is used to import the data and print into maps.</p>
 <ul class="simple">
 <li><p>The geopackage and tiff data produced by the tool can be simply dragged within QGIS main window to import them in the Table of Content (Toc).</p></li>
 <li><p>You can add a basemap for reference. The best way is using the <a class="reference external" href="https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30">Quick Map Service</a> plugin.</p></li>
@@ -797,14 +793,14 @@ title="Print to PDF"
 <p>Do you prefer to map using python? Take a <a class="reference external" href="https://courses.spatialthoughts.com/python-dataviz.html"><strong>Python data-viz free course</strong></a>!</p>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="figures">
-<h1>Figures<a class="headerlink" href="#figures" title="Permalink to this heading">#</a></h1>
+<section id="figures">
+<h2>Figures<a class="headerlink" href="#figures" title="Permalink to this heading">#</a></h2>
 <ul>
 <li><p>Charts allow to give a quick snapshots of key output, e.g. the most risk-prone units in a country.</p>
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../_images/EAI_chart.png"><img alt="../_images/EAI_chart.png" src="../_images/EAI_chart.png" style="width: 50%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 43 </span><span class="caption-text">Example of chart depicting absolute and relative EAI.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 48 </span><span class="caption-text">Example of chart depicting absolute and relative EAI.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </li>
@@ -812,21 +808,22 @@ title="Print to PDF"
 <figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="../_images/EAI_change_chart.png"><img alt="../_images/EAI_change_chart.png" src="../_images/EAI_change_chart.png" style="width: 50%;" /></a>
 <figcaption>
-<p><span class="caption-number">Fig. 44 </span><span class="caption-text">Example of chart depicting absolute EAI for historical baseline and future projection scenario.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 49 </span><span class="caption-text">Example of chart depicting absolute EAI for historical baseline and future projection scenario.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </li>
 </ul>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="dashboard">
-<h1>Dashboard<a class="headerlink" href="#dashboard" title="Permalink to this heading">#</a></h1>
+<section id="dashboard">
+<h2>Dashboard<a class="headerlink" href="#dashboard" title="Permalink to this heading">#</a></h2>
 <p>An <a class="reference external" href="https://matamadio.github.io/CCDR-geoboard"><strong>open-source online dashboard</strong></a> has been developed in order to quickly disseminate results of risk screening and assessment.</p>
 <figure class="align-center" id="id3">
 <img alt="../_images/ccdr-dashboard.png" src="../_images/ccdr-dashboard.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 45 </span><span class="caption-text">Geo-dashboard for dissemination of risk screening results.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 50 </span><span class="caption-text">Geo-dashboard for dissemination of risk screening results.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -887,22 +884,17 @@ title="Print to PDF"
 </div>
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   Results presentation
-  </a>
- </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#maps">
    Maps
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#figures">
    Figures
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#dashboard">
    Dashboard
   </a>
@@ -935,7 +927,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Tropical Cyclone Analytics" href="run_tc.html" />
-    <link rel="prev" title="Tool setup and run" href="tool-setup.html" />
+    <link rel="prev" title="Baseline risk" href="run-baseline.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -553,7 +553,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rdl.html">Risk Data Library</a></li>
@@ -562,6 +561,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="tool-setup.html">Tool setup and run</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_ch.html">Custom Hazard Analytics</a></li>
@@ -571,11 +571,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="../tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -801,7 +804,7 @@ title="Print to PDF"
 </ul>
 <p>Default exposure datasets can be overridden by placing custom datasets in the EXP folder and pointing at those file in the interface.</p>
 <p>The <a class="reference internal" href="global-hazard.html"><span class="doc std std-doc"><strong>hazard data</strong></span></a>, when not automatically fetched, need to be downloaded and placed in the HZD folder; in case of tiled data, use pre-processing scripts to merge those into country-sized data. Each RP scenario is expected as a raster file (<code class="docutils literal notranslate"><span class="pre">.tif</span></code>) named as 1in<code class="docutils literal notranslate"><span class="pre">years</span></code>.tif.<br></p>
-<p>Exampe for Nepal, running analysis on undefended flood, 2020, RP100:</p>
+<p>Example for Nepal, running analysis on undefended flood, 2020, RP100:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Work</span> <span class="nb">dir</span><span class="o">/</span>
  <span class="o">-</span> <span class="n">GUI</span><span class="o">.</span><span class="n">ipynb</span>		<span class="n">Place</span> <span class="n">the</span> <span class="n">notebooks</span> <span class="ow">and</span> <span class="n">related</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">main</span> <span class="n">work</span> <span class="n">directory</span>
  <span class="o">-</span> <span class="n">common</span><span class="o">.</span><span class="n">py</span>
@@ -913,7 +916,7 @@ Include 5 return periods (<code class="docutils literal notranslate"><span class
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python<span class="w"> </span>manual_run.py
 </pre></div>
 </div>
-<p>The analysis runs on all selected exposed categories, in sequence. It will print a separate message for each iteration. In case of 3 exposure caterories, it will take three iterations to get all results.
+<p>The analysis runs on all selected exposure categories, in sequence. It will print a separate message for each iteration. In case of 3 exposure categories, it will take three iterations to get all results.
 The output is created as multi-tab .xlsx and multi-layer .gpkg.
 Depending on the power and number of cores on your CPU and the size and resolution of the data, the analysis can take from less than a minute to few minutes.
 E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.</p>
@@ -949,11 +952,11 @@ E.g. for Bangladesh on a  i9-12900KF (16 cores), 64 Gb RAM: below 100 seconds.</
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="tool-setup.html" title="previous page">
+  <a class='left-prev' id="prev-link" href="run-baseline.html" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Tool setup and run</p>
+          <p class="prev-next-title">Baseline risk</p>
       </div>
   </a>
   <a class='right-next' id="next-link" href="run_tc.html" title="next page">
@@ -1024,7 +1027,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

@@ -552,7 +552,6 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/global-exposure.html">Exposure datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/global-vulnerability.html">Vulnerability models</a></li>
-
 <li class="toctree-l1"><a class="reference internal" href="docs/risk-poverty.html">Risk and poverty</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/disaster-data.html">Disaster records</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/rdl.html">Risk Data Library</a></li>
@@ -561,6 +560,7 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Disaster Risk Analytics</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="docs/tool-setup.html">Tool setup and run</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="docs/run-baseline.html">Baseline risk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/run_fl.html">Flood Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/run_tc.html">Tropical Cyclone Analytics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/run_ch.html">Custom Hazard Analytics</a></li>
@@ -570,11 +570,14 @@ const thebe_selector_output = ".output, .cell_output"
 </li>
 <li class="toctree-l1"><a class="reference internal" href="docs/validation.html">Validation and interpretation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs/presentation.html">Results presentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="docs/utility.html">Utilities</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools/utility/merge_tiles/Merge_tiles.html">TILE MERGE SCRIPT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools/utility/Fetch_data/Fetch_WSF19.html">HARVESTING AND RESAMPLING OF BUILT-UP DATA FROM WSF-2019</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools/utility/mapping.html">Mapping &amp; Geocoding</a></li>
 
-
-
-<li class="toctree-l1"><a class="reference internal" href="docs/utility.html">Utilities</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="tools/utility/emdat/EMDAT_dashboard.html">EMDAT Disaster Data Dashboard - Enhanced with Leafmap</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="docs/philosophy_of_mapping.html">The Philosophy of Mapping</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Credits</span></p>
@@ -775,46 +778,7 @@ title="Print to PDF"
               
   <section class="tex2jax_ignore mathjax_ignore" id="risk-data-library-country-climate-disaster-risk-screening-tools">
 <h1>Risk Data Library - Country Climate &amp; Disaster Risk Screening Tools<a class="headerlink" href="#risk-data-library-country-climate-disaster-risk-screening-tools" title="Permalink to this heading">#</a></h1>
-<div class="news-container">
-    <div class="news-ticker">
-        <span class="news-item"><strong>AUGUST UPDATE:</strong> New EMDAT dashboard notebook</span>
-        <span class="news-item"><strong>JUNE UPDATE:</strong> New notebooks! New documentation! New video-tutorials! </span>
-    </div>
-</div>
-<style>
-    .news-container {
-        width: 100%;
-        background-color: #f0f7fa;
-        overflow: hidden;
-        margin: 10px 0 20px 0;
-        border-radius: 4px;
-        border-left: 4px solid #118AB2;
-    }
-    .news-ticker {
-        white-space: nowrap;
-        padding: 10px 0;
-        animation: ticker 30s linear infinite;
-        color: #333;
-        font-size: 14px;
-    }
-    @keyframes ticker {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-    }
-    .news-item {
-        display: inline-block;
-        padding: 0 30px;
-    }
-    .news-item strong {
-        color: #118AB2;
-        font-weight: bold;
-    }
-    /* Pause animation on hover */
-    .news-container:hover .news-ticker {
-        animation-play-state: paused;
-    }
-</style>
-<p>This documentation offers guidance on risk screening and provides pythons tools to quickly produce natual hazards’ risk screening at the national or sub-national level. The tools have originally being created for the World Bank’s <a class="reference external" href="https://www.worldbank.org/en/publication/country-climate-development-reports"><strong>Country Climate and Development Report</strong></a> risk screening activities (2022/2025) and then furtherly developed within the <a class="reference internal" href="docs/rdl.html"><span class="doc std std-doc"><strong>Risk Data Library project</strong></span></a>.</p>
+<p>This documentation offers guidance on risk screening and provides Python tools to quickly produce natural hazards risk screening at the national or sub-national level. The tools were originally created for the World Bank’s <a class="reference external" href="https://www.worldbank.org/en/publication/country-climate-development-reports"><strong>Country Climate and Development Report</strong></a> risk screening activities (2022/2025) and further developed within the <a class="reference internal" href="docs/rdl.html"><span class="doc std std-doc"><strong>Risk Data Library project</strong></span></a>.</p>
 <section id="what-you-can-do-with-these-tools">
 <h2>What you can do with these tools<a class="headerlink" href="#what-you-can-do-with-these-tools" title="Permalink to this heading">#</a></h2>
 <style>
@@ -1094,7 +1058,7 @@ title="Print to PDF"
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This documentation reflects the approches and methods adopted for the CCDR disaster risk screening following the <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Tools%20and%20Approaches.pdf"><strong>CCDR guidance note</strong></a>. They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
+<p>This documentation reflects the approaches and methods adopted for the CCDR disaster risk screening following the <a class="reference external" href="https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Tools%20and%20Approaches.pdf"><strong>CCDR guidance note</strong></a>. They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
 Also note that our tools are not expected to reflect all existing risk perspectives and dimensions, rather producing standardised risk indicators.</p>
 </div>
 <p>The CCDR risk screening tools has been developed in agreement with regional geography and poverty teams, and with the support of the World Bank Global Facility for Disaster Risk and Recovery (<a class="reference external" href="https://www.gfdrr.org"><strong>GFDRR</strong></a>).</p>
@@ -1388,7 +1352,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jun 11, 2026.<br>
+Last updated on Jul 09, 2026.<br>
 </p>
   </div>
   

@@ -46,7 +46,7 @@ ARs are supported by coordinated climate modeling efforts referred to as Coupled
 modeling of future climate scenarios referred to as Shared Socioeconomic Pathways (SSPs). These pathways cover the range of possible future scenarios of anthropogenic drivers of climate change by accounting for various future greenhouse gas emission trajectories, as well as a specific focus on carbon dioxide (CO2) concentration trajectories (IPCC 2021b).
 
 ## Dimensions of climate indices:
-   - **SSPs:** scenarios SSP1/RCP2.6, SSP2/RCP4.5, SSP3/RCP7.0, SSP5/RCP8
+   - **SSPs:** scenarios SSP1/RCP2.6, SSP2/RCP4.5, SSP3/RCP7.0, SSP5/RCP8.5
    - **Models ensemble range:** percentiles p10, p50, p90
    - **Period:** Historical (1981-2015), [Near term (2020-2039), Medium term (2040-2059), Long term (2060-2079), End of century (2080-2099)]
    - **Time scale:** Monthly, Seasonal, Annual 
@@ -60,12 +60,12 @@ align: center
 ---
 Recommended CCDR Global Scenarios and characteristics for adaptation and development planning.
 ```
-- **SSP1-1.9 / RCP2.6:** emissions peak between 2040 and 2060, declining by 2100. This results in warming of 3-3.5 °C by 2100.
-- **SSP2-4.5 / RCP4.5:** emissions continue to increase through the end of the century, with resulting warming of 3.8-4.2 °C by 2100.
-- **SSP3-7.0 / RCP8.5:** models describe a large emission variability for this scenario. Warming is estimated at 3.9-4.6 °C by 2100.
+- **SSP1-2.6 (low emissions):** strong mitigation scenario where emissions peak before 2030 and decline rapidly. Projected global mean warming of **~1.8 °C** above pre-industrial levels by 2100 (likely range 1.3–2.4 °C, IPCC AR6).
+- **SSP2-4.5 (intermediate):** moderate mitigation with emissions stabilizing around current levels then declining after mid-century. Projected warming of **~2.7 °C** by 2100 (likely range 2.1–3.5 °C, IPCC AR6).
+- **SSP5-8.5 (high emissions):** fossil fuel-intensive development with no significant mitigation; emissions continue rising through 2050. Projected warming of **~4.4 °C** by 2100 (likely range 3.3–5.7 °C, IPCC AR6).
 
 ## Data sources
-The climate indices are primarily sourced from the [**Cimate Change Knowledge Portal**](https://climateknowledgeportal.worldbank.org) by the World Bank, which provides a large selection of climate indices for both trends and extremes, accessible via raster download or API.
+The climate indices are primarily sourced from the [**Climate Change Knowledge Portal**](https://climateknowledgeportal.worldbank.org) by the World Bank, which provides a large selection of climate indices for both trends and extremes, accessible via raster download or API.
 Additional indices could also be obtained from external sources.
 
 | **Name** | **Developer** | **Description** | **Data format** |
