@@ -2,7 +2,7 @@
 
 ## Maps
 The best way to depict spatial variability is through maps. For baseline risk mapping, there is no simple automation; [QGIS](external-tools) is used to import the data and print into maps.
-- The geopackage and tiff data produced by the tool can be simply dragged within QGIS main window to import them in the Table of Content (Toc).
+- The geopackage and tiff data produced by the tool can be simply dragged within QGIS main window to import them in the Table of Contents (ToC).
 - You can add a basemap for reference. The best way is using the [Quick Map Service](https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30) plugin.
 - A proper [symbology](https://docs.qgis.org/3.34/en/docs/training_manual/basic_map/symbology.html) should be applied to each layer.
 - The [print layout](https://docs.qgis.org/3.34/en/docs/user_manual/print_composer/index.html) window is used to build the map to export as a picture, adding legends, scale bar, etc.

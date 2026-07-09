@@ -303,7 +303,7 @@ The map shows countries that have been already covered by the risk analytics. Cl
 This documentation reflects the approaches and methods adopted for the CCDR disaster risk screening following the [**CCDR guidance note**](https://github.com/GFDRR/CCDR-tools/blob/main/docs/CCDR_notes/CCDR%20Tools%20and%20Approaches.pdf). They are based on the most typical DRM framework, yet there are many alternative approaches that could be adopted for similar purposes.
 Also note that our tools are not expected to reflect all existing risk perspectives and dimensions, rather producing standardised risk indicators.
 ```
-The CCDR risk screening tools has been developed in agreement with regional geography and poverty teams, and with the support of the World Bank Global Facility for Disaster Risk and Recovery ([**GFDRR**](https://www.gfdrr.org)).
+The CCDR risk screening tools have been developed in agreement with regional geography and poverty teams, and with the support of the World Bank Global Facility for Disaster Risk and Recovery ([**GFDRR**](https://www.gfdrr.org)).
 
 ```{figure} docs/images/GFDRR_logo.png
 ---

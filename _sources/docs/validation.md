@@ -1,7 +1,5 @@
 # Validation and interpretation
 
-[//]: # (Comment)
-
 ## Validate input
 It is always a good practice to spend some time to evaluate the quality and representativeness of input data before diving into the analytics.
 Input data can contain errors and artefacts; sometimes they are large and evident, sometimes they are small and hard to catch - but that doesn't mean they don't have an impact over the quality of results!
@@ -71,7 +69,7 @@ Example of chart showing cross-comparison between two different models represent
 ### Exposure
 #### Correct values interpretation and outliers
 - Check layer projection system (CRS) and resolution
-  - The CRS should be the same for all layers involved in the analysis, e.g. `WGS 84 - EPSG: 3857`
+  - The CRS should be the same for all layers involved in the analysis, e.g. `WGS 84 - EPSG: 4326`
 - Check the exposure category and unit of measure (exposure metadata)
   - Is the unit of measure the same as expected by the vulnerability model? E.g. population could be expressed as count, density, percentage. Land cover values could be binary or categorical
 - Check values distribution (histogram)
@@ -111,7 +109,7 @@ Following on the previous example over Nepal; we now load the [GHS-pop 2020 laye
 ```
 
 ## Output interpretation
-The analytical model produces numbers; then is to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestable for a non-expert audience.
+The analytical model produces numbers; it then falls to the ability of the risk analyst to interpret them correctly, spot errors, and build a narrative to make the results digestable for a non-expert audience.
 
 ### Validation against empirical disaster data
 

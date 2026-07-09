@@ -5,7 +5,7 @@ Its overarching purpose is to support disaster resilience work by making risk da
 
 Building on GFDRR experience, extensive & intensive review of risk literature and case studies, and partnership with some of the main risk data actors ([GEM, UCL EPICentre, BGS, OasisHUB and more](https://riskdatalibrary.org/project)), the RDL proposes a standard data and metadata schema to organise, format, describe, store and share risk data.
 <br><br>
-More information are available in the [**RDL documentation**](https://docs.riskdatalibrary.org).
+More information is available in the [**RDL documentation**](https://docs.riskdatalibrary.org).
 
 ## Risk data
 
