@@ -20,15 +20,15 @@ The script has been developed to run as [jupyter notebook](https://jupyter.org/)
 - Python 3 needs to be installed on your system. We suggest the latest [Anaconda](https://www.anaconda.com/download) distribution. Mamba is also supported.
 - Create new `rdl-tools` environment from the provided rdl-tools.yml file. It can be done via Anaconda navigator interface (environments > Import ) or from the Anaconda cmd prompt:
   ```bash
-  conda create --name rdl-tools --file <dir/rdl-tools.yml>`
-  activate rdl-tools
+  conda env create -n rdl-tools -f rdl-tools.yml
+  conda activate rdl-tools
   ```
 
 ## Settings
 Edit the `.env` file inside the notebook directories to specify your working directory:
 
 ```
-# Environment variables for the CCDR Climate and Disasater Risk analysis notebooks
+# Environment variables for the CCDR Climate and Disaster Risk analysis notebooks
 
 # Fill the below with the location of data files
 # Use absolute paths with forward slashes ("/"), and keep the trailing slash

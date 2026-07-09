@@ -33,7 +33,8 @@ Data are sourced at 0.25° resolution from the [World Bank Climate Knowledge Por
 
 ### SSP Scenarios
 
-- **SSP1-1.9/2.6**: Sustainability - low challenges to mitigation and adaptation
+- **SSP1-1.9**: Sustainability — very low emissions, consistent with limiting warming to 1.5 °C
+- **SSP1-2.6**: Sustainability — low emissions, consistent with limiting warming to below 2 °C
 - **SSP2-4.5**: Middle of the road - medium challenges to mitigation and adaptation
 - **SSP3-7.0**: Regional rivalry - high challenges to mitigation and adaptation
 - **SSP5-8.5**: Fossil-fueled development - high challenges to mitigation, low challenges to adaptation

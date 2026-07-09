@@ -7,7 +7,7 @@ The combination can be displayed using bivariate maps that show the locations wh
 ---
 align: center
 ---
-Example of bivariate maps relating expected annual impact from river floods on population mortality and population socio-economci status as described by population-weighted wealth index (RWI).
+Example of bivariate maps relating expected annual impact from river floods on population mortality and population socio-economic status as described by population-weighted wealth index (RWI).
 ```
 
 ## Wealth indices

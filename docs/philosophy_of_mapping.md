@@ -9,7 +9,7 @@ The practice of mapping the world is not simply a technical endeavor — it is a
 One of the earliest systematic attempts at mapping the known world came from the Greek scholar **Eratosthenes of Cyrene** (c. 276–194 BCE), a polymath who served as the chief librarian at the Library of Alexandria. He is often credited as the "father of geography." 
 His most notable contribution was the calculation of the Earth's circumference with remarkable accuracy for his time, using simple geometry and observations of shadows in Syene and Alexandria during the summer solstice. Based on this, Eratosthenes devised one of the first known *gridded* maps of the inhabited world, laying out meridians and parallels in an early conceptualization of geographic coordinates.
 
-```{figure} https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Mappa_di_Eratostene.jpg/960px-Mappa_di_Eratostene.jpg
+```{figure} images/map_eratosthenes.jpg
 :alt: Eratosthenes' Map
 :width: 90%
 :align: center
@@ -46,4 +46,4 @@ Today, as we navigate digital maps, satellite imagery, and GIS systems, we conti
 
 ## Suggested Reading
 
-📖 [*"A History of the World in Twelve Maps"*](https://books.google.it/books/about/A_History_of_the_World_in_Twelve_Maps.html?id=Qsi_7_DQ3L4C&redir_esc=y) by Jerry Brotton
+[*"A History of the World in Twelve Maps"*](https://books.google.it/books/about/A_History_of_the_World_in_Twelve_Maps.html?id=Qsi_7_DQ3L4C&redir_esc=y) by Jerry Brotton

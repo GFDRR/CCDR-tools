@@ -1,6 +1,6 @@
 # Tropical Cyclone Analytics
 
-Based on [**STORM v4**](https://data.4tu.nl/datasets/0ea98bdd-5772-4da8-ae97-99735e891aff/4) (2023) hazard data as max wind spead (m/s) by Return Period scenario.
+Based on [**STORM v4**](https://data.4tu.nl/datasets/0ea98bdd-5772-4da8-ae97-99735e891aff/4) (2023) hazard data as max wind speed (m/s) by Return Period scenario.
 1. Exposure by hazard thresholds on population, built-up and agricultural area<br>2. Expected Annual Impact estimates on built-up area using regional-specific damage curves from [**CLIMADA**](https://nhess.copernicus.org/articles/21/393/2021/).
 
 ## Input data management

@@ -27,18 +27,17 @@ Dashboard created from EMDAT dataset, summarising global and country statistics 
 width: 600
 align: center
 ---
-EMDAT dashboard notebook
+EMDAT dashboard — global statistics view.
 ```
 ```{figure} images/emdat_dashboard4.jpg
 ---
 width: 600
 align: center
 ---
-EMDAT dashboard notebook
+EMDAT dashboard — country-level map view.
 ```
 
-(external-tools)=
-# External tools
+## External tools
 Additional tools to help collect, view and process risk data.
 
 ```{table}

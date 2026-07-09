@@ -1,6 +1,6 @@
 # Hazard datasets
 
-**Hazard datasets** refer to a variety of datasets that can be used to represent the value that is exposed to suffer damage and losses from natural hazards. This section presents some of the most common and recent type of data and indicators used for this purpose. Please note that _CCDR focus only on hydro-meteorological hazards_, as geopyhisical hazards occurrence and intensity are not affected by climate change.
+**Hazard datasets** refer to geospatial data representing the physical intensity and frequency of natural phenomena that may cause damage and losses. This section presents some of the most common and recent datasets used for hazard characterisation. The CCDR risk screening tools focus primarily on **hydro-meteorological hazards**, as these are directly influenced by climate change. Geophysical hazards are included here for reference and completeness, as they are relevant to overall disaster risk management even if their frequency and intensity are not significantly affected by climate change.
 
 ```{seealso}
 Hazard datasets developed by WB disaster risk projects have been placed in a special collection of the WB Development Data Hub: [Risk Data Library Collection: **HAZARD**](https://datacatalog.worldbank.org/search?fq=(identification%2Fcollection_code%2Fany(col:col%20eq%20%27RDL%27))&q=hazard).
@@ -250,6 +250,20 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 <div class="hazard-text">Heat stress</div>
 
 ![Heat stress](images/hzd_icons/heat-wave.png)
+
+</a>
+</div>
+</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>
+<div class="hazard-item">
+<a href="hzd_hm-data.html#wildfire">
+<div class="hazard-text">Wildfire</div>
+
+![Wildfire](images/hzd_icons/fire.png)
 
 </a>
 </div>

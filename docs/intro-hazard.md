@@ -2,7 +2,7 @@
 
 Natural phenomena, whether extreme events or long-term processes, become hazards only when they pose potential harm to people, property, or socioeconomic systems. The occurrence of these natural hazards is primarily determined by physical factors, such as weather system dynamics, tectonic plate movements and terrain characteristics (e.g., slopes, drainage, vegetation).
 Anthropogenic factors, such as urbanization, environmental degradation and climate change, are known as *risk drivers* as they can influence the location, frequency, and intensity of natural hazards.
-The inherently geographical nature of both natural hazards and exposure necessessarily requires a geospatial approach to properly understand and interpret the risk.
+The inherently geographical nature of both natural hazards and exposure necessarily requires a geospatial approach to properly understand and interpret the risk.
 In other words, the spatial dimension is crucial for effective risk assessment and management strategies.
 
 ```{seealso}
@@ -62,7 +62,7 @@ Note that a return period of 1,000 years, while very unlikely, can occur anyday!
 ```
 
 All kind of hazard models carry **limitations related to their applicability**. Their quality depend on scale, resolution, model quality, training period and related input data quality.
-As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expeceted to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.
+As a rule of thumb, their fitness for application in the context of a risk screening or assessment exercise depends on the scale of the risk analysis, i.e. locally-sourced models are expected to be best fitted for local scale assessment (e.g. city level), while global models are best suited for national or sub-national estimates.
 
 In the context of developing countries, however, a global model is often the only available source for a location. In those cases, the application of the global model must be taken with caution and correctly interpreted acknowledging the limitations. See [**uncertainty**](uncertainty).
 

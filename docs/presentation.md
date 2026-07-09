@@ -1,9 +1,6 @@
 # Results presentation
-This section is still work in progress.
 
-[//]: # (Comment)
-
-# Maps
+## Maps
 The best way to depict spatial variability is through maps. For baseline risk mapping, there is no simple automation; [QGIS](external-tools) is used to import the data and print into maps.
 - The geopackage and tiff data produced by the tool can be simply dragged within QGIS main window to import them in the Table of Content (Toc).
 - You can add a basemap for reference. The best way is using the [Quick Map Service](https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30) plugin.
@@ -13,7 +10,7 @@ The best way to depict spatial variability is through maps. For baseline risk ma
 ```{seealso}
 Do you prefer to map using python? Take a [**Python data-viz free course**](https://courses.spatialthoughts.com/python-dataviz.html)!
 ```
-# Figures
+## Figures
 
 - Charts allow to give a quick snapshots of key output, e.g. the most risk-prone units in a country.
     ```{figure} images/EAI_chart.png
@@ -31,7 +28,7 @@ Do you prefer to map using python? Take a [**Python data-viz free course**](http
     ---
     Example of chart depicting absolute EAI for historical baseline and future projection scenario.
     ```
-# Dashboard
+## Dashboard
 
 An [**open-source online dashboard**](https://matamadio.github.io/CCDR-geoboard) has been developed in order to quickly disseminate results of risk screening and assessment.
 

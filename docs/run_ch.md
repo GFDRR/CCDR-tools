@@ -4,7 +4,7 @@
 
 This script is meant for custom input from the user on all three risk components. It can still fetch national and sub-national boundaries from the [WB ArcGIS repository](https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer).
 
-The [**exposure data**](global-exposure.md) and the [**hazard data**](global-hazard.md) selected by the user need to be manually downloaded and placed in the respecive folders; in case of tiled data, use the [pre-processing script](https://github.com/GFDRR/CCDR-tools/blob/main/tools/code/F3/) to merge those into country-sized data. Each dataset is expected as a raster file (`.tif`).<br>
+The [**exposure data**](global-exposure.md) and the [**hazard data**](global-hazard.md) selected by the user need to be manually downloaded and placed in the respective folders; in case of tiled data, use the [pre-processing script](https://github.com/GFDRR/CCDR-tools/blob/main/tools/code/F3/) to merge those into country-sized data. Each dataset is expected as a raster file (`.tif`).<br>
 
 Example:
 
@@ -33,7 +33,7 @@ Example:
     align: center
     ---
     ```
-- Hazard tab: select the hazard data (*.tif), the hazard name, the minimum hazard intensity threshold (all values below that will be ignored), and the associated frequency, if any. You can also select add more than one layer in case of muultiple return periods.
+- Hazard tab: select the hazard data (*.tif), the hazard name, the minimum hazard intensity threshold (all values below that will be ignored), and the associated frequency, if any. You can also select more than one layer in case of multiple return periods.
     ```{figure} images/GUI_CH2.jpg
     ---
     width: 100%

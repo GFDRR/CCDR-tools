@@ -1,6 +1,6 @@
 # Exposure
 
-The concept of exposure relates to the receptors of risk, which are the physical, human and production capitals that could be loss due to natural hazards.
+The concept of exposure relates to the receptors of risk, which are the physical, human and production capitals that could be lost due to natural hazards.
 
 ```{seealso}
 **The situation of people, infrastructure, housing, production capacities and other tangible human assets located in hazard-prone areas (UNDRR 2019).**

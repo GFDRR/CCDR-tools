@@ -17,15 +17,15 @@ Air pollution can be measured by the mean annual surface-level concentrations of
 | **Frequency type** | Annual mean |
 | **Time reference** | Baseline (1998-2022) |
 | **Intensity metric** | PM2.5 [ug/m3] |
-| **License** | Opend data |
+| **License** | Open data |
 ```
 
-```{figure} https://sites.wustl.edu/acag/files/2024/05/image.png
+```{figure} images/pm25_global_2022.png
 ---
 align: center
 width: 100%
 ---
-Annual PM 2.5 global concentration: 2022.
+Annual PM2.5 global concentration: 2022. Source: van Donkelaar et al. / ACAG, Washington University in St. Louis.
 ```
 
 Concentrations of PM2.5 over 15 μg/m3 can lead to severe public health consequences (respiratory infections, cardiovascular disease, and lung cancer), especially in densely populated areas. While not a climate hazard in and of itself, air pollution can be affected by climate change [[UCAR 2022](https://scied.ucar.edu/learning-zone/air-quality/air-quality-and-climate-change#:~:text=Because%20of%20climate%20warming%2C%20the,more%20often%20in%20hot%20temperatures.)], but can also affect local climate: drier conditions can promote dust transport from soil; wildfires can increase the local dust concentration; high dust can alter the heat intake from the sun and thus affect temperatures.

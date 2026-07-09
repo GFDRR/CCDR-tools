@@ -10,15 +10,15 @@ Input data can contain errors and artefacts; sometimes they are large and eviden
 
 #### Correct values interpretation and outliers
 
-- Check layer projection sysyem (CRS) and resolution
+- Check layer projection system (CRS) and resolution
   - The CRS should be the same for all layers involved in the analysis, e.g. `WGS 84 - EPSG: 4326`
 - Check unit of measure (hazard metadata)
   - Is the unit of measure the same as expected by the vulnerability model? E.g. flood depth could be expressed in centimeters, meters, or by classes
 - Check values distribution (histogram)
-  - Is the range rapresented compatible with the unit of measure? Are there outliers?
+  - Is the range represented compatible with the unit of measure? Are there outliers?
   - Set a proper cut for outliers
 - Set up appropriate classification and symbology (legend)
-  - This could be quantitative o categorical depending on the data
+  - This could be quantitative or categorical depending on the data
 
 #### Geographic correlation
 
@@ -70,15 +70,15 @@ Example of chart showing cross-comparison between two different models represent
 
 ### Exposure
 #### Correct values interpretation and outliers
-- Check layer projection sysyem (CRS) and resolution
+- Check layer projection system (CRS) and resolution
   - The CRS should be the same for all layers involved in the analysis, e.g. `WGS 84 - EPSG: 3857`
 - Check the exposure category and unit of measure (exposure metadata)
   - Is the unit of measure the same as expected by the vulnerability model? E.g. population could be expressed as count, density, percentage. Land cover values could be binary or categorical
 - Check values distribution (histogram)
-  - Is the range rapresented compatible with the unit of measure? Are there outliers?
+  - Is the range represented compatible with the unit of measure? Are there outliers?
   - Set a proper cut for outliers
 - Set up appropriate classification and symbology (legend)
-  - This could be quantitative o categorical depending on the data
+  - This could be quantitative or categorical depending on the data
 
 ```{figure} images/exp_wpop_hst.jpg
 ---
