@@ -787,6 +787,13 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#wildfire">
    Wildfire
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#global-fwi-probabilistic-layers-cems-2000-2024">
+     Global FWI probabilistic layers (CEMS 2000-2024)
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -1260,21 +1267,28 @@ The two indices are similar and <a class="reference external" href="https://www.
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td class="text-right"><p><a class="reference external" href="https://gwis.jrc.ec.europa.eu/apps/gwis.statistics/seasonaltrend">Global Wildfire Information System (GWIS)</a></p></td>
+<tr class="row-even"><td class="text-right"><p>Global FWI from CEMS (2000-2024)</p></td>
+<td class="text-center"><p>World Bank</p></td>
+<td class="text-center"><p>0.25°</p></td>
+<td class="text-center"><p>Probabilistic (GEV/Gumbel return levels)</p></td>
+<td class="text-center"><p>Baseline (2000-2024)</p></td>
+<td class="text-center"><p>On request</p></td>
+</tr>
+<tr class="row-odd"><td class="text-right"><p><a class="reference external" href="https://gwis.jrc.ec.europa.eu/apps/gwis.statistics/seasonaltrend">Global Wildfire Information System (GWIS)</a></p></td>
 <td class="text-center"><p>EU-JRC</p></td>
 <td class="text-center"><p>0.1°</p></td>
 <td class="text-center"><p>Deterministic (fire weather index)</p></td>
 <td class="text-center"><p>Baseline + seasonal</p></td>
 <td class="text-center"><p>Open</p></td>
 </tr>
-<tr class="row-odd"><td class="text-right"><p><a class="reference external" href="https://catalogue.ceda.ac.uk/uuid/58f00d8814064b79a0c49662ad3af537">FireCCI51 / MODIS burned area</a></p></td>
+<tr class="row-even"><td class="text-right"><p><a class="reference external" href="https://catalogue.ceda.ac.uk/uuid/58f00d8814064b79a0c49662ad3af537">FireCCI51 / MODIS burned area</a></p></td>
 <td class="text-center"><p>ESA CCI</p></td>
 <td class="text-center"><p>250 m</p></td>
 <td class="text-center"><p>Historical observations</p></td>
 <td class="text-center"><p>2001–2019</p></td>
 <td class="text-center"><p>Open</p></td>
 </tr>
-<tr class="row-even"><td class="text-right"><p><a class="reference external" href="https://zenodo.org/record/6326500">Global Fire Risk under Climate Change</a></p></td>
+<tr class="row-odd"><td class="text-right"><p><a class="reference external" href="https://zenodo.org/record/6326500">Global Fire Risk under Climate Change</a></p></td>
 <td class="text-center"><p>Knorr et al.</p></td>
 <td class="text-center"><p>0.5°</p></td>
 <td class="text-center"><p>Probabilistic</p></td>
@@ -1284,6 +1298,22 @@ The two indices are similar and <a class="reference external" href="https://www.
 </tbody>
 </table>
 <p>Fire weather conditions — the key driver of wildfire hazard — can be characterised using the <strong>Fire Weather Index (FWI)</strong>, which integrates temperature, humidity, wind speed, and precipitation into a single metric. CMIP6 projections of FWI are available through the Copernicus Climate Data Store and can be used to assess changes in wildfire hazard under future climate scenarios.</p>
+<section id="global-fwi-probabilistic-layers-cems-2000-2024">
+<h3>Global FWI probabilistic layers (CEMS 2000-2024)<a class="headerlink" href="#global-fwi-probabilistic-layers-cems-2000-2024" title="Permalink to this heading">#</a></h3>
+<p>A <strong>probabilistic FWI dataset</strong> has been developed to support CCDR wildfire hazard screening, based on the daily FWI reanalysis distributed through the <a class="reference external" href="https://ewds.climate.copernicus.eu">Copernicus Emergency Management Service (CEMS)</a>. Daily FWI values for the 2000-2024 period are aggregated to annual maxima, and an extreme value analysis is applied to derive hazard intensity at different frequencies. This dataset is not yet publicly released; the processed layers can be obtained on request by contacting the author (Mattia Amadio, <a class="reference external" href="mailto:mamadio&#37;&#52;&#48;worldbank&#46;org">mamadio<span>&#64;</span>worldbank<span>&#46;</span>org</a>). The workflow is:</p>
+<ul class="simple">
+<li><p>Register to the <a class="reference external" href="https://ewds.climate.copernicus.eu">Copernicus Early Warning Data Store</a> and download the daily FWI data (2000-2024) in 5-6 year chunks.</p></li>
+<li><p>Process the timeseries with a dedicated Python notebook to compute summary statistics and fit a <strong>Generalized Extreme Value (GEV / Gumbel)</strong> distribution to the annual maxima.</p></li>
+<li><p>Derive return levels for the 5-, 10-, 25- and 50-year return periods, alongside the overall mean, the mean and standard deviation of the annual maxima, and the maximum observed value.</p></li>
+</ul>
+<p>The return-level maps express the FWI value expected to be exceeded, on average, once every <em>N</em> years. Return levels are computed from the fitted distribution as <code class="docutils literal notranslate"><span class="pre">Return</span> <span class="pre">level</span> <span class="pre">=</span> <span class="pre">μ</span> <span class="pre">+</span> <span class="pre">σ</span> <span class="pre">·</span> <span class="pre">(−ln(−ln(1</span> <span class="pre">−</span> <span class="pre">1/T)))</span></code>, where μ is the location parameter, σ the scale parameter, and <em>T</em> the return period in years. A <strong>vegetation fuel filter</strong> is applied as a final step to mask out areas without burnable vegetation (e.g. bare deserts, water bodies), so that the hazard layer reflects only locations where wildfire can actually occur.</p>
+<figure class="align-center" id="id7">
+<img alt="../_images/fwi_cems.png" src="../_images/fwi_cems.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 18 </span><span class="caption-text"><em>[Placeholder]</em> Global FWI hazard from CEMS (2000-2024): overall mean, 5-year return level, and the same layer after application of the vegetation fuel filter.</span><a class="headerlink" href="#id7" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
 </section>
 </section>
 
@@ -1381,6 +1411,13 @@ The two indices are similar and <a class="reference external" href="https://www.
   <a class="reference internal nav-link" href="#wildfire">
    Wildfire
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#global-fwi-probabilistic-layers-cems-2000-2024">
+     Global FWI probabilistic layers (CEMS 2000-2024)
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
