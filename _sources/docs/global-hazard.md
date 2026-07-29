@@ -24,7 +24,15 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 
 .hazard-table th,
 .hazard-table td {
-  width: 33.33%;
+  width: 25%;
+}
+
+.hazard-table td.hydro {
+  background-color: #f0f5f8;
+}
+
+.hazard-table tr:nth-child(even) td.hydro {
+  background-color: #eaf1f5;
 }
 
 .hazard-table th {
@@ -131,7 +139,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 <thead>
 <tr>
 <th><a href="hzd_gp-data.md"><strong>GEOPHYSICAL</strong></a></th>
-<th><a href="hzd_hm-data.md"><strong>HYDRO-METEOROLOGICAL</strong></a></th>
+<th colspan="2"><a href="hzd_hm-data.md"><strong>HYDRO-METEOROLOGICAL</strong></a></th>
 <th><a href="hzd_env-data.md"><strong>ENVIRONMENTAL</strong></a></th>
 </tr>
 </thead>
@@ -147,12 +155,22 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </a>
 </div>
 </td>
-<td>
+<td class="hydro">
 <div class="hazard-item">
 <a href="hzd_hm-data.html#floods">
 <div class="hazard-text">River floods</div>
 
 ![River flood](images/hzd_icons/flood.png)
+
+</a>
+</div>
+</td>
+<td class="hydro">
+<div class="hazard-item">
+<a href="hzd_hm-data.html#drought-water-scarcity">
+<div class="hazard-text">Drought</div>
+
+![Drought](images/hzd_icons/drought.png)
 
 </a>
 </div>
@@ -179,12 +197,22 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </a>
 </div>
 </td>
-<td>
+<td class="hydro">
 <div class="hazard-item">
 <a href="hzd_hm-data.html#landslides">
 <div class="hazard-text">Landslide</div>
 
 ![Landslide](images/hzd_icons/landslide.png)
+
+</a>
+</div>
+</td>
+<td class="hydro">
+<div class="hazard-item">
+<a href="hzd_hm-data.html#heat-stress">
+<div class="hazard-text">Heat stress</div>
+
+![Heat stress](images/hzd_icons/heat-wave.png)
 
 </a>
 </div>
@@ -202,7 +230,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </a>
 </div>
 </td>
-<td>
+<td class="hydro">
 <div class="hazard-item">
 <a href="hzd_hm-data.html#coastal-floods-storm-surge">
 <div class="hazard-text">Coastal flood</div>
@@ -212,53 +240,7 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </a>
 </div>
 </td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>
-<div class="hazard-item">
-<a href="hzd_hm-data.html#tropical-cyclones">
-<div class="hazard-text">Tropical cyclones</div>
-
-![Tropical cyclones](images/hzd_icons/wind.png)
-
-</a>
-</div>
-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>
-<div class="hazard-item">
-<a href="hzd_hm-data.html#drought-water-scarcity">
-<div class="hazard-text">Drought</div>
-
-![Drought](images/hzd_icons/drought.png)
-
-</a>
-</div>
-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>
-<div class="hazard-item">
-<a href="hzd_hm-data.html#heat-stress">
-<div class="hazard-text">Heat stress</div>
-
-![Heat stress](images/hzd_icons/heat-wave.png)
-
-</a>
-</div>
-</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td>
+<td class="hydro">
 <div class="hazard-item">
 <a href="hzd_hm-data.html#wildfire">
 <div class="hazard-text">Wildfire</div>
@@ -268,6 +250,21 @@ Others, such as landslides, use a **deterministic approach**, providing an indiv
 </a>
 </div>
 </td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td class="hydro">
+<div class="hazard-item">
+<a href="hzd_hm-data.html#tropical-cyclones">
+<div class="hazard-text">Tropical cyclones</div>
+
+![Tropical cyclones](images/hzd_icons/wind.png)
+
+</a>
+</div>
+</td>
+<td class="hydro"></td>
 <td></td>
 </tr>
 </tbody>
