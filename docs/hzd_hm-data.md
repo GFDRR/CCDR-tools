@@ -203,8 +203,26 @@ Global probabilistic wildfire hazard datasets are available from several sources
 
 | **Name** | **Developer** | **Resolution** | **Analysis type** | **Time reference** | **License** |
 |---:|:---:|:---:|:---:|:---:|:---:|
+| Global FWI from CEMS (2000-2024) | World Bank | 0.25° | Probabilistic (GEV/Gumbel return levels) | Baseline (2000-2024) | On request |
 | [Global Wildfire Information System (GWIS)](https://gwis.jrc.ec.europa.eu/apps/gwis.statistics/seasonaltrend) | EU-JRC | 0.1° | Deterministic (fire weather index) | Baseline + seasonal | Open |
 | [FireCCI51 / MODIS burned area](https://catalogue.ceda.ac.uk/uuid/58f00d8814064b79a0c49662ad3af537) | ESA CCI | 250 m | Historical observations | 2001–2019 | Open |
 | [Global Fire Risk under Climate Change](https://zenodo.org/record/6326500) | Knorr et al. | 0.5° | Probabilistic | Baseline + SSP1-2.6, SSP5-8.5 (2071–2100) | Open |
 
 Fire weather conditions — the key driver of wildfire hazard — can be characterised using the **Fire Weather Index (FWI)**, which integrates temperature, humidity, wind speed, and precipitation into a single metric. CMIP6 projections of FWI are available through the Copernicus Climate Data Store and can be used to assess changes in wildfire hazard under future climate scenarios.
+
+### Global FWI probabilistic layers (CEMS 2000-2024)
+
+A **probabilistic FWI dataset** has been developed to support CCDR wildfire hazard screening, based on the daily FWI reanalysis distributed through the [Copernicus Emergency Management Service (CEMS)](https://ewds.climate.copernicus.eu). Daily FWI values for the 2000-2024 period are aggregated to annual maxima, and an extreme value analysis is applied to derive hazard intensity at different frequencies. This dataset is not yet publicly released; the processed layers can be obtained on request by contacting the author (Mattia Amadio, mamadio@worldbank.org). The workflow is:
+
+- Register to the [Copernicus Early Warning Data Store](https://ewds.climate.copernicus.eu) and download the daily FWI data (2000-2024) in 5-6 year chunks.
+- Process the timeseries with a dedicated Python notebook to compute summary statistics and fit a **Generalized Extreme Value (GEV / Gumbel)** distribution to the annual maxima.
+- Derive return levels for the 5-, 10-, 25- and 50-year return periods, alongside the overall mean, the mean and standard deviation of the annual maxima, and the maximum observed value.
+
+The return-level maps express the FWI value expected to be exceeded, on average, once every *N* years. Return levels are computed from the fitted distribution as `Return level = μ + σ · (−ln(−ln(1 − 1/T)))`, where μ is the location parameter, σ the scale parameter, and *T* the return period in years. A **vegetation fuel filter** is applied as a final step to mask out areas without burnable vegetation (e.g. bare deserts, water bodies), so that the hazard layer reflects only locations where wildfire can actually occur.
+
+```{figure} images/fwi_cems.png
+---
+align: center
+---
+*[Placeholder]* Global FWI hazard from CEMS (2000-2024): overall mean, 5-year return level, and the same layer after application of the vegetation fuel filter.
+```
