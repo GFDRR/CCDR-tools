@@ -879,16 +879,16 @@ If ‘None’, the default <code class="docutils literal notranslate"><span clas
 <p>Example of <code class="docutils literal notranslate"><span class="pre">manual_run.py</span></code> running undefended river flood analysis (<code class="docutils literal notranslate"><span class="pre">haz_cat</span></code>) over Cambodia (<code class="docutils literal notranslate"><span class="pre">country</span></code>) over period 2020.
 Include 10 return periods (<code class="docutils literal notranslate"><span class="pre">return_periods</span></code>) over three default exposure categories (<code class="docutils literal notranslate"><span class="pre">exp_cat_list</span></code>) using function approach; results summarised at ADM level 2 (<code class="docutils literal notranslate"><span class="pre">adm</span></code>). Do not save intermediate rasters (<code class="docutils literal notranslate"><span class="pre">save_check_raster</span></code>).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Defining the initial parameters - Example for function analysis</span>
-    <span class="n">country</span>            <span class="o">=</span> <span class="s1">&#39;KHM&#39;</span>
-    <span class="n">haz_cat</span>            <span class="o">=</span> <span class="s1">&#39;FLUVIAL_UNDEFENDED&#39;</span>
+    <span class="n">country</span>            <span class="o">=</span> <span class="s1">'KHM'</span>
+    <span class="n">haz_cat</span>            <span class="o">=</span> <span class="s1">'FLUVIAL_UNDEFENDED'</span>
     <span class="n">period</span>	       <span class="o">=</span> <span class="mi">2020</span>
-    <span class="n">scenario</span>           <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">scenario</span>           <span class="o">=</span> <span class="s1">''</span>
     <span class="n">return_periods</span>     <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
     <span class="n">min_haz_slider</span>     <span class="o">=</span> <span class="mi">20</span>
-    <span class="n">exp_cat_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;POP&#39;</span><span class="p">,</span> <span class="s1">&#39;BU&#39;</span><span class="p">,</span> <span class="s1">&#39;AGR&#39;</span><span class="p">]</span>
+    <span class="n">exp_cat_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">'POP'</span><span class="p">,</span> <span class="s1">'BU'</span><span class="p">,</span> <span class="s1">'AGR'</span><span class="p">]</span>
     <span class="n">exp_nam_list</span>       <span class="o">=</span> <span class="p">[]</span>
     <span class="n">adm_level</span>          <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">analysis_app</span>       <span class="o">=</span> <span class="s1">&#39;Function&#39;</span>
+    <span class="n">analysis_app</span>       <span class="o">=</span> <span class="s1">'Function'</span>
     <span class="c1"># class_edges      = []</span>
     <span class="n">save_check_raster</span>  <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
@@ -896,16 +896,16 @@ Include 10 return periods (<code class="docutils literal notranslate"><span clas
 <p>Example of <code class="docutils literal notranslate"><span class="pre">manual_run.py</span></code> running defended coastal flood analysis (<code class="docutils literal notranslate"><span class="pre">haz_cat</span></code>) over Tunisia (<code class="docutils literal notranslate"><span class="pre">country</span></code>) over period 2030, scenario SSP2 - 4.5.
 Include 5 return periods (<code class="docutils literal notranslate"><span class="pre">return_periods</span></code>) over three custom exposure categories (<code class="docutils literal notranslate"><span class="pre">exp_cat_list</span></code>) using hazard classes according to thresholds (<code class="docutils literal notranslate"><span class="pre">class_edges</span></code>); results summarised at ADM3 level (<code class="docutils literal notranslate"><span class="pre">adm</span></code>). Do not save intermediate rasters (<code class="docutils literal notranslate"><span class="pre">save_check_raster</span></code>).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Defining the initial parameters - Example for class analysis</span>
-    <span class="n">country</span>            <span class="o">=</span> <span class="s1">&#39;TUN&#39;</span>
-    <span class="n">haz_cat</span>            <span class="o">=</span> <span class="s1">&#39;COASTAL_DEFENDED&#39;</span>
+    <span class="n">country</span>            <span class="o">=</span> <span class="s1">'TUN'</span>
+    <span class="n">haz_cat</span>            <span class="o">=</span> <span class="s1">'COASTAL_DEFENDED'</span>
     <span class="n">period</span>	       <span class="o">=</span> <span class="mi">2030</span>
-    <span class="n">scenario</span>           <span class="o">=</span> <span class="s1">&#39;SSP2-4.5&#39;</span>
+    <span class="n">scenario</span>           <span class="o">=</span> <span class="s1">'SSP2-4.5'</span>
     <span class="n">return_periods</span>     <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">500</span><span class="p">]</span>
     <span class="n">min_haz_slider</span>     <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">exp_cat_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;POP&#39;</span><span class="p">,</span> <span class="s1">&#39;BU&#39;</span><span class="p">,</span> <span class="s1">&#39;AGR&#39;</span><span class="p">]</span>
-    <span class="n">exp_nam_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GHS&#39;</span><span class="p">,</span> <span class="s1">&#39;WSF19&#39;</span><span class="p">,</span> <span class="s1">&#39;ESA20&#39;</span><span class="p">]</span>
-    <span class="n">adm</span>                <span class="o">=</span> <span class="s1">&#39;3&#39;</span>
-    <span class="n">analysis_app</span>       <span class="o">=</span> <span class="s1">&#39;Classes&#39;</span>
+    <span class="n">exp_cat_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">'POP'</span><span class="p">,</span> <span class="s1">'BU'</span><span class="p">,</span> <span class="s1">'AGR'</span><span class="p">]</span>
+    <span class="n">exp_nam_list</span>       <span class="o">=</span> <span class="p">[</span><span class="s1">'GHS'</span><span class="p">,</span> <span class="s1">'WSF19'</span><span class="p">,</span> <span class="s1">'ESA20'</span><span class="p">]</span>
+    <span class="n">adm</span>                <span class="o">=</span> <span class="s1">'3'</span>
+    <span class="n">analysis_app</span>       <span class="o">=</span> <span class="s1">'Classes'</span>
     <span class="n">class_edges</span>        <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">]</span>
     <span class="n">save_check_raster</span>  <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
@@ -1025,7 +1025,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jul 29, 2026.<br>
+Last updated on Sep 16, 2026.<br>
 </p>
   </div>
   

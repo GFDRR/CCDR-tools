@@ -903,7 +903,7 @@ title="Print to PDF"
 <p>Adding a marker to a map is easy with Folium! We’ll simply call <code class="docutils literal notranslate"><span class="pre">folium.Marker()</span></code> at a particular lat/lon, enter some text to display when the marker is clicked on, and then add it to our base map.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">28.3949</span><span class="p">,</span><span class="mf">84.1240</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="s2">&quot;Nepal&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">CCDR_map</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">28.3949</span><span class="p">,</span><span class="mf">84.1240</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="s2">"Nepal"</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">CCDR_map</span><span class="p">)</span>
 <span class="n">CCDR_map</span>
 </pre></div>
 </div>
@@ -1021,7 +1021,7 @@ title="Print to PDF"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">world_boundaries</span> <span class="o">=</span> <span class="p">(</span>
 
-    <span class="s2">&quot;http://geojson.xyz/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson&quot;</span>
+    <span class="s2">"http://geojson.xyz/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson"</span>
 
 <span class="p">)</span>
 </pre></div>
@@ -1030,7 +1030,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CCDR_map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;cartodb positron&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CCDR_map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">"cartodb positron"</span><span class="p">)</span>
 <span class="n">folium</span><span class="o">.</span><span class="n">GeoJson</span><span class="p">(</span><span class="n">world_boundaries</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">CCDR_map</span><span class="p">)</span>
 <span class="n">CCDR_map</span>
 </pre></div>
@@ -1134,7 +1134,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CCDR_countries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../_static/CCDR_countries.csv&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CCDR_countries</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"../../_static/CCDR_countries.csv"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1386,27 +1386,27 @@ title="Print to PDF"
 
 <span class="n">folium</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
     <span class="n">geo_data</span> <span class="o">=</span> <span class="n">world_boundaries</span><span class="p">,</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Countries covered by CCDR-tools analytics&quot;</span><span class="p">,</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"Countries covered by CCDR-tools analytics"</span><span class="p">,</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">CCDR_countries</span><span class="p">,</span>
-    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ISO3&#39;</span><span class="p">,</span><span class="s1">&#39;Status&#39;</span><span class="p">],</span>
-    <span class="n">key_on</span> <span class="o">=</span> <span class="s1">&#39;feature.properties.iso_a3&#39;</span><span class="p">,</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'ISO3'</span><span class="p">,</span><span class="s1">'Status'</span><span class="p">],</span>
+    <span class="n">key_on</span> <span class="o">=</span> <span class="s1">'feature.properties.iso_a3'</span><span class="p">,</span>
     <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">bins</span><span class="p">],</span>
-    <span class="n">fill_color</span> <span class="o">=</span> <span class="s1">&#39;RdYlGn&#39;</span><span class="p">,</span>
+    <span class="n">fill_color</span> <span class="o">=</span> <span class="s1">'RdYlGn'</span><span class="p">,</span>
     <span class="n">fill_opacity</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
     <span class="n">line_opacity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="n">nan_fill_color</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
-    <span class="n">legend_name</span> <span class="o">=</span> <span class="s1">&#39;Countries covered&#39;</span><span class="p">,</span>
+    <span class="n">nan_fill_color</span> <span class="o">=</span> <span class="s2">"none"</span><span class="p">,</span>
+    <span class="n">legend_name</span> <span class="o">=</span> <span class="s1">'Countries covered'</span><span class="p">,</span>
     <span class="n">style_function</span><span class="o">=</span><span class="k">lambda</span> <span class="n">feature</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="n">step</span><span class="p">(</span><span class="n">country_dict</span><span class="p">[</span><span class="n">feature</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]),</span>
-        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">"fillColor"</span><span class="p">:</span> <span class="n">step</span><span class="p">(</span><span class="n">country_dict</span><span class="p">[</span><span class="n">feature</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]]),</span>
+        <span class="s2">"color"</span><span class="p">:</span> <span class="s2">"black"</span><span class="p">,</span>
+        <span class="s2">"weight"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">CCDR_map</span><span class="p">)</span>
 
 <span class="n">tooltip</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">GeoJson</span><span class="p">(</span>
     <span class="n">world_boundaries</span><span class="p">,</span>
-    <span class="n">tooltip</span><span class="o">=</span><span class="n">folium</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">GeoJsonTooltip</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;pop_est&#39;</span><span class="p">,</span> <span class="s1">&#39;economy&#39;</span><span class="p">,</span> <span class="s1">&#39;income_grp&#39;</span><span class="p">],</span>
-                                           <span class="n">aliases</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Country&#39;</span><span class="p">,</span> <span class="s1">&#39;Population&#39;</span><span class="p">,</span> <span class="s1">&#39;Economy&#39;</span><span class="p">,</span> <span class="s1">&#39;Income&#39;</span><span class="p">],</span>
+    <span class="n">tooltip</span><span class="o">=</span><span class="n">folium</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">GeoJsonTooltip</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'pop_est'</span><span class="p">,</span> <span class="s1">'economy'</span><span class="p">,</span> <span class="s1">'income_grp'</span><span class="p">],</span>
+                                           <span class="n">aliases</span><span class="o">=</span><span class="p">[</span><span class="s1">'Country'</span><span class="p">,</span> <span class="s1">'Population'</span><span class="p">,</span> <span class="s1">'Economy'</span><span class="p">,</span> <span class="s1">'Income'</span><span class="p">],</span>
                                            <span class="n">localize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                                 <span class="p">)</span>
 <span class="n">CCDR_map</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">tooltip</span><span class="p">)</span>
@@ -1668,9 +1668,9 @@ title="Print to PDF"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">branca</span>
 
-<span class="n">legend_html</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="n">legend_html</span> <span class="o">=</span> <span class="s1">'''</span>
 <span class="s1">{% macro html(this, kwargs) %}</span>
-<span class="s1">&lt;div style=&quot;</span>
+<span class="s1">&lt;div style="</span>
 <span class="s1">    position: fixed; </span>
 <span class="s1">    bottom: 25px;</span>
 <span class="s1">    left: 25px;</span>
@@ -1678,12 +1678,12 @@ title="Print to PDF"
 <span class="s1">    height: 120px;</span>
 <span class="s1">    z-index:9999;</span>
 <span class="s1">    font-size:14px;</span>
-<span class="s1">    &quot;&gt;</span>
-<span class="s1">    &lt;p&gt;&lt;a style=&quot;color:#91cf60;font-size:150%;margin-left:20px;&quot;&gt;&amp;#9632;&lt;/a&gt;&amp;emsp;Completed&lt;/p&gt;</span>
-<span class="s1">    &lt;p&gt;&lt;a style=&quot;color:#ffffbf;font-size:150%;margin-left:20px;&quot;&gt;&amp;#9632;&lt;/a&gt;&amp;emsp;Ongoing&lt;/p&gt;</span>
-<span class="s1">    &lt;p&gt;&lt;a style=&quot;color:#fc8d59;font-size:150%;margin-left:20px;&quot;&gt;&amp;#9632;&lt;/a&gt;&amp;emsp;Planned&lt;/p&gt;</span>
+<span class="s1">    "&gt;</span>
+<span class="s1">    &lt;p&gt;&lt;a style="color:#91cf60;font-size:150%;margin-left:20px;"&gt;&amp;#9632;&lt;/a&gt;&amp;emsp;Completed&lt;/p&gt;</span>
+<span class="s1">    &lt;p&gt;&lt;a style="color:#ffffbf;font-size:150%;margin-left:20px;"&gt;&amp;#9632;&lt;/a&gt;&amp;emsp;Ongoing&lt;/p&gt;</span>
+<span class="s1">    &lt;p&gt;&lt;a style="color:#fc8d59;font-size:150%;margin-left:20px;"&gt;&amp;#9632;&lt;/a&gt;&amp;emsp;Planned&lt;/p&gt;</span>
 <span class="s1">&lt;/div&gt;</span>
-<span class="s1">&lt;div style=&quot;</span>
+<span class="s1">&lt;div style="</span>
 <span class="s1">    position: fixed; </span>
 <span class="s1">    bottom: 25px;</span>
 <span class="s1">    left: 25px;</span>
@@ -1694,10 +1694,10 @@ title="Print to PDF"
 <span class="s1">    background-color: #ffffff;</span>
 
 <span class="s1">    opacity: 0.7;</span>
-<span class="s1">    &quot;&gt;</span>
+<span class="s1">    "&gt;</span>
 <span class="s1">&lt;/div&gt;</span>
 <span class="s1">{</span><span class="si">% e</span><span class="s1">ndmacro %}</span>
-<span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">'''</span>
 <span class="n">legend</span> <span class="o">=</span> <span class="n">branca</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">MacroElement</span><span class="p">()</span>
 <span class="n">legend</span><span class="o">.</span><span class="n">_template</span> <span class="o">=</span> <span class="n">branca</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">legend_html</span><span class="p">)</span>
 </pre></div>
@@ -1706,25 +1706,25 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CCDR_map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;cartodbpositron&quot;</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CCDR_map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">"cartodbpositron"</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
 
 <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 
 <span class="n">choropleth</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Choropleth</span><span class="p">(</span>
     <span class="n">geo_data</span> <span class="o">=</span> <span class="n">world_boundaries</span><span class="p">,</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Countries covered by CCDR-tools analytics&quot;</span><span class="p">,</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">"Countries covered by CCDR-tools analytics"</span><span class="p">,</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">CCDR_countries</span><span class="p">,</span>
-    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ISO3&#39;</span><span class="p">,</span><span class="s1">&#39;Status&#39;</span><span class="p">],</span>
-    <span class="n">key_on</span> <span class="o">=</span> <span class="s1">&#39;feature.properties.iso_a3&#39;</span><span class="p">,</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'ISO3'</span><span class="p">,</span><span class="s1">'Status'</span><span class="p">],</span>
+    <span class="n">key_on</span> <span class="o">=</span> <span class="s1">'feature.properties.iso_a3'</span><span class="p">,</span>
     <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">bins</span><span class="p">],</span>
-    <span class="n">fill_color</span> <span class="o">=</span> <span class="s1">&#39;RdYlGn&#39;</span><span class="p">,</span>
+    <span class="n">fill_color</span> <span class="o">=</span> <span class="s1">'RdYlGn'</span><span class="p">,</span>
     <span class="n">fill_opacity</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
     <span class="n">line_opacity</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
-    <span class="n">nan_fill_color</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+    <span class="n">nan_fill_color</span> <span class="o">=</span> <span class="s2">"none"</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">CCDR_map</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">choropleth</span><span class="o">.</span><span class="n">_children</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;color_map&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'color_map'</span><span class="p">):</span>
         <span class="k">del</span><span class="p">(</span><span class="n">choropleth</span><span class="o">.</span><span class="n">_children</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
 <span class="n">choropleth</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">CCDR_map</span><span class="p">)</span>      
@@ -1739,7 +1739,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">outfp</span> <span class="o">=</span> <span class="s2">&quot;../../docs/maps/CCDR_map.html&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">outfp</span> <span class="o">=</span> <span class="s2">"../../docs/maps/CCDR_map.html"</span>
 <span class="n">CCDR_map</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfp</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1861,7 +1861,7 @@ By <a href="https://matamadio.github.io/">Mattia Amadio</a>
   
   <div class="footer-item">
     <p class="last-updated">
-Last updated on Jul 29, 2026.<br>
+Last updated on Sep 16, 2026.<br>
 </p>
   </div>
   
