@@ -1,6 +1,6 @@
 # Importing the required packages
 import numpy as np
-from common import wb_to_region, tc_region_mapping
+from common import tc_region_mapping
 
 # Defining the damage functions
 
@@ -19,11 +19,41 @@ def FL_mortality_factor(x: np.array, wb_region: str = None):
 
 
 # Floods (river and coastal) over Built-Up areas
-def FL_damage_factor_builtup(x: np.array, wb_region: str):
-    """A polynomial fit to average damage across builtup land cover relative to water depth in meters.
+def FL_damage_factor_builtup(x: np.array, region: str):
+    """Damage across built-up land cover relative to water depth in meters, refit
+    directly against the raw depth-damage data points published in Huizinga et al.
+    (2017) - the coefficients below are NOT hand-interpolated, they come from a
+    nonlinear least-squares fit (scipy.optimize.curve_fit) of the standard 4-parameter
+    Huizinga logistic form a + (d-a)/(1+(x/c)**b) to that source data.
 
-    The sectors are commercial, industry, transport, infrastructure and residential.
-    Values are capped between 0 and 1
+    "Built-up" is modelled as a composite of the three sectors Huizinga et al. group
+    together as "buildings": Residential (70%), Commercial (15%), Industrial (15%).
+    This weighting is our own assumption (JRC provides no global split of built-up
+    area by building use) and can be revisited if better local data becomes
+    available. Where a region's data is missing one of these sectors (e.g. Africa
+    has no Commercial curve in the source), the remaining weights are renormalized
+    - Africa is effectively Residential 82.4% / Industrial 17.6%. Transport and
+    Infrastructure (roads) are intentionally excluded: Huizinga et al. treat those as
+    a separate asset class mapped from road networks, not from built-up/settlement
+    extent, so blending them in would double-count against a dedicated roads layer.
+
+    EUROPE is now its own bucket, fit from JRC's dedicated EUROPE composite curve,
+    for the EU-27 countries listed in common.eu_country_codes. GLOBAL (everyone else
+    in wb_to_region's 'Other'/ECA catch-alls - North America, Japan, Korea, Australia,
+    New Zealand, non-EU Europe) is refit as the mean of JRC's own EUROPE + NORTH
+    AMERICA + OCEANIA composite curves, rather than the ad hoc coefficients used
+    previously, which didn't match any curve in the source workbook.
+
+    Parameters
+    ----------
+    x : np.array
+        Flood depth in centimeters.
+    region : str
+        Final damage-function region bucket - 'AFRICA', 'ASIA', 'LAC', 'EUROPE' or
+        'GLOBAL' - as resolved by common.resolve_flood_region(country_iso3, wb_region).
+        This is NOT the raw World Bank region code.
+
+    Values are capped between 0 and 1.
 
     References
     ----------
@@ -32,24 +62,52 @@ def FL_damage_factor_builtup(x: np.array, wb_region: str):
     """
     x = (x/100).astype(np.float32)    # convert cm to m
     function_mapping = {
-        'AFRICA': lambda x: np.maximum(0.0, np.minimum(1.0, 1.246282 + (0.004404681 - 1.246282)/(1 + (x/1.888094)**1.245007))),
-        'ASIA': lambda x: np.maximum(0.0, np.minimum(1.0, 1.267385 + (0.002553797 - 1.267385)/(1 + (x/1.511393)**1.011526))),
-        'LAC': lambda x: np.maximum(0.0, np.minimum(1.0, 1.04578 + (0.001490579 - 1.04578)/(1 + (x/0.5619431)**1.509554))),
-        'GLOBAL': lambda x: np.maximum(0.0, np.minimum(1.0, 2.100049 + (-0.00003530885 - 2.100049)/(1 + (x/6.632485)**0.559315))),
+        'AFRICA': lambda x: np.maximum(0.0, np.minimum(1.0, 1.2671827203289083 + (0.00413364200087085 - 1.2671827203289083)/(1 + (x/2.057466891542489)**1.2883789088727349))),
+        'ASIA': lambda x: np.maximum(0.0, np.minimum(1.0, 1.2446026534606476 + (0.002065149335395301 - 1.2446026534606476)/(1 + (x/1.4347439516379064)**1.0323864071557256))),
+        'LAC': lambda x: np.maximum(0.0, np.minimum(1.0, 1.035618667757186 + (0.0008811294104793913 - 1.035618667757186)/(1 + (x/0.4894358954469605)**1.5496269301385341))),
+        'EUROPE': lambda x: np.maximum(0.0, np.minimum(1.0, 1.7088514404060207 + (0.0021048967984816642 - 1.7088514404060207)/(1 + (x/4.001115592872838)**0.9441309503291869))),
+        'GLOBAL': lambda x: np.maximum(0.0, np.minimum(1.0, 1.3581185158837237 + (0.050530835141520035 - 1.3581185158837237)/(1 + (x/1.9731251441067115)**0.9099528927976404))),
     }
-    # CRITICAL: Map wb_region to the actual region key first
-    region = wb_to_region.get(wb_region, 'GLOBAL')
-    damage_func = function_mapping.get(region)
-
-    # FIXED: Actually call the function instead of returning the function object
+    damage_func = function_mapping.get(region, function_mapping['GLOBAL'])
     result = damage_func(x)
     return result.astype(np.float32)
 
 
 # Floods (river and coastal) impact function over Agricultural areas
-def FL_damage_factor_agri(x: np.array, wb_region: str):
-    """A polynomial fit to average damage across agricultural land cover relative to water depth in meters.
+def FL_damage_factor_agri(x: np.array, region: str):
+    """Damage across agricultural land cover relative to water depth in meters,
+    refit directly against the raw depth-damage data points published in
+    Huizinga et al. (2017) via nonlinear least squares (scipy.optimize.curve_fit)
+    to the standard 4-parameter Huizinga logistic form a + (d-a)/(1+(x/c)**b).
     Values are capped between 0 and 1.
+
+    NOTE on AFRICA: the previous coefficient set was
+        1.006324 + (0.01417282 - 1.006324)/(1 + (x/8621.368)**1.675571)**2665027
+    Because ** binds tighter than /, the exponent 2665027 applied to the ENTIRE
+    denominator (not a term inside it), producing a near step-function: ~1.4%
+    damage at x=0 jumping to the 1.0 cap at any depth above ~0. The AFRICA
+    coefficients below are a fresh fit to the actual 9 published Africa/agriculture
+    data points (which genuinely do rise steeply, saturating near 1.0 by ~3m -
+    that part of the old shape wasn't wrong, just the broken exponent handling was).
+
+    NOTE on LAC: Huizinga et al. do not publish an agriculture curve for Latin
+    America & Caribbean at all (every LAC/agriculture cell in the source workbook
+    is blank). The previous LAC coefficients were therefore fabricated/interpolated
+    with no source data behind them. Per Huizinga et al.'s own stated methodology
+    ("if not feasible to develop a continent-specific function, Global is provided"),
+    LAC now falls back to the GLOBAL curve instead of using invented numbers.
+
+    EUROPE is now its own bucket (JRC does publish agriculture data for Europe),
+    used for the EU-27 countries listed in common.eu_country_codes.
+
+    Parameters
+    ----------
+    x : np.array
+        Flood depth in centimeters.
+    region : str
+        Final damage-function region bucket - 'AFRICA', 'ASIA', 'LAC', 'EUROPE' or
+        'GLOBAL' - as resolved by common.resolve_flood_region(country_iso3, wb_region).
+        This is NOT the raw World Bank region code.
 
     References
     ----------
@@ -58,13 +116,15 @@ def FL_damage_factor_agri(x: np.array, wb_region: str):
     """
     x = x/100  # convert cm to m
     function_mapping = {
-        'AFRICA': np.maximum(0.0, np.minimum(1.0, 1.006324 + (0.01417282 - 1.006324)/(1 + (x/8621.368)**1.675571)**2665027)),
-        'ASIA': np.maximum(0.0, np.minimum(1.0, (1.672909*x)/(3.917017+x))),
-        'LAC': np.maximum(0.0, np.minimum(1.0, 1.876076 + (0.01855393 - 1.876076)/(1 + (x/5.08262)**0.7629432))),
-        'GLOBAL': np.maximum(0.0, np.minimum(1.0, 1.167022 + (-0.002602531 - 1.167022)/(1 + (x/1.398796)**1.246833))),
+        'AFRICA': lambda x: np.maximum(0.0, np.minimum(1.0, 1.0108063696349077 + (0.001115088844059405 - 1.0108063696349077)/(1 + (x/0.8299357296842107)**2.8611757218195413))),
+        'ASIA': lambda x: np.maximum(0.0, np.minimum(1.0, 1.0810635207406762 + (0.00016732761699327043 - 1.0810635207406762)/(1 + (x/1.5324656322983508)**1.885982369925525))),
+        'EUROPE': lambda x: np.maximum(0.0, np.minimum(1.0, 1.170778235039068 + (0.0 - 1.170778235039068)/(1 + (x/1.2001969915332753)**1.1556264599993142))),
+        # LAC: no source data - falls back to the GLOBAL curve (see note above).
+        'LAC': lambda x: np.maximum(0.0, np.minimum(1.0, 1.1651603167369582 + (0.0 - 1.1651603167369582)/(1 + (x/1.4133544121779626)**1.2597438701651484))),
+        'GLOBAL': lambda x: np.maximum(0.0, np.minimum(1.0, 1.1651603167369582 + (0.0 - 1.1651603167369582)/(1 + (x/1.4133544121779626)**1.2597438701651484))),
     }
-    region = wb_to_region.get(wb_region, 'GLOBAL')
-    return function_mapping.get(region)
+    damage_func = function_mapping.get(region, function_mapping['GLOBAL'])
+    return damage_func(x)
 
 
 # Tropical Cyclone - Regional equations

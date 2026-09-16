@@ -1,6 +1,7 @@
 # This file includes common configuration elements used by the script.
 
 import os
+import re
 from dotenv import dotenv_values, find_dotenv
 
 config = dotenv_values(find_dotenv())
@@ -47,10 +48,38 @@ wb_to_region = {
     'MENA': 'AFRICA',       # Middle East and North Africa
     'EAP': 'ASIA',          # East Asia and Pacific
     'SAR': 'ASIA',          # South Asia
-    'ECA': 'ASIA',          # East Europe and Central Asia
+    'ECA': 'ASIA',          # East Europe and Central Asia - see eu_country_codes below:
+                            # EU member states within ECA (e.g. Poland, Romania) are
+                            # pulled out to their own EUROPE bucket by resolve_flood_region;
+                            # only non-EU ECA countries (Turkey, Western Balkans, Central
+                            # Asia, etc.) actually fall through to ASIA here.
     'LCR': 'LAC',           # Latin America and Caribbean
-    'Other': 'GLOBAL',      # North America, Europe, Japan, Korea, Australia and New Zealand
+    'Other': 'GLOBAL',      # North America, Japan, Korea, Australia and New Zealand -
+                            # EU member states in 'Other' (e.g. Germany, France) are also
+                            # pulled out to EUROPE by resolve_flood_region.
 }
+
+# EU-27 member states (ISO3). Used to give EU countries a dedicated JRC EUROPE flood
+# damage curve instead of whatever their WB_REGION happens to bucket them into - EU
+# countries are split today between ECA (mapped to ASIA) and 'Other' (mapped to
+# GLOBAL), neither of which reflects JRC's own Europe-specific curve.
+eu_country_codes = {
+    'AUT', 'BEL', 'BGR', 'HRV', 'CYP', 'CZE', 'DNK', 'EST', 'FIN', 'FRA',
+    'DEU', 'GRC', 'HUN', 'IRL', 'ITA', 'LVA', 'LTU', 'LUX', 'MLT', 'NLD',
+    'POL', 'PRT', 'ROU', 'SVK', 'SVN', 'ESP', 'SWE',
+}
+
+
+def resolve_flood_region(country_iso3: str, wb_region: str) -> str:
+    """Resolve the flood damage-function region bucket for a country.
+
+    EU membership (by ISO3) takes priority over the World Bank region code,
+    since WB_REGION alone can't distinguish EU from non-EU countries within
+    ECA or 'Other'. Falls back to the wb_to_region mapping otherwise.
+    """
+    if country_iso3 in eu_country_codes:
+        return 'EUROPE'
+    return wb_to_region.get(wb_region, 'GLOBAL')
 
 # Tropical cyclone regions list with constituent countries
 tc_region_list = {
@@ -93,3 +122,35 @@ tc_region_mapping = {
     for region, countries in tc_region_list.items()
     for country in countries
 }
+
+
+def list_boundary_layers(file_path):
+    """Return the list of layer names in a vector file (e.g. a multi-layer
+    GeoPackage), or [] if the format doesn't support multiple layers or the
+    file can't be introspected (e.g. a plain shapefile, or a path that
+    doesn't exist yet while the user is still typing it in the GUI).
+
+    Shared by runAnalysis.py, custom_hazard_analysis.py, and the GUI custom-
+    boundaries file pickers - a GPKG with multiple layers previously had
+    gpd.read_file() silently pick whichever layer GDAL considers "default",
+    ignoring the ADM level the user actually selected (confirmed against a
+    real Fiji file: a 1417-feature ADM4 layer got loaded instead of the
+    intended 15-feature ADM2 layer in the same file).
+    """
+    import geopandas as gpd
+    try:
+        return gpd.list_layers(file_path)['name'].tolist()
+    except Exception:
+        return []
+
+
+def match_adm_level_layer(layers, adm_level):
+    """Return the single layer name matching "ADM{adm_level}" as a whole
+    token (e.g. 'ADM2', 'ADM02'), or None if there isn't exactly one such
+    match. Used as a convenience default when picking among a multi-layer
+    file's layers - never picks silently when the match is ambiguous (e.g.
+    both 'FJI_ADM4' and 'FJI_ADM4_fix' match 'ADM4')."""
+    if adm_level is None:
+        return None
+    matches = [lyr for lyr in layers if re.search(rf'adm0*{adm_level}(?!\d)', lyr, re.IGNORECASE)]
+    return matches[0] if len(matches) == 1 else None

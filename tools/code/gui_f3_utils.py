@@ -58,7 +58,10 @@ def on_adm_level_change(change):
 
 
 def plot_geospatial_boundaries(gdf, crs: str = "EPSG:4326"):
-    gdf = gdf.set_crs(crs)  # Assign WGS 84 CRS by default
+    if gdf.crs is None:
+        gdf = gdf.set_crs(crs)  # No CRS defined - assume WGS 84
+    elif str(gdf.crs) != str(crs):
+        gdf = gdf.to_crs(crs)  # Has a different real CRS - reproject
     m = folium.Map()
     folium.GeoJson(
         gdf,
@@ -103,6 +106,19 @@ custom_boundaries_name_field = widgets.Dropdown(
 custom_boundaries_name_field_id = f'custom-boundaries-name-field-{id(custom_boundaries_name_field)}'
 custom_boundaries_name_field.add_class(custom_boundaries_name_field_id)
 
+# Shown/enabled only when the selected file has more than one layer (e.g. a
+# GeoPackage bundling several ADM levels) - see
+# notebook_utils.update_custom_boundaries_layer_field.
+custom_boundaries_layer_field = widgets.Dropdown(
+    options=[],
+    value=None,
+    description='Layer:',
+    disabled=True,
+    layout=widgets.Layout(width='250px')
+)
+custom_boundaries_layer_field_id = f'custom-boundaries-layer-field-{id(custom_boundaries_layer_field)}'
+custom_boundaries_layer_field.add_class(custom_boundaries_layer_field_id)
+
 select_file_button = notebook_utils.select_file_button
 
 
@@ -121,16 +137,22 @@ def update_custom_boundaries_visibility(*args):
     custom_boundaries_name_field.disabled = not is_custom
     select_file_button.disabled = not is_custom
     adm_level_selector.disabled = is_custom
+    if not is_custom:
+        custom_boundaries_layer_field.disabled = True
     update_preview_map()
 
 
 custom_boundaries_radio.observe(update_custom_boundaries_visibility, 'value')
+custom_boundaries_layer_field.observe(lambda change: update_preview_map(), 'value')
 
 
 def update_preview_map(*args):
     if custom_boundaries_radio.value == 'Custom boundaries':
         try:
-            gdf = gpd.read_file(custom_boundaries_file.value)
+            selected_layer = notebook_utils.update_custom_boundaries_layer_field(
+                custom_boundaries_file.value, adm_level_selector.value, custom_boundaries_layer_field
+            )
+            gdf = gpd.read_file(custom_boundaries_file.value, layer=selected_layer)
             plot_geospatial_boundaries(gdf)
             notebook_utils.set_default_values(gdf, custom_boundaries_id_field, custom_boundaries_name_field)
         except Exception as e:
@@ -264,6 +286,7 @@ def preview_impact_func(*args):
 
         # Get the World Bank region from the countries.csv file
         wb_region = df.loc[df['ISO_A3'] == iso_a3, 'WB_REGION'].values[0]
+        flood_region = common.resolve_flood_region(iso_a3, wb_region)
 
         if selected_exposures:
             steps = np.arange(0, 6, 0.1)
@@ -273,9 +296,9 @@ def preview_impact_func(*args):
                 if exposure == 'POP':
                     damage_factor = lambda x: FL_mortality_factor(x*100)
                 elif exposure == 'BU':
-                    damage_factor = lambda x: FL_damage_factor_builtup(x*100, wb_region)
+                    damage_factor = lambda x: FL_damage_factor_builtup(x*100, flood_region)
                 elif exposure == 'AGR':
-                    damage_factor = lambda x: FL_damage_factor_agri(x*100, wb_region)
+                    damage_factor = lambda x: FL_damage_factor_agri(x*100, flood_region)
                 else:
                     print(f"Unknown exposure category: {exposure}")
                     continue
@@ -381,7 +404,8 @@ approach_selector.observe(update_preview, names='value')
 country_boundaries = notebook_utils.create_country_boundaries(
     country_selector, adm_level_selector, custom_boundaries_radio,
     select_file_button, custom_boundaries_file,
-    custom_boundaries_id_field, custom_boundaries_name_field
+    custom_boundaries_id_field, custom_boundaries_name_field,
+    custom_boundaries_layer_field
 )
 
 hazard_info = notebook_utils.create_hazard_info(
@@ -493,10 +517,15 @@ def run_analysis_script(b):
                 custom_boundaries_file_path = custom_boundaries_file.value
                 custom_code_field = custom_boundaries_id_field.value
                 custom_name_field = custom_boundaries_name_field.value
+                custom_boundaries_layer = (
+                    custom_boundaries_layer_field.value
+                    if not custom_boundaries_layer_field.disabled else None
+                )
             else:
                 custom_boundaries_file_path = None
                 custom_code_field = None
                 custom_name_field = None
+                custom_boundaries_layer = None
 
             start_time = time.perf_counter()
 
@@ -528,7 +557,8 @@ def run_analysis_script(b):
                     exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges,
                     save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
                     custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
-                    custom_name_field=custom_name_field, wb_region=wb_region)
+                    custom_name_field=custom_name_field, wb_region=wb_region,
+                    custom_boundaries_layer=custom_boundaries_layer)
 
                 if result_df is None:
                     print("Encountered Exception! Please fix issue above.")

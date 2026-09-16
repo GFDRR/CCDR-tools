@@ -11,7 +11,19 @@ dependencies:
   
   # Data manipulation and analysis
   - pandas
-  - numpy
+  # Pinned exactly (not left open-ended): this environment previously had an
+  # unpinned `numpy` silently drift from whatever 1.x version rasterio/gdal/
+  # fiona were built against up to 2.2.6, seven months later and unnoticed,
+  # via some unrelated install. That drift was investigated as a suspect in a
+  # native crash (a NumPy 1.x-built C extension reading/writing NumPy 2.x
+  # array structures is undefined behavior) but was ultimately ruled out - the
+  # real cause was an unrelated lxml/libxml2 bug (see CHANGES_1.0.md), and
+  # 2.2.6 has otherwise run fine against this rasterio/gdal/fiona build. Kept
+  # pinned to the exact version in active use specifically so a future
+  # silent drift like this one can't happen again unnoticed; bump deliberately
+  # (and re-verify rasterio/gdal/fiona compatibility) rather than dropping the
+  # pin.
+  - numpy=2.2.6
   
   # Geospatial libraries
   - geopandas

@@ -126,7 +126,10 @@ def on_adm_level_change(change):
 
 
 def plot_geospatial_boundaries(gdf, crs: str = "EPSG:4326"):
-    gdf = gdf.set_crs(crs)  # Assign WGS 84 CRS by default
+    if gdf.crs is None:
+        gdf = gdf.set_crs(crs)  # No CRS defined - assume WGS 84
+    elif str(gdf.crs) != str(crs):
+        gdf = gdf.to_crs(crs)  # Has a different real CRS - reproject
     m = folium.Map()
 
     # Add the wind speed layer first
@@ -234,6 +237,19 @@ custom_boundaries_name_field = widgets.Dropdown(
 custom_boundaries_name_field_id = f'custom-boundaries-name-field-{id(custom_boundaries_name_field)}'
 custom_boundaries_name_field.add_class(custom_boundaries_name_field_id)
 
+# Shown/enabled only when the selected file has more than one layer (e.g. a
+# GeoPackage bundling several ADM levels) - see
+# notebook_utils.update_custom_boundaries_layer_field.
+custom_boundaries_layer_field = widgets.Dropdown(
+    options=[],
+    value=None,
+    description='Layer:',
+    disabled=True,
+    layout=widgets.Layout(width='250px')
+)
+custom_boundaries_layer_field_id = f'custom-boundaries-layer-field-{id(custom_boundaries_layer_field)}'
+custom_boundaries_layer_field.add_class(custom_boundaries_layer_field_id)
+
 select_file_button = notebook_utils.select_file_button
 
 # Custom ADM Functions
@@ -250,14 +266,20 @@ def update_custom_boundaries_visibility(*args):
     custom_boundaries_name_field.disabled = not is_custom
     select_file_button.disabled = not is_custom
     adm_level_selector.disabled = is_custom
+    if not is_custom:
+        custom_boundaries_layer_field.disabled = True
     update_preview_map()
 
 custom_boundaries_radio.observe(update_custom_boundaries_visibility, 'value')
+custom_boundaries_layer_field.observe(lambda change: update_preview_map(), 'value')
 
 def update_preview_map(*args):
     if custom_boundaries_radio.value == 'Custom boundaries':
         try:
-            gdf = gpd.read_file(custom_boundaries_file.value)
+            selected_layer = notebook_utils.update_custom_boundaries_layer_field(
+                custom_boundaries_file.value, adm_level_selector.value, custom_boundaries_layer_field
+            )
+            gdf = gpd.read_file(custom_boundaries_file.value, layer=selected_layer)
             plot_geospatial_boundaries(gdf)
             notebook_utils.set_default_values(gdf, custom_boundaries_id_field, custom_boundaries_name_field)
         except Exception as e:
@@ -319,7 +341,19 @@ period_selector.observe(update_scenario_visibility, 'value')
 update_scenario_visibility()
 
 # Exposure
+# Tropical cyclone wind-damage functions are only defined for built-up (BU)
+# stock (TC_damage_factor_builtup, from Eberenz et al. 2021) - there is no
+# validated wind-damage curve for population or agriculture in this codebase.
+# Selecting POP/AGR here previously crashed in "Function" mode (a damage_factor
+# arity bug, since fixed) and would otherwise silently pass raw wind speed
+# through as if it were a damage fraction - not a meaningful result either
+# way. Restrict this shared widget to Built-up only for the TC tool
+# specifically; other notebooks (GUI.ipynb, etc.) get their own unrestricted
+# widget instance since each notebook runs in its own kernel/process.
 exposure_selector = notebook_utils.exposure_selector
+exposure_selector.options = [('Built-up', 'BU')]
+exposure_selector.value = ('BU',)
+exposure_selector.disabled = True
 exposure_selector_id = f'exposure-selector-{id(exposure_selector)}'
 exposure_selector.add_class(exposure_selector_id)
 
@@ -479,7 +513,8 @@ approach_selector.observe(update_preview, names='value')
 country_boundaries = notebook_utils.create_country_boundaries(
     country_selector, adm_level_selector, custom_boundaries_radio,
     select_file_button, custom_boundaries_file,
-    custom_boundaries_id_field, custom_boundaries_name_field
+    custom_boundaries_id_field, custom_boundaries_name_field,
+    custom_boundaries_layer_field
 )
 
 hazard_info = notebook_utils.create_hazard_info(
@@ -589,10 +624,15 @@ def run_analysis_script(b):
                 custom_boundaries_file_path = custom_boundaries_file.value
                 custom_code_field = custom_boundaries_id_field.value
                 custom_name_field = custom_boundaries_name_field.value
+                custom_boundaries_layer = (
+                    custom_boundaries_layer_field.value
+                    if not custom_boundaries_layer_field.disabled else None
+                )
             else:
                 custom_boundaries_file_path = None
                 custom_code_field = None
                 custom_name_field = None
+                custom_boundaries_layer = None
         
             start_time = time.perf_counter()
 
@@ -620,17 +660,18 @@ def run_analysis_script(b):
                 exp_nam = exp_nam_list[i]
                 print(f"Running analysis for {exp_cat}...")
                 result_df = run_analysis(country, haz_type, haz_cat, period, scenario, return_periods, min_haz_slider,
-                                exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges, 
+                                exp_cat, exp_nam, exp_year, adm_level, analysis_type, class_edges,
                                 save_check_raster, n_cores, use_custom_boundaries=use_custom_boundaries,
                                 custom_boundaries_file_path=custom_boundaries_file_path, custom_code_field=custom_code_field,
-                                custom_name_field=custom_name_field, wb_region=wb_region)
+                                custom_name_field=custom_name_field, wb_region=wb_region,
+                                custom_boundaries_layer=custom_boundaries_layer)
                 
                 if result_df is None:
                     print("Encountered Exception! Please fix issue above.")
                     return
-                
+
                 sheet_name = prepare_sheet_name(analysis_type, return_periods, exp_cat)
-                            
+
                 saving_excel_and_gpgk_file(result_df, excel_file, sheet_name, gpkg_file, exp_cat)
 
                 # Create summary DataFrame
@@ -649,24 +690,24 @@ def run_analysis_script(b):
                         miny = min(miny, bounds[1])
                         maxx = max(maxx, bounds[2])
                         maxy = max(maxy, bounds[3])
-                            
+
             # Combine all summary DataFrames
             if summary_dfs:
                 combined_summary = prepare_and_save_summary_df(summary_dfs, exp_cat_list, excel_file, return_file=True)
-    
+
                 # Add custom exposure information
                 notebook_utils.write_combined_summary_to_excel(
                     excel_file, combined_summary, exp_cat_list,
                     custom_exposure_radio, custom_exposure_container
                 )
-                
+
             # Generate charts only for Function approach
             if analysis_type == "Function" and preview_chk.value:
                 colors = {'POP': 'blue', 'BU': 'orange', 'AGR': 'green'}
                 title_prefix = "Wind "
-                charts = [notebook_utils.create_eai_chart(title_prefix, combined_summary, exp_cat, period, scenario, colors[exp_cat]) 
+                charts = [notebook_utils.create_eai_chart(title_prefix, combined_summary, exp_cat, period, scenario, colors[exp_cat])
                         for exp_cat in exp_cat_list]
-                
+
                 # Export charts if requested
                 if notebook_utils.export_charts_chk.value and charts:
                     notebook_utils.export_charts(
@@ -707,7 +748,7 @@ def run_analysis_script(b):
 
                 # Update the map_widget with the new map
                 map_widget.value = m._repr_html_()
-                    
+
                 with chart_output:
                     clear_output(wait=True)
                     # Display charts only once

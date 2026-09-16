@@ -517,13 +517,22 @@ def process_landslide_hazard(adm_units, hazard_key, value_threshold, area_thresh
                 score = config['remap'].get(max_index, 0)
                 hazard_scores.append(score)
             else:
-                max_index_values.append(0)
-                hazard_scores.append(0)
+                # No valid pixels in this unit - treat the same as "index 1 /
+                # not affected" (max_index=1) rather than hardcoding score=0.
+                # Previously this appended 0 directly, bypassing config['remap']
+                # entirely (0 isn't even a key in it) and giving a "no data"
+                # unit a different, higher score than a unit that legitimately
+                # has data but no class meets the area threshold (which
+                # correctly falls through to max_index=1 -> score=-1 above).
+                max_index_values.append(1)
+                hazard_scores.append(config['remap'].get(1, -1))
                 for index_class in [1, 2, 3, 4, 5]:
                     index_area_stats[index_class].append(0)
         else:
-            max_index_values.append(0)
-            hazard_scores.append(0)
+            # Same "no data" case as above (missing/failed zonal stats for this
+            # unit) - keep consistent with the branch above instead of scoring 0.
+            max_index_values.append(1)
+            hazard_scores.append(config['remap'].get(1, -1))
             for index_class in [1, 2, 3, 4, 5]:
                 index_area_stats[index_class].append(0)
 
@@ -636,14 +645,17 @@ def process_volcano_hazard(adm_units, hazard_key, value_threshold, area_threshol
         if max_vei == 0:
             hazard_scores.append(-1)
         else:
-            # Remap VEI to hazard score
+            # Remap VEI to hazard score. Note: this previously forced any
+            # range mapped to -1 (i.e. VEI < 2, per HAZARD_CONFIG['volcano']
+            # ['remap']['ranges'] = [(0, 2, -1), ...]) up to 0 instead of
+            # passing -1 through, so a unit whose only qualifying buffer was
+            # VEI 1 (meeting the area threshold) was scored 0 ("no hazard, low
+            # tier") rather than -1 ("not affected"), inflating its apparent
+            # risk relative to the documented scoring spec.
             score = 0
             for min_val, max_val, hazard_score in config['remap']['ranges']:
                 if min_val <= max_vei < max_val:
-                    if hazard_score == -1:  # No hazard
-                        score = 0
-                    else:
-                        score = hazard_score
+                    score = hazard_score
                     break
 
             hazard_scores.append(score)
@@ -1128,6 +1140,13 @@ def process_hazard(adm_units, hazard_key, value_threshold, area_threshold_pct):
         return process_extreme_heat_hazard(adm_units, hazard_key, value_threshold, area_threshold_pct)
     elif config['type'] == 'raster_rp_thresholds':
         return process_rp_threshold_hazard(adm_units, hazard_key, value_threshold, area_threshold_pct)
+    elif config['type'] == 'raster_tsunami':
+        # Previously missing: tsunami's config type ('raster_tsunami') had no
+        # branch here and fell through to "Unknown hazard type" -> None. This
+        # was masked because the notebook UI special-cases tsunami before ever
+        # calling process_hazard(), but any other caller (manual scripts, a
+        # future refactor) would get a silent None instead of a result.
+        return process_tsunami_hazard(adm_units, hazard_key, value_threshold, area_threshold_pct)
     else:
         print(f"Unknown hazard type: {config['type']}")
         return None

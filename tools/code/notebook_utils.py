@@ -278,9 +278,10 @@ def create_row_box(index, delete_button):
 def create_country_boundaries(
     country_selector, adm_level_selector, custom_boundaries_radio,
     select_file_button, custom_boundaries_file,
-    custom_boundaries_id_field, custom_boundaries_name_field
+    custom_boundaries_id_field, custom_boundaries_name_field,
+    custom_boundaries_layer_field=None
 ):
-    return VBox([
+    children = [
         Label("Country:"),
         country_selector,
         Label("Administrative Level:"),
@@ -289,9 +290,55 @@ def create_country_boundaries(
         custom_boundaries_radio,
         select_file_button,
         custom_boundaries_file,
+    ]
+    if custom_boundaries_layer_field is not None:
+        # Only relevant (and only shown/enabled) when the selected file has
+        # more than one layer - e.g. a GeoPackage bundling several ADM
+        # levels. See update_custom_boundaries_layer_field for how it's
+        # populated.
+        children.append(custom_boundaries_layer_field)
+    children += [
         custom_boundaries_id_field,
         custom_boundaries_name_field
-    ])
+    ]
+    return VBox(children)
+
+
+def update_custom_boundaries_layer_field(file_path, adm_level, custom_boundaries_layer_field):
+    """Populate/show custom_boundaries_layer_field when the selected custom
+    boundaries file has more than one layer (e.g. a GeoPackage bundling
+    several ADM levels), and pick a convenience default via
+    common.match_adm_level_layer - the user can still override it before
+    running. Returns the layer name to actually read the file with (None
+    means "let geopandas pick its own default", i.e. a single-layer file).
+
+    Added after a real bug: gpd.read_file() with no layer= on a multi-layer
+    file silently picked whichever layer GDAL considers "default", loading a
+    1417-feature ADM4 layer when the user had selected ADM level 2 and the
+    same file had its own 15-feature ADM2 layer.
+
+    Safe to call on every preview refresh (including one triggered by the
+    user changing the layer dropdown itself): the auto-matched default is
+    only (re-)applied when the file path has actually changed, or the
+    dropdown's current value is no longer one of the file's layers - a
+    manual layer choice for the same file is never silently overwritten.
+    """
+    import common
+    layers = common.list_boundary_layers(file_path) if file_path else []
+    is_new_file = getattr(custom_boundaries_layer_field, '_layer_field_file_path', None) != file_path
+    custom_boundaries_layer_field._layer_field_file_path = file_path
+
+    if len(layers) > 1:
+        custom_boundaries_layer_field.options = layers
+        custom_boundaries_layer_field.disabled = False
+        if is_new_file or custom_boundaries_layer_field.value not in layers:
+            default_layer = common.match_adm_level_layer(layers, adm_level)
+            custom_boundaries_layer_field.value = default_layer if default_layer else layers[0]
+        return custom_boundaries_layer_field.value
+    else:
+        custom_boundaries_layer_field.options = []
+        custom_boundaries_layer_field.disabled = True
+        return layers[0] if layers else None
 
 
 def create_hazard_info(
@@ -331,7 +378,10 @@ def create_vulnerability_approach(approach_selector, approach_box):
 
 
 def export_charts(output_dir: str, country: str, haz_cat: str, period: str, scenario: str,
-                  charts: dict, exp_cat_list: list[str]):
+                  charts: list, exp_cat_list: list[str]):
+    # NOTE: `charts` is a list of matplotlib Figures in index-order matching
+    # exp_cat_list (see call sites), not a dict - the previous `dict` type hint
+    # was misleading. zip() over a list iterates its elements as intended.
     chart_dir = os.path.join(output_dir, 'charts')
     os.makedirs(chart_dir, exist_ok=True)
     base_file_name = f"{country}_{haz_cat}_{period}"
@@ -444,14 +494,18 @@ def write_combined_summary_to_excel(
     excel_file: str, combined_summary, exp_cat_list,
     custom_exposure_radio, custom_exposure_container
 ):
-    excel_writer = pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace')
-    row_offset = len(combined_summary) + 4  # Start two rows below the table
-    for i, exp_cat in enumerate(exp_cat_list):
-        if custom_exposure_radio.value == 'Custom exposure':
-            custom_name = custom_exposure_container.children[i].value
-            if custom_name:
-                excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
-                row_offset += 1
+    # Previously this ExcelWriter was never closed (no `with` block, no explicit
+    # .close()), so the openpyxl workbook changes - the "Custom exposure layer
+    # for ..." annotations below - were never flushed to disk and silently
+    # dropped from the saved file.
+    with pd.ExcelWriter(excel_file, engine='openpyxl', mode='a', if_sheet_exists='replace') as excel_writer:
+        row_offset = len(combined_summary) + 4  # Start two rows below the table
+        for i, exp_cat in enumerate(exp_cat_list):
+            if custom_exposure_radio.value == 'Custom exposure':
+                custom_name = custom_exposure_container.children[i].value
+                if custom_name:
+                    excel_writer.sheets['Summary'].cell(row=row_offset, column=1, value=f"Custom exposure layer for {exp_cat}: {custom_name}")
+                    row_offset += 1
 
 
 preview_chk = Checkbox(

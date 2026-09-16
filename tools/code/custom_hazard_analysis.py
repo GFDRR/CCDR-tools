@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 import rasterio
+import rioxarray as rxr
 from rasterio.warp import Resampling, calculate_default_transform, reproject
 from rasterstats import zonal_stats
 from functools import partial
@@ -35,7 +36,8 @@ def run_analysis_with_custom_hazard(
     # Custom hazard specific parameters
     hazard_files, custom_damage_func,
     zonal_stats_type='sum',
-    user_nodata=None
+    user_nodata=None,
+    custom_boundaries_layer=None
 ):
     """
     Optimized function to run analysis using custom hazard raster files.
@@ -67,6 +69,12 @@ def run_analysis_with_custom_hazard(
     zonal_stats_type : which statistic to use for zonal calculations ('sum', 'mean', or 'max')
     """
     try:
+        # The probability weighting below (prob_RPs_LB/UB via -np.diff) assumes
+        # return_periods is sorted ascending; an out-of-order list silently
+        # produces negative probability bins that corrupt EAI/EAE. hazard_files
+        # is keyed by RP value, so sorting here doesn't affect file lookups.
+        return_periods = sorted(return_periods)
+
         # Create a custom hazard folder if needed
         custom_haz_folder = os.path.join(DATA_DIR, "HZD", "CUSTOM", haz_cat)
         os.makedirs(custom_haz_folder, exist_ok=True)
@@ -94,7 +102,27 @@ def run_analysis_with_custom_hazard(
         # Fetch the ADM data
         if use_custom_boundaries:
             print(f"Using custom boundaries from file: {custom_boundaries_file_path}")
-            adm_data = gpd.read_file(custom_boundaries_file_path)
+            # See runAnalysis.py's run_analysis for why this matters: a multi-
+            # layer file silently picked whichever layer GDAL considers
+            # "default", ignoring the selected ADM level entirely.
+            selected_layer = custom_boundaries_layer
+            if selected_layer is None:
+                available_layers = common.list_boundary_layers(custom_boundaries_file_path)
+                if len(available_layers) > 1:
+                    selected_layer = common.match_adm_level_layer(available_layers, adm_level)
+                    if selected_layer is None:
+                        raise ValueError(
+                            f"'{custom_boundaries_file_path}' contains multiple layers "
+                            f"({available_layers}) and none (or more than one) "
+                            f"unambiguously matches ADM level {adm_level}. Select the "
+                            f"intended layer explicitly (the GUI's layer dropdown), or "
+                            f"rename it to include 'ADM{adm_level}' so it can be "
+                            f"identified automatically."
+                        )
+                    print(f"Multiple layers found in {custom_boundaries_file_path}: "
+                          f"{available_layers} - using '{selected_layer}' to match "
+                          f"the selected ADM level {adm_level}.")
+            adm_data = gpd.read_file(custom_boundaries_file_path, layer=selected_layer)
             code_field = custom_code_field
             name_field = custom_name_field
             all_adm_codes = [code_field]
@@ -138,6 +166,27 @@ def run_analysis_with_custom_hazard(
             'nodata': exp_nodata,
             'meta': exp_meta
         }
+
+        # Administrative boundaries must share a CRS with the exposure raster
+        # for zonal stats to mean anything - rasterstats reads raw vector
+        # coordinates directly against the raster's own affine transform, it
+        # does not reproject on your behalf. Every zonal_stats call below
+        # (the exposure total here, and the per-RP class/affected/impact
+        # rasters in process_return_period_optimized, which are all written
+        # out using exp_metadata['transform']/['crs']) ultimately runs
+        # against rasters in exp_crs, so reconciling adm_data once here
+        # covers every call site. Left unchecked, a mismatch (e.g. custom
+        # boundaries in one CRS vs a custom exposure raster in another)
+        # silently produces zero overlap everywhere, with no error.
+        if adm_data.crs is None:
+            print(f"WARNING: administrative boundaries have no CRS defined - "
+                  f"assuming their coordinates already match the exposure "
+                  f"raster's CRS ({exp_crs}). If exposure/impact totals come "
+                  f"out zero, check this first.")
+        elif adm_data.crs != exp_crs:
+            print(f"Reprojecting administrative boundaries from {adm_data.crs} "
+                  f"to match the exposure raster's CRS ({exp_crs})...")
+            adm_data = adm_data.to_crs(exp_crs)
 
         # Create a memory-mapped temporary file for the exposure data to share between processes
         print("Creating memory-mapped exposure data for shared access...")
@@ -414,31 +463,33 @@ def process_return_period_optimized(rp_file_tuple, **kwargs):
         # IMPROVEMENT #1: Preprocess hazard raster to match exposure grid
         reprojected_hazard = preprocess_hazard_raster(hazard_file, exp_metadata, process_temp_dir)
 
-        # Load hazard data once
-        with rasterio.open(reprojected_hazard) as src:
-            haz_array = src.read(1)
-            _ = src.transform
-            haz_nodata = src.nodata
+        # Load hazard data using rioxarray (automatically handles nodata from metadata)
+        haz_data = rxr.open_rasterio(reprojected_hazard)[0].astype('float32')
 
-            # Use user-specified nodata if provided
-            user_nodata = kwargs.get('user_nodata')
-            if user_nodata is not None:
-                # Handle single value or list of values
-                if isinstance(user_nodata, list):
-                    print(f"Excluding nodata value(s) from calculations for RP {rp}: {user_nodata}")
-                    # Exclude all nodata values by converting them to NaN
-                    for nd_val in user_nodata:
-                        haz_array = np.where(haz_array == nd_val, np.nan, haz_array)
-                else:
-                    haz_nodata = user_nodata
-                    print(f"Excluding nodata value from calculations for RP {rp}: {haz_nodata}")
-                    haz_array = np.where(haz_array == haz_nodata, np.nan, haz_array)
-            elif haz_nodata is not None:
-                # Exclude metadata nodata by converting to NaN
-                haz_array = np.where(haz_array == haz_nodata, np.nan, haz_array)
+        # User-specified nodata values take precedence over metadata
+        user_nodata = kwargs.get('user_nodata')
+        if user_nodata is not None:
+            # Handle single value or list of values
+            if isinstance(user_nodata, list):
+                print(f"Applying user-specified nodata value(s) for RP {rp}: {user_nodata}")
+                # Exclude all user-specified nodata values by converting them to NaN
+                for nd_val in user_nodata:
+                    haz_data = haz_data.where(haz_data != nd_val, np.nan)
+            else:
+                print(f"Applying user-specified nodata value for RP {rp}: {user_nodata}")
+                haz_data = haz_data.where(haz_data != user_nodata, np.nan)
+        else:
+            # rioxarray automatically handles nodata from metadata
+            # Just inform user that metadata nodata is being used
+            with rasterio.open(reprojected_hazard) as src:
+                if src.nodata is not None:
+                    print(f"Using nodata value from raster metadata for RP {rp}: {src.nodata}")
 
-            # Apply minimum threshold
-            haz_array = np.where(haz_array <= min_haz_threshold, np.nan, haz_array)
+        # Convert to numpy array for processing
+        haz_array = haz_data.data
+
+        # Apply minimum threshold
+        haz_array = np.where(haz_array <= min_haz_threshold, np.nan, haz_array)
 
         # Create result dataframe
         result_df = pd.DataFrame(index=adm_data.index)
@@ -461,15 +512,16 @@ def process_return_period_optimized(rp_file_tuple, **kwargs):
         # Process differently based on analysis approach
         if analysis_type == "Classes":
             # For classes approach
-            # Create a classified array
-            bin_idx = np.zeros_like(haz_array)
-            for i, threshold in enumerate(bin_seq):
-                # Digitize into bins
-                if i < len(bin_seq) - 1:
-                    bin_mask = (haz_array >= threshold) & (haz_array < bin_seq[i+1]) & valid_mask
-                else:
-                    bin_mask = (haz_array >= threshold) & valid_mask
-                bin_idx[bin_mask] = i
+            # Create a classified array. Use np.digitize (matching runAnalysis.py's
+            # equivalent step) rather than the previous hand-rolled loop, which
+            # assigned index i to [bin_seq[i], bin_seq[i+1]) instead of
+            # [bin_seq[i-1], bin_seq[i]) - that shifted every class down by one,
+            # silently merged sub-threshold pixels into class 0, and left the
+            # final (i == len(bin_seq)-1, threshold == np.inf) branch unreachable
+            # so the top/worst class always reported zero exposure. Invalid/
+            # below-threshold pixels are still excluded downstream because
+            # affected_exp is already NaN for ~valid_mask (see class_exp below).
+            bin_idx = np.digitize(haz_array, bin_seq).astype('int32')
 
             # For each class, calculate exposure
             for bin_x in reversed(range(num_bins)):

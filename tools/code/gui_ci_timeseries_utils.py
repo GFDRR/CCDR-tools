@@ -775,36 +775,38 @@ def calculate_zonal_stats(data_array, admin_boundaries, stat='mean'):
         return use_fallback_values(admin_boundaries, data_array, column_name)
 
 def use_fallback_values(admin_boundaries, data_array, column_name):
-    """Create fallback values that vary by zone for better visualization"""
-    print("Using fallback method for zonal statistics")
-    admin_boundaries_copy = admin_boundaries.copy()
-    
-    # Try to get global statistics for a baseline
+    """Zonal statistics failed - do NOT fabricate data. Fill the column with NaN
+    for every zone and print a loud, unmistakable warning identifying what failed."""
+    country_name = "unknown country"
     try:
-        global_mean = float(data_array.mean().values)
-        global_std = float(data_array.std().values)
-        
-        # Generate random but consistent values for each zone
-        import numpy as np
-        np.random.seed(42)  # For consistency
-        n_zones = len(admin_boundaries_copy)
-        
-        # Generate values with some variation
-        if global_std > 0:
-            values = np.random.normal(global_mean, global_std/2, n_zones)
-        else:
-            # If standard deviation is 0, add small relative variations
-            variation = abs(global_mean * 0.1) if global_mean != 0 else 1.0
-            values = np.random.normal(global_mean, variation, n_zones)
-            
-        admin_boundaries_copy[column_name] = values
-        print(f"Added fallback statistic column with varied values (mean: {values.mean():.2f})")
-        
-    except Exception as e:
-        print(f"Error in fallback value generation: {e}")
-        # Absolute last resort - constant value
-        admin_boundaries_copy[column_name] = 0
-    
+        if admin_boundaries is not None and 'NAM_0' in admin_boundaries.columns and len(admin_boundaries) > 0:
+            country_name = admin_boundaries['NAM_0'].iloc[0]
+    except Exception:
+        pass
+
+    index_name = getattr(data_array, 'name', None) or "unknown index"
+
+    time_label = "unknown time step"
+    try:
+        if hasattr(data_array, 'time'):
+            time_vals = np.atleast_1d(data_array.time.values)
+            if time_vals.size == 1:
+                time_label = str(time_vals[0])
+            elif time_vals.size > 1:
+                time_label = f"{time_vals[0]} to {time_vals[-1]}"
+    except Exception:
+        pass
+
+    print("=" * 80)
+    print(f"WARNING: ZONAL STATS FAILED - country='{country_name}', index/variable='{index_name}', "
+          f"time step='{time_label}', column='{column_name}'.")
+    print(f"WARNING: ZONAL STATS FAILED - no valid statistics could be calculated for '{column_name}'. "
+          f"Setting these values to NaN (missing data) instead of fabricating fake values.")
+    print("=" * 80)
+
+    admin_boundaries_copy = admin_boundaries.copy()
+    admin_boundaries_copy[column_name] = np.nan
+
     return admin_boundaries_copy
 
 # Function to create choropleth maps for zonal statistics
@@ -1459,7 +1461,7 @@ def export_boundaries_to_gpkg(gdf, country, adm_level, index, year, output_dir, 
                     
                     # Use geometry to match records if available, otherwise use id columns
                     merge_cols = list(set(id_cols + essential_cols).intersection(set(all_gdf.columns)).intersection(set(gdf_copy.columns)))
-                    
+
                     if not merge_cols:
                         print("Warning: No common columns found for merging. Using index-based updates.")
                         # If no common columns, try to use the index
@@ -1469,17 +1471,33 @@ def export_boundaries_to_gpkg(gdf, country, adm_level, index, year, output_dir, 
                         else:
                             print(f"Error: Cannot merge data with different lengths ({len(all_gdf)} vs {len(gdf_copy)}).")
                     else:
+                        # Pick a merge key deliberately instead of relying on an arbitrary set
+                        # order (e.g. 'NAM_0' is not unique for a single-country boundary set
+                        # and would turn this into a many-to-many merge that duplicates rows).
+                        # Prefer a verified-unique ID/CODE column, then fall back to geometry.
+                        key_col = None
+                        for candidate in id_cols:
+                            if candidate in merge_cols and all_gdf[candidate].is_unique:
+                                key_col = candidate
+                                break
+                        if key_col is None and 'geometry' in merge_cols:
+                            key_col = 'geometry'
+                        if key_col is None:
+                            key_col = merge_cols[0]
+                            print(f"Warning: No verified-unique ID/CODE column or geometry found for merging; "
+                                  f"falling back to '{key_col}', which may not be unique and could duplicate rows.")
+
                         # Extract just the necessary columns from gdf_copy
                         year_data = gdf_copy[merge_cols + [year_col]]
-                        
+
                         # To avoid duplication, remove any existing year column from all_gdf
                         if year_col in all_gdf.columns:
                             all_gdf = all_gdf.drop(columns=[year_col])
-                        
+
                         # Merge with suffixes to avoid collision
                         all_gdf = all_gdf.merge(
-                            year_data[[col for col in year_data.columns if col not in merge_cols] + [merge_cols[0]]], 
-                            on=merge_cols[0],
+                            year_data[[col for col in year_data.columns if col not in merge_cols] + [key_col]],
+                            on=key_col,
                             how='left',
                             suffixes=('', '_new')  # Use empty string for existing columns
                         )

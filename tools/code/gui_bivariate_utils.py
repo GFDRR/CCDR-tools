@@ -412,7 +412,12 @@ def calculate_weighted_rwi(gdf, pop_field, rwi_field):
     # Scale to 0-100 for easier interpretation
     min_val = result_gdf['w_RWIxPOP'].min()
     max_val = result_gdf['w_RWIxPOP'].max()
-    result_gdf['w_RWIxPOP_scaled'] = 100 * (result_gdf['w_RWIxPOP'] - min_val) / (max_val - min_val)
+    if abs(max_val - min_val) < 1e-9:
+        # All values are identical (e.g. a single-feature layer or uniform data);
+        # avoid divide-by-zero and just put every feature at the midpoint.
+        result_gdf['w_RWIxPOP_scaled'] = 50
+    else:
+        result_gdf['w_RWIxPOP_scaled'] = 100 * (result_gdf['w_RWIxPOP'] - min_val) / (max_val - min_val)
 
     return result_gdf
 
@@ -963,6 +968,18 @@ def create_bivariate_map(gdf, colors_list, id_field, name_field, num_quantiles):
             # Get wealth and hazard quantiles
             wealth_q = feature_data['wealth_quantile'].values[0]
             hazard_q = feature_data['hazard_quantile'].values[0]
+
+            # Defensive no-data check: if either quantile is missing/NaN (should not
+            # normally happen since classify_data / the calling code fills NaNs with
+            # 0), render the feature as "no data" instead of letting int() raise
+            # ValueError on NaN and crashing the whole map render.
+            if pd.isna(wealth_q) or pd.isna(hazard_q):
+                return {
+                    'fillColor': '#CCCCCC',
+                    'color': 'black',
+                    'weight': 1,
+                    'fillOpacity': 0.5
+                }
 
             # Calculate bivariate class with fixed orientation
             # hazard is the row (i), wealth is the column (j)
@@ -1603,7 +1620,12 @@ def run_analysis(b):
                 # Scale to 0-100 for easier interpretation
                 min_val = result_gdf[wealth_field].min()
                 max_val = result_gdf[wealth_field].max()
-                result_gdf['w_RWIxPOP_scaled'] = 100 * (result_gdf[wealth_field] - min_val) / (max_val - min_val)
+                if abs(max_val - min_val) < 1e-9:
+                    # All values are identical (e.g. a single-feature layer or uniform data);
+                    # avoid divide-by-zero and just put every feature at the midpoint.
+                    result_gdf['w_RWIxPOP_scaled'] = 50
+                else:
+                    result_gdf['w_RWIxPOP_scaled'] = 100 * (result_gdf[wealth_field] - min_val) / (max_val - min_val)
 
                 # Assign back to gdf to maintain consistency with the rest of the function
                 gdf = result_gdf
@@ -1626,8 +1648,15 @@ def run_analysis(b):
 
             # Calculate relative exposure (per capita)
             print("Calculating relative Exposure to Hazard")
-            gdf['relative_exposure'] = gdf[hazard_field] / gdf[pop_field]
-            print(f"Relative Exposure Range: {gdf['relative_exposure'].min():.6f} to {gdf['relative_exposure'].max():.6f}\n")
+            # Guard against division by zero/negative population (e.g. uninhabited
+            # park/water/desert admin units), which would otherwise produce NaN/inf
+            # and later crash pd.cut() / int() downstream.
+            gdf['relative_exposure'] = np.where(
+                gdf[pop_field] > 0,
+                gdf[hazard_field] / gdf[pop_field],
+                np.nan
+            )
+            print(f"Relative Exposure Range: {np.nanmin(gdf['relative_exposure']):.6f} to {np.nanmax(gdf['relative_exposure']):.6f}\n")
 
             # Instead of using quantiles, use a fixed scale from 0% to max_exposure% for exposure
             print(f"Creating fixed-scale classification for exposure (0-{max_exposure_slider.value*100:.1f}%)...")
@@ -1658,9 +1687,9 @@ def run_analysis(b):
 
             # Manually classify exposure using fixed scale
             gdf['hazard_quantile'] = pd.cut(
-                gdf['relative_exposure'], 
+                gdf['relative_exposure'],
                 bins=exposure_breaks,
-                labels=False, 
+                labels=False,
                 include_lowest=True
             )
 
@@ -1670,8 +1699,18 @@ def run_analysis(b):
                 print(f"Warning: {above_max.sum()} features have exposure above {exposure_max*100:.1f}% and are classified in the highest category")
                 gdf.loc[above_max, 'hazard_quantile'] = num_quantiles - 1
 
+            # Features with pop_field <= 0 have NaN relative_exposure and thus NaN
+            # hazard_quantile (pd.cut cannot bin NaN). Fill any remaining NaNs using
+            # the same "no data" convention as classify_data() (fillna(0)) so that
+            # bivariate_class never ends up NaN and int() never fails downstream.
+            n_missing_hazard = gdf['hazard_quantile'].isna().sum()
+            if n_missing_hazard:
+                print(f"Warning: {n_missing_hazard} features have zero/negative population and no valid exposure classification; assigning them to quantile 0.")
+            gdf['wealth_quantile'] = gdf['wealth_quantile'].fillna(0).astype(int)
+            gdf['hazard_quantile'] = gdf['hazard_quantile'].fillna(0).astype(int)
+
             # Create combined classification
-            gdf['bivariate_class'] = gdf['wealth_quantile'] * num_quantiles + gdf['hazard_quantile']
+            gdf['bivariate_class'] = (gdf['wealth_quantile'] * num_quantiles + gdf['hazard_quantile']).astype(int)
 
             # Generate bivariate color scheme
             print("Generating bivariate color scheme with enhanced saturation...")

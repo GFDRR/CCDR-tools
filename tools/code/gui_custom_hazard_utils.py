@@ -97,7 +97,10 @@ def plot_geospatial_boundaries(gdf, crs: str = "EPSG:4326"):
     from math import log
     global m, basemaps_dict, current_hazard_layer
 
-    gdf = gdf.set_crs(crs)  # Assign WGS 84 CRS by default
+    if gdf.crs is None:
+        gdf = gdf.set_crs(crs)  # No CRS defined - assume WGS 84
+    elif str(gdf.crs) != str(crs):
+        gdf = gdf.to_crs(crs)  # Has a different real CRS - reproject
 
     with map_widget:
         map_widget.clear_output(wait=True)
@@ -169,6 +172,19 @@ custom_boundaries_name_field = widgets.Dropdown(
 custom_boundaries_name_field_id = f'custom-boundaries-name-field-{id(custom_boundaries_name_field)}'
 custom_boundaries_name_field.add_class(custom_boundaries_name_field_id)
 
+# Shown/enabled only when the selected file has more than one layer (e.g. a
+# GeoPackage bundling several ADM levels) - see
+# notebook_utils.update_custom_boundaries_layer_field.
+custom_boundaries_layer_field = widgets.Dropdown(
+    options=[],
+    value=None,
+    description='Layer:',
+    disabled=True,
+    layout=widgets.Layout(width='250px')
+)
+custom_boundaries_layer_field_id = f'custom-boundaries-layer-field-{id(custom_boundaries_layer_field)}'
+custom_boundaries_layer_field.add_class(custom_boundaries_layer_field_id)
+
 select_file_button = notebook_utils.select_file_button
 
 # Custom ADM Functions
@@ -184,14 +200,20 @@ def update_custom_boundaries_visibility(*args):
     custom_boundaries_name_field.disabled = not is_custom
     select_file_button.disabled = not is_custom
     adm_level_selector.disabled = is_custom
+    if not is_custom:
+        custom_boundaries_layer_field.disabled = True
     update_preview_map()
 
 custom_boundaries_radio.observe(update_custom_boundaries_visibility, 'value')
+custom_boundaries_layer_field.observe(lambda change: update_preview_map(), 'value')
 
 def update_preview_map(*args):
     if custom_boundaries_radio.value == 'Custom boundaries':
         try:
-            gdf = gpd.read_file(custom_boundaries_file.value)
+            selected_layer = notebook_utils.update_custom_boundaries_layer_field(
+                custom_boundaries_file.value, adm_level_selector.value, custom_boundaries_layer_field
+            )
+            gdf = gpd.read_file(custom_boundaries_file.value, layer=selected_layer)
             plot_geospatial_boundaries(gdf)
             notebook_utils.set_default_values(gdf, custom_boundaries_id_field, custom_boundaries_name_field)
         except Exception as e:
@@ -459,6 +481,11 @@ def preview_hazard_data():
                     if nodata_values:
                         print(f"Using user-specified nodata value(s): {nodata_values}")
                         nodata = nodata_values[0]  # Store first value for metadata display
+                    elif nodata is not None:
+                        # All user-entered values were invalid - fall back to the raster's
+                        # own metadata nodata instead of silently leaving it unset.
+                        print(f"WARNING: No valid nodata values parsed from user input; falling back to raster metadata nodata={nodata}.")
+                        nodata_values = [nodata]
                 elif nodata is not None:
                     nodata_values = [nodata]
 
@@ -527,7 +554,11 @@ def preview_hazard_data():
                             adm_level = adm_level_selector.value if adm_level_selector.value is not None else 0
                             admin_gdf = get_adm_data(country, adm_level)
                         elif custom_boundaries_radio.value == 'Custom boundaries' and os.path.exists(custom_boundaries_file.value):
-                            admin_gdf = gpd.read_file(custom_boundaries_file.value)
+                            preview_layer = (
+                                custom_boundaries_layer_field.value
+                                if not custom_boundaries_layer_field.disabled else None
+                            )
+                            admin_gdf = gpd.read_file(custom_boundaries_file.value, layer=preview_layer)
 
                         if admin_gdf is not None:
                             # Check if admin boundaries already exist
@@ -1074,9 +1105,10 @@ def create_country_boundaries(
     country_selector, adm_level_selector, custom_boundaries_radio,
     select_file_button, custom_boundaries_file,
     custom_boundaries_id_field, custom_boundaries_name_field,
-    zonal_stats_selector  # Add the new parameter
+    zonal_stats_selector,  # Add the new parameter
+    custom_boundaries_layer_field=None
 ):
-    return widgets.VBox([
+    children = [
         widgets.Label("Country Boundaries:"),
         country_selector,
         adm_level_selector,
@@ -1085,18 +1117,26 @@ def create_country_boundaries(
         custom_boundaries_radio,
         select_file_button,
         custom_boundaries_file,
+    ]
+    if custom_boundaries_layer_field is not None:
+        # Only relevant (and only shown/enabled) when the selected file has
+        # more than one layer - e.g. a GeoPackage bundling several ADM levels.
+        children.append(custom_boundaries_layer_field)
+    children += [
         custom_boundaries_id_field,
         custom_boundaries_name_field,
         widgets.HTML("<hr style='margin: 10px 0;'>"),
         widgets.Label("Analysis Options:"),
         zonal_stats_selector  # Add the new selector here
-    ])
+    ]
+    return widgets.VBox(children)
 
 country_boundaries = create_country_boundaries(
     country_selector, adm_level_selector, custom_boundaries_radio,
     select_file_button, custom_boundaries_file,
     custom_boundaries_id_field, custom_boundaries_name_field,
-    zonal_stats_selector  # Pass the new selector
+    zonal_stats_selector,  # Pass the new selector
+    custom_boundaries_layer_field
 )
 
 # Hazard info for custom hazard
@@ -1383,10 +1423,15 @@ def run_analysis_script(b):
                 custom_boundaries_file_path = custom_boundaries_file.value
                 custom_code_field = custom_boundaries_id_field.value
                 custom_name_field = custom_boundaries_name_field.value
+                custom_boundaries_layer = (
+                    custom_boundaries_layer_field.value
+                    if not custom_boundaries_layer_field.disabled else None
+                )
             else:
                 custom_boundaries_file_path = None
                 custom_code_field = None
                 custom_name_field = None
+                custom_boundaries_layer = None
             
             # Process hazard files
             return_periods = []
@@ -1442,6 +1487,11 @@ def run_analysis_script(b):
                 if nodata_list:
                     user_nodata = nodata_list
                     print(f"Using user-specified nodata value(s): {user_nodata}")
+                else:
+                    # All user-entered values were invalid - leave user_nodata as None so
+                    # downstream analysis falls back to each raster's own metadata nodata
+                    # instead of silently discarding it.
+                    print("Warning: No valid nodata values parsed from user input; falling back to each raster's own metadata nodata.")
 
             # Create a custom damage function based on the selected approach
             custom_func_str = custom_function_input.value
@@ -1494,7 +1544,8 @@ def run_analysis_script(b):
                         hazard_files=hazard_files,
                         custom_damage_func=custom_damage_func,
                         zonal_stats_type=zonal_stats_type,
-                        user_nodata=user_nodata
+                        user_nodata=user_nodata,
+                        custom_boundaries_layer=custom_boundaries_layer
                     )
                     
                     if result_df is None:

@@ -193,35 +193,38 @@ def process_flood_hazard(country, adm_level, flood_types, value_threshold, area_
             rp_path = raster_paths[rp_name]
             print(f"\nProcessing {rp_name}...")
 
-            # Read nodata value from raster
-            with rasterio.open(rp_path) as src:
-                raster_nodata = src.nodata
-                if raster_nodata is None:
-                    # If not set in metadata, use Fathom default
-                    nodata_value = -32767
-                    print(f"  Warning: No nodata value in raster metadata, using Fathom default: {nodata_value}")
-                elif raster_nodata == 0:
-                    # CRITICAL: If raster nodata is 0, this is incorrect!
-                    # 0 should be valid value (dry land), not nodata
-                    # Use -32767 to preserve dry land pixels
-                    nodata_value = -32767
-                    print(f"  WARNING: Raster has nodata=0 (incorrect!). Using -32767 to preserve dry land pixels.")
-                    print(f"  → Please reprocess this raster with merge_utils.py to fix the nodata value.")
-                else:
-                    nodata_value = raster_nodata
-                    print(f"  Using nodata value from raster: {nodata_value}")
+            # Read this raster's own CRS and nodata value. Previously neither
+            # was checked: nodata=None was passed to rasterstats regardless of
+            # the raster's actual nodata (relying solely on a manual "exclude
+            # negative values" filter below, which silently mis-handles any
+            # raster whose nodata sentinel is 0 - the README documents that
+            # some flood datasets do use 0 as nodata, which would then be
+            # counted as valid "0 depth" pixels, inflating the area%
+            # denominator). Likewise the admin boundary CRS was never compared
+            # to the raster's CRS before zonal stats, unlike plot_raster_layer
+            # elsewhere in this file, which does reproject when they differ.
+            with rasterio.open(rp_path) as _rp_src:
+                raster_nodata = _rp_src.nodata
+                raster_crs = _rp_src.crs
+
+            if raster_crs is not None and adm_flood.crs is not None and adm_flood.crs != raster_crs:
+                print(f"Warning: admin boundaries CRS ({adm_flood.crs}) differs from "
+                      f"{rp_name} raster CRS ({raster_crs}); reprojecting boundaries for this raster.")
+                geom_source = adm_flood.geometry.to_crs(raster_crs)
+            else:
+                geom_source = adm_flood.geometry
 
             # Calculate zonal statistics using parallel processing
             cores = min(len(adm_flood), mp.cpu_count())
 
             # Split geometries into chunks for parallel processing
-            geom_list = list(adm_flood.geometry)
+            geom_list = list(geom_source)
             chunk_size = len(geom_list) // cores + (1 if len(geom_list) % cores else 0)
             geom_chunks = [geom_list[i:i + chunk_size] for i in range(0, len(geom_list), chunk_size)]
 
             with mp.Pool(cores) as p:
                 func = partial(zonal_stats_partial, raster=rp_path, stats=[],
-                             all_touched=True, nodata=nodata_value, raster_out=True)
+                             all_touched=True, nodata=raster_nodata, raster_out=True)
                 stats_parallel = p.map(func, geom_chunks)
 
             stats_values = list(it.chain(*stats_parallel))
@@ -237,8 +240,13 @@ def process_flood_hazard(country, adm_level, flood_types, value_threshold, area_
                     values = stat['mini_raster_array'].compressed()
 
                     if len(values) > 0:
-                        # Additional safety check: exclude ALL negative values
-                        # This removes any nodata values and keeps only valid flood depths (>= 0)
+                        # .compressed() already excludes this raster's real
+                        # nodata value now that it's passed explicitly above
+                        # (including a 0 nodata sentinel, per this project's own
+                        # documented convention for some flood datasets). This
+                        # remaining filter is just a safety net against stray
+                        # negative sentinels that weren't declared in the
+                        # raster's metadata.
                         values = values[values >= 0]
 
                         if len(values) > 0:

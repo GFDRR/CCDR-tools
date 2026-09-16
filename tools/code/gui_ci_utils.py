@@ -453,7 +453,7 @@ def standardize_anomaly(historical_var, anomaly_var, method='epsilon'):
 # Function to handle special time units in climate data
 def handle_time_units(data_var, index):
     """Handle special time units like timedeltas or large values representing nanoseconds."""
-    if index in ['cwd', 'cdd', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
+    if index in ['cwd', 'cdd', 'r20mm', 'r50mm', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
         # Check the data type
         original_dtype = data_var.dtype
         print(f"Original data type for {index}: {original_dtype}")
@@ -710,36 +710,38 @@ def calculate_zonal_stats(data_array, admin_boundaries, stat='mean'):
         return use_fallback_values(admin_boundaries, data_array, column_name)
 
 def use_fallback_values(admin_boundaries, data_array, column_name):
-    """Create fallback values that vary by zone for better visualization"""
-    print("Using fallback method for zonal statistics")
-    admin_boundaries_copy = admin_boundaries.copy()
-    
-    # Try to get global statistics for a baseline
+    """Zonal statistics failed - do NOT fabricate data. Fill the column with NaN
+    for every zone and print a loud, unmistakable warning identifying what failed."""
+    country_name = "unknown country"
     try:
-        global_mean = float(data_array.mean().values)
-        global_std = float(data_array.std().values)
-        
-        # Generate random but consistent values for each zone
-        import numpy as np
-        np.random.seed(42)  # For consistency
-        n_zones = len(admin_boundaries_copy)
-        
-        # Generate values with some variation
-        if global_std > 0:
-            values = np.random.normal(global_mean, global_std/2, n_zones)
-        else:
-            # If standard deviation is 0, add small relative variations
-            variation = abs(global_mean * 0.1) if global_mean != 0 else 1.0
-            values = np.random.normal(global_mean, variation, n_zones)
-            
-        admin_boundaries_copy[column_name] = values
-        print(f"Added fallback statistic column with varied values (mean: {values.mean():.2f})")
-        
-    except Exception as e:
-        print(f"Error in fallback value generation: {e}")
-        # Absolute last resort - constant value
-        admin_boundaries_copy[column_name] = 0
-    
+        if admin_boundaries is not None and 'NAM_0' in admin_boundaries.columns and len(admin_boundaries) > 0:
+            country_name = admin_boundaries['NAM_0'].iloc[0]
+    except Exception:
+        pass
+
+    index_name = getattr(data_array, 'name', None) or "unknown index"
+
+    time_label = "unknown time step"
+    try:
+        if hasattr(data_array, 'time'):
+            time_vals = np.atleast_1d(data_array.time.values)
+            if time_vals.size == 1:
+                time_label = str(time_vals[0])
+            elif time_vals.size > 1:
+                time_label = f"{time_vals[0]} to {time_vals[-1]}"
+    except Exception:
+        pass
+
+    print("=" * 80)
+    print(f"WARNING: ZONAL STATS FAILED - country='{country_name}', index/variable='{index_name}', "
+          f"time step='{time_label}', column='{column_name}'.")
+    print(f"WARNING: ZONAL STATS FAILED - no valid statistics could be calculated for '{column_name}'. "
+          f"Setting these values to NaN (missing data) instead of fabricating fake values.")
+    print("=" * 80)
+
+    admin_boundaries_copy = admin_boundaries.copy()
+    admin_boundaries_copy[column_name] = np.nan
+
     return admin_boundaries_copy
 
 # Function to create choropleth maps for zonal statistics
@@ -925,7 +927,7 @@ def create_climate_plots(historical_ds, future_ds, admin_boundaries, index, proj
         country_max = float(country_data.max().values)
         
         # Set vmin/vmax based on the masked data
-        if index in ['cwd', 'cdd', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
+        if index in ['cwd', 'cdd', 'r20mm', 'r50mm', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
             vmin = max(0, country_min)
             vmax = min(100, country_max * 1.1)
         else:
@@ -935,7 +937,7 @@ def create_climate_plots(historical_ds, future_ds, admin_boundaries, index, proj
         print(f"Using country extent min/max for colorbar: {vmin} to {vmax}")
     else:
         # Fallback to global extent if no boundaries available
-        if index in ['cwd', 'cdd', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
+        if index in ['cwd', 'cdd', 'r20mm', 'r50mm', 'hd30', 'hd35', 'hi35','hi39', 'hdtrhi']:
             vmin = max(0, float(historical_var.min().values))
             vmax = min(100, float(historical_var.max().values) * 1.1)
         else:
