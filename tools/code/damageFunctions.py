@@ -1,8 +1,27 @@
 # Importing the required packages
 import numpy as np
-from common import tc_region_mapping
+from common import tc_region_mapping, wb_to_region
 
 # Defining the damage functions
+
+
+def _resolve_region(region):
+    """Accept either an already-resolved region bucket ('AFRICA', 'ASIA',
+    'LAC', 'EUROPE', 'GLOBAL') or a raw World Bank region code ('AFR',
+    'MENA', 'EAP', 'SAR', 'ECA', 'LCR', 'Other') for backward compatibility -
+    FL_damage_factor_builtup/agri were originally documented and tested
+    against raw WB codes, and callers that don't need EU-specific handling
+    can keep passing one directly. Note this path cannot apply the EU-
+    country override introduced alongside the EUROPE bucket (that needs the
+    country's ISO3 code, not just its WB region) - use
+    common.resolve_flood_region(country_iso3, wb_region) upstream for that.
+    Anything unrecognized (including a raw WB code with no mapping) falls
+    back to GLOBAL.
+    """
+    known_buckets = {'AFRICA', 'ASIA', 'LAC', 'EUROPE', 'GLOBAL'}
+    if region in known_buckets:
+        return region
+    return wb_to_region.get(region, 'GLOBAL')
 
 
 # Floods (river and coastal) over Population mortality
@@ -68,7 +87,7 @@ def FL_damage_factor_builtup(x: np.array, region: str):
         'EUROPE': lambda x: np.maximum(0.0, np.minimum(1.0, 1.7088514404060207 + (0.0021048967984816642 - 1.7088514404060207)/(1 + (x/4.001115592872838)**0.9441309503291869))),
         'GLOBAL': lambda x: np.maximum(0.0, np.minimum(1.0, 1.3581185158837237 + (0.050530835141520035 - 1.3581185158837237)/(1 + (x/1.9731251441067115)**0.9099528927976404))),
     }
-    damage_func = function_mapping.get(region, function_mapping['GLOBAL'])
+    damage_func = function_mapping[_resolve_region(region)]
     result = damage_func(x)
     return result.astype(np.float32)
 
@@ -123,7 +142,7 @@ def FL_damage_factor_agri(x: np.array, region: str):
         'LAC': lambda x: np.maximum(0.0, np.minimum(1.0, 1.1651603167369582 + (0.0 - 1.1651603167369582)/(1 + (x/1.4133544121779626)**1.2597438701651484))),
         'GLOBAL': lambda x: np.maximum(0.0, np.minimum(1.0, 1.1651603167369582 + (0.0 - 1.1651603167369582)/(1 + (x/1.4133544121779626)**1.2597438701651484))),
     }
-    damage_func = function_mapping.get(region, function_mapping['GLOBAL'])
+    damage_func = function_mapping[_resolve_region(region)]
     return damage_func(x)
 
 
