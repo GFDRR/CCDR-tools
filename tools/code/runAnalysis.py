@@ -1010,8 +1010,15 @@ def plot_results(result_df, exp_cat, analysis_type):
         print("Unknown analysis approach")
         return None, None
 
-    # Ensure the CRS is EPSG:4326
-    result_df = result_df.to_crs(epsg=4326)
+    # Ensure the CRS is EPSG:4326, unwrapping antimeridian-crossing geometries
+    # rather than letting them come out invalid-looking/world-spanning - see
+    # common.reproject_for_web_map. result_df may arrive here already in a
+    # local working CRS (e.g. for an antimeridian-crossing country, per
+    # run_analysis's use of common.safe_reproject_to_4326 for file output),
+    # so a plain to_crs(epsg=4326) here reproduces the exact wrap problem for
+    # the map preview specifically - confirmed: Fiji's risk layer rendered
+    # present-but-invisible in the folium preview until this was added.
+    result_df = common.reproject_for_web_map(result_df)
 
     # Filter out zero and negative values for color scaling
     non_zero_data = result_df[result_df[column] > 0]

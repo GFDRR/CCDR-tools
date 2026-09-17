@@ -194,3 +194,56 @@ def safe_reproject_to_4326(gdf):
               f"renders correctly in GIS software, just not literally EPSG:4326.")
         return gdf
     return reprojected
+
+
+def unwrap_antimeridian_geometry(geom):
+    """Shift every vertex of a geometry with negative longitude by +360
+    degrees, so an antimeridian-crossing shape renders correctly on a
+    standard web map (Leaflet/folium). Those plot longitude linearly and
+    don't require it to be clamped to [-180, 180], so re-expressing e.g.
+    -178.2 as 181.8 (instead of the wrapped value a naive to_crs(epsg=4326)
+    produces) renders as a normal, valid, correctly-positioned shape instead
+    of one that spans the whole globe.
+
+    A first version of this walked each ring sequentially (numpy.unwrap-
+    style, shifting only where consecutive vertices jump by more than 180
+    degrees), which works for a single ring that crosses the seam but NOT
+    for a MultiPolygon whose separate parts sit entirely on one side or the
+    other with no single ring ever crossing it - exactly Fiji's real shape
+    (scattered islands, some west of 180, some east of it as separate,
+    non-adjacent parts). Confirmed the sequential version left those parts
+    un-shifted; this simpler per-vertex rule - shift every negative-
+    longitude point regardless of which ring or part it's in - fixes both
+    cases and is safe here because reproject_for_web_map only calls this
+    once it has already detected the geometry crosses the antimeridian in
+    the first place (a country whose real territory isn't near longitude
+    180 would never reach this code path)."""
+    from shapely.ops import transform
+
+    def shift(x, y, z=None):
+        x = x + 360 if x < 0 else x
+        return (x, y) if z is None else (x, y, z)
+
+    return transform(shift, geom)
+
+
+def reproject_for_web_map(gdf):
+    """Reproject a GeoDataFrame to EPSG:4326 for display on a standard web
+    map (folium/Leaflet). Unlike safe_reproject_to_4326 (used for file
+    output, where keeping the original working CRS is an acceptable
+    fallback since any GIS tool reads a file's own CRS), a web map genuinely
+    needs WGS84 coordinates - so instead of falling back to the working CRS,
+    antimeridian-crossing geometries are unwrapped (see
+    unwrap_antimeridian_geometry) after the normal reprojection, keeping
+    true, correctly-positioned coordinates that Leaflet renders as a
+    contiguous shape rather than a degenerate world-spanning one.
+    """
+    if gdf.crs is None:
+        return gdf.set_crs(epsg=4326, allow_override=True)
+    if gdf.crs.to_epsg() != 4326:
+        gdf = gdf.to_crs(epsg=4326)
+    minx, miny, maxx, maxy = gdf.total_bounds
+    if (maxx - minx) > 180:
+        gdf = gdf.copy()
+        gdf['geometry'] = gdf.geometry.apply(unwrap_antimeridian_geometry)
+    return gdf

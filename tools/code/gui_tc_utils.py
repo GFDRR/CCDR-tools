@@ -126,7 +126,14 @@ def on_adm_level_change(change):
 
 
 def plot_geospatial_boundaries(gdf, crs: str = "EPSG:4326"):
-    if gdf.crs is None:
+    if str(crs) == "EPSG:4326":
+        # common.reproject_for_web_map unwraps antimeridian-crossing
+        # geometries (e.g. custom Fiji boundaries in EPSG:3460, itself a
+        # local CRS designed around Fiji's dateline-straddling territory)
+        # instead of letting them render as a degenerate, near-invisible
+        # world-spanning shape on the folium preview map.
+        gdf = common.reproject_for_web_map(gdf)
+    elif gdf.crs is None:
         gdf = gdf.set_crs(crs)  # No CRS defined - assume WGS 84
     elif str(gdf.crs) != str(crs):
         gdf = gdf.to_crs(crs)  # Has a different real CRS - reproject
@@ -684,8 +691,16 @@ def run_analysis_script(b):
                     if layer is not None:
                         layers.append(layer)
                         colormaps.append(colormap)
-                        # Update the overall bounding box using result_df
-                        bounds = result_df.total_bounds
+                        # Update the overall bounding box. Must use the same
+                        # web-map-projected geometry plot_results built the
+                        # layer from, not the raw result_df - for an
+                        # antimeridian-crossing country result_df here is
+                        # still in its local working CRS (meters), and
+                        # feeding those raw values to Leaflet's fit_bounds as
+                        # if they were lat/lng makes it zoom out to roughly
+                        # the whole world with the actual (correctly placed)
+                        # layer too small to see.
+                        bounds = common.reproject_for_web_map(result_df).total_bounds
                         minx = min(minx, bounds[0])
                         miny = min(miny, bounds[1])
                         maxx = max(maxx, bounds[2])
