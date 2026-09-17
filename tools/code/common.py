@@ -154,3 +154,43 @@ def match_adm_level_layer(layers, adm_level):
         return None
     matches = [lyr for lyr in layers if re.search(rf'adm0*{adm_level}(?!\d)', lyr, re.IGNORECASE)]
     return matches[0] if len(matches) == 1 else None
+
+
+def safe_reproject_to_4326(gdf):
+    """Reproject a GeoDataFrame to EPSG:4326 for output, unless doing so
+    would produce degenerate antimeridian-wrapped geometries.
+
+    A polygon that is contiguous in a working CRS centered on the
+    antimeridian (e.g. the local Mercator CRS used for antimeridian-crossing
+    countries - see input_utils.normalize_antimeridian_raster) becomes
+    invalid-by-shape once converted back to plain lon/lat: each vertex's
+    longitude gets independently wrapped into [-180, 180], scattering a ring
+    that was contiguous in the source CRS across both extremes. shapely does
+    not flag the result as topologically invalid (it's still a simple,
+    non-self-intersecting ring in raw coordinate terms), but its bounding box
+    ends up spanning close to the full 360 degrees of longitude - no real
+    administrative unit is actually that wide, so that's the signal used
+    here to detect it (confirmed against a real Fiji province: reprojecting
+    Lau this way produced a "polygon" 359.8 degrees wide).
+
+    When detected, the geometries are left in their original working CRS
+    instead - valid, correctly shaped, and rendered/analyzed correctly by any
+    GIS tool that reads the file's own CRS (which every mainstream one does),
+    just not literally EPSG:4326. Properly splitting these polygons at the
+    antimeridian before reprojecting is possible but out of scope here.
+    """
+    if gdf.crs is None:
+        return gdf.set_crs(epsg=4326, allow_override=True)
+    if gdf.crs.to_epsg() == 4326:
+        return gdf
+    original_crs = gdf.crs
+    reprojected = gdf.to_crs(epsg=4326)
+    minx, miny, maxx, maxy = reprojected.total_bounds
+    if (maxx - minx) > 180:
+        print(f"WARNING: reprojecting to EPSG:4326 would wrap geometries across "
+              f"the antimeridian (bounding box {maxx - minx:.1f} degrees wide - "
+              f"no real administrative unit is that wide). Keeping the output in "
+              f"its working CRS ({original_crs}) instead, which is valid and "
+              f"renders correctly in GIS software, just not literally EPSG:4326.")
+        return gdf
+    return reprojected

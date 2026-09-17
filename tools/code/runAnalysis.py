@@ -576,7 +576,6 @@ def run_analysis(
                             analysis_type, exp_cat, adm_level, num_bins, n_valid_RPs_gt_1)
         result_df = calc_EAEI(result_df, valid_RPs, prob_RPs_df, 'Mean',
                             analysis_type, exp_cat, adm_level, num_bins, n_valid_RPs_gt_1)
-        result_df = result_df.round(3) # Round to three decimal places to avoid giving the impression of high precision
 
         # If method == 'Mean', then simplify it's name
         # If not n_valid_RPs_gt_1 and any column contains the initial part as 'RP1_', it is removed then
@@ -635,6 +634,16 @@ def run_analysis(
 
             print(f"Aggregated to {len(result_df)} administrative units")
 
+        # Round only now, at the very end, after island parts have been added
+        # back together and percentage columns recomputed from the aggregated
+        # absolute values (see the has_multipart block above). Rounding
+        # earlier - the previous position of this line, before that
+        # aggregation - meant every per-island absolute value got truncated
+        # to 3 decimals before being summed and used to recompute EAI%,
+        # measurably distorting small ADM4-level results (median stock in the
+        # single digits) even though the pre-rounding error itself is tiny.
+        result_df = result_df.round(3)
+
         # Write output csv table and geopackages
         save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, scenario, analysis_type, valid_RPs,
                          source_crs=adm_data.crs)
@@ -654,9 +663,14 @@ def run_analysis(
         if not isinstance(result_df, gpd.GeoDataFrame):
             result_df = gpd.GeoDataFrame(result_df, geometry='geometry')
         if adm_data.crs is not None:
-            result_df = result_df.set_crs(adm_data.crs, allow_override=True).to_crs(epsg=4326)
-        else:
-            result_df = result_df.set_crs(epsg=4326, allow_override=True)
+            result_df = result_df.set_crs(adm_data.crs, allow_override=True)
+        # common.safe_reproject_to_4326 falls back to keeping the working CRS
+        # (instead of EPSG:4326) when the country crosses the antimeridian -
+        # forcing 4326 there produces geometries that are valid by shapely's
+        # own check but wrap across the whole globe (confirmed: a real Fiji
+        # province came out 359.8 degrees wide). Still valid, correctly
+        # shaped GIS data either way, just not literally EPSG:4326 in that case.
+        result_df = common.safe_reproject_to_4326(result_df)
 
         return result_df
 
@@ -886,27 +900,40 @@ def calc_EAEI(result_df, RPs, prob_RPs_df, method, analysis_type, exp_cat,
     return result_df
 
 def create_summary_df(result_df, valid_RPs, exp_cat):
+    valid_RPs = sorted(valid_RPs)
     summary_data = []
     for rp in valid_RPs:
         row = {'RP': rp, 'Freq': 1/rp}
-        
+
         # Check for impact column
         impact_col = next((col for col in result_df.columns if f'RP{rp}_{exp_cat}_imp' in col), None)
         if impact_col:
             row[f'{exp_cat}_impact'] = result_df[impact_col].sum()
-        
+
         summary_data.append(row)
-    
+
     summary_df = pd.DataFrame(summary_data)
-    
-    # Calculate Ex_freq
-    summary_df['Ex_freq'] = summary_df['Freq'].diff().abs().shift(-1)
-    summary_df.loc[summary_df.index[-1], 'Ex_freq'] = summary_df.loc[summary_df.index[-1], 'Freq']
-    
+
+    # Ex_freq previously used the lower-bound exceedance-frequency weighting
+    # (Freq[i] - Freq[i+1], with the last RP weighted by its own Freq) -
+    # exactly prob_RPs_LB's formula below, just re-derived independently
+    # here rather than reusing it. That made the Summary sheet's EAI a
+    # lower-bound estimate while the per-unit table's default (unsuffixed)
+    # {exp_cat}_EAI column - computed by calc_EAEI - is the MEAN of the
+    # lower and upper bound weightings. The two were silently inconsistent:
+    # Summary total meaningfully undercounts the sum of per-unit EAI.
+    # Recompute the same mean weighting calc_EAEI/run_analysis uses
+    # (prob_RPs_Mean = (prob_RPs_LB + prob_RPs_UB) / 2) so the Summary sheet
+    # and the unit tables agree.
+    prob_RPs = summary_df['Freq'].to_numpy()
+    prob_RPs_LB = np.append(-np.diff(prob_RPs), prob_RPs[-1])
+    prob_RPs_UB = np.insert(-np.diff(prob_RPs), 0, 0.)
+    summary_df['Ex_freq'] = (prob_RPs_LB + prob_RPs_UB) / 2
+
     # Calculate EAI
     if f'{exp_cat}_impact' in summary_df.columns:
         summary_df[f'{exp_cat}_EAI'] = summary_df[f'{exp_cat}_impact'] * summary_df['Ex_freq']
-    
+
     return summary_df
 
 def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, scenario, analysis_type, valid_RPs,
@@ -928,12 +955,16 @@ def save_geopackage(result_df, country, adm_level, haz_cat, exp_cat, period, sce
     # set_crs() only *labels* a CRS without transforming coordinates, so
     # blindly labelling non-4326 coordinates as EPSG:4326 here would silently
     # corrupt the output (e.g. writing local Mercator meters into a
-    # geopackage/map that interprets them as WGS84 degrees). Reproject
-    # (to_crs) using the CRS the geometries actually came from, so the
-    # output file is genuinely in EPSG:4326 regardless of what working CRS
-    # was used internally for zonal stats.
+    # geopackage/map that interprets them as WGS84 degrees). Reproject using
+    # the CRS the geometries actually came from via
+    # common.safe_reproject_to_4326, which falls back to keeping that working
+    # CRS (instead of forcing EPSG:4326) when the country crosses the
+    # antimeridian - forcing 4326 there produces geometries that are valid by
+    # shapely's own check but wrap across the whole globe (confirmed: a real
+    # Fiji province came out 359.8 degrees wide).
     if source_crs is not None:
-        result_df = result_df.set_crs(source_crs, allow_override=True).to_crs(epsg=4326)
+        result_df = result_df.set_crs(source_crs, allow_override=True)
+        result_df = common.safe_reproject_to_4326(result_df)
     else:
         # No CRS information was passed through - fall back to the previous
         # behavior (assume already EPSG:4326) rather than fail outright.

@@ -1,22 +1,5 @@
-# Check SSL limitations
 import sys
 sys.path.append('.')  # Ensure the current directory is in the path
-try:
-    from ssl_utils import disable_ssl_verification
-    disable_ssl_verification()
-except ImportError:
-    import ssl
-    import warnings
-    import urllib3
-
-    # Fallback if ssl_utils.py is not available
-    warnings.filterwarnings('ignore', message='Unverified HTTPS request')
-    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    try:
-        ssl._create_default_https_context = ssl._create_unverified_context
-    except AttributeError:
-        pass
-
 import os
 from osgeo import gdal
 import numpy as np
@@ -27,6 +10,32 @@ import shutil
 from shapely.geometry import shape, MultiPolygon
 from shapely.geometry.base import BaseGeometry
 from tqdm import tqdm
+
+# SSL verification is only disabled when explicitly opted into, via
+# DISABLE_SSL_VERIFICATION=true in .env - this previously ran unconditionally
+# at import time, silently downgrading TLS certificate verification for
+# every HTTPS request made by the whole process for the rest of the session
+# (not just this tool's own WorldPop/STAC/ArcGIS calls), with no way to opt
+# out. Kept available rather than removed outright, since some corporate
+# networks intercept/re-sign TLS for outbound traffic in a way that breaks
+# default certificate validation against these public endpoints - but that
+# should be a deliberate choice, not a silent default.
+if str(common.config.get('DISABLE_SSL_VERIFICATION', 'false')).lower() == 'true':
+    try:
+        from ssl_utils import disable_ssl_verification
+        disable_ssl_verification()
+    except ImportError:
+        import ssl
+        import warnings
+        import urllib3
+
+        # Fallback if ssl_utils.py is not available
+        warnings.filterwarnings('ignore', message='Unverified HTTPS request')
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        try:
+            ssl._create_default_https_context = ssl._create_unverified_context
+        except AttributeError:
+            pass
 
 DATA_DIR = common.DATA_DIR
 OUTPUT_DIR = common.OUTPUT_DIR
@@ -183,7 +192,8 @@ ANTIMERIDIAN_LOCAL_CRS_PROJ4 = ('+proj=merc +lon_0=180 +k=1 +x_0=0 +y_0=0 '
                                  '+a=6378137 +b=6378137 +units=m +no_defs')
 
 
-def normalize_antimeridian_raster(raster_path, country_geom_4326, output_path):
+def normalize_antimeridian_raster(raster_path, country_geom_4326, output_path,
+                                   resample_alg=None):
     """Reproject+crop a raster covering an antimeridian-crossing country from
     plain EPSG:4326 into the compact local Mercator CRS above.
 
@@ -207,10 +217,31 @@ def normalize_antimeridian_raster(raster_path, country_geom_4326, output_path):
     reprojects the administrative boundaries to match whatever CRS the
     exposure raster ends up in, and calc_imp_RPs's WarpedVRT already
     reprojects the hazard raster the same way.
+
+    `resample_alg` defaults to GDAL's GRA_Sum, appropriate for a COUNT raster
+    (e.g. WorldPop population - each pixel is a number of people, not a
+    density): it allocates each source pixel's value across the destination
+    pixels it overlaps, weighted by area, so the total is conserved.
+    GRA_NearestNeighbour was used here originally and does NOT conserve
+    totals - it just copies the nearest source pixel's value into each
+    destination pixel, which either drops source pixels entirely or
+    duplicates one source pixel's value into several destination pixels
+    whenever the destination grid is finer or differently oriented than the
+    source (as it always is here, going from geographic degrees to a
+    projected CRS). Confirmed independently against a real reprojected Fiji
+    population raster: 53% of populated cells had the exact same value as
+    their right neighbour and 42% as the one below - a duplication signature
+    a native population grid does not have - consistent with the ~38%
+    population inflation this caused. Pass a different resample_alg for a
+    non-count raster (e.g. GRA_NearestNeighbour to preserve categorical/
+    sentinel values, as the WSF built-up mosaic in F3/merge_utils.py-style
+    callers does).
     """
+    if resample_alg is None:
+        resample_alg = gdal.GRA_Sum
     warp_kwargs = dict(
         dstSRS=ANTIMERIDIAN_LOCAL_CRS_PROJ4, format='GTiff',
-        resampleAlg=gdal.GRA_NearestNeighbour, multithread=True,
+        resampleAlg=resample_alg, multithread=True,
         creationOptions=['COMPRESS=DEFLATE', 'PREDICTOR=2', 'ZLEVEL=9'],
     )
     if country_geom_4326 is not None:

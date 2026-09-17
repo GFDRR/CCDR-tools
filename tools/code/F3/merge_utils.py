@@ -32,11 +32,20 @@ def _tiles_cross_antimeridian(tif_files):
 
 def _merge_tifs_across_antimeridian(tif_files, output_file):
     """
-    Merge tiles that straddle the antimeridian (180 degree line) by first
+    Merge tiles that straddle the antimeridian (180 degree line) by
     reprojecting each tile to a Mercator projection centered on longitude 180
     (moving the projection's discontinuity to the Greenwich meridian, far from
-    the data), merging in that projection where there's no dateline
-    wraparound, then reprojecting the merged result back to EPSG:4326.
+    the data) and merging in that projection, where there's no dateline
+    wraparound.
+
+    The merged output is deliberately LEFT in this local Mercator CRS, not
+    reprojected back to EPSG:4326. An earlier version of this function (and,
+    separately, the near-identical one in input_utils.py for exposure tiles)
+    did reproject back to EPSG:4326 - but that re-wraps the coordinates
+    through the dateline and reproduces the exact "spans the whole globe"
+    problem this function exists to avoid. This is safe to leave un-reprojected:
+    calc_imp_RPs's WarpedVRT already reads a hazard raster's own CRS and warps
+    it on the fly to match the exposure raster's CRS, whatever that is.
 
     Adapted from a one-off fix originally applied by hand for Fiji (a separate,
     non-automatic script/notebook) - generalized here to trigger automatically
@@ -71,21 +80,14 @@ def _merge_tifs_across_antimeridian(tif_files, output_file):
             print(f"Warning: no tiles could be reprojected for antimeridian-safe merge of {output_file}.")
             return
 
-        temp_merged = os.path.join(temp_dir, 'merged_temp.tif')
-        vrt = gdal.BuildVRT('', reprojected_files, options=gdal.BuildVRTOptions(resampleAlg='near'))
-        gdal.Translate(temp_merged, vrt, options=gdal.TranslateOptions(
-            creationOptions=['COMPRESS=DEFLATE', 'PREDICTOR=2', 'ZLEVEL=9']
-        ))
-        vrt = None
-
         # NearestNeighbour throughout preserves Fathom's exact sentinel values
         # (-32767 permanent water, -32768 nodata) without interpolation
         # smearing them into neighbouring depth values.
-        gdal.Warp(output_file, temp_merged, options=gdal.WarpOptions(
-            dstSRS='EPSG:4326', format='GTiff',
-            resampleAlg=gdal.GRA_NearestNeighbour, multithread=True,
-            creationOptions=['COMPRESS=DEFLATE', 'PREDICTOR=2', 'ZLEVEL=9'],
+        vrt = gdal.BuildVRT('', reprojected_files, options=gdal.BuildVRTOptions(resampleAlg='near'))
+        gdal.Translate(output_file, vrt, options=gdal.TranslateOptions(
+            creationOptions=['COMPRESS=DEFLATE', 'PREDICTOR=2', 'ZLEVEL=9']
         ))
+        vrt = None
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
@@ -101,12 +103,13 @@ def merge_tifs(subdir_path):
     - Preserves all negative values as-is (no conversion)
 
     Tiles that collectively straddle the antimeridian (180 degree line) are
-    merged via an intermediate longitude-180-centered projection to avoid
-    dateline mosaic misalignment (a plain BuildVRT/Translate in lon/lat
-    coordinates cannot correctly place tiles that are numerically split
-    across +180 and -180 - it would treat them as ~360 degrees apart instead
-    of adjacent), then reprojected back to EPSG:4326 before the nodata
-    standardization step below runs as usual.
+    merged via a longitude-180-centered projection to avoid dateline mosaic
+    misalignment (a plain BuildVRT/Translate in lon/lat coordinates cannot
+    correctly place tiles that are numerically split across +180 and -180 -
+    it would treat them as ~360 degrees apart instead of adjacent). The
+    merged result stays in that local projected CRS (see
+    _merge_tifs_across_antimeridian) rather than being reprojected back to
+    EPSG:4326, before the nodata standardization step below runs as usual.
     """
     # Get a list of all .tif files in the subdirectory
     tif_files = [os.path.join(subdir_path, file) for file in os.listdir(subdir_path) if file.endswith('.tif')]
