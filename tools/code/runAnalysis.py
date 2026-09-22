@@ -543,6 +543,7 @@ def run_analysis(
             "bin_seq": bin_seq,
             "num_bins": num_bins,
             "adm_data": adm_data,
+            "haz_type": haz_type,
         }
         # Damage functions key their regional curve differently: FL functions
         # (FL_damage_factor_builtup/agri) expect an already-resolved bucket name
@@ -679,7 +680,7 @@ def run_analysis(
         raise    
 
 def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scenario, exp_cat, exp_data, min_haz_threshold,
-                 damage_factor, save_check_raster, bin_seq, num_bins, adm_data, wb_region):
+                 damage_factor, save_check_raster, bin_seq, num_bins, adm_data, wb_region, haz_type=None):
     """
     Apply calculates for each given return period.
     """
@@ -720,6 +721,16 @@ def calc_imp_RPs(RPs, haz_folder, analysis_type, country, haz_cat, period, scena
 
         except rasterio._err.CPLE_OpenFailedError:
             raise IOError(f"Error occurred trying to open raster file: 1in{rp}.tif")
+
+        # Convert STORM's native 10-minute mean wind speed to the 1-minute
+        # sustained convention TC_damage_factor_builtup is calibrated against
+        # - see common.STORM_TO_1MIN_SUSTAINED_FACTOR's docstring for why.
+        # Done here, before both min_haz_threshold and the damage function,
+        # so a "20 m/s" threshold now means 20 m/s in 1-minute-sustained
+        # terms, not STORM's native 10-minute mean - worth knowing when
+        # comparing against past runs.
+        if haz_type == 'TC':
+            haz_data = haz_data * common.STORM_TO_1MIN_SUSTAINED_FACTOR
 
         # Set values below min threshold to nan (original approach)
         haz_data = haz_data.where(haz_data.data > min_haz_threshold, np.nan)

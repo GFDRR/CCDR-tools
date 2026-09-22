@@ -1,7 +1,10 @@
 import numpy as np
 from shapely.geometry import Polygon, MultiPolygon
 
-from tools.code.common import unwrap_antimeridian_geometry, match_adm_level_layer
+from tools.code.common import (
+    unwrap_antimeridian_geometry, match_adm_level_layer, STORM_TO_1MIN_SUSTAINED_FACTOR
+)
+from tools.code.damageFunctions import TC_damage_factor_builtup
 
 
 def test_unwrap_antimeridian_geometry_single_ring_crossing():
@@ -40,3 +43,23 @@ def test_match_adm_level_layer_ambiguous_returns_none():
     layers = ['FJI_ADM4', 'FJI_ADM4_fix', 'FJI_ADM2']
     assert match_adm_level_layer(layers, 4) is None
     assert match_adm_level_layer(layers, 2) == 'FJI_ADM2'
+
+
+def test_storm_to_1min_sustained_factor_matches_storm_documentation():
+    # Bloemendaal et al. (2020): 1-min sustained = U10 / 0.8821.
+    assert np.isclose(STORM_TO_1MIN_SUSTAINED_FACTOR, 1 / 0.8821, rtol=1e-9)
+    # A raw STORM value of 50 m/s should convert to ~56.7 m/s.
+    assert np.isclose(50 * STORM_TO_1MIN_SUSTAINED_FACTOR, 56.69, atol=0.01)
+
+
+def test_storm_conversion_materially_changes_tc_damage():
+    # Regression guard for the fix itself: applying the conversion before
+    # evaluating the damage curve should noticeably raise damage relative to
+    # feeding STORM's raw (unconverted) 10-minute mean value straight in -
+    # confirmed against Fiji's Oceania curve (Vhalf=54.4): ~38% unconverted
+    # vs. ~56% converted at a raw 50 m/s STORM value.
+    x_raw = np.array([50.0])
+    country = 'FJI'
+    damage_raw = TC_damage_factor_builtup(x_raw, country)
+    damage_converted = TC_damage_factor_builtup(x_raw * STORM_TO_1MIN_SUSTAINED_FACTOR, country)
+    assert damage_converted[0] > damage_raw[0] + 0.15

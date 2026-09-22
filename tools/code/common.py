@@ -13,6 +13,17 @@ CACHE_DIR = config["CACHE_DIR"]
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(CACHE_DIR,  exist_ok=True)
 
+# STORM (this tool's TC wind hazard source) reports 10-minute mean sustained
+# wind speed; TC_damage_factor_builtup's regional curves (Eberenz et al.,
+# 2021, via CLIMADA) are calibrated against 1-minute sustained wind speed -
+# systematically higher for the same storm. STORM's own documentation gives
+# this conversion factor (Bloemendaal et al., 2020, "Generation of a global
+# synthetic tropical cyclone hazard dataset using STORM"): 1-min sustained =
+# U10 / 0.8821. Applied to the raw hazard raster in runAnalysis.calc_imp_RPs,
+# before both the user's min_haz_threshold and the damage function, so the
+# two stay consistent with each other.
+STORM_TO_1MIN_SUSTAINED_FACTOR = 1 / 0.8821
+
 # Define the REST API URLs
 rest_api_url_view = "https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions_VIEW/FeatureServer"
 rest_api_url_new = "https://services.arcgis.com/iQ1dY19aHwbSDYIF/ArcGIS/rest/services/World_Bank_Global_Administrative_Divisions/FeatureServer"
