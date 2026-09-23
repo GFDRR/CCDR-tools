@@ -221,7 +221,28 @@ def run_input_checks(
     }
 
     url = f"{common.rest_api_url}/5/query"
-    response = requests.get(url=url, params=params)
+    # Unlike input_utils.py's fetch functions, this call had no exception
+    # handling at all - a connection-level failure (SSL cert error, DNS
+    # failure, timeout) propagated straight out of an ipywidgets button
+    # handler as an unhandled traceback dumped into the notebook output,
+    # instead of the graceful "Error: ..." message every other failure mode
+    # here gets. Observed in the wild: SSLCertVerificationError
+    # ("self-signed certificate in certificate chain") - the signature of a
+    # corporate network intercepting/re-signing TLS, the same scenario
+    # DISABLE_SSL_VERIFICATION in .env exists for (see input_utils.py).
+    try:
+        response = requests.get(url=url, params=params)
+    except requests.exceptions.SSLError as e:
+        print("Error: Could not verify the server's SSL certificate while validating "
+              "the country code. If you're on a network that intercepts/re-signs "
+              "HTTPS traffic (common on corporate networks), either point "
+              "REQUESTS_CA_BUNDLE at your organization's root CA certificate, or set "
+              "DISABLE_SSL_VERIFICATION=true in .env as a fallback (see .env for "
+              f"details). ({e})")
+        return False
+    except requests.exceptions.RequestException as e:
+        print(f"Error: Unable to validate country code. Please ensure you are connected to the internet. ({e})")
+        return False
 
     if response.status_code != 200:
         print("Error: Unable to validate country code. Please ensure you are connected to the internet.")
