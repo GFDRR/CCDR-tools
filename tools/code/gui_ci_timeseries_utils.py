@@ -297,6 +297,18 @@ def on_mode_change(change):
 
 mode_selector.observe(on_mode_change, names='value')
 
+def _is_valid_netcdf(path):
+    """Check whether a file can actually be opened as a NetCDF dataset,
+    without loading its data into memory (xr.open_dataset is lazy by
+    default)."""
+    try:
+        with xr.open_dataset(path) as ds:
+            pass
+        return True
+    except Exception:
+        return False
+
+
 # Function to download a file if it doesn't exist
 def download_file(url, local_path, mode='baseline', ssp=None):
     """Download a file if it doesn't exist, with different paths for baseline and projections."""
@@ -310,7 +322,25 @@ def download_file(url, local_path, mode='baseline', ssp=None):
         modified_path = os.path.join(dirname, f"{filename}_{ssp}{ext}")
     else:
         modified_path = local_path
-        
+
+    if os.path.exists(modified_path) and not _is_valid_netcdf(modified_path):
+        # A previous download interrupted partway (network drop, kernel
+        # restart, closing the notebook mid-download) can leave a truncated/
+        # corrupted .nc file at this exact path. Previously that was trusted
+        # as "already exists" and handed straight to xr.open_dataset() by
+        # load_netcdf(), which fails deep in HDF5/netCDF's binary decoding
+        # with a cryptic error ("When changing to a larger dtype, its size
+        # must be a divisor of the total size in bytes of the last axis of
+        # the array") that gives no hint the real problem is a stale,
+        # incomplete file on disk rather than anything about this run.
+        print(f"WARNING: '{modified_path}' exists but could not be opened as "
+              f"a valid NetCDF file - likely left over from an interrupted "
+              f"previous download. Re-downloading.")
+        try:
+            os.remove(modified_path)
+        except OSError as e:
+            print(f"WARNING: could not remove stale file '{modified_path}': {e}")
+
     if not os.path.exists(modified_path):
         print(f"Downloading {url} to {modified_path}")
         try:

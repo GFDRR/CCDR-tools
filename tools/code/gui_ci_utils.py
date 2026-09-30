@@ -259,8 +259,34 @@ def build_urls(index, projection, time_period):
     return historical_url, future_url
 
 # Function to download a file if it doesn't exist
+def _is_valid_netcdf(path):
+    """Check whether a file can actually be opened as a NetCDF dataset,
+    without loading its data into memory (xr.open_dataset is lazy by
+    default)."""
+    try:
+        with xr.open_dataset(path) as ds:
+            pass
+        return True
+    except Exception:
+        return False
+
+
 def download_file(url, local_path):
     """Download a file if it doesn't exist."""
+    if os.path.exists(local_path) and not _is_valid_netcdf(local_path):
+        # See gui_ci_timeseries_utils.py's identical fix: a file left behind
+        # by an interrupted previous download was previously trusted as
+        # "already exists" and handed straight to xarray, which fails deep
+        # in HDF5 decoding with a cryptic dtype error rather than a clear
+        # message about a stale/incomplete file.
+        print(f"WARNING: '{local_path}' exists but could not be opened as a "
+              f"valid NetCDF file - likely left over from an interrupted "
+              f"previous download. Re-downloading.")
+        try:
+            os.remove(local_path)
+        except OSError as e:
+            print(f"WARNING: could not remove stale file '{local_path}': {e}")
+
     if not os.path.exists(local_path):
         print(f"Downloading {url} to {local_path}")
         try:
