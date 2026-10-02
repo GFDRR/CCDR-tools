@@ -1,5 +1,6 @@
 import os
 import shutil
+import tempfile
 import numpy as np
 from osgeo import gdal
 
@@ -52,9 +53,15 @@ def _merge_tifs_across_antimeridian(tif_files, output_file):
     for any antimeridian-crossing country instead of requiring a manual
     swap-in each time.
     """
-    temp_dir = os.path.join(os.path.dirname(output_file),
-                             f"{os.path.basename(output_file)}_antimeridian_tmp")
-    os.makedirs(temp_dir, exist_ok=True)
+    # Use the local temp drive (tempfile respects %TEMP%/TMPDIR, normally
+    # C: on Windows), not a directory next to output_file. mosaic_directory
+    # (and so output_file) is routinely on a mapped network drive - creating
+    # the per-tile reprojected copies there meant every tile got written to
+    # the network and then read back from it for the merge step, roughly
+    # doubling network I/O for this path on top of the reprojection cost
+    # itself. Confirmed as a plausible cause of sustained low CPU / I/O-wait
+    # behaviour when this path is active.
+    temp_dir = tempfile.mkdtemp(prefix=f"{os.path.basename(output_file)}_antimeridian_")
 
     # A generic longitude-180-centered Mercator - the seam sits at longitude 0,
     # nowhere near an antimeridian-crossing country's own tiles.
@@ -92,7 +99,7 @@ def _merge_tifs_across_antimeridian(tif_files, output_file):
         shutil.rmtree(temp_dir, ignore_errors=True)
 
 
-def merge_tifs(subdir_path):
+def merge_tifs(subdir_path, crosses_antimeridian=None):
     """
     Merge Fathom 3 tiles into a single raster.
 
@@ -110,6 +117,22 @@ def merge_tifs(subdir_path):
     merged result stays in that local projected CRS (see
     _merge_tifs_across_antimeridian) rather than being reprojected back to
     EPSG:4326, before the nodata standardization step below runs as usual.
+
+    Parameters
+    ----------
+    crosses_antimeridian : bool, optional
+        Whether this tile set straddles the antimeridian. If not given, it's
+        determined by opening every tile in subdir_path via
+        _tiles_cross_antimeridian - fine for a single call, but
+        Fathom_preprocessing.ipynb calls merge_tifs once per return-period
+        subfolder (via ProcessPoolExecutor, all in parallel), and a given
+        country's tile set covers the exact same geographic extent in every
+        RP subfolder. Left to auto-detect, that meant re-opening every tile
+        file, redundantly, once per RP, all hitting the data drive at once -
+        confirmed to turn this from fast to painfully slow on a network
+        drive with many tiles. Callers that loop over several subfolders for
+        the same country should compute this once (from any one subfolder's
+        tiles) and pass it to every call instead.
     """
     # Get a list of all .tif files in the subdirectory
     tif_files = [os.path.join(subdir_path, file) for file in os.listdir(subdir_path) if file.endswith('.tif')]
@@ -122,7 +145,9 @@ def merge_tifs(subdir_path):
 
         # Step 1: Build VRT and merge tiles into temporary file
         temp_output = output_file + '.tmp.tif'
-        if _tiles_cross_antimeridian(tif_files):
+        if crosses_antimeridian is None:
+            crosses_antimeridian = _tiles_cross_antimeridian(tif_files)
+        if crosses_antimeridian:
             print(f"Note: tiles in {subdir_path} appear to cross the antimeridian; "
                   f"merging via a longitude-180-centered projection to avoid "
                   f"dateline mosaic misalignment.")
